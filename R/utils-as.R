@@ -10,34 +10,31 @@
         text_interpret = "gt::md"
       ) %>%
       select(all_of(c("column", "rows", "text_interpret", "footnote")))
-  }
-  else if (column %in% c("indent", "bold", "italic")) {
+  } else if (column %in% c("indent", "bold", "italic")) {
     x$table_styling$text_format <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(.data$rows, ~parse_expr(.x)),
+        rows = map(.data$rows, ~ parse_expr(.x)),
         format_type = .env$column,
         undo_text_format = FALSE
       ) %>%
       bind_rows(x$table_styling$text_format)
-  }
-  else if (column %in% "missing_emdash") {
+  } else if (column %in% "missing_emdash") {
     x$table_styling[["fmt_missing"]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(.data$rows, ~parse_expr(.x)),
+        rows = map(.data$rows, ~ parse_expr(.x)),
         symbol = get_theme_element("tbl_regression-str:ref_row_text",
           default = "\U2014"
         )
       )
-  }
-  else if (column %in% "fmt_fun") {
+  } else if (column %in% "fmt_fun") {
     x$table_styling[[column]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%

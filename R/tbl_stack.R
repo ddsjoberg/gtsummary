@@ -103,7 +103,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   # stacking tables ------------------------------------------------------------
   # the table_body and call_list will be updated with the tbl_stack values
   tbl_id_colname <-
-    purrr::map(tbls, ~pluck(.x, "table_body") %>% names()) %>%
+    purrr::map(tbls, ~ pluck(.x, "table_body") %>% names()) %>%
     unlist() %>%
     unique() %>%
     tbl_id_varname()
@@ -271,7 +271,9 @@ tbl_id_varname <- function(colnames) {
     purrr::discard(is.na)
 
   # return 'tbl_id1' if no columns found
-  if (is_empty(tbl_id_colnames)) return("tbl_id1")
+  if (is_empty(tbl_id_colnames)) {
+    return("tbl_id1")
+  }
 
   # if there are other tbl_id columns, return the next in the sequence
   tbl_max_id <-

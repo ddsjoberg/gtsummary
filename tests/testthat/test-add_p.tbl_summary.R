@@ -5,7 +5,9 @@ test_that("add_p creates output without error/warning", {
     tbl_summary(trial, by = grade) %>% add_p() %>% render_as_html()
   )
 
-  tbl <- tbl_summary(mtcars, by = am) %>% add_p() %>% as_tibble()
+  tbl <- tbl_summary(mtcars, by = am) %>%
+    add_p() %>%
+    as_tibble()
   expect_snapshot(tbl)
   expect_warning(
     tbl_summary(mtcars, by = am) %>% add_p(),
@@ -59,7 +61,9 @@ test_that("add_p creates output without error/warning for continuous2", {
     tbl_summary(trial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
   )
 
-  tbl <- tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
+  tbl <- tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>%
+    add_p() %>%
+    as_tibble()
   expect_snapshot(tbl)
   expect_warning(
     tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p(),
@@ -112,11 +116,13 @@ test_that("add_p works well", {
     tbl <-
       tbl_summary(mtcars, by = am) %>%
       add_p(
-        test = list(vars(mpg) ~ "t.test",
-                    disp ~ "aov",
-                    hp ~ "oneway.test",
-                    cyl ~ "chisq.test.no.correct",
-                    carb ~ "mood.test")
+        test = list(
+          vars(mpg) ~ "t.test",
+          disp ~ "aov",
+          hp ~ "oneway.test",
+          cyl ~ "chisq.test.no.correct",
+          carb ~ "mood.test"
+        )
       ) %>%
       as_tibble(),
     NA
@@ -127,8 +133,10 @@ test_that("add_p works well", {
     tbl <-
       tbl_summary(mtcars, by = am) %>%
       add_p(
-        test = list(vars(mpg) ~ t.test,
-                    disp ~ aov)
+        test = list(
+          vars(mpg) ~ t.test,
+          disp ~ aov
+        )
       ) %>%
       as_tibble(),
     NA
@@ -205,19 +213,19 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     dplyr::select(trt,
-                  var_t.test = age,
-                  var_t.test_dots = age,
-                  var_kruskal.test = age,
-                  var_wilcox.test = age,
-                  var_wilcox.test_dots = age,
-                  var_aov = age,
-                  var_chisq.test = response,
-                  var_chisq.test_dots = response,
-                  var_chisq.test.no.correct = response,
-                  var_fisher.test = response,
-                  var_fisher.test_dots = response,
-                  var_mcnemar.test = response,
-                  var_mcnemar.test_dots = response,
+      var_t.test = age,
+      var_t.test_dots = age,
+      var_kruskal.test = age,
+      var_wilcox.test = age,
+      var_wilcox.test_dots = age,
+      var_aov = age,
+      var_chisq.test = response,
+      var_chisq.test_dots = response,
+      var_chisq.test.no.correct = response,
+      var_fisher.test = response,
+      var_fisher.test_dots = response,
+      var_mcnemar.test = response,
+      var_mcnemar.test_dots = response,
     ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_p(
@@ -318,8 +326,10 @@ test_that("p-values are replicated within tbl_summary()", {
     trial_group %>%
       dplyr::filter(dplyr::row_number() != 1L) %>%
       tbl_summary(include = c(marker, age), by = trt) %>%
-      add_p(test = list(age = "paired.t.test", marker = "paired.wilcox.test"),
-            include = age, group = id)
+      add_p(
+        test = list(age = "paired.t.test", marker = "paired.wilcox.test"),
+        include = age, group = id
+      )
   )
 
 
@@ -345,7 +355,7 @@ test_that("p-values are replicated within tbl_summary()", {
       ),
       test.args = list(
         age_paired.t.test_dots ~ list(mu = 1),
-        response_mcnemar.test_dots ~ list(correct  = FALSE),
+        response_mcnemar.test_dots ~ list(correct = FALSE),
         age_paired.wilcox.test_dots ~ list(mu = 1)
       ),
       group = "id"
@@ -355,7 +365,8 @@ test_that("p-values are replicated within tbl_summary()", {
   expect_equal(
     dplyr::filter(tbl_groups$meta_data, variable == "response_mcnemar.test_dots")$p.value,
     mcnemar.test(trial_group_wide[["response.x"]], trial_group_wide[["response.y"]],
-                 correct  = FALSE)$p.value
+      correct = FALSE
+    )$p.value
   )
 
   expect_equal(
@@ -396,7 +407,7 @@ test_that("Groups arg and lme4", {
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-           age_lme4 = age
+      age_lme4 = age
     ) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
@@ -420,7 +431,7 @@ test_that("difftime works with Wilcox", {
         time_diff = as.difftime(age, units = "mins")
       ) %>%
       dplyr::select(trt, time_diff) %>%
-      tbl_summary(by=trt) %>%
+      tbl_summary(by = trt) %>%
       add_p() %>%
       inline_text(variable = time_diff, column = "p.value"),
     "p=0.7"
@@ -488,12 +499,14 @@ test_that("add_p can be run after add_difference()", {
   expect_equal(
     tbl %>%
       unlist(),
-    c(label = "Age",
+    c(
+      label = "Age",
       stat_1 = "47.011",
       stat_2 = "47.449",
       estimate = "-0.03",
       ci = "-0.32, 0.25",
-      p.value = "0.8")
+      p.value = "0.8"
+    )
   )
   expect_true(
     tbl %>%
@@ -501,6 +514,4 @@ test_that("add_p can be run after add_difference()", {
       names() %>%
       rlang::is_empty()
   )
-
-
 })

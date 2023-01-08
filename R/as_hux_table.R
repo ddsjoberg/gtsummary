@@ -38,7 +38,8 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   if (!isFALSE(strip_md_bold)) {
     lifecycle::deprecate_warn(
       "1.6.0", "gtsummary::as_hux_table(strip_md_bold=)",
-      details = "Markdown syntax is now recognized by the {huxtable} package.")
+      details = "Markdown syntax is now recognized by the {huxtable} package."
+    )
   }
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -107,18 +108,24 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
         indent_spaces <- ifelse(format_type %in% "indent", "     ", "          ")
         rlang::expr(
           dplyr::mutate(
-            dplyr::across(dplyr::all_of(!!column),
-                          ~ifelse(dplyr::row_number() %in% !!row_numbers,
-                                  paste0(!!indent_spaces, .), .)))
+            dplyr::across(
+              dplyr::all_of(!!column),
+              ~ ifelse(dplyr::row_number() %in% !!row_numbers,
+                paste0(!!indent_spaces, .), .
+              )
+            )
+          )
         )
       }
     )
 
   # insert indentation code before 'as_huxtable()' call ------------------------
   index_n <- which(names(huxtable_calls) %in% "huxtable")
-  huxtable_calls <- append(x = huxtable_calls,
-                           values = list("indent" = indent_exprs),
-                           after = index_n - 1L)
+  huxtable_calls <- append(
+    x = huxtable_calls,
+    values = list("indent" = indent_exprs),
+    after = index_n - 1L
+  )
 
   # bold header rows -----------------------------------------------------------
   if (isTRUE(bold_header_rows)) {
@@ -232,9 +239,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   df_bold <-
     x$table_styling$text_format %>%
     filter(.data$format_type == "bold") %>%
-    inner_join(x$table_styling$header %>%
-                 select("column", column_id = "id"),
-               by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select("column", column_id = "id"),
+      by = "column"
     ) %>%
     select("format_type", "row_numbers", "column_id")
 
@@ -252,9 +260,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   df_italic <-
     x$table_styling$text_format %>%
     filter(.data$format_type == "italic") %>%
-    inner_join(x$table_styling$header %>%
-                 select("column", column_id = "id"),
-               by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select("column", column_id = "id"),
+      by = "column"
     ) %>%
     select("format_type", "row_numbers", "column_id")
 
@@ -355,13 +364,17 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_markdown ---------------------------------------------------------------
-  header_rows <- switch(any_spanning_header, 1:2) %||% 1L
+  header_rows <- switch(any_spanning_header,
+    1:2
+  ) %||% 1L
   huxtable_calls[["set_markdown"]] <-
     list(
       set_markdown =
-        expr(huxtable::set_markdown(row = !!header_rows,
-                                    col = huxtable::everywhere,
-                                    value = TRUE)),
+        expr(huxtable::set_markdown(
+          row = !!header_rows,
+          col = huxtable::everywhere,
+          value = TRUE
+        )),
       set_header_rows = expr(huxtable::set_header_rows(row = !!header_rows, value = TRUE))
     )
 

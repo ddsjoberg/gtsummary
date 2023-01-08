@@ -151,7 +151,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   missing_text <- missing_text %||%
     get_theme_element("tbl_svysummary-arg:missing_text") %||%
     get_theme_element("tbl_summary-arg:missing_text",
-                      default = translate_text("Unknown")
+      default = translate_text("Unknown")
     )
   sort <- sort %||%
     get_theme_element("tbl_svysummary-arg:sort") %||%
@@ -285,8 +285,8 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
         ifelse(is.null(by),
-               "**N = {style_number(N)}**",
-               "**{level}**, N = {style_number(n)}"
+          "**N = {style_number(N)}**",
+          "**{level}**, N = {style_number(n)}"
         )
     )
 
@@ -432,9 +432,9 @@ summarize_categorical_survey <- function(data, variable, by,
 
   # calculating percent
   group_by_percent <- switch(percent,
-                             "cell" = "",
-                             "column" = ifelse(!is.null(by), "by", ""),
-                             "row" = "variable_levels"
+    "cell" = "",
+    "column" = ifelse(!is.null(by), "by", ""),
+    "row" = "variable_levels"
   )
 
   svy_table <- svy_table %>%
@@ -603,30 +603,30 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
                                 stat_display, digits, data, by, percent, var_label) {
   # first table are the standard stats
   t1 <- switch(summary_type,
-               "continuous" = summarize_continuous_survey(
-                 data = data, variable = variable,
-                 by = by, stat_display = stat_display,
-                 digits = digits, summary_type = summary_type
-               ),
-               "continuous2" = summarize_continuous_survey(
-                 data = data, variable = variable,
-                 by = by, stat_display = stat_display,
-                 digits = digits, summary_type = summary_type
-               ),
-               "categorical" = summarize_categorical_survey(
-                 data = data, variable = variable,
-                 by = by,
-                 dichotomous_value = dichotomous_value,
-                 sort = sort, percent = percent,
-                 stat_display = stat_display
-               ),
-               "dichotomous" = summarize_categorical_survey(
-                 data = data, variable = variable,
-                 by = by,
-                 dichotomous_value = dichotomous_value,
-                 sort = sort, percent = percent,
-                 stat_display = stat_display
-               )
+    "continuous" = summarize_continuous_survey(
+      data = data, variable = variable,
+      by = by, stat_display = stat_display,
+      digits = digits, summary_type = summary_type
+    ),
+    "continuous2" = summarize_continuous_survey(
+      data = data, variable = variable,
+      by = by, stat_display = stat_display,
+      digits = digits, summary_type = summary_type
+    ),
+    "categorical" = summarize_categorical_survey(
+      data = data, variable = variable,
+      by = by,
+      dichotomous_value = dichotomous_value,
+      sort = sort, percent = percent,
+      stat_display = stat_display
+    ),
+    "dichotomous" = summarize_categorical_survey(
+      data = data, variable = variable,
+      by = by,
+      dichotomous_value = dichotomous_value,
+      sort = sort, percent = percent,
+      stat_display = stat_display
+    )
   )
 
   # adding the N_obs and N_missing, etc
@@ -660,7 +660,7 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
 
   # returning table will all stats
   merge_vars <- switch(!is.null(by),
-                       c("by", "variable")
+    c("by", "variable")
   ) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 

@@ -86,13 +86,13 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   table1
 } else {
   knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
-} 
+}
 ```
 
 There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r table2, include = TRUE}
-table2 <- 
+table2 <-
   tbl_summary(
     trial2,
     by = trt, # split table by group
@@ -101,8 +101,7 @@ table2 <-
   add_n() %>% # add column with total number of non-missing observations
   add_p() %>% # test for a difference between groups
   modify_header(label = "**Variable**") %>% # update the column header
-  bold_labels() 
-
+  bold_labels()
 ```
 
 ```{r tbl_summary_print_extra, include = FALSE}
@@ -138,7 +137,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   t1
 } else {
   knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
-} 
+}
 ```
 
 ### Side-by-side Regression Models
@@ -153,13 +152,12 @@ t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(exponentiate = TRUE)
 
-# merge tables 
+# merge tables
 tbl_merge_ex1 <-
   tbl_merge(
     tbls = list(t1, t2),
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
-
 ```
 
 ```{r tbl_merge_ex1, include = FALSE}
@@ -172,7 +170,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   t3
 } else {
   knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
-} 
+}
 ```
 
 Review even more output options in the **[table gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
@@ -245,7 +243,7 @@ A BibTeX entry for LaTeX users is
 
 ## Contributing
 
-Big thank you to [&#x0040;jeffreybears](https://www.jeffreybears.com/) for the hex sticker!
+Big thank you to [&#x0040;jeffreybears](https://www.etsy.com/shop/jeffreybears/) for the hex sticker!
 
 Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. Thank you to all contributors!  
 `r usethis::use_tidy_thanks("ddsjoberg/gtsummary", from = "2018-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`

@@ -79,8 +79,7 @@ knit_print.gtsummary <- function(x, ...) {
         sep = "\n"
       ))
       print_engine <- "flextable"
-    }
-    else {
+    } else {
       rlang::inform(paste(
         "Table printed with `knitr::kable()`, not {gt}. Learn why at",
         "https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",

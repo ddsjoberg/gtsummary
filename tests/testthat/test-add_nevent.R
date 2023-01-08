@@ -34,10 +34,10 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
   expect_error(
     res <-
       tbl_uvregression(
-      trial,
-      method = survival::coxph,
-      y = survival::Surv(ttdeath, death),
-    ) %>%
+        trial,
+        method = survival::coxph,
+        y = survival::Surv(ttdeath, death),
+      ) %>%
       add_nevent(),
     NA
   )
@@ -48,11 +48,11 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
   expect_error(
     res <-
       tbl_uvregression(
-      trial,
-      method = glm,
-      y = response,
-      method.args = list(family = binomial)
-    ) %>%
+        trial,
+        method = glm,
+        y = response,
+        method.args = list(family = binomial)
+      ) %>%
       add_nevent(),
     NA
   )

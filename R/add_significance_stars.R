@@ -69,8 +69,10 @@
 #'   lm(marker ~ stage + grade, data = trial) %>%
 #'   tbl_regression() %>%
 #'   add_global_p() %>%
-#'   add_significance_stars(hide_p = FALSE,
-#'                            pattern = "{p.value}{stars}") %>%
+#'   add_significance_stars(
+#'     hide_p = FALSE,
+#'     pattern = "{p.value}{stars}"
+#'   ) %>%
 #'   as_gt() %>%
 #'   gt::tab_style(
 #'     style = "vertical-align:top",
@@ -111,7 +113,8 @@ add_significance_stars <- function(x, pattern = NULL,
   .assert_class(x, "gtsummary")
   if (!"p.value" %in% names(x$table_body)) {
     cli::cli_abort(c(
-      "!" = "There is no p-value column in the table and significance stars cannot be placed."))
+      "!" = "There is no p-value column in the table and significance stars cannot be placed."
+    ))
   }
 
   # assign default pattern and footnote placement ------------------------------
@@ -130,8 +133,8 @@ add_significance_stars <- function(x, pattern = NULL,
   if (!is_string(pattern)) abort("`pattern=` must be a string.")
   pattern_cols <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
   if (isTRUE(is_empty(pattern_cols))) {
     abort("`pattern=` must be a string using glue syntax to select columns.")
@@ -184,7 +187,7 @@ add_significance_stars <- function(x, pattern = NULL,
       x = x,
       columns = pattern_cols[1],
       rows =
-        !!expr(!is.na(.data$p.value) ),
+        !!expr(!is.na(.data$p.value)),
       cols_merge_pattern = pattern
     )
 

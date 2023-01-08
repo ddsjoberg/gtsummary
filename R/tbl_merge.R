@@ -76,16 +76,18 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   # checking all inputs are class gtsummary
-  if (purrr::some(tbls, ~!inherits(.x, "gtsummary"))) {
+  if (purrr::some(tbls, ~ !inherits(.x, "gtsummary"))) {
     stop("All objects in `tbls=` must be class 'gtsummary'", call. = FALSE)
   }
 
   # check all tbls have the merging columns
-  if (purrr::some(tbls, ~any(!c("variable", "row_type", "var_label", "label") %in% names(.x$table_body)))) {
-    paste("All objects in `tbls=` objects must have columns",
-          "'variable', 'row_type', 'var_label', and 'label'",
-          "in `.$table_body` for merging.") %>%
-    stop(call. = FALSE)
+  if (purrr::some(tbls, ~ any(!c("variable", "row_type", "var_label", "label") %in% names(.x$table_body)))) {
+    paste(
+      "All objects in `tbls=` objects must have columns",
+      "'variable', 'row_type', 'var_label', and 'label'",
+      "in `.$table_body` for merging."
+    ) %>%
+      stop(call. = FALSE)
   }
 
   # at least two objects must be passed
@@ -142,8 +144,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     purrr::some(
       ~ nrow(.x) !=
         select(.x, all_of(c("variable", "row_type", "var_label", "label"))) %>%
-        distinct() %>%
-        nrow()
+          distinct() %>%
+          nrow()
     ) %>%
     switch(paste(
       "The merging columns (variable name, variable label, row type, and label column)",
@@ -195,12 +197,14 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # unnesting results from within variable column tibbles
   ends_with_selectors <-
-    map(seq_len(tbls_length), ~rlang::expr(ends_with(!!paste0("_", .x))))
+    map(seq_len(tbls_length), ~ rlang::expr(ends_with(!!paste0("_", .x))))
   table_body <-
     merged_table %>%
     unnest("table") %>%
-    select("variable", "var_label", "row_type", "label",
-           !!!ends_with_selectors, everything())
+    select(
+      "variable", "var_label", "row_type", "label",
+      !!!ends_with_selectors, everything()
+    )
 
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(
@@ -310,7 +314,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # convert rows to proper expression
   expr <- switch(inherits(rows, "quosure"),
-                 rlang::f_rhs(rows)
+    rlang::f_rhs(rows)
   ) %||% rows
 
   # get all variable names in expression to be renamed
@@ -349,8 +353,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   columns <- tbl$table_styling$header$column
   var_list <-
     stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~stringr::str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~stringr::str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ stringr::str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ stringr::str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist() %>%
     setdiff(c("label", "variable", "var_label", "row_type")) %>%
     intersect(columns)

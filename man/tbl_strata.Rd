@@ -135,15 +135,15 @@ tbl_strata_ex2 <-
   tbl_strata2(
     strata = grade,
     .tbl_fun =
-      ~.x \%>\%
-      tbl_summary(
-        label = list(response = .y),
-        missing = "no",
-        statistic = response ~ "{p}\%"
-      ) \%>\%
-      add_ci(pattern = "{stat} ({ci})") \%>\%
-     modify_header(stat_0 = "**Rate (95\% CI)**") \%>\%
-     modify_footnote(stat_0 = NA),
+      ~ .x \%>\%
+        tbl_summary(
+          label = list(response = .y),
+          missing = "no",
+          statistic = response ~ "{p}\%"
+        ) \%>\%
+        add_ci(pattern = "{stat} ({ci})") \%>\%
+        modify_header(stat_0 = "**Rate (95\% CI)**") \%>\%
+        modify_footnote(stat_0 = NA),
     .combine_with = "tbl_stack",
     .combine_args = list(group_header = NULL),
     .quiet = TRUE

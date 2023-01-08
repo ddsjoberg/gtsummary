@@ -2,7 +2,7 @@
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   .superfluous_args(variable, ...)
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-                     data = !!data, conf.level = !!conf.level, !!!test.args
+    data = !!data, conf.level = !!conf.level, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy()
@@ -46,7 +46,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
   expr(stats::wilcox.test(as.numeric(!!rlang::sym(variable)) ~ as.factor(!!rlang::sym(by)),
-                          data = !!data, !!!test.args
+    data = !!data, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy() %>%
@@ -114,10 +114,10 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # building base and full models
   mod0 <- lme4::glmer(stats::as.formula(formula0),
-                      data = data, family = stats::binomial
+    data = data, family = stats::binomial
   )
   mod1 <- lme4::glmer(stats::as.formula(formula1),
-                      data = data, family = stats::binomial
+    data = data, family = stats::binomial
   )
 
   # returning p-value
@@ -135,16 +135,16 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull("..n..") %>% max(na.rm = TRUE) > 1) {
+    pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
   # reshaping data
   data_wide <-
     tidyr::pivot_wider(data,
-                       id_cols = all_of(group),
-                       names_from = all_of(by),
-                       values_from = all_of(variable)
+      id_cols = all_of(group),
+      names_from = all_of(by),
+      values_from = all_of(variable)
     )
 
   # message about missing data
@@ -161,8 +161,8 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 
   # calculate p-value
   expr(stats::t.test(data_wide[[2]], data_wide[[3]],
-                     paired = TRUE,
-                     conf.level = !!conf.level, !!!test.args
+    paired = TRUE,
+    conf.level = !!conf.level, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy()
@@ -183,7 +183,8 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
         paste(
           "Follow the link for an example of the updated syntax",
           "or update the test to `test = varname ~ 'mcnemar.test.wide'`.",
-          "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test")
+          "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test"
+        )
     )
   }
 
@@ -192,16 +193,16 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull("..n..") %>% max(na.rm = TRUE) > 1) {
+    pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
   # reshaping data
   data_wide <-
     tidyr::pivot_wider(data,
-                       id_cols = all_of(group),
-                       names_from = all_of(by),
-                       values_from = all_of(variable)
+      id_cols = all_of(group),
+      names_from = all_of(by),
+      values_from = all_of(variable)
     )
 
   # message about missing data
@@ -238,16 +239,16 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull("..n..") %>% max(na.rm = TRUE) > 1) {
+    pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
   # reshaping data
   data_wide <-
     tidyr::pivot_wider(data,
-                       id_cols = all_of(group),
-                       names_from = all_of(by),
-                       values_from = all_of(variable)
+      id_cols = all_of(group),
+      names_from = all_of(by),
+      values_from = all_of(variable)
     )
 
   # message about missing data
@@ -263,7 +264,8 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
 
   # calculate p-value
   expr(stats::wilcox.test(as.numeric(data_wide[[2]]), as.numeric(data_wide[[3]]),
-                          paired = TRUE, !!!test.args)) %>%
+    paired = TRUE, !!!test.args
+  )) %>%
     eval() %>%
     broom::tidy()
 }
@@ -293,7 +295,7 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
   # reverse coding the 'by' variable
   data[[by]] <-
     switch(!is.factor(data[[by]]),
-           forcats::fct_rev(factor(data[[by]]))
+      forcats::fct_rev(factor(data[[by]]))
     ) %||%
     forcats::fct_rev(data[[by]])
 
@@ -339,7 +341,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (type %in% "dichotomous" &&
-      length(data_frame[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
+    length(data_frame[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
     stop("`variable=` must have exactly 2 levels", call. = FALSE)
   }
   if (is_survey(data) && !is.null(group)) {
@@ -350,8 +352,9 @@ add_p_test_emmeans <- function(data, variable, by, type,
   rhs <- c(by, adj.vars) %>%
     chr_w_backtick() %>%
     paste(collapse = " + ")
-  if (!is.null(group))
+  if (!is.null(group)) {
     rhs <- paste0(rhs, "+ (1 | ", chr_w_backtick(group), ")")
+  }
   f <-
     ifelse(
       type == "dichotomous",
@@ -364,15 +367,14 @@ add_p_test_emmeans <- function(data, variable, by, type,
   type2 <-
     dplyr::case_when(
       is.data.frame(data) && is.null(group) ~ type,
-      is_survey(data) && is.null(group) && type == "dichotomous" ~  "dichotomous_svy",
-      is_survey(data) && is.null(group) && type == "continuous" ~  "continuous_svy",
+      is_survey(data) && is.null(group) && type == "dichotomous" ~ "dichotomous_svy",
+      is_survey(data) && is.null(group) && type == "continuous" ~ "continuous_svy",
       is.data.frame(data) && type == "dichotomous" ~ "dichotomous_mixed",
       is.data.frame(data) && type == "continuous" ~ "continuous_mixed",
     )
 
   model_fun <-
-    switch(
-      type2,
+    switch(type2,
       "dichotomous" =
         purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
       "continuous" =
@@ -388,8 +390,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
     )
 
   emmeans_fun <-
-    switch(
-      type,
+    switch(type,
       "dichotomous" =
         purrr::partial(emmeans::emmeans, specs = f_by, regrid = "response"),
       "continuous" =
@@ -409,16 +410,17 @@ add_p_test_emmeans <- function(data, variable, by, type,
       conf.high = any_of("upper.CL")
     ) %>%
     dplyr::select(
-      "estimate", std.error = "SE",
+      "estimate",
+      std.error = "SE",
       "conf.low", "conf.high",
       "p.value"
     ) %>%
     dplyr::mutate(
       method =
         ifelse(
-         is.null(.env$adj.vars),
-         "Regression least-squares mean difference",
-         "Regression least-squares adjusted mean difference"
+          is.null(.env$adj.vars),
+          "Regression least-squares mean difference",
+          "Regression least-squares adjusted mean difference"
         )
     )
 }
@@ -430,7 +432,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
   # reverse coding the 'by' variable
   data[[by]] <-
     switch(!is.factor(data[[by]]),
-           forcats::fct_rev(factor(data[[by]]))
+      forcats::fct_rev(factor(data[[by]]))
     ) %||%
     forcats::fct_rev(data[[by]])
 
@@ -481,10 +483,12 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   }
 
   smd_args <-
-    list(x = .extract_data_frame(data)[[variable]],
-         g = .extract_data_frame(data)[[by]],
-         std.error = TRUE,
-         na.rm = TRUE)
+    list(
+      x = .extract_data_frame(data)[[variable]],
+      g = .extract_data_frame(data)[[by]],
+      std.error = TRUE,
+      na.rm = TRUE
+    )
 
   if (is_survey(data)) {
     smd_args <- c(smd_args, list(w = stats::weights(data)))
@@ -666,9 +670,9 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 
   # returning p-value
   method <- switch(test_type,
-                   "log" = "Cox regression (LRT)",
-                   "wald" = "Cox regression (Wald)",
-                   "sc" = "Cox regression (Score)"
+    "log" = "Cox regression (LRT)",
+    "wald" = "Cox regression (Wald)",
+    "sc" = "Cox regression (Score)"
   )
   broom::glance(coxph_result) %>%
     select(all_of(paste0(c("statistic.", "p.value."), test_type))) %>%
@@ -680,38 +684,50 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
   rlang::inject(
     stats::lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
-              data = data)
+      data = data
+    )
   ) %>%
     broom::glance() %>%
     dplyr::select("statistic", "p.value") %>%
     mutate(method = "Two-way ANOVA")
 }
 
-add_p_test_tbl_summary_to_tbl_continuous <- function(
-  data, variable, by, continuous_variable, test.args = NULL, group = NULL,
-  test_name, ...) {
-
+add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continuous_variable, test.args = NULL, group = NULL,
+                                                     test_name, ...) {
   if (!is.null(by)) {
     stop("This test cannot be used with `by=` variable specified.", call. = FALSE)
   }
 
-  switch(
-    test_name,
-    "t.test" = add_p_test_t.test(data = data, variable = continuous_variable,
-                                 by = variable, test.args = test.args, ...),
-    "aov" = add_p_test_aov(data = data, variable = continuous_variable,
-                           by = variable, test.args = test.args, ...),
-    "kruskal.test" = add_p_test_kruskal.test(data = data, variable = continuous_variable,
-                                             by = variable, test.args = test.args, ...),
-    "wilcox.test" = add_p_test_wilcox.test(data = data, variable = continuous_variable,
-                                           by = variable, test.args = test.args, ...),
-    "lme4" = add_p_test_lme4(data = data, variable = continuous_variable,
-                             by = variable, test.args = test.args, group = group, ...),
-    "ancova" = add_p_test_ancova(data = data, variable = continuous_variable,
-                                 by = variable, test.args = test.args, ...),
-    "ancova_lme4" = add_p_test_ancova_lme4(data = data, variable = continuous_variable,
-                                           by = variable, test.args = test.args,
-                                           group = group, ...)
+  switch(test_name,
+    "t.test" = add_p_test_t.test(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, ...
+    ),
+    "aov" = add_p_test_aov(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, ...
+    ),
+    "kruskal.test" = add_p_test_kruskal.test(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, ...
+    ),
+    "wilcox.test" = add_p_test_wilcox.test(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, ...
+    ),
+    "lme4" = add_p_test_lme4(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, group = group, ...
+    ),
+    "ancova" = add_p_test_ancova(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args, ...
+    ),
+    "ancova_lme4" = add_p_test_ancova_lme4(
+      data = data, variable = continuous_variable,
+      by = variable, test.args = test.args,
+      group = group, ...
+    )
   ) %||%
     stop("No test selected", call. = FALSE) %>%
     dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))

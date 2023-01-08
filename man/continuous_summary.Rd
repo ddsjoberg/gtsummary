@@ -39,7 +39,7 @@ continuous_summary_ex1 <-
     include = c("stage", "grade"),
     by = "trt",
     stat_fns = ~ continuous_summary("age"),
-    statistic = ~ "{median} [{p25}-{p75}]",
+    statistic = ~"{median} [{p25}-{p75}]",
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
   ) \%>\%

@@ -105,6 +105,3 @@ test_that("no errors/warnings with tidy_wald_test()", {
     ignore_attr = TRUE
   )
 })
-
-
-
