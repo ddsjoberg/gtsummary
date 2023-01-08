@@ -262,8 +262,9 @@ A BibTeX entry for LaTeX users is
 
 ## Contributing
 
-Big thank you to [@jeffreybears](https://www.jeffreybears.com/) for the
-hex sticker!
+Big thank you to
+[@jeffreybears](https://www.etsy.com/shop/jeffreybears/) for the hex
+sticker!
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of
@@ -314,6 +315,7 @@ you to all contributors!
 [@ctlamb](https://github.com/ctlamb),
 [@davidgohel](https://github.com/davidgohel),
 [@davidkane9](https://github.com/davidkane9),
+[@DavisVaughan](https://github.com/DavisVaughan),
 [@dax44](https://github.com/dax44),
 [@dchiu911](https://github.com/dchiu911),
 [@ddsjoberg](https://github.com/ddsjoberg),
@@ -386,6 +388,7 @@ you to all contributors!
 [@mbac](https://github.com/mbac),
 [@mdidish](https://github.com/mdidish),
 [@MelissaAssel](https://github.com/MelissaAssel),
+[@mfansler](https://github.com/mfansler),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@mljaniczek](https://github.com/mljaniczek),
 [@moleps](https://github.com/moleps),
