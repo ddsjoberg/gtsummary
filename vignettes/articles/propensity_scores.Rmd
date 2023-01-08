@@ -22,7 +22,7 @@ Herein, we review how to perform propensity score analysis aided with the {gtsum
 
 For a deeper review of propensity score methods, review one or more of the following resources
 
-- Causal inference R workshop prepared by ([Malcolm Barrett](https://twitter.com/malco_barrett)) and  ([Lucy D’Agostino McGowan](https://twitter.com/LucyStats)). Workshop material are found (here)[https://github.com/malcolmbarrett/causal_inference_r_workshop].
+- Causal inference R workshop prepared by ([Malcolm Barrett](https://twitter.com/malco_barrett)) and  ([Lucy D’Agostino McGowan](https://twitter.com/LucyStats)). Workshop materials can be found [here](https://github.com/malcolmbarrett/causal_inference_r_workshop).
 
 - "A Tutorial and Case Study in Propensity Score Analysis: An Application to Estimating the Effect of In-Hospital Smoking Cessation Counseling on Mortality" published in *Multivariate Behavioral Research*. (doi:10.1080/00273171.2011.540480)[https://doi.org/10.1080%2F00273171.2011.540480].
 
@@ -106,7 +106,7 @@ gts_pre_match <-
   add_difference(everything() ~ "smd") %>%
   modify_header(
     estimate ~ "**SMD**", # rename Difference to SMD
-    all_stat_cols() ~ "**{level}**<br>N = {n}"
+    all_stat_cols() ~ "**{level}**  \nN = {n}"
   ) %>%
   modify_column_hide(columns = ci) # remove 95% CI
 
@@ -222,7 +222,10 @@ gts_post_match <-
     test = everything() ~ "smd",
     estimate_fun = ~partial(style_sigfig, digits = 3)
   ) %>%
-  modify_header(estimate ~ "**SMD**") %>% # rename Difference to SMD
+  modify_header(
+    all_stat_cols() ~ "**{level}**  \nN= {n}",
+    estimate ~ "**SMD**" # rename Difference to SMD
+  ) %>% 
   modify_column_hide(columns = ci) # remove 95%CI
 
 gts_post_match
