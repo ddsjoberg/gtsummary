@@ -22,7 +22,7 @@
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' as_flex_table_ex1 <-
 #'   trial %>%
