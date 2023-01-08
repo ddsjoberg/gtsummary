@@ -97,9 +97,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+<div class="section level4">
+<h4 id="breaking-changes-development-version">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h4>
 <ul><li><p>Updated a default argument values in <code>tidy_robust(vcov=NULL, vcov_args=NULL)</code>. Users must specify the type of robust standard errors using these arguments.</p></li>
-<li><p>Arguments pass via the dots in <code>tbl_uvregression(...)</code> are now passed to <code><a href="https://larmarange.github.io/broom.helpers/reference/tidy_plus_plus.html" class="external-link">broom.helpers::tidy_plus_plus()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1396" class="external-link">#1396</a>)</p></li>
-<li><p>Added a new article illustrating how to place gtsummary tables into Shiny applications. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1335" class="external-link">#1335</a>)</p></li>
 <li>
 <p>Fully removed deprecated items that were originally deprecated in v1.2.5 (released 3 years ago).</p>
 <ul><li><code>tbl_summary_()</code></li>
@@ -109,14 +109,29 @@
 <code>add_p(exclude=)</code>, <code>as_gt(exclude=)</code>, <code>as_kable(exclude=)</code>, <code>as_tibble.gtsummary(exclude=)</code>, <code>tbl_regression(exclude=)</code>, <code>tbl_uvregression(exclude=)</code>
 </li>
 </ul></li>
-<li><p>Added new function <code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> for adding confidence intervals to <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/965" class="external-link">#965</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-functions-development-version">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h4>
+<ul><li>Added new function <code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> for adding confidence intervals to <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/965" class="external-link">#965</a>)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-functionality-development-version">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-development-version"></a></h4>
+<ul><li><p>Arguments pass via the dots in <code>tbl_uvregression(...)</code> are now passed to <code><a href="https://larmarange.github.io/broom.helpers/reference/tidy_plus_plus.html" class="external-link">broom.helpers::tidy_plus_plus()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1396" class="external-link">#1396</a>)</p></li>
 <li><p>Added new theme elements to control the default headers in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1401" class="external-link">#1401</a>)</p></li>
 <li><p>All examples that previously used <code>&lt;br&gt;</code> for line breaks in gt tables have been updated to use <code>\n</code>. Additionally, the <code>"qjecon"</code> journal theme has been updated to use the new line breaker as well. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1311" class="external-link">#1311</a>)</p></li>
-<li><p>Fix for <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> when the header is blank. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1406" class="external-link">#1406</a>)</p></li>
-<li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that now allows for column vectors to be named within a data frame. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1403" class="external-link">#1403</a>)</p></li>
 <li><p>Now allowing for mixed-class numeric types in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, such that <code><a href="../reference/inline_text.html">inline_text()</a></code> will not throw an error when the pattern argument is specified.</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/stats/mood.test.html" class="external-link">stats::mood.test()</a></code> to <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1397" class="external-link">#1397</a>)</p></li>
 </ul></div>
+<div class="section level4">
+<h4 id="new-documentation-development-version">New Documentation<a class="anchor" aria-label="anchor" href="#new-documentation-development-version"></a></h4>
+<ul><li>Added a new article illustrating how to place gtsummary tables into Shiny applications. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1335" class="external-link">#1335</a>)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li><p>Fix for <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> when the header is blank. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1406" class="external-link">#1406</a>)</p></li>
+<li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that now allows for column vectors to be named within a data frame. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1403" class="external-link">#1403</a>)</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.3" id="gtsummary-163">gtsummary 1.6.3<small>2022-12-06</small><a class="anchor" aria-label="anchor" href="#gtsummary-163"></a></h2>
 <ul><li><p>The <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> function now recognizes markdown bold (<code>**</code>) and italic (<code>_</code>) syntax in the headers and spanning headers. Restrictions apply. See help file for details. Users can no longer place sets of double stars and underscores <em>without</em> the text being formatted as markdown syntax. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1361" class="external-link">#1361</a>)</p></li>
