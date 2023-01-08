@@ -87,7 +87,7 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 # A simple weighted dataset
 add_p_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
-  tbl_svysummary(by = Survived) \%>\%
+  tbl_svysummary(by = Survived, include = c(Sex, Age)) \%>\%
   add_p()
 
 # A dataset with a complex design
@@ -96,7 +96,7 @@ d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~
 
 # Example 2 ----------------------------------
 add_p_svysummary_ex2 <-
-  tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) \%>\%
+  tbl_svysummary(d_clust, by = both, include = c(api00, api99, both)) \%>\%
   add_p()
 
 # Example 3 ----------------------------------
