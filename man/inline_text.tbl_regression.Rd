@@ -76,7 +76,7 @@ Other tbl_regression tools:
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_split}()},

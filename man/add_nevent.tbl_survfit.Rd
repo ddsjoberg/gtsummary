@@ -45,7 +45,7 @@ add_nevent.tbl_survfit_ex1 <-
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
