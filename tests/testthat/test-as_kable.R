@@ -69,7 +69,7 @@ test_that("tbl_merge/tbl_stack", {
   expect_snapshot(tbl)
 })
 
-test_that("No errors replacing default arg values",{
+test_that("No errors replacing default arg values", {
   expect_error(
     trial %>%
       tbl_summary(

@@ -114,7 +114,6 @@ test_that("indent2", {
 })
 
 test_that("latex-column-alignment", {
-
   t1 <- trial %>%
     select(trt, age) %>%
     tbl_summary(
@@ -135,6 +134,3 @@ test_that("latex-column-alignment", {
 
   expect_snapshot(tstack)
 })
-
-
-

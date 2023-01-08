@@ -257,7 +257,8 @@ test_that("tbl_summary-order of output columns", {
       select(grade, grade_str) %>%
       tbl_summary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
-      names() %>% {
+      names() %>%
+      {
         .[startsWith(., "stat_")]
       },
     paste0("stat_", 1:3)
@@ -455,8 +456,8 @@ test_that("tbl_summary creates output without error/warning for continuous2 (no 
     purrr::map(
       list(mtcars, iris),
       ~ tbl_summary(.x,
-                    type = all_continuous() ~ "continuous2",
-                    sort = list(all_categorical() ~ "frequency")
+        type = all_continuous() ~ "continuous2",
+        sort = list(all_categorical() ~ "frequency")
       ) %>%
         as_tibble()
     )
@@ -646,19 +647,18 @@ test_that("Hmisc labelled data don't error", {
       dplyr::pull("stat_1"),
     "210 (135, 358)"
   )
-
 })
 
 test_that("no error when by variable omitted from include", {
   expect_snapshot(
     trial %>%
-      tbl_summary(by = trt, include  = age) %>%
+      tbl_summary(by = trt, include = age) %>%
       render_as_html()
   )
 })
 
 test_that("all column names are accepted", {
-  df <- data.frame(variable = c(rep("A", 5), rep("B", 5)), value= 1:10)
+  df <- data.frame(variable = c(rep("A", 5), rep("B", 5)), value = 1:10)
 
   expect_snapshot(
     tbl_summary(df, by = "variable") %>%
@@ -671,7 +671,6 @@ test_that("all column names are accepted", {
   expect_snapshot(
     tbl_summary(df %>% dplyr::rename(by = variable), by = "by") %>% render_as_html()
   )
-
 })
 
 test_that("no error with factor variable with all NA and no specifed levels", {
@@ -705,7 +704,8 @@ test_that("modify_*() family works", {
     add_overall() %>%
     modify_spanning_header(everything() ~ "N = {N}") %>%
     modify_header(all_stat_cols(FALSE) ~ "{level} N = {n}",
-                  stat_0 = "Overall N = {N}") %>%
+      stat_0 = "Overall N = {N}"
+    ) %>%
     modify_footnote(label = "N = {N}") %>%
     modify_caption("N = {N}")
   tbl2 <-
@@ -715,7 +715,8 @@ test_that("modify_*() family works", {
     add_n() %>%
     modify_spanning_header(everything() ~ "N = {N}") %>%
     modify_header(all_stat_cols(FALSE) ~ "{level} N = {n}",
-                  stat_0 = "Overall N = {N}") %>%
+      stat_0 = "Overall N = {N}"
+    ) %>%
     modify_footnote(label = "N = {N}") %>%
     modify_caption("N = {N}")
 
@@ -770,14 +771,19 @@ test_that("modify_*() family works", {
 
 test_that("no error when data frame contains named vector", {
   df <-
-    structure(list(swallowing = structure(c(NA, 53, 100, 0, 100),
-                                          names = c("", "", "", "", "")),
-                   salivation = structure(c(NA, 100, 46, 62, 100),
-                                          names = c("", "", "", "", ""))),
-              row.names = c(NA, -5L), class = c("tbl_df", "tbl", "data.frame"))
+    structure(
+      list(
+        swallowing = structure(c(NA, 53, 100, 0, 100),
+          names = c("", "", "", "", "")
+        ),
+        salivation = structure(c(NA, 100, 46, 62, 100),
+          names = c("", "", "", "", "")
+        )
+      ),
+      row.names = c(NA, -5L), class = c("tbl_df", "tbl", "data.frame")
+    )
 
   expect_snapshot(
     tbl_summary(df, type = list(everything() ~ "continuous")) %>% render_as_html()
   )
-
 })

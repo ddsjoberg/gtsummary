@@ -59,4 +59,3 @@ test_that("indent2", {
   )
   expect_snapshot(tbl %>% render_as_html())
 })
-

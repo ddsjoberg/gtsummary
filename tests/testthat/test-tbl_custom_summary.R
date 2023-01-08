@@ -12,9 +12,9 @@ test_that("tbl_custom_summary() basics", {
       tbl_custom_summary(
         include = c("grade", "response", "marker"),
         by = "trt",
-        stat_fns = ~ mean_age,
-        statistic = ~ "{mean_age}",
-        digits = ~ 1
+        stat_fns = ~mean_age,
+        statistic = ~"{mean_age}",
+        digits = ~1
       ) %>%
       add_overall(last = TRUE) %>%
       modify_footnote(all_stat_cols() ~ "Mean age") %>%
@@ -95,8 +95,10 @@ test_that("tbl_custom_summary() basics", {
   expect_snapshot(tbl)
   expect_equal(
     tbl$label,
-    c("__Grade__", "_I_", "_II_", "_III_", "__T Stage__", "_T1_",
-      "_T2_", "_T3_", "_T4_", "__All grades & stages__")
+    c(
+      "__Grade__", "_I_", "_II_", "_III_", "__T Stage__", "_T1_",
+      "_T2_", "_T3_", "_T4_", "__All grades & stages__"
+    )
   )
   expect_equal(
     tbl$n,
@@ -104,9 +106,11 @@ test_that("tbl_custom_summary() basics", {
   )
   expect_equal(
     tbl$stat_2,
-    c(NA, "1.0 (high, diff: 0.1)", "0.5 (low, diff: -0.4)", "1.0 (high, diff: 0.1)",
+    c(
+      NA, "1.0 (high, diff: 0.1)", "0.5 (low, diff: -0.4)", "1.0 (high, diff: 0.1)",
       NA, "0.7 (low, diff: -0.3)", "1.0 (high, diff: 0.1)", "0.9 (high, diff: 0.0)",
-      "0.7 (low, diff: -0.2)", "0.8 (low, diff: -0.1)")
+      "0.7 (low, diff: -0.2)", "0.8 (low, diff: -0.1)"
+    )
   )
 
   # using data[[variable]]
@@ -192,8 +196,10 @@ test_that("tbl_custom_summary() helpers work as expected", {
 
   expect_equal(
     tbl$stat_1,
-    c(NA, "0.012 [0.00; 0.02] (7/583)", "0.011 [0.00; 0.02] (6/528)",
-      "0.019 [0.01; 0.04] (8/426)", "0.016 [0.01; 0.03] (7/445)")
+    c(
+      NA, "0.012 [0.00; 0.02] (7/583)", "0.011 [0.00; 0.02] (6/528)",
+      "0.019 [0.01; 0.04] (8/426)", "0.016 [0.01; 0.03] (7/445)"
+    )
   )
 
   # continuous_summary
@@ -224,7 +230,9 @@ test_that("tbl_custom_summary() helpers work as expected", {
         by = "Sex",
         stat_fns = everything() ~ proportion_summary("Survived", "Yes", weights = "Freq"),
         statistic = everything() ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-        digits = everything() ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent)
+        digits = everything() ~ list(function(x) {
+          style_percent(x, digits = 1)
+        }, 0, 0, style_percent, style_percent)
       ) %>%
       as_tibble(col_labels = FALSE),
     NA
@@ -233,9 +241,11 @@ test_that("tbl_custom_summary() helpers work as expected", {
 
   expect_equal(
     tbl$stat_1,
-    c(NA, "45.3% (29/64) [33-58]", "20.3% (338/1,667) [18-22]", NA,
+    c(
+      NA, "45.3% (29/64) [33-58]", "20.3% (338/1,667) [18-22]", NA,
       "34.4% (62/180) [28-42]", "14.0% (25/179) [9.4-20]", "17.3% (88/510) [14-21]",
-      "22.3% (192/862) [20-25]")
+      "22.3% (192/862) [20-25]"
+    )
   )
 })
 
@@ -260,8 +270,8 @@ test_that("character summaries do not cause error", {
       tbl_custom_summary(
         include = c("stage"),
         by = "trt",
-        stat_fns = ~ diff_to_great_mean,
-        statistic = ~ "{mean} ({level}) [{date}]"
+        stat_fns = ~diff_to_great_mean,
+        statistic = ~"{mean} ({level}) [{date}]"
       ),
     NA
   )
@@ -273,7 +283,7 @@ test_that("character summaries do not cause error", {
       select(age, variable = trt) %>%
       tbl_custom_summary(
         by = "variable",
-        stat_fns = ~continuous_summary("age"),
+        stat_fns = ~ continuous_summary("age"),
         statistic = ~"{mean} ({sd})"
       ) %>%
       as_tibble(),
@@ -281,12 +291,11 @@ test_that("character summaries do not cause error", {
       select(age, trt) %>%
       tbl_custom_summary(
         by = "trt",
-        stat_fns = ~continuous_summary("age"),
+        stat_fns = ~ continuous_summary("age"),
         statistic = ~"{mean} ({sd})"
       ) %>%
       as_tibble()
   )
-
 })
 
 test_that("full_data contains all observations including missing values", {
@@ -300,8 +309,8 @@ test_that("full_data contains all observations including missing values", {
   res <-
     tbl_custom_summary(
       trial,
-      stat_fns = ~ fn,
-      statistic = ~ "{Nobs}/{Ntot}",
+      stat_fns = ~fn,
+      statistic = ~"{Nobs}/{Ntot}",
       include = age
     ) %>%
     as_tibble()

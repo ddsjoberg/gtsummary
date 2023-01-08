@@ -58,13 +58,19 @@ tbl_continuous <- function(data,
                            statistic = NULL,
                            label = NULL) {
   # evaluate inputs ------------------------------------------------------------
-  variable <- .select_to_varnames(data = data, select = {{ variable }},
-                                  select_single = TRUE, arg_name = "variable")
-  by <- .select_to_varnames(data = data, select = {{ by }},
-                            select_single = TRUE, arg_name = "by")
+  variable <- .select_to_varnames(
+    data = data, select = {{ variable }},
+    select_single = TRUE, arg_name = "variable"
+  )
+  by <- .select_to_varnames(
+    data = data, select = {{ by }},
+    select_single = TRUE, arg_name = "by"
+  )
   include <-
-    .select_to_varnames(data = data, select = {{ include }},
-                        select_single = FALSE, arg_name = "include") %>%
+    .select_to_varnames(
+      data = data, select = {{ include }},
+      select_single = FALSE, arg_name = "include"
+    ) %>%
     setdiff(c(variable, by))
 
   digits <-
@@ -75,18 +81,22 @@ tbl_continuous <- function(data,
     rlang::set_names(include) %>%
     purrr::list_modify(
       !!!.formula_list_to_named_list(
-        digits, data = data, arg_name = "digits",
+        digits,
+        data = data, arg_name = "digits",
         type_check = chuck(type_check, "digits", "fn"),
-        type_check_msg = chuck(type_check, "digits", "msg"))
+        type_check_msg = chuck(type_check, "digits", "msg")
+      )
     )
   statistic <-
     rep_len(list("{median} ({p25}, {p75})"), length.out = length(include)) %>%
     rlang::set_names(include) %>%
     purrr::list_modify(
-      !!!.formula_list_to_named_list(statistic, data = data,
-                                     arg_name = "statistic",
-                                     type_check = chuck(type_check, "is_string", "fn"),
-                                     type_check_msg = chuck(type_check, "is_string", "msg"))
+      !!!.formula_list_to_named_list(statistic,
+        data = data,
+        arg_name = "statistic",
+        type_check = chuck(type_check, "is_string", "fn"),
+        type_check_msg = chuck(type_check, "is_string", "msg")
+      )
     )
 
   label <-
@@ -105,7 +115,10 @@ tbl_continuous <- function(data,
   variable_label <-
     label[[variable]] %||% attr(data[[variable]], "label") %||% variable
   statistic_footnote <-
-    stat_label_match(statistic) %>% unlist() %>% unique() %>% paste(collapse = "; ")
+    stat_label_match(statistic) %>%
+    unlist() %>%
+    unique() %>%
+    paste(collapse = "; ")
   result <-
     tbl_custom_summary(
       data, data,

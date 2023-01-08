@@ -10,8 +10,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(by = trt) %>%
-          add_p()
+            tbl_summary(by = trt) %>%
+            add_p()
       ),
     NA
   )
@@ -28,8 +28,8 @@ test_that("no errors with standard use", {
         strata = c(grade, stage),
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(by = trt) %>%
-          add_p(test = all_continuous() ~ "t.test")
+            tbl_summary(by = trt) %>%
+            add_p(test = all_continuous() ~ "t.test")
       ) %>%
       render_as_html()
   )
@@ -58,8 +58,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(by = trt) %>%
-          add_p(),
+            tbl_summary(by = trt) %>%
+            add_p(),
         .combine_with = "tbl_stack"
       ),
     NA
@@ -74,10 +74,10 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_uvregression(
-            y = age,
-            method = lm
-          )
+            tbl_uvregression(
+              y = age,
+              method = lm
+            )
       ) %>%
       render_as_html()
   )
@@ -90,8 +90,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_cross() %>%
-          add_p()
+            tbl_cross() %>%
+            add_p()
       ) %>%
       render_as_html()
   )
@@ -104,8 +104,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_cross() %>%
-          add_p()
+            tbl_cross() %>%
+            add_p()
       ) %>%
       render_as_html()
   )
@@ -117,11 +117,11 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(
-            include = response,
-            label = list(response = .y),
-            missing = "no"
-          )
+            tbl_summary(
+              include = response,
+              label = list(response = .y),
+              missing = "no"
+            )
       ) %>%
       render_as_html()
   )
@@ -147,7 +147,7 @@ test_that("no errors with standard use", {
         strata = trt,
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(),
+            tbl_summary(),
         .combine_args = list(tab_spanner = FALSE)
       ),
     NA
@@ -162,10 +162,10 @@ test_that("no errors with standard use", {
         strata = trt,
         .tbl_fun =
           ~ .x %>%
-          tbl_summary(by = grade, missing = "no") %>%
-          add_n(),
+            tbl_summary(by = grade, missing = "no") %>%
+            add_n(),
         .stack_group_header = TRUE,
-        .combine_with = 'tbl_stack'
+        .combine_with = "tbl_stack"
       )
   )
 })

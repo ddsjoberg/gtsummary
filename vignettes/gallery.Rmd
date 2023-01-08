@@ -20,11 +20,13 @@ knitr::opts_chunk$set(
 
 ```{r, echo = FALSE, results = 'asis'}
 # we do NOT want the vignette to build on CRAN...it's taking too long
-if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
-    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
-  msg <- 
-    paste("View this vignette on the",
-          "[package website](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html).")
+if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
+  !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
+  msg <-
+    paste(
+      "View this vignette on the",
+      "[package website](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)."
+    )
   cat(msg)
   knitr::knit_exit()
 }
@@ -33,8 +35,14 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
 FAQ and Gallery showing various tables possible with the {gtsummary} package.
 
 ```{r setup, message = FALSE, warning=FALSE}
-library(gtsummary); library(gt); library(survival)
-library(dplyr); library(stringr); library(purrr); library(forcats); library(tidyr)
+library(gtsummary)
+library(gt)
+library(survival)
+library(dplyr)
+library(stringr)
+library(purrr)
+library(forcats)
+library(tidyr)
 ```
 
 <hr>
@@ -126,7 +134,7 @@ Add a spanning header over the group columns for increased clarity, and modify c
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(
-    by = trt, 
+    by = trt,
     missing = "no",
     statistic = all_continuous() ~ "{median} ({p25}, {p75})"
   ) %>%
@@ -147,10 +155,12 @@ trial %>%
   tbl_summary(
     by = trt,
     type = all_continuous() ~ "continuous2",
-    statistic = all_continuous() ~ c("{N_nonmiss}",
-                                     "{mean} ({sd})", 
-                                     "{median} ({p25}, {p75})", 
-                                     "{min}, {max}"),
+    statistic = all_continuous() ~ c(
+      "{N_nonmiss}",
+      "{mean} ({sd})",
+      "{median} ({p25}, {p75})",
+      "{min}, {max}"
+    ),
     missing = "no"
   ) %>%
   italicize_levels()
@@ -166,11 +176,11 @@ trial %>%
   select(response, age, grade) %>%
   mutate(response = factor(response, labels = c("No Tumor Response", "Tumor Responded"))) %>%
   tbl_summary(
-    by = response, 
+    by = response,
     missing = "no",
     label = list(age ~ "Patient Age", grade ~ "Tumor Grade")
   ) %>%
-  add_p(pvalue_fun = ~style_pvalue(.x, digits = 2)) %>%
+  add_p(pvalue_fun = ~ style_pvalue(.x, digits = 2)) %>%
   add_q()
 ```
 
@@ -183,13 +193,13 @@ Include missing tumor response as column using `fct_explicit_na()`.
 trial %>%
   select(response, age, grade) %>%
   mutate(
-    response = factor(response, labels = c("No Tumor Response", "Tumor Responded")) %>% 
+    response = factor(response, labels = c("No Tumor Response", "Tumor Responded")) %>%
       fct_explicit_na(na_level = "Missing Response Status")
   ) %>%
   tbl_summary(
-    by = response, 
+    by = response,
     label = list(age ~ "Patient Age", grade ~ "Tumor Grade")
-  ) 
+  )
 ```
 
 <hr>
@@ -204,8 +214,10 @@ trial %>%
   select(response, marker, trt) %>%
   tbl_summary(
     by = trt,
-    statistic = list(all_continuous() ~ "{mean} ({sd})",
-                     all_categorical() ~ "{p}%"),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}%"
+    ),
     missing = "no"
   ) %>%
   add_difference() %>%
@@ -238,9 +250,13 @@ trial_paired %>%
   ungroup() %>%
   # summarize data
   tbl_summary(by = trt, include = -id) %>%
-  add_p(test = list(marker ~ "paired.t.test",
-                    response ~ "mcnemar.test"), 
-        group = id)
+  add_p(
+    test = list(
+      marker ~ "paired.t.test",
+      response ~ "mcnemar.test"
+    ),
+    group = id
+  )
 ```
 
 <hr>
@@ -268,7 +284,7 @@ t1 <- small_trial %>%
 t2 <- small_trial %>%
   filter(grade %in% c("I", "III")) %>%
   tbl_summary(by = grade, missing = "no") %>%
-  add_p()  %>%
+  add_p() %>%
   modify_header(p.value ~ md("**I vs. III**")) %>%
   # hide summary stat columns
   modify_column_hide(all_stat_cols())
@@ -295,7 +311,6 @@ trial %>%
   tbl_summary(statistic = all_continuous() ~ "{mean} ({sd})", missing = "no") %>%
   modify_header(stat_0 ~ "**Mean (SD)**") %>%
   add_ci()
-
 ```
 
 <hr>
@@ -320,8 +335,8 @@ trial %>%
   select(trt, grade, age, stage) %>%
   mutate(grade = paste("Grade", grade)) %>%
   tbl_strata(
-    strata = grade, 
-    ~.x %>%
+    strata = grade,
+    ~ .x %>%
       tbl_summary(by = trt, missing = "no") %>%
       modify_header(all_stat_cols() ~ "**{level}**")
   )
@@ -339,7 +354,7 @@ trial %>%
   select(response, age, grade) %>%
   tbl_uvregression(
     method = glm,
-    y = response, 
+    y = response,
     method.args = list(family = binomial),
     exponentiate = TRUE
   ) %>%
@@ -357,8 +372,8 @@ gt_r1 <- glm(response ~ trt + grade, trial, family = binomial) %>%
   tbl_regression(exponentiate = TRUE)
 gt_r2 <- coxph(Surv(ttdeath, death) ~ trt + grade, trial) %>%
   tbl_regression(exponentiate = TRUE)
-gt_t1 <- trial[c("trt", "grade")] %>% 
-  tbl_summary(missing = "no") %>% 
+gt_t1 <- trial[c("trt", "grade")] %>%
+  tbl_summary(missing = "no") %>%
   add_n() %>%
   modify_header(stat_0 ~ "**n (%)**") %>%
   modify_footnote(stat_0 ~ NA_character_)
@@ -384,7 +399,7 @@ trial %>%
   select(ttdeath, death, stage, grade) %>%
   tbl_uvregression(
     method = coxph,
-    y = Surv(ttdeath, death), 
+    y = Surv(ttdeath, death),
     exponentiate = TRUE,
     hide_n = TRUE
   ) %>%
@@ -406,7 +421,7 @@ trial %>%
     hide_n = TRUE
   ) %>%
   modify_header(list(
-    label ~"**Model Outcome**",
+    label ~ "**Model Outcome**",
     estimate ~ "**Treatment Coef.**"
   )) %>%
   modify_footnote(estimate ~ "Values larger than 0 indicate larger values in the Drug B group.")
@@ -419,13 +434,14 @@ Implement a custom tidier to report Wald confidence intervals.
 The Wald confidence intervals are calculated using `confint.default()`.
 
 ```{r}
-my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
+my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
   dplyr::bind_cols(
     broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
     # calculate the confidence intervals, and save them in a tibble
     stats::confint.default(x) %>%
       tibble::as_tibble() %>%
-      rlang::set_names(c("conf.low", "conf.high"))  )
+      rlang::set_names(c("conf.low", "conf.high"))
+  )
 }
 
 lm(age ~ grade + marker, trial) %>%
@@ -442,7 +458,7 @@ trial %>%
   select(ttdeath, death, stage, grade) %>%
   tbl_uvregression(
     method = coxph,
-    y = Surv(ttdeath, death), 
+    y = Surv(ttdeath, death),
     exponentiate = TRUE,
   ) %>%
   add_significance_stars()

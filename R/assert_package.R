@@ -9,7 +9,7 @@
 #' @return Returns NULL or not at all.
 #' @examples
 #' assert_package("gt", boolean = TRUE)
-
+#'
 assert_package <- function(pkg, fn = NULL, boolean = FALSE) {
   broom.helpers::.assert_package(
     pkg = pkg,

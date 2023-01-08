@@ -62,7 +62,9 @@ set_gtsummary_theme <- function(x, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking the input is a named list -----------------------------------------
-  if (rlang::is_empty(x)) return(invisible())
+  if (rlang::is_empty(x)) {
+    return(invisible())
+  }
   if (!inherits(x, "list") || is.null(names(x)) || "" %in% names(x)) {
     stop("Argument `x=` must be  named list.", call. = FALSE)
   }
@@ -129,7 +131,9 @@ with_gtsummary_theme <- function(x, expr,
 
 .msg_ignored_elements <- function(x, current_theme, msg) {
   # if no message, dont print one!
-  if (is.null(msg)) return(invisible())
+  if (is.null(msg)) {
+    return(invisible())
+  }
 
   # save vector of theme element names that will be ignored
   elements <-
@@ -137,9 +141,13 @@ with_gtsummary_theme <- function(x, expr,
     imap(
       function(.x, .y) {
         # if theme element not currently set, return NULL
-        if (is.null(current_theme[[.y]])) return(NULL)
+        if (is.null(current_theme[[.y]])) {
+          return(NULL)
+        }
         # if theme element is already set and is different, return the name of the element
-        if (!identical(.x, current_theme[[.y]])) return(.y)
+        if (!identical(.x, current_theme[[.y]])) {
+          return(.y)
+        }
         return(NULL)
       }
     ) %>%
@@ -166,9 +174,11 @@ check_gtsummary_theme <- function(x) {
 
   # check all names are true theme elements
   if (any(!names(x) %in% df_theme_elements$name)) {
-    paste("Theme element(s) {.val {setdiff(names(x), df_theme_elements$name)}}",
-          "are not valid.") %>%
-    cli::cli_alert_danger()
+    paste(
+      "Theme element(s) {.val {setdiff(names(x), df_theme_elements$name)}}",
+      "are not valid."
+    ) %>%
+      cli::cli_alert_danger()
     return(invisible())
   }
 

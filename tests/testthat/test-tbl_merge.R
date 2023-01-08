@@ -36,10 +36,10 @@ adj_mods <-
         ),
         trial
       ) %>%
-      tbl_regression(
-        include = all_of(.x),
-        exponentiate = TRUE
-      )
+        tbl_regression(
+          include = all_of(.x),
+          exponentiate = TRUE
+        )
   )
 
 # now get stage and grade models adjusted for each other
@@ -188,5 +188,3 @@ test_that("tbl_merge with complicated tbl_stack + cols_merge", {
   )
   reset_gtsummary_theme()
 })
-
-

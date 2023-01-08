@@ -110,12 +110,11 @@ test_that("as_tibble(fmt_missing=) works", {
       select(age) %>%
       tbl_summary() %>%
       modify_table_body(
-        ~.x %>% mutate(stat_0 = NA_character_)
+        ~ .x %>% mutate(stat_0 = NA_character_)
       ) %>%
       modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "-") %>%
       as_tibble(fmt_missing = TRUE, col_labels = FALSE) %>%
       dplyr::pull(stat_0),
     c("-", "-")
   )
-
 })

@@ -20,15 +20,15 @@ test_that("lm: no errors/warnings with standard use", {
       render_as_html()
   )
   expect_warning(mtcars %>%
-                   tbl_uvregression(
-                     method = lm,
-                     y = mpg
-                   ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg
+    ), NA)
 
   expect_false(
     "ci" %in%
       names(tbl_uvregression(mtcars, method = lm, y = mpg, conf.int = FALSE) %>%
-              as_tibble(col_labels = FALSE))
+        as_tibble(col_labels = FALSE))
   )
 })
 
@@ -73,11 +73,11 @@ test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
       render_as_html()
   )
   expect_warning(mtcars %>%
-                   tbl_uvregression(
-                     method = lm,
-                     y = mpg,
-                     tidy_fun = broom::tidy
-                   ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg,
+      tidy_fun = broom::tidy
+    ), NA)
 })
 
 test_that("coxph: no errors/warnings with standard use", {
@@ -352,7 +352,7 @@ test_that("tbl_uvregression() can pass the dots to tidy_plus_plus()", {
         y = age,
         method = lm,
         include = c(trt, grade),
-        no_reference_row =  any_of(c("trt", "grade")),
+        no_reference_row = any_of(c("trt", "grade")),
         add_header_rows = FALSE
       ) %>%
       as_tibble() %>%
