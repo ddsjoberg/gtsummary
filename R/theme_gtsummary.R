@@ -22,7 +22,7 @@
 #'   - `"nejm"` _The New England Journal of Medicine_
 #'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
-#'   - `"qjecon"` _The Quarterly Journal of Economics_ ___Under Development___
+#'   - `"qjecon"` _The Quarterly Journal of Economics_
 #'       - `tbl_summary()` all percentages rounded to one decimal place
 #'       - `tbl_regression()`/`tbl_uvregression()` add significance stars with `add_significance_stars()`; hides CI and p-value from output
 #' - `theme_gtsummary_compact()`

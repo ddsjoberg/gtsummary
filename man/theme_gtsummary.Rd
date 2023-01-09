@@ -112,7 +112,7 @@ for details.
 \item Round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
 \item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR
 }
-\item \code{"qjecon"} \emph{The Quarterly Journal of Economics} \emph{\strong{Under Development}}
+\item \code{"qjecon"} \emph{The Quarterly Journal of Economics}
 \itemize{
 \item \code{tbl_summary()} all percentages rounded to one decimal place
 \item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output
