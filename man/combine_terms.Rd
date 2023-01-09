@@ -40,7 +40,7 @@ with a single row in the output table.  The p-value is calculated using
 }
 
 \examples{
-\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
