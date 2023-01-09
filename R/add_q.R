@@ -15,7 +15,7 @@
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @export
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-

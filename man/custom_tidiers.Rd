@@ -145,7 +145,7 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 }
 
 \examples{
-\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)

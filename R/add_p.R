@@ -519,7 +519,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' ```
 #'
 #' @export
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' library(survival)
 #'
@@ -691,13 +691,13 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
-#'   tbl_svysummary(by = Survived) %>%
+#'   tbl_svysummary(by = Survived, include = c(Sex, Age)) %>%
 #'   add_p()
 #'
 #' # A dataset with a complex design
@@ -706,7 +706,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #'
 #' # Example 2 ----------------------------------
 #' add_p_svysummary_ex2 <-
-#'   tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) %>%
+#'   tbl_svysummary(d_clust, by = both, include = c(api00, api99, both)) %>%
 #'   add_p()
 #'
 #' # Example 3 ----------------------------------

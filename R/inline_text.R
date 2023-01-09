@@ -424,7 +424,7 @@ inline_text.tbl_survival <- function(...) {
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A string reporting results from a gtsummary table
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #' # fit survfit
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
