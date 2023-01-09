@@ -20,12 +20,12 @@ install.packages(
 #    may overlap throughout the entire package.
 
 # gt.doc.images MUST BE UDPATED TO BE ABLE TO DIRECT THE IMAGES TO ANOTHER FOLDER!
-gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
+gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = here::here("man-images"))
 
 # document a single file with
 gt.doc.images::save_help_file_images(
   pkg = "gtsummary",
-  rd_files = "add_ci.Rd",
+  rd_files = "add_p.tbl_svysummary.Rd",
   path.output = file.path(here::here(), "man-images")
 )
 

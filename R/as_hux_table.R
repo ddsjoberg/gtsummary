@@ -19,7 +19,7 @@
 #' @return A {huxtable} object
 #' @family gtsummary output types
 #' @author David Hugh-Jones, Daniel D. Sjoberg
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' trial %>%
 #'   dplyr::select(trt, age, grade) %>%
