@@ -32,6 +32,8 @@
 
 ### Bug Fixes
 
+* Updated Lancet journal theme to report p-values with more precision, per the journal's reporting guidelines. (#1442)
+
 * Fix for `as_flex_table()` when the header is blank. (#1406)
 
 * Fix in `tbl_summary()` that now allows for column vectors to be named within a data frame. (#1403)
