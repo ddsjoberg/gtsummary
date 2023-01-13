@@ -230,6 +230,14 @@ test_that("setting themes", {
     },
     "0·64 (0·22 – 1·39)"
   )
+  expect_snapshot(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("lancet"),
+      lm(mpg ~ factor(cyl) + hp + am, mtcars) %>%
+        tbl_regression() %>%
+        as_tibble()
+    )
+  )
 
   reset_gtsummary_theme()
 

@@ -184,8 +184,68 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "The Lancet",
-        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
-        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "pkgwide-fn:pvalue_fun" =
+          function(x, prepend_p = FALSE) {
+            # this function assures that 5s are rounded up (and not to even, the default in `round()`)
+            round2 <- function(x, digits = 0) {
+              round(x + .Machine$double.eps * sign(x), digits = digits)
+            }
+
+            p_fmt <-
+              dplyr::case_when(
+                # allowing some leeway for numeric storage errors
+                x > 1 + 1e-15 ~ NA_character_,
+                x < 0 - 1e-15 ~ NA_character_,
+                x > 0.99 ~ paste0(">", gtsummary::style_number(x = 0.99, digits = 2)),
+                round2(x, digits = 2) >= 0.10 ~ gtsummary::style_number(x, digits = 2),
+                round2(x, digits = 3) >= 0.01 ~ gtsummary::style_number(x, digits = 3),
+                x >= 0.0001 ~ gtsummary::style_number(x, digits = 4),
+                x < 0.0001 ~ paste0("<", gtsummary::style_number(x = 0.0001, digits = 4))
+              )
+
+            # prepending a p = in front of value
+            if (prepend_p == TRUE) {
+              p_fmt <- dplyr::case_when(
+                is.na(p_fmt) ~ NA_character_,
+                stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                TRUE ~ paste0("p=", p_fmt)
+              )
+            }
+
+            attributes(p_fmt) <- attributes(x)
+            return(p_fmt)
+          },
+        "pkgwide-fn:prependpvalue_fun" =
+          function(x, prepend_p = TRUE) {
+            # this function assures that 5s are rounded up (and not to even, the default in `round()`)
+            round2 <- function(x, digits = 0) {
+              round(x + .Machine$double.eps * sign(x), digits = digits)
+            }
+
+            p_fmt <-
+              dplyr::case_when(
+                # allowing some leeway for numeric storage errors
+                x > 1 + 1e-15 ~ NA_character_,
+                x < 0 - 1e-15 ~ NA_character_,
+                x > 0.99 ~ paste0(">", gtsummary::style_number(x = 0.99, digits = 2)),
+                round2(x, digits = 2) >= 0.10 ~ gtsummary::style_number(x, digits = 2),
+                round2(x, digits = 3) >= 0.01 ~ gtsummary::style_number(x, digits = 3),
+                x >= 0.0001 ~ gtsummary::style_number(x, digits = 4),
+                x < 0.0001 ~ paste0("<", gtsummary::style_number(x = 0.0001, digits = 4))
+              )
+
+            # prepending a p = in front of value
+            if (prepend_p == TRUE) {
+              p_fmt <- dplyr::case_when(
+                is.na(p_fmt) ~ NA_character_,
+                stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                TRUE ~ paste0("p=", p_fmt)
+              )
+            }
+
+            attributes(p_fmt) <- attributes(x)
+            return(p_fmt)
+          },
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "style_number-arg:decimal.mark" =
           ifelse(.Platform$OS.type == "windows", special_char$interpunct, "\U00B7"),
