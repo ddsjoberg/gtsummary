@@ -360,3 +360,19 @@
       4 Range        6, 83      
       5 Unknown      11         
 
+---
+
+    Code
+      with_gtsummary_theme(theme_gtsummary_journal("lancet"), lm(mpg ~ factor(cyl) +
+        hp + am, mtcars) %>% tbl_regression() %>% as_tibble())
+    Output
+      # A tibble: 6 x 4
+        `**Characteristic**` `**Beta**` `**95% CI**`   `**p-value**`
+        <chr>                <chr>      <chr>          <chr>        
+      1 factor(cyl)          <NA>       <NA>           <NA>         
+      2 4                    <NA>       <NA>           <NA>         
+      3 6                    -3·9       -7·1 to -0·77  0·017        
+      4 8                    -3·5       -8·7 to 1·6    0·17         
+      5 hp                   -0·04      -0·07 to -0·01 0·0053       
+      6 am                   4·2        1·6 to 6·7     0·0027       
+
