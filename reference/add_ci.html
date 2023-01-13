@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -53,7 +53,10 @@
       <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
+      <a href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a>
+    </li>
+    <li>
+      <a href="../articles/shiny.html">gtsummary + Shiny</a>
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
@@ -109,6 +112,20 @@
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  style_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  df <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for tbl_svysummary</span></span>
+<span><span class="fu">add_ci</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  style_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  df <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -116,7 +133,7 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>A <code>tbl_summary</code> object</p></dd>
+<dd><p>A <code>tbl_summary</code> or a <code>tbl_svysummary</code> object</p></dd>
 
 
 <dt>...</dt>
@@ -125,10 +142,9 @@
 
 <dt>method</dt>
 <dd><p>Confidence interval method. Default is
-<code>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</code>.
-Must be one of
-<code>c("wilson", "wilson.no.correct", "exact", "asymptotic")</code> for categorical
-variables, and <code>c("t.test", "wilcox.test")</code> for continuous variables.
+<code>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</code> for <code>tbl_summary</code> objects
+and <code>list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean")</code> for <code>tbl_svysummary</code>
+objects.
 See details below.</p></dd>
 
 
@@ -159,6 +175,11 @@ represented by <code>"{stat}"</code> and the CI column represented by <code>"{ci
 e.g. <code>pattern = "{stat} ({ci})"</code> will merge the two columns with the CI
 in parentheses.</p></dd>
 
+
+<dt>df</dt>
+<dd><p>For <code><a href="tbl_svysummary.html">tbl_svysummary()</a></code>, the number of degrees of freedom used
+to estimate confidence intervals. By default, will use <code><a href="https://rdrr.io/pkg/survey/man/svychisq.html" class="external-link">survey::degf()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -170,12 +191,35 @@ in parentheses.</p></dd>
     <h2>method argument</h2>
     
 
+
+<p><strong>for <code>tbl_summary</code> tables</strong></p>
+<p>Must be one of
+<code>c("wilson", "wilson.no.correct", "exact", "asymptotic")</code> for categorical
+variables, and <code>c("t.test", "wilcox.test")</code> for continuous variables.</p>
 <p>Methods <code>c("wilson", "wilson.no.correct")</code> are calculated with
 <code>prop.test(correct = c(TRUE, FALSE))</code>.
 The default method, <code>"wilson"</code>, includes the Yates continuity correction.
-Methods <code>c("exact", "asymptotic")</code> are calculated with <code>Hmisc::binconf(method=)</code>.
-Confidence intervals for means are calculated using <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code> and
+Methods <code>c("exact", "asymptotic")</code> are calculated with <code>Hmisc::binconf(method=)</code>.</p>
+<p>Confidence intervals for means are calculated using <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code> and
 <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test()</a></code> for pseudo-medians.</p>
+<p><strong>for <code>tbl_svysummary</code> tables</strong></p>
+<p>Must be one of
+<code>c("svyprop", "svyprop.logit", "svyprop.likelihood", "svyprop.asin", "svyprop.beta", "svyprop.mean", "svyprop.xlogit")</code>
+for categorical variables, and
+<code>c("svymean", "svymedian", "svymedian.mean", "svymedian.beta", "svymedian.xlogit", "svymedian.asin", "svymedian.score")</code>
+for continuous variables.</p>
+<p>Confidence intervals for proportions are computed with <code><a href="https://rdrr.io/pkg/survey/man/svyciprop.html" class="external-link">survey::svyciprop()</a></code>.
+See the help file of this function for details on the different methods
+available to compute CIs. The default method <code>"svyprop"</code> is equivalent
+to <code>"svyprop.logit"</code>, corresponding to a call to <code><a href="https://rdrr.io/pkg/survey/man/svyciprop.html" class="external-link">survey::svyciprop()</a></code> with
+<code>method = "logit"</code>.</p>
+<p>Confidence intervals for means (method <code>"svymean"</code>) are computed using
+<code>confint(svymean())</code>.</p>
+<p>Confidence intervals for medians are computed with <code><a href="https://rdrr.io/pkg/survey/man/svyquantile.html" class="external-link">survey::svyquantile()</a></code>.
+See the help file of this function for details on the different methods
+available to compute CIs. The default method <code>"svymedian"</code> is equivalent
+to <code>"svymedian.mean"</code>, corresponding to a call to <code>surevy::svyquantile()</code>
+with <code>method = "mean"</code>.</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -185,27 +229,12 @@ Confidence intervals for means are calculated using <code><a href="https://rdrr.
 <p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex1.png" alt="image of rendered example table" style="width:50%;"></p>
 <p>Example 2</p>
 <p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex2.png" alt="image of rendered example table" style="width:45%;"></p>
+<p>Example 3</p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex3.png" alt="image of rendered example table" style="width:45%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>Review <a href="syntax.html">list, formula, and selector syntax</a> used throughout gtsummary</p>
-<p>Other tbl_summary tools: 
-<code><a href="add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
-<code><a href="add_overall.html">add_overall</a>()</code>,
-<code><a href="add_p.tbl_summary.html">add_p.tbl_summary</a>()</code>,
-<code><a href="add_q.html">add_q</a>()</code>,
-<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
-<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
-<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
-<code><a href="inline_text.tbl_survfit.html">inline_text.tbl_survfit</a>()</code>,
-<code><a href="modify.html">modify</a></code>,
-<code><a href="separate_p_footnotes.html">separate_p_footnotes</a>()</code>,
-<code><a href="tbl_custom_summary.html">tbl_custom_summary</a>()</code>,
-<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
-<code><a href="tbl_split.html">tbl_split</a>()</code>,
-<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
-<code><a href="tbl_strata.html">tbl_strata</a>()</code>,
-<code><a href="tbl_summary.html">tbl_summary</a>()</code></p></div>
+    <div class="dont-index"><p>Review <a href="syntax.html">list, formula, and selector syntax</a> used throughout gtsummary</p></div>
     </div>
 
     <div id="ref-examples">
@@ -215,18 +244,34 @@ Confidence intervals for means are calculated using <code><a href="https://rdrr.
 <span class="r-in"><span><span class="va">add_ci_ex1</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">marker</span>, <span class="va">response</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>missing <span class="op">=</span> <span class="st">"no"</span>,</span></span>
-<span class="r-in"><span>              statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    missing <span class="op">=</span> <span class="st">"no"</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">add_ci</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">add_ci_ex2</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_categorical</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{p}%"</span>,</span></span>
-<span class="r-in"><span>                missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu">add_ci</span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">response</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_categorical</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{p}%"</span>,</span></span>
+<span class="r-in"><span>    missing <span class="op">=</span> <span class="st">"no"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_ci</span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">api</span>, package <span class="op">=</span> <span class="st">"survey"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">add_ci_ex3</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign</a></span><span class="op">(</span>id <span class="op">=</span> <span class="op">~</span><span class="va">dnum</span>, weights <span class="op">=</span> <span class="op">~</span><span class="va">pw</span>, data <span class="op">=</span> <span class="va">apiclus1</span>, fpc <span class="op">=</span> <span class="op">~</span><span class="va">fpc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_svysummary.html">tbl_svysummary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">api00</span>, <span class="va">hsg</span>, <span class="va">stype</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="va">hsg</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_ci</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    method <span class="op">=</span> <span class="va">api00</span> <span class="op">~</span> <span class="st">"svymedian"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -242,7 +287,7 @@ Confidence intervals for means are calculated using <code><a href="https://rdrr.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

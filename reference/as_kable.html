@@ -26,7 +26,7 @@ or spanning header rows."><meta property="og:image" content="https://www.danield
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -56,7 +56,10 @@ or spanning header rows."><meta property="og:image" content="https://www.danield
       <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
+      <a href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a>
+    </li>
+    <li>
+      <a href="../articles/shiny.html">gtsummary + Shiny</a>
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
@@ -104,7 +107,7 @@ or spanning header rows.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_kable</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, return_calls <span class="op">=</span> <span class="cn">FALSE</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_kable</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, return_calls <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -128,10 +131,6 @@ Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html
 <dt>return_calls</dt>
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
-
-
-<dt>exclude</dt>
-<dd><p>DEPRECATED</p></dd>
 
 </dl></div>
     <div id="value">
@@ -166,27 +165,102 @@ indenting is not supported, try <code><a href="bold_italicize_labels_levels.html
 <span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">as_kable</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |**Characteristic**         | **Drug A**, N = 98 | **Drug B**, N = 102 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:--------------------------|:------------------:|:-------------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Age__                    |    46 (37, 59)     |     48 (39, 56)     |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Unknown                    |         7          |          4          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Marker Level (ng/mL)__   | 0.84 (0.24, 1.57)  |  0.52 (0.19, 1.20)  |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Unknown                    |         6          |          4          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__T Stage__                |                    |                     |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |T1                         |      28 (29%)      |      25 (25%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |T2                         |      25 (26%)      |      29 (28%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |T3                         |      22 (22%)      |      21 (21%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |T4                         |      23 (23%)      |      27 (26%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Grade__                  |                    |                     |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |I                          |      35 (36%)      |      33 (32%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |II                         |      32 (33%)      |      36 (35%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |III                        |      31 (32%)      |      33 (32%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Tumor Response__         |      28 (29%)      |      33 (34%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Unknown                    |         3          |          4          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Patient Died__           |      52 (53%)      |      60 (59%)       |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |__Months to Death/Censor__ | 23.5 (17.4, 24.0)  |  21.2 (14.6, 24.0)  |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;table&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;thead&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:left;"&gt; **Characteristic** &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:center;"&gt; **Drug A**, N = 98 &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:center;"&gt; **Drug B**, N = 102 &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;/thead&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tbody&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Age__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 46 (37, 59) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 48 (39, 56) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Marker Level (ng/mL)__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 0.84 (0.24, 1.57) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 0.52 (0.19, 1.20) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __T Stage__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt;  &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt;  &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; T1 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 28 (29%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 25 (25%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; T2 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 25 (26%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 29 (28%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; T3 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 22 (22%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 21 (21%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; T4 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 23 (23%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 27 (26%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Grade__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt;  &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt;  &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 35 (36%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 33 (32%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 32 (33%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 36 (35%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 31 (32%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 33 (32%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Tumor Response__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 28 (29%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 33 (34%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Patient Died__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 52 (53%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 60 (59%) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; __Months to Death/Censor__ &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 23.5 (17.4, 24.0) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:center;"&gt; 21.2 (14.6, 24.0) &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/tbody&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/table&gt;</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -202,7 +276,7 @@ indenting is not supported, try <code><a href="bold_italicize_labels_levels.html
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

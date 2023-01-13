@@ -26,7 +26,7 @@ computing a proportion and its confidence interval."><meta property="og:image" c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -56,7 +56,10 @@ computing a proportion and its confidence interval."><meta property="og:image" c
       <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
+      <a href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a>
+    </li>
+    <li>
+      <a href="../articles/shiny.html">gtsummary + Shiny</a>
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
@@ -190,9 +193,11 @@ and the corresponding method.</p>
 <span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="st">"Class"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="st">"Sex"</span>,</span></span>
 <span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="fu">proportion_summary</span><span class="op">(</span><span class="st">"Survived"</span>, <span class="st">"Yes"</span>, weights <span class="op">=</span> <span class="st">"Freq"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,</span></span>
 <span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="style_percent.html">style_percent</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">}</span>,</span></span>
+<span class="r-in"><span>      <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="style_percent.html">style_percent</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">}</span>,</span></span>
 <span class="r-in"><span>      <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">style_percent</span>, <span class="va">style_percent</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
@@ -216,7 +221,7 @@ and the corresponding method.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -25,7 +25,7 @@ tbl_custom_summary."><meta property="og:image" content="https://www.danieldsjobe
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -55,7 +55,10 @@ tbl_custom_summary."><meta property="og:image" content="https://www.danieldsjobe
       <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
+      <a href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a>
+    </li>
+    <li>
+      <a href="../articles/shiny.html">gtsummary + Shiny</a>
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
@@ -199,7 +202,6 @@ call. Default is <code>NULL</code>.</p></dd>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Other tbl_summary tools: 
-<code><a href="add_ci.html">add_ci</a>()</code>,
 <code><a href="add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
 <code><a href="add_p.tbl_summary.html">add_p.tbl_summary</a>()</code>,
 <code><a href="add_q.html">add_q</a>()</code>,
@@ -257,12 +259,12 @@ call. Default is <code>NULL</code>.</p></dd>
 <span class="r-in"><span>    include <span class="op">=</span> <span class="va">grade</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="va">trt</span>,</span></span>
 <span class="r-in"><span>    percent <span class="op">=</span> <span class="st">"row"</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{p}%"</span>,</span></span>
-<span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{p}%"</span>,</span></span>
+<span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span><span class="fl">1</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">add_overall</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    last <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{p}% (n={n})"</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{p}% (n={n})"</span>,</span></span>
 <span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -290,7 +292,7 @@ call. Default is <code>NULL</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
