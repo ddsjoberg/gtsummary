@@ -99,7 +99,7 @@
 <p><strong>If there is an GitHub issue associated with this pull request, please provide link.</strong></p>
 <hr><p>Reviewer Checklist (if item does not apply, mark is as complete)</p>
 <ul class="task-list"><li>
-<input type="checkbox" disabled>Ensure all package dependencies are installed by running <code><a href="https://rstudio.github.io/renv/reference/install.html" class="external-link">renv::install()</a></code>
+<input type="checkbox" disabled>Ensure all package dependencies are installed by running <code>renv::install()</code>
 </li>
 <li>
 <input type="checkbox" disabled>PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.</li>
@@ -117,8 +117,8 @@
 <li>
 <input type="checkbox" disabled>R CMD Check runs without errors, warnings, and notes</li>
 <li>
-<input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html" class="external-link">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
-</ul><p>When the branch is ready to be merged into master: - [ ] Update <code>NEWS.md</code> with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parentheses at the end update (see <code>NEWS.md</code> for examples). - [ ] Increment the version number using <code>usethis::use_version(which = "dev")</code> - [ ] Run <code>codemetar::write_codemeta()</code> - [ ] Run <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html" class="external-link">usethis::use_spell_check()</a></code> again - [ ] Approve Pull Request - [ ] Merge the PR. Please use “Squash and merge”.</p>
+<input type="checkbox" disabled><code>usethis::use_spell_check()</code> runs with no spelling errors in documentation</li>
+</ul><p>When the branch is ready to be merged into master: - [ ] Update <code>NEWS.md</code> with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parentheses at the end update (see <code>NEWS.md</code> for examples). - [ ] Increment the version number using <code>usethis::use_version(which = "dev")</code> - [ ] Run <code>codemetar::write_codemeta()</code> - [ ] Run <code>usethis::use_spell_check()</code> again - [ ] Approve Pull Request - [ ] Merge the PR. Please use “Squash and merge”.</p>
 
 
   </div>
