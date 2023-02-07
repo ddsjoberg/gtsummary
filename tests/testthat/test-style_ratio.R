@@ -11,6 +11,10 @@ test_that("correct rounding near one", {
     seq(0.999, 1.001, by = 0.0005) %>% style_ratio(digits = 3),
     c("0.999", "1.000", "1.000", "1.001", "1.001")
   )
+  expect_equal(
+    -seq(0.999, 1.001, by = 0.0005) %>% style_ratio(digits = 3),
+    c("-0.999", "-1.000", "-1.000", "-1.001", "-1.001")
+  )
 
   expect_false(
     style_ratio(0.99) == "1.0"
