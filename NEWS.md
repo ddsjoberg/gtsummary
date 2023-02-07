@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated `style_ratio()` to now format negative values.
+
 # gtsummary 1.7.0
 
 ### Breaking Changes
