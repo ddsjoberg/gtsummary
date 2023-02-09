@@ -1,6 +1,7 @@
 # gtsummary (development version)
 
 * Updated `style_ratio()` to now format negative values.
+* Bug fix in `add_ci.tbl_svysummary()` for dichotomous variables.
 
 # gtsummary 1.7.0
 
