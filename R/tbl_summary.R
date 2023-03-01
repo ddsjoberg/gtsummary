@@ -256,7 +256,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (!is.null(by) && sum(is.na(data[[by]])) > 0) {
     message(glue(
       "{sum(is.na(data[[by]]))} observations missing `{by}` have been removed. ",
-      "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
+      "To include these observations, use `forcats::fct_na_value_to_level()` on `{by}` ",
       "column before passing to `tbl_summary()`."
     ))
 

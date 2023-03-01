@@ -177,7 +177,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (!is.null(by) && sum(is.na(data$variables[[by]])) > 0) {
     message(glue(
       "{sum(is.na(data$variables[[by]]))} observations missing `{by}` have been removed. ",
-      "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
+      "To include these observations, use `forcats::fct_na_value_to_level()` on `{by}` ",
       "column before passing to `tbl_svysummary()`."
     ))
     lbls <- purrr::map(data$variables, ~ attr(.x, "label"))
@@ -503,13 +503,12 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
   # adding stat_display to the data frame
   if (summary_type == "continuous2") {
     return <-
-      left_join(
+      dplyr::cross_join(
         df_stats,
         tibble(
           variable_levels = map_chr(stat_display, ~ stat_label_match(.x) %>% unlist()),
           stat_display = .env$stat_display
-        ),
-        by = character()
+        )
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
   } else {

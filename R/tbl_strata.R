@@ -227,7 +227,7 @@ tbl_strata_internal <- function(data,
         "n_unweighted", "N_unweighted", "p_unweighted"
       ))
     ) %>%
-    mutate(header = glue::glue_data(dplyr::cur_data(), .header))
+    mutate(header = glue::glue(.header))
 
   # nesting data and building tbl objects --------------------------------------
   df_tbls <-

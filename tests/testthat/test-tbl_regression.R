@@ -265,6 +265,7 @@ test_that("tidymodels/parsnip/workflows", {
 })
 
 test_that("tidycrr models work", {
+  skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
   skip_if_not(broom.helpers::.assert_package("tidycmprsk", pkg_search = "gtsummary", boolean = TRUE))
   mod <- tidycmprsk::crr(tidycmprsk::Surv(ttdeath, death_cr) ~ age + grade, tidycmprsk::trial)
 

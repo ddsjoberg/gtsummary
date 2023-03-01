@@ -801,13 +801,12 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   # adding stat_display to the data frame
   if (summary_type == "continuous2") {
     return <-
-      left_join(
+      dplyr::cross_join(
         df_stats,
         tibble(
           variable_levels = map_chr(stat_display, ~ stat_label_match(.x) %>% unlist()),
           stat_display = stat_display
-        ),
-        by = character()
+        )
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
   } else {

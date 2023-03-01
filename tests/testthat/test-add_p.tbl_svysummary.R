@@ -104,6 +104,7 @@ test_that("add_p creates errors with bad args", {
 
 
 test_that("add_p works well", {
+  skip_if_not(broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE))
   expect_error(
     tbl1 <-
       tbl_svysummary(strial, by = response) %>%

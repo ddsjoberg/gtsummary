@@ -245,16 +245,18 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     )
 
   # adding the Ns to the `x$table_styling$header`
-  x$table_styling$header <-
-    x[c("N", "n", "N_event")] %>%
-    purrr::compact() %>%
-    as_tibble() %>%
-    dplyr::rename_with(.fn = ~ vec_paste0("modify_stat_", .), .cols = everything()) %>%
-    full_join(
-      x$table_styling$header,
-      by = character()
-    ) %>%
-    dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+  if (!rlang::is_empty(x[c("N", "n", "N_event")] %>% purrr::compact())) {
+    x$table_styling$header <-
+      x[c("N", "n", "N_event")] %>%
+      purrr::compact() %>%
+      as_tibble() %>%
+      dplyr::rename_with(.fn = ~ vec_paste0("modify_stat_", .), .cols = everything()) %>%
+      dplyr::cross_join(
+        x$table_styling$header
+      ) %>%
+      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+  }
+
 
   # running any additional mods ------------------------------------------------
   x <-
