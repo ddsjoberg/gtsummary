@@ -379,7 +379,7 @@ test_that("tbl_svysummary-all missing data does not cause error", {
   expect_error(
     missing_fct_by <-
       trial %>%
-      mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
+      mutate(response2 = factor(response) %>% forcats::fct_na_value_to_level(level = "(Missing)")) %>%
       filter(!is.na(response)) %>%
       survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary(by = response2),
@@ -500,7 +500,8 @@ test_that("tbl_svysummary-calculates unweighted N with continuous variables and 
       dplyr::group_by(Sex) %>%
       dplyr::count() %>%
       dplyr::pull(n) %>%
-      dplyr::first()
+      dplyr::first(),
+    ignore_attr = TRUE
   )
 })
 
