@@ -163,8 +163,8 @@ tbl_cross <- function(data,
       vars(any_of(c(row, col))),
       ~ switch(missing,
         "no" = .,
-        "ifany" = forcats::fct_explicit_na(., missing_text),
-        "always" = forcats::fct_explicit_na(., missing_text) %>%
+        "ifany" = if (any(is.na(.))) forcats::fct_na_value_to_level(., level = missing_text) else .,
+        "always" = forcats::fct_na_value_to_level(., level = missing_text) %>%
           forcats::fct_expand(missing_text)
       )
     )

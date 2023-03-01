@@ -23,9 +23,16 @@
 #' ) %>%
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
-  ifelse(
-    round2(abs(x), digits = digits) < 1,
-    style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-    style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...)
-  )
+  x_fmt <-
+    case_when(
+      round2(abs(x), digits = digits) < 1 ~
+        style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+      x > 0 ~
+        style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+      x < 0 ~
+        style_sigfig(pmin(-1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    )
+
+  attributes(x_fmt) <- attributes(unclass(x))
+  x_fmt
 }

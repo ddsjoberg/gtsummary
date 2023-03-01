@@ -364,7 +364,7 @@ test_that("tbl_summary-all missing data does not cause error", {
   expect_error(
     missing_fct_by <-
       trial %>%
-      mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
+      mutate(response2 = factor(response) %>% forcats::fct_na_value_to_level(level = "(Missing)")) %>%
       filter(!is.na(response)) %>%
       tbl_summary(by = response2),
     NA
