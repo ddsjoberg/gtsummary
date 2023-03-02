@@ -163,4 +163,35 @@ test_that("add_ci() works with tbl_svysummary", {
   res %>%
     render_as_html() %>%
     expect_snapshot()
+
+  expect_error(
+    res <- d %>%
+      tbl_svysummary(
+        by = both,
+        include = stype,
+        percent = "row"
+      ) %>%
+      add_overall() %>%
+      add_ci(),
+    NA
+  )
+  expect_equal(
+    as_tibble(res, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
+    c(NA, "17%, 29%", "27%, 73%", "20%, 71%")
+  )
+  expect_error(
+    res <- d %>%
+      tbl_svysummary(
+        by = both,
+        include = stype,
+        percent = "cell"
+      ) %>%
+      add_overall() %>%
+      add_ci(),
+    NA
+  )
+  expect_equal(
+    as_tibble(res, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
+    c(NA, "13%, 24%", "1.5%, 9.2%", "2.5%, 14%")
+  )
 })
