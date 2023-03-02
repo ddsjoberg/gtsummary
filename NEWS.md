@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in the `style_*()` family of functions. The attributes of the input vector--excluding the class--are retained. (#1460)
+
 * Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.
 
 * Updated `style_ratio()` to now format negative values.
