@@ -47,7 +47,7 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
       }
     )
   ret[is.na(x)] <- NA_character_
-  names(ret) <- names(x)
+  attributes(ret) <- attributes(unclass(x))
 
   ret
 }
