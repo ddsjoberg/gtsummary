@@ -150,9 +150,7 @@ test_that("add_ci() works with tbl_svysummary", {
       "0.32%, 12%", "88%, 100%")
   )
   expect_message(tbl %>% add_ci())
-  svyres %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(svyres %>% as_tibble())
 
   expect_error(
     res <-
@@ -166,9 +164,7 @@ test_that("add_ci() works with tbl_svysummary", {
       ),
     NA
   )
-  res %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(res %>% as_tibble())
 
   expect_error(
     res <- d %>%
