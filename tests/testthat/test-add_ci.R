@@ -119,12 +119,17 @@ test_that("add_ci() works with tbl_svysummary", {
   skip_if_not(assert_package("survey", boolean = TRUE))
 
   data(api, package = "survey")
-  d <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
+  d <- survey::svydesign(
+    id = ~dnum,
+    weights = ~pw,
+    data = apiclus1 %>% dplyr::mutate(logical = (yr.rnd == "No")),
+    fpc = ~fpc
+  )
 
   tbl <- d %>%
     tbl_svysummary(
       by = both,
-      include = c(api00, hsg, stype),
+      include = c(api00, hsg, stype, yr.rnd, logical),
       statistic = hsg ~ "{mean} ({sd})"
     )
 
@@ -141,12 +146,11 @@ test_that("add_ci() works with tbl_svysummary", {
   )
   expect_equal(
     as_tibble(svyres, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
-    c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%")
+    c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%",
+      "0.32%, 12%", "88%, 100%")
   )
   expect_message(tbl %>% add_ci())
-  svyres %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(svyres %>% as_tibble())
 
   expect_error(
     res <-
@@ -160,9 +164,7 @@ test_that("add_ci() works with tbl_svysummary", {
       ),
     NA
   )
-  res %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(res %>% as_tibble())
 
   expect_error(
     res <- d %>%
