@@ -580,10 +580,21 @@ single_ci_svy <- function(variable, by, tbl, method, conf.level,
     summary_type[[variable]] %in% c("categorical", "dichotomous")) {
     svyprop_method <- stringr::str_sub(method[[variable]], start = 9L)
     if (svyprop_method == "") svyprop_method <- "logit"
+
+    md <-
+        tbl$meta_data %>%
+        filter(.data$variable %in% .env$variable) %>%
+        purrr::pluck("df_stats", 1)
+    if (!"variable_levels" %in% names(md)) # if dichotomous
+      md <- md %>%
+        dplyr::mutate(variable_levels =
+                        tbl$meta_data %>%
+                        filter(.data$variable %in% .env$variable) %>%
+                        purrr::pluck("dichotomous_value", 1)
+                      )
+
     df_single_ci <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1) %>%
+      md %>%
       dplyr::rowwise() %>%
       mutate(
         ci = calculate_svyprop_ci(
