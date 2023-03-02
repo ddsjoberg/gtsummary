@@ -29,6 +29,6 @@ style_percent <- function(x, symbol = FALSE, digits = 0, big.mark = NULL, decima
 
   # adding percent symbol if requested
   if (symbol == TRUE) y <- ifelse(!is.na(y), paste0(y, "%"), y)
-  attributes(y) <- attributes(x)
+  attributes(y) <- attributes(unclass(x))
   return(y)
 }
