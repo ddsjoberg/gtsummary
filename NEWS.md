@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Update in `as_hux_table()` to ensure the Ns in header are not incorrectly auto-formatted by {huxtable}.
+
 * Fix in the `style_*()` family of functions. The attributes of the input vector--excluding the class--are retained. (#1460)
 
 * Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.
