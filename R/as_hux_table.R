@@ -395,5 +395,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     ))
   )
 
+  # set_number_format ----------------------------------------------------------
+  # this prevents huxtable from auto-formatting numbers, which are sometimes done incorrectly
+  huxtable_calls[["set_number_format"]] <-
+    list(set_number_format = expr(huxtable::set_number_format(NA)))
+
   huxtable_calls
 }

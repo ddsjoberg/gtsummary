@@ -14,6 +14,17 @@ test_that("tbl_summary", {
     NA
   )
   expect_snapshot(tbl)
+
+  # confirming the header prints the N correctly
+  expect_error(
+    tbl <-
+      rep_len(list(trial[c("age", "trt")]), 25) %>%
+      bind_rows() %>%
+      tbl_summary() %>%
+      as_hux_table(),
+    NA
+  )
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_summary", {

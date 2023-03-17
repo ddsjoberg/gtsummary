@@ -48,6 +48,23 @@
       
       Column names: label, stat_0
 
+---
+
+    Code
+      tbl
+    Output
+                                Characteristic    N = 5,000   
+                              ────────────────────────────────
+                                age              47 (38, 57)  
+                                Unknown              275      
+                                trt                           
+                                Drug A           2,450 (49%)  
+                                Drug B           2,550 (51%)  
+                              ────────────────────────────────
+                                Median (IQR); n (%)           
+      
+      Column names: label, stat_0
+
 # tbl_cross
 
     Code
