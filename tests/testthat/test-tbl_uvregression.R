@@ -286,6 +286,15 @@ test_that("tbl_uvregression creates errors with bad inputs", {
     ),
     NULL
   )
+  expect_error(
+    tbl_uvregression(
+      data = survival::lung,
+      method = "lm",
+      y = age,
+      include = c("time", "sex")
+    ),
+    "*required and must be a function*"
+  )
 })
 
 
