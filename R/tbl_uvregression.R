@@ -97,6 +97,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   if (!is.data.frame(data) && !is_survey(data)) {
     stop("`data` argument must be a data frame or survey object.", call. = FALSE)
   }
+  if (missing(method) || !rlang::is_function(method)) {
+    cli::cli_abort("Argument {.code method} is required and must be a function.")
+  }
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
