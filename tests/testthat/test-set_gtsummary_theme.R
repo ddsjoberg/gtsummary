@@ -259,6 +259,32 @@ test_that("setting themes", {
     ),
     "*continuous_stat*"
   )
+
+  expect_equal(
+    with_gtsummary_theme(
+      x = list("tbl_svysummary-str:header-withby" = "**{level}**  \nN={n}"),
+      expr =
+        survey::svydesign(~1, data = trial, weights = ~1) %>%
+        tbl_svysummary(by = trt, include = age) %>%
+        as_tibble() %>%
+        dplyr::select(-1) %>%
+        names()
+    ),
+    c("**Drug A**  \nN=98", "**Drug B**  \nN=102")
+  )
+
+  expect_equal(
+    with_gtsummary_theme(
+      x = list("tbl_svysummary-str:header-noby" = "N========{n}"),
+      expr =
+        survey::svydesign(~1, data = trial, weights = ~1) %>%
+        tbl_svysummary(include = age) %>%
+        as_tibble() %>%
+        dplyr::select(-1) %>%
+        names()
+    ),
+    c("N========200")
+  )
 })
 
 reset_gtsummary_theme()

@@ -284,9 +284,14 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     modify_header(
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
-        ifelse(is.null(by),
-          "**N = {style_number(N)}**",
-          "**{level}**, N = {style_number(n)}"
+        ifelse(
+          is.null(by),
+          get_theme_element("tbl_svysummary-str:header-noby",
+                            default = "**N = {style_number(N)}**"
+          ),
+          get_theme_element("tbl_svysummary-str:header-withby",
+                            default = "**{level}**, N = {style_number(n)}"
+          )
         )
     )
 

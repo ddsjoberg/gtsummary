@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added theme elements to control the default headers in `tbl_svysummary()`. (#1452)
+
 * Improved error messaging in `tbl_uvregression()` when `method=` argument is not correctly specified. (#1469)
 
 * Update in `as_hux_table()` to ensure the Ns in header are not incorrectly auto-formatted by {huxtable}.
