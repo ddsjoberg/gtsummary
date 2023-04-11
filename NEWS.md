@@ -18,6 +18,8 @@
 
 * `add_ci.tbl_svysummary()` now takes properly into account the `percent` argument (#1470)
 
+* `tbl_svysummary()` can now report design effects (#1486)
+
 # gtsummary 1.7.0
 
 ### Breaking Changes
