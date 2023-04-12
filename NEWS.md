@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_svysummary()` function may now report the design effect, e.g. `tbl_svysummary(statistic = ~"{deff}")`. (#1486)
+
 * Added French translations for new marginal effects tidiers housed in {broom.helpers}. (#1417)
 
 * Added theme elements to control the default headers in `tbl_svysummary()`. (#1452)
