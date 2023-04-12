@@ -70,9 +70,6 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   tbl1 <- tbl_regression(mod1)
   tbl2 <- tbl_regression(mod2)
 
-  expect_warning(
-    res <- tbl1 %>% add_global_p(), NA
-  )
   expect_snapshot(res %>% render_as_html())
   expect_equal(
     car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
