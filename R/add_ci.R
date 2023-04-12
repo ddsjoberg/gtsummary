@@ -268,7 +268,7 @@ add_ci.tbl_summary <- function(x,
   x <-
     x %>%
     add_stat(
-      fns = include ~ purrr::partial(single_ci_fn,
+      fns = all_of(include) ~ purrr::partial(single_ci_fn,
         method = method,
         conf.level = conf.level,
         statistic = statistic,
@@ -276,7 +276,7 @@ add_ci.tbl_summary <- function(x,
         summary_type = summary_type,
         df = df
       ),
-      location = list(include ~ "label", all_categorical(FALSE) ~ "level")
+      location = list(all_of(include) ~ "label", all_categorical(FALSE) ~ "level")
     ) %>%
     # moving the CI cols to after the original stat cols (when `by=` variable present)
     # also renaming CI columns
