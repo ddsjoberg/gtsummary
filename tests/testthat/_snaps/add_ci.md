@@ -133,7 +133,8 @@
 # add_ci() works on a subset of variables
 
     Code
-      .
+      trial %>% tbl_summary(include = c(response, age)) %>% add_ci(include = age) %>%
+        as_tibble()
     Message
       x `add_ci()` added mean CI for "age"; however, no mean is shown in the `tbl_summary()` table.
     Output

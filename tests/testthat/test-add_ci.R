@@ -81,14 +81,14 @@ test_that("add_ci() works", {
 })
 
 test_that("add_ci() works on a subset of variables", {
-  trial %>%
-    tbl_summary(
-      include = c(response, age)
-    ) %>%
-    add_ci(include = age) %>%
-    as_tibble() %>%
-    expect_snapshot()
-
+  expect_snapshot(
+    trial %>%
+      tbl_summary(
+        include = c(response, age)
+      ) %>%
+      add_ci(include = age) %>%
+      as_tibble()
+  )
 })
 
 test_that("add_ci() throws errors with bad arguments", {
