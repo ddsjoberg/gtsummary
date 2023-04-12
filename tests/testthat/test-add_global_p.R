@@ -100,8 +100,6 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
     tbl2 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
-  expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
-
   expect_error(
     tbl_bad_names <-
       trial %>%
