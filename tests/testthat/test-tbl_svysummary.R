@@ -26,7 +26,7 @@ test_that("tbl_svysummary creates output without error/warning (with by var)", {
     all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted} {p.std.error} {deff}"
   )
   expect_snapshot(
-    tbl_svysummary(dc_light, by = both, statistic = statistics) %>% render_as_html()
+    tbl_svysummary(dc_light, by = both, statistic = statistics) %>% as_tibble()
   )
   expect_warning(
     tbl_svysummary(dc_light, by = both, statistic = statistics),
