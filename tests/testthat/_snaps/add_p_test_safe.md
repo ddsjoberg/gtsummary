@@ -6,11 +6,10 @@
           group = NULL) %>% purrr::pluck("df_result")
     Output
       # A tibble: 1 x 10
-        estim~1 stati~2 param~3 conf.~4 conf.~5 p.value method estim~6 estim~7 alter~8
-          <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl> <chr>    <dbl>   <dbl> <chr>  
-      1  -0.438  -0.209    184.   -4.57    3.69   0.834 Welch~    47.0    47.4 two.si~
-      # ... with abbreviated variable names 1: estimate, 2: statistic, 3: parameter,
-      #   4: conf.low, 5: conf.high, 6: estimate1, 7: estimate2, 8: alternative
+        estimate statistic parameter conf.low conf.high p.value method       estimate1
+           <dbl>     <dbl>     <dbl>    <dbl>     <dbl>   <dbl> <chr>            <dbl>
+      1   -0.438    -0.209      184.    -4.57      3.69   0.834 Welch Two S~      47.0
+      # i 2 more variables: estimate2 <dbl>, alternative <chr>
 
 ---
 
