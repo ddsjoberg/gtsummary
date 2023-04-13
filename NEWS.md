@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when a subset of CIs are requested in `add_ci(include=)`. (#1484)
+
 * Added French translations for new marginal effects tidiers housed in {broom.helpers}. (#1417)
 
 * Added theme elements to control the default headers in `tbl_svysummary()`. (#1452)
