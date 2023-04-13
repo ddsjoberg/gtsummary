@@ -431,6 +431,28 @@
       </table>
       </div>
 
+# tbl_svysummary-difftime does not cause error
+
+    Code
+      dplyr::storms[1:10, ] %>% dplyr::mutate(date = ISOdate(year, month, day),
+      date_diff = difftime(dplyr::lag(date, 5), date, units = "days")) %>% survey::svydesign(
+        data = ., ids = ~1, weights = ~1) %>% tbl_svysummary() %>% as_tibble()
+    Output
+      # A tibble: 69 x 2
+         `**Characteristic**` `**N = 10**`
+         <chr>                <chr>       
+       1 name                 <NA>        
+       2 Amy                  10 (100%)   
+       3 year                 <NA>        
+       4 1975                 10 (100%)   
+       5 month                <NA>        
+       6 6                    10 (100%)   
+       7 day                  <NA>        
+       8 27                   4 (40%)     
+       9 28                   4 (40%)     
+      10 29                   2 (20%)     
+      # i 59 more rows
+
 # tbl_svysummary-all missing data does not cause error
 
     Code

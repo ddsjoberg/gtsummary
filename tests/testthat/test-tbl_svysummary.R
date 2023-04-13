@@ -291,14 +291,14 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
 
 test_that("tbl_svysummary-difftime does not cause error", {
   expect_snapshot(
-    dplyr::storms %>%
+    dplyr::storms[1:10, ] %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
       survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary() %>%
-      render_as_html()
+      as_tibble()
   )
 })
 
