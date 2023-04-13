@@ -130,6 +130,22 @@
       </table>
       </div>
 
+# add_ci() works on a subset of variables
+
+    Code
+      trial %>% tbl_summary(include = c(response, age)) %>% add_ci(include = age) %>%
+        as_tibble()
+    Message
+      x `add_ci()` added mean CI for "age"; however, no mean is shown in the `tbl_summary()` table.
+    Output
+      # A tibble: 4 x 3
+        `**Characteristic**` `**N = 200**` `**95% CI**`
+        <chr>                <chr>         <chr>       
+      1 Tumor Response       61 (32%)      <NA>        
+      2 Unknown              7             <NA>        
+      3 Age                  47 (38, 57)   45, 49      
+      4 Unknown              11            <NA>        
+
 # add_ci() works with tbl_svysummary
 
     Code
