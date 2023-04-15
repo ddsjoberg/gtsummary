@@ -1,5 +1,13 @@
 # gtsummary (development version)
 
+* The `tbl_svysummary()` function may now report the design effect, e.g. `tbl_svysummary(statistic = ~"{deff}")`. (#1486)
+
+* Bug fix when a subset of CIs are requested in `add_ci(include=)`. (#1484)
+
+* Added French translations for new marginal effects tidiers housed in {broom.helpers}. (#1417)
+
+* Added theme elements to control the default headers in `tbl_svysummary()`. (#1452)
+
 * Improved error messaging in `tbl_uvregression()` when `method=` argument is not correctly specified. (#1469)
 
 * Update in `as_hux_table()` to ensure the Ns in header are not incorrectly auto-formatted by {huxtable}.
@@ -13,6 +21,8 @@
 * Bug fix in `add_ci.tbl_svysummary()` for dichotomous variables.
 
 * `add_ci.tbl_svysummary()` now takes properly into account the `percent` argument (#1470)
+
+* `tbl_svysummary()` can now report design effects (#1486)
 
 # gtsummary 1.7.0
 
