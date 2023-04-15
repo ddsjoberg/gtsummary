@@ -22,11 +22,11 @@ test_that("tbl_svysummary creates output without error/warning (no by var)", {
 
 test_that("tbl_svysummary creates output without error/warning (with by var)", {
   statistics <- list(
-    all_continuous() ~ "{median} {mean} {sd} {var} {min} {max} {sum} {p25} {p42} {p75} {p89} {mean.std.error}",
-    all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted}"
+    all_continuous() ~ "{median} {mean} {sd} {var} {min} {max} {sum} {p25} {p42} {p75} {p89} {mean.std.error} {deff}",
+    all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted} {p.std.error} {deff}"
   )
   expect_snapshot(
-    tbl_svysummary(dc_light, by = both, statistic = statistics) %>% render_as_html()
+    tbl_svysummary(dc_light, by = both, statistic = statistics) %>% as_tibble()
   )
   expect_warning(
     tbl_svysummary(dc_light, by = both, statistic = statistics),
@@ -291,14 +291,14 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
 
 test_that("tbl_svysummary-difftime does not cause error", {
   expect_snapshot(
-    dplyr::storms %>%
+    dplyr::storms[1:10, ] %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
       survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary() %>%
-      render_as_html()
+      as_tibble()
   )
 })
 

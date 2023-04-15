@@ -25,6 +25,7 @@
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` percentage
 #'   \item `{p.std.error}` standard error of the sample proportion computed with [survey::svymean()]
+#'   \item `{deff}` design effect of the sample proportion computed with [survey::svymean()]
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
@@ -34,6 +35,7 @@
 #'   \item `{median}` median
 #'   \item `{mean}` mean
 #'   \item `{mean.std.error}` standard error of the sample mean computed with [survey::svymean()]
+#'   \item `{deff}` design effect of the sample mean computed with [survey::svymean()]
 #'   \item `{sd}` standard deviation
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
@@ -356,18 +358,19 @@ summarize_categorical_survey <- function(data, variable, by,
 
   if (is.null(by)) {
     if (percent %in% c("column", "cell")) {
-      svy_p <- survey::svymean(c_form(right = variable), data, na.rm = TRUE) %>%
+      svy_p <- survey::svymean(c_form(right = variable), data, na.rm = TRUE, deff = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         mutate(
           variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
         ) %>%
-        select(p = "mean", p.std.error = "SE", "variable_levels")
+        select(p = "mean", p.std.error = "SE", "deff", "variable_levels")
     } else {
       # this will have p=1 for all and p.std.error=0 for all
       svy_p <- tibble(
         variable_levels = levels(data$variables[[variable]]),
         p = 1,
-        p.std.error = 0
+        p.std.error = 0,
+        deff = NaN
       )
     }
     svy_table <-
@@ -377,37 +380,39 @@ summarize_categorical_survey <- function(data, variable, by,
       left_join(svy_p, by = c("variable_levels"))
   } else {
     if (percent == "column") {
-      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean, na.rm = TRUE) %>%
+      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean, na.rm = TRUE, deff = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(by)) %>%
         mutate(
-          stat = if_else(
-            str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")),
-            "p.std.error",
-            "p"
+          stat = case_when(
+            str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")) ~ "p.std.error",
+            str_starts(.data$name, paste0("DEff.", variable)) | str_starts(.data$name, paste0("DEff.`", variable, "`")) ~ "deff",
+            TRUE ~ "p"
           ),
           name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            stringr::str_remove_all("DEff\\.") %>%
             str_remove_all(variable) %>%
             str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
-        set_names(c("by", "variable_levels", "p", "p.std.error"))
+        set_names(c("by", "variable_levels", "p", "p.std.error", "deff"))
     } else if (percent == "row") {
-      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE) %>%
+      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE, deff = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(variable)) %>%
         mutate(
-          stat = if_else(
-            str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")),
-            "p.std.error",
-            "p"
+          stat = case_when(
+            str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")) ~ "p.std.error",
+            str_starts(.data$name, paste0("DEff.", by)) | str_starts(.data$name, paste0("DEff.`", by, "`")) ~ "deff",
+            TRUE ~ "p"
           ),
           name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            stringr::str_remove_all("DEff\\.") %>%
             str_remove_all(by) %>%
             str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
-        set_names(c("variable_levels", "by", "p", "p.std.error"))
+        set_names(c("variable_levels", "by", "p", "p.std.error", "deff"))
     } else if (percent == "cell") {
       inttemp <- expand.grid(
         by = levels(data$variables[[by]]),
@@ -417,10 +422,10 @@ summarize_categorical_survey <- function(data, variable, by,
           var_level = paste0("interaction(", .env$by, ", ", variable, ")", .data$by, ".", .data$variable_levels)
         )
 
-      svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE) %>%
+      svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE, deff = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         dplyr::left_join(inttemp, by = "var_level") %>%
-        select(p = "mean", p.std.error = "SE", "by", "variable_levels")
+        select(p = "mean", p.std.error = "SE", "by", "deff", "variable_levels")
     }
 
     svy_table <-
@@ -447,7 +452,8 @@ summarize_categorical_survey <- function(data, variable, by,
     mutate(
       N = sum(.data$n),
       p = if_else(.data$N == 0, NA_real_, .data$p), # re-introducing NA where relevant
-      p.std.error = if_else(.data$N == 0, NA_real_, .data$p.std.error)
+      p.std.error = if_else(.data$N == 0, NA_real_, .data$p.std.error),
+      deff = if_else(.data$N == 0, NA_real_, .data$deff)
     ) %>%
     ungroup()
 
@@ -557,6 +563,9 @@ compute_survey_stat <- function(data, variable, by, f) {
   if (f == "mean.std.error") {
     fun <- svymean.std.error
   }
+  if (f == "deff") {
+    fun <- svymean.deff
+  }
   if (f == "median") {
     fun <- svyquantile_version
     args$quantiles <- .5
@@ -646,7 +655,7 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
     sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
-    select(-"stat_display", -"p.std.error") %>%
+    select(-"stat_display", -"p.std.error", -"deff") %>%
     rename(
       p_miss = "p",
       N_obs = "N",
@@ -728,6 +737,12 @@ svymax <- function(x, design, na.rm = FALSE, ...) {
 # mean standard error
 svymean.std.error <- function(x, design, na.rm = FALSE, ...) {
   survey::svymean(x = x, design = design, na.rm = na.rm, ...) %>% survey::SE()
+}
+
+# mean design effects
+svymean.deff <- function(x, design, na.rm = FALSE, ...) {
+  survey::svymean(x = x, design = design, na.rm = na.rm, deff = TRUE) %>%
+    survey::deff()
 }
 
 # function chooses which quantile function to sue based on the survey pkg version
