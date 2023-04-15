@@ -16,7 +16,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
    \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \tab  \cr
-   \code{"mood.test"} \tab Mood two-sample test \tab \code{mood.test(variable ~ as.factor(by), data = data, ...)} \tab  \cr
+   \code{"mood.test"} \tab Mood two-sample test of scale \tab \code{mood.test(variable ~ as.factor(by), data = data, ...)} \tab Not to be confused with the Brown-Mood test of medians \cr
    \code{"oneway.test"} \tab One-way ANOVA \tab \code{oneway.test(variable ~ as.factor(by), data = data, ...)} \tab  \cr
    \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \tab  \cr
    \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)} \tab  \cr
