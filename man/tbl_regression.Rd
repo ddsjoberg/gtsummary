@@ -139,10 +139,11 @@ tbl_regression_ex2 <-
   tbl_regression(exponentiate = TRUE)
 
 # Example 3 ----------------------------------
+# round all estimates to 3 decimal places
 suppressMessages(library(lme4))
 tbl_regression_ex3 <-
-  glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
-  tbl_regression(exponentiate = TRUE)
+  lmer(hp ~ am + (1 | gear), data = mtcars) \%>\%
+  tbl_regression(estimate_fun = function(x) style_number(x, digits = 3))
 }
 }
 \seealso{
