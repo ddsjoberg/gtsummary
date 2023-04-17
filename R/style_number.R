@@ -53,6 +53,7 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
 }
 
 # this function assures that 5s are rounded up (and not to even, the default in `round()`)
+a_very_small_number <- sqrt(.Machine$double.eps)
 round2 <- function(x, digits = 0) {
-  round(x + .Machine$double.eps * sign(x), digits = digits)
+  round(x + a_very_small_number * sign(x), digits = digits)
 }
