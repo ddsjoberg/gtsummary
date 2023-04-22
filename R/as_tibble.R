@@ -70,8 +70,17 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 
 #' @export
 #' @rdname as_tibble.gtsummary
-as.data.frame.gtsummary <- function(...) {
-  as_tibble(...) |> as.data.frame()
+as.data.frame.gtsummary <- function(x, include = everything(), col_labels = TRUE,
+                                    fmt_missing = FALSE, ...) {
+  as.data.frame(
+    as_tibble(
+      x = x,
+      include = {{ include }},
+      col_labels = col_labels,
+      fmt_missing = fmt_missing,
+      ...
+    )
+  )
 }
 
 

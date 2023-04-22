@@ -14,7 +14,13 @@
   ...
 )
 
-\method{as.data.frame}{gtsummary}(...)
+\method{as.data.frame}{gtsummary}(
+  x,
+  include = everything(),
+  col_labels = TRUE,
+  fmt_missing = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
