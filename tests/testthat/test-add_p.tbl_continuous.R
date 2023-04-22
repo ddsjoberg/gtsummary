@@ -9,7 +9,7 @@ test_that("add_p.tbl_continuous() works", {
       include = grade
     ) %>%
       add_p() %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_continuous(
@@ -18,7 +18,7 @@ test_that("add_p.tbl_continuous() works", {
       include = grade
     ) %>%
       add_p() %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_continuous(
@@ -27,7 +27,7 @@ test_that("add_p.tbl_continuous() works", {
       include = trt
     ) %>%
       add_p(everything() ~ "t.test") %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_continuous(
@@ -36,7 +36,7 @@ test_that("add_p.tbl_continuous() works", {
       include = trt
     ) %>%
       add_p(everything() ~ "wilcox.test") %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_continuous(
@@ -45,7 +45,7 @@ test_that("add_p.tbl_continuous() works", {
       include = trt
     ) %>%
       add_p(everything() ~ "lme4", group = "stage") %>%
-      render_as_html()
+      as.data.frame()
   )
 
 
@@ -68,6 +68,6 @@ test_that("add_p.tbl_continuous() works", {
       by = grade
     ) %>%
       add_p(everything() ~ "wilcox.test.NOT.A.TEST") %>%
-      render_as_html()
+      as.data.frame()
   )
 })
