@@ -9,7 +9,7 @@ test_that("lm: no errors/warnings with standard use", {
         method = lm,
         y = mpg
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     mtcars %>%
@@ -17,7 +17,7 @@ test_that("lm: no errors/warnings with standard use", {
         method = lm,
         y = "mpg"
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(mtcars %>%
     tbl_uvregression(
@@ -46,7 +46,7 @@ test_that("geeglm: no errors/warnings with standard use", {
       ),
       include = -response
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(
     tbl_uvregression(
@@ -70,7 +70,7 @@ test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
         y = mpg,
         tidy_fun = broom::tidy
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(mtcars %>%
     tbl_uvregression(
@@ -89,7 +89,7 @@ test_that("coxph: no errors/warnings with standard use", {
         y = survival::Surv(time, status)
       ), NA
   )
-  expect_snapshot(coxph_uv %>% render_as_html())
+  expect_snapshot(coxph_uv %>% as.data.frame())
   expect_warning(
     survival::lung %>%
       tbl_uvregression(
@@ -120,7 +120,7 @@ test_that("glmer: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(lme4_uv %>% render_as_html())
+  expect_snapshot(lme4_uv %>% as.data.frame())
   expect_warning(
     mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
@@ -152,7 +152,7 @@ test_that("glmer: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_warning(
     mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
@@ -176,7 +176,7 @@ test_that("tbl_uvregression x= argument tests", {
     ),
     NA
   )
-  expect_snapshot(ux_x %>% render_as_html())
+  expect_snapshot(ux_x %>% as.data.frame())
 
   expect_equal(
     ux_x %>%
@@ -319,7 +319,7 @@ test_that("tbl_uvregression does not throw error with odd variable names in `dat
     tbl <- trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 })
 
 test_that("tbl_uvregression throw error with bad arguments in model function", {
@@ -345,7 +345,7 @@ test_that("tbl_uvregression works with survey object", {
       ),
     NA
   )
-  expect_snapshot(tbl_uvreg %>% render_as_html())
+  expect_snapshot(tbl_uvreg %>% as.data.frame())
 
   expect_equal(
     tbl_uvreg$tbls$age$model_obj %>% broom::tidy(),
