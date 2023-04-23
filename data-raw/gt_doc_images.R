@@ -25,7 +25,7 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = here::here
 # document a single file with
 gt.doc.images::save_help_file_images(
   pkg = "gtsummary",
-  rd_files = "add_p.tbl_svysummary.Rd",
+  rd_files = "tbl_regression.Rd",
   path.output = file.path(here::here(), "man-images")
 )
 
