@@ -216,11 +216,6 @@ test_that("tbl_custom_summary() helpers work as expected", {
   )
   expect_snapshot(tbl)
 
-  expect_equal(
-    tbl$stat_1,
-    c(NA, "46 [36-60]", "44 [31-54]", "52 [42-60]")
-  )
-
   # proportion_summary
   expect_error(
     tbl <- Titanic %>%

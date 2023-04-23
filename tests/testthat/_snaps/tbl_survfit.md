@@ -45,7 +45,7 @@
       tbl_survfit(s2, times = c(12, 24)) %>% as.data.frame()
     Output
         **Characteristic**    **Time 12**    **Time 24**
-      1            Overall 88% (84%, 93%) 44% (38%, 51%)
+      1            Overall 89% (84%, 93%) 44% (38%, 51%)
 
 ---
 
@@ -53,7 +53,7 @@
       tbl_survfit(s2.1, times = c(12, 24)) %>% as.data.frame()
     Output
         **Characteristic**    **Time 12**    **Time 24**
-      1            Overall 88% (84%, 93%) 44% (38%, 51%)
+      1            Overall 89% (84%, 93%) 44% (38%, 51%)
 
 ---
 
@@ -62,7 +62,7 @@
         digits = 4)) %>% as.data.frame()
     Output
         **Characteristic**   **20% Percentile**   **40% Percentile**
-      1            Overall 14.59 (12.68, 16.23) 19.44 (17.77, 21.49)
+      1            Overall 14.60 (12.68, 16.23) 19.44 (17.77, 21.49)
 
 ---
 

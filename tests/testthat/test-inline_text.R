@@ -41,7 +41,7 @@ test_that("inline_text.tbl_summary: no by", {
 
   expect_equal(
     inline_text(test_inline1, variable = "stage", level = "T1", pattern = "{p}%"),
-    "26%"
+    "27%"
   )
   expect_equal(
     inline_text(test_inline1, variable = "age", pattern = "The median is {median}"),
@@ -290,7 +290,7 @@ test_that("inline_text.tbl_svysummary: no by", {
 
   expect_equal(
     inline_text(test_inline1, variable = "stage", level = "T1", pattern = "{p}%"),
-    "26%"
+    "27%"
   )
   expect_equal(
     inline_text(test_inline1, variable = "age", pattern = "The median is {median}"),

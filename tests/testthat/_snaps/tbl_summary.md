@@ -1,36 +1,44 @@
 # tbl_summary creates output without error/warning (no by var)
 
     Code
-      purrr::map(lst_tbl, as_tibble)
+      purrr::map(lst_tbl, as.data.frame)
     Output
       [[1]]
-      # A tibble: 23 x 2
-         `**Characteristic**` `**N = 32**`        
-         <chr>                <chr>               
-       1 mpg                  19.2 (15.4, 22.8)   
-       2 cyl                  <NA>                
-       3 8                    14 (44%)            
-       4 4                    11 (34%)            
-       5 6                    7 (22%)             
-       6 disp                 196 (121, 326)      
-       7 hp                   123 (96, 180)       
-       8 drat                 3.70 (3.08, 3.92)   
-       9 wt                   3.33 (2.58, 3.61)   
-      10 qsec                 17.71 (16.89, 18.90)
-      # i 13 more rows
+         **Characteristic**           **N = 32**
+      1                 mpg    19.2 (15.4, 22.8)
+      2                 cyl                 <NA>
+      3                   8             14 (44%)
+      4                   4             11 (34%)
+      5                   6              7 (22%)
+      6                disp       196 (121, 326)
+      7                  hp        123 (97, 180)
+      8                drat    3.70 (3.08, 3.92)
+      9                  wt    3.33 (2.58, 3.61)
+      10               qsec 17.71 (16.89, 18.90)
+      11                 vs             14 (44%)
+      12                 am             13 (41%)
+      13               gear                 <NA>
+      14                  3             15 (47%)
+      15                  4             12 (38%)
+      16                  5              5 (16%)
+      17               carb                 <NA>
+      18                  2             10 (31%)
+      19                  4             10 (31%)
+      20                  1              7 (22%)
+      21                  3             3 (9.4%)
+      22                  6             1 (3.1%)
+      23                  8             1 (3.1%)
       
       [[2]]
-      # A tibble: 8 x 2
-        `**Characteristic**` `**N = 150**`    
-        <chr>                <chr>            
-      1 Sepal.Length         5.80 (5.10, 6.40)
-      2 Sepal.Width          3.00 (2.80, 3.30)
-      3 Petal.Length         4.35 (1.60, 5.10)
-      4 Petal.Width          1.30 (0.30, 1.80)
-      5 Species              <NA>             
-      6 setosa               50 (33%)         
-      7 versicolor           50 (33%)         
-      8 virginica            50 (33%)         
+        **Characteristic**       **N = 150**
+      1       Sepal.Length 5.80 (5.10, 6.40)
+      2        Sepal.Width 3.00 (2.80, 3.30)
+      3       Petal.Length 4.35 (1.60, 5.10)
+      4        Petal.Width 1.30 (0.30, 1.80)
+      5            Species              <NA>
+      6             setosa          50 (33%)
+      7         versicolor          50 (33%)
+      8          virginica          50 (33%)
       
 
 # tbl_summary creates output without error/warning (with by var)
@@ -39,13 +47,13 @@
       tbl_summary(mtcars, by = am) %>% as.data.frame()
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13
-      1                 mpg    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      1                 mpg    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       2                 cyl                 <NA>                 <NA>
       3                   4              3 (16%)              8 (62%)
       4                   6              4 (21%)              3 (23%)
       5                   8             12 (63%)              2 (15%)
       6                disp       276 (196, 360)        120 (79, 160)
-      7                  hp       175 (116, 192)        109 (66, 113)
+      7                  hp       175 (117, 193)        109 (66, 113)
       8                drat    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       9                  wt    3.52 (3.44, 3.84)    2.32 (1.94, 2.78)
       10               qsec 17.82 (17.18, 19.17) 17.02 (16.46, 18.61)
@@ -69,13 +77,13 @@
         as.data.frame()
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13
-      1             New mpg    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      1             New mpg    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       2             New cyl                 <NA>                 <NA>
       3                   4              3 (16%)              8 (62%)
       4                   6              4 (21%)              3 (23%)
       5                   8             12 (63%)              2 (15%)
       6                disp       276 (196, 360)        120 (79, 160)
-      7                  hp       175 (116, 192)        109 (66, 113)
+      7                  hp       175 (117, 193)        109 (66, 113)
       8                drat    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       9                  wt    3.52 (3.44, 3.84)    2.32 (1.94, 2.78)
       10               qsec 17.82 (17.18, 19.17) 17.02 (16.46, 18.61)
@@ -106,7 +114,7 @@
       6    Marker Level (ng/mL) 0.64 (0.22, 1.39)
       7                 Unknown                10
       8                 T Stage              <NA>
-      9                      T1          53 (26%)
+      9                      T1          53 (27%)
       10                     T2          54 (27%)
       11                     T3          43 (22%)
       12                     T4          50 (25%)
@@ -199,7 +207,7 @@
        1 Chemotherapy Treatment <NA>              <NA>              <NA>             
        2 Drug A                 35 (51%)          32 (47%)          31 (48%)         
        3 Drug B                 33 (49%)          36 (53%)          33 (52%)         
-       4 Age                    47 (37, 56)       48 (37, 57)       47 (38, 58)      
+       4 Age                    47 (37, 56)       49 (37, 57)       47 (38, 58)      
        5 Unknown                2                 6                 3                
        6 Marker Level (ng/mL)   1.01 (0.26, 1.61) 0.37 (0.14, 1.11) 0.62 (0.29, 1.68)
        7 Unknown                2                 5                 3                
@@ -220,7 +228,7 @@
        1 Chemotherapy Treatment <NA>              <NA>              <NA>             
        2 Drug A                 28 (53%)          25 (46%)          22 (51%)         
        3 Drug B                 25 (47%)          29 (54%)          21 (49%)         
-       4 Age                    45 (36, 56)       48 (42, 55)       50 (39, 60)      
+       4 Age                    45 (37, 57)       48 (42, 55)       50 (39, 60)      
        5 Unknown                2                 1                 2                
        6 Marker Level (ng/mL)   0.40 (0.22, 0.98) 0.72 (0.16, 1.87) 1.06 (0.28, 1.56)
        7 Unknown                4                 1                 4                
@@ -694,7 +702,7 @@
       1  Chemotherapy Treatment              <NA>              <NA>              <NA>
       2                  Drug A          35 (51%)          32 (47%)          31 (48%)
       3                  Drug B          33 (49%)          36 (53%)          33 (52%)
-      4                     Age       47 (37, 56)       48 (37, 57)       47 (38, 58)
+      4                     Age       47 (37, 56)       49 (37, 57)       47 (38, 58)
       5                 Unknown                 2                 6                 3
       6    Marker Level (ng/mL) 1.01 (0.26, 1.61) 0.37 (0.14, 1.11) 0.62 (0.29, 1.68)
       7                 Unknown                 2                 5                 3
@@ -750,7 +758,7 @@
        7 disp                 <NA>             
        8 Median (IQR)         196 (121, 326)   
        9 hp                   <NA>             
-      10 Median (IQR)         123 (96, 180)    
+      10 Median (IQR)         123 (97, 180)    
       # i 19 more rows
       
       [[2]]
@@ -779,7 +787,7 @@
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13
       1                 mpg                 <NA>                 <NA>
-      2        Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      2        Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       3                 cyl                 <NA>                 <NA>
       4                   4              3 (16%)              8 (62%)
       5                   6              4 (21%)              3 (23%)
@@ -787,7 +795,7 @@
       7                disp                 <NA>                 <NA>
       8        Median (IQR)       276 (196, 360)        120 (79, 160)
       9                  hp                 <NA>                 <NA>
-      10       Median (IQR)       175 (116, 192)        109 (66, 113)
+      10       Median (IQR)       175 (117, 193)        109 (66, 113)
       11               drat                 <NA>                 <NA>
       12       Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       13                 wt                 <NA>                 <NA>
@@ -946,7 +954,7 @@
       tbl_summary(df, type = list(everything() ~ "continuous")) %>% as.data.frame()
     Output
         **Characteristic**    **N = 5**
-      1         swallowing 76 (40, 100)
+      1         swallowing 77 (40, 100)
       2            Unknown            1
       3         salivation 81 (58, 100)
       4            Unknown            1

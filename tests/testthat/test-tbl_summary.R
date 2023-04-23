@@ -5,7 +5,7 @@ test_that("tbl_summary creates output without error/warning (no by var)", {
     lst_tbl <- purrr::map(list(mtcars, iris), ~ tbl_summary(.x, sort = list(all_categorical() ~ "frequency"))),
     NA
   )
-  expect_snapshot(purrr::map(lst_tbl, as_tibble))
+  expect_snapshot(purrr::map(lst_tbl, as.data.frame))
   expect_warning(
     purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
     NA

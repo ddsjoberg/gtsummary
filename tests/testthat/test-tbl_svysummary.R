@@ -616,7 +616,7 @@ test_that("tbl_svysummary() works with date and date/time", {
     ) %>%
       as_tibble(col_labels = FALSE) %>%
       dplyr::pull(),
-    c(NA, "44%", "56%")
+    c(NA, "44%", "57%")
   )
 })
 
