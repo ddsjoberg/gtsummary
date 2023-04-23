@@ -10,7 +10,7 @@ test_that("no errors/warnings with stratified variable", {
       s1,
       times = c(12, 24)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -18,7 +18,7 @@ test_that("no errors/warnings with stratified variable", {
       s1.1,
       times = c(12, 24)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_survfit(
@@ -26,7 +26,7 @@ test_that("no errors/warnings with stratified variable", {
       times = c(12, 24),
       reverse = TRUE
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(
     tbl_survfit(
@@ -41,7 +41,7 @@ test_that("no errors/warnings with stratified variable", {
       probs = c(0.2, 0.4),
       estimate_fun = partial(style_sigfig, digits = 4)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(
     tbl_survfit(
@@ -61,14 +61,14 @@ test_that("no errors/warnings with no stratified variable", {
       s2,
       times = c(12, 24)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_survfit(
       s2.1,
       times = c(12, 24)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(
     tbl_survfit(
@@ -83,7 +83,7 @@ test_that("no errors/warnings with no stratified variable", {
       probs = c(0.2, 0.4),
       estimate_fun = partial(style_sigfig, digits = 4)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(
     tbl_survfit(
@@ -129,7 +129,7 @@ test_that("no errors/warnings with no stratified variable", {
     tbl <- tbl_survfit(trial, y = survival::Surv(ttdeath, death), include = c(grade, trt), times = 10),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_message(
     tbl_survfit(survival::survfit(survival::Surv(ttdeath, death) ~ grade + trt, trial), times = 10),
@@ -155,12 +155,12 @@ test_that("no errors/warnings with competing events", {
   cr_2 <- survival::survfit(survival::Surv(ttdeath, death_cr) ~ grade, data = trial2)
 
   expect_snapshot(
-    tbl_survfit(cr_1, times = c(12, 24)) %>% render_as_html()
+    tbl_survfit(cr_1, times = c(12, 24)) %>% as.data.frame()
   )
   expect_error(
     summod2 <- tbl_survfit(cr_2, times = c(12, 24), label = ~"Tumor Grade"), NA
   )
-  expect_snapshot(summod2 %>% render_as_html())
+  expect_snapshot(summod2 %>% as.data.frame())
 
   # output is identical in tbl_survfit and summary
   summod <- summary(cr_2, times = c(12, 24))

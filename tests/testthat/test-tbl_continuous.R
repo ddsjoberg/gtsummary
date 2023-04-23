@@ -23,7 +23,7 @@ test_that("tbl_continuous() works", {
       include = c(grade, stage)
     ) %>%
       add_overall() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_equal(

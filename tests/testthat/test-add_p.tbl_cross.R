@@ -3,13 +3,13 @@ skip_on_cran()
 
 test_that("add_p.tbl_cross", {
   expect_snapshot(
-    trial %>% tbl_cross(response, death) %>% add_p() %>% render_as_html()
+    trial %>% tbl_cross(response, death) %>% add_p() %>% as.data.frame()
   )
   expect_snapshot(
-    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p() %>% render_as_html()
+    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p() %>% as.data.frame()
   )
   expect_snapshot(
-    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p(source_note = TRUE) %>% render_as_html()
+    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p(source_note = TRUE) %>% as.data.frame()
   )
   expect_error(
     tbl <-
@@ -21,7 +21,7 @@ test_that("add_p.tbl_cross", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_equal(
     tbl %>%
       as_tibble(col_labels = FALSE) %>%
@@ -53,7 +53,7 @@ test_that("add_p.tbl_cross", {
     },
     NA
   )
-  expect_snapshot(tbl_pt %>% render_as_html())
+  expect_snapshot(tbl_pt %>% as.data.frame())
   expect_equal(
     tbl_pt$table_styling$footnote %>%
       dplyr::filter(column == "p.value") %>%
@@ -75,7 +75,7 @@ test_that("add_p.tbl_cross", {
     },
     NA
   )
-  expect_snapshot(tbl_pt %>% render_as_html())
+  expect_snapshot(tbl_pt %>% as.data.frame())
   expect_equal(
     tbl_pt$table_styling$source_note,
     "Teste de McNemar, ",
