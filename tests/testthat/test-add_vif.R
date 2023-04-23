@@ -6,28 +6,28 @@ test_that("no errors/warnings with standard", {
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       add_vif() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
     lm(age ~ marker + response, trial) %>%
       tbl_regression() %>%
       add_vif() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       add_vif(statistic = "aGVIF") %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       add_vif(statistic = c("aGVIF", "df")) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_error(
@@ -41,13 +41,13 @@ test_that("no errors/warnings with standard", {
     lm(age ~ marker + response, trial) %>%
       tbl_regression() %>%
       add_vif(statistic = "VIF") %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
     lm(age ~ marker + response, trial) %>%
       tbl_regression() %>%
       add_vif(statistic = "VIF") %>%
-      render_as_html()
+      as.data.frame()
   )
 })

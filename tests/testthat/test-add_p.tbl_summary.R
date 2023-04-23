@@ -2,7 +2,7 @@ skip_on_cran()
 
 test_that("add_p creates output without error/warning", {
   expect_snapshot(
-    tbl_summary(trial, by = grade) %>% add_p() %>% render_as_html()
+    tbl_summary(trial, by = grade) %>% add_p() %>% as.data.frame()
   )
 
   tbl <- tbl_summary(mtcars, by = am) %>%
@@ -17,7 +17,7 @@ test_that("add_p creates output without error/warning", {
   expect_snapshot(
     trial %>%
       tbl_summary(by = trt) %>%
-      add_p() %>% render_as_html()
+      add_p() %>% as.data.frame()
   )
 
   expect_warning(
@@ -36,7 +36,7 @@ test_that("add_p creates output without error/warning", {
 
   expect_snapshot(
     tbl_summary(trial, by = trt, include = -response) %>%
-      add_p(group = response) %>% render_as_html()
+      add_p(group = response) %>% as.data.frame()
   )
 })
 
@@ -73,7 +73,7 @@ test_that("add_p creates output without error/warning for continuous2", {
   expect_snapshot(
     trial %>%
       tbl_summary(by = trt, type = all_continuous() ~ "continuous2") %>%
-      add_p() %>% render_as_html()
+      add_p() %>% as.data.frame()
   )
 
   expect_warning(
@@ -92,7 +92,7 @@ test_that("add_p creates output without error/warning for continuous2", {
 
   expect_snapshot(
     tbl_summary(trial, by = trt, include = -response, type = all_continuous() ~ "continuous2") %>%
-      add_p(group = response) %>% render_as_html()
+      add_p(group = response) %>% as.data.frame()
   )
 })
 
@@ -159,12 +159,12 @@ test_that("add_p with custom p-value function", {
   expect_snapshot(
     trial[c("response", "trt")] %>%
       tbl_summary(by = trt) %>%
-      add_p(test = response ~ "my_mcnemar") %>% render_as_html()
+      add_p(test = response ~ "my_mcnemar") %>% as.data.frame()
   )
   expect_snapshot(
     trial[c("response", "trt")] %>%
       tbl_summary(by = trt) %>%
-      add_p(test = response ~ "my_mcnemar2") %>% render_as_html()
+      add_p(test = response ~ "my_mcnemar2") %>% as.data.frame()
   )
 
   expect_error(
@@ -174,7 +174,7 @@ test_that("add_p with custom p-value function", {
       add_p(test = response ~ my_mcnemar),
     NA
   )
-  expect_snapshot(tbl_mcnemar %>% render_as_html())
+  expect_snapshot(tbl_mcnemar %>% as.data.frame())
 
   expect_equal(
     tbl_mcnemar$meta_data$p.value,
@@ -247,7 +247,7 @@ test_that("p-values are replicated within tbl_summary()", {
         var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
-  expect_snapshot(tbl_test.args %>% render_as_html())
+  expect_snapshot(tbl_test.args %>% as.data.frame())
 
   expect_equal(
     dplyr::filter(tbl_test.args$meta_data, variable == "var_t.test")$p.value,
@@ -360,7 +360,7 @@ test_that("p-values are replicated within tbl_summary()", {
       ),
       group = "id"
     )
-  expect_snapshot(tbl_groups %>% render_as_html())
+  expect_snapshot(tbl_groups %>% as.data.frame())
 
   expect_equal(
     dplyr::filter(tbl_groups$meta_data, variable == "response_mcnemar.test_dots")$p.value,
@@ -414,7 +414,7 @@ test_that("Groups arg and lme4", {
       test = list(contains("lme4") ~ "lme4"),
       group = "id"
     )
-  expect_snapshot(tbl_groups %>% render_as_html())
+  expect_snapshot(tbl_groups %>% as.data.frame())
 
   expect_equal(
     dplyr::filter(tbl_groups$meta_data, variable == "age_lme4")$p.value,
@@ -447,7 +447,7 @@ test_that("no error with missing data", {
       tbl_summary(by = "am", type = hp ~ "continuous") %>%
       add_p()
   )
-  expect_snapshot(t1 %>% render_as_html())
+  expect_snapshot(t1 %>% as.data.frame())
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
     rep_len(NA_character_, 8)

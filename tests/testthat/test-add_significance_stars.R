@@ -13,7 +13,7 @@ test_that("works as expected without error", {
   expect_snapshot(
     tbl1 %>%
       add_significance_stars(hide_ci = FALSE, hide_p = FALSE) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_error(
@@ -22,7 +22,7 @@ test_that("works as expected without error", {
       add_significance_stars(hide_ci = FALSE, hide_p = FALSE),
     NA
   )
-  expect_snapshot(tbl_stars %>% render_as_html())
+  expect_snapshot(tbl_stars %>% as.data.frame())
 
   expect_error(
     tbl_merge(list(tbl_stars, tbl_stars)),
@@ -40,7 +40,7 @@ test_that("works as expected without error", {
         thresholds = c(0.0000001, 0.55, 0.9, 1),
         hide_p = FALSE
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_equal(

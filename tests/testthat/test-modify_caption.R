@@ -10,7 +10,7 @@ test_that("no errors/warnings with all output types", {
     tbl_summary() %>%
     modify_caption("test caption")
 
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_error(tbl %>% as_gt(), NA)
   expect_error(tbl %>% as_flex_table(), NA)
   expect_error(tbl %>% as_hux_table(), NA)
@@ -22,7 +22,7 @@ test_that("no errors/warnings with all output types", {
     select(age) %>%
     tbl_summary() %>%
     modify_caption("test caption", text_interpret = "html")
-  expect_snapshot(tbl2 %>% render_as_html())
+  expect_snapshot(tbl2 %>% as.data.frame())
 
   tbl_reg <- lm(mpg ~ hp, mtcars) %>% tbl_regression()
   expect_error(modify_caption(trial), "*")
@@ -43,5 +43,5 @@ test_that("no errors/warnings with all output types", {
       modify_caption("captions are great"),
     NA
   )
-  expect_snapshot(tbl_with_caption %>% render_as_html())
+  expect_snapshot(tbl_with_caption %>% as.data.frame())
 })

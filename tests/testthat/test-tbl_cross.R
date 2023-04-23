@@ -13,7 +13,7 @@ test_that("tbl_cross- throws error if both `col` and `row` are not specified", {
 
 test_that("tbl_cross- works if no `col` or `row` specified", {
   expect_snapshot(
-    tbl_cross(trial, col = trt, row = response) %>% render_as_html()
+    tbl_cross(trial, col = trt, row = response) %>% as.data.frame()
   )
 })
 
@@ -26,14 +26,14 @@ test_that("tbl_cross- works in character inputs for `col` and `row", {
       col = all_of(col_variable),
       row = all_of(row_variable)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
 test_that("tbl_cross- creates output without error with continuous args", {
   expect_snapshot(
     tbl_cross(mtcars, row = gear, col = am) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -60,33 +60,33 @@ test_that("tbl_cross- labels work", {
       am = "AM LABEL",
       cyl = "New cyl"
     )) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_snapshot(
     tbl_cross(mtcars,
       row = am, col = cyl,
       label = vars(am) ~ "AM LABEL"
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
 # Stats and Percent Argument ---------------------------------------------------
 test_that("tbl_cross- statistics argument works", {
   expect_snapshot(
-    tbl_cross(trial, statistic = "{p}") %>% render_as_html()
+    tbl_cross(trial, statistic = "{p}") %>% as.data.frame()
   )
   expect_snapshot(
-    tbl_cross(trial, percent = "cell") %>% render_as_html()
+    tbl_cross(trial, percent = "cell") %>% as.data.frame()
   )
 })
 
 test_that("tbl_cross- passing percent without stat works and produces %", {
   expect_snapshot(
-    tbl_cross(trial, percent = "cell") %>% render_as_html()
+    tbl_cross(trial, percent = "cell") %>% as.data.frame()
   )
   x <- tbl_cross(trial, percent = "cell")
-  expect_snapshot(x %>% render_as_html())
+  expect_snapshot(x %>% as.data.frame())
   expect_equal(
     sum(str_detect(x$table_body$stat_1, "%"), na.rm = TRUE) > 1,
     TRUE
@@ -111,7 +111,7 @@ test_that("tbl_cross- test no missing omits all NAs", {
     col = response,
     missing = "no"
   )
-  expect_snapshot(x %>% render_as_html())
+  expect_snapshot(x %>% as.data.frame())
   expect_equal(
     "Unknown" %in% x$table_body$label,
     FALSE
@@ -124,7 +124,7 @@ test_that("tbl_cross- test ifany missing returns Unknown when missing", {
     col = trt,
     missing = "ifany"
   )
-  expect_snapshot(x %>% render_as_html())
+  expect_snapshot(x %>% as.data.frame())
   expect_equal(
     "Unknown" %in% x$table_body$label,
     TRUE
@@ -138,7 +138,7 @@ test_that("tbl_cross- test 'always' missing returns Unknown even when none", {
     col = grade,
     missing = "always"
   )
-  expect_snapshot(x %>% render_as_html())
+  expect_snapshot(x %>% as.data.frame())
   expect_equal(
     "Unknown" %in% x$table_body$label,
     TRUE
@@ -151,7 +151,7 @@ test_that("tbl_cross- works with grouped data (it ungroups it first)", {
     trial %>%
       dplyr::group_by(response) %>%
       tbl_cross(death, trt) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -163,7 +163,7 @@ test_that("tbl_cross- test 'no' missing throws message", {
   )
 
   table <- data %>% tbl_cross(row = X, col = Y)
-  expect_snapshot(table %>% render_as_html())
+  expect_snapshot(table %>% as.data.frame())
 
   type <- table$meta_data %>%
     filter(variable == "X") %>%
@@ -178,14 +178,14 @@ test_that("tbl_cross- test NULL margin argument", {
     row = trt,
     col = response
   )
-  expect_snapshot(margins %>% render_as_html())
+  expect_snapshot(margins %>% as.data.frame())
 
   no_margins <- tbl_cross(trial,
     row = trt,
     col = response,
     margin = NULL
   )
-  expect_snapshot(no_margins %>% render_as_html())
+  expect_snapshot(no_margins %>% as.data.frame())
 
   # test row margins ------
   expect_equal(

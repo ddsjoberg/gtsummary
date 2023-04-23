@@ -28,7 +28,7 @@ test_that("combine_terms works without error", {
       ),
     NA
   )
-  expect_snapshot(tbl1 %>% render_as_html())
+  expect_snapshot(tbl1 %>% as.data.frame())
 
   expect_error(
     tbl2 <- tbl_regression(mod2, label = stage ~ "Stage") %>%
@@ -38,7 +38,7 @@ test_that("combine_terms works without error", {
       ),
     NA
   )
-  expect_snapshot(tbl2 %>% render_as_html())
+  expect_snapshot(tbl2 %>% as.data.frame())
 
   # testing anova p-value is correct
   expect_equal(
@@ -64,17 +64,17 @@ test_that("combine_terms works without error", {
       tbl_regression() %>%
       add_global_p() %>%
       combine_terms(formula = . ~ . - marker - I(marker^2)) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # Confirm logistic regression model works (test option must be specified)
   expect_snapshot(
     glm(response ~ age + marker + sp2marker + sp3marker,
       data = trial %>%
-        bind_cols(
+        dplyr::bind_cols(
           Hmisc::rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
             as.data.frame() %>%
-            set_names("sp2marker", "sp3marker")
+            stats::setNames(c("sp2marker", "sp3marker"))
         ) %>%
         filter(complete.cases(.) == TRUE),
       family = "binomial"
@@ -84,7 +84,7 @@ test_that("combine_terms works without error", {
         formula_update = . ~ . - marker - sp2marker - sp3marker,
         test = "LRT"
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # Confirm Cox model works
@@ -96,7 +96,7 @@ test_that("combine_terms works without error", {
       combine_terms(
         formula_update = . ~ . - Hmisc::rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # Confirm survreg model works
@@ -108,7 +108,7 @@ test_that("combine_terms works without error", {
       combine_terms(
         formula_update = . ~ . - Hmisc::rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # Confirm GEE model works (as long as selected terms are not the only terms in model)
@@ -117,10 +117,10 @@ test_that("combine_terms works without error", {
     geepack::geeglm(
       as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
       data = ChickWeight %>%
-        bind_cols(
+        dplyr::bind_cols(
           Hmisc::rcspline.eval(.$Time, nk = 4, inclx = FALSE, norm = 0) %>%
             as.data.frame() %>%
-            set_names("sp2Time", "sp3Time")
+            stats::setNames(c("sp2Time", "sp3Time"))
         ),
       family = gaussian,
       id = Chick,
@@ -130,7 +130,7 @@ test_that("combine_terms works without error", {
       combine_terms(
         formula_update = . ~ . - Time - sp2Time - sp3Time
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_message(

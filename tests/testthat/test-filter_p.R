@@ -5,7 +5,7 @@ test_that("no errors/warnings with standard use after tbl_summary() and add_p()"
     tbl_summary(by = trt) %>%
     add_p()
 
-  expect_snapshot(filter_p(table1, t = 0.2) %>% render_as_html())
+  expect_snapshot(filter_p(table1, t = 0.2) %>% as.data.frame())
   expect_warning(filter_p(table1, t = 0.2), NA)
 })
 
@@ -16,7 +16,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_g
     tbl_regression(exponentiate = TRUE) %>%
     add_global_p()
 
-  expect_snapshot(filter_p(regress1, t = 0.2) %>% render_as_html())
+  expect_snapshot(filter_p(regress1, t = 0.2) %>% as.data.frame())
   expect_warning(filter_p(regress1, t = 0.2), NA)
 })
 
@@ -32,7 +32,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_g
     ) %>%
     add_global_p()
 
-  expect_snapshot(filter_p(regress2, t = 0.2) %>% render_as_html())
+  expect_snapshot(filter_p(regress2, t = 0.2) %>% as.data.frame())
   expect_warning(filter_p(regress2, t = 0.2), NA)
 })
 

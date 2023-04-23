@@ -64,19 +64,19 @@ test_that("test-select helpers", {
   )
 
   expect_snapshot(
-    tbl_summary(trial, statistic = all_continuous() ~ "{mean}") %>% render_as_html()
+    tbl_summary(trial, statistic = all_continuous() ~ "{mean}") %>% as.data.frame()
   )
 
   expect_snapshot(
-    tbl_summary(trial, statistic = all_categorical() ~ "{n}") %>% render_as_html()
+    tbl_summary(trial, statistic = all_categorical() ~ "{n}") %>% as.data.frame()
   )
 
   expect_snapshot(
-    tbl_summary(trial, statistic = all_dichotomous() ~ "{n}") %>% render_as_html()
+    tbl_summary(trial, statistic = all_dichotomous() ~ "{n}") %>% as.data.frame()
   )
 
   expect_snapshot(
-    tbl_summary(trial, statistic = all_categorical(dichotomous = FALSE) ~ "{n}") %>% render_as_html()
+    tbl_summary(trial, statistic = all_categorical(dichotomous = FALSE) ~ "{n}") %>% as.data.frame()
   )
 
   expect_snapshot(
@@ -85,7 +85,7 @@ test_that("test-select helpers", {
         test = everything() ~ "fisher.test",
         test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   df <-

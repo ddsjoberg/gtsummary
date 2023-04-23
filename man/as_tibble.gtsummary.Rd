@@ -2,6 +2,7 @@
 % Please edit documentation in R/as_tibble.R
 \name{as_tibble.gtsummary}
 \alias{as_tibble.gtsummary}
+\alias{as.data.frame.gtsummary}
 \title{Convert gtsummary object to a tibble}
 \usage{
 \method{as_tibble}{gtsummary}(
@@ -12,6 +13,8 @@
   fmt_missing = FALSE,
   ...
 )
+
+\method{as.data.frame}{gtsummary}(...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package

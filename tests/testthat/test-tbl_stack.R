@@ -36,7 +36,7 @@ row2 <- tbl_merge(list(t2, t4))
 test_that("Stacking tbl_regression objects", {
   expect_snapshot(
     tbl_stack(list(t1, t2), group_header = c("Group 1", "Group 2")) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # must pass items as list
@@ -55,7 +55,7 @@ test_that("Stacking tbl_regression objects", {
 test_that("Stacking tbl_merge objects", {
   expect_snapshot(
     tbl_stack(list(row1, row2)) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -71,13 +71,13 @@ test_that("Stacking tbl_summary objects", {
     zz <- tbl_stack(list(yy, tt)),
     NA
   )
-  expect_snapshot(zz %>% render_as_html())
+  expect_snapshot(zz %>% as.data.frame())
 
   # no error if the list is named
   lst_summary <- list(yy, tt) %>% set_names("one", "two")
   expect_snapshot(
     tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # complex row-specific formatting is maintained

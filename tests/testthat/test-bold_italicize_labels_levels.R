@@ -28,7 +28,7 @@ test_that("tab_style: bold and italicize", {
       italicize_levels() %>%
       bold_p() %>%
       bold_p(q = TRUE, t = 0.2) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -37,7 +37,7 @@ test_that("tab_style: bold and italicize", {
       bold_levels() %>%
       italicize_labels() %>%
       italicize_levels() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -46,7 +46,7 @@ test_that("tab_style: bold and italicize", {
       bold_levels() %>%
       italicize_labels() %>%
       italicize_levels() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_warning(

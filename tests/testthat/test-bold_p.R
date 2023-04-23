@@ -4,7 +4,7 @@ test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
   tbl_summary_comp <- tbl_summary(mtcars, by = am) %>%
     add_p()
 
-  expect_snapshot(bold_p(tbl_summary_comp) %>% render_as_html())
+  expect_snapshot(bold_p(tbl_summary_comp) %>% as.data.frame())
   expect_warning(bold_p(tbl_summary_comp), NA)
 })
 

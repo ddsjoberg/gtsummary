@@ -22,9 +22,10 @@ test_that("add_ci() works", {
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
   )
-  tbl1 %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(
+    tbl1 %>%
+      as.data.frame()
+  )
 
   res <-
     trial %>%
@@ -49,10 +50,9 @@ test_that("add_ci() works", {
       ci_stat_2 = c("25%, 44%", "45, 50")
     )
   )
-  res %>%
-    render_as_html() %>%
-    expect_snapshot()
-
+  expect_snapshot(
+    res %>% as.data.frame()
+  )
   res <-
     trial %>%
     select(response, trt) %>%
@@ -75,9 +75,9 @@ test_that("add_ci() works", {
     tbl2$ci_stat_0,
     c("25 to 39", NA, "42 to 56", "44 to 58")
   )
-  res %>%
-    render_as_html() %>%
-    expect_snapshot()
+  expect_snapshot(
+    res %>% as.data.frame()
+  )
 })
 
 test_that("add_ci() works on a subset of variables", {

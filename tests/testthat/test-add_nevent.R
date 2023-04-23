@@ -14,7 +14,7 @@ test_that("add_nevent after tbl_regression creates output without error/warning"
       add_nevent(),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   # glm model
   expect_error(
@@ -24,7 +24,7 @@ test_that("add_nevent after tbl_regression creates output without error/warning"
       add_nevent(),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 })
 
 
@@ -41,7 +41,7 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
       add_nevent(),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
 
   # glm model
@@ -56,7 +56,7 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
       add_nevent(),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 })
 
 test_that("add_nevent error with bad inputs", {
@@ -88,7 +88,7 @@ test_that("add_nevent.tbl_surfit", {
     res <- add_nevent(tbl_survfit),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 })
 
 # add_nevent.tbl_regression ---------------------------------------------------------
@@ -100,17 +100,17 @@ test_that("add_nevent.tbl_regression", {
   expect_error(
     res <- tbl %>% add_nevent(), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_error(
     res <- tbl %>% add_nevent(location = "level"), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_error(
     res <- tbl %>% add_nevent(location = c("label", "level")), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 })
 
 # add_nevent.tbl_uvregression ---------------------------------------------------------
@@ -127,15 +127,15 @@ test_that("add_nevent.tbl_regression", {
   expect_error(
     res <- tbl %>% add_nevent(), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_error(
     res <- tbl %>% add_nevent(location = "level"), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_error(
     res <- tbl %>% add_nevent(location = c("label", "level")), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 })

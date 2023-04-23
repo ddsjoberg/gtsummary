@@ -9,11 +9,11 @@ tbl_svysummary_by <-
 
 test_that("input checks", {
   expect_snapshot(
-    tbl_summary_noby %>% modify_header(stat_0 = "test") %>% render_as_html()
+    tbl_summary_noby %>% modify_header(stat_0 = "test") %>% as.data.frame()
   )
 
   expect_snapshot(
-    tbl_summary_noby %>% modify_header(stat_0 ~ "test") %>% render_as_html()
+    tbl_summary_noby %>% modify_header(stat_0 ~ "test") %>% as.data.frame()
   )
 
   expect_error(
@@ -21,7 +21,7 @@ test_that("input checks", {
     NA
   )
 
-  expect_snapshot(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}") %>% render_as_html())
+  expect_snapshot(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}") %>% as.data.frame())
   expect_message(tbl_summary_noby %>% modify_header(stat_1 = "N = {n}"))
   expect_equal(
     tbl_summary_by %>%
@@ -61,7 +61,7 @@ test_that("checking glue inserts to headers", {
       ),
     NA
   )
-  expect_snapshot(tbl1 %>% render_as_html())
+  expect_snapshot(tbl1 %>% as.data.frame())
 
   expect_equal(
     tbl1$table_styling$header %>% dplyr::filter(hide == FALSE) %>% dplyr::pull(label),
@@ -79,7 +79,7 @@ test_that("checking glue inserts to headers", {
       ),
     NA
   )
-  expect_snapshot(tbl2 %>% render_as_html())
+  expect_snapshot(tbl2 %>% as.data.frame())
 
   expect_equal(
     tbl2$table_styling$header %>% dplyr::filter(hide == FALSE) %>% dplyr::pull(label),
@@ -97,7 +97,7 @@ test_that("checking glue inserts to headers", {
       modify_header(label ~ "Variable (N = {N})"),
     NA
   )
-  expect_snapshot(tbl3 %>% render_as_html())
+  expect_snapshot(tbl3 %>% as.data.frame())
   expect_equal(
     tbl3$table_styling$header %>% dplyr::filter(column == "label") %>% dplyr::pull(label),
     c("Variable (N = 32)")

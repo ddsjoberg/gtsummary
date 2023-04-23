@@ -8,7 +8,7 @@ test_that("no errors/warnings with standard use", {
 
   expect_error(tbl1 <- remove_row_type(tbl_sum, type = "header"), NA)
   expect_warning(remove_row_type(tbl_sum, type = "header"), NA)
-  expect_snapshot(tbl1 %>% render_as_html())
+  expect_snapshot(tbl1 %>% as.data.frame())
 
   expect_equal(
     tbl1$table_body$label,
@@ -23,7 +23,7 @@ test_that("no errors/warnings with standard use", {
   )
 
   expect_error(tbl3 <- remove_row_type(tbl_reg, type = "reference"), NA)
-  expect_snapshot(tbl3 %>% render_as_html())
+  expect_snapshot(tbl3 %>% as.data.frame())
   expect_equal(
     as.vector(tbl3$table_body$label),
     c("Grade", "II", "III", "T Stage", "T2", "T3", "T4")

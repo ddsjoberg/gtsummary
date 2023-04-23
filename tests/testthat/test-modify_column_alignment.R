@@ -5,6 +5,6 @@ test_that("modify_column_alignment() works", {
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       modify_column_alignment(columns = everything(), align = "left") %>%
-      render_as_html()
+      as.data.frame()
   )
 })

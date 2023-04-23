@@ -45,7 +45,7 @@ test_that("setting themes", {
     tbl <- tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_equal(
     tbl$table_styling$footnote %>% dplyr::filter(column == "p.value") %>% purrr::pluck("footnote"),
@@ -61,7 +61,7 @@ test_that("setting themes", {
   expect_snapshot(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_error(
@@ -83,7 +83,7 @@ test_that("setting themes", {
     set_gtsummary_theme()
 
   expect_error(tbl_theme <- tbl_summary(trial[c("trt", "age")]), NA)
-  expect_snapshot(tbl_theme %>% render_as_html())
+  expect_snapshot(tbl_theme %>% as.data.frame())
   expect_equal(
     tbl_theme$meta_data$stat_display,
     list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})"))
@@ -146,7 +146,7 @@ test_that("setting themes", {
       as_tibble(col_labels = FALSE),
     NA
   )
-  expect_snapshot(tbl_qjecon1 %>% render_as_html())
+  expect_snapshot(tbl_qjecon1 %>% as.data.frame())
   expect_equal(
     tbl_qjecon1 %>%
       as_tibble(col_labels = FALSE) %>%
@@ -163,7 +163,7 @@ test_that("setting themes", {
       as_tibble(col_labels = FALSE),
     NA
   )
-  expect_snapshot(tbl_qjecon2 %>% render_as_html())
+  expect_snapshot(tbl_qjecon2 %>% as.data.frame())
   expect_false("ci" %in% names(tbl_qjecon2))
 
   reset_gtsummary_theme()

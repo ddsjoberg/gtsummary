@@ -8,7 +8,7 @@ test_that("checks for rows arg", {
         footnote = "test footnote",
         rows = variable == "age"
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   footnote_variable <- "age"
@@ -19,7 +19,7 @@ test_that("checks for rows arg", {
         footnote = "test footnote",
         rows = variable == footnote_variable
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   null_value <- NULL
@@ -30,7 +30,7 @@ test_that("checks for rows arg", {
         footnote = "test footnote",
         rows = null_value
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
 
@@ -47,7 +47,7 @@ test_that("checks for rows arg", {
       ),
     NA
   )
-  expect_snapshot(tbl1 %>% render_as_html())
+  expect_snapshot(tbl1 %>% as.data.frame())
   expect_equal(
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("46 (37, 59)  ---  48 (39, 56)", "28 (29%)  ---  33 (34%)")
@@ -64,7 +64,7 @@ test_that("checks for rows arg", {
       modify_column_unhide(all_stat_cols()),
     NA
   )
-  expect_snapshot(tbl2 %>% render_as_html())
+  expect_snapshot(tbl2 %>% as.data.frame())
   expect_equal(
     as_tibble(tbl2, col_labels = FALSE) %>% pull(stat_1),
     c("46 (37, 59)", "28 (29%)")
