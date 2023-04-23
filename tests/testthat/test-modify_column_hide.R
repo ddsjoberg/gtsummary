@@ -6,6 +6,6 @@ test_that("input checks", {
       tbl_regression() %>%
       modify_column_hide(column = ci) %>%
       modify_column_unhide(column = std.error) %>%
-      render_as_html()
+      as.data.frame()
   )
 })

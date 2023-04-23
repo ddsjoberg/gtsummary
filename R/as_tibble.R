@@ -10,7 +10,7 @@
 #' @return a [tibble][tibble::tibble-package]
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @export
+#' @name as_tibble.gtsummary
 #' @examples
 #' \donttest{
 #' tbl <-
@@ -23,6 +23,10 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 #' }
+NULL
+
+#' @export
+#' @rdname as_tibble.gtsummary
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, fmt_missing = FALSE, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
@@ -62,6 +66,17 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 
   # taking each gt function call, concatenating them with %>% separating them
   .eval_list_of_exprs(tibble_calls[include])
+}
+
+#' @export
+#' @rdname as_tibble.gtsummary
+as.data.frame.gtsummary <- function(...) {
+  res <- as_tibble(...)
+
+  if (inherits(res, "data.frame"))
+    return(as.data.frame(res))
+
+  res
 }
 
 

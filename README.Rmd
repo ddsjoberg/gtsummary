@@ -68,33 +68,30 @@ Example basic table:
 
 ```{r table1, include = TRUE}
 library(gtsummary)
-# make dataset with a few variables to summarize
-trial2 <- trial %>% select(age, grade, response, trt)
 
 # summarize the data with our package
-table1 <- tbl_summary(trial2)
+table1 <- 
+  trial %>%
+  tbl_summary(include = c(age, grade, response))
 ```
 
 ```{r tbl_summary_print_simple, include = FALSE}
 # Had to manually save images in temp file, not sure if better way.
-gt::gtsave(as_gt(table1), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(table1), file = "man/figures/README-tbl_summary_print_simple-1.png")
 ```
 
-```{r out.width = "30%", echo = FALSE}
-# Have to do this workaround since the README needs markdown format for GitHub page but a different format for the website.
-if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
-  table1
-} else {
-  knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
-}
+```{r out.width = "25%", echo = FALSE}
+knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
 ```
+
 
 There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r table2, include = TRUE}
 table2 <-
   tbl_summary(
-    trial2,
+    trial,
+    include = c(age, grade, response),
     by = trt, # split table by group
     missing = "no" # don't list missing data separately
   ) %>%
@@ -105,16 +102,12 @@ table2 <-
 ```
 
 ```{r tbl_summary_print_extra, include = FALSE}
-gt::gtsave(as_gt(table2), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(table2), file = "man/figures/README-tbl_summary_print_extra-1.png")
 ```
 
 
-```{r out.width = "60%", echo = FALSE}
-if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
-  table2
-} else {
-  knitr::include_graphics("man/figures/README-tbl_summary_print_extra-1.png")
-}
+```{r out.width = "55%", echo = FALSE}
+knitr::include_graphics("man/figures/README-tbl_summary_print_extra-1.png")
 ```
 
 ### Regression Models
@@ -128,16 +121,12 @@ t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 ```{r tbl_regression_printa, include = FALSE}
-gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(t1), file = "man/figures/README-tbl_regression_printa-1.png")
 ```
 
 
 ```{r out.width = "40%", echo = FALSE}
-if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
-  t1
-} else {
-  knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
-}
+knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
 ```
 
 ### Side-by-side Regression Models
@@ -161,16 +150,12 @@ tbl_merge_ex1 <-
 ```
 
 ```{r tbl_merge_ex1, include = FALSE}
-gt::gtsave(as_gt(tbl_merge_ex1), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(tbl_merge_ex1), file = "man/figures/README-tbl_merge_ex1-1.png")
 ```
 
 
 ```{r out.width = "60%", echo = FALSE}
-if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
-  t3
-} else {
-  knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
-}
+knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
 ```
 
 Review even more output options in the **[table gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
@@ -191,20 +176,12 @@ knitr::include_graphics("man/figures/gt_output_formats.PNG")
 
 ## Save Individual Tables
 
-{gtsummary} tables can also be saved directly to file as an image, RTF, LaTeX, and Word file.
+{gtsummary} tables can also be saved directly to file as an image, HTML, Word, RTF, and LaTeX file.
 
 ```r
 tbl %>%
   as_gt() %>%
-  gt::gtsave(filename = ".") # use extensions .html .tex .ltx .rtf
-```
-
-For a Word file, use
-
-```r
-tbl %>%
-  as_flex_table() %>%
-  flextable::save_as_docx()
+  gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
 ```
 
 ## Additional Resources

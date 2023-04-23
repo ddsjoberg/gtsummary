@@ -7,7 +7,7 @@ test_that("modify_column_indent() works", {
       modify_column_indent(columns = label, undo = TRUE),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_equal(
     tbl$table_styling$text_format$undo_text_format,

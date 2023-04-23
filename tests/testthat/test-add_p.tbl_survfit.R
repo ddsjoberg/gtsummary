@@ -14,12 +14,12 @@ test_that("add_p.tbl_survfit works", {
     survfit_list %>%
       purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>%
         add_p() %>%
-        render_as_html())
+        as.data.frame())
   )
 
   expect_snapshot(
     survfit_list %>%
-      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p() %>% render_as_html(),
+      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p() %>% as.data.frame(),
     NA
   )
 
@@ -27,7 +27,7 @@ test_that("add_p.tbl_survfit works", {
     survfit_list[[1]] %>%
       tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>%
       add_p() %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -35,7 +35,7 @@ test_that("add_p.tbl_survfit works", {
       select(trt, grade, ttdeath, death) %>%
       tbl_survfit(times = c(12, 24), y = survival::Surv(ttdeath, death)) %>%
       add_p() %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -50,7 +50,7 @@ test_that("add_p.tbl_survfit survdiff family checks", {
       survival::survfit(survival::Surv(ttdeath, death) ~ stage, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
-  expect_snapshot(tbl_survfit %>% render_as_html())
+  expect_snapshot(tbl_survfit %>% as.data.frame())
 
   # logrank
   logrank_trt <-
@@ -102,7 +102,7 @@ test_that("add_p.tbl_survfit coxph family checks", {
       survival::survfit(survival::Surv(ttdeath, death) ~ grade, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
-  expect_snapshot(tbl_survfit %>% render_as_html())
+  expect_snapshot(tbl_survfit %>% as.data.frame())
 
   # LRT
   lrt_trt <-

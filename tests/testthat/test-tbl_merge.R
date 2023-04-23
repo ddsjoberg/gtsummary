@@ -76,7 +76,7 @@ t6 <-
   )
 
 test_that("no errors/warnings with standard use", {
-  expect_snapshot(t4 %>% render_as_html())
+  expect_snapshot(t4 %>% as.data.frame())
   expect_error(t4, NA)
   expect_warning(t4, NA)
   expect_error(tbl_merge(tbls = list(t5, t6)), NA)
@@ -119,7 +119,7 @@ test_that("tbl_merge() column ordering", {
       as_tibble(col_labels = FALSE) %>%
       select(label, ends_with("_1"), ends_with("_2"), ends_with("_3"))
   )
-  expect_snapshot(tbl_merge(list(t1, t2, t3)) %>% render_as_html())
+  expect_snapshot(tbl_merge(list(t1, t2, t3)) %>% as.data.frame())
 })
 
 test_that("tbl_merge() no spanning header", {
@@ -129,7 +129,7 @@ test_that("tbl_merge() no spanning header", {
     tbl_no_spanning <- tbl_merge(list(tbl, tbl), tab_spanner = FALSE),
     NA
   )
-  expect_snapshot(tbl_no_spanning %>% render_as_html())
+  expect_snapshot(tbl_no_spanning %>% as.data.frame())
   expect_true(
     is.na(tbl_no_spanning$table_styling$header$spanning_header) %>% all()
   )
@@ -142,7 +142,7 @@ test_that("tbl_merge() one table", {
     tbl_only_one <- tbl_merge(list(tbl)),
     NA
   )
-  expect_snapshot(tbl_only_one %>% render_as_html())
+  expect_snapshot(tbl_only_one %>% as.data.frame())
 })
 
 test_that("tbl_merge() errors are triggered", {
@@ -184,7 +184,7 @@ test_that("tbl_merge with complicated tbl_stack + cols_merge", {
   expect_snapshot(
     tbl_merge(tbls = list(t3, t4)) %>%
       modify_spanning_header(everything() ~ NA) %>%
-      render_as_html()
+      as.data.frame()
   )
   reset_gtsummary_theme()
 })
