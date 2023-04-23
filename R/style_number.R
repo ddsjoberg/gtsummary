@@ -53,7 +53,7 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
 }
 
 # this function assures that 5s are rounded up (and not to even, the default in `round()`)
-a_very_small_number <- sqrt(.Machine$double.eps)
+# code taken from https://github.com/sfirke/janitor/blob/main/R/round_half_up.R
 round2 <- function(x, digits = 0) {
-  round(x + a_very_small_number * sign(x), digits = digits)
+  trunc(abs(x) * 10 ^ digits + 0.5 + sqrt(.Machine$double.eps)) / 10 ^ digits * sign(x)
 }
