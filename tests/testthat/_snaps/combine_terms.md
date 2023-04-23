@@ -47,10 +47,10 @@
 ---
 
     Code
-      glm(response ~ age + marker + sp2marker + sp3marker, data = trial %>% bind_cols(
+      glm(response ~ age + marker + sp2marker + sp3marker, data = trial %>% dplyr::bind_cols(
         Hmisc::rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
-          as.data.frame() %>% set_names("sp2marker", "sp3marker")) %>% filter(
-        complete.cases(.) == TRUE), family = "binomial") %>% tbl_regression(
+          as.data.frame() %>% stats::setNames(c("sp2marker", "sp3marker"))) %>%
+        filter(complete.cases(.) == TRUE), family = "binomial") %>% tbl_regression(
         exponentiate = TRUE) %>% combine_terms(formula_update = . ~ . - marker -
         sp2marker - sp3marker, test = "LRT") %>% as.data.frame()
     Message
@@ -125,8 +125,8 @@
 
     Code
       geepack::geeglm(as.formula("weight ~ Diet + Time + sp2Time + sp3Time"), data = ChickWeight %>%
-        bind_cols(Hmisc::rcspline.eval(.$Time, nk = 4, inclx = FALSE, norm = 0) %>%
-          as.data.frame() %>% set_names("sp2Time", "sp3Time")), family = gaussian,
+        dplyr::bind_cols(Hmisc::rcspline.eval(.$Time, nk = 4, inclx = FALSE, norm = 0) %>%
+          as.data.frame() %>% stats::setNames(c("sp2Time", "sp3Time"))), family = gaussian,
       id = Chick, corstr = "exchangeable") %>% tbl_regression() %>% combine_terms(
         formula_update = . ~ . - Time - sp2Time - sp3Time) %>% as.data.frame()
     Message

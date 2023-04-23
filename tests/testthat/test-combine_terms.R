@@ -71,10 +71,10 @@ test_that("combine_terms works without error", {
   expect_snapshot(
     glm(response ~ age + marker + sp2marker + sp3marker,
       data = trial %>%
-        bind_cols(
+        dplyr::bind_cols(
           Hmisc::rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
             as.data.frame() %>%
-            set_names("sp2marker", "sp3marker")
+            stats::setNames(c("sp2marker", "sp3marker"))
         ) %>%
         filter(complete.cases(.) == TRUE),
       family = "binomial"
@@ -117,10 +117,10 @@ test_that("combine_terms works without error", {
     geepack::geeglm(
       as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
       data = ChickWeight %>%
-        bind_cols(
+        dplyr::bind_cols(
           Hmisc::rcspline.eval(.$Time, nk = 4, inclx = FALSE, norm = 0) %>%
             as.data.frame() %>%
-            set_names("sp2Time", "sp3Time")
+            stats::setNames(c("sp2Time", "sp3Time"))
         ),
       family = gaussian,
       id = Chick,
