@@ -100,14 +100,14 @@ Example basic table:
 
 ``` r
 library(gtsummary)
-# make dataset with a few variables to summarize
-trial2 <- trial %>% select(age, grade, response, trt)
 
 # summarize the data with our package
-table1 <- tbl_summary(trial2)
+table1 <- 
+  trial %>%
+  tbl_summary(include = c(age, grade, response))
 ```
 
-<img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
+<img src="man/figures/README-tbl_summary_print_simple-1.png" width="25%" />
 
 There are many **customization options** to **add information** (like
 comparing groups) and **format results** (like bold labels) in your
@@ -118,7 +118,8 @@ tutorial for many more options, or below for one example.
 ``` r
 table2 <-
   tbl_summary(
-    trial2,
+    trial,
+    include = c(age, grade, response),
     by = trt, # split table by group
     missing = "no" # don't list missing data separately
   ) %>%
@@ -128,7 +129,7 @@ table2 <-
   bold_labels()
 ```
 
-<img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
+<img src="man/figures/README-tbl_summary_print_extra-1.png" width="55%" />
 
 ### Regression Models
 
@@ -189,21 +190,13 @@ vignette for details.
 
 ## Save Individual Tables
 
-{gtsummary} tables can also be saved directly to file as an image, RTF,
-LaTeX, and Word file.
+{gtsummary} tables can also be saved directly to file as an image, HTML,
+Word, RTF, and LaTeX file.
 
 ``` r
 tbl %>%
   as_gt() %>%
-  gt::gtsave(filename = ".") # use extensions .html .tex .ltx .rtf
-```
-
-For a Word file, use
-
-``` r
-tbl %>%
-  as_flex_table() %>%
-  flextable::save_as_docx()
+  gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
 ```
 
 ## Additional Resources

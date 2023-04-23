@@ -22,7 +22,7 @@ cox_hmisclbl <- survival::coxph(survival::Surv(time, status) ~ age + sex, data =
 
 
 test_that("glm: logistic and poisson regression", {
-  expect_snapshot(tbl_regression(mod_logistic) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_logistic) %>% as.data.frame())
   expect_warning(tbl_regression(mod_logistic), NA)
 
   expect_snapshot(
@@ -53,7 +53,7 @@ test_that("glm: logistic and poisson regression", {
       exponentiate = TRUE,
       estimate_fun = purrr::partial(style_ratio, digits = 1)
     ) %>%
-      render_as_html()
+      as.data.frame()
   )
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
 
@@ -78,32 +78,32 @@ test_that("glm: logistic and poisson regression", {
 })
 
 test_that("lm: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_lm) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_lm) %>% as.data.frame())
   expect_warning(tbl_regression(mod_lm), NA)
 })
 
 test_that("lm with tidyfun: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_lm, tidy_fun = broom::tidy) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_lm, tidy_fun = broom::tidy) %>% as.data.frame())
   expect_warning(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
 })
 
 
 test_that("survreg: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_survreg) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_survreg) %>% as.data.frame())
 })
 
 test_that("lmer: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_lmer) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_lmer) %>% as.data.frame())
   expect_warning(tbl_regression(mod_lmer), NA)
 })
 
 test_that("glmer: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_glmer) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_glmer) %>% as.data.frame())
   expect_warning(tbl_regression(mod_glmer), NA)
 })
 
 test_that("lm with interactions: no errors/warnings with standard use", {
-  expect_snapshot(tbl_regression(mod_lm_interaction) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod_lm_interaction) %>% as.data.frame())
   expect_warning(tbl_regression(mod_lm_interaction), NA)
 })
 
@@ -193,7 +193,7 @@ test_that("Testing lme4 results", {
     ),
     NA
   )
-  expect_snapshot(tbl_lme4 %>% render_as_html())
+  expect_snapshot(tbl_lme4 %>% as.data.frame())
 
   # coefs are exponentiated properly
   expect_equal(
@@ -216,7 +216,7 @@ test_that("Interaction modifications", {
       ),
     NA
   )
-  expect_snapshot(tbl_i %>% render_as_html())
+  expect_snapshot(tbl_i %>% as.data.frame())
 
   # checking modifications to table
   expect_equal(
@@ -273,12 +273,12 @@ test_that("tidycrr models work", {
     tbl <- tbl_regression(mod, exponentiate = TRUE),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$estimate,
     c("1.01", NA, NA, "1.06", "1.54")
   )
-  expect_snapshot(add_global_p(tbl) %>% render_as_html())
+  expect_snapshot(add_global_p(tbl) %>% as.data.frame())
 })
 
 test_that("cmprsk::crr models message", {
@@ -304,7 +304,7 @@ test_that("NSE args could be passed to tidy_plus_plus()", {
       ),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
@@ -324,7 +324,7 @@ test_that("`add_header_rows = FALSE` could be passed to tidy_plus_plus()", {
       ),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
