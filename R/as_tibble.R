@@ -74,9 +74,9 @@ as.data.frame.gtsummary <- function(...) {
   res <- as_tibble(...)
 
   if (inherits(res, "data.frame"))
-    return(as.data.frame(ref))
-  else
-    return(res)
+    return(as.data.frame(res))
+
+  res
 }
 
 
