@@ -291,7 +291,7 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
 
 test_that("tbl_svysummary-difftime does not cause error", {
   expect_snapshot(
-    dplyr::storms[1:10, ] %>%
+    df_dplyr_storms %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
