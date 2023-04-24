@@ -218,9 +218,9 @@
 # tbl_svysummary-difftime does not cause error
 
     Code
-      dplyr::storms[1:10, ] %>% dplyr::mutate(date = ISOdate(year, month, day),
-      date_diff = difftime(dplyr::lag(date, 5), date, units = "days")) %>% survey::svydesign(
-        data = ., ids = ~1, weights = ~1) %>% tbl_svysummary() %>% as_tibble()
+      df_dplyr_storms %>% dplyr::mutate(date = ISOdate(year, month, day), date_diff = difftime(
+        dplyr::lag(date, 5), date, units = "days")) %>% survey::svydesign(data = .,
+        ids = ~1, weights = ~1) %>% tbl_svysummary() %>% as_tibble()
     Output
       # A tibble: 69 x 2
          `**Characteristic**` `**N = 10**`
