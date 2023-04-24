@@ -158,30 +158,26 @@ test_that("error catching working properly", {
   expect_error(
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
-      combine_terms(formula = . ~ . - marker),
-    NULL
+      combine_terms(formula = . ~ . - marker)
   )
 
   expect_error(
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
-      combine_terms(formula = . ~ . - marker, label = c("marker", "marker2")),
-    NULL
+      combine_terms(formula = . ~ . - marker, label = c("marker", "marker2"))
   )
 
   # there is no pvalue returned by anova in this model
   expect_error(
     lm(mpg ~ disp + am * factor(cyl), data = mtcars) %>%
       tbl_regression() %>%
-      combine_terms(. ~ . - am),
-    NULL
+      combine_terms(. ~ . - am)
   )
 
   expect_error(
     glm(am ~ disp + factor(cyl), data = mtcars, family = binomial) %>%
       tbl_regression() %>%
-      combine_terms(. ~ . - disp),
-    NULL
+      combine_terms(. ~ . - disp)
   )
 })
 
