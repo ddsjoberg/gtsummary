@@ -178,7 +178,8 @@ test_that("error catching working properly", {
     glm(am ~ disp + factor(cyl), data = mtcars, family = binomial) %>%
       tbl_regression() %>%
       combine_terms(. ~ . - disp) %>%
-      as.data.frame()
+      as.data.frame(),
+    error = TRUE
   )
 
   expect_error(

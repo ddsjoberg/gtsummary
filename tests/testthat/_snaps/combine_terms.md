@@ -143,3 +143,20 @@
       5                  4       30     18, 43      <0.001
       6               Time     <NA>       <NA>      <0.001
 
+# error catching working properly
+
+    Code
+      glm(am ~ disp + factor(cyl), data = mtcars, family = binomial) %>%
+        tbl_regression() %>% combine_terms(. ~ . - disp) %>% as.data.frame()
+    Message
+      combine_terms: Creating a reduced model with
+      `reduced_model <- stats::update(x$model_obj, formula. = . ~ . - disp)`
+      combine_terms: Calculating p-value comparing full and reduced models with
+      `stats::anova(x$model_obj, reduced_model)`
+    Condition
+      Error:
+      ! The output from `anova()` did not contain a p-value.
+       A common source of this error is not specifying the `test=` argument.
+       For example, to get the LRT p-value for a logistic regression estimated with `glm()`,
+       include the argument `test = "LRT"` in the `combine_terms()` call.
+
