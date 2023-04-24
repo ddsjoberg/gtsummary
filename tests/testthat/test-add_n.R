@@ -200,9 +200,9 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 })
 
 
-# add_n.tbl_surfit --------------------------------------------------------
+# add_n.tbl_survfit --------------------------------------------------------
 
-test_that("add_n.tbl_surfit", {
+test_that("add_n.tbl_survfit", {
   skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
   tbl_survfit <-
