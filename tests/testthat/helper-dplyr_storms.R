@@ -1,4 +1,4 @@
-# dplyr::storms[1:10, ] |> dput() # this was run on 2023-04-23 on dplyr v1.1.2
+# dplyr::storms[1:10, ] %>% dput() # this was run on 2023-04-23 on dplyr v1.1.2
 
 df_dplyr_storms <-
   structure(
