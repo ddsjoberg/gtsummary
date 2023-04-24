@@ -286,15 +286,18 @@ test_that("add_difference() with smd and survey weights", {
   expect_error(
     tbl <-
       rhcSvy %>%
-      tbl_svysummary(
-        by = swang1,
-        statistic = all_continuous() ~ "{mean} ({sd})",
-        include = all_of(c("age", "sex", "race"))
-      ) %>%
-      add_difference(
-        everything() ~ "smd",
-        estimate_fun = everything() ~ purrr::partial(style_sigfig, digits = 3)
-      ) %>%
+      {suppressWarnings(
+        tbl_svysummary(
+          .,
+          by = swang1,
+          statistic = all_continuous() ~ "{mean} ({sd})",
+          include = all_of(c("age", "sex", "race"))
+        ) %>%
+          add_difference(
+            everything() ~ "smd",
+            estimate_fun = everything() ~ purrr::partial(style_sigfig, digits = 3)
+          )
+      )} %>%
       as_tibble(col_labels = FALSE),
     NA
   )
