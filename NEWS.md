@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Fix in the footnote of `add_overall()` when run after `tbl_continuous()`. (#1436)
+
+* Updating the levels of precision used in `round2()`, which is used in the background for every rounded/formatted number in a gtsummary table. (#1494)
+
 * Added `as.data.frame()` S3 method for gtsummary class.
 
 * The `tbl_svysummary()` function may now report the design effect, e.g. `tbl_svysummary(statistic = ~"{deff}")`. (#1486)

@@ -166,14 +166,14 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   if (!is.null(statistic)) {
     x_copy$inputs$statistic <-
       switch(is.null(x_copy$inputs$statistic),
-        statistic
+             statistic
       ) %||%
       purrr::list_modify(x_copy$inputs$statistic, !!!statistic)
   }
   if (!is.null(digits)) {
     x_copy$inputs$digits <-
       switch(is.null(x_copy$inputs$digits),
-        digits
+             digits
       ) %||%
       purrr::list_modify(x_copy$inputs$digits, !!!digits)
   }
@@ -256,17 +256,25 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
   }
 
   # updating table_style
-  x <-
-    modify_table_styling(
-      x,
-      columns = "stat_0",
-      footnote = footnote_stat_label(x$meta_data),
-      hide = FALSE
-    ) %>%
-    modify_header(
-      stat_0 =
-        col_label %||%
-          paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
+  x$table_styling$footnote <-
+    dplyr::bind_rows(
+      x$table_styling$footnote,
+      tbl_overall$table_styling$footnote %>%
+        dplyr::filter(.data$column %in% "stat_0")
+    )
+
+  x$table_styling$header <-
+    x$table_styling$header %>%
+    mutate(
+      label =
+        ifelse(
+          .data$column %in% "stat_0",
+          paste0(
+            "**", translate_text("Overall"), "**, ",
+            stringr::str_remove_all(.data$label, pattern = stringr::fixed("**"))
+          ),
+          .data$label
+        )
     )
 
   x
