@@ -71,17 +71,17 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   tbl2 <- tbl_regression(mod2)
 
   expect_equal(
-    car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
-    tbl1 %>% add_global_p(include = everything(), type = "II") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    suppressWarnings(car::Anova(mod1, type = "II")) %>% select(last_col()) %>% pull() %>% discard(is.na),
+    tbl1 %>% {suppressWarnings(add_global_p(., include = everything(), type = "II"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
   expect_equal(
-    car::Anova(mod1, type = "III") %>% select(last_col()) %>% pull() %>% discard(is.na) %>% .[-1],
-    tbl1 %>% add_global_p(keep = FALSE, type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    suppressWarnings(car::Anova(mod1, type = "III")) %>% select(last_col()) %>% pull() %>% discard(is.na) %>% .[-1],
+    tbl1 %>% {suppressWarnings(add_global_p(., keep = FALSE, type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
   # testing that p.values are kept with keep = TRUE (only one line without missing p-value)
   expect_equal(
-    tbl1 %>% add_global_p(keep = TRUE, type = "II") %>%
+    tbl1 %>% {suppressWarnings(add_global_p(., keep = TRUE, type = "II"))} %>%
       pluck("table_body") %>% filter(variable == "factor(`number + cylinders`)") %>%
       pull("p.value") %>%
       {
@@ -92,8 +92,8 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
 
   # testing that using non-standard characters don't change the global p-values
   expect_equal(
-    tbl1 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na),
-    tbl2 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    tbl1 %>% {suppressWarnings(add_global_p(., include = everything(), type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na),
+    tbl2 %>% {suppressWarnings(add_global_p(., include = everything(), type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
   expect_error(
