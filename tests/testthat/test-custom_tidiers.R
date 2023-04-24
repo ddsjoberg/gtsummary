@@ -5,7 +5,7 @@ mod <- lm(age ~ marker + grade, trial)
 
 test_that("no errors/warnings with tidy_standardize", {
   skip_if_not(broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE))
-  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_standardize) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_standardize) %>% as.data.frame())
 })
 
 test_that("no errors/warnings with tidy_bootstrap", {
@@ -15,7 +15,7 @@ test_that("no errors/warnings with tidy_bootstrap", {
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
 
   skip_on_os(c("mac", "linux", "solaris"))
-  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% render_as_html())
+  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% as.data.frame())
 })
 
 
@@ -30,7 +30,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
 
   skip_on_os(c("mac", "linux", "solaris"))
   tbl_mice <- tbl_regression(mod_mice)
-  expect_snapshot(tbl_mice %>% render_as_html())
+  expect_snapshot(tbl_mice %>% as.data.frame())
 })
 
 
@@ -42,7 +42,7 @@ test_that("no errors/warnings with tbl_regression.multinom", {
       nnet::multinom(grade ~ age, trial) %>%
       tbl_regression(estimate_fun = function(x) style_sigfig(x, digits = 1))
   )
-  expect_snapshot(tbl_nnet %>% render_as_html())
+  expect_snapshot(tbl_nnet %>% as.data.frame())
   expect_snapshot(tbl_nnet %>% as_tibble())
 })
 
@@ -66,7 +66,7 @@ test_that("no errors/warnings with tbl_regression.gam", {
         exponentiate = TRUE,
         label = `s(marker,age)` ~ "Smoothed marker/age"
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -79,7 +79,7 @@ test_that("no errors/warnings with tidy_robust()", {
         tidy_fun = purrr::partial(tidy_robust, vcov_estimation = "CL"),
         exponentiate = TRUE
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # expect message when `vcov` and `vcov_args` have not been specified

@@ -12,7 +12,7 @@ test_that("no errors/warnings with standard use after tbl_regression", {
     car::Anova(mod1) %>% select(last_col()) %>% pull() %>% discard(is.na),
     tbl1 %>% add_global_p(include = everything()) %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_warning(
     res <- tbl1 %>% add_global_p(keep = TRUE, type = "II"), NA
@@ -21,7 +21,7 @@ test_that("no errors/warnings with standard use after tbl_regression", {
     car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
     tbl1 %>% add_global_p(include = everything(), type = "II") %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   # testing that p.values are kept with keep = TRUE (only one line without missing p-value)
   expect_equal(
@@ -45,12 +45,12 @@ test_that("no errors/warnings with standard use after tbl_uvregression", {
   expect_warning(
     tbl2 %>% add_global_p(), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
 
   expect_error(
     res <- tbl2 %>% add_global_p(type = 2, keep = TRUE), NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
   expect_warning(
     tbl2 %>% add_global_p(type = "II"), NA
   )
@@ -71,17 +71,17 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   tbl2 <- tbl_regression(mod2)
 
   expect_equal(
-    car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
-    tbl1 %>% add_global_p(include = everything(), type = "II") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    suppressWarnings(car::Anova(mod1, type = "II")) %>% select(last_col()) %>% pull() %>% discard(is.na),
+    tbl1 %>% {suppressWarnings(add_global_p(., include = everything(), type = "II"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
   expect_equal(
-    car::Anova(mod1, type = "III") %>% select(last_col()) %>% pull() %>% discard(is.na) %>% .[-1],
-    tbl1 %>% add_global_p(keep = FALSE, type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    suppressWarnings(car::Anova(mod1, type = "III")) %>% select(last_col()) %>% pull() %>% discard(is.na) %>% .[-1],
+    tbl1 %>% {suppressWarnings(add_global_p(., keep = FALSE, type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
   # testing that p.values are kept with keep = TRUE (only one line without missing p-value)
   expect_equal(
-    tbl1 %>% add_global_p(keep = TRUE, type = "II") %>%
+    tbl1 %>% {suppressWarnings(add_global_p(., keep = TRUE, type = "II"))} %>%
       pluck("table_body") %>% filter(variable == "factor(`number + cylinders`)") %>%
       pull("p.value") %>%
       {
@@ -92,8 +92,8 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
 
   # testing that using non-standard characters don't change the global p-values
   expect_equal(
-    tbl1 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na),
-    tbl2 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
+    tbl1 %>% {suppressWarnings(add_global_p(., include = everything(), type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na),
+    tbl2 %>% {suppressWarnings(add_global_p(., include = everything(), type = "III"))} %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
   expect_error(
@@ -128,7 +128,7 @@ test_that("`add_global_p()` works with `tbl_uvregression(x=)`", {
       add_global_p(keep = TRUE),
     NA
   )
-  # expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$p.value,
     c("0.7", NA, "0.6", "0.4", "0.025", NA, "0.010", "0.6")

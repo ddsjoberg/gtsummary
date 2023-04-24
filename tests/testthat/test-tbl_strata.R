@@ -15,7 +15,7 @@ test_that("no errors with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_snapshot(
     trial %>%
@@ -31,7 +31,7 @@ test_that("no errors with standard use", {
             tbl_summary(by = trt) %>%
             add_p(test = all_continuous() ~ "t.test")
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_error(
@@ -47,7 +47,7 @@ test_that("no errors with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_error(
     tbl <-
@@ -64,7 +64,7 @@ test_that("no errors with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
 
   expect_snapshot(
     trial %>%
@@ -79,7 +79,7 @@ test_that("no errors with standard use", {
               method = lm
             )
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -93,7 +93,7 @@ test_that("no errors with standard use", {
             tbl_cross() %>%
             add_p()
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -107,7 +107,7 @@ test_that("no errors with standard use", {
             tbl_cross() %>%
             add_p()
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   expect_snapshot(
@@ -123,7 +123,7 @@ test_that("no errors with standard use", {
               missing = "no"
             )
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
@@ -135,7 +135,7 @@ test_that("no errors with standard use", {
           modify_header(all_stat_cols() ~ "**{level}**"),
         .combine_with = "tbl_stack"
       ) %>%
-      render_as_html()
+      as.data.frame()
   )
 
   # check .combine_args works, no spanning header anywhere
@@ -152,7 +152,7 @@ test_that("no errors with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as.data.frame())
   expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
 
   lifecycle::expect_deprecated(

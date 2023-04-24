@@ -16,7 +16,7 @@ test_that("add_difference-basic use", {
       ),
     NA
   )
-  expect_snapshot(tbl_diff %>% render_as_html())
+  expect_snapshot(tbl_diff %>% as.data.frame())
 
   expect_equal(
     dplyr::filter(tbl_diff$table_body, variable == "marker") %>% select(estimate, conf.low, conf.high, p.value),
@@ -28,7 +28,7 @@ test_that("add_difference-basic use", {
       select(trt, response, grade) %>%
       tbl_summary(by = trt, percent = "row") %>%
       add_difference() %>%
-      render_as_html()
+      as.data.frame()
   )
 })
 
@@ -61,7 +61,7 @@ test_that("p-values are replicated within tbl_summary()", {
         var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
-  expect_snapshot(tbl_test.args %>% render_as_html())
+  expect_snapshot(tbl_test.args %>% as.data.frame())
 
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_t.test") %>%
@@ -171,7 +171,7 @@ test_that("p-values are replicated within tbl_summary()", {
       group = "id",
       adj.vars = c("stage", "marker")
     )
-  expect_snapshot(tbl_groups %>% render_as_html())
+  expect_snapshot(tbl_groups %>% as.data.frame())
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_ancova_lme4") %>%
@@ -225,7 +225,7 @@ test_that("no error with missing data", {
       tbl_summary(by = "am", type = hp ~ "continuous", missing = "no") %>%
       add_difference()
   )
-  expect_snapshot(t1 %>% render_as_html())
+  expect_snapshot(t1 %>% as.data.frame())
 
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
@@ -286,15 +286,18 @@ test_that("add_difference() with smd and survey weights", {
   expect_error(
     tbl <-
       rhcSvy %>%
-      tbl_svysummary(
-        by = swang1,
-        statistic = all_continuous() ~ "{mean} ({sd})",
-        include = all_of(c("age", "sex", "race"))
-      ) %>%
-      add_difference(
-        everything() ~ "smd",
-        estimate_fun = everything() ~ purrr::partial(style_sigfig, digits = 3)
-      ) %>%
+      {suppressWarnings(
+        tbl_svysummary(
+          .,
+          by = swang1,
+          statistic = all_continuous() ~ "{mean} ({sd})",
+          include = all_of(c("age", "sex", "race"))
+        ) %>%
+          add_difference(
+            everything() ~ "smd",
+            estimate_fun = everything() ~ purrr::partial(style_sigfig, digits = 3)
+          )
+      )} %>%
       as_tibble(col_labels = FALSE),
     NA
   )
@@ -321,7 +324,7 @@ test_that("add_difference() with emmeans()", {
       add_difference(test = everything() ~ "emmeans", adj.vars = "stage"),
     NA
   )
-  expect_snapshot(res %>% render_as_html())
+  expect_snapshot(res %>% as.data.frame())
   expect_error(
     tbl %>%
       add_difference(test = everything() ~ "emmeans", group = "death"),

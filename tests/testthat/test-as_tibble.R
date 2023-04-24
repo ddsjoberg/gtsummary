@@ -27,18 +27,18 @@ t3 <-
 test_that("as_tibble works with standard use", {
   expect_error(as_tibble(t1), NA)
   expect_warning(as_tibble(t1), NA)
-  expect_snapshot(as_tibble(t1))
+  expect_snapshot(as_tibble(t1) %>% as.data.frame())
 
   expect_error(as_tibble(t1, return_calls = TRUE), NA)
   expect_warning(as_tibble(t1, return_calls = TRUE), NA)
 
   expect_error(as_tibble(t2), NA)
   expect_warning(as_tibble(t2), NA)
-  expect_snapshot(as_tibble(t3))
+  expect_snapshot(as_tibble(t3) %>% as.data.frame())
 
   expect_error(as_tibble(t3), NA)
   expect_warning(as_tibble(t3), NA)
-  expect_snapshot(as_tibble(t3))
+  expect_snapshot(as_tibble(t3) %>% as.data.frame())
 })
 
 
@@ -95,7 +95,7 @@ test_that("as_tibble(fmt_missing=) works", {
       as_tibble(fmt_missing = TRUE, col_labels = FALSE),
     NA
   )
-  expect_snapshot(tbl)
+  expect_snapshot(tbl %>% as.data.frame())
   expect_equal(
     tbl$estimate_1,
     c(NA_character_, "—", "-6.9", "-12")
