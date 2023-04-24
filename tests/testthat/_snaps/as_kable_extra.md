@@ -24,7 +24,7 @@
       \hline
       T Stage & \\
       \hline
-      \hspace{1em}T1 & 53 (26\%)\\
+      \hspace{1em}T1 & 53 (27\%)\\
       \hline
       \hspace{1em}T2 & 54 (27\%)\\
       \hline

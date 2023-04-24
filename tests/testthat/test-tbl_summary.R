@@ -5,7 +5,7 @@ test_that("tbl_summary creates output without error/warning (no by var)", {
     lst_tbl <- purrr::map(list(mtcars, iris), ~ tbl_summary(.x, sort = list(all_categorical() ~ "frequency"))),
     NA
   )
-  expect_snapshot(purrr::map(lst_tbl, as_tibble))
+  expect_snapshot(purrr::map(lst_tbl, as.data.frame))
   expect_warning(
     purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
     NA
@@ -278,7 +278,7 @@ test_that("tbl_summary-all_categorical() use with `type=`", {
 
 test_that("tbl_summary-difftime does not cause error", {
   expect_snapshot(
-    dplyr::storms %>%
+    df_dplyr_storms %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
