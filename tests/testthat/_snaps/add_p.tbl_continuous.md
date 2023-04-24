@@ -7,7 +7,7 @@
         **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **p-value**
       1              Grade               <NA>                <NA>         0.9
       2                  I        46 (36, 60)         48 (42, 55)        <NA>
-      3                 II        44 (31, 54)         50 (43, 57)        <NA>
+      3                 II        45 (31, 55)         51 (43, 57)        <NA>
       4                III        52 (42, 60)         45 (36, 52)        <NA>
 
 ---
@@ -19,7 +19,7 @@
         **Characteristic** **N = 200** **p-value**
       1              Grade        <NA>         0.8
       2                  I 47 (37, 56)        <NA>
-      3                 II 48 (37, 57)        <NA>
+      3                 II 49 (37, 57)        <NA>
       4                III 47 (38, 58)        <NA>
 
 ---

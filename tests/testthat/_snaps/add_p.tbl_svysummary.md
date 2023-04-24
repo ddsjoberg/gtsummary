@@ -7,7 +7,7 @@
       1  Chemotherapy Treatment              <NA>              <NA>              <NA>
       2                  Drug A          35 (51%)          32 (47%)          31 (48%)
       3                  Drug B          33 (49%)          36 (53%)          33 (52%)
-      4                     Age       47 (36, 56)       48 (36, 57)       47 (38, 58)
+      4                     Age       47 (37, 56)       48 (36, 57)       47 (38, 58)
       5                 Unknown                 2                 6                 3
       6    Marker Level (ng/mL) 0.98 (0.24, 1.58) 0.37 (0.14, 1.09) 0.61 (0.26, 1.67)
       7                 Unknown                 2                 5                 3
@@ -44,7 +44,7 @@
       strial %>% tbl_svysummary(by = trt) %>% add_p() %>% as.data.frame()
     Output
              **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **p-value**
-      1                     Age        46 (37, 58)         48 (38, 56)         0.7
+      1                     Age        46 (37, 59)         48 (39, 56)         0.7
       2                 Unknown                  7                   4        <NA>
       3    Marker Level (ng/mL)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)       0.084
       4                 Unknown                  6                   4        <NA>
@@ -73,7 +73,7 @@
       2                  Drug A          35 (51%)          32 (47%)          31 (48%)
       3                  Drug B          33 (49%)          36 (53%)          33 (52%)
       4                     Age              <NA>              <NA>              <NA>
-      5            Median (IQR)       47 (36, 56)       48 (36, 57)       47 (38, 58)
+      5            Median (IQR)       47 (37, 56)       48 (36, 57)       47 (38, 58)
       6                 Unknown                 2                 6                 3
       7    Marker Level (ng/mL)              <NA>              <NA>              <NA>
       8            Median (IQR) 0.98 (0.24, 1.58) 0.37 (0.14, 1.09) 0.61 (0.26, 1.67)
@@ -117,7 +117,7 @@
     Output
              **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **p-value**
       1                     Age               <NA>                <NA>         0.7
-      2            Median (IQR)        46 (37, 58)         48 (38, 56)        <NA>
+      2            Median (IQR)        46 (37, 59)         48 (39, 56)        <NA>
       3                 Unknown                  7                   4        <NA>
       4    Marker Level (ng/mL)               <NA>                <NA>       0.084
       5            Median (IQR)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)        <NA>
@@ -146,7 +146,7 @@
       1  Chemotherapy Treatment              <NA>              <NA>         0.5
       2                  Drug A          67 (51%)          28 (46%)        <NA>
       3                  Drug B          65 (49%)          33 (54%)        <NA>
-      4                     Age       46 (36, 55)       49 (42, 58)       0.090
+      4                     Age       46 (36, 55)       49 (42, 59)       0.090
       5                 Unknown                 7                 3        <NA>
       6    Marker Level (ng/mL) 0.59 (0.19, 1.23) 0.90 (0.29, 1.52)        0.10
       7                 Unknown                 6                 4        <NA>
@@ -171,7 +171,7 @@
       1  Chemotherapy Treatment              <NA>              <NA>         0.5
       2                  Drug A          67 (51%)          28 (46%)        <NA>
       3                  Drug B          65 (49%)          33 (54%)        <NA>
-      4                     Age       46 (36, 55)       49 (42, 58)       0.081
+      4                     Age       46 (36, 55)       49 (42, 59)       0.081
       5                 Unknown                 7                 3        <NA>
       6    Marker Level (ng/mL) 0.59 (0.19, 1.23) 0.90 (0.29, 1.52)         0.2
       7                 Unknown                 6                 4        <NA>

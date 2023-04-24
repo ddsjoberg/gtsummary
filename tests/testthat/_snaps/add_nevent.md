@@ -67,7 +67,7 @@
       res %>% as.data.frame()
     Output
             **Characteristic** **Event N**    **Time 12**    **Time 24**
-      1                Overall         112 88% (84%, 93%) 44% (38%, 51%)
+      1                Overall         112 89% (84%, 93%) 44% (38%, 51%)
       2 Chemotherapy Treatment         112           <NA>           <NA>
       3                 Drug A        <NA> 91% (85%, 97%) 47% (38%, 58%)
       4                 Drug B        <NA> 86% (80%, 93%) 41% (33%, 52%)

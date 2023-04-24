@@ -12,7 +12,7 @@
       6    Marker Level (ng/mL)   190 0.64 (0.22, 1.39)
       7                 Unknown  <NA>                10
       8                 T Stage   200              <NA>
-      9                      T1  <NA>          53 (26%)
+      9                      T1  <NA>          53 (27%)
       10                     T2  <NA>          54 (27%)
       11                     T3  <NA>          43 (22%)
       12                     T4  <NA>          50 (25%)
@@ -63,7 +63,7 @@
       6    Marker Level (ng/mL) 0.64 (0.22, 1.39)   190
       7                 Unknown                10  <NA>
       8                 T Stage              <NA>   200
-      9                      T1          53 (26%)  <NA>
+      9                      T1          53 (27%)  <NA>
       10                     T2          54 (27%)  <NA>
       11                     T3          43 (22%)  <NA>
       12                     T4          50 (25%)  <NA>
@@ -109,12 +109,12 @@
       1  Chemotherapy Treatment   20020001000              <NA>
       2                  Drug A          <NA>          98 (49%)
       3                  Drug B          <NA>         102 (51%)
-      4                     Age 20018911945.5       47 (38, 57)
+      4                     Age 20018911955.5       47 (38, 57)
       5                 Unknown          <NA>                11
       6    Marker Level (ng/mL) 20019010955.0 0.64 (0.22, 1.39)
       7                 Unknown          <NA>                10
       8                 T Stage   20020001000              <NA>
-      9                      T1          <NA>          53 (26%)
+      9                      T1          <NA>          53 (27%)
       10                     T2          <NA>          54 (27%)
       11                     T3          <NA>          43 (22%)
       12                     T4          <NA>          50 (25%)
@@ -122,7 +122,7 @@
       14                      I          <NA>          68 (34%)
       15                     II          <NA>          68 (34%)
       16                    III          <NA>          64 (32%)
-      17         Tumor Response  2001937963.5          61 (32%)
+      17         Tumor Response  2001937973.5          61 (32%)
       18                Unknown          <NA>                 7
       19           Patient Died   20020001000         112 (56%)
       20 Months to Death/Censor   20020001000 22.4 (16.0, 24.0)
@@ -136,12 +136,12 @@
       1  Chemotherapy Treatment   20020001000              <NA>
       2                  Drug A          <NA>          98 (49%)
       3                  Drug B          <NA>         102 (51%)
-      4                     Age 20018911945.5       47 (38, 57)
+      4                     Age 20018911955.5       47 (38, 57)
       5                 Unknown          <NA>                11
       6    Marker Level (ng/mL) 20019010955.0 0.64 (0.22, 1.39)
       7                 Unknown          <NA>                10
       8                 T Stage   20020001000              <NA>
-      9                      T1          <NA>          53 (26%)
+      9                      T1          <NA>          53 (27%)
       10                     T2          <NA>          54 (27%)
       11                     T3          <NA>          43 (22%)
       12                     T4          <NA>          50 (25%)
@@ -149,7 +149,7 @@
       14                      I          <NA>          68 (34%)
       15                     II          <NA>          68 (34%)
       16                    III          <NA>          64 (32%)
-      17         Tumor Response  2001937963.5          61 (32%)
+      17         Tumor Response  2001937973.5          61 (32%)
       18                Unknown          <NA>                 7
       19           Patient Died   20020001000         112 (56%)
       20 Months to Death/Censor   20020001000 22.4 (16.0, 24.0)
@@ -170,7 +170,7 @@
       8            Median (IQR)  <NA> 0.64 (0.22, 1.39)
       9                 Unknown  <NA>                10
       10                T Stage   200              <NA>
-      11                     T1  <NA>          53 (26%)
+      11                     T1  <NA>          53 (27%)
       12                     T2  <NA>          54 (27%)
       13                     T3  <NA>          43 (22%)
       14                     T4  <NA>          50 (25%)
@@ -227,7 +227,7 @@
       8            Median (IQR) 0.64 (0.22, 1.39)  <NA>
       9                 Unknown                10  <NA>
       10                T Stage              <NA>   200
-      11                     T1          53 (26%)  <NA>
+      11                     T1          53 (27%)  <NA>
       12                     T2          54 (27%)  <NA>
       13                     T3          43 (22%)  <NA>
       14                     T4          50 (25%)  <NA>
@@ -277,14 +277,14 @@
       1  Chemotherapy Treatment   20020001000              <NA>
       2                  Drug A          <NA>          98 (49%)
       3                  Drug B          <NA>         102 (51%)
-      4                     Age 20018911945.5              <NA>
+      4                     Age 20018911955.5              <NA>
       5            Median (IQR)          <NA>       47 (38, 57)
       6                 Unknown          <NA>                11
       7    Marker Level (ng/mL) 20019010955.0              <NA>
       8            Median (IQR)          <NA> 0.64 (0.22, 1.39)
       9                 Unknown          <NA>                10
       10                T Stage   20020001000              <NA>
-      11                     T1          <NA>          53 (26%)
+      11                     T1          <NA>          53 (27%)
       12                     T2          <NA>          54 (27%)
       13                     T3          <NA>          43 (22%)
       14                     T4          <NA>          50 (25%)
@@ -292,7 +292,7 @@
       16                      I          <NA>          68 (34%)
       17                     II          <NA>          68 (34%)
       18                    III          <NA>          64 (32%)
-      19         Tumor Response  2001937963.5          61 (32%)
+      19         Tumor Response  2001937973.5          61 (32%)
       20                Unknown          <NA>                 7
       21           Patient Died   20020001000         112 (56%)
       22 Months to Death/Censor   20020001000              <NA>
@@ -304,7 +304,7 @@
       res %>% as.data.frame()
     Output
              **Characteristic**         **N** **Drug A**, N = 98 **Drug B**, N = 102
-      1                     Age 20018911945.5               <NA>                <NA>
+      1                     Age 20018911955.5               <NA>                <NA>
       2            Median (IQR)          <NA>        46 (37, 59)         48 (39, 56)
       3                 Unknown          <NA>                  7                   4
       4    Marker Level (ng/mL) 20019010955.0               <NA>                <NA>
@@ -319,7 +319,7 @@
       13                      I          <NA>           35 (36%)            33 (32%)
       14                     II          <NA>           32 (33%)            36 (35%)
       15                    III          <NA>           31 (32%)            33 (32%)
-      16         Tumor Response  2001937963.5           28 (29%)            33 (34%)
+      16         Tumor Response  2001937973.5           28 (29%)            33 (34%)
       17                Unknown          <NA>                  3                   4
       18           Patient Died   20020001000           52 (53%)            60 (59%)
       19 Months to Death/Censor   20020001000               <NA>                <NA>
@@ -331,7 +331,7 @@
       res %>% as.data.frame()
     Output
              **Characteristic** **N** **Drug A**, N = 98 **Drug B**, N = 102
-      1                     Age   189        46 (37, 58)         48 (38, 56)
+      1                     Age   189        46 (37, 59)         48 (39, 56)
       2                 Unknown  <NA>                  7                   4
       3    Marker Level (ng/mL)   190  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
       4                 Unknown  <NA>                  6                   4
@@ -355,7 +355,7 @@
       res %>% as.data.frame()
     Output
              **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **N**
-      1                     Age        46 (37, 58)         48 (38, 56)   189
+      1                     Age        46 (37, 59)         48 (39, 56)   189
       2                 Unknown                  7                   4  <NA>
       3    Marker Level (ng/mL)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)   190
       4                 Unknown                  6                   4  <NA>
@@ -399,7 +399,7 @@
     Output
              **Characteristic** **N** **Drug A**, N = 98 **Drug B**, N = 102
       1                     Age   189               <NA>                <NA>
-      2            Median (IQR)  <NA>        46 (37, 58)         48 (38, 56)
+      2            Median (IQR)  <NA>        46 (37, 59)         48 (39, 56)
       3                 Unknown  <NA>                  7                   4
       4    Marker Level (ng/mL)   190               <NA>                <NA>
       5            Median (IQR)  <NA>  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
@@ -426,7 +426,7 @@
     Output
              **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **N**
       1                     Age               <NA>                <NA>   189
-      2            Median (IQR)        46 (37, 58)         48 (38, 56)  <NA>
+      2            Median (IQR)        46 (37, 59)         48 (39, 56)  <NA>
       3                 Unknown                  7                   4  <NA>
       4    Marker Level (ng/mL)               <NA>                <NA>   190
       5            Median (IQR)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)  <NA>
@@ -466,13 +466,13 @@
       12               Freq 2,2012,20101000              <NA>             <NA>
       13       Median (IQR)            <NA>    342 (140, 513)     79 (64, 144)
 
-# add_n.tbl_surfit
+# add_n.tbl_survfit
 
     Code
       res %>% as.data.frame()
     Output
             **Characteristic** **N**    **Time 12**    **Time 24**
-      1                Overall   200 88% (84%, 93%) 44% (38%, 51%)
+      1                Overall   200 89% (84%, 93%) 44% (38%, 51%)
       2 Chemotherapy Treatment   200           <NA>           <NA>
       3                 Drug A  <NA> 91% (85%, 97%) 47% (38%, 58%)
       4                 Drug B  <NA> 86% (80%, 93%) 41% (33%, 52%)

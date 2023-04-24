@@ -4,13 +4,13 @@
       tbl %>% add_stat_label() %>% as.data.frame()
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13
-      1   mpg, Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      1   mpg, Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       2          cyl, n (%)                 <NA>                 <NA>
       3                   4              3 (16%)              8 (62%)
       4                   6              4 (21%)              3 (23%)
       5                   8             12 (63%)              2 (15%)
       6  disp, Median (IQR)       276 (196, 360)        120 (79, 160)
-      7    hp, Median (IQR)       175 (116, 192)        109 (66, 113)
+      7    hp, Median (IQR)       175 (117, 193)        109 (66, 113)
       8  drat, Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       9    wt, Median (IQR)    3.52 (3.44, 3.84)    2.32 (1.94, 2.78)
       10 qsec, Median (IQR) 17.82 (17.18, 19.17) 17.02 (16.46, 18.61)
@@ -33,13 +33,13 @@
       tbl00 %>% as.data.frame()
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13 **p-value**
-      1   mpg, Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)       0.002
+      1   mpg, Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)       0.002
       2          cyl, n (%)                 <NA>                 <NA>       0.009
       3                   4              3 (16%)              8 (62%)        <NA>
       4                   6              4 (21%)              3 (23%)        <NA>
       5                   8             12 (63%)              2 (15%)        <NA>
       6  disp, Median (IQR)       276 (196, 360)        120 (79, 160)      <0.001
-      7    hp, Median (IQR)       175 (116, 192)        109 (66, 113)       0.046
+      7    hp, Median (IQR)       175 (117, 193)        109 (66, 113)       0.046
       8  drat, Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)      <0.001
       9    wt, Median (IQR)    3.52 (3.44, 3.84)    2.32 (1.94, 2.78)      <0.001
       10 qsec, Median (IQR) 17.82 (17.18, 19.17) 17.02 (16.46, 18.61)         0.3
@@ -62,13 +62,13 @@
       tbl %>% add_overall() %>% add_stat_label() %>% as.data.frame()
     Output
          **Characteristic**  **Overall**, N = 32        **0**, N = 19
-      1   mpg, Median (IQR)    19.2 (15.4, 22.8)    17.3 (14.9, 19.2)
+      1   mpg, Median (IQR)    19.2 (15.4, 22.8)    17.3 (15.0, 19.2)
       2          cyl, n (%)                 <NA>                 <NA>
       3                   4             11 (34%)              3 (16%)
       4                   6              7 (22%)              4 (21%)
       5                   8             14 (44%)             12 (63%)
       6  disp, Median (IQR)       196 (121, 326)       276 (196, 360)
-      7    hp, Median (IQR)        123 (96, 180)       175 (116, 192)
+      7    hp, Median (IQR)        123 (97, 180)       175 (117, 193)
       8  drat, Median (IQR)    3.70 (3.08, 3.92)    3.15 (3.07, 3.70)
       9    wt, Median (IQR)    3.33 (2.58, 3.61)    3.52 (3.44, 3.84)
       10 qsec, Median (IQR) 17.71 (16.89, 18.90) 17.82 (17.18, 19.17)
@@ -115,13 +115,13 @@
         "no. (%)") %>% as.data.frame()
     Output
          **Characteristic** **Statistic**        **0**, N = 19        **1**, N = 13
-      1                 mpg  Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      1                 mpg  Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       2                 cyl          <NA>                 <NA>                 <NA>
       3                   4       no. (%)              3 (16%)              8 (62%)
       4                   6       no. (%)              4 (21%)              3 (23%)
       5                   8       no. (%)             12 (63%)              2 (15%)
       6                disp  Median (IQR)       276 (196, 360)        120 (79, 160)
-      7                  hp  Median (IQR)       175 (116, 192)        109 (66, 113)
+      7                  hp  Median (IQR)       175 (117, 193)        109 (66, 113)
       8                drat  Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       9                  wt  Median (IQR)    3.52 (3.44, 3.84)    2.32 (1.94, 2.78)
       10               qsec  Median (IQR) 17.82 (17.18, 19.17) 17.02 (16.46, 18.61)
@@ -160,7 +160,7 @@
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13
       1                 mpg                 <NA>                 <NA>
-      2        Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      2        Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       3          cyl, n (%)                 <NA>                 <NA>
       4                   4              3 (16%)              8 (62%)
       5                   6              4 (21%)              3 (23%)
@@ -168,7 +168,7 @@
       7                disp                 <NA>                 <NA>
       8        Median (IQR)       276 (196, 360)        120 (79, 160)
       9                  hp                 <NA>                 <NA>
-      10       Median (IQR)       175 (116, 192)        109 (66, 113)
+      10       Median (IQR)       175 (117, 193)        109 (66, 113)
       11               drat                 <NA>                 <NA>
       12       Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       13                 wt                 <NA>                 <NA>
@@ -195,7 +195,7 @@
     Output
          **Characteristic**        **0**, N = 19        **1**, N = 13 **p-value**
       1                 mpg                 <NA>                 <NA>       0.002
-      2        Median (IQR)    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)        <NA>
+      2        Median (IQR)    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)        <NA>
       3          cyl, n (%)                 <NA>                 <NA>       0.009
       4                   4              3 (16%)              8 (62%)        <NA>
       5                   6              4 (21%)              3 (23%)        <NA>
@@ -203,7 +203,7 @@
       7                disp                 <NA>                 <NA>      <0.001
       8        Median (IQR)       276 (196, 360)        120 (79, 160)        <NA>
       9                  hp                 <NA>                 <NA>       0.046
-      10       Median (IQR)       175 (116, 192)        109 (66, 113)        <NA>
+      10       Median (IQR)       175 (117, 193)        109 (66, 113)        <NA>
       11               drat                 <NA>                 <NA>      <0.001
       12       Median (IQR)    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)        <NA>
       13                 wt                 <NA>                 <NA>      <0.001
@@ -230,7 +230,7 @@
     Output
          **Characteristic**  **Overall**, N = 32        **0**, N = 19
       1                 mpg                 <NA>                 <NA>
-      2        Median (IQR)    19.2 (15.4, 22.8)    17.3 (14.9, 19.2)
+      2        Median (IQR)    19.2 (15.4, 22.8)    17.3 (15.0, 19.2)
       3          cyl, n (%)                 <NA>                 <NA>
       4                   4             11 (34%)              3 (16%)
       5                   6              7 (22%)              4 (21%)
@@ -238,7 +238,7 @@
       7                disp                 <NA>                 <NA>
       8        Median (IQR)       196 (121, 326)       276 (196, 360)
       9                  hp                 <NA>                 <NA>
-      10       Median (IQR)        123 (96, 180)       175 (116, 192)
+      10       Median (IQR)        123 (97, 180)       175 (117, 193)
       11               drat                 <NA>                 <NA>
       12       Median (IQR)    3.70 (3.08, 3.92)    3.15 (3.07, 3.70)
       13                 wt                 <NA>                 <NA>
@@ -295,7 +295,7 @@
     Output
          **Characteristic** **Statistic**        **0**, N = 19        **1**, N = 13
       1                 mpg          <NA>                 <NA>                 <NA>
-      2        Median (IQR)          <NA>    17.3 (14.9, 19.2)    22.8 (21.0, 30.4)
+      2        Median (IQR)          <NA>    17.3 (15.0, 19.2)    22.8 (21.0, 30.4)
       3                 cyl          <NA>                 <NA>                 <NA>
       4                   4       no. (%)              3 (16%)              8 (62%)
       5                   6       no. (%)              4 (21%)              3 (23%)
@@ -303,7 +303,7 @@
       7                disp          <NA>                 <NA>                 <NA>
       8        Median (IQR)          <NA>       276 (196, 360)        120 (79, 160)
       9                  hp          <NA>                 <NA>                 <NA>
-      10       Median (IQR)          <NA>       175 (116, 192)        109 (66, 113)
+      10       Median (IQR)          <NA>       175 (117, 193)        109 (66, 113)
       11               drat          <NA>                 <NA>                 <NA>
       12       Median (IQR)          <NA>    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)
       13                 wt          <NA>                 <NA>                 <NA>
@@ -329,7 +329,7 @@
       tbl %>% add_stat_label() %>% as.data.frame()
     Output
                            **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102
-      1                     Age, Median (IQR)        46 (37, 58)         48 (38, 56)
+      1                     Age, Median (IQR)        46 (37, 59)         48 (39, 56)
       2                               Unknown                  7                   4
       3    Marker Level (ng/mL), Median (IQR)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
       4                               Unknown                  6                   4
@@ -354,7 +354,7 @@
         "no. (%)") %>% as.data.frame()
     Output
              **Characteristic** **Statistic** **Drug A**, N = 98 **Drug B**, N = 102
-      1                     Age  Median (IQR)        46 (37, 58)         48 (38, 56)
+      1                     Age  Median (IQR)        46 (37, 59)         48 (39, 56)
       2                 Unknown             n                  7                   4
       3    Marker Level (ng/mL)  Median (IQR)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
       4                 Unknown             n                  6                   4
@@ -379,7 +379,7 @@
     Output
              **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102
       1                     Age               <NA>                <NA>
-      2            Median (IQR)        46 (37, 58)         48 (38, 56)
+      2            Median (IQR)        46 (37, 59)         48 (39, 56)
       3                 Unknown                  7                   4
       4    Marker Level (ng/mL)               <NA>                <NA>
       5            Median (IQR)  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
@@ -407,7 +407,7 @@
     Output
              **Characteristic** **Statistic** **Drug A**, N = 98 **Drug B**, N = 102
       1                     Age          <NA>               <NA>                <NA>
-      2            Median (IQR)          <NA>        46 (37, 58)         48 (38, 56)
+      2            Median (IQR)          <NA>        46 (37, 59)         48 (39, 56)
       3                 Unknown             n                  7                   4
       4    Marker Level (ng/mL)          <NA>               <NA>                <NA>
       5            Median (IQR)          <NA>  0.82 (0.23, 1.55)   0.51 (0.18, 1.20)
