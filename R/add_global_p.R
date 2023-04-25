@@ -288,7 +288,7 @@ tidy_car_anova <- function(x, type, tbl, ...) {
 
   # running car::Anova()
   tryCatch(
-    do.call(car::Anova, args = c(list(mod = x, type = type), dots)) %>% broom::tidy(),
+    tidy_car_anova(x = x, type = type, ...),
 
     # trying `add_global_p(anova_fun = gtsummary::tidy_wald_test)` if `car::Anova()` fails
     error = function(e) {
