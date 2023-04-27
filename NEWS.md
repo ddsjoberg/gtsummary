@@ -1,14 +1,12 @@
 # gtsummary (development version)
 
-* Fix in the footnote of `add_overall()` when run after `tbl_continuous()`. (#1436)
-
-* Updating the levels of precision used in `round2()`, which is used in the background for every rounded/formatted number in a gtsummary table. (#1494)
+### New Functions
 
 * Added `as.data.frame()` S3 method for gtsummary class.
 
-* The `tbl_svysummary()` function may now report the design effect, e.g. `tbl_svysummary(statistic = ~"{deff}")`. (#1486)
+### New Functionality
 
-* Bug fix when a subset of CIs are requested in `add_ci(include=)`. (#1484)
+* The `tbl_svysummary()` function may now report the design effect, e.g. `tbl_svysummary(statistic = ~"{deff}")`. (#1486)
 
 * Added French translations for new marginal effects tidiers housed in {broom.helpers}. (#1417)
 
@@ -16,19 +14,27 @@
 
 * Improved error messaging in `tbl_uvregression()` when `method=` argument is not correctly specified. (#1469)
 
+* Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.
+
+* `tbl_svysummary()` can now report design effects (#1486)
+
+### Bug Fixes
+
+* Fix in the footnote of `add_overall()` when run after `tbl_continuous()`. (#1436)
+
+* Updating the levels of precision used in `round2()`, which is used in the background for every rounded/formatted number in a gtsummary table. (#1494)
+
+* Bug fix when a subset of CIs are requested in `add_ci(include=)`. (#1484)
+
 * Update in `as_hux_table()` to ensure the Ns in header are not incorrectly auto-formatted by {huxtable}.
 
 * Fix in the `style_*()` family of functions. The attributes of the input vector--excluding the class--are retained. (#1460)
-
-* Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.
 
 * Updated `style_ratio()` to now format negative values.
 
 * Bug fix in `add_ci.tbl_svysummary()` for dichotomous variables.
 
 * `add_ci.tbl_svysummary()` now takes properly into account the `percent` argument (#1470)
-
-* `tbl_svysummary()` can now report design effects (#1486)
 
 # gtsummary 1.7.0
 
