@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.7.1
 
 ### New Functions
 
