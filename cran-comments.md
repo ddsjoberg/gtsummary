@@ -9,7 +9,7 @@ Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
 
 ## revdepcheck results
 
-We checked 16 reverse dependencies (12 from CRAN + 4 from other repositories), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 19 reverse dependencies (13 from CRAN + 6 from other repositories), comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
