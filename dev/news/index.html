@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.7.0.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.7.1.9000</span>
       </span>
     </div>
 
@@ -97,12 +97,15 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.7.1" id="gtsummary-171">gtsummary 1.7.1<small>2023-04-27</small><a class="anchor" aria-label="anchor" href="#gtsummary-171"></a></h2>
 <div class="section level4">
-<h4 id="new-functions-development-version">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h4>
+<h4 id="new-functions-1-7-1">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-7-1"></a></h4>
 <ul><li>Added <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> S3 method for gtsummary class.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-functionality-development-version">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-development-version"></a></h4>
+<h4 id="new-functionality-1-7-1">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-7-1"></a></h4>
 <ul><li><p>The <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> function may now report the design effect, e.g. <code>tbl_svysummary(statistic = ~"{deff}")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
 <li><p>Added French translations for new marginal effects tidiers housed in {broom.helpers}. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1417" class="external-link">#1417</a>)</p></li>
 <li><p>Added theme elements to control the default headers in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1452" class="external-link">#1452</a>)</p></li>
@@ -111,7 +114,7 @@
 <li><p><code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> can now report design effects (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-1-7-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-7-1"></a></h4>
 <ul><li><p>Fix in the footnote of <code><a href="../reference/add_overall.html">add_overall()</a></code> when run after <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1436" class="external-link">#1436</a>)</p></li>
 <li><p>Updating the levels of precision used in <code>round2()</code>, which is used in the background for every rounded/formatted number in a gtsummary table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1494" class="external-link">#1494</a>)</p></li>
 <li><p>Bug fix when a subset of CIs are requested in <code>add_ci(include=)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1484" class="external-link">#1484</a>)</p></li>
