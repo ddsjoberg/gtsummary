@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
       </span>
     </div>
 
@@ -161,10 +161,10 @@ instructions on running the app locally on your machine.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create the Shiny app</span></span>
-<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">fluidPage</span><span class="op">(</span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
 <span>  <span class="co"># Inputs: Select Age Range</span></span>
-<span>  <span class="fu">sidebarPanel</span><span class="op">(</span></span>
-<span>    <span class="fu">sliderInput</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span></span>
 <span>      inputId <span class="op">=</span> <span class="st">"age_range"</span>,</span>
 <span>      label <span class="op">=</span> <span class="st">"Age Range"</span>,</span>
 <span>      min <span class="op">=</span> <span class="fl">5</span>, max <span class="op">=</span> <span class="fl">85</span>,</span>
@@ -200,7 +200,7 @@ instructions on running the app locally on your machine.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Run the application</span></span>
-<span><span class="fu">shinyApp</span><span class="op">(</span>ui <span class="op">=</span> <span class="va">ui</span>, server <span class="op">=</span> <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span>ui <span class="op">=</span> <span class="va">ui</span>, server <span class="op">=</span> <span class="va">server</span><span class="op">)</span></span></code></pre></div>
 <p>To run this Shiny app locally on your machine, save the script above
 as <code>app.R</code> in a R Project, open in RStudio, and run the
 application.</p>
