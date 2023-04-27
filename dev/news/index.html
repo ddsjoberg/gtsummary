@@ -97,22 +97,31 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fix in the footnote of <code><a href="../reference/add_overall.html">add_overall()</a></code> when run after <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1436" class="external-link">#1436</a>)</p></li>
-<li><p>Updating the levels of precision used in <code>round2()</code>, which is used in the background for every rounded/formatted number in a gtsummary table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1494" class="external-link">#1494</a>)</p></li>
-<li><p>Added <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> S3 method for gtsummary class.</p></li>
-<li><p>The <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> function may now report the design effect, e.g. <code>tbl_svysummary(statistic = ~"{deff}")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
-<li><p>Bug fix when a subset of CIs are requested in <code>add_ci(include=)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1484" class="external-link">#1484</a>)</p></li>
+<div class="section level4">
+<h4 id="new-functions-development-version">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h4>
+<ul><li>Added <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> S3 method for gtsummary class.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-functionality-development-version">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-development-version"></a></h4>
+<ul><li><p>The <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> function may now report the design effect, e.g. <code>tbl_svysummary(statistic = ~"{deff}")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
 <li><p>Added French translations for new marginal effects tidiers housed in {broom.helpers}. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1417" class="external-link">#1417</a>)</p></li>
 <li><p>Added theme elements to control the default headers in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1452" class="external-link">#1452</a>)</p></li>
 <li><p>Improved error messaging in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> when <code>method=</code> argument is not correctly specified. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1469" class="external-link">#1469</a>)</p></li>
+<li><p>Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.</p></li>
+<li><p><code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> can now report design effects (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li><p>Fix in the footnote of <code><a href="../reference/add_overall.html">add_overall()</a></code> when run after <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1436" class="external-link">#1436</a>)</p></li>
+<li><p>Updating the levels of precision used in <code>round2()</code>, which is used in the background for every rounded/formatted number in a gtsummary table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1494" class="external-link">#1494</a>)</p></li>
+<li><p>Bug fix when a subset of CIs are requested in <code>add_ci(include=)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1484" class="external-link">#1484</a>)</p></li>
 <li><p>Update in <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> to ensure the Ns in header are not incorrectly auto-formatted by {huxtable}.</p></li>
 <li><p>Fix in the <code>style_*()</code> family of functions. The attributes of the input vector–excluding the class–are retained. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1460" class="external-link">#1460</a>)</p></li>
-<li><p>Updates to account for changes in {forcats} v1.0.0 and {dplyr} v1.1.0.</p></li>
 <li><p>Updated <code><a href="../reference/style_ratio.html">style_ratio()</a></code> to now format negative values.</p></li>
 <li><p>Bug fix in <code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> for dichotomous variables.</p></li>
 <li><p><code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> now takes properly into account the <code>percent</code> argument (<a href="https://github.com/ddsjoberg/gtsummary/issues/1470" class="external-link">#1470</a>)</p></li>
-<li><p><code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> can now report design effects (<a href="https://github.com/ddsjoberg/gtsummary/issues/1486" class="external-link">#1486</a>)</p></li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.7.0" id="gtsummary-170">gtsummary 1.7.0<small>2023-01-13</small><a class="anchor" aria-label="anchor" href="#gtsummary-170"></a></h2>
 <div class="section level4">
