@@ -11,7 +11,7 @@ test_that("no errors/warnings with standard use", {
   expect_warning(mtcars %>% tbl_summary(by = am) %>% add_overall(last = TRUE), NA)
   expect_snapshot(res %>% as.data.frame())
 
-  expect_error(res <- iris %>% tbl_summary(by = Species) %>% add_overall(), NA)
+  expect_error(res <- iris %>% tbl_summary(by = Species) %>% add_overall(col_label = "**All Species**"), NA)
   expect_warning(iris %>% tbl_summary(by = Species) %>% add_overall(), NA)
   expect_snapshot(res %>% as.data.frame())
 })
