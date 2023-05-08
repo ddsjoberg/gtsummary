@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `add_overall(col_label=)` where specified label was not always placed.  (#1505)
+
 # gtsummary 1.7.1
 
 ### New Functions

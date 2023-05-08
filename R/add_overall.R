@@ -255,7 +255,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
       )
   }
 
-  # updating table_style
+  # updating table_style with footnote and column header
   x$table_styling$footnote <-
     dplyr::bind_rows(
       x$table_styling$footnote,
@@ -263,19 +263,27 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
         dplyr::filter(.data$column %in% "stat_0")
     )
 
-  x$table_styling$header <-
-    x$table_styling$header %>%
-    mutate(
-      label =
-        ifelse(
-          .data$column %in% "stat_0",
-          paste0(
-            "**", translate_text("Overall"), "**, ",
-            stringr::str_remove_all(.data$label, pattern = stringr::fixed("**"))
-          ),
-          .data$label
-        )
-    )
+  # use defult header for new column
+  if (is.null(col_label)) {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      mutate(
+        label =
+          ifelse(
+            .data$column %in% "stat_0",
+            paste0(
+              "**", translate_text("Overall"), "**, ",
+              stringr::str_remove_all(.data$label, pattern = stringr::fixed("**"))
+            ),
+            .data$label
+          )
+      )
+  }
+  # use user-specified label
+  else {
+    x <- modify_header(x, stat_0 = col_label)
+  }
+
 
   x
 }
