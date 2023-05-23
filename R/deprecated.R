@@ -10,6 +10,8 @@ NULL
 
 # tentative deprecation schedule, `Sys.Date() - months(18)`
 # "warn" for 18 months
+#   1.7.1 2023-04-27
+#   1.7.0 2023-01-13
 #   1.6.3 2022-12-06
 #   1.6.2 2022-09-30
 #   1.6.1 2022-06-22
