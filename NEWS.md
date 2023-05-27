@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix where some default `add_p.tbl_summary()` categorical tests were chi-squared when it should have been Fisher's exact test. This misclassification occurred in some cases when there was a large differential in the missing pattern for one of the variables in the cross table. (#1513)
+
 * Bug fix in `add_overall(col_label=)` where specified label was not always placed.  (#1505)
 
 # gtsummary 1.7.1
