@@ -64,7 +64,7 @@ remove_row_type <- function(x, variables = everything(),
   } else if (type == "header" && inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_survfit"))) {
     lst_expr <- list(
       variables = c("var_type", "row_type"),
-      expr = expr(.data$var_type == "categorical" & .data$row_type == "label")
+      expr = expr(.data$var_type %in% c("categorical", "continuous2") & .data$row_type == "label")
     )
   } else if (type == "header") {
     lst_expr <- list(

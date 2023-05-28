@@ -28,3 +28,15 @@
       6                 T3      2.8  -3.2, 8.8         0.4
       7                 T4     -2.0  -7.9, 3.9         0.5
 
+---
+
+    Code
+      data.frame(x = 1:100, y = c(rep("A", 50), rep("B", 50))) %>% tbl_summary(by = y,
+        type = x ~ "continuous2", statistic = x ~ c("{mean}", "{min}", "{max}")) %>%
+        remove_row_type(x, type = "header") %>% as.data.frame()
+    Output
+        **Characteristic** **A**, N = 50 **B**, N = 50
+      1               Mean            26            76
+      2            Minimum             1            51
+      3            Maximum            50           100
+

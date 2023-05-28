@@ -70,4 +70,19 @@ test_that("no errors/warnings with standard use", {
       tbl_summary(include = grade) %>%
       remove_row_type(variable = grade, type = "header", level_value = "I")
   )
+
+  # previously there was a bug where header rows for cont2 variables was not removed
+  expect_snapshot(
+    data.frame(x = 1:100, y = c(rep("A", 50), rep("B", 50))) %>%
+      tbl_summary(
+        by = y,
+        type = x ~ "continuous2",
+        statistic = x ~ c("{mean}", "{min}", "{max}")
+      ) %>%
+      remove_row_type(
+        x,
+        type = "header"
+      ) %>%
+      as.data.frame()
+  )
 })

@@ -220,7 +220,7 @@ print_stack_differences <- function(tbls) {
   if (nrow(tbl_differences) > 0) {
     paste(
       "Column headers among stacked tables differ. Headers from the first table are used.",
-      "Use {.code quiet = TRUE} to supress this message."
+      "Use {.code quiet = TRUE} to suppress this message."
     ) %>%
       stringr::str_wrap() %>%
       cli_alert_info()
