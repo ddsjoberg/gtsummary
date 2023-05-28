@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `remove_row_type()` where header rows for `continuous2` type variables was not removed when requested. (#1507)
+
 * Bug fix where some default `add_p.tbl_summary()` categorical tests were chi-squared when it should have been Fisher's exact test. This misclassification occurred in some cases when there was a large differential in the missing pattern for one of the variables in the cross table. (#1513)
 
 * Removed messaging about the former auto-removal of the `tbl_summary(group)` variable from the table: a change that occurred 3+ years ago in gtsummary v1.3.1
