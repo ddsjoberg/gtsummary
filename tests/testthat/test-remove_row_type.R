@@ -82,7 +82,7 @@ test_that("no errors/warnings with standard use", {
       remove_row_type(
         x,
         type = "header"
-      ) |>
+      ) %>%
       as.data.frame()
   )
 })
