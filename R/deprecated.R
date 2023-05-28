@@ -8,17 +8,19 @@
 #' @keywords internal
 NULL
 
-# tentative deprecation schedule
+# tentative deprecation schedule, `Sys.Date() - months(18)`
 # "warn" for 18 months
+#   1.7.1 2023-04-27
+#   1.7.0 2023-01-13
 #   1.6.3 2022-12-06
 #   1.6.2 2022-09-30
 #   1.6.1 2022-06-22
 #   1.6.0 2022-04-25
 #   1.5.2 2022-01-29
 #   1.5.1 2022-01-20
-#   1.5.0 2021-10-16
 
-# "stop" for 18 months, then delete from pkg
+# "stop" for 18 months, then delete from pkg, `Sys.Date() - months(36)`
+#   1.5.0 2021-10-16
 #   1.4.2 2021-07-13
 #   1.4.1 2021-05-19
 #   1.4.0 2021-04-13
@@ -29,8 +31,7 @@ NULL
 #   1.3.3 2020-08-11
 #   1.3.2 2020-06-14
 #   1.3.1 2020-06-02
-#   1.3.0 2020-04-17
-#   1.2.6 2020-02-13
+
 
 # v1.3.3 (2020-08-11) ----------------------------------------------------------
 #' @rdname deprecated
