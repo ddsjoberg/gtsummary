@@ -70,9 +70,11 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
           sudo apt-get update -y
           sudo apt-get install -y texlive-fonts-extra
+          sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
+          remotes::install_cran("curl", repos = 'https://packagemanager.posit.co/cran/latest') # added this because curl install was failing from CRAN, hopeing this uses the binaries available from RSPM
           remotes::install_deps(dependencies = TRUE, repos = 'http://cran.rstudio.com')
           remotes::install_cran("rcmdcheck", repos = 'http://cran.rstudio.com')
         shell: Rscript {0}

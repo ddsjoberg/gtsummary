@@ -106,16 +106,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       arg_name = "include"
     )
 
-  # group argument -------------------------------------------------------------
-  if (!is.null(group) && group %in% x$meta_data$variable) {
-    glue::glue(
-      "The `group=` variable is no longer auto-removed from the summary table as of v1.3.1.\n",
-      "The following syntax is now preferred:\n",
-      "tbl_summary(..., include = -{group}) %>% add_p(..., group = {group})"
-    ) %>%
-      rlang::inform()
-  }
-
   # checking that input x has a by var
   if (is.null(x$df_by)) {
     paste(
