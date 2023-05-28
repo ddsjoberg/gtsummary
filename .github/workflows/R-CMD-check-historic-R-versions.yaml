@@ -73,8 +73,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          remotes::install_cran("curl", repos = 'https://packagemanager.posit.co/cran/latest')
           remotes::install_deps(dependencies = TRUE, repos = 'http://cran.rstudio.com')
-          remotes::install_cran("curl", repos = 'http://cran.rstudio.com')
           remotes::install_cran("rcmdcheck", repos = 'http://cran.rstudio.com')
         shell: Rscript {0}
 
