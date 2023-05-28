@@ -234,10 +234,9 @@
   # calculate expected counts to select between chisq and fisher
   min_exp <-
     suppressWarnings(
-      expand.grid(
-        table(data[[variable]]) / sum(!is.na(data[[variable]])),
-        table(data[[by]]) / sum(!is.na(data[[by]]))
-      ) %>%
+      table(data[[by]], data[[variable]]) %>%
+        proportions() %>%
+        {expand.grid(rowSums(.), colSums(.))} %>%
         mutate(
           exp = .data$Var1 * .data$Var2 *
             sum(!is.na(data[[variable]]) & !is.na(data[[by]]))
