@@ -31,9 +31,9 @@
 ---
 
     Code
-      as.data.frame(data.frame(x = 1:100, y = c(rep("A", 50), rep("B", 50))) %>%
-        tbl_summary(by = y, type = x ~ "continuous2", statistic = x ~ c("{mean}",
-          "{min}", "{max}")) %>% remove_row_type(x, type = "header"))
+      data.frame(x = 1:100, y = c(rep("A", 50), rep("B", 50))) %>% tbl_summary(by = y,
+        type = x ~ "continuous2", statistic = x ~ c("{mean}", "{min}", "{max}")) %>%
+        remove_row_type(x, type = "header") %>% as.data.frame()
     Output
         **Characteristic** **A**, N = 50 **B**, N = 50
       1               Mean            26            76
