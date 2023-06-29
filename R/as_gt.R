@@ -301,7 +301,8 @@ table_styling_to_gt_calls <- function(x, ...) {
       seq_len(nrow(df_spanning_header)),
       ~ expr(gt::tab_spanner(
         columns = !!df_spanning_header$cols[[.x]],
-        label = gt::md(!!df_spanning_header$spanning_header[[.x]])
+        label = gt::md(!!df_spanning_header$spanning_header[[.x]]),
+        gather = FALSE
       ))
     )
 
