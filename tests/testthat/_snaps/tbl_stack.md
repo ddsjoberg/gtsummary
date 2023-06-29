@@ -18,7 +18,7 @@
       tbl_stack(list(row1, row2)) %>% as.data.frame()
     Message
       i Column headers among stacked tables differ. Headers from the first table are
-      used. Use `quiet = TRUE` to supress this message.
+      used. Use `quiet = TRUE` to suppress this message.
     Output
             **Characteristic** **OR** **95% CI** **p-value** **HR** **95% CI**
       1 Treatment (unadjusted)   <NA>       <NA>        <NA>   <NA>       <NA>
@@ -120,7 +120,7 @@
         as.data.frame()
     Message
       i Column headers among stacked tables differ. Headers from the first table are
-      used. Use `quiet = TRUE` to supress this message.
+      used. Use `quiet = TRUE` to suppress this message.
     Output
          **Group**     **Characteristic**    **0**, N = 132     **1**, N = 61
       1    Group 1 Chemotherapy Treatment              <NA>              <NA>

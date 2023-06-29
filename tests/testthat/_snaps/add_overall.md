@@ -107,11 +107,11 @@
     Code
       res %>% as.data.frame()
     Output
-        **Characteristic** **Overall**, N = 150 **setosa**, N = 50
-      1       Sepal.Length    5.80 (5.10, 6.40)  5.00 (4.80, 5.20)
-      2        Sepal.Width    3.00 (2.80, 3.30)  3.40 (3.20, 3.68)
-      3       Petal.Length    4.35 (1.60, 5.10)  1.50 (1.40, 1.58)
-      4        Petal.Width    1.30 (0.30, 1.80)  0.20 (0.20, 0.30)
+        **Characteristic**   **All Species** **setosa**, N = 50
+      1       Sepal.Length 5.80 (5.10, 6.40)  5.00 (4.80, 5.20)
+      2        Sepal.Width 3.00 (2.80, 3.30)  3.40 (3.20, 3.68)
+      3       Petal.Length 4.35 (1.60, 5.10)  1.50 (1.40, 1.58)
+      4        Petal.Width 1.30 (0.30, 1.80)  0.20 (0.20, 0.30)
         **versicolor**, N = 50 **virginica**, N = 50
       1      5.90 (5.60, 6.30)     6.50 (6.23, 6.90)
       2      2.80 (2.53, 3.00)     3.00 (2.80, 3.18)
