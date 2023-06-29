@@ -59,3 +59,18 @@ test_that("indent2", {
   )
   expect_snapshot(tbl %>% render_as_html())
 })
+
+test_that("spanning header-column gathering", {
+  expect_error(
+    tbl <-
+      trial %>%
+      tbl_summary(
+        by = grade,
+        include = age
+      ) %>%
+      modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**") %>%
+      as_gt(),
+    NA
+  )
+  expect_snapshot(tbl %>% render_as_html())
+})
