@@ -67,7 +67,7 @@ test_that("spanning header-column gathering", {
       tbl_summary(
         by = grade,
         include = age
-      ) |>
+      ) %>%
       modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**") %>%
       as_gt(),
     NA
