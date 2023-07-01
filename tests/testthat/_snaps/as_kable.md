@@ -54,6 +54,19 @@
       |:------------------|:--------:|:-----------:|:-----------:|
       |Age                |   0.00   | -0.01, 0.01 |    >0.9     |
 
+---
+
+    Code
+      with_gtsummary_theme(x = theme_gtsummary_journal("qjecon"), as_kable(
+        tbl_regression(lm(age ~ marker + response, data = trial)), format = "pipe"))
+    Output
+      
+      
+      |**Characteristic**   | **Beta**  **(SE)** |
+      |:--------------------|:------------------:|
+      |Marker Level (ng/mL) |    0.03  (1.29)    |
+      |Tumor Response       |    3.9  (2.40)     |
+
 # tbl_uvregression
 
     Code
