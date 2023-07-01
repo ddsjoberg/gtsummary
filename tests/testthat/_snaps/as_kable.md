@@ -57,8 +57,8 @@
 ---
 
     Code
-      with_gtsummary_theme(x = theme_gtsummary_journal("qjecon"), as_kable(
-        tbl_regression(lm(age ~ marker + response, data = trial)), format = "pipe"))
+      with_gtsummary_theme(x = theme_gtsummary_journal("qjecon"), lm(age ~ marker +
+        response, data = trial) %>% tbl_regression() %>% as_kable(format = "pipe"))
     Output
       
       
