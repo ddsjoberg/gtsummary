@@ -28,6 +28,8 @@ Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
 summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.
 For example, kable summary tables do not include indentation, footnotes,
 or spanning header rows.
+
+Line breaks (\verb{\\n}) are removed from column headers and table cells.
 }
 \details{
 Tip: To better distinguish variable labels and level labels when

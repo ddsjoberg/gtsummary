@@ -5,6 +5,8 @@
 #' For example, kable summary tables do not include indentation, footnotes,
 #' or spanning header rows.
 #'
+#' Line breaks (`\n`) are removed from column headers and table cells.
+#'
 #' @details Tip: To better distinguish variable labels and level labels when
 #' indenting is not supported, try [bold_labels()] or [italicize_levels()].
 #'
