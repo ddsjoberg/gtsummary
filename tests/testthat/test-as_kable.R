@@ -25,7 +25,7 @@ test_that("tbl_regression", {
   expect_snapshot(
     with_gtsummary_theme(
       x = theme_gtsummary_journal("qjecon"),
-      lm(age ~ marker + response, data = trial) |>
+      lm(age ~ marker + response, data = trial) %>%
         tbl_regression() %>%
         as_kable(format = "pipe")
     )
