@@ -21,6 +21,15 @@ test_that("tbl_regression", {
   expect_error(tbl <- lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(format = "pipe"), NA)
   expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(), NA)
   expect_snapshot(tbl)
+
+  expect_snapshot(
+    with_gtsummary_theme(
+      x = theme_gtsummary_journal("qjecon"),
+      lm(age ~ marker + response, data = trial) %>%
+        tbl_regression() %>%
+        as_kable(format = "pipe")
+    )
+  )
 })
 
 test_that("tbl_uvregression", {

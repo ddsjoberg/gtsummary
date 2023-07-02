@@ -5,6 +5,8 @@
 #' For example, kable summary tables do not include indentation, footnotes,
 #' or spanning header rows.
 #'
+#' Line breaks (`\n`) are removed from column headers and table cells.
+#'
 #' @details Tip: To better distinguish variable labels and level labels when
 #' indenting is not supported, try [bold_labels()] or [italicize_levels()].
 #'
@@ -25,6 +27,7 @@
 #'   bold_labels() %>%
 #'   as_kable()
 #' }
+
 as_kable <- function(x, ..., include = everything(), return_calls = FALSE) {
   .assert_class(x, "gtsummary")
 
@@ -80,6 +83,12 @@ table_styling_to_kable_calls <- function(x, ...) {
       list(expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .))))
     )
 
+  # remove_line_breaks ---------------------------------------------------------
+  kable_calls[["remove_line_breaks"]] <-
+    expr(dplyr::mutate(
+      dplyr::across(.cols = where(is.character),
+                    function(x) stringr::str_replace_all(x, pattern = "\\n(?!\\\\)", replacement = ""))))
+
   # kable ----------------------------------------------------------------------
   kable_calls[["kable"]] <- .construct_call_to_kable(x, ...)
 
@@ -94,7 +103,9 @@ table_styling_to_kable_calls <- function(x, ...) {
     # default args
     list(
       caption = x$table_styling$caption,
-      col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label,
+      col.names =
+        dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label %>%
+        stringr::str_replace_all(pattern = "\\n(?!\\\\)", replacement = ""),
       align =
         filter(x$table_styling$header, .data$hide == FALSE) %>%
           dplyr::pull("align") %>%

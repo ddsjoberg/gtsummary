@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Line breaks (i.e. `\n`) are now removed from column headers and table cells when `as_kable()` is called. (#1526)
+
 * Fix in `as_gt()` where columns with common spanning headers were gathered. Corrected with `gt::tab_spanner(gather = FALSE)`. (#1527)
 
 * Fix in `remove_row_type()` where header rows for `continuous2` type variables was not removed when requested. (#1507)
