@@ -49,6 +49,21 @@
       3 Age                  47 (38, 57)   45, 49      
       4 Unknown              11            <NA>        
 
+# add_ci() column order respects add_overall(last=TRUE)
+
+    Code
+      trial %>% tbl_summary(by = trt, include = "stage") %>% add_overall(last = TRUE) %>%
+        add_ci() %>% as_tibble(col_label = FALSE)
+    Output
+      # A tibble: 5 x 7
+        label   stat_1   ci_stat_1 stat_2   ci_stat_2 stat_0   ci_stat_0
+        <chr>   <chr>    <chr>     <chr>    <chr>     <chr>    <chr>    
+      1 T Stage <NA>     <NA>      <NA>     <NA>      <NA>     <NA>     
+      2 T1      28 (29%) 20%, 39%  25 (25%) 17%, 34%  53 (27%) 21%, 33% 
+      3 T2      25 (26%) 17%, 35%  29 (28%) 20%, 38%  54 (27%) 21%, 34% 
+      4 T3      22 (22%) 15%, 32%  21 (21%) 13%, 30%  43 (22%) 16%, 28% 
+      5 T4      23 (23%) 16%, 33%  27 (26%) 18%, 36%  50 (25%) 19%, 32% 
+
 # add_ci() works with tbl_svysummary
 
     Code
