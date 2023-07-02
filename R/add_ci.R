@@ -282,15 +282,9 @@ add_ci.tbl_summary <- function(x,
     # also renaming CI columns
     modify_table_body(
       function(.x) {
-        cols_to_order <-
+        # rename ci columns
+        .x <-
           .x %>%
-          select(all_stat_cols(), matches("^stat_\\d+_ci$")) %>%
-          names()
-
-        .x %>%
-          dplyr::relocate(all_of(sort(cols_to_order)),
-            .before = all_of(sort(cols_to_order)[1])
-          ) %>%
           dplyr::rename_with(
             .fn = ~ vec_paste0(
               "ci_",
@@ -298,6 +292,17 @@ add_ci.tbl_summary <- function(x,
             ),
             .cols = matches("^stat_\\d+_ci$")
           )
+
+        # reorder the columns
+        stat_cols_in_order <-
+          .x %>%
+          select(all_stat_cols()) %>%
+          names() %>%
+          lapply(function(x) c(x, paste0("ci_", x))) %>%
+          unlist()
+
+        .x %>%
+          dplyr::relocate(all_of(stat_cols_in_order), .after = all_of(stat_cols_in_order[1]))
       }
     )
 
