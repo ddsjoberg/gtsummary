@@ -139,3 +139,19 @@
       4      <NA>
       5      <NA>
 
+# source notes
+
+    Code
+      mtcars %>% tbl_cross(row = vs, col = am, margin = "col") %>% add_p(source_note = TRUE) %>%
+        as_flex_table()
+    Output
+      a flextable object.
+      col_keys: `label`, `stat_1`, `stat_2`, `stat_0` 
+      header has 2 row(s) 
+      body has 3 row(s) 
+      original dataset sample: 
+        label stat_1 stat_2 stat_0
+      1    vs   <NA>   <NA>   <NA>
+      2     0     12      6     18
+      3     1      7      7     14
+

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `as_flex_table()` where source notes were not accurately rendered. (#1520)
+
 * Fix in column order when `add_ci()` is run after `add_overall(last=TRUE)`. Previously, the overall columns were placed in front. (#1525)
 
 * Line breaks (i.e. `\n`) are now removed from column headers and table cells when `as_kable()` is called. (#1526)

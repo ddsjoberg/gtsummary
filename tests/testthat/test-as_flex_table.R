@@ -98,3 +98,15 @@ test_that("indent2", {
     NA
   )
 })
+
+
+test_that("source notes", {
+  # this is a bad test, because it does not actually test that the footnote/source note is accurate
+  expect_snapshot(
+    mtcars %>%
+      tbl_cross(row = vs, col = am,
+                margin = "col") %>%
+      add_p(source_note = TRUE) %>%
+      as_flex_table()
+  )
+})
