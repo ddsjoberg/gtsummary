@@ -254,7 +254,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
           if (.x %in% c("p.value")) {
             return(fmt_fun[[.x]] %||% x$inputs$pvalue_fun)
           }
-          return(fmt_fun[[.x]] %||% purrr::partial(style_sigfig, digits = 3))
+          return(fmt_fun[[.x]] %||% function(x) style_sigfig(x, digits = 3))
         }
       )
     )
