@@ -30,7 +30,9 @@ gt.doc.images::save_help_file_images(
 )
 
 # 5. Shrink png files
-gt.doc.images::shrink_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
+gt.doc.images::shrink_help_file_images(pkg = "gtsummary",
+                                       path = here::here(),
+                                       path.output = file.path(here::here(), "man-images"))
 
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png", path.output = file.path(path, "man-images"))
 
