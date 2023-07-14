@@ -251,7 +251,7 @@ tbl_strata_internal <- function(data,
 
   # deprecated argument --------------------------------------------------------
   if (!is.null(.stack_group_header) && isTRUE(.combine_with == "tbl_stack")) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "1.5.1",
       what = "gtsummary::tbl_strata(.stack_group_header)",
       details =
@@ -262,11 +262,6 @@ tbl_strata_internal <- function(data,
           )
         )
     )
-    .combine_args <-
-      switch(isFALSE(.stack_group_header),
-        list(group_header = NULL)
-      ) %||%
-      list(group_header = df_tbls$strata)
   }
 
   # combining tbls -------------------------------------------------------------
