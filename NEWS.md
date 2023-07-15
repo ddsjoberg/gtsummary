@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.7.2
 
 * Removed messaging about the former auto-removal of the `tbl_summary(group)` variable from the table: a change that occurred 3+ years ago in gtsummary v1.3.1
