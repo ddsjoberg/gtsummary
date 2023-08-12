@@ -46,6 +46,13 @@ tbl2 <- lm(marker ~ age + grade, trial) \%>\% tbl_regression()
 
 tbl_merge(list(tbl1, tbl2))
 }\if{html}{\out{</div>}}
+
+The addition of the new column \code{"stat_label"} induces a need for default
+labels for categorical variables. The default is \code{"No. (\%)"} but this
+can be changed to either a desired text
+(e.g. \code{label = list( all_categorical() ~ "N (\%)")}) or removed entirely
+so that categorical variables have no change in labeling via
+\code{label = list( all_categorical() ~ NA_character_)}
 }
 
 \section{Example Output}{

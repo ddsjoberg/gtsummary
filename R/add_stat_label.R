@@ -26,6 +26,13 @@
 #' tbl_merge(list(tbl1, tbl2))
 #' ```
 #'
+#' The addition of the new column `"stat_label"` induces a need for default
+#' labels for categorical variables. The default is `"No. (%)"` but this
+#' can be changed to either a desired text
+#' (e.g. `label = list( all_categorical() ~ "N (%)")`) or removed entirely
+#' so that categorical variables have no change in labeling via
+#' `label = list( all_categorical() ~ NA_character_)`
+#'
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' or with class `tbl_svysummary` from the [tbl_svysummary] function
 #' @param location location where statistic label will be included.
