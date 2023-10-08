@@ -138,9 +138,9 @@
 # ordering in add_difference() with paired tests
 
     Code
-      as_kable(mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(
-        0, 1))) %>% tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
-        "paired.t.test", group = id))
+      mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(0, 1))) %>%
+        tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
+        "paired.t.test", group = id) %>% as_kable()
     Message
       Note for variable 'mpg': Some observations included in the calculation of summary statistics were omitted from the p-value calculation due to unbalanced missingness within group.
     Output
@@ -153,9 +153,9 @@
 ---
 
     Code
-      as_kable(mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(
-        1, 0))) %>% tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
-        "paired.t.test", group = id))
+      mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(1, 0))) %>%
+        tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
+        "paired.t.test", group = id) %>% as_kable()
     Message
       Note for variable 'mpg': Some observations included in the calculation of summary statistics were omitted from the p-value calculation due to unbalanced missingness within group.
     Output
