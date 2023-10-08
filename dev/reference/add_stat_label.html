@@ -151,6 +151,12 @@ is merged with it.</p>
 <span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tbl1</span>, <span class="va">tbl2</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>The addition of the new <code>"stat_label"</code> column requires a default
+labels for categorical variables, which is  <code>"No. (%)"</code>. This
+can be changed to either desired text or left blank using <code>NA_character_</code>.
+The blank option is useful in the <code>location="row"</code> case to keep the
+output for categorical variables identical what was produced without
+a <code>"add_stat_label()"</code> function call.</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
