@@ -342,3 +342,35 @@ test_that("add_difference() with emmeans()", {
     NA
   )
 })
+
+
+test_that("ordering in add_difference() with paired tests", {
+  expect_snapshot(
+    mtcars %>%
+      mutate(
+        .by = am,
+        id = row_number(),
+        am = factor(am, levels = c(0, 1))
+      ) %>%
+      tbl_summary(
+        by = am,
+        include = mpg
+      ) %>%
+      add_difference(test = ~"paired.t.test", group = id) |>
+      as_kable()
+  )
+  expect_snapshot(
+    mtcars %>%
+      mutate(
+        .by = am,
+        id = row_number(),
+        am = factor(am, levels = c(1, 0))
+      ) %>%
+      tbl_summary(
+        by = am,
+        include = mpg
+      ) %>%
+      add_difference(test = ~"paired.t.test", group = id) |>
+      as_kable()
+  )
+})

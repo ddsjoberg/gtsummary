@@ -135,3 +135,33 @@
       1                   -0.42  -4.5, 3.7         0.8
       2                   -4.7% -18%, 8.4%         0.5
 
+# ordering in add_difference() with paired tests
+
+    Code
+      as_kable(mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(
+        0, 1))) %>% tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
+        "paired.t.test", group = id))
+    Message
+      Note for variable 'mpg': Some observations included in the calculation of summary statistics were omitted from the p-value calculation due to unbalanced missingness within group.
+    Output
+      
+      
+      |**Characteristic** |   **0**, N = 19   |   **1**, N = 13   | **Difference** | **95% CI** | **p-value** |
+      |:------------------|:-----------------:|:-----------------:|:--------------:|:----------:|:-----------:|
+      |mpg                | 17.3 (15.0, 19.2) | 22.8 (21.0, 30.4) |      -7.0      | -10, -3.6  |   <0.001    |
+
+---
+
+    Code
+      as_kable(mtcars %>% mutate(.by = am, id = row_number(), am = factor(am, levels = c(
+        1, 0))) %>% tbl_summary(by = am, include = mpg) %>% add_difference(test = ~
+        "paired.t.test", group = id))
+    Message
+      Note for variable 'mpg': Some observations included in the calculation of summary statistics were omitted from the p-value calculation due to unbalanced missingness within group.
+    Output
+      
+      
+      |**Characteristic** |   **1**, N = 13   |   **0**, N = 19   | **Difference** | **95% CI** | **p-value** |
+      |:------------------|:-----------------:|:-----------------:|:--------------:|:----------:|:-----------:|
+      |mpg                | 22.8 (21.0, 30.4) | 17.3 (15.0, 19.2) |      7.0       |  3.6, 10   |   <0.001    |
+
