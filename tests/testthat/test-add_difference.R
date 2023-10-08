@@ -356,7 +356,7 @@ test_that("ordering in add_difference() with paired tests", {
         by = am,
         include = mpg
       ) %>%
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id) %>%
       as_kable()
   )
   expect_snapshot(
@@ -370,7 +370,7 @@ test_that("ordering in add_difference() with paired tests", {
         by = am,
         include = mpg
       ) %>%
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id) %>%
       as_kable()
   )
 })

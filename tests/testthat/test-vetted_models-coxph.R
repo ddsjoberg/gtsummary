@@ -25,14 +25,12 @@ skip_on_cran()
 skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-library(dplyr)
-library(survival)
 
 # coxph() ----------------------------------------------------------------------
 test_that("vetted_models coxph()", {
   # building models to check
-  mod_coxph_lin <- coxph(Surv(ttdeath, death) ~ age + trt + grade, data = trial)
-  mod_coxph_int <- coxph(Surv(ttdeath, death) ~ age + trt * grade, data = trial)
+  mod_coxph_lin <- survival::coxph(survival::Surv(ttdeath, death) ~ age + trt + grade, data = trial)
+  mod_coxph_int <- survival::coxph(survival::Surv(ttdeath, death) ~ age + trt * grade, data = trial)
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(
@@ -157,8 +155,8 @@ test_that("vetted_models coxph()", {
   expect_error(
     trial %>%
       tbl_uvregression(
-        y = Surv(ttdeath, death),
-        method = coxph
+        y = survival::Surv(ttdeath, death),
+        method = survival::coxph
       ) %>%
       add_global_p() %>%
       add_q(),
@@ -167,8 +165,8 @@ test_that("vetted_models coxph()", {
   expect_warning(
     trial %>%
       tbl_uvregression(
-        y = Surv(ttdeath, death),
-        method = coxph
+        y = survival::Surv(ttdeath, death),
+        method = survival::coxph
       ) %>%
       add_nevent() %>%
       add_global_p() %>%
