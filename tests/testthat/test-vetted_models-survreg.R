@@ -35,15 +35,13 @@ skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-library(dplyr)
-library(survival)
 
 
 # survreg() --------------------------------------------------------------------
 test_that("vetted_models survreg()", {
   # building models to check
-  mod_survreg_lin <- survreg(Surv(ttdeath, death) ~ age + trt + grade, data = trial)
-  mod_survreg_int <- survreg(Surv(ttdeath, death) ~ age + trt * grade, data = trial)
+  mod_survreg_lin <- survival::survreg(survival::Surv(ttdeath, death) ~ age + trt + grade, data = trial)
+  mod_survreg_int <- survival::survreg(survival::Surv(ttdeath, death) ~ age + trt * grade, data = trial)
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(
@@ -82,15 +80,15 @@ test_that("vetted_models survreg()", {
   #       - labels are correct
   expect_equal(
     tbl_survreg_lin$table_body %>%
-      filter(row_type == "label") %>%
-      pull(label),
+      dplyr::filter(row_type == "label") %>%
+      dplyr::pull(label),
     c("Age", "Chemotherapy Treatment", "Grade"),
     ignore_attr = TRUE
   )
   expect_equal(
     tbl_survreg_int$table_body %>%
-      filter(row_type == "label") %>%
-      pull(label),
+      dplyr::filter(row_type == "label") %>%
+      dplyr::pull(label),
     c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade"),
     ignore_attr = TRUE
   )
@@ -99,8 +97,8 @@ test_that("vetted_models survreg()", {
   #       - interaction labels are correct
   expect_equal(
     tbl_survreg_int$table_body %>%
-      filter(var_type == "interaction") %>%
-      pull(label),
+      dplyr::filter(var_type == "interaction") %>%
+      dplyr::pull(label),
     c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III"),
     ignore_attr = TRUE
   )
@@ -127,7 +125,7 @@ test_that("vetted_models survreg()", {
   #       - numbers in table are correct
   expect_equal(
     tbl_survreg_lin2$table_body %>%
-      pull(p.value) %>%
+      dplyr::pull(p.value) %>%
       na.omit() %>%
       as.vector(),
     car::Anova(mod_survreg_lin, type = "III") %>%
@@ -137,16 +135,16 @@ test_that("vetted_models survreg()", {
   )
   expect_equal(
     tbl_survreg_int2$table_body %>%
-      pull(p.value) %>%
+      dplyr::pull(p.value) %>%
       na.omit() %>%
       as.vector(),
     car::Anova(mod_survreg_int, type = "III") %>%
       as.data.frame() %>%
-      pull(`Pr(>Chisq)`),
+      dplyr::pull(`Pr(>Chisq)`),
     ignore_attr = TRUE
   )
   expect_equal(
-    tbl_survreg_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+    tbl_survreg_lin3$table_body %>% dplyr::filter(variable == "trt") %>% pull(p.value),
     car::Anova(mod_survreg_lin, type = "III") %>%
       as.data.frame() %>%
       tibble::rownames_to_column() %>%
@@ -160,8 +158,8 @@ test_that("vetted_models survreg()", {
   expect_error(
     trial %>%
       tbl_uvregression(
-        y = Surv(ttdeath, death),
-        method = survreg
+        y = survival::Surv(ttdeath, death),
+        method = survival::survreg
       ) %>%
       add_global_p() %>%
       add_q(),
