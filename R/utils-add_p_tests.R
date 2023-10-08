@@ -141,7 +141,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 
   # reshaping data
   data_wide <-
-    tidyr::pivot_wider(data,
+    tidyr::pivot_wider(dplyr::arrange(data, .data[[by]]),
       id_cols = all_of(group),
       names_from = all_of(by),
       values_from = all_of(variable)
@@ -245,7 +245,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
 
   # reshaping data
   data_wide <-
-    tidyr::pivot_wider(data,
+    tidyr::pivot_wider(dplyr::arrange(data, .data[[by]]),
       id_cols = all_of(group),
       names_from = all_of(by),
       values_from = all_of(variable)

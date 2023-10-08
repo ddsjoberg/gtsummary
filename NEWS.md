@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `add_difference()` for pair t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
+
 # gtsummary 1.7.2
 
 * Removed messaging about the former auto-removal of the `tbl_summary(group)` variable from the table: a change that occurred 3+ years ago in gtsummary v1.3.1

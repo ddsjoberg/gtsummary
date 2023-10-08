@@ -25,7 +25,6 @@ skip_on_cran()
 testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-library(dplyr)
 
 # lm() ------------------------------------------------------------------------
 test_that("vetted_models lm()", {
