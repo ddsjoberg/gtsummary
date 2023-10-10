@@ -14,7 +14,7 @@ test_that("no errors/warnings with tidy_bootstrap", {
   set.seed(123)
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
 
-  skip_on_os(c("mac", "linux", "solaris"))
+  skip_on_os(c("windows", "linux", "solaris"))
   expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% as.data.frame())
 })
 
@@ -28,7 +28,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
   expect_error(mice::pool(mod_mice) %>% tbl_regression(), NA)
   expect_output(mice::pool(mod_mice), NA)
 
-  skip_on_os(c("mac", "linux", "solaris"))
+  skip_on_os(c("windows", "linux", "solaris"))
   tbl_mice <- tbl_regression(mod_mice)
   expect_snapshot(tbl_mice %>% as.data.frame())
 })
@@ -36,7 +36,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
 
 test_that("no errors/warnings with tbl_regression.multinom", {
   skip_if_not(broom.helpers::.assert_package("nnet", pkg_search = "gtsummary", boolean = TRUE))
-  skip_on_os(c("mac", "linux", "solaris"))
+  skip_on_os(c("windows", "linux", "solaris"))
   expect_output(
     tbl_nnet <-
       nnet::multinom(grade ~ age, trial) %>%

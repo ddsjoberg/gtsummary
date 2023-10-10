@@ -194,7 +194,7 @@ add_ci.tbl_summary <- function(x,
   style_fun <-
     .formula_list_to_named_list(
       x = list(
-        all_categorical() ~ purrr::partial(style_sigfig, scale = 100),
+        all_categorical() ~ function(x) style_sigfig(x, scale = 100),
         all_continuous() ~ style_sigfig
       ),
       var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
@@ -269,12 +269,12 @@ add_ci.tbl_summary <- function(x,
     x %>%
     add_stat(
       fns = all_of(include) ~ purrr::partial(single_ci_fn,
-        method = method,
-        conf.level = conf.level,
-        statistic = statistic,
-        style_fun = style_fun,
-        summary_type = summary_type,
-        df = df
+                                             method = method,
+                                             conf.level = conf.level,
+                                             statistic = statistic,
+                                             style_fun = style_fun,
+                                             summary_type = summary_type,
+                                             df = df
       ),
       location = list(all_of(include) ~ "label", all_categorical(FALSE) ~ "level")
     ) %>%
@@ -282,15 +282,9 @@ add_ci.tbl_summary <- function(x,
     # also renaming CI columns
     modify_table_body(
       function(.x) {
-        cols_to_order <-
+        # rename ci columns
+        .x <-
           .x %>%
-          select(all_stat_cols(), matches("^stat_\\d+_ci$")) %>%
-          names()
-
-        .x %>%
-          dplyr::relocate(all_of(sort(cols_to_order)),
-            .before = all_of(sort(cols_to_order)[1])
-          ) %>%
           dplyr::rename_with(
             .fn = ~ vec_paste0(
               "ci_",
@@ -298,6 +292,17 @@ add_ci.tbl_summary <- function(x,
             ),
             .cols = matches("^stat_\\d+_ci$")
           )
+
+        # reorder the columns
+        stat_cols_in_order <-
+          .x %>%
+          select(all_stat_cols()) %>%
+          names() %>%
+          lapply(function(x) c(x, paste0("ci_", x))) %>%
+          unlist()
+
+        .x %>%
+          dplyr::relocate(all_of(stat_cols_in_order), .after = all_of(stat_cols_in_order[1]))
       }
     )
 

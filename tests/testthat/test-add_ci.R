@@ -91,6 +91,18 @@ test_that("add_ci() works on a subset of variables", {
   )
 })
 
+test_that("add_ci() column order respects add_overall(last=TRUE)", {
+  expect_snapshot(
+    trial %>%
+      tbl_summary(
+        by = trt,
+        include = "stage") %>%
+      add_overall(last = TRUE) %>%
+      add_ci() %>%
+      as_tibble(col_label = FALSE)
+  )
+})
+
 test_that("add_ci() throws errors with bad arguments", {
   tbl0 <-
     trial %>%

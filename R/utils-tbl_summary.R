@@ -753,10 +753,7 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
     fns_names_chr[fns_names_chr %in% paste0("p", 0:100)] %>%
       set_names(.) %>%
-      imap(~ purrr::partial(
-        quantile,
-        probs = as.numeric(stringr::str_replace(.x, pattern = "^p", "")) / 100
-      )) %>%
+      imap(~function(x) stats::quantile(x, probs = as.numeric(stringr::str_replace(.x, pattern = "^p", "")) / 100)) %>%
       list2env(envir = rlang::env_parent())
   }
 
@@ -935,14 +932,14 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
       imap(
         # scale percents by 100
         ~ switch(is.numeric(.x) & .y %in% percent_stats,
-          purrr::partial(style_number, digits = !!.x, scale = 100)
+                 function(x) style_number(x, digits = .x, scale = 100)
         ) %||%
           switch(is.numeric(.x) & summary_type %in% c("categorical", "dichotomous") & .y %in% c("p", "p_unweighted"),
-            purrr::partial(style_number, digits = !!.x, scale = 100)
+                 function(x) style_number(x, digits = .x, scale = 100)
           ) %||%
           # all other stats are not scaled
           switch(is.numeric(.x),
-            purrr::partial(style_number, digits = !!.x)
+                 function(x) style_number(x, digits = .x)
           ) %||%
           .x # if user passed a function, then return the function
       )
@@ -968,7 +965,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
       rep(length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
       as.list() %>%
       rlang::set_names(fns_names_chr %>% setdiff(base_stats)) %>%
-      map(~ purrr::partial(style_number, digits = !!.x))
+      map(~ function(x) style_number(x = x, digits = .x))
   }
 
   # adding the formatting function as an attribute

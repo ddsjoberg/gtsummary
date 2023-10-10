@@ -155,7 +155,7 @@ test_that("no errors with standard use", {
   expect_snapshot(tbl %>% as.data.frame())
   expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
 
-  lifecycle::expect_deprecated(
+  lifecycle::expect_defunct(
     trial %>%
       select(age, trt, grade) %>%
       tbl_strata(
