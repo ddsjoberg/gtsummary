@@ -36,30 +36,12 @@ or
 \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
 for detailed examples in the 'Advanced Customization' section.
 }
-\section{Example Output}{
-
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_gt_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
 as_gt_ex1 <-
   trial[c("trt", "age", "response", "grade")] \%>\%
   tbl_summary(by = trt) \%>\%
   as_gt()
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_flex_table}()},
-\code{\link{as_hux_table}()},
-\code{\link{as_kable_extra}()},
-\code{\link{as_kable}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg

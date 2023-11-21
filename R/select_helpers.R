@@ -31,12 +31,6 @@
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "select_ex1.png", width = "55")`
-#' }}
 NULL
 
 #' @rdname select_helpers

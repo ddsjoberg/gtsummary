@@ -17,12 +17,6 @@
 #'   modify_column_hide(columns = ci) %>%
 #'   modify_column_unhide(columns = std.error)
 #' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "modify_column_hide_ex1.png", width = "45")`
-#' }}
 NULL
 
 #' @rdname modify_column_hide

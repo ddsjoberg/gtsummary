@@ -1,27 +1,9 @@
-# THIS FILE CONTAINS A FEW SCRIPTS THAT ASSIST IN SETTING UP A GENERAL
-# GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
-# WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
+get_theme_element <- function(...) NULL
 
-# LAST UPDATED: 2020-12-19
-
-# .create_gtsummary_object -----------------------------------------------------
-#' Function uses `table_body` to create a gtsummary object
-#'
-#' @param table_body the table_body tibble
-#' @param ... other objects that will be added to the gtsummary object list
-#'
-#' @export
-#' @keywords internal
-#' @return gtsummary object
-.create_gtsummary_object <- function(table_body, ...) {
-  x <- list() # empty gtsummary object
-
-  # table_body -----------------------------------------------------------------
-  x$table_body <- table_body
-
+construct_initial_table_styling <- function(x) {
   # table_styling --------------------------------------------------------------
   x$table_styling$header <-
-    tibble(
+    dplyr::tibble(
       column = names(x$table_body),
       hide = TRUE,
       align = "center",
@@ -30,102 +12,49 @@
       interpret_spanning_header = "gt::md",
       spanning_header = NA_character_
     ) %>%
-    mutate(
-      hide = ifelse(.data$column == "label", FALSE, .data$hide),
-      align = ifelse(.data$column == "label", "left", .data$align)
+    dplyr::mutate(
+      hide = ifelse(.data$column %in% "label", FALSE, .data$hide),
+      align = ifelse(.data$column %in% "label", "left", .data$align)
     )
 
   x$table_styling$footnote <-
-    tibble(
+    dplyr::tibble(
       column = character(), rows = list(),
       text_interpret = character(), footnote = character()
     )
   x$table_styling$footnote_abbrev <-
-    tibble(
+    dplyr::tibble(
       column = character(), rows = list(),
       text_interpret = character(), footnote = character()
     )
   x$table_styling$text_format <-
-    .purrr_when(
-      isTRUE(all(c("label", "row_type") %in% x$table_styling$header$column)) ~
-        tibble(
-          column = "label",
-          rows = list(rlang::expr(.data$row_type %in% c("level", "missing"))),
-          format_type = "indent", undo_text_format = FALSE
-        ),
-      isFALSE(all(c("label", "row_type") %in% x$table_styling$header$column)) ~
-        tibble(
-          column = character(), rows = list(),
-          format_type = character(), undo_text_format = logical()
-        )
+    dplyr::tibble(
+      column = character(), rows = list(),
+      format_type = character(), undo_text_format = logical()
     )
+
+  x$table_styling$indentation <-
+    if (all(c("label", "row_type") %in% x$table_styling$header$column)) {
+      dplyr::tibble(
+        column = c("label", "label"),
+        rows = list(rlang::expr(TRUE), rlang::expr(.data$row_type %in% c("level", "missing"))),
+        n_spaces = c(0L, 4L)
+      )
+    }
+    else {
+      dplyr::tibble(column = character(), rows = list(), n_spaces = integer())
+    }
 
   x$table_styling$fmt_missing <-
-    tibble(column = character(), rows = list(), symbol = character())
+    dplyr::tibble(column = character(), rows = list(), symbol = character())
   x$table_styling$fmt_fun <-
-    tibble(column = character(), rows = list(), fmt_fun = list())
+    dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
   x$table_styling$cols_merge <-
-    tibble(column = character(), rows = list(), pattern = character())
+    dplyr::tibble(column = character(), rows = list(), pattern = character())
 
-  # adding other objects to list -----------------------------------------------
-  x <- c(x, list(...))
 
   # returning gtsummary object -------------------------------------------------
-  class(x) <- "gtsummary"
   x
-}
-
-# this fn updates `table_styling` list to match `table_body`
-.update_table_styling <- function(x) {
-  # vector of columns deleted in update
-  deleted_columns <-
-    x$table_styling$header$column %>%
-    setdiff(names(x$table_body))
-
-  # if a column was deleted, omit all styling instructions for that column -----
-  if (!is_empty(deleted_columns)) {
-    for (styling_element in names(x$table_styling)) {
-      # if element is a tibble with a column called 'column'
-      if (is.data.frame(x$table_styling[[styling_element]]) &&
-        "column" %in% names(x$table_styling[[styling_element]])) {
-        x$table_styling[[styling_element]] <-
-          x$table_styling[[styling_element]] %>%
-          filter(!.data$column %in% deleted_columns)
-      }
-    }
-  }
-
-  # update styling header table with new variables -----------------------------
-  x$table_styling$header <-
-    tibble(
-      column = names(x$table_body),
-      hide = TRUE,
-      align = "center",
-      interpret_label = "gt::md",
-      label = names(x$table_body),
-      interpret_spanning_header = "gt::md",
-      spanning_header = NA_character_
-    ) %>%
-    .rows_update_table_styling_header(x$table_styling$header)
-
-  # return x -------------------------------------------------------------------
-  x
-}
-
-.rows_update_table_styling_header <- function(x, y) {
-  common_columns <- intersect(names(x), names(y))
-
-  x %>%
-    # updating rows in header
-    dplyr::rows_update(
-      y %>% select(all_of(common_columns)),
-      by = "column"
-    ) %>%
-    # re-adding the columns not in the original header table
-    dplyr::left_join(
-      y %>% select(-all_of(setdiff(common_columns, "column"))),
-      by = "column"
-    )
 }
 
 
@@ -152,3 +81,57 @@
     env = attr(x, ".Environment")
   )
 }
+
+# this fn updates `table_styling` list to match `table_body`
+.update_table_styling <- function(x) {
+  # vector of columns deleted in update
+  deleted_columns <-
+    x$table_styling$header$column %>%
+    setdiff(names(x$table_body))
+
+  # if a column was deleted, omit all styling instructions for that column -----
+  if (!is_empty(deleted_columns)) {
+    for (styling_element in names(x$table_styling)) {
+      # if element is a tibble with a column called 'column'
+      if (is.data.frame(x$table_styling[[styling_element]]) &&
+          "column" %in% names(x$table_styling[[styling_element]])) {
+        x$table_styling[[styling_element]] <-
+          x$table_styling[[styling_element]] %>%
+          dplyr::filter(!.data$column %in% deleted_columns)
+      }
+    }
+  }
+
+  # update styling header table with new variables -----------------------------
+  x$table_styling$header <-
+    dplyr::tibble(
+      column = names(x$table_body),
+      hide = TRUE,
+      align = "center",
+      interpret_label = "gt::md",
+      label = names(x$table_body),
+      interpret_spanning_header = "gt::md",
+      spanning_header = NA_character_
+    ) %>%
+    .rows_update_table_styling_header(x$table_styling$header)
+
+  # return x -------------------------------------------------------------------
+  x
+}
+
+.rows_update_table_styling_header <- function(x, y) {
+  common_columns <- intersect(names(x), names(y))
+
+  x %>%
+    # updating rows in header
+    dplyr::rows_update(
+      y %>% dplyr::select(all_of(common_columns)),
+      by = "column"
+    ) %>%
+    # re-adding the columns not in the original header table
+    dplyr::left_join(
+      y %>% dplyr::select(-all_of(setdiff(common_columns, "column"))),
+      by = "column"
+    )
+}
+

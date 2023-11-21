@@ -64,15 +64,6 @@ functions for selecting columns of data frames (and other items as well).
 \item \code{all_contrasts()} selects variables in regression model based on their type of contrast
 }
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/select_ex1.png" alt="image of rendered example table" style="width:55\%;">
-}}
-}
-
 \examples{
 select_ex1 <-
   trial \%>\%

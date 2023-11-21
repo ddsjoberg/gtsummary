@@ -140,7 +140,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        tibble(column = columns, interpret_label = text_interpret, label = label),
+        dplyr::tibble(column = columns, interpret_label = text_interpret, label = label),
         by = "column"
       )
   }
@@ -150,7 +150,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        tibble(column = columns, interpret_label = text_interpret, spanning_header = spanning_header),
+        dplyr::tibble(column = columns, interpret_label = text_interpret, spanning_header = spanning_header),
         by = "column"
       )
   }
@@ -160,7 +160,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        tibble(column = columns, hide = hide),
+        dplyr::tibble(column = columns, hide = hide),
         by = "column"
       )
   }
@@ -170,7 +170,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        tibble(column = columns, align = align),
+        dplyr::tibble(column = columns, align = align),
         by = "column"
       )
   }
@@ -178,9 +178,9 @@ modify_table_styling <- function(x,
   # footnote -------------------------------------------------------------------
   if (!is.null(footnote)) {
     x$table_styling$footnote <-
-      bind_rows(
+      dplyr::bind_rows(
         x$table_styling$footnote,
-        tibble(
+        dplyr::tibble(
           column = columns,
           rows = list(rows),
           text_interpret = text_interpret,
@@ -192,9 +192,9 @@ modify_table_styling <- function(x,
   # footnote_abbrev ------------------------------------------------------------
   if (!is.null(footnote_abbrev)) {
     x$table_styling$footnote_abbrev <-
-      bind_rows(
+      dplyr::bind_rows(
         x$table_styling$footnote_abbrev,
-        tibble(
+        dplyr::tibble(
           column = columns,
           rows = list(rows),
           text_interpret = text_interpret,
@@ -209,7 +209,7 @@ modify_table_styling <- function(x,
     x$table_styling$fmt_fun <-
       bind_rows(
         x$table_styling$fmt_fun,
-        tibble(
+        dplyr::tibble(
           column = columns,
           rows = list(rows),
           fmt_fun = fmt_fun
@@ -230,7 +230,7 @@ modify_table_styling <- function(x,
         tidyr::expand_grid(!!!.)
       } %>%
       {
-        bind_rows(x$table_styling$text_format, .)
+        dplyr::bind_rows(x$table_styling$text_format, .)
       }
   }
 
@@ -246,7 +246,7 @@ modify_table_styling <- function(x,
         tidyr::expand_grid(!!!.)
       } %>%
       {
-        bind_rows(x$table_styling$fmt_missing, .)
+        dplyr::bind_rows(x$table_styling$fmt_missing, .)
       }
   }
 
@@ -272,8 +272,8 @@ modify_table_styling <- function(x,
   rows <- enquo(rows)
   all_columns <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~ str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~ str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ stringr::str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ stringr::str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
 
   if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
@@ -295,9 +295,9 @@ modify_table_styling <- function(x,
   x$table_styling$cols_merge <-
     x$table_styling$cols_merge %>%
     # remove previous merging for specified column
-    filter(!.data$column %in% .env$column) %>%
+    dplyr::filter(!.data$column %in% .env$column) %>%
     # append new merge instructions
-    bind_rows(
+    dplyr::bind_rows(
       tibble(
         column = column,
         rows = list(rows),

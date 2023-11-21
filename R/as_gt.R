@@ -31,19 +31,11 @@
 #'   trial[c("trt", "age", "response", "grade")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
-#' @section Example Output:
-#'
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_gt_ex1.png", width = "50")`
-#' }}
-
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   .assert_class(x, "gtsummary")
 
   # running pre-conversion function, if present --------------------------------
-  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+  # x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # merging column specified in `x$table_styling$cols_merge` -------------------
   # UPDATE THIS WHEN `gt::cols_merge(rows=)` argument is added!
@@ -100,14 +92,14 @@ table_styling_to_gt_calls <- function(x, ...) {
   # gt -------------------------------------------------------------------------
   groupname_col <-
     switch("groupname_col" %in% x$table_styling$header$column,
-      "groupname_col"
+           "groupname_col"
     )
   caption <-
     switch(!is.null(x$table_styling$caption),
-      rlang::call2(
-        attr(x$table_styling$caption, "text_interpret"),
-        x$table_styling$caption
-      )
+           rlang::call2(
+             attr(x$table_styling$caption, "text_interpret"),
+             x$table_styling$caption
+           )
     )
   gt_calls[["gt"]] <-
     expr(gt::gt(
@@ -137,9 +129,9 @@ table_styling_to_gt_calls <- function(x, ...) {
   df_cols_align <-
     x$table_styling$header %>%
     select("column", "align") %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    mutate(cols = map(.data$data, ~ pull(.x, column)))
+    dplyr::group_by(.data$align) %>%
+    tidyr::nest() %>%
+    dplyr::mutate(cols = map(.data$data, ~ dplyr::pull(.x, column)))
 
   gt_calls[["cols_align"]] <-
     map(
@@ -151,7 +143,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # indent ---------------------------------------------------------------------
-  df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
+  df_indent <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "indent")
   gt_calls[["indent"]] <-
     map(
       seq_len(nrow(df_indent)),
@@ -165,7 +157,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # indent2 --------------------------------------------------------------------
-  df_indent2 <- x$table_styling$text_format %>% filter(.data$format_type == "indent2")
+  df_indent2 <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "indent2")
   gt_calls[["indent2"]] <-
     map(
       seq_len(nrow(df_indent2)),
@@ -190,7 +182,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
+  df_bold <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "bold")
   gt_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
@@ -204,7 +196,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_italic -----------------------------------------------------------
-  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
+  df_italic <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "italic")
   gt_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
@@ -231,21 +223,21 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # tab_footnote ---------------------------------------------------------------
   if (nrow(x$table_styling$footnote) == 0 &&
-    nrow(x$table_styling$footnote_abbrev) == 0) {
+      nrow(x$table_styling$footnote_abbrev) == 0) {
     gt_calls[["tab_footnote"]] <- list()
   } else {
     df_footnotes <-
-      bind_rows(
+      dplyr::bind_rows(
         x$table_styling$footnote,
         x$table_styling$footnote_abbrev
       ) %>%
-      nest(data = c("column", "row_numbers")) %>%
-      rowwise() %>%
-      mutate(
+      tidyr::nest(data = c("column", "row_numbers")) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
         columns = .data$data %>% pull("column") %>% unique() %>% list(),
         rows = .data$data %>% pull("row_numbers") %>% unique() %>% list()
       ) %>%
-      ungroup()
+      dplyr::ungroup()
     df_footnotes$footnote_exp <-
       map2(
         df_footnotes$text_interpret,
@@ -284,17 +276,17 @@ table_styling_to_gt_calls <- function(x, ...) {
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
     x$table_styling$header %>%
-    select("column", "interpret_spanning_header", "spanning_header") %>%
-    filter(!is.na(.data$spanning_header)) %>%
-    nest(cols = "column") %>%
-    mutate(
+    dplyr::select("column", "interpret_spanning_header", "spanning_header") %>%
+    dplyr::filter(!is.na(.data$spanning_header)) %>%
+    tidyr::nest(cols = "column") %>%
+    dplyr::mutate(
       spanning_header = map2(
         .data$interpret_spanning_header, .data$spanning_header,
         ~ call2(parse_expr(.x), .y)
       ),
       cols = map(.data$cols, ~ pull(.x))
     ) %>%
-    select("spanning_header", "cols")
+    dplyr::select("spanning_header", "cols")
 
   gt_calls[["tab_spanner"]] <-
     map(

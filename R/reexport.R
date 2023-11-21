@@ -1,21 +1,11 @@
-# tibble -----------------------------------------------------------------------
-#' @export
-#' @importFrom tibble as_tibble
-tibble::as_tibble
-
-# knitr ------------------------------------------------------------------------
-#' @export
-#' @importFrom knitr knit_print
-knitr::knit_print
-
 # dplyr ------------------------------------------------------------------------
 #' @export
 #' @importFrom dplyr %>%
 dplyr::`%>%`
 
-#' @importFrom dplyr vars
 #' @export
-dplyr::vars
+#' @importFrom dplyr as_tibble
+dplyr::as_tibble
 
 #' @importFrom dplyr select
 #' @export
@@ -64,3 +54,7 @@ dplyr::last_col
 #' @importFrom dplyr one_of
 #' @export
 dplyr::one_of
+
+#' @importFrom dplyr vars
+#' @export
+dplyr::vars
