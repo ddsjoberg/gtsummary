@@ -18,15 +18,6 @@ modify_column_unhide(x, columns)
 \lifecycle{maturing}
 Use these functions to hide or unhide columns in a gtsummary table.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-`r man_create_image_tag(file = "modify_column_hide_ex1.png", width = "45")`
-}}
-}
-
 \examples{
 \donttest{
 # Example 1 ----------------------------------

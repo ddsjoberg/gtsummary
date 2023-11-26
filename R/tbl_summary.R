@@ -47,7 +47,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   cards::process_selectors(data, by = {{by}}, include = {{include}})
   include <- setdiff(include, by) # remove by variable from list vars included
   missing <- rlang::arg_match(arg = missing)
-  percent <- rlang::arg_match0(arg = percent)
+  percent <- rlang::arg_match(arg = percent)
 
   cards::process_formula_selectors(
     data = data[include],
@@ -59,6 +59,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # save processed function inputs ---------------------------------------------
   tbl_summary_inputs <- as.list(environment())
+  call <- match.call()
 
   # construct cards ------------------------------------------------------------
   cards <-
@@ -80,18 +81,34 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       )
     )
 
-  # return object
-  list(
-    cards = cards,
-    calls = list(tbl_summary = tbl_summary_inputs)
-  ) |>
-    structure(class = c("tbl_summary", "gtsummary")) |>
-    construct_gtsummary() |>
+  # construct initial tbl_summary object ---------------------------------------
+  x <-
+    list(
+      cards = cards,
+      inputs = tbl_summary_inputs,
+      call_list = list(tbl_summary = call)
+    ) |>
+    brdg_summary() |>
+    structure(class = c("tbl_summary", "gtsummary"))
+
+  # adding styling -------------------------------------------------------------
+  x <-
     modify_table_styling(
+      x,
       columns = "label",
+      label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
       text_format = "indent"
     )
+
+  x <-
+    modify_header(
+      x,
+      all_stat_cols() ~ ifelse(is_empty(by), "**N = {N}**", "**{level}**  \nN = {n}")
+    )
+
+  # return object
+  x
 }
 
 .get_variables_by_type <- function(x, type) {

@@ -31,19 +31,19 @@ construct_gtsummary.tbl_summary <- function(x) {
     dplyr::left_join(
       dplyr::tibble(variable = x$calls$tbl_summary$include),
       dplyr::bind_rows(
-        bridge_summary_continuous(
+        pier_summary_continuous(
           x,
           variables = .get_variables_by_type(x$calls$tbl_summary$type, type = "continuous")
         ),
-        bridge_summary_continuous2(
+        pier_summary_continuous2(
           x,
           variables = .get_variables_by_type(x$calls$tbl_summary$type, type = "continuous2")
         ),
-        bridge_summary_categorical(
+        pier_summary_categorical(
           x,
           variables = .get_variables_by_type(x$calls$tbl_summary$type, type = "categorical")
         ),
-        bridge_summary_dichotomous(
+        pier_summary_dichotomous(
           x,
           variables = .get_variables_by_type(x$calls$tbl_summary$type, type = "dichotomous"),
           value = x$calls$tbl_summary$value
