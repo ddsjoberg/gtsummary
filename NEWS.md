@@ -1,5 +1,15 @@
 # gtsummary (development version)
 
+### Overview of Changes in v2.0
+
+#### User-facing Updates
+
+* The counts in the header of `tbl_summary(by)` tables now appear on a new line.
+
+#### Internal Updates
+
+* Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
+
 ### Bug Fixes
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
