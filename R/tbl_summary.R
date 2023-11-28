@@ -48,6 +48,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   include <- setdiff(include, by) # remove by variable from list vars included
   missing <- rlang::arg_match(arg = missing)
   percent <- rlang::arg_match(arg = percent)
+  cards::process_formula_selectors(data = data[include], value = value)
 
   cards::process_formula_selectors(
     data = data[include],
@@ -113,4 +114,90 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
 .get_variables_by_type <- function(x, type) {
   names(x)[unlist(x) %in% type]
+}
+
+.guess_summary_type <- function(data,
+                                variables,
+                                value,
+                                data_name = caller_arg(data),
+                                env = caller_env()) {
+  map(
+    variables,
+    function(variable) {
+      # logical variables are dichotomous
+      if (inherits(data[[variable]], "logical")) {
+        return("dichotomous")
+      }
+
+      # if all missing
+      if (sum(is.na(data[[variable]])) == nrow(data)) {
+        if (inherits(data[[variable]], base_numeric_classes)) {
+          return("continuous")
+        }
+        if (inherits(data[[variable]], "character")) {
+          return("dichotomous")
+        }
+        if (inherits(data[[variable]], "factor") &&
+            !rlang::is_empty(attr(data[[variable]], "levels"))) {
+          return("categorical")
+        }
+        if (inherits(data[[variable]], "factor") &&
+            rlang::is_empty(attr(data[[variable]], "levels"))) {
+          return("dichotomous")
+        }
+      }
+
+      # numeric variables that are 0 and 1 only, will be dichotomous
+      if (inherits(data[[variable]], c("integer", "numeric")) &&
+          length(setdiff(stats::na.omit(data[[variable]]), c(0, 1))) == 0) {
+        return("dichotomous")
+      }
+
+      # factor variables that are "No" and "Yes" only, will be dichotomous
+      if (inherits(data[[variable]], "factor") &&
+          setequal(attr(data[[variable]], "levels"), c("No", "Yes"))) {
+        return("dichotomous")
+      }
+      if (inherits(data[[variable]], "factor") &&
+          setequal(attr(data[[variable]], "levels"), c("no", "yes"))) {
+        return("dichotomous")
+      }
+      if (inherits(data[[variable]], "factor") &&
+          setequal(attr(data[[variable]], "levels"), c("NO", "YES"))) {
+        return("dichotomous")
+      }
+
+      # character variables that are "No" and "Yes" only, will be dichotomous
+      if (inherits(data[[variable]], "character") &&
+          setequal(stats::na.omit(data[[variable]]), c("No", "Yes"))) {
+        return("dichotomous")
+      }
+      if (inherits(data[[variable]], "character") &&
+          setequal(stats::na.omit(data[[variable]]), c("no", "yes"))) {
+        return("dichotomous")
+      }
+      if (inherits(data[[variable]], "character") &&
+          setequal(stats::na.omit(data[[variable]]), c("NO", "YES"))) {
+        return("dichotomous")
+      }
+
+      # factors and characters are categorical (except when all missing)
+      if (inherits(data[[variable]], c("factor", "character"))) {
+        return("categorical")
+      }
+
+      # numeric variables with fewer than 10 levels will be categorical
+      if (inherits(data[[variable]], base_numeric_classes) &&
+          length(unique(stats::na.omit(data[[variable]]))) < 10) {
+        return("categorical")
+      }
+
+      # all other numeric classes are continuous
+      if (inherits(data[[variable]], base_numeric_classes)) {
+        return(get_theme_element("tbl_summary-str:default_con_type", default = "continuous"))
+      }
+    }
+  ) |>
+    stats::setNames(variables)
+
 }

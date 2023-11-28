@@ -36,51 +36,47 @@ NULL
 #' @rdname select_helpers
 #' @export
 all_continuous <- function(continuous2 = TRUE) {
-  if (continuous2 == TRUE) {
-    return(broom.helpers::all_continuous())
-  } else {
-    return(
-      .generic_selector("variable", "var_type",
-        .data$var_type %in% "continuous",
-        fun_name = "all_continuous"
-      )
-    )
-  }
+  types <- if (continuous2) c("continuous", "continuous2") else "continuous"
+
+  where(function(x) attr(x, "gtsummary.type") %in% types)
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  .generic_selector("variable", "var_type",
-    .data$var_type %in% "continuous2",
-    fun_name = "all_continuous"
-  )
+  where(function(x) attr(x, "gtsummary.type") %in% "continuous2")
 }
 
 #' @rdname select_helpers
 #' @export
-all_categorical <- broom.helpers::all_categorical
+all_categorical <- function(dichotomous = TRUE) {
+  types <- if (dichotomous) c("categorical", "dichotomous") else "categorical"
 
-#' @rdname select_helpers
-#' @export
-all_dichotomous <- broom.helpers::all_dichotomous
-
-#' @rdname select_helpers
-#' @export
-all_tests <- function(tests = NULL) {
-  if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
-    paste(
-      "The `tests=` argument must be one or more of the following:",
-      paste(shQuote(df_add_p_tests$test_name), collapse = ", ")
-    ) %>%
-      stop(call. = FALSE)
-  }
-
-  .generic_selector("variable", "test_name",
-    .data$test_name %in% .env$tests,
-    fun_name = "all_tests"
-  )
+  where(function(x) attr(x, "gtsummary.type") %in% types)
 }
+
+#' @rdname select_helpers
+#' @export
+all_dichotomous <- function() {
+  where(function(x) attr(x, "gtsummary.type") %in% "dichotomous")
+}
+
+# #' @rdname select_helpers
+# #' @export
+# all_tests <- function(tests = NULL) {
+#   if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
+#     paste(
+#       "The `tests=` argument must be one or more of the following:",
+#       paste(shQuote(df_add_p_tests$test_name), collapse = ", ")
+#     ) %>%
+#       stop(call. = FALSE)
+#   }
+#
+#   .generic_selector("variable", "test_name",
+#     .data$test_name %in% .env$tests,
+#     fun_name = "all_tests"
+#   )
+# }
 
 #' @rdname select_helpers
 #' @export
@@ -105,14 +101,14 @@ all_stat_cols <- function(stat_0 = TRUE) {
   }
 }
 
-#' @rdname select_helpers
-#' @export
-all_interaction <- broom.helpers::all_interaction
+# #' @rdname select_helpers
+# #' @export
+# all_interaction <- broom.helpers::all_interaction
 
-#' @rdname select_helpers
-#' @export
-all_intercepts <- broom.helpers::all_intercepts
+# #' @rdname select_helpers
+# #' @export
+# all_intercepts <- broom.helpers::all_intercepts
 
-#' @rdname select_helpers
-#' @export
-all_contrasts <- broom.helpers::all_contrasts
+# #' @rdname select_helpers
+# #' @export
+# all_contrasts <- broom.helpers::all_contrasts

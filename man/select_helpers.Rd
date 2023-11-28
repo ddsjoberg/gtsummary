@@ -6,11 +6,7 @@
 \alias{all_continuous2}
 \alias{all_categorical}
 \alias{all_dichotomous}
-\alias{all_tests}
 \alias{all_stat_cols}
-\alias{all_interaction}
-\alias{all_intercepts}
-\alias{all_contrasts}
 \title{Select helper functions}
 \usage{
 all_continuous(continuous2 = TRUE)
@@ -21,15 +17,7 @@ all_categorical(dichotomous = TRUE)
 
 all_dichotomous()
 
-all_tests(tests = NULL)
-
 all_stat_cols(stat_0 = TRUE)
-
-all_interaction()
-
-all_intercepts()
-
-all_contrasts(contrasts_type = NULL)
 }
 \arguments{
 \item{continuous2}{Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
@@ -37,10 +25,10 @@ all_contrasts(contrasts_type = NULL)
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
 
+\item{stat_0}{When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
+
 \item{tests}{string indicating the test type of the variables to select, e.g.
 select all variables being compared with \code{"t.test"}}
-
-\item{stat_0}{When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
 
 \item{contrasts_type}{type of contrast to select. When \code{NULL}, all variables with a
 contrast will be selected. Default is \code{NULL}.  Select among contrast types
