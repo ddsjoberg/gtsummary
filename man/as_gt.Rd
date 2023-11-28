@@ -7,8 +7,7 @@
 as_gt(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
-(e.g. \link{tbl_summary} or \link{tbl_regression})}
+\item{x}{An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -18,7 +17,7 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{...}{Arguments passed on to \link[gt:gt]{gt::gt}}
+\item{...}{Arguments passed on to \code{gt::gt(...)}}
 }
 \value{
 A \code{gt_tbl} object
@@ -29,12 +28,6 @@ that is, a table created with \code{gt::gt()}.
 Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
-
-Review the
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
-or
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
-for detailed examples in the 'Advanced Customization' section.
 }
 \examples{
 # Example 1 ----------------------------------

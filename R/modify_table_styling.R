@@ -94,7 +94,7 @@ modify_table_styling <- function(x,
                                  cols_merge_pattern = NULL) {
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
-  .assert_class(x, "gtsummary")
+  assert_class(x, "gtsummary")
 
   text_interpret <- match.arg(text_interpret) %>%
     {
@@ -207,7 +207,7 @@ modify_table_styling <- function(x,
   if (!is.null(fmt_fun)) {
     if (rlang::is_function(fmt_fun)) fmt_fun <- list(fmt_fun)
     x$table_styling$fmt_fun <-
-      bind_rows(
+      dplyr::bind_rows(
         x$table_styling$fmt_fun,
         dplyr::tibble(
           column = columns,
@@ -270,26 +270,21 @@ modify_table_styling <- function(x,
 # function to add merging columns instructions
 .modify_cols_merge <- function(x, column, rows, pattern) {
   rows <- enquo(rows)
-  all_columns <-
-    str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~ stringr::str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~ stringr::str_remove_all(.x, pattern = fixed("{"))) %>%
-    unlist()
+  all_columns <- .extract_glue_elements(pattern)
 
-  if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
-    paste(
-      "All columns specified in `cols_merge_pattern=`",
-      "must be present in `x$table_body`"
-    ) %>%
-      abort()
+  if (!is_empty(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
+    cli::cli_abort(c(
+      "All columns specified in {.arg cols_merge_pattern} argument must be present in {.code x$table_body}",
+      "i" = "The following columns are not present: {.val {setdiff(all_columns, x$table_styling$header$column)}}"
+    ))
   }
 
-  if (!is.na(pattern) && !identical(column, all_columns[1])) {
+  if (!is_empty(pattern) && !identical(column, all_columns[1])) {
     paste(
-      "A single column must be passed when using `cols_merge_pattern=`,",
+      "A single column must be passed when using {.arg cols_merge_pattern},",
       "and that column must be the first to appear in the pattern argument."
     ) %>%
-      abort()
+      cli::cli_abort()
   }
 
   x$table_styling$cols_merge <-
@@ -298,7 +293,7 @@ modify_table_styling <- function(x,
     dplyr::filter(!.data$column %in% .env$column) %>%
     # append new merge instructions
     dplyr::bind_rows(
-      tibble(
+      dplyr::tibble(
         column = column,
         rows = list(rows),
         pattern = pattern

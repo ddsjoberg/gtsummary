@@ -10,7 +10,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
   if (!is.null(stat_by)) {
     lifecycle::deprecate_stop(
       "1.3.6", "gtsummary::modify_header(stat_by=)",
-      details = glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead.")
+      details = glue::glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead.")
     )
   }
   if (!is.null(update)) {

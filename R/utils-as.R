@@ -10,7 +10,8 @@
         text_interpret = "gt::md"
       ) %>%
       dplyr::select(all_of(c("column", "rows", "text_interpret", "footnote")))
-  } else if (column %in% c("indent", "bold", "italic")) {
+  }
+  else if (column %in% c("indent", "bold", "italic")) {
     x$table_styling$text_format <-
       x$table_header %>%
       dplyr::select(all_of(c("column", .env$column))) %>%
@@ -22,7 +23,8 @@
         undo_text_format = FALSE
       ) %>%
       dplyr::bind_rows(x$table_styling$text_format)
-  } else if (column %in% "missing_emdash") {
+  }
+  else if (column %in% "missing_emdash") {
     x$table_styling[["fmt_missing"]] <-
       x$table_header %>%
       dplyr::select(all_of(c("column", .env$column))) %>%
@@ -34,7 +36,8 @@
           default = "\U2014"
         )
       )
-  } else if (column %in% "fmt_fun") {
+  }
+  else if (column %in% "fmt_fun") {
     x$table_styling[[column]] <-
       x$table_header %>%
       dplyr::select(all_of(c("column", .env$column))) %>%
@@ -257,7 +260,7 @@
         mutate(column_id = dplyr::row_number()),
       by = "column"
     ) %>%
-    dplyr::arrange(desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
+    dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
     dplyr::group_by(.data$footnote) %>%
     tidyr::nest() %>%
     dplyr::ungroup() %>%
@@ -301,7 +304,7 @@
   exprs %>%
     # removing NULL elements
     unlist() %>%
-    purrr::compact() %>%
+    compact() %>%
     # concatenating expressions with %>% between each of them
-    purrr::reduce(function(x, y) rlang::inject(!!x %>% !!y, env = env))
+    reduce(function(x, y) rlang::inject(!!x %>% !!y, env = env))
 }

@@ -6,21 +6,14 @@
 #' A user can use this function if they wish to add customized formatting
 #' available via the [gt package](https://gt.rstudio.com/index.html).
 #'
-#' @description Review the
-#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
-#' or
-#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
-#' for detailed examples in the 'Advanced Customization' section.
-#'
-#' @param x Object created by a function from the gtsummary package
-#' (e.g. [tbl_summary] or [tbl_regression])
+#' @param x An object of class `"gtsummary"
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
 #' Default is `everything()`.
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
-#' @param ... Arguments passed on to [gt::gt]
+#' @param ... Arguments passed on to `gt::gt(...)`
 #' @return A `gt_tbl` object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
@@ -32,7 +25,7 @@
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
-  .assert_class(x, "gtsummary")
+  assert_class(x, "gtsummary")
 
   # running pre-conversion function, if present --------------------------------
   # x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -50,7 +43,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
   gt_calls <-
-    purrr::reduce(
+    reduce(
       .x = seq_along(insert_expr_after),
       .f = function(x, y) {
         add_expr_after(
@@ -80,9 +73,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   }
 
   # taking each gt function call, concatenating them with %>% separating them
-  gt_calls[include] %>%
-    c(parse_expr(.get_deprecated_option("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
-    .eval_list_of_exprs()
+  .eval_list_of_exprs(gt_calls[include])
 }
 
 # creating gt calls from table_styling -----------------------------------------
@@ -225,7 +216,8 @@ table_styling_to_gt_calls <- function(x, ...) {
   if (nrow(x$table_styling$footnote) == 0 &&
       nrow(x$table_styling$footnote_abbrev) == 0) {
     gt_calls[["tab_footnote"]] <- list()
-  } else {
+  }
+  else {
     df_footnotes <-
       dplyr::bind_rows(
         x$table_styling$footnote,
@@ -234,8 +226,8 @@ table_styling_to_gt_calls <- function(x, ...) {
       tidyr::nest(data = c("column", "row_numbers")) %>%
       dplyr::rowwise() %>%
       dplyr::mutate(
-        columns = .data$data %>% pull("column") %>% unique() %>% list(),
-        rows = .data$data %>% pull("row_numbers") %>% unique() %>% list()
+        columns = .data$data %>% dplyr::pull("column") %>% unique() %>% list(),
+        rows = .data$data %>% dplyr::pull("row_numbers") %>% unique() %>% list()
       ) %>%
       dplyr::ungroup()
     df_footnotes$footnote_exp <-
@@ -284,7 +276,7 @@ table_styling_to_gt_calls <- function(x, ...) {
         .data$interpret_spanning_header, .data$spanning_header,
         ~ call2(parse_expr(.x), .y)
       ),
-      cols = map(.data$cols, ~ pull(.x))
+      cols = map(.data$cols, ~ dplyr::pull(.x))
     ) %>%
     dplyr::select("spanning_header", "cols")
 

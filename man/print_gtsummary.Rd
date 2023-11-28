@@ -5,7 +5,11 @@
 \alias{print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
-\method{print}{gtsummary}(x, print_engine = "gt", ...)
+\method{print}{gtsummary}(
+  x,
+  print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
+  ...
+)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
