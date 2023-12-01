@@ -51,6 +51,10 @@ dplyr::everything
 #' @export
 dplyr::last_col
 
+#' @importFrom dplyr where
+#' @export
+dplyr::where
+
 #' @importFrom dplyr one_of
 #' @export
 dplyr::one_of

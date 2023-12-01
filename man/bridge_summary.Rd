@@ -2,6 +2,7 @@
 % Please edit documentation in R/bridge_summary.R
 \name{bridge_summary}
 \alias{bridge_summary}
+\alias{brdg_summary}
 \alias{pier_summary_dichotomous}
 \alias{pier_summary_categorical}
 \alias{pier_summary_continuous2}
@@ -9,6 +10,8 @@
 \alias{pier_summary_missing_row}
 \title{Summary Table Bridges}
 \usage{
+brdg_summary(x, calling_function = "tbl_summary")
+
 pier_summary_dichotomous(x, variables, value = x$inputs$value)
 
 pier_summary_categorical(x, variables, missing, missing_text, missing_stat)
@@ -21,6 +24,10 @@ pier_summary_missing_row(x, variables = x$inputs$include)
 }
 \arguments{
 \item{x}{gtsummary object of class \code{"tbl_summary"}}
+
+\item{calling_function}{string indicating the name of the function that is
+calling thie bridge function, e.g. \code{call_function = "tbl_summary"}. This is used
+internally to organize results.}
 
 \item{variables}{character list of variables}
 
@@ -47,6 +54,7 @@ referred to as the piers (supports for a bridge) and begin with \verb{pier_*()}.
 tbl <-
   tbl_summary(
     data = mtcars,
+    include = c("cyl", "am", "mpg", "hp"),
     type =
       list(
         cyl = "categorical",
@@ -66,33 +74,21 @@ tbl <-
 pier_summary_dichotomous(
  x = tbl,
  variables = "am",
- value = list(am = 1),
- missing = "ifany",
- missing_text = "Unknown",
- missing_stat = "{N_miss}"
+ value = list(am = 1)
 )
 
 pier_summary_categorical(
  x = tbl,
- variables = "cyl",
- missing = "ifany",
- missing_text = "Unknown",
- missing_stat = "{N_miss}"
+ variables = "cyl"
 )
 
 pier_summary_continuous2(
  x = tbl,
- variables = "hp",
- missing = "ifany",
- missing_text = "Unknown",
- missing_stat = "{N_miss}"
+ variables = "hp"
 )
 
 pier_summary_continuous(
  x = tbl,
- variables = "mpg",
- missing = "ifany",
- missing_text = "Unknown",
- missing_stat = "{N_miss}"
+ variables = "mpg"
 )
 }

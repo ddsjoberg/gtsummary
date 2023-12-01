@@ -11,6 +11,9 @@
 #' @param variables character list of variables
 #' @param value named list of values to be summarized. the names are the
 #' variable names.
+#' @param calling_function string indicating the name of the function that is
+#' calling thie bridge function, e.g. `call_function = "tbl_summary"`. This is used
+#' internally to organize results.
 #' @inheritParams tbl_summary
 #'
 #' @return data frame
@@ -20,6 +23,7 @@
 #' tbl <-
 #'   tbl_summary(
 #'     data = mtcars,
+#'     include = c("cyl", "am", "mpg", "hp"),
 #'     type =
 #'       list(
 #'         cyl = "categorical",
@@ -39,37 +43,27 @@
 #' pier_summary_dichotomous(
 #'  x = tbl,
 #'  variables = "am",
-#'  value = list(am = 1),
-#'  missing = "ifany",
-#'  missing_text = "Unknown",
-#'  missing_stat = "{N_miss}"
+#'  value = list(am = 1)
 #' )
 #'
 #' pier_summary_categorical(
 #'  x = tbl,
-#'  variables = "cyl",
-#'  missing = "ifany",
-#'  missing_text = "Unknown",
-#'  missing_stat = "{N_miss}"
+#'  variables = "cyl"
 #' )
 #'
 #' pier_summary_continuous2(
 #'  x = tbl,
-#'  variables = "hp",
-#'  missing = "ifany",
-#'  missing_text = "Unknown",
-#'  missing_stat = "{N_miss}"
+#'  variables = "hp"
 #' )
 #'
 #' pier_summary_continuous(
 #'  x = tbl,
-#'  variables = "mpg",
-#'  missing = "ifany",
-#'  missing_text = "Unknown",
-#'  missing_stat = "{N_miss}"
+#'  variables = "mpg"
 #' )
 NULL
 
+#' @rdname bridge_summary
+#' @export
 brdg_summary <- function(x, calling_function = "tbl_summary") {
   # add gts info to the cards table --------------------------------------------
   # add the function call column

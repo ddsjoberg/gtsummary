@@ -1,3 +1,18 @@
+
+.extract_glue_elements <- function(x) {
+  regmatches(x, gregexpr("\\{([^\\}]*)\\}", x)) |>
+    unlist() %>%
+    {substr(., 2, nchar(.) - 1)}
+}
+
+.ifelse1 <- function(test, yes, no) {
+  if (test) {
+    return(yes)
+  }
+  no
+}
+
+
 # used in the as_flex_table (and friends) functions for inserting calls
 add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   # checking input

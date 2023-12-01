@@ -17,10 +17,4 @@ Ahead of a gtsummary object being converted to an output type,
 each logical expression saved in \code{x$table_styling} is converted to a
 list of row numbers.
 }
-\examples{
-tbl <-
-  trial \%>\%
-  tbl_summary(include = c(age, grade)) \%>\%
-  .table_styling_expr_to_row_number()
-}
 \keyword{internal}

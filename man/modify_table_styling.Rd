@@ -123,6 +123,7 @@ See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other Advanced modifiers: 
-\code{\link{modify_column_hide}()}
+\code{\link{modify_column_hide}()},
+\code{\link{modify_fmt_fun}()}
 }
 \concept{Advanced modifiers}
