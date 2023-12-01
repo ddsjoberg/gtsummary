@@ -21,6 +21,7 @@
 #' tbl <-
 #'   tbl_summary(
 #'     data = mtcars,
+#'     include = c("cyl", "am", "mpg", "hp"),
 #'     type =
 #'       list(
 #'         cyl = "categorical",
@@ -36,26 +37,61 @@
 #'         hp = c("{mean}", "{median}")
 #'       )
 #'   )
-tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL,
+tbl_summary <- function(data,
+                        by = NULL,
+                        label = NULL,
+                        statistic = list(all_continuous() ~ "{mean} ({sd})",
+                                         all_categorical() ~ "{n} ({p}%)"),
+                        digits = NULL,
+                        type = assign_summary_type(data, include, value),
+                        value = NULL,
                         missing = c("ifany", "no", "always"),
-                        missing_text = "Unknown", missing_stat = "{N_miss}",
-                        sort = NULL, percent = c("column", "row", "cell"),
-                        include = c(everything(), -by)) {
+                        missing_text = "Unknown",
+                        missing_stat = "{N_miss}",
+                        sort = all_categorical() ~ "alphanumeric",
+                        percent = c("column", "row", "cell"),
+                        include = everything()) {
   # process arguments ----------------------------------------------------------
   data <- dplyr::ungroup(data)
   cards::process_selectors(data, by = {{by}}, include = {{include}})
   include <- setdiff(include, by) # remove by variable from list vars included
+  include <- .remove_na_columns(data, include)
   missing <- rlang::arg_match(arg = missing)
   percent <- rlang::arg_match(arg = percent)
   cards::process_formula_selectors(data = data[include], value = value)
 
+  # assign summary type --------------------------------------------------------
+  if (!missing(type)) {
+    # first set default types, so selectors like `all_continuous()` can be used
+    # to recast the summary type, e.g. make all continuous type "continuous2"
+    default_types <- formals(gtsummary::tbl_summary)[["type"]] |> eval()
+    data <- .add_summary_type_as_attr(data, default_types)
+    # process the user-passed type argument
+    cards::process_formula_selectors(data = data[include], type = type)
+    # fill in any types not specified by user
+    type <- utils::modifyList(default_types, type)
+  }
+
+  # evaluate the remaining list-formula arguments ------------------------------
+  # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = data[include],
+    data = .add_summary_type_as_attr(data[include], type),
     label = label,
-    statistic = statistic,
+    statistic =
+      .ifelse1(
+        missing(statistic),
+        get_theme_element("TODO:fill-this-in", default = statistic),
+        statistic
+      ) ,
     digits = digits,
-    type = type
+    sort = sort
+  )
+
+  # fill in unspecified variables
+  cards::fill_formula_selectors(
+    data[include],
+    statistic =
+      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]]))
   )
 
   # save processed function inputs ---------------------------------------------
@@ -116,88 +152,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   names(x)[unlist(x) %in% type]
 }
 
-.guess_summary_type <- function(data,
-                                variables,
-                                value,
-                                data_name = caller_arg(data),
-                                env = caller_env()) {
-  map(
-    variables,
-    function(variable) {
-      # logical variables are dichotomous
-      if (inherits(data[[variable]], "logical")) {
-        return("dichotomous")
-      }
+.remove_na_columns <- function(data, include) {
+  is_all_na <- map_lgl(include, function(x) all(is.na(x)))
+  if (any(is_all_na)) {
+    paste("Columns {.val {include[is_all_na]}} are all {.cls NA}",
+          "and have been removed from the summary table.") |>
+    cli::cli_inform()
+  }
 
-      # if all missing
-      if (sum(is.na(data[[variable]])) == nrow(data)) {
-        if (inherits(data[[variable]], base_numeric_classes)) {
-          return("continuous")
-        }
-        if (inherits(data[[variable]], "character")) {
-          return("dichotomous")
-        }
-        if (inherits(data[[variable]], "factor") &&
-            !rlang::is_empty(attr(data[[variable]], "levels"))) {
-          return("categorical")
-        }
-        if (inherits(data[[variable]], "factor") &&
-            rlang::is_empty(attr(data[[variable]], "levels"))) {
-          return("dichotomous")
-        }
-      }
-
-      # numeric variables that are 0 and 1 only, will be dichotomous
-      if (inherits(data[[variable]], c("integer", "numeric")) &&
-          length(setdiff(stats::na.omit(data[[variable]]), c(0, 1))) == 0) {
-        return("dichotomous")
-      }
-
-      # factor variables that are "No" and "Yes" only, will be dichotomous
-      if (inherits(data[[variable]], "factor") &&
-          setequal(attr(data[[variable]], "levels"), c("No", "Yes"))) {
-        return("dichotomous")
-      }
-      if (inherits(data[[variable]], "factor") &&
-          setequal(attr(data[[variable]], "levels"), c("no", "yes"))) {
-        return("dichotomous")
-      }
-      if (inherits(data[[variable]], "factor") &&
-          setequal(attr(data[[variable]], "levels"), c("NO", "YES"))) {
-        return("dichotomous")
-      }
-
-      # character variables that are "No" and "Yes" only, will be dichotomous
-      if (inherits(data[[variable]], "character") &&
-          setequal(stats::na.omit(data[[variable]]), c("No", "Yes"))) {
-        return("dichotomous")
-      }
-      if (inherits(data[[variable]], "character") &&
-          setequal(stats::na.omit(data[[variable]]), c("no", "yes"))) {
-        return("dichotomous")
-      }
-      if (inherits(data[[variable]], "character") &&
-          setequal(stats::na.omit(data[[variable]]), c("NO", "YES"))) {
-        return("dichotomous")
-      }
-
-      # factors and characters are categorical (except when all missing)
-      if (inherits(data[[variable]], c("factor", "character"))) {
-        return("categorical")
-      }
-
-      # numeric variables with fewer than 10 levels will be categorical
-      if (inherits(data[[variable]], base_numeric_classes) &&
-          length(unique(stats::na.omit(data[[variable]]))) < 10) {
-        return("categorical")
-      }
-
-      # all other numeric classes are continuous
-      if (inherits(data[[variable]], base_numeric_classes)) {
-        return(get_theme_element("tbl_summary-str:default_con_type", default = "continuous"))
-      }
-    }
-  ) |>
-    stats::setNames(variables)
-
+  include[!is_all_na]
 }

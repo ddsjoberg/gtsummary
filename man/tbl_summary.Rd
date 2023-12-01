@@ -8,16 +8,16 @@ tbl_summary(
   data,
   by = NULL,
   label = NULL,
-  statistic = NULL,
+  statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{n} ({p}\%)"),
   digits = NULL,
-  type = NULL,
+  type = assign_summary_type(data, include, value),
   value = NULL,
   missing = c("ifany", "no", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
-  sort = NULL,
+  sort = all_categorical() ~ "alphanumeric",
   percent = c("column", "row", "cell"),
-  include = c(everything(), -by)
+  include = everything()
 )
 }
 \arguments{
@@ -57,6 +57,7 @@ Title
 tbl <-
   tbl_summary(
     data = mtcars,
+    include = c("cyl", "am", "mpg", "hp"),
     type =
       list(
         cyl = "categorical",

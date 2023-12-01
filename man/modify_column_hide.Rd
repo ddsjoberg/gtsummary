@@ -18,21 +18,11 @@ modify_column_unhide(x, columns)
 \lifecycle{maturing}
 Use these functions to hide or unhide columns in a gtsummary table.
 }
-\examples{
-\donttest{
-# Example 1 ----------------------------------
-# hide 95\% CI, and replace with standard error
-modify_column_hide_ex1 <-
-  lm(age ~ marker + grade, trial) \%>\%
-  tbl_regression() \%>\%
-  modify_column_hide(columns = ci) \%>\%
-  modify_column_unhide(columns = std.error)
-}
-}
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other Advanced modifiers: 
+\code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

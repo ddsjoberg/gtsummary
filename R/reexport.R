@@ -51,7 +51,7 @@ dplyr::everything
 #' @export
 dplyr::last_col
 
-#' @importFrom dplyr last_col
+#' @importFrom dplyr where
 #' @export
 dplyr::where
 

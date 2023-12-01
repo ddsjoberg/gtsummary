@@ -19,11 +19,11 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' # Example 1 ----------------------------------
-#' as_gt_ex1 <-
-#'   trial[c("trt", "age", "response", "grade")] %>%
-#'   tbl_summary(by = trt) %>%
-#'   as_gt()
+#' # # Example 1 ----------------------------------
+#' # as_gt_ex1 <-
+#' #   trial[c("trt", "age", "response", "grade")] %>%
+#' #   tbl_summary(by = trt) %>%
+#' #   as_gt()
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   assert_class(x, "gtsummary")
 

@@ -30,11 +30,11 @@ A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 }
 \examples{
-# Example 1 ----------------------------------
-as_gt_ex1 <-
-  trial[c("trt", "age", "response", "grade")] \%>\%
-  tbl_summary(by = trt) \%>\%
-  as_gt()
+# # Example 1 ----------------------------------
+# as_gt_ex1 <-
+#   trial[c("trt", "age", "response", "grade")] \%>\%
+#   tbl_summary(by = trt) \%>\%
+#   as_gt()
 }
 \author{
 Daniel D. Sjoberg

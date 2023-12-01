@@ -1,20 +1,24 @@
 # gtsummary (development version)
 
-### Overview of Changes in v2.0
+## Overview of Changes in v2.0
 
-#### User-facing Updates
+### User-facing Updates
 
 * The counts in the header of `tbl_summary(by)` tables now appear on a new line.
 
-#### Internal Updates
+* If a column is all `NA` it is now removed from the summary table created with `tbl_summary()`.
+
+* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be explicitly defined in a factor.
+
+### Internal Updates
 
 * Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
 
-### Bug Fixes
+## Bug Fixes 
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
 
-### Deprecations
+## Deprecations 
 
 * Global options have been deprecated in gtsummary since v1.3.1 (3.5 years ago). They have now been fully removed from the package.
 
