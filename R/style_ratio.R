@@ -24,7 +24,7 @@
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
   x_fmt <-
-    case_when(
+    dplyr::case_when(
       round2(abs(x), digits = digits) < 1 ~
         style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
       x > 0 ~

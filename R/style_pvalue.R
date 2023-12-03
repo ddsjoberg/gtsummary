@@ -23,7 +23,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   # rounding large p-values to 1 digits
   if (digits == 1) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         # allowing some leeway for numeric storage errors
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
@@ -52,7 +52,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   # rounding large p-values to 2 digits
   else if (digits == 2) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.99 ~ paste0(">", style_number(
@@ -77,7 +77,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   # rounding large pvalues to 3 digit
   else if (digits == 3) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.999 ~ paste0(">", style_number(
@@ -99,9 +99,10 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
 
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
-    p_fmt <- case_when(
+    p_fmt <- dplyr::case_when(
       is.na(p_fmt) ~ NA_character_,
-      stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+      grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
+      # stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)
     )
   }

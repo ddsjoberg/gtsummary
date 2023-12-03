@@ -14,7 +14,6 @@ styfn_number(digits = 0, big.mark = NULL, decimal.mark = NULL, scale = 1, ...)
 styfn_sigfig(digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...)
 
 styfn_pvalue(
-  x,
   digits = 1,
   prepend_p = FALSE,
   big.mark = NULL,

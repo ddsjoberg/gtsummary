@@ -7,7 +7,7 @@
 #'
 #' @name modify_column_hide
 #' @family Advanced modifiers
-#' @examples
+# #' @examples
 # #' \donttest{
 # #' # Example 1 ----------------------------------
 # #' # hide 95% CI, and replace with standard error
