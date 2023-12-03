@@ -83,7 +83,7 @@
 #' @keywords internal
 #' @export
 #'
-#' @examples
+# #' @examples
 # #' tbl <-
 # #'   trial %>%
 # #'   tbl_summary(include = c(age, grade)) %>%

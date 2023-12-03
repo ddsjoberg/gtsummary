@@ -9,7 +9,7 @@ tbl_summary(
   by = NULL,
   label = NULL,
   statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{n} ({p}\%)"),
-  digits = NULL,
+  digits = assign_summary_digits(data, statistic, type),
   type = assign_summary_type(data, include, value),
   value = NULL,
   missing = c("ifany", "no", "always"),

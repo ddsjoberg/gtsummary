@@ -42,7 +42,7 @@ tbl_summary <- function(data,
                         label = NULL,
                         statistic = list(all_continuous() ~ "{mean} ({sd})",
                                          all_categorical() ~ "{n} ({p}%)"),
-                        digits = NULL,
+                        digits = assign_summary_digits(data, statistic, type),
                         type = assign_summary_type(data, include, value),
                         value = NULL,
                         missing = c("ifany", "no", "always"),
@@ -82,16 +82,19 @@ tbl_summary <- function(data,
         missing(statistic),
         get_theme_element("TODO:fill-this-in", default = statistic),
         statistic
-      ) ,
-    digits = digits,
+      ),
     sort = sort
   )
-
   # fill in unspecified variables
   cards::fill_formula_selectors(
     data[include],
     statistic =
       get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]]))
+  )
+
+  cards::process_formula_selectors(
+    data = .add_summary_type_as_attr(data[include], type),
+    digits = digits
   )
 
   # save processed function inputs ---------------------------------------------
@@ -108,13 +111,15 @@ tbl_summary <- function(data,
       cards::ard_categorical(
         data,
         by = by,
-        variables = .get_variables_by_type(type, c("categorical", "dichotomous"))
+        variables = .get_variables_by_type(type, c("categorical", "dichotomous")),
+        fmt_fn = digits
       ),
       # calculate categorical summaries
       cards::ard_continuous(
         data,
         by = by,
-        variables = .get_variables_by_type(type, c("continuous", "continuous2"))
+        variables = .get_variables_by_type(type, c("continuous", "continuous2")),
+        fmt_fn = digits
       )
     )
 
