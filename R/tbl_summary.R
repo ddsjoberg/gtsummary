@@ -72,6 +72,8 @@ tbl_summary <- function(data,
     type <- utils::modifyList(default_types, type)
   }
 
+  value <- .assign_default_values(data[include], value, type)
+
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
@@ -166,4 +168,25 @@ tbl_summary <- function(data,
   }
 
   include[!is_all_na]
+}
+
+.assign_default_values <- function(data, value, type) {
+  lapply(
+    names(data),
+    function(variable) {
+      # if user passed value, then use it
+      if (!is.null(value[[variable]])) return(value[[variable]])
+      # if not a dichotomous summary type, then return NULL
+      if (!type[[variable]] %in% "dichotomous") return(NULL)
+
+      # otherwise, return default value
+      default_value <- .get_default_dichotomous_value(data[[variable]])
+      if (!is.null(default_value)) return(default_value)
+      cli::cli_abort(c(
+        "Error in argument {.arg value} for variable {.val {variable}}.",
+        "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
+      ))
+    }
+  ) |>
+    stats::setNames(names(data))
 }
