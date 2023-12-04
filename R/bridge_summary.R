@@ -129,11 +129,16 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   # construct default table_styling --------------------------------------------
   x <- construct_initial_table_styling(x)
 
+  # add info to x$table_styling$header for dynamic headers ---------------------
+  x <- .add_table_styling_stats(x)
+
+  x
 }
 
 #' @rdname bridge_summary
 #' @export
 pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
+  if (is_empty(variables)) return(dplyr::tibble())
   # subsetting cards object on dichotomous summaries ---------------------------
   x$cards <-
     x$cards |>
@@ -154,6 +159,7 @@ pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
 #' @rdname bridge_summary
 #' @export
 pier_summary_categorical <- function(x, variables, missing, missing_text, missing_stat) {
+  if (is_empty(variables)) return(dplyr::tibble())
   # subsetting cards object on categorical summaries ----------------------------
   card <-
     x$cards |>
@@ -265,6 +271,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
 #' @rdname bridge_summary
 #' @export
 pier_summary_continuous2 <- function(x, variables, missing, missing_text, missing_stat) {
+  if (is_empty(variables)) return(dplyr::tibble())
   # subsetting cards object on continuous2 summaries ----------------------------
   card <-
     x$cards |>
@@ -275,7 +282,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
     card |>
-    dplyr::group_by(across(c("gts_column" ,cards::all_ard_groups(), "variable"))) |>
+    dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
       function(.x, .y) {
         dplyr::mutate(
@@ -418,6 +425,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
 #' @rdname bridge_summary
 #' @export
 pier_summary_missing_row <- function(x, variables = x$inputs$include) {
+  if (is_empty(variables)) return(dplyr::tibble())
   # keeping variables to report missing obs for (or returning empty df if none)
   if (x$inputs$missing == "no") return(dplyr::tibble())
   if (x$inputs$missing == "ifany") {
@@ -444,4 +452,71 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       row_type = "missing",
       label = x$inputs$missing_text
     )
+}
+
+.add_table_styling_stats <- function(x) {
+  if (is_empty(x$inputs$by)) {
+    x$table_styling$header <-
+      x$table_styling$header |>
+      dplyr::mutate(
+        modify_stat_N =
+          x$cards |>
+          dplyr::filter(.data$stat_name %in% "N_obs") |>
+          dplyr::pull("statistic") |>
+          unlist() |>
+          getElement(1),
+        modify_stat_n = .data$modify_stat_N,
+        modify_stat_p = 1,
+        modify_stat_level = "Overall"
+      )
+  }
+  else {
+    df_by_stats <- x$cards |>
+      dplyr::filter(.data$variable %in% .env$x$inputs$by & .data$stat_name %in% c("N", "n", "p"))
+
+    # get a data frame with the by variable stats
+    df_by_stats_wide <-
+      df_by_stats |>
+      dplyr::filter(.data$stat_name %in% c("n", "p")) |>
+      dplyr::mutate(
+        .by = .data$variable_level,
+        column = paste0("stat_", dplyr::cur_group_id())
+      ) %>%
+      {dplyr::bind_rows(
+        .,
+        dplyr::select(., "variable_level", "column", statistic = "variable_level") |>
+          dplyr::mutate(stat_name = "level") |>
+          dplyr::distinct()
+      )} |>
+      tidyr::pivot_wider(
+        id_cols = "column",
+        names_from = "stat_name",
+        values_from = "statistic"
+      ) |>
+      dplyr::mutate(
+        dplyr::across(-"column", unlist),
+        dplyr::across("level", as.character)
+      ) |>
+      dplyr::rename_with(
+        function(x) paste0("modify_stat_", x),
+        .cols = -"column"
+      )
+
+    # add the stats here to the header data frame
+    x$table_styling$header <-
+      x$table_styling$header |>
+      dplyr::mutate(
+        modify_stat_N =
+          df_by_stats |>
+          dplyr::filter(.data$stat_name %in% "N") |>
+          dplyr::pull("statistic") |>
+          unlist()
+      ) |>
+      dplyr::left_join(
+        df_by_stats_wide,
+        by = "column"
+      )
+  }
+
+  x
 }

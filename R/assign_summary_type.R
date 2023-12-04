@@ -32,28 +32,7 @@ assign_summary_type <- function(data, variables, value, type = NULL) {
           return(type[[variable]])
         }
 
-        # logical variables are dichotomous
-        if (inherits(data[[variable]], "logical")) {
-          return("dichotomous")
-        }
-
-        # numeric variables that are 0 and 1 only, will be dichotomous
-        if (inherits(data[[variable]], c("integer", "numeric")) &&
-            length(setdiff(stats::na.omit(data[[variable]]), c(0, 1))) == 0) {
-          return("dichotomous")
-        }
-
-        # factor variables that are "No" and "Yes" only, will be dichotomous
-        if (inherits(data[[variable]], "factor") &&
-            length(levels(data[[variable]])) == 2L &&
-            setequal(toupper(levels(data[[variable]])), c("NO", "YES"))) {
-          return("dichotomous")
-        }
-
-        # character variables that are "No" and "Yes" only, will be dichotomous
-        if (inherits(data[[variable]], "character") &&
-            setequal(toupper(stats::na.omit(data[[variable]])), c("NO", "YES")) &&
-            length(stats::na.omit(data[[variable]])) == 2L) {
+        if (!is.null(.get_default_dichotomous_value(data[[variable]]))) {
           return("dichotomous")
         }
 
@@ -81,6 +60,36 @@ assign_summary_type <- function(data, variables, value, type = NULL) {
 
   # return type
   type
+}
+
+.get_default_dichotomous_value <- function(x) {
+  # logical variables are dichotomous
+  if (inherits(x, "logical")) {
+    return(TRUE)
+  }
+
+  # numeric variables that are 0 and 1 only, will be dichotomous
+  if (inherits(x, c("integer", "numeric")) &&
+      length(setdiff(stats::na.omit(x), c(0, 1))) == 0) {
+    return(stats::na.omit(x) |> unique() |> sort() |> dplyr::last())
+  }
+
+  # factor variables that are "No" and "Yes" only, will be dichotomous
+  if (inherits(x, "factor") &&
+      length(levels(x)) == 2L &&
+      setequal(toupper(levels(x)), c("NO", "YES"))) {
+    return(levels(x)[toupper(levels(x)) %in% "YES"])
+  }
+
+  # character variables that are "No" and "Yes" only, will be dichotomous
+  if (inherits(x, "character") &&
+      setequal(toupper(stats::na.omit(x)), c("NO", "YES")) &&
+      length(stats::na.omit(x)) == 2L) {
+    return(unique(x)[toupper(unique(x)) %in% "YES"])
+  }
+
+  # otherwise, return NULL
+  NULL
 }
 
 .add_summary_type_as_attr <- function(data, type) {
