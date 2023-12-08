@@ -69,20 +69,12 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   # add the function call column
   x$cards <-
     x$cards |>
-    dplyr::mutate(
-      gts_function =
-        ifelse(
-          .data$variable %in% c(x$inputs$tbl_summary$by, x$inputs$tbl_summary$include) &
-            .data$context %in% c("continuous", "categorical"),
-          .env$calling_function,
-          NA_character_
-        )
-    )
+    dplyr::mutate(gts_function = .env$calling_function)
 
   # adding the name of the column the stats will populate
   if (is_empty(x$inputs$by)) {
     x$cards$gts_column <-
-      ifelse(x$cards$context %in% c("continuous", "categorical"), "stat_0", NA_character_)
+      ifelse(x$cards$context %in% c("continuous", "categorical", "missing"), "stat_0", NA_character_)
   }
   else {
     x$cards <-
@@ -91,7 +83,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
         .by = cards::all_ard_groups(),
         gts_column =
           ifelse(
-            .data$context %in% c("continuous", "categorical") &
+            .data$context %in% c("continuous", "categorical", "missing") &
               !.data$variable %in% .env$x$inputs$tbl_summary$by,
             paste0("stat_", dplyr::cur_group_id() - 1L),
             NA_character_
@@ -163,7 +155,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
   # subsetting cards object on categorical summaries ----------------------------
   card <-
     x$cards |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% "categorical") |>
+    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("categorical", "missing")) |>
     cards::apply_statistic_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
@@ -275,7 +267,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
   # subsetting cards object on continuous2 summaries ----------------------------
   card <-
     x$cards |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% "continuous") |>
+    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
     cards::apply_statistic_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
@@ -373,7 +365,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
   # subsetting cards object on continuous summaries ----------------------------
   card <-
     x$cards |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% "continuous") |>
+    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
     cards::apply_statistic_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------

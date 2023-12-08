@@ -1,18 +1,12 @@
 
 
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
-                          quiet = NULL, update = NULL, stat_by = NULL) {
+                          quiet = NULL, update = NULL) {
   # process inputs -------------------------------------------------------------
   dots <- rlang::dots_list(...)
   text_interpret <- rlang::arg_match(text_interpret)
 
   # deprecated arguments
-  if (!is.null(stat_by)) {
-    lifecycle::deprecate_stop(
-      "1.3.6", "gtsummary::modify_header(stat_by=)",
-      details = glue::glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead.")
-    )
-  }
   if (!is.null(update)) {
     lifecycle::deprecate_warn(
       "2.0.0", "gtsummary::modify_header(update=)",
@@ -76,7 +70,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
       if (!is.null(glued_value$result))
         return(glued_value$result)
 
-      cli::cli_abort("There was an error the {.field glue} evaluation of {.val {value}}.")
+      cli::cli_abort("There was an error the {.fun glue::glue} evaluation of {.val {value}}.")
     }
   )
 }

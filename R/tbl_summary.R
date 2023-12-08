@@ -107,6 +107,7 @@ tbl_summary <- function(data,
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      cards::ard_missing(data, variables = all_of(include), by = all_of(by)),
       # tabulate by variable for header stats
       if (!rlang::is_empty(by)) cards::ard_categorical(data, variables = all_of(by)),
       # tabulate categorical summaries

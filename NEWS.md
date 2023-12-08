@@ -22,7 +22,9 @@
 
 ### Deprecations 
 
-* Global options have been deprecated in gtsummary since v1.3.1 (3.5 years ago). They have now been fully removed from the package.
+* Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
+
+* The `modify_header(stat_by)` argument was deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the packaage.
 
 # gtsummary 1.7.2
 
