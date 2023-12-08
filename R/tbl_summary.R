@@ -144,6 +144,12 @@ tbl_summary <- function(data,
       label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
       text_format = "indent"
+    ) |>
+    modify_table_styling(
+      columns = all_stat_cols(),
+      footnote =
+        .construct_summary_footnote(x$cards, x$inputs$include, x$inputs$statistic) |>
+        unlist() |> unique() |> paste(collapse = ", ")
     )
 
   x <-
@@ -155,6 +161,25 @@ tbl_summary <- function(data,
   # return object
   x
 }
+
+
+.construct_summary_footnote <- function(card, include, statistic) {
+  include |>
+    lapply(
+      function(variable) {
+        card |>
+          dplyr::filter(.data$variable %in% .env$variable) |>
+          dplyr::select("stat_name", "stat_label") |>
+          dplyr::distinct() %>%
+          {as.list(.$stat_label) |> stats::setNames(.$stat_name)}|>
+          glue::glue_data(statistic[[variable]]) %>%
+          {gsub(pattern = "(%%)+", replacement = "%", x = .)}
+      }
+    ) |>
+    stats::setNames(include)
+}
+
+
 
 .get_variables_by_type <- function(x, type) {
   names(x)[unlist(x) %in% type]
