@@ -152,7 +152,7 @@ tbl_summary <- function(data,
       columns = "label",
       label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
-      text_format = "indent"
+      indentation = 4L
     ) |>
     modify_table_styling(
       columns = all_stat_cols(),
