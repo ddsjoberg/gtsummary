@@ -17,9 +17,9 @@
 #' @param hide logical indicating whether to hide column from output
 #' @param align string indicating alignment of column, must be one of
 #' `c("left", "right", "center")`
-#' @param text_format string indicated which type of text formatting to apply to the rows and columns.
-#' Must be one of `c("bold", "italic", "indent", "indent2")`. Do not assign
-#' both `"indent"` and `"indent2"` to the same cell.
+#' @param text_format,undo_text_format
+#' string indicated which type of text formatting to apply/remove to the rows and columns.
+#' Must be one of `c("bold", "italic")`.
 #' @param text_interpret string, must be one of `"md"` or `"html"`
 #' @param fmt_fun function that formats the statistics in the
 #' columns/rows in `columns=` and `rows=`
@@ -28,13 +28,12 @@
 #' @param footnote string with text for footnote
 #' @param spanning_header string with text for spanning header
 #' @param missing_symbol string indicating how missing values are formatted.
-#' @param undo_text_format rarely used. Logical that undoes the indent, bold,
-#' and italic styling when `TRUE`
 #' @param cols_merge_pattern \lifecycle{experimental} glue-syntax string
 #' indicating how to merge
 #' columns in `x$table_body`. For example, to construct a confidence interval
 #' use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
 #' string must match the single column name passed in `columns=`.
+#' @param indentation an integer indicating how many space to indent text
 #'
 #' @seealso `modify_table_body()`
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
@@ -75,8 +74,6 @@
 #' version of the quosure is the same as the quosure (i.e. no evaluated
 #' objects), there should be no issues. Regardless, this argument is used
 #' internally with care, and it is _not_ recommended for users.
-
-
 modify_table_styling <- function(x,
                                  columns,
                                  rows = NULL,
@@ -89,30 +86,78 @@ modify_table_styling <- function(x,
                                  missing_symbol = NULL,
                                  fmt_fun = NULL,
                                  text_format = NULL,
-                                 undo_text_format = FALSE,
+                                 undo_text_format = NULL,
+                                 indentation = NULL,
                                  text_interpret = c("md", "html"),
                                  cols_merge_pattern = NULL) {
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
   assert_class(x, "gtsummary")
 
-  text_interpret <- match.arg(text_interpret) %>%
-    {
-      paste0("gt::", .)
+  # deprecation ----------------------------------------------------------------
+  if (isTRUE(undo_text_format)) {
+    # set new values for the user
+    if (any(c("indent", "indent2") %in% text_format)) {
+      indentation <- 0L
     }
-  if (!is.null(text_format)) {
-    text_format <- match.arg(text_format,
-      choices = c("bold", "italic", "indent", "indent2"),
-      several.ok = TRUE
+    undo_text_format <- text_format |> setdiff(c("indent", "indent2"))
+    text_format <- NULL
+
+    updated_call <-
+      match.call() |>
+      as.list() |>
+      utils::modifyList(
+        list(text_format = NULL, undo_text_format = undo_text_format, indentation = indentation)
+      ) |>
+      compact()
+    if (nchar(expr_deparse(updated_call[["x"]])) > 30L) updated_call[["x"]] <- expr(.)
+    updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
+
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = "gtsummary::modify_table_styling(undo_text_format = 'must be one of \"bold\" or \"italic\"')",
+      details = glue::glue("Update function call to `{updated_call}`.")
     )
+  }
+  if (any(c("indent", "indent2") %in% text_format)) {
+    lst_new_args <-
+      list(
+        indentation = ifelse("indent" %in% text_format, 4L, 8L),
+        text_format =
+          text_format |>
+          setdiff(c("indent", "indent2")) %>%
+          {.ifelse1(is_empty(.), NULL, .)} #nolint
+      )
+    env_bind(.env = current_env(), !!!lst_new_args)
+
+    updated_call <-
+      match.call() |>
+      as.list() |>
+      utils::modifyList(lst_new_args) |>
+      compact()
+    if (nchar(expr_deparse(updated_call[["x"]])) > 30) updated_call[["x"]] <- expr(.)
+    updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
+
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = "gtsummary::modify_table_styling(text_format = 'must be one of \"bold\" or \"italic\"')",
+      details = glue::glue("Update function call to `{updated_call}`.")
+    )
+  }
+
+  text_interpret <- paste0("gt::", arg_match(text_interpret))
+
+  if (!is.null(text_format)) {
+    text_format <- arg_match(text_format, values = c("bold", "italic"), multiple = TRUE)
+  }
+  if (!is.null(undo_text_format)) {
+    undo_text_format <- arg_match(undo_text_format, values = c("bold", "italic"), multiple = TRUE)
   }
   rows <- enquo(rows)
   rows_eval_error <-
     tryCatch(
       eval_tidy(rows, data = x$table_body) %>%
-        {
-          !is.null(.) && !is.logical(.)
-        },
+        {!is.null(.) && !is.logical(.)}, #nolint
       error = function(e) TRUE
     )
   if (rows_eval_error) {
@@ -224,14 +269,37 @@ modify_table_styling <- function(x,
         column = columns,
         rows = list(rows),
         format_type = text_format,
-        undo_text_format = undo_text_format
+        undo_text_format = FALSE
       ) %>%
-      {
-        tidyr::expand_grid(!!!.)
-      } %>%
-      {
-        dplyr::bind_rows(x$table_styling$text_format, .)
-      }
+      {tidyr::expand_grid(!!!.)} %>% # nolint
+      {dplyr::bind_rows(x$table_styling$text_format, .)} # nolint
+  }
+  if (!is.null(undo_text_format)) {
+    x$table_styling$text_format <-
+      list(
+        column = columns,
+        rows = list(rows),
+        format_type = undo_text_format,
+        undo_text_format = TRUE
+      ) %>%
+      {tidyr::expand_grid(!!!.)} %>% # nolint
+      {dplyr::bind_rows(x$table_styling$text_format, .)} # nolint
+  }
+
+  # indentation ----------------------------------------------------------------
+  if (!is.null(indentation)) {
+    if (!rlang::is_scalar_integerish(indentation)) {
+      cli::cli_abort("The {.arg indentation} argument must be a scalar integer.")
+    }
+    x$table_styling$indentation <-
+    dplyr::bind_rows(
+      x$table_styling$indentation,
+      dplyr::tibble(
+        column = columns,
+        rows = list(rows),
+        n_spaces = as.integer(indentation)
+      )
+    )
   }
 
   # missing_symbol -------------------------------------------------------------

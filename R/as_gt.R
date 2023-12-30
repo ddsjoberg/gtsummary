@@ -134,14 +134,13 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # indent ---------------------------------------------------------------------
-  df_indent <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "indent")
   gt_calls[["indent"]] <-
     map(
-      seq_len(nrow(df_indent)),
+      seq_len(nrow(x$table_styling$indentation)),
       ~ expr(gt::text_transform(
         locations = gt::cells_body(
-          columns = !!df_indent$column[[.x]],
-          rows = !!df_indent$row_numbers[[.x]]
+          columns = !!x$table_styling$indentation$column[[.x]],
+          rows = !!x$table_styling$indentation$row_numbers[[.x]]
         ),
         fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0", x)
       ))

@@ -1,58 +1,11 @@
-.convert_header_to_rows_one_column <- function(x, column) {
-  if (column %in% c("footnote", "footnote_abbrev")) {
-    x$table_styling[[column]] <-
-      x$table_header %>%
-      dplyr::select(all_of(c("column", .env$column))) %>%
-      set_names(c("column", "footnote")) %>%
-      dplyr::filter(!is.na(.data$footnote)) %>%
-      dplyr::mutate(
-        rows = list(expr(NULL)),
-        text_interpret = "gt::md"
-      ) %>%
-      dplyr::select(all_of(c("column", "rows", "text_interpret", "footnote")))
-  }
-  else if (column %in% c("indent", "bold", "italic")) {
-    x$table_styling$text_format <-
-      x$table_header %>%
-      dplyr::select(all_of(c("column", .env$column))) %>%
-      dplyr::filter(!is.na(.data[[column]])) %>%
-      set_names(c("column", "rows")) %>%
-      dplyr::mutate(
-        rows = map(.data$rows, ~ parse_expr(.x)),
-        format_type = .env$column,
-        undo_text_format = FALSE
-      ) %>%
-      dplyr::bind_rows(x$table_styling$text_format)
-  }
-  else if (column %in% "missing_emdash") {
-    x$table_styling[["fmt_missing"]] <-
-      x$table_header %>%
-      dplyr::select(all_of(c("column", .env$column))) %>%
-      dplyr::filter(!is.na(.data[[column]])) %>%
-      set_names(c("column", "rows")) %>%
-      dplyr::mutate(
-        rows = map(.data$rows, ~ parse_expr(.x)),
-        symbol = get_theme_element("tbl_regression-str:ref_row_text",
-          default = "\U2014"
-        )
-      )
-  }
-  else if (column %in% "fmt_fun") {
-    x$table_styling[[column]] <-
-      x$table_header %>%
-      dplyr::select(all_of(c("column", .env$column))) %>%
-      dplyr::filter(!map_lgl(.data[[column]], is.null)) %>%
-      dplyr::mutate(rows = list(expr(NULL))) %>%
-      dplyr::select(all_of(c("column", "rows", .env$column)))
-  }
-
-  # return gtsummary table
-  x
-}
 
 # takes a table_body and a character rows expression, and returns the resulting row numbers
 .rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
   rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
+
+  # if a single lgl value, then expand it to the length of the tabel_body
+  if (is_scalar_logical(rows_evaluated))
+    rows_evaluated <- rep_len(rows_evaluated, length.out = nrow(table_body))
 
   if (is.null(rows_evaluated)) {
     return(return_when_null)
@@ -83,11 +36,11 @@
 #' @keywords internal
 #' @export
 #'
-# #' @examples
-# #' tbl <-
-# #'   trial %>%
-# #'   tbl_summary(include = c(age, grade)) %>%
-# #'   .table_styling_expr_to_row_number()
+#' @examples
+#' tbl <-
+#'   trial %>%
+#'   tbl_summary(include = c(age, grade)) %>%
+#'   .table_styling_expr_to_row_number()
 .table_styling_expr_to_row_number <- function(x) {
   # text_format ----------------------------------------------------------------
   x$table_styling$text_format <-
@@ -116,6 +69,34 @@
     dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) %>%
     dplyr::select("column", "row_numbers", everything()) %>%
     dplyr::ungroup()
+
+  # indentation ----------------------------------------------------------------
+  x$table_styling$indentation <-
+    x$table_styling$indentation %>%
+    dplyr::filter(.data$column %in% .cols_to_show(x)) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      row_numbers =
+        switch(nrow(.) == 0,
+               integer(0)
+        ) %||%
+        .rows_expr_to_row_numbers(
+          x$table_body, .data$rows,
+          return_when_null = seq_len(nrow(x$table_body))
+        ) %>%
+        list(),
+    ) %>%
+    dplyr::select(-"rows") %>%
+    tidyr::unnest("row_numbers") %>%
+    dplyr::group_by(.data$column, .data$row_numbers) %>%
+    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
+    dplyr::select("column", "row_numbers", "n_spaces") %>%
+    dplyr::ungroup() %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
+    dplyr::ungroup() |>
+    dplyr::filter(.data$n_spaces != 0)
 
   # fmt_missing ----------------------------------------------------------------
   x$table_styling$fmt_missing <-
