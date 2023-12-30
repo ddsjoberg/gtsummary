@@ -48,7 +48,7 @@ tbl_summary <- function(data,
                         missing = c("ifany", "no", "always"),
                         missing_text = "Unknown",
                         missing_stat = "{N_miss}",
-                        sort = all_categorical() ~ "alphanumeric",
+                        sort = all_categorical(FALSE) ~ "alphanumeric",
                         percent = c("column", "row", "cell"),
                         include = everything()) {
   # process arguments ----------------------------------------------------------
@@ -85,7 +85,12 @@ tbl_summary <- function(data,
         get_theme_element("TODO:fill-this-in", default = statistic),
         statistic
       ),
-    sort = sort
+    sort =
+      .ifelse1(
+        missing(sort),
+        get_theme_element("TODO:fill-this-in", default = sort),
+        sort
+      )
   )
   # fill in unspecified variables
   cards::fill_formula_selectors(
@@ -98,6 +103,10 @@ tbl_summary <- function(data,
     data = .add_summary_type_as_attr(data[include], type),
     digits = digits
   )
+
+  # sort requested columns by frequency
+  data <- .sort_data_infreq(data, sort)
+
 
   # save processed function inputs ---------------------------------------------
   tbl_summary_inputs <- as.list(environment())
@@ -162,6 +171,18 @@ tbl_summary <- function(data,
   x
 }
 
+.sort_data_infreq <- function(data, sort) {
+  # if no frequency sorts requested, just return data frame
+  if (every(sort, function(x) x %in% "alphanumeric")) return(data)
+
+  for (i in seq_along(sort[intersect(names(sort), names(data))])) {
+    if (sort[[i]] %in% "frequency") {
+      data[[names(sort)[i]]] <- fct_infreq(data[[names(sort)[i]]])
+    }
+  }
+
+  data
+}
 
 .construct_summary_footnote <- function(card, include, statistic) {
   include |>
