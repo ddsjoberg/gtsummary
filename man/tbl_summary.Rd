@@ -15,7 +15,7 @@ tbl_summary(
   missing = c("ifany", "no", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
-  sort = all_categorical() ~ "alphanumeric",
+  sort = all_categorical(FALSE) ~ "alphanumeric",
   percent = c("column", "row", "cell"),
   include = everything()
 )
