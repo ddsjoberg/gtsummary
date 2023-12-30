@@ -157,8 +157,7 @@ tbl_summary <- function(data,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_summary_footnote(x$cards, x$inputs$include, x$inputs$statistic) |>
-        unlist() |> unique() |> paste(collapse = ", ")
+        .construct_summary_footnote(x$cards, x$inputs$include, x$inputs$statistic, x$inputs$type)
     )
 
   x <-
@@ -184,10 +183,11 @@ tbl_summary <- function(data,
   data
 }
 
-.construct_summary_footnote <- function(card, include, statistic) {
+.construct_summary_footnote <- function(card, include, statistic, type) {
   include |>
     lapply(
       function(variable) {
+        if (type[[variable]] %in% "continuous2") return(NULL)
         card |>
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
@@ -197,7 +197,11 @@ tbl_summary <- function(data,
           {gsub(pattern = "(%%)+", replacement = "%", x = .)}
       }
     ) |>
-    stats::setNames(include)
+    stats::setNames(include) |>
+    compact() |>
+    unlist() |>
+    unique() |>
+    paste(collapse = ", ")
 }
 
 
