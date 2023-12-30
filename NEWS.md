@@ -12,7 +12,7 @@
 
 * Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be explicitly defined in a factor.
 
-* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indendation = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
+* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indentation = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
 
 * The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
 
