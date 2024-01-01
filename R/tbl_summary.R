@@ -51,13 +51,16 @@ tbl_summary <- function(data,
                         sort = all_categorical(FALSE) ~ "alphanumeric",
                         percent = c("column", "row", "cell"),
                         include = everything()) {
+  # data argument checks -------------------------------------------------------
+  check_not_missing(data)
+  check_class_data_frame(data)
+
   # process arguments ----------------------------------------------------------
   data <- dplyr::ungroup(data)
-  cards::process_selectors(data, by = {{by}}, include = {{include}})
+  cards::process_selectors(data, by = {{ by }}, include = {{ include }})
   include <- setdiff(include, by) # remove by variable from list vars included
-  include <- .remove_na_columns(data, include)
-  missing <- rlang::arg_match(arg = missing)
-  percent <- rlang::arg_match(arg = percent)
+  missing <- arg_match(arg = missing)
+  percent <- arg_match(arg = percent)
   cards::process_formula_selectors(data = data[include], value = value)
 
   # assign summary type --------------------------------------------------------
@@ -208,17 +211,6 @@ tbl_summary <- function(data,
 
 .get_variables_by_type <- function(x, type) {
   names(x)[unlist(x) %in% type]
-}
-
-.remove_na_columns <- function(data, include) {
-  is_all_na <- map_lgl(include, function(x) all(is.na(x)))
-  if (any(is_all_na)) {
-    paste("Columns {.val {include[is_all_na]}} are all {.cls NA}",
-          "and have been removed from the summary table.") |>
-    cli::cli_inform()
-  }
-
-  include[!is_all_na]
 }
 
 .assign_default_values <- function(data, value, type) {

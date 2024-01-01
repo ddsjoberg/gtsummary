@@ -25,7 +25,7 @@
 #' #   tbl_summary(by = trt) %>%
 #' #   as_gt()
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
-  assert_class(x, "gtsummary")
+  check_class(x, "gtsummary")
 
   # running pre-conversion function, if present --------------------------------
   # x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))

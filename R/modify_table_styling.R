@@ -92,7 +92,7 @@ modify_table_styling <- function(x,
                                  cols_merge_pattern = NULL) {
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
-  assert_class(x, "gtsummary")
+  check_class(x, "gtsummary")
 
   # deprecation ----------------------------------------------------------------
   if (isTRUE(undo_text_format)) {
