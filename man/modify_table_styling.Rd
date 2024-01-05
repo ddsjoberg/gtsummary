@@ -17,7 +17,8 @@ modify_table_styling(
   missing_symbol = NULL,
   fmt_fun = NULL,
   text_format = NULL,
-  undo_text_format = FALSE,
+  undo_text_format = NULL,
+  indentation = NULL,
   text_interpret = c("md", "html"),
   cols_merge_pattern = NULL
 )
@@ -50,12 +51,10 @@ and text formatting. Default is \code{NULL}. See details below.}
 \item{fmt_fun}{function that formats the statistics in the
 columns/rows in \verb{columns=} and \verb{rows=}}
 
-\item{text_format}{string indicated which type of text formatting to apply to the rows and columns.
-Must be one of \code{c("bold", "italic", "indent", "indent2")}. Do not assign
-both \code{"indent"} and \code{"indent2"} to the same cell.}
+\item{text_format, undo_text_format}{string indicated which type of text formatting to apply/remove to the rows and columns.
+Must be one of \code{c("bold", "italic")}.}
 
-\item{undo_text_format}{rarely used. Logical that undoes the indent, bold,
-and italic styling when \code{TRUE}}
+\item{indentation}{an integer indicating how many space to indent text}
 
 \item{text_interpret}{string, must be one of \code{"md"} or \code{"html"}}
 

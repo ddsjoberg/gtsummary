@@ -34,11 +34,12 @@ construct_initial_table_styling <- function(x) {
     )
 
   x$table_styling$indentation <-
-    if (all(c("label", "row_type") %in% x$table_styling$header$column)) {
+    # if there is a label column, make it
+    if ("label" %in% x$table_styling$header$column) {
       dplyr::tibble(
-        column = c("label", "label"),
-        rows = list(rlang::expr(TRUE), rlang::expr(.data$row_type %in% c("level", "missing"))),
-        n_spaces = c(0L, 4L)
+        column = "label",
+        rows = list(rlang::expr(TRUE)),
+        n_spaces = 0L
       )
     }
     else {
