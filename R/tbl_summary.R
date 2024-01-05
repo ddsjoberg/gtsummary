@@ -113,14 +113,15 @@ tbl_summary <- function(data,
       # tabulate categorical summaries
       cards::ard_categorical(
         data,
-        by = by,
-        variables = .get_variables_by_type(type, c("categorical", "dichotomous")),
-        fmt_fn = digits
+        by = all_of(by),
+        variables = all_of(.get_variables_by_type(type, c("categorical", "dichotomous"))),
+        fmt_fn = digits,
+        denominator = percent
       ),
       # calculate categorical summaries
       cards::ard_continuous(
         data,
-        by = by,
+        by = all_of(by),
         variables = .get_variables_by_type(type, c("continuous", "continuous2")),
         fmt_fn = digits
       )
