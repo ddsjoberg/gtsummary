@@ -140,7 +140,7 @@ pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
       .data$variable_level %in% list(NULL) |
         .data$variable_level %in% list(value[[.data$variable[1]]])
     ) |>
-    # updating the context to continuous, because it will be process that way below
+    # updating the context to continuous, because it will be processed that way below
     dplyr::mutate(
       context = ifelse(.data$context %in% "categorical", "continuous", .data$context)
     )
@@ -169,8 +169,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
           cards::get_ard_statistics(
             df_variable_stats,
             .data$variable_level %in% list(NULL),
-            .column = "statistic_fmt",
-            .attributes = NULL
+            .column = "statistic_fmt"
           )
 
         str_statistic_pre_glue <-
@@ -193,7 +192,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
                           glue::glue(
                             str_to_glue,
                             .envir =
-                              cards::get_ard_statistics(df_variable_level_stats, .column = "statistic_fmt", .attributes = NULL) |>
+                              cards::get_ard_statistics(df_variable_level_stats, .column = "statistic_fmt") |>
                               c(lst_variable_stats)
                           ) |>
                           as.character()
@@ -286,7 +285,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
                 stat =
                   glue::glue(
                     str_to_glue,
-                    .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt", .attributes = NULL)
+                    .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
                   ) |>
                   as.character()
               }
@@ -299,7 +298,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
                 label =
                   glue::glue(
                     str_to_glue,
-                    .envir = cards::get_ard_statistics(.x, .column = "stat_label", .attributes = NULL)
+                    .envir = cards::get_ard_statistics(.x, .column = "stat_label")
                   ) |>
                   as.character()
               }
@@ -362,6 +361,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
 #' @rdname bridge_summary
 #' @export
 pier_summary_continuous <- function(x, variables, missing, missing_text, missing_stat) {
+  if (is_empty(variables)) return(dplyr::tibble())
   # subsetting cards object on continuous summaries ----------------------------
   card <-
     x$cards |>
@@ -379,7 +379,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
         stat =
           glue::glue(
             x$inputs$statistic[[.data$variable[1]]],
-            .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt", .attributes = NULL)
+            .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
           ) |>
           as.character()
       )
@@ -502,7 +502,8 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
           df_by_stats |>
           dplyr::filter(.data$stat_name %in% "N") |>
           dplyr::pull("statistic") |>
-          unlist()
+          unlist() |>
+          getElement(1L)
       ) |>
       dplyr::left_join(
         df_by_stats_wide,
