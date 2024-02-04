@@ -33,28 +33,43 @@ The default for each variable is the column label attribute, \code{attr(., 'labe
 If no label has been set, the column name is used.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Used to specify the summary statistics for each variable.
-The default is
+Specifies summary statistics to display for each variable.  The default is
 \code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
 See below for details.}
 
-\item{digits}{TODO:}
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}. See below for details.}
 
-\item{type}{TODO:}
+\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the summary type. Accepted value are
+\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
+If not specified, default type is assigned via
+\code{assign_summary_type()}. See below for details.}
 
-\item{value}{TODO:}
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the level of a variable to display on a single row.
+The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
+with this argument. Default is \code{NULL}. See below for details.}
 
-\item{missing}{TODO:}
+\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
+\itemize{
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+}}
 
-\item{missing_text}{TODO:}
+\item{sort}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies sorting to perform for categorical variables.
+Values must be one of \code{c("alphanumeric", "frequency")}.
+Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
 
-\item{missing_stat}{TODO:}
+\item{percent}{Indicates the type of percentage to return.
+Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
-\item{sort}{TODO:}
-
-\item{percent}{TODO:}
-
-\item{include}{TODO:}
+\item{include}{variables to include in the summary table. Default is \code{everything()}}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}
@@ -80,25 +95,14 @@ The values are interpreted using  \code{\link[glue:glue]{glue::glue()}} syntax:
 a name that appears between curly brackets will be interpreted as a function
 name and the formatted result of that function will be placed in the table.
 
-For categorical variables, the following statistics are available to display.
-\itemize{
-\item \code{{n}} frequency
-\item \code{{N}} denominator, or cohort size
-\item \code{{p}} formatted percentage
-}
+For categorical variables, the following statistics are available to display:
+\code{{n}} (frequency), \code{{N}} (denominator), \code{{p}} (percent).
 
-For continuous variables, \strong{any univariate function may be used}. Below is a list
-of the \emph{most commonly} used statistics.
-\itemize{
-\item \code{{median}} median
-\item \code{{mean}} mean
-\item \code{{sd}} standard deviation
-\item \code{{var}} variance
-\item \code{{min}} minimum
-\item \code{{max}} maximum
-\item \code{{sum}} sum
-\item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
-}
+For continuous variables, \strong{any univariate function may be used}.
+The most commonly used functions are \code{{median}}, \code{{mean}}, \code{{sd}}, \code{{min}},
+and \code{{max}}.
+Additionally, \verb{\{p##\}} is available for percentiles, where \verb{##} is an integer from 0 to 100.
+For example, \code{p25: quantile(probs=0.25, type=2)}.
 
 When the summary type is \code{"continuous2"}, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary table.
@@ -112,6 +116,42 @@ display.
 \item \code{{N_nonmiss}} number of non-missing observations
 \item \code{{p_miss}} percentage of observations missing
 \item \code{{p_nonmiss}} percentage of observations not missing
+}
+}
+
+\section{digits argument}{
+
+The digits argument specifies the the number of digits (or formatting function)
+statistics are rounded to.
+
+The values passed can either be a single integer, a vector of integers, a
+function, or a list of functions. If a single integer or function is passed,
+it is recycled to the length of the number of statistics presented.
+For example, if the statistic is \code{"{mean} ({sd})"}, it is equivalent to
+pass \code{1}, \code{c(1, 1)}, \code{styfn_number(digits=1)}, and
+\code{list(styfn_number(digits=1), styfn_number(digits=1))}.
+
+Named lists are also accepted to change the default formatting for a single
+statistic, e.g. \code{list(sd = styfn_number(digits=1))}.
+}
+
+\section{type and value arguments}{
+
+There are four summary types:
+\itemize{
+\item \code{"continuous"} summaries are shown on a \emph{single row}. Most numeric
+variables default to summary type continuous.
+\item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
+\item \code{"categorical"} \emph{multi-line} summaries of nominal data. Character variables,
+factor variables, and numeric variables with fewer than 10 unique levels default to
+type categorical. To change a numeric variable to continuous that
+defaulted to categorical, use \code{type = list(varname ~ "continuous")}
+\item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
+rather than one row per level of the variable.
+Variables coded as \code{TRUE}/\code{FALSE}, \code{0}/\code{1}, or \code{yes}/\code{no} are assumed to be dichotomous,
+and the \code{TRUE}, \code{1}, and \code{yes} rows are displayed.
+Otherwise, the value to display must be specified in the \code{value}
+argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 }
 

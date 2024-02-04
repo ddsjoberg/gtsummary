@@ -1,9 +1,32 @@
-
-
+#' Assign Default Digits
+#'
+#' Used to assign the default formatting for variables summarized with
+#' `tbl_summary()`.
+#'
+#' @param data (`data.frame`)\cr
+#'   a data frame
+#' @param statistic (`named list`)\cr
+#'   a named list; notably, _not_ a [`formula-list-selector`][syntax]
+#' @param type (`named list`)\cr
+#'   a named list; notably, _not_ a [`formula-list-selector`][syntax]
+#' @param digits (`named list`)\cr
+#'   a named list; notably, _not_ a [`formula-list-selector`][syntax].
+#'   Default is `NULL`
+#'
+#' @return a named list
+#' @export
+#'
+#' @examples
+#' assign_summary_digits(
+#'   mtcars,
+#'   statistic = list(mpg = "{mean}"),
+#'   type = list(mpg = "continuous")
+#' )
 assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   # stats returned for all variables
   lst_cat_summary_fns <- .categorical_summary_functions(c("n", "p"))
-  lst_all_fmt_fns <- .categorical_summary_functions()
+  lst_all_fmt_fns <-
+    .categorical_summary_functions(c("N_obs", "N_miss", "N_nonmiss", "p_miss", "p_nonmiss"))
 
   # extract the statistics
   statistic <- lapply(statistic, function(x) .extract_glue_elements(x) |> unlist())

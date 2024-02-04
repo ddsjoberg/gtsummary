@@ -19,15 +19,36 @@
 #'   The default is
 #'   `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #'   See below for details.
-#' @param digits TODO:
-#' @param type TODO:
-#' @param value TODO:
-#' @param missing TODO:
-#' @param missing_text TODO:
-#' @param missing_stat TODO:
-#' @param sort TODO:
-#' @param percent TODO:
-#' @param include TODO:
+#' @param digits  ([`formula-list-selector`][syntax])\cr
+#'   Specifies how summary statistics are rounded. Values may be either integer(s)
+#'   or function(s). If not specified, default formatting is assigned
+#'   via `assign_summary_digits()`. See below for details.
+#' @param type ([`formula-list-selector`][syntax])\cr
+#'   Specifies the summary type. Accepted value are
+#'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
+#'   If not specified, default type is assigned via
+#'   `assign_summary_type()`. See below for details.
+#' @param value ([`formula-list-selector`][syntax])\cr
+#'   Specifies the level of a variable to display on a single row.
+#'   The gtsummary type selectors, e.g. `all_dichotomous()`, cannot be used
+#'   with this argument. Default is `NULL`. See below for details.
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Specifies summary statistics to display for each variable.  The default is
+#'   `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
+#'   See below for details.
+#' @param missing,missing_text,missing_stat
+#'   Arguments dictating how and if missing values are presented:
+#'   - `missing`: must be one of `c("ifany", "no", "always")`
+#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
+#'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
+#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`
+#' @param sort ([`formula-list-selector`][syntax])\cr
+#'   Specifies sorting to perform for categorical variables.
+#'   Values must be one of `c("alphanumeric", "frequency")`.
+#'   Default is `all_categorical(FALSE) ~ "alphanumeric"`
+#' @param percent Indicates the type of percentage to return.
+#'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
+#' @param include variables to include in the summary table. Default is `everything()`
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
@@ -43,25 +64,14 @@
 #' a name that appears between curly brackets will be interpreted as a function
 #' name and the formatted result of that function will be placed in the table.
 #'
-#' For categorical variables, the following statistics are available to display.
-#' \itemize{
-#'   \item `{n}` frequency
-#'   \item `{N}` denominator, or cohort size
-#'   \item `{p}` formatted percentage
-#' }
+#' For categorical variables, the following statistics are available to display:
+#' `{n}` (frequency), `{N}` (denominator), `{p}` (percent).
 #'
-#' For continuous variables, **any univariate function may be used**. Below is a list
-#' of the _most commonly_ used statistics.
-#' \itemize{
-#'   \item `{median}` median
-#'   \item `{mean}` mean
-#'   \item `{sd}` standard deviation
-#'   \item `{var}` variance
-#'   \item `{min}` minimum
-#'   \item `{max}` maximum
-#'   \item `{sum}` sum
-#'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
-#' }
+#' For continuous variables, **any univariate function may be used**.
+#' The most commonly used functions are `{median}`, `{mean}`, `{sd}`, `{min}`,
+#' and `{max}`.
+#' Additionally, `{p##}` is available for percentiles, where `##` is an integer from 0 to 100.
+#' For example, `p25: quantile(probs=0.25, type=2)`.
 #'
 #' When the summary type is `"continuous2"`, pass a vector of statistics.
 #' Each element of the vector will result in a separate row in the summary table.
@@ -76,6 +86,36 @@
 #'   \item `{p_miss}` percentage of observations missing
 #'   \item `{p_nonmiss}` percentage of observations not missing
 #' }
+#'
+#' @section digits argument:
+#' The digits argument specifies the the number of digits (or formatting function)
+#' statistics are rounded to.
+#'
+#' The values passed can either be a single integer, a vector of integers, a
+#' function, or a list of functions. If a single integer or function is passed,
+#' it is recycled to the length of the number of statistics presented.
+#' For example, if the statistic is `"{mean} ({sd})"`, it is equivalent to
+#' pass `1`, `c(1, 1)`, `styfn_number(digits=1)`, and
+#' `list(styfn_number(digits=1), styfn_number(digits=1))`.
+#'
+#' Named lists are also accepted to change the default formatting for a single
+#' statistic, e.g. `list(sd = styfn_number(digits=1))`.
+#'
+#' @section type and value arguments:
+#' There are four summary types:
+#'    - `"continuous"` summaries are shown on a *single row*. Most numeric
+#'    variables default to summary type continuous.
+#'    - `"continuous2"` summaries are shown on *2 or more rows*
+#'    - `"categorical"` *multi-line* summaries of nominal data. Character variables,
+#'    factor variables, and numeric variables with fewer than 10 unique levels default to
+#'    type categorical. To change a numeric variable to continuous that
+#'    defaulted to categorical, use `type = list(varname ~ "continuous")`
+#'    - `"dichotomous"` categorical variables that are displayed on a *single row*,
+#'    rather than one row per level of the variable.
+#'    Variables coded as `TRUE`/`FALSE`, `0`/`1`, or `yes`/`no` are assumed to be dichotomous,
+#'    and the `TRUE`, `1`, and `yes` rows are displayed.
+#'    Otherwise, the value to display must be specified in the `value`
+#'    argument, e.g. `value = list(varname ~ "level to show")`
 #'
 #' @export
 #' @return A table of class `c('tbl_summary', 'gtsummary')`

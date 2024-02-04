@@ -34,11 +34,13 @@ internally to organize results.}
 \item{value}{named list of values to be summarized. the names are the
 variable names.}
 
-\item{missing}{TODO:}
-
-\item{missing_text}{TODO:}
-
-\item{missing_stat}{TODO:}
+\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
+\itemize{
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+}}
 }
 \value{
 data frame
