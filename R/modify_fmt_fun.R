@@ -35,15 +35,13 @@ modify_fmt_fun <- function(x, update, rows = NULL) {
   # converting update arg to a tidyselect list ---------------------------------
   cards::process_formula_selectors(
     data = x$table_body,
-    udpate = update
+    update = update
   )
   cards::check_list_elements(
-    check = function(x) is_function(x),
-    error_msg = list(
-      check = "The value passed in {.arg {arg_name}} for variable {.val {variable}} must be a function."
-    )
+    x = update,
+    predicate = function(x) is_function(x),
+    error_msg = "The value passed in {.arg {arg_name}} for variable {.val {variable}} must be a function."
   )
-
 
   # updating formatting functions ----------------------------------------------
   x <-

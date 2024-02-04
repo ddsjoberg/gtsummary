@@ -30,7 +30,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         # if the passed value fully specifies the formatting for each 'statistic',
         # then return it. Otherwise, the remaining stat will be filled below
         if (setequal(statistic[[variable]], names(digits[[variable]]))) {
-          return(digits[[variable]])
+          return(lst_all_fmt_fns |> utils::modifyList(digits[[variable]]))
         }
       }
 

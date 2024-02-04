@@ -18,9 +18,11 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
 
   cards::process_formula_selectors(data = x$table_body, dots = dots)
   cards::check_list_elements(
-    dots = function(x) is_string(x),
-    error_msg = list(dots = c("All values passed in {.arg ...} must be strings.",
-                              "i" = "For example, {.code label = '**Variable**'}"))
+    x = dots,
+    predicate = function(x) is_string(x),
+    error_msg =
+      c("All values passed in {.arg ...} must be strings.",
+        "i" = "For example, {.code label = '**Variable**'}")
   )
 
   # evaluate the strings with glue

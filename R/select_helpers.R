@@ -38,13 +38,13 @@ NULL
 all_continuous <- function(continuous2 = TRUE) {
   types <- if (continuous2) c("continuous", "continuous2") else "continuous"
 
-  where(function(x) attr(x, "gtsummary.type") %in% types)
+  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  where(function(x) attr(x, "gtsummary.type") %in% "continuous2")
+  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% "continuous2"))
 }
 
 #' @rdname select_helpers
@@ -52,13 +52,13 @@ all_continuous2 <- function() {
 all_categorical <- function(dichotomous = TRUE) {
   types <- if (dichotomous) c("categorical", "dichotomous") else "categorical"
 
-  where(function(x) attr(x, "gtsummary.type") %in% types)
+  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_dichotomous <- function() {
-  where(function(x) attr(x, "gtsummary.type") %in% "dichotomous")
+  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% "dichotomous"))
 }
 
 # #' @rdname select_helpers
