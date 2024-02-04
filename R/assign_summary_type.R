@@ -3,11 +3,18 @@
 #' Function inspects data and assigns a summary type when not specified
 #' in the `type` argument.
 #'
-#' @param data a data frame
-#' @param variables character vector of column names in `data`
-#' @param value named list of values to show for dichotomous variables, where
-#' the names are the variables
-#' @param type named list of summary types, where names are the variables
+#' @param data (`data.frame`)\cr
+#'   a data frame
+#' @param variables (`character`)\cr
+#'   character vector of column names in `data`
+#' @param value (`named list`)\cr
+#'   named list of values to show for dichotomous variables, where
+#'   the names are the variables
+#' @param type (`named list`)\cr
+#'   named list of summary types, where names are the variables
+#' @param cat_threshold (`integer`)\cr
+#'   for base R numeric classes with fewer levels than
+#'   this threshold will default to a categorical summary. Default is `10L`
 #'
 #' @return named list
 #' @export
@@ -18,7 +25,7 @@
 #'   variables = c("age", "grade", "response"),
 #'   value = NULL
 #' )
-assign_summary_type <- function(data, variables, value, type = NULL) {
+assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L) {
   # base classes that can be summarized as continuous
   base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt", "double")
 
@@ -32,18 +39,29 @@ assign_summary_type <- function(data, variables, value, type = NULL) {
           return(type[[variable]])
         }
 
+        # if user supplied a dichotomous value, make it dichotomous
         if (!is.null(.get_default_dichotomous_value(data[[variable]]))) {
           return("dichotomous")
         }
 
-        # factors and characters are categorical
-        if (inherits(data[[variable]], c("factor", "character"))) {
+        # factors are categorical
+        if (inherits(data[[variable]], "factor")) {
           return("categorical")
         }
 
-        # numeric variables with fewer than 10 levels will be categorical
+        # if all missing, the continuous
+        if (all(is.na(data[[variable]]))) {
+          return("continuous")
+        }
+
+        # characters are categorical
+        if (inherits(data[[variable]], "character")) {
+          return("categorical")
+        }
+
+        # numeric variables with fewer than 'cat_threshold' levels will be categorical
         if (inherits(data[[variable]], base_numeric_classes) &&
-            length(unique(stats::na.omit(data[[variable]]))) < 10) {
+            length(unique(stats::na.omit(data[[variable]]))) < cat_threshold) {
           return("categorical")
         }
 

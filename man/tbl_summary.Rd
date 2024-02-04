@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Title}
+\title{Summary statistics table}
 \usage{
 tbl_summary(
   data,
@@ -21,13 +21,22 @@ tbl_summary(
 )
 }
 \arguments{
-\item{data}{TODO:}
+\item{data}{(\code{data.frame})\cr A data frame}
 
-\item{by}{TODO:}
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}}
 
-\item{label}{TODO:}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
-\item{statistic}{TODO:}
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to specify the summary statistics for each variable.
+The default is
+\code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
+See below for details.}
 
 \item{digits}{TODO:}
 
@@ -49,28 +58,99 @@ tbl_summary(
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}
+
+A table of class \code{c('tbl_summary', 'gtsummary')}
 }
 \description{
-Title
+The \code{tbl_summary()} function calculates descriptive statistics for
+continuous, categorical, and dichotomous variables.
+Review the
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+for detailed examples.
 }
+\section{statistic argument}{
+
+The statistic argument specifies the statistics presented in the table. The
+input dictates the summary statistics presented in the table. For example,
+\code{statistic = list(age ~ "{mean} ({sd})")} would report the mean and
+standard deviation for age; \code{statistic = list(all_continuous() ~ "{mean} ({sd})")}
+would report the mean and standard deviation for all continuous variables.
+
+The values are interpreted using  \code{\link[glue:glue]{glue::glue()}} syntax:
+a name that appears between curly brackets will be interpreted as a function
+name and the formatted result of that function will be placed in the table.
+
+For categorical variables, the following statistics are available to display.
+\itemize{
+\item \code{{n}} frequency
+\item \code{{N}} denominator, or cohort size
+\item \code{{p}} formatted percentage
+}
+
+For continuous variables, \strong{any univariate function may be used}. Below is a list
+of the \emph{most commonly} used statistics.
+\itemize{
+\item \code{{median}} median
+\item \code{{mean}} mean
+\item \code{{sd}} standard deviation
+\item \code{{var}} variance
+\item \code{{min}} minimum
+\item \code{{max}} maximum
+\item \code{{sum}} sum
+\item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
+}
+
+When the summary type is \code{"continuous2"}, pass a vector of statistics.
+Each element of the vector will result in a separate row in the summary table.
+
+For both categorical and continuous variables, statistics on the number of
+missing and non-missing observations and their proportions are available to
+display.
+\itemize{
+\item \code{{N_obs}} total number of observations
+\item \code{{N_miss}} number of missing observations
+\item \code{{N_nonmiss}} number of non-missing observations
+\item \code{{p_miss}} percentage of observations missing
+\item \code{{p_nonmiss}} percentage of observations not missing
+}
+}
+
 \examples{
-tbl <-
+# Example 1 ----------------------------------
+tbl_summary_ex1 <-
+  trial |>
+  select(age, grade, response) |>
+  tbl_summary()
+
+# Example 2 ----------------------------------
+tbl_summary_ex2 <-
+  trial |>
+  select(age, grade, response, trt) |>
   tbl_summary(
-    data = mtcars,
-    include = c("cyl", "am", "mpg", "hp"),
-    type =
-      list(
-        cyl = "categorical",
-        am = "dichotomous",
-        mpg = "continuous",
-        hp = "continuous2"
-      ),
-    value = list(am = 1),
-    statistic =
-      list(
-        c(cyl, am) ~ "{n} ({p}\%)",
-        mpg = "{mean} ({sd})",
-        hp = c("{mean}", "{median}")
-      )
+    by = trt,
+    label = list(age = "Patient Age"),
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    digits = list(age ~ c(0, 1))
+  )
+
+# Example 3 ----------------------------------
+tbl_summary_ex3 <-
+  trial |>
+  select(age, marker) |>
+  tbl_summary(
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
+    missing = "no"
   )
 }
+\seealso{
+See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial
+
+See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
+
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}
+\author{
+Daniel D. Sjoberg
+}
+\concept{tbl_summary tools}

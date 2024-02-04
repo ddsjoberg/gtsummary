@@ -8,6 +8,7 @@
 check_class(
   x,
   class,
+  length = NULL,
   allow_empty = FALSE,
   arg_name = rlang::caller_arg(x),
   call = rlang::caller_env()
@@ -16,7 +17,7 @@ check_class(
 check_class_data_frame(
   x,
   arg_name = rlang::caller_arg(x),
-  call = rlang::caller_env()
+  call = parent.frame()
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ check_class_data_frame(
 
 \item{class}{character vector or string indicating accepted classes.
 Passed to \code{inherits(what=class)}}
+
+\item{length}{if not \code{NULL}, the \code{x} object must be length specified}
 
 \item{allow_empty}{logical indicating whether empty arguments are allowed.
 Empty is defined by \code{rlang::is_empty()}, where empty elements include

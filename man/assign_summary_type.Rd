@@ -4,17 +4,25 @@
 \alias{assign_summary_type}
 \title{Assign Default Summary Type}
 \usage{
-assign_summary_type(data, variables, value, type = NULL)
+assign_summary_type(data, variables, value, type = NULL, cat_threshold = 10L)
 }
 \arguments{
-\item{data}{a data frame}
+\item{data}{(\code{data.frame})\cr
+a data frame}
 
-\item{variables}{character vector of column names in \code{data}}
+\item{variables}{(\code{character})\cr
+character vector of column names in \code{data}}
 
-\item{value}{named list of values to show for dichotomous variables, where
+\item{value}{(\verb{named list})\cr
+named list of values to show for dichotomous variables, where
 the names are the variables}
 
-\item{type}{named list of summary types, where names are the variables}
+\item{type}{(\verb{named list})\cr
+named list of summary types, where names are the variables}
+
+\item{cat_threshold}{(\code{integer})\cr
+for base R numeric classes with fewer levels than
+this threshold will default to a categorical summary. Default is \code{10L}}
 }
 \value{
 named list
