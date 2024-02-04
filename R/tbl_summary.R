@@ -155,7 +155,7 @@
 tbl_summary <- function(data,
                         by = NULL,
                         label = NULL,
-                        statistic = list(all_continuous() ~ "{mean} ({sd})",
+                        statistic = list(all_continuous() ~ "{median} ({p25}, {p75})",
                                          all_categorical() ~ "{n} ({p}%)"),
                         digits = assign_summary_digits(data, statistic, type),
                         type = assign_summary_type(data, include, value),
@@ -262,23 +262,29 @@ tbl_summary <- function(data,
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
-      cards::ard_missing(data, variables = all_of(include), by = all_of(by)),
+      cards::ard_missing(data, variables = all_of(include), by = all_of(by),
+                         stat_labels = ~default_stat_labels()),
       # tabulate by variable for header stats
-      if (!rlang::is_empty(by)) cards::ard_categorical(data, variables = all_of(by)),
+      if (!rlang::is_empty(by)) cards::ard_categorical(data, variables = all_of(by),
+                                                       stat_labels = ~default_stat_labels()),
       # tabulate categorical summaries
       cards::ard_categorical(
         data,
         by = all_of(by),
         variables = all_categorical(),
         fmt_fn = digits,
-        denominator = percent
+        denominator = percent,
+        stat_labels = ~default_stat_labels()
       ),
       # calculate categorical summaries
       cards::ard_continuous(
         data,
         by = all_of(by),
         variables = all_continuous(),
-        fmt_fn = digits
+        statistics =
+          .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
+        fmt_fn = digits,
+        stat_labels = ~default_stat_labels()
       )
     )
 
@@ -339,16 +345,17 @@ tbl_summary <- function(data,
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
-          {as.list(.$stat_label) |> stats::setNames(.$stat_name)}|>
-          glue::glue_data(statistic[[variable]]) %>%
-          {gsub(pattern = "(%%)+", replacement = "%", x = .)}
+          {stats::setNames(as.list(.$stat_label), .$stat_name)} |>
+          glue::glue_data(
+            gsub("\\{(p|p_miss|p_nonmiss)\\}%", "{\\1}", x = statistic[[variable]])
+          )
       }
     ) |>
     stats::setNames(include) |>
     compact() |>
     unlist() |>
     unique() %>%
-    {switch(!is.null(.), paste(collapse = ", "))}
+    {switch(!is.null(.), paste(., collapse = ", "))}
 }
 
 
@@ -413,6 +420,48 @@ tbl_summary <- function(data,
   }
 
   invisible()
+}
+
+.continuous_statistics_chr_to_fun <- function(statistics) {
+  # vector of all the categorical summary function names
+  # these are defined internally, and we don't need to convert them to true fns
+  chr_protected_cat_names <- .categorical_summary_functions() |> names() |> c("N")
+
+  # this chunk converts the character strings that define the statistics
+  # into named lists of functions,
+  # e.g. list(age = "{mean}") becomes list(age = list(mean = function(x) mean(x)))
+  lst_stat_fns_chr <-
+    lapply(
+      statistics,
+      function(x) {
+        chr_fun_names <-
+          .extract_glue_elements(x) |> unlist() |> setdiff(chr_protected_cat_names)
+        lgl_fun_is_quantile <- grepl(x = chr_fun_names, pattern = "^p\\d{1,3}$")
+
+        map2(
+          chr_fun_names, lgl_fun_is_quantile,
+          function(chr_fun_name, is_quantile) {
+            # if it's a quantile function, return the quantile function
+            if (is_quantile) {
+              return(.str_to_quantile_fun(chr_fun_name))
+            }
+            # otherwise, convert the string to an expr and evaluate
+            # TODO: for values that were converted from formulas,
+            #   this needs to be updated to evaluate from the formula env
+            #   this will first require an updated to the {cards} function that processes the inputs.
+            #   i am not sure if we need to track any other env, or just the formulas...
+            eval(rlang::parse_expr(chr_fun_name))
+          }
+        ) |>
+          set_names(chr_fun_names)
+      }
+    )
+
+  lst_stat_fns_chr
+}
+
+.str_to_quantile_fun <- function(str) {
+  function(x) stats::quantile(x, probs = as.numeric(substr(str, 2, nchar(str))) / 100, type = 2) |> unname()
 }
 
 

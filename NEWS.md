@@ -16,6 +16,8 @@
 
 * The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
 
+* In `tbl_summary()`, the default calculation for quantiles (e.g. statistics of the form `"p25"` or `"p75"`) has been updated with type `quantile(type=2)`.
+
 #### Internal Updates
 
 * Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
@@ -28,7 +30,7 @@
 
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
 
-* The `modify_header(stat_by)` argument was deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the packaage.
+* The `modify_header(stat_by)` argument was deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package.
 
 # gtsummary 1.7.2
 
