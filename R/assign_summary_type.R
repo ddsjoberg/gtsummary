@@ -40,6 +40,11 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
         }
 
         # if user supplied a dichotomous value, make it dichotomous
+        if (!is.null(value[[variable]])) {
+          return("dichotomous")
+        }
+
+        # if a type with a default dichotomous value, make it dichotomous
         if (!is.null(.get_default_dichotomous_value(data[[variable]]))) {
           return("dichotomous")
         }

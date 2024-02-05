@@ -157,8 +157,8 @@ tbl_summary <- function(data,
                         label = NULL,
                         statistic = list(all_continuous() ~ "{median} ({p25}, {p75})",
                                          all_categorical() ~ "{n} ({p}%)"),
-                        digits = assign_summary_digits(data, statistic, type),
-                        type = assign_summary_type(data, include, value),
+                        digits = NULL,
+                        type = NULL,
                         value = NULL,
                         missing = c("ifany", "no", "always"),
                         missing_text = "Unknown",
@@ -180,15 +180,18 @@ tbl_summary <- function(data,
   cards::process_formula_selectors(data = data[include], value = value)
 
   # assign summary type --------------------------------------------------------
-  if (!missing(type)) {
+  if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
-    default_types <- formals(gtsummary::tbl_summary)[["type"]] |> eval()
+    default_types <- assign_summary_type(data, include, value)
     data <- .add_summary_type_as_attr(data, default_types)
     # process the user-passed type argument
     cards::process_formula_selectors(data = data[include], type = type)
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
+  }
+  else {
+    type <- assign_summary_type(data, include, value)
   }
   data <- .add_summary_type_as_attr(data, type)
 
@@ -217,8 +220,8 @@ tbl_summary <- function(data,
     data = data[include],
     digits =
       .ifelse1(
-        missing(digits),
-        get_theme_element("TODO:fill-this-in", default = digits),
+        is_empty(digits),
+        get_theme_element("TODO:fill-this-in", default = assign_summary_digits(data, statistic, type)),
         digits
       )
   )
@@ -250,8 +253,7 @@ tbl_summary <- function(data,
   )
 
   # sort requested columns by frequency
-  # TODO: Does this break the type attribute? If so, need to re-apply
-  data <- .sort_data_infreq(data, sort)
+  data <- .sort_data_infreq(data, sort, type)
 
   # save processed function inputs ---------------------------------------------
   tbl_summary_inputs <- as.list(environment())
@@ -271,9 +273,19 @@ tbl_summary <- function(data,
       cards::ard_categorical(
         data,
         by = all_of(by),
-        variables = all_categorical(),
+        variables = all_categorical(FALSE),
         fmt_fn = digits,
         denominator = percent,
+        stat_labels = ~default_stat_labels()
+      ),
+      # tabulate dichotomous summaries
+      cards::ard_dichotomous(
+        data,
+        by = all_of(by),
+        variables = all_dichotomous(),
+        fmt_fn = digits,
+        denominator = percent,
+        values = value,
         stat_labels = ~default_stat_labels()
       ),
       # calculate categorical summaries
@@ -299,31 +311,30 @@ tbl_summary <- function(data,
     structure(class = c("tbl_summary", "gtsummary"))
 
   # adding styling -------------------------------------------------------------
-  x <-
+  x <- x |>
+    # add header to label column and add default indentation
     modify_table_styling(
-      x,
       columns = "label",
       label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
       indentation = 4L
     ) |>
+    # adding the statistic footnote
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
         .construct_summary_footnote(x$cards, x$inputs$include, x$inputs$statistic, x$inputs$type)
-    )
-
-  x <-
+    ) |>
+    # updating the headers for the stats columns
     modify_header(
-      x,
       all_stat_cols() ~ ifelse(is_empty(by), "**N = {N}**", "**{level}**  \nN = {n}")
     )
 
-  # return object
+  # return tbl_summary table ---------------------------------------------------
   x
 }
 
-.sort_data_infreq <- function(data, sort) {
+.sort_data_infreq <- function(data, sort, type) {
   # if no frequency sorts requested, just return data frame
   if (every(sort, function(x) x %in% "alphanumeric")) return(data)
 
@@ -333,7 +344,7 @@ tbl_summary <- function(data,
     }
   }
 
-  data
+  .add_summary_type_as_attr(data, type)
 }
 
 .construct_summary_footnote <- function(card, include, statistic, type) {
@@ -468,40 +479,40 @@ tbl_summary <- function(data,
 .check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort, env = parent.frame()) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
-  sort_accepted <- c("alphanumeric", "frequency")
 
   cards::check_list_elements(
     x = label,
     predicate = function(x) is_string(x),
-    error_msg = "Error in argument {arg_name} for column {variable}: value must be a string.",
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a string.",
     env = env
   )
 
   cards::check_list_elements(
     x = statistic,
     predicate = function(x) is.character(x),
-    error_msg = "Error in argument {arg_name} for column {variable}: value must be a character vector.",
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a character vector.",
     env = env
   )
 
   cards::check_list_elements(
     x = type,
-    predicate = function(x) is_string(x) && x %in% type_accepted,
-    error_msg = "Error in argument {arg_name} for column {variable}: value must be one of {.val {type_accepted}}.",
+    predicate = function(x) is_string(x) && x %in% c("continuous", "continuous2", "categorical", "dichotomous"),
+    error_msg =
+      "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('continuous', 'continuous2', 'categorical', 'dichotomous')}}.",
     env = env
   )
 
   cards::check_list_elements(
     x = value,
     predicate = function(x) is.null(x) || length(x) == 1L,
-    error_msg = "Error in argument {arg_name} for column {variable}: value must be either {.val {NULL}} or a scalar.",
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be either {.val {NULL}} or a scalar.",
     env = env
   )
 
   cards::check_list_elements(
     x = sort,
-    predicate = function(x) is.null(x) || (is_string(x)  && x %in% sort_accepted),
-    error_msg = "Error in argument {arg_name} for column {variable}: value must be one of {.val {sort_accepted}}.",
+    predicate = function(x) is.null(x) || (is_string(x)  && x %in% c("alphanumeric", "frequency")),
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}.",
     env = env
   )
 }

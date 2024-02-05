@@ -74,7 +74,11 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   # adding the name of the column the stats will populate
   if (is_empty(x$inputs$by)) {
     x$cards$gts_column <-
-      ifelse(x$cards$context %in% c("continuous", "categorical", "missing"), "stat_0", NA_character_)
+      ifelse(
+        x$cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
+        "stat_0",
+        NA_character_
+      )
   }
   else {
     x$cards <-
@@ -83,7 +87,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
         .by = cards::all_ard_groups(),
         gts_column =
           ifelse(
-            .data$context %in% c("continuous", "categorical", "missing") &
+            .data$context %in% c("continuous", "categorical", "dichotomous", "missing") &
               !.data$variable %in% .env$x$inputs$tbl_summary$by,
             paste0("stat_", dplyr::cur_group_id() - 1L),
             NA_character_
@@ -131,18 +135,12 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
 #' @export
 pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
   if (is_empty(variables)) return(dplyr::tibble())
-  # subsetting cards object on dichotomous summaries ---------------------------
+
+  # updating the context to continuous, because it will be processed that way below
   x$cards <-
     x$cards |>
-    dplyr::filter(
-      .by = c(cards::all_ard_groups(), "variable"),
-      .data$variable %in% .env$variables,
-      .data$variable_level %in% list(NULL) |
-        .data$variable_level %in% list(value[[.data$variable[1]]])
-    ) |>
-    # updating the context to continuous, because it will be processed that way below
     dplyr::mutate(
-      context = ifelse(.data$context %in% "categorical", "continuous", .data$context)
+      context = ifelse(.data$context %in% "dichotomous", "continuous", .data$context)
     )
 
   pier_summary_continuous(x = x, variables = variables)
@@ -471,7 +469,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       df_by_stats |>
       dplyr::filter(.data$stat_name %in% c("n", "p")) |>
       dplyr::mutate(
-        .by = .data$variable_level,
+        .by = "variable_level",
         column = paste0("stat_", dplyr::cur_group_id())
       ) %>%
       {dplyr::bind_rows(

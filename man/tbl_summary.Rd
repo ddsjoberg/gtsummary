@@ -10,8 +10,8 @@ tbl_summary(
   label = NULL,
   statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~
     "{n} ({p}\%)"),
-  digits = assign_summary_digits(data, statistic, type),
-  type = assign_summary_type(data, include, value),
+  digits = NULL,
+  type = NULL,
   value = NULL,
   missing = c("ifany", "no", "always"),
   missing_text = "Unknown",
