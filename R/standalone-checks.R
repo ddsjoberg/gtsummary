@@ -43,7 +43,8 @@ check_class <- function(x, class, length = NULL, allow_empty = FALSE,
   if (!inherits(x, class)) {
     cli::cli_abort(
       c("Argument {.arg {arg_name}} must be class {.cls {class}}.",
-        "i" = "The class of {.arg {arg_name}} is {.cls {class(x)}}."),
+        "i" = "The class of {.arg {arg_name}} is {.cls {class(x)}}."
+      ),
       call = call
     )
   }

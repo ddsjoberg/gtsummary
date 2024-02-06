@@ -125,8 +125,8 @@ modify_table_styling <- function(x,
         indentation = ifelse("indent" %in% text_format, 4L, 8L),
         text_format =
           text_format |>
-          setdiff(c("indent", "indent2")) %>%
-          {.ifelse1(is_empty(.), NULL, .)} #nolint
+            setdiff(c("indent", "indent2")) %>%
+            {.ifelse1(is_empty(.), NULL, .)} # styler: off
       )
     env_bind(.env = current_env(), !!!lst_new_args)
 
@@ -157,7 +157,7 @@ modify_table_styling <- function(x,
   rows_eval_error <-
     tryCatch(
       eval_tidy(rows, data = x$table_body) %>%
-        {!is.null(.) && !is.logical(.)}, #nolint
+        {!is.null(.) && !is.logical(.)}, # styler: off
       error = function(e) TRUE
     )
   if (rows_eval_error) {
@@ -271,8 +271,8 @@ modify_table_styling <- function(x,
         format_type = text_format,
         undo_text_format = FALSE
       ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # nolint
-      {dplyr::bind_rows(x$table_styling$text_format, .)} # nolint
+      {tidyr::expand_grid(!!!.)} %>% # styler: off
+      {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
   }
   if (!is.null(undo_text_format)) {
     x$table_styling$text_format <-
@@ -282,8 +282,8 @@ modify_table_styling <- function(x,
         format_type = undo_text_format,
         undo_text_format = TRUE
       ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # nolint
-      {dplyr::bind_rows(x$table_styling$text_format, .)} # nolint
+      {tidyr::expand_grid(!!!.)} %>% # styler: off
+      {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
   }
 
   # indentation ----------------------------------------------------------------
@@ -292,14 +292,14 @@ modify_table_styling <- function(x,
       cli::cli_abort("The {.arg indentation} argument must be a scalar integer.")
     }
     x$table_styling$indentation <-
-    dplyr::bind_rows(
-      x$table_styling$indentation,
-      dplyr::tibble(
-        column = columns,
-        rows = list(rows),
-        n_spaces = as.integer(indentation)
+      dplyr::bind_rows(
+        x$table_styling$indentation,
+        dplyr::tibble(
+          column = columns,
+          rows = list(rows),
+          n_spaces = as.integer(indentation)
+        )
       )
-    )
   }
 
   # missing_symbol -------------------------------------------------------------
@@ -310,12 +310,8 @@ modify_table_styling <- function(x,
         rows = list(rows),
         symbol = missing_symbol
       ) %>%
-      {
-        tidyr::expand_grid(!!!.)
-      } %>%
-      {
-        dplyr::bind_rows(x$table_styling$fmt_missing, .)
-      }
+      {tidyr::expand_grid(!!!.)} %>% # styler: off
+      {dplyr::bind_rows(x$table_styling$fmt_missing, .)} # styler: off
   }
 
   # cols_merge_pattern ---------------------------------------------------------

@@ -1,11 +1,11 @@
-
 # takes a table_body and a character rows expression, and returns the resulting row numbers
 .rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
   rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
 
   # if a single lgl value, then expand it to the length of the tabel_body
-  if (is_scalar_logical(rows_evaluated))
+  if (is_scalar_logical(rows_evaluated)) {
     rows_evaluated <- rep_len(rows_evaluated, length.out = nrow(table_body))
+  }
 
   if (is.null(rows_evaluated)) {
     return(return_when_null)
@@ -78,13 +78,13 @@
     dplyr::mutate(
       row_numbers =
         switch(nrow(.) == 0,
-               integer(0)
+          integer(0)
         ) %||%
-        .rows_expr_to_row_numbers(
-          x$table_body, .data$rows,
-          return_when_null = seq_len(nrow(x$table_body))
-        ) %>%
-        list(),
+          .rows_expr_to_row_numbers(
+            x$table_body, .data$rows,
+            return_when_null = seq_len(nrow(x$table_body))
+          ) %>%
+          list(),
     ) %>%
     dplyr::select(-"rows") %>%
     tidyr::unnest("row_numbers") %>%

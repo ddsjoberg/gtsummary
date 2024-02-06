@@ -41,8 +41,7 @@ construct_initial_table_styling <- function(x) {
         rows = list(rlang::expr(TRUE)),
         n_spaces = 0L
       )
-    }
-    else {
+    } else {
       dplyr::tibble(column = character(), rows = list(), n_spaces = integer())
     }
 
@@ -95,7 +94,7 @@ construct_initial_table_styling <- function(x) {
     for (styling_element in names(x$table_styling)) {
       # if element is a tibble with a column called 'column'
       if (is.data.frame(x$table_styling[[styling_element]]) &&
-          "column" %in% names(x$table_styling[[styling_element]])) {
+        "column" %in% names(x$table_styling[[styling_element]])) {
         x$table_styling[[styling_element]] <-
           x$table_styling[[styling_element]] %>%
           dplyr::filter(!.data$column %in% deleted_columns)
@@ -135,4 +134,3 @@ construct_initial_table_styling <- function(x) {
       by = "column"
     )
 }
-

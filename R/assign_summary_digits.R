@@ -84,10 +84,13 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
     x,
     function(value, stat_name) {
       # if not an integer, simply return the value
-      if (!is_integerish(value)) return(value)
+      if (!is_integerish(value)) {
+        return(value)
+      }
       # if an integer is passed for a percentage, process stat with style_percent()
-      if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted"))
+      if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted")) {
         return(styfn_percent(digits = value))
+      }
       # otherwise, use style_numer() to style number
       return(styfn_number(digits = value))
     }
@@ -96,7 +99,9 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 
 .guess_continuous_summary_digits <- function(x) {
   # if all missing, return 0
-  if (all(is.na(x))) return(styfn_number(digits = 0L))
+  if (all(is.na(x))) {
+    return(styfn_number(digits = 0L))
+  }
 
   # if class is integer, then round everything to nearest integer
   if (inherits(x, "integer")) {
@@ -122,9 +127,11 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 }
 
 .categorical_summary_functions <-
-  function(statistics = c("
+  function(statistics = c(
+             "
                           N", "N_obs", "N_miss", "N_nonmiss", "n_unweighted", "N_unweighted",
-                          "p_miss", "p_nonmiss", "p_unweighted")) {
+             "p_miss", "p_nonmiss", "p_unweighted"
+           )) {
     lst_defaults <-
       c(
         c("n", "N", "N_obs", "N_miss", "N_nonmiss", "n_unweighted", "N_unweighted") |>

@@ -31,4 +31,3 @@ print.gtsummary <- function(x,
   ) %>%
     print()
 }
-

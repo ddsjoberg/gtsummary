@@ -83,14 +83,14 @@ table_styling_to_gt_calls <- function(x, ...) {
   # gt -------------------------------------------------------------------------
   groupname_col <-
     switch("groupname_col" %in% x$table_styling$header$column,
-           "groupname_col"
+      "groupname_col"
     )
   caption <-
     switch(!is.null(x$table_styling$caption),
-           rlang::call2(
-             attr(x$table_styling$caption, "text_interpret"),
-             x$table_styling$caption
-           )
+      rlang::call2(
+        attr(x$table_styling$caption, "text_interpret"),
+        x$table_styling$caption
+      )
     )
   gt_calls[["gt"]] <-
     expr(gt::gt(
@@ -213,10 +213,9 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # tab_footnote ---------------------------------------------------------------
   if (nrow(x$table_styling$footnote) == 0 &&
-      nrow(x$table_styling$footnote_abbrev) == 0) {
+    nrow(x$table_styling$footnote_abbrev) == 0) {
     gt_calls[["tab_footnote"]] <- list()
-  }
-  else {
+  } else {
     df_footnotes <-
       dplyr::bind_rows(
         x$table_styling$footnote,

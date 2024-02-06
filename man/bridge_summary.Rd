@@ -74,23 +74,23 @@ tbl <-
   )
 
 pier_summary_dichotomous(
- x = tbl,
- variables = "am",
- value = list(am = 1)
+  x = tbl,
+  variables = "am",
+  value = list(am = 1)
 )
 
 pier_summary_categorical(
- x = tbl,
- variables = "cyl"
+  x = tbl,
+  variables = "cyl"
 )
 
 pier_summary_continuous2(
- x = tbl,
- variables = "hp"
+  x = tbl,
+  variables = "hp"
 )
 
 pier_summary_continuous(
- x = tbl,
- variables = "mpg"
+  x = tbl,
+  variables = "mpg"
 )
 }

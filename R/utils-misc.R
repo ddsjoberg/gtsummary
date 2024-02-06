@@ -1,8 +1,9 @@
-
 .extract_glue_elements <- function(x) {
   regmatches(x, gregexpr("\\{([^\\}]*)\\}", x)) |>
     unlist() %>%
-    {substr(., 2, nchar(.) - 1)}
+    {
+      substr(., 2, nchar(.) - 1)
+    }
 }
 
 .ifelse1 <- function(test, yes, no) {

@@ -1,5 +1,3 @@
-
-
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
                           quiet = NULL, update = NULL) {
   # process inputs -------------------------------------------------------------
@@ -12,8 +10,11 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
       "2.0.0", "gtsummary::modify_header(update=)",
       details = "Use `modify_header(...)` input instead."
     )
-    if (is.factor(dots)) dots <- c(list(dots), update)
-    else dots <- c(list(dots), update)
+    if (is.factor(dots)) {
+      dots <- c(list(dots), update)
+    } else {
+      dots <- c(list(dots), update)
+    }
   }
 
   cards::process_formula_selectors(data = x$table_body, dots = dots)
@@ -22,7 +23,8 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
     predicate = function(x) is_string(x),
     error_msg =
       c("All values passed in {.arg ...} must be strings.",
-        "i" = "For example, {.code label = '**Variable**'}")
+        "i" = "For example, {.code label = '**Variable**'}"
+      )
   )
 
   # evaluate the strings with glue
@@ -69,8 +71,9 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
           data = df_header_subset
         )
 
-      if (!is.null(glued_value$result))
+      if (!is.null(glued_value$result)) {
         return(glued_value$result)
+      }
 
       cli::cli_abort("There was an error the {.fun glue::glue} evaluation of {.val {value}}.")
     }

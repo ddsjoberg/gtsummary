@@ -66,7 +66,7 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
 
         # numeric variables with fewer than 'cat_threshold' levels will be categorical
         if (inherits(data[[variable]], base_numeric_classes) &&
-            length(unique(stats::na.omit(data[[variable]]))) < cat_threshold) {
+          length(unique(stats::na.omit(data[[variable]]))) < cat_threshold) {
           return("categorical")
         }
 
@@ -93,21 +93,21 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
 
   # numeric variables that are 0 and 1 only, will be dichotomous
   if (inherits(x, c("integer", "numeric")) &&
-      length(setdiff(stats::na.omit(x), c(0, 1))) == 0) {
+    length(setdiff(stats::na.omit(x), c(0, 1))) == 0) {
     return(stats::na.omit(x) |> unique() |> sort() |> dplyr::last())
   }
 
   # factor variables that are "No" and "Yes" only, will be dichotomous
   if (inherits(x, "factor") &&
-      length(levels(x)) == 2L &&
-      setequal(toupper(levels(x)), c("NO", "YES"))) {
+    length(levels(x)) == 2L &&
+    setequal(toupper(levels(x)), c("NO", "YES"))) {
     return(levels(x)[toupper(levels(x)) %in% "YES"])
   }
 
   # character variables that are "No" and "Yes" only, will be dichotomous
   if (inherits(x, "character") &&
-      setequal(toupper(stats::na.omit(x)), c("NO", "YES")) &&
-      length(stats::na.omit(x)) == 2L) {
+    setequal(toupper(stats::na.omit(x)), c("NO", "YES")) &&
+    length(stats::na.omit(x)) == 2L) {
     return(unique(x)[toupper(unique(x)) %in% "YES"])
   }
 

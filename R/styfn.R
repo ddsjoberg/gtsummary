@@ -44,4 +44,3 @@ styfn_ratio <- function(digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
 styfn_percent <- function(symbol = FALSE, digits = 0, big.mark = NULL, decimal.mark = NULL, ...) {
   function(x) style_percent(x, symbol = symbol, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
-
