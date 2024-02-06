@@ -155,8 +155,10 @@
 tbl_summary <- function(data,
                         by = NULL,
                         label = NULL,
-                        statistic = list(all_continuous() ~ "{median} ({p25}, {p75})",
-                                         all_categorical() ~ "{n} ({p}%)"),
+                        statistic = list(
+                          all_continuous() ~ "{median} ({p25}, {p75})",
+                          all_categorical() ~ "{n} ({p}%)"
+                        ),
                         digits = NULL,
                         type = NULL,
                         value = NULL,
@@ -189,8 +191,7 @@ tbl_summary <- function(data,
     cards::process_formula_selectors(data = data[include], type = type)
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
-  }
-  else {
+  } else {
     type <- assign_summary_type(data, include, value)
   }
   data <- .add_summary_type_as_attr(data, type)
@@ -264,11 +265,17 @@ tbl_summary <- function(data,
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
-      cards::ard_missing(data, variables = all_of(include), by = all_of(by),
-                         stat_labels = ~default_stat_labels()),
+      cards::ard_missing(data,
+        variables = all_of(include), by = all_of(by),
+        stat_labels = ~ default_stat_labels()
+      ),
       # tabulate by variable for header stats
-      if (!rlang::is_empty(by)) cards::ard_categorical(data, variables = all_of(by),
-                                                       stat_labels = ~default_stat_labels()),
+      if (!rlang::is_empty(by)) {
+        cards::ard_categorical(data,
+          variables = all_of(by),
+          stat_labels = ~ default_stat_labels()
+        )
+      },
       # tabulate categorical summaries
       cards::ard_categorical(
         data,
@@ -276,7 +283,7 @@ tbl_summary <- function(data,
         variables = all_categorical(FALSE),
         fmt_fn = digits,
         denominator = percent,
-        stat_labels = ~default_stat_labels()
+        stat_labels = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
@@ -286,7 +293,7 @@ tbl_summary <- function(data,
         fmt_fn = digits,
         denominator = percent,
         values = value,
-        stat_labels = ~default_stat_labels()
+        stat_labels = ~ default_stat_labels()
       ),
       # calculate categorical summaries
       cards::ard_continuous(
@@ -296,7 +303,7 @@ tbl_summary <- function(data,
         statistics =
           .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
         fmt_fn = digits,
-        stat_labels = ~default_stat_labels()
+        stat_labels = ~ default_stat_labels()
       )
     )
 
@@ -336,7 +343,9 @@ tbl_summary <- function(data,
 
 .sort_data_infreq <- function(data, sort, type) {
   # if no frequency sorts requested, just return data frame
-  if (every(sort, function(x) x %in% "alphanumeric")) return(data)
+  if (every(sort, function(x) x %in% "alphanumeric")) {
+    return(data)
+  }
 
   for (i in seq_along(sort[intersect(names(sort), names(data))])) {
     if (sort[[i]] %in% "frequency") {
@@ -351,12 +360,16 @@ tbl_summary <- function(data,
   include |>
     lapply(
       function(variable) {
-        if (type[[variable]] %in% "continuous2") return(NULL)
+        if (type[[variable]] %in% "continuous2") {
+          return(NULL)
+        }
         card |>
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |>
+          {
+            stats::setNames(as.list(.$stat_label), .$stat_name)
+          } |>
           glue::glue_data(
             gsub("\\{(p|p_miss|p_nonmiss)\\}%", "{\\1}", x = statistic[[variable]])
           )
@@ -366,7 +379,11 @@ tbl_summary <- function(data,
     compact() |>
     unlist() |>
     unique() %>%
-    {switch(!is.null(.), paste(., collapse = ", "))}
+    {
+      switch(!is.null(.),
+        paste(., collapse = ", ")
+      )
+    }
 }
 
 
@@ -380,13 +397,19 @@ tbl_summary <- function(data,
     names(data),
     function(variable) {
       # if user passed value, then use it
-      if (!is.null(value[[variable]])) return(value[[variable]])
+      if (!is.null(value[[variable]])) {
+        return(value[[variable]])
+      }
       # if not a dichotomous summary type, then return NULL
-      if (!type[[variable]] %in% "dichotomous") return(NULL)
+      if (!type[[variable]] %in% "dichotomous") {
+        return(NULL)
+      }
 
       # otherwise, return default value
       default_value <- .get_default_dichotomous_value(data[[variable]])
-      if (!is.null(default_value)) return(default_value)
+      if (!is.null(default_value)) {
+        return(default_value)
+      }
       cli::cli_abort(c(
         "Error in argument {.arg value} for variable {.val {variable}}.",
         "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
@@ -417,9 +440,9 @@ tbl_summary <- function(data,
       c("haven::as_factor", "labelled::to_factor", "labelled::unlabelled", "unclass")
 
     hyperlinks <- c(
-        "https://haven.tidyverse.org/articles/semantics.html",
-        "https://larmarange.github.io/labelled/articles/intro_labelled.html#unlabelled"
-      )
+      "https://haven.tidyverse.org/articles/semantics.html",
+      "https://larmarange.github.io/labelled/articles/intro_labelled.html#unlabelled"
+    )
 
     c(
       "!" = "Column(s) {.val {haven_labelled_vars}} are class {.val haven_labelled}.",
@@ -436,7 +459,9 @@ tbl_summary <- function(data,
 .continuous_statistics_chr_to_fun <- function(statistics) {
   # vector of all the categorical summary function names
   # these are defined internally, and we don't need to convert them to true fns
-  chr_protected_cat_names <- .categorical_summary_functions() |> names() |> c("N")
+  chr_protected_cat_names <- .categorical_summary_functions() |>
+    names() |>
+    c("N")
 
   # this chunk converts the character strings that define the statistics
   # into named lists of functions,
@@ -446,7 +471,9 @@ tbl_summary <- function(data,
       statistics,
       function(x) {
         chr_fun_names <-
-          .extract_glue_elements(x) |> unlist() |> setdiff(chr_protected_cat_names)
+          .extract_glue_elements(x) |>
+          unlist() |>
+          setdiff(chr_protected_cat_names)
         lgl_fun_is_quantile <- grepl(x = chr_fun_names, pattern = "^p\\d{1,3}$")
 
         map2(
@@ -511,7 +538,7 @@ tbl_summary <- function(data,
 
   cards::check_list_elements(
     x = sort,
-    predicate = function(x) is.null(x) || (is_string(x)  && x %in% c("alphanumeric", "frequency")),
+    predicate = function(x) is.null(x) || (is_string(x) && x %in% c("alphanumeric", "frequency")),
     error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}.",
     env = env
   )
