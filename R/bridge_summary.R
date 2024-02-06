@@ -41,24 +41,24 @@
 #'   )
 #'
 #' pier_summary_dichotomous(
-#'  x = tbl,
-#'  variables = "am",
-#'  value = list(am = 1)
+#'   x = tbl,
+#'   variables = "am",
+#'   value = list(am = 1)
 #' )
 #'
 #' pier_summary_categorical(
-#'  x = tbl,
-#'  variables = "cyl"
+#'   x = tbl,
+#'   variables = "cyl"
 #' )
 #'
 #' pier_summary_continuous2(
-#'  x = tbl,
-#'  variables = "hp"
+#'   x = tbl,
+#'   variables = "hp"
 #' )
 #'
 #' pier_summary_continuous(
-#'  x = tbl,
-#'  variables = "mpg"
+#'   x = tbl,
+#'   variables = "mpg"
 #' )
 NULL
 
@@ -79,8 +79,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
         "stat_0",
         NA_character_
       )
-  }
-  else {
+  } else {
     x$cards <-
       x$cards |>
       dplyr::mutate(
@@ -134,7 +133,9 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
 #' @rdname bridge_summary
 #' @export
 pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
 
   # updating the context to continuous, because it will be processed that way below
   x$cards <-
@@ -149,7 +150,9 @@ pier_summary_dichotomous <- function(x, variables, value = x$inputs$value) {
 #' @rdname bridge_summary
 #' @export
 pier_summary_categorical <- function(x, variables, missing, missing_text, missing_stat) {
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
   # subsetting cards object on categorical summaries ----------------------------
   card <-
     x$cards |>
@@ -177,32 +180,31 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
           .data = df_groups_and_variable,
           df_stats =
             dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
-            dplyr::group_by(.data$variable_level) |>
-            dplyr::group_map(
-              function(df_variable_level_stats, df_variable_levels) {
-                dplyr::mutate(
-                  .data = df_variable_levels,
-                  stat =
-                    map(
-                      str_statistic_pre_glue,
-                      function(str_to_glue) {
-                        stat =
-                          glue::glue(
-                            str_to_glue,
-                            .envir =
-                              cards::get_ard_statistics(df_variable_level_stats, .column = "statistic_fmt") |>
-                              c(lst_variable_stats)
-                          ) |>
-                          as.character()
-
-                      }
-                    ),
-                  label = unlist(.data$variable_level) |> as.character()
-                )
-              }
-            ) |>
-            dplyr::bind_rows() |>
-            list()
+              dplyr::group_by(.data$variable_level) |>
+              dplyr::group_map(
+                function(df_variable_level_stats, df_variable_levels) {
+                  dplyr::mutate(
+                    .data = df_variable_levels,
+                    stat =
+                      map(
+                        str_statistic_pre_glue,
+                        function(str_to_glue) {
+                          stat <-
+                            glue::glue(
+                              str_to_glue,
+                              .envir =
+                                cards::get_ard_statistics(df_variable_level_stats, .column = "statistic_fmt") |>
+                                  c(lst_variable_stats)
+                            ) |>
+                            as.character()
+                        }
+                      ),
+                    label = unlist(.data$variable_level) |> as.character()
+                  )
+                }
+              ) |>
+              dplyr::bind_rows() |>
+              list()
         )
       }
     ) |>
@@ -214,9 +216,11 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
     # merge in variable label
     dplyr::left_join(
       x$cards |>
-        dplyr::filter(.data$variable %in% .env$variables,
-                      .data$context %in% "attributes",
-                      .data$stat_name %in% "label") |>
+        dplyr::filter(
+          .data$variable %in% .env$variables,
+          .data$context %in% "attributes",
+          .data$stat_name %in% "label"
+        ) |>
         dplyr::select("variable", var_label = "statistic"),
       by = "variable"
     ) |>
@@ -239,7 +243,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
   df_results <-
     map(
       variables,
-      ~dplyr::bind_rows(
+      ~ dplyr::bind_rows(
         df_result_levels |>
           dplyr::select("variable", "var_label", "row_type") |>
           dplyr::filter(.data$variable %in% .x) |>
@@ -260,7 +264,9 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
 #' @rdname bridge_summary
 #' @export
 pier_summary_continuous2 <- function(x, variables, missing, missing_text, missing_stat) {
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
   # subsetting cards object on continuous2 summaries ----------------------------
   card <-
     x$cards |>
@@ -280,7 +286,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
             map(
               x$inputs$statistic[[.y$variable[1]]],
               function(str_to_glue) {
-                stat =
+                stat <-
                   glue::glue(
                     str_to_glue,
                     .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
@@ -288,12 +294,12 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
                   as.character()
               }
             ) |>
-            list(),
+              list(),
           label =
             map(
               x$inputs$statistic[[.y$variable[1]]],
               function(str_to_glue) {
-                label =
+                label <-
                   glue::glue(
                     str_to_glue,
                     .envir = cards::get_ard_statistics(.x, .column = "stat_label")
@@ -301,7 +307,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
                   as.character()
               }
             ) |>
-            list()
+              list()
         )
       }
     ) |>
@@ -313,9 +319,11 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
     # merge in variable label
     dplyr::left_join(
       x$cards |>
-        dplyr::filter(.data$variable %in% .env$variables,
-                      .data$context %in% "attributes",
-                      .data$stat_name %in% "label") |>
+        dplyr::filter(
+          .data$variable %in% .env$variables,
+          .data$context %in% "attributes",
+          .data$stat_name %in% "label"
+        ) |>
         dplyr::select("variable", var_label = "statistic"),
       by = "variable"
     ) |>
@@ -338,7 +346,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
   df_results <-
     map(
       variables,
-      ~dplyr::bind_rows(
+      ~ dplyr::bind_rows(
         df_result_levels |>
           dplyr::select("variable", "var_label", "row_type") |>
           dplyr::filter(.data$variable %in% .x) |>
@@ -359,7 +367,9 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
 #' @rdname bridge_summary
 #' @export
 pier_summary_continuous <- function(x, variables, missing, missing_text, missing_stat) {
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
   # subsetting cards object on continuous summaries ----------------------------
   card <-
     x$cards |>
@@ -372,14 +382,14 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
     card |>
     dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
-      ~dplyr::mutate(
+      ~ dplyr::mutate(
         .data = .y,
         stat =
           glue::glue(
             x$inputs$statistic[[.data$variable[1]]],
             .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
           ) |>
-          as.character()
+            as.character()
       )
     ) |>
     dplyr::bind_rows()
@@ -390,9 +400,11 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
     # merge in variable label
     dplyr::left_join(
       x$cards |>
-        dplyr::filter(.data$variable %in% .env$variables,
-                      .data$context %in% "attributes",
-                      .data$stat_name %in% "label") |>
+        dplyr::filter(
+          .data$variable %in% .env$variables,
+          .data$context %in% "attributes",
+          .data$stat_name %in% "label"
+        ) |>
         dplyr::select("variable", var_label = "statistic"),
       by = "variable"
     ) |>
@@ -415,9 +427,13 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
 #' @rdname bridge_summary
 #' @export
 pier_summary_missing_row <- function(x, variables = x$inputs$include) {
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
   # keeping variables to report missing obs for (or returning empty df if none)
-  if (x$inputs$missing == "no") return(dplyr::tibble())
+  if (x$inputs$missing == "no") {
+    return(dplyr::tibble())
+  }
   if (x$inputs$missing == "ifany") {
     variables <-
       x$cards |>
@@ -426,7 +442,9 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       dplyr::pull("variable") |>
       unique()
   }
-  if (is_empty(variables)) return(dplyr::tibble())
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
 
   # slightly modifying the `x` object for missing value calculations
   x$inputs$statistic <- rep_named(variables, list(x$inputs$missing_stat))
@@ -451,16 +469,15 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       dplyr::mutate(
         modify_stat_N =
           x$cards |>
-          dplyr::filter(.data$stat_name %in% "N_obs") |>
-          dplyr::pull("statistic") |>
-          unlist() |>
-          getElement(1),
+            dplyr::filter(.data$stat_name %in% "N_obs") |>
+            dplyr::pull("statistic") |>
+            unlist() |>
+            getElement(1),
         modify_stat_n = .data$modify_stat_N,
         modify_stat_p = 1,
         modify_stat_level = "Overall"
       )
-  }
-  else {
+  } else {
     df_by_stats <- x$cards |>
       dplyr::filter(.data$variable %in% .env$x$inputs$by & .data$stat_name %in% c("N", "n", "p"))
 
@@ -472,12 +489,14 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
         .by = "variable_level",
         column = paste0("stat_", dplyr::cur_group_id())
       ) %>%
-      {dplyr::bind_rows(
-        .,
-        dplyr::select(., "variable_level", "column", statistic = "variable_level") |>
-          dplyr::mutate(stat_name = "level") |>
-          dplyr::distinct()
-      )} |>
+      {
+        dplyr::bind_rows(
+          .,
+          dplyr::select(., "variable_level", "column", statistic = "variable_level") |>
+            dplyr::mutate(stat_name = "level") |>
+            dplyr::distinct()
+        )
+      } |>
       tidyr::pivot_wider(
         id_cols = "column",
         names_from = "stat_name",
@@ -498,10 +517,10 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       dplyr::mutate(
         modify_stat_N =
           df_by_stats |>
-          dplyr::filter(.data$stat_name %in% "N") |>
-          dplyr::pull("statistic") |>
-          unlist() |>
-          getElement(1L)
+            dplyr::filter(.data$stat_name %in% "N") |>
+            dplyr::pull("statistic") |>
+            unlist() |>
+            getElement(1L)
       ) |>
       dplyr::left_join(
         df_by_stats_wide,
