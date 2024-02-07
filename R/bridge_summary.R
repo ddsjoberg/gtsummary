@@ -98,7 +98,10 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   # build the table body pieces with bridge functions and stack them -----------
   x$table_body <-
     dplyr::left_join(
-      dplyr::tibble(variable = x$inputs$include),
+      dplyr::tibble(
+        variable = x$inputs$include,
+        summary_type = x$inputs$type[.data$variable] |> unlist() |> unname()
+      ),
       dplyr::bind_rows(
         pier_summary_continuous(
           x,
@@ -446,16 +449,13 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
     return(dplyr::tibble())
   }
 
-  # slightly modifying the `x` object for missing value calculations
+  # slightly modifying the `x` object for missing value calculations -----------
+  # make all the summary stats the same for all vars
   x$inputs$statistic <- rep_named(variables, list(x$inputs$missing_stat))
-  x$cards <-
-    x$cards |>
-    dplyr::mutate(
-      context = ifelse(.data$context %in% "categorical", "continuous", .data$context)
-    )
 
 
   pier_summary_continuous(x, variables = variables) |>
+    # update the row_type and label
     dplyr::mutate(
       row_type = "missing",
       label = x$inputs$missing_text

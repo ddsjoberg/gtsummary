@@ -12,14 +12,22 @@ test_that("tbl_summary(by) creates output without error/warning", {
 })
 
 test_that("tbl_summary(label) allows for named list input", {
-  expect_snapshot(
-    tbl_summary(
+  expect_error(
+    tbl <- tbl_summary(
       mtcars,
       by = am,
       label = list(mpg = "New mpg", cyl = "New cyl"),
       include = c(mpg, cyl)
-    ) |>
-      as.data.frame()
+    ),
+    NA
+  )
+  expect_snapshot(as.data.frame(tbl))
+
+  expect_equal(
+    tbl$table_body |>
+      dplyr::filter(row_type %in% "header") |>
+      dplyr::pull(label),
+    c("New mpg", "New cyl")
   )
 })
 
@@ -44,8 +52,16 @@ test_that("tbl_summary(sort) works", {
 })
 
 test_that("tbl_summary(value) works", {
-  expect_snapshot(
-    tbl_summary(trial, value = "grade" ~ "III", include = grade) |>
-      as.data.frame()
+  # ensure grade is coerced to dichotomous and response defaults to dichotomous
+  expect_error(
+    tbl <- tbl_summary(trial, value = "grade" ~ "III", include = c(grade, response)),
+    NA
+  )
+  expect_snapshot(as.data.frame(tbl))
+
+  # check all summary types are assigned to dichotomous
+  expect_equal(
+    tbl$table_body$summary_type |> unique(),
+    "dichotomous"
   )
 })

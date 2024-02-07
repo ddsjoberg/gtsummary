@@ -70,7 +70,7 @@ Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
 \item{percent}{Indicates the type of percentage to return.
 Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
-\item{include}{variables to include in the summary table. Default is \code{everything()}}
+\item{include}{Variables to include in the summary table. Default is \code{everything()}}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}

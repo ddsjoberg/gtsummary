@@ -142,8 +142,7 @@
 # tbl_summary(label) allows for named list input
 
     Code
-      as.data.frame(tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl"),
-      include = c(mpg, cyl)))
+      as.data.frame(tbl)
     Output
         **Characteristic**   **0**  \nN = 19   **1**  \nN = 13
       1            New mpg 17.3 (14.7, 19.2) 22.8 (21.0, 30.4)
@@ -171,8 +170,10 @@
 # tbl_summary(value) works
 
     Code
-      as.data.frame(tbl_summary(trial, value = "grade" ~ "III", include = grade))
+      as.data.frame(tbl)
     Output
         **Characteristic** **N = 200**
       1              Grade    64 (32%)
+      2     Tumor Response    61 (32%)
+      3            Unknown           7
 

@@ -48,7 +48,7 @@
 #'   Default is `all_categorical(FALSE) ~ "alphanumeric"`
 #' @param percent Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
-#' @param include variables to include in the summary table. Default is `everything()`
+#' @param include Variables to include in the summary table. Default is `everything()`
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
