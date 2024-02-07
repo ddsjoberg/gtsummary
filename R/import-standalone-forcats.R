@@ -1,6 +1,10 @@
+# Standalone file: do not edit by hand
+# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-forcats.R>
+# ----------------------------------------------------------------------
+#
 # ---
 # file: standalone-forcats.R
-# last-updated: 2023-12-29
+# last-updated: 2024-01-24
 # license: https://unlicense.org
 # imports:
 # ---
@@ -10,10 +14,9 @@
 # of programming.
 #
 # ## Changelog
-# 2023-12-29
-# First functions added
 #
 # nocov start
+# styler: off
 
 fct_infreq <- function(f, ordered = NA) {
   # reorder by frequency
@@ -33,3 +36,4 @@ fct_inorder <- function(f, ordered = NA) {
 }
 
 # nocov end
+# styler: on
