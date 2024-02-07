@@ -1,14 +1,24 @@
-test_that("standard tbl_summary() creates correct", {
+test_that("tbl_summary(data)", {
+  # creates table when data frame is passed
   expect_snapshot(tbl_summary(data = trial) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris) |> as.data.frame())
+
+  # errors thrown when bad data argument passed
+  expect_snapshot(error = TRUE, tbl_summary())
+  expect_snapshot(error = TRUE, tbl_summary(data = letters))
+  expect_snapshot(error = TRUE, tbl_summary(data = dplyr::tibble()))
 })
 
 
-test_that("tbl_summary(by) creates output without error/warning", {
+test_that("tbl_summary(by)", {
   expect_snapshot(tbl_summary(data = trial, by = trt) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars, by = am) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris, by = Species) |> as.data.frame())
+
+  # errors thrown when bad data argument passed
+  expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
+
 })
 
 test_that("tbl_summary(label) allows for named list input", {
