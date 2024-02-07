@@ -176,6 +176,7 @@ tbl_summary <- function(data,
   # process arguments ----------------------------------------------------------
   data <- dplyr::ungroup(data)
   cards::process_selectors(data, by = {{ by }}, include = {{ include }})
+  check_scalar(by, allow_empty = TRUE)
   include <- setdiff(include, by) # remove by variable from list vars included
   missing <- arg_match(arg = missing)
   percent <- arg_match(arg = percent)
@@ -245,8 +246,10 @@ tbl_summary <- function(data,
   }
 
   # check inputs ---------------------------------------------------------------
-  check_class(missing_text, class = "character", length = 1L)
-  check_class(missing_stat, class = "character", length = 1L)
+  check_class(missing_text, class = "character")
+  check_scalar(missing_text)
+  check_class(missing_stat, class = "character")
+  check_scalar(missing_stat)
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,

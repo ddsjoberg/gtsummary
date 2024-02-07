@@ -1,4 +1,4 @@
-# standard tbl_summary() creates correct
+# tbl_summary(data)
 
     Code
       as.data.frame(tbl_summary(data = trial))
@@ -70,7 +70,31 @@
       7         versicolor          50 (33%)
       8          virginica          50 (33%)
 
-# tbl_summary(by) creates output without error/warning
+---
+
+    Code
+      tbl_summary()
+    Condition
+      Error in `tbl_summary()`:
+      ! The `data` argument cannot be missing.
+
+---
+
+    Code
+      tbl_summary(data = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `data` argument must be class <data.frame>, not a character vector.
+
+---
+
+    Code
+      tbl_summary(data = dplyr::tibble())
+    Condition
+      Error in `tbl_summary()`:
+      ! Expecting `data` argument to have at least 1 row and 1 column.
+
+# tbl_summary(by)
 
     Code
       as.data.frame(tbl_summary(data = trial, by = trt))
@@ -138,6 +162,14 @@
       2       3.00 (2.80, 3.20)
       3       5.55 (5.10, 5.90)
       4       2.00 (1.80, 2.30)
+
+---
+
+    Code
+      tbl_summary(mtcars, by = c("mpg", "am"))
+    Condition
+      Error in `tbl_summary()`:
+      ! The `by` argument must be length 1 or empty.
 
 # tbl_summary(label) allows for named list input
 
