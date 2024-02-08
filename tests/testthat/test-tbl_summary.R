@@ -18,10 +18,9 @@ test_that("tbl_summary(by)", {
 
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
-
 })
 
-test_that("tbl_summary(label) allows for named list input", {
+test_that("tbl_summary(label)", {
   expect_error(
     tbl <- tbl_summary(
       mtcars,
