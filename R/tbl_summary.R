@@ -170,7 +170,7 @@ tbl_summary <- function(data,
                         include = everything()) {
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
-  check_class_data_frame(data)
+  check_data_frame(data)
   .data_dim_checks(data)
 
   # process arguments ----------------------------------------------------------

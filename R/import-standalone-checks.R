@@ -54,13 +54,50 @@ check_class <- function(x, class, allow_empty = FALSE,
 #' @inheritParams check_class
 #' @keywords internal
 #' @noRd
-check_class_data_frame <- function(x, allow_empty = FALSE,
-                                   message = "The {.arg {arg_name}} argument must be class
+check_data_frame <- function(x, allow_empty = FALSE,
+                             message = "The {.arg {arg_name}} argument must be class
                                               {.cls {class}}, not {.obj_type_friendly {x}}.",
-                                   arg_name = rlang::caller_arg(x), call = parent.frame()) {
+                             arg_name = rlang::caller_arg(x), call = parent.frame()) {
   check_class(
     x = x, class = "data.frame", allow_empty = allow_empty,
     message = message, arg_name = arg_name, call = call
+  )
+}
+
+#' Check Class Logical
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_logical <- function(x, allow_empty = FALSE,
+                          message = "The {.arg {arg_name}} argument must be class
+                                              {.cls {class}}, not {.obj_type_friendly {x}}.",
+                          arg_name = rlang::caller_arg(x), call = parent.frame()) {
+  check_class(
+    x = x, class = "logical", allow_empty = allow_empty,
+    message = message, arg_name = arg_name, call = call
+  )
+}
+
+#' Check Class Logical and Scalar
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_scalar_logical <- function(x, allow_empty = FALSE,
+                                 message = "The {.arg {arg_name}} argument must be a scalar with class
+                                              {.cls {class}}, not {.obj_type_friendly {x}}.",
+                                 arg_name = rlang::caller_arg(x), call = parent.frame()) {
+  check_logical(
+    x = x, allow_empty = allow_empty,
+    message = message, arg_name = arg_name,
+    call = call
+  )
+
+  check_scalar(
+    x = x, allow_empty = allow_empty,
+    message = message, arg_name = arg_name,
+    call = call
   )
 }
 
@@ -148,11 +185,11 @@ check_range <- function(x,
                         include_bounds = c(FALSE, FALSE),
                         message =
                           paste0(
-                          "The {.arg {arg_name}} argument must be in the interval
+                            "The {.arg {arg_name}} argument must be in the interval
                            {.code {ifelse(include_bounds[1], '[', '(')}{range[1]},
                            {range[2]}{ifelse(include_bounds[2], ']', ')')}}",
-                          ifelse(scalar, " and length {.val {1}}", ""),
-                          "."),
+                           ifelse(scalar, " and length {.val {1}}", ""),
+                           "."),
                         scalar = FALSE,
                         allow_empty = FALSE,
                         arg_name = rlang::caller_arg(x),
