@@ -3,7 +3,9 @@ test_that("tbl_summary(data)", {
   expect_snapshot(tbl_summary(data = trial) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris) |> as.data.frame())
+})
 
+test_that("tbl_summary(data) errors properly", {
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary())
   expect_snapshot(error = TRUE, tbl_summary(data = letters))
@@ -15,7 +17,9 @@ test_that("tbl_summary(by)", {
   expect_snapshot(tbl_summary(data = trial, by = trt) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars, by = am) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris, by = Species) |> as.data.frame())
+  })
 
+test_that("tbl_summary(by)", {
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
 })

@@ -70,7 +70,7 @@
       7         versicolor          50 (33%)
       8          virginica          50 (33%)
 
----
+# tbl_summary(data) errors properly
 
     Code
       tbl_summary()
@@ -171,7 +171,7 @@
       Error in `tbl_summary()`:
       ! The `by` argument must be length 1 or empty.
 
-# tbl_summary(label) allows for named list input
+# tbl_summary(label)
 
     Code
       as.data.frame(tbl)
