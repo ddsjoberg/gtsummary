@@ -183,6 +183,23 @@
       4                  6           4 (21%)           3 (23%)
       5                  8          12 (63%)           2 (15%)
 
+# tbl_summary(label) errors properly
+
+    Code
+      tbl_summary(trial["age"], label = list(age = letters))
+    Condition
+      Error in `tbl_summary()`:
+      ! Error in argument `label` for column "age": value must be a string.
+
+---
+
+    Code
+      tbl_summary(trial["age"], label = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `label` argument must be a named list, list of formulas, or a single formula.
+      i Review ?syntax (`?cards::syntax()`) for examples and details.
+
 # tbl_summary(sort) works
 
     Code

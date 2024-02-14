@@ -44,6 +44,18 @@ test_that("tbl_summary(label)", {
   )
 })
 
+test_that("tbl_summary(label) errors properly", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial["age"], label = list(age = letters))
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial["age"], label = letters)
+  )
+})
+
 test_that("tbl_summary(sort) works", {
   expect_equal(
     tbl_summary(mtcars, sort = all_categorical() ~ "frequency", include = cyl) |>
