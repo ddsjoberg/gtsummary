@@ -19,7 +19,7 @@ test_that("tbl_summary(by)", {
   expect_snapshot(tbl_summary(data = iris, by = Species) |> as.data.frame())
   })
 
-test_that("tbl_summary(by)", {
+test_that("tbl_summary(by) errors properly", {
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
 })

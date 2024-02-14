@@ -163,7 +163,7 @@
       3       5.55 (5.10, 5.90)
       4       2.00 (1.80, 2.30)
 
----
+# tbl_summary(by) errors properly
 
     Code
       tbl_summary(mtcars, by = c("mpg", "am"))
