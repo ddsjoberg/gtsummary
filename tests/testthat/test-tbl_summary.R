@@ -56,7 +56,7 @@ test_that("tbl_summary(label) errors properly", {
   )
 })
 
-test_that("tbl_summary(sort) works", {
+test_that("tbl_summary(sort)", {
   expect_equal(
     tbl_summary(mtcars, sort = all_categorical() ~ "frequency", include = cyl) |>
       getElement("table_body") |>
@@ -64,7 +64,9 @@ test_that("tbl_summary(sort) works", {
       dplyr::pull(label),
     c("8", "4", "6")
   )
+})
 
+test_that("tbl_summary(sort) errors properly", {
   # proper errors are returned
   expect_snapshot(
     error = TRUE,

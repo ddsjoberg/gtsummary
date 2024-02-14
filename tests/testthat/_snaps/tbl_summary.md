@@ -200,7 +200,7 @@
       ! The `label` argument must be a named list, list of formulas, or a single formula.
       i Review ?syntax (`?cards::syntax()`) for examples and details.
 
-# tbl_summary(sort) works
+# tbl_summary(sort) errors properly
 
     Code
       tbl_summary(mtcars, sort = list(all_categorical() ~ c("frequency", "two")))
