@@ -101,6 +101,28 @@ check_scalar_logical <- function(x, allow_empty = FALSE,
   )
 }
 
+#' Check String
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_string <- function(x, allow_empty = FALSE,
+                         message = "The {.arg {arg_name}} argument must be a string,
+                         not {.obj_type_friendly {x}}.",
+                         arg_name = rlang::caller_arg(x), call = parent.frame()) {
+  check_class(
+    x = x, class = "character", allow_empty = allow_empty,
+    message = message, arg_name = arg_name,
+    call = call
+  )
+
+  check_scalar(
+    x = x, allow_empty = allow_empty,
+    message = message, arg_name = arg_name,
+    call = call
+  )
+}
+
 #' Check Argument not Missing
 #'
 #' @inheritParams check_class

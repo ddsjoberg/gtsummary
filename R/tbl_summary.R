@@ -140,7 +140,7 @@
 #'     by = trt,
 #'     label = list(age = "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
-#'     digits = list(age ~ c(0, 1))
+#'     digits = list(age = c(0, 1))
 #'   )
 #'
 #' # Example 3 ----------------------------------
