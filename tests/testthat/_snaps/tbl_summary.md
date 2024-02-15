@@ -200,6 +200,43 @@
       ! The `label` argument must be a named list, list of formulas, or a single formula.
       i Review ?syntax (`?cards::syntax()`) for examples and details.
 
+# tbl_summary(statistic) errors properly
+
+    Code
+      tbl_summary(trial, include = response, statistic = ~"{n} ({not_a_statistic})")
+    Condition
+      Error in `tbl_summary()`:
+      ! Statistic "not_a_statistic" is not available for variable "response".
+      i Select among "p", "N", "n", "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", and "N_obs".
+
+---
+
+    Code
+      tbl_summary(trial, include = age, statistic = ~"({not_a_summary_statistic})")
+    Condition
+      Error in `tbl_summary()`:
+      ! Error converting string "not_a_summary_statistic" to a function.
+      i Is the name spelled correctly and available?
+
+# tbl_summary(value)
+
+    Code
+      as.data.frame(tbl)
+    Output
+        **Characteristic** **N = 200**
+      1              Grade    64 (32%)
+      2     Tumor Response    61 (32%)
+      3            Unknown           7
+
+# tbl_summary(value) errors properly
+
+    Code
+      tbl_summary(trial, value = "grade" ~ "IV", include = c(grade, response))
+    Condition
+      Error in `cards::ard_dichotomous()`:
+      ! Error in argument `values` for variable "grade".
+      i A value of "IV" was passed, but must be one of I, II, and III.
+
 # tbl_summary(sort) errors properly
 
     Code
@@ -215,14 +252,4 @@
     Condition
       Error in `tbl_summary()`:
       ! Error in argument `sort` for column "cyl": value must be one of "alphanumeric" and "frequency".
-
-# tbl_summary(value) works
-
-    Code
-      as.data.frame(tbl)
-    Output
-        **Characteristic** **N = 200**
-      1              Grade    64 (32%)
-      2     Tumor Response    61 (32%)
-      3            Unknown           7
 
