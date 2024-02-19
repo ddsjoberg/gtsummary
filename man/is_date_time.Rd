@@ -18,6 +18,6 @@ a scalar logical
 \examples{
 iris |>
   dplyr::mutate(date = as.Date("2000-01-01") + dplyr::row_number()) |>
-  lapply(is_date_time)
+  lapply(gtsummary:::is_date_time)
 }
 \keyword{internal}

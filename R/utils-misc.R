@@ -43,7 +43,7 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 #' @examples
 #' iris |>
 #'   dplyr::mutate(date = as.Date("2000-01-01") + dplyr::row_number()) |>
-#'   lapply(is_date_time)
+#'   lapply(gtsummary:::is_date_time)
 is_date_time <- function(x) {
   inherits(x, c("Date", "POSIXct", "POSIXlt"))
 }
