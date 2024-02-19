@@ -295,6 +295,48 @@
       Error in `tbl_summary()`:
       ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
 
+# tbl_summary(missing_text)
+
+    Code
+      as.data.frame(tbl_summary(trial, include = response, missing_text = "(MISSING)"),
+      col_label = FALSE)
+    Output
+                 label   stat_0
+      1 Tumor Response 61 (32%)
+      2      (MISSING)        7
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_text = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_text` argument must be length 1.
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_text = 10L)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_text` argument must be class <character>, not an integer.
+
+# tbl_summary(missing_stat)
+
+    Code
+      tbl_summary(trial, include = response, missing_stat = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_stat` argument must be length 1.
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_stat = 10L)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_stat` argument must be class <character>, not an integer.
+
 # tbl_summary(sort) errors properly
 
     Code
@@ -310,4 +352,49 @@
     Condition
       Error in `tbl_summary()`:
       ! Error in argument `sort` for column "cyl": value must be one of "alphanumeric" and "frequency".
+
+# tbl_summary(percent)
+
+    Code
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "column",
+        statistic = ~"{p}%"), col_labels = FALSE)
+    Output
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    36%    32%
+      3    II    33%    35%
+      4   III    32%    32%
+
+---
+
+    Code
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "row",
+        statistic = ~"{p}%"), col_labels = FALSE)
+    Output
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    51%    49%
+      3    II    47%    53%
+      4   III    48%    52%
+
+---
+
+    Code
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "cell",
+        statistic = ~"{p}%"), col_labels = FALSE)
+    Output
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    18%    17%
+      3    II    16%    18%
+      4   III    16%    17%
+
+---
+
+    Code
+      tbl_summary(trial, by = trt, include = grade, percent = letters, statistic = ~
+        "{p}%")
+    Condition
+      Error in `tbl_summary()`:
+      ! `percent` must be one of "column", "row", or "cell", not "a".
 

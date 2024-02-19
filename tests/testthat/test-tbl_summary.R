@@ -435,8 +435,73 @@ test_that("tbl_summary(missing)", {
 })
 
 # tbl_summary(missing_text) ----------------------------------------------------
+test_that("tbl_summary(missing_text)", {
+  expect_snapshot(
+    tbl_summary(
+      trial,
+      include = response,
+      missing_text = "(MISSING)"
+    ) |>
+      as.data.frame(col_label = FALSE)
+  )
 
+  # errors with invalid inputs
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      include = response,
+      missing_text = letters
+    )
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      include = response,
+      missing_text = 10L
+    )
+  )
+})
 
+# tbl_summary(missing_stat) ----------------------------------------------------
+test_that("tbl_summary(missing_stat)", {
+  # basic reporting works
+  expect_equal(
+    tbl_summary(
+      trial,
+      include = response,
+      missing_stat = "N = {N_miss}"
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "N = 7"
+  )
+
+  # reporting of non-standard stats works as well
+  expect_equal(
+    tbl_summary(
+      trial,
+      include = response,
+      missing_stat = "{N_miss}, {N_obs}, {N_nonmiss}, {p_miss}, {p_nonmiss}"
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "7, 200, 193, 3.5, 97"
+  )
+
+  # errors with bad inputs
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = response, missing_stat = letters)
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = response, missing_stat = 10L)
+  )
+})
 
 # tbl_summary(sort) ------------------------------------------------------------
 test_that("tbl_summary(sort)", {
@@ -461,4 +526,26 @@ test_that("tbl_summary(sort) errors properly", {
   )
 })
 
+# tbl_summary(percent) ---------------------------------------------------------
+test_that("tbl_summary(percent)", {
+  expect_snapshot(
+    tbl_summary(trial, by = trt, include = grade, percent = "column", statistic = ~"{p}%") |>
+      as.data.frame(col_labels = FALSE)
+  )
 
+  expect_snapshot(
+    tbl_summary(trial, by = trt, include = grade, percent = "row", statistic = ~"{p}%") |>
+      as.data.frame(col_labels = FALSE)
+  )
+
+  expect_snapshot(
+    tbl_summary(trial, by = trt, include = grade, percent = "cell", statistic = ~"{p}%") |>
+      as.data.frame(col_labels = FALSE)
+  )
+
+  # errors with bad input
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, by = trt, include = grade, percent = letters, statistic = ~"{p}%")
+  )
+})
