@@ -91,7 +91,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
       if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted")) {
         return(styfn_percent(digits = value))
       }
-      # otherwise, use style_numer() to style number
+      # otherwise, use style_number() to style number
       return(styfn_number(digits = value))
     }
   )
@@ -108,22 +108,31 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
     return(styfn_number(digits = 0L))
   }
 
-  # otherwise guess the number of dignits to use based on the spread
-  # calculate the spread of the variable
-  var_spread <-
-    stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
-    stats::quantile(x, probs = c(0.05), na.rm = TRUE)
+  # if it's a date or time, then convert the result to character
+  if (is_date_time(x)) {
+    return(as.character)
+  }
 
-  styfn_number(
-    digits =
-      dplyr::case_when(
-        var_spread < 0.01 ~ 4L,
-        var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
-        var_spread >= 0.1 & var_spread < 10 ~ 2L,
-        var_spread >= 10 & var_spread < 20 ~ 1L,
-        var_spread >= 20 ~ 0L
-      )
+  # otherwise guess the number of digits to use based on the spread
+  # calculate the spread of the variable
+  tryCatch({
+    var_spread <-
+      stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
+      stats::quantile(x, probs = c(0.05), na.rm = TRUE)
+
+    styfn_number(
+      digits =
+        dplyr::case_when(
+          var_spread < 0.01 ~ 4L,
+          var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
+          var_spread >= 0.1 & var_spread < 10 ~ 2L,
+          var_spread >= 10 & var_spread < 20 ~ 1L,
+          var_spread >= 20 ~ 0L
+        )
+    )},
+    error = function(e) 0L
   )
+
 }
 
 .categorical_summary_functions <-

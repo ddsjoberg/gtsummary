@@ -215,8 +215,58 @@
       tbl_summary(trial, include = age, statistic = ~"({not_a_summary_statistic})")
     Condition
       Error in `tbl_summary()`:
-      ! Error converting string "not_a_summary_statistic" to a function.
+      ! Problem with the `statistic` argument.
+      Error converting string "not_a_summary_statistic" to a function.
       i Is the name spelled correctly and available?
+
+# tbl_summary(type)
+
+    Code
+      dplyr::select(getElement(tbl_summary(trial, include = c(age, marker, response,
+        stage), type = list(age = "continuous", marker = "continuous2", response = "dichotomous",
+        state = "categorical"), missing = "no"), "table_body"), variable,
+      summary_type, row_type, label)
+    Output
+      # A tibble: 9 x 4
+        variable summary_type row_type label               
+        <chr>    <chr>        <chr>    <chr>               
+      1 age      continuous   header   Age                 
+      2 marker   continuous2  header   Marker Level (ng/mL)
+      3 marker   continuous2  level    Median (Q1, Q3)     
+      4 response dichotomous  header   Tumor Response      
+      5 stage    categorical  header   T Stage             
+      6 stage    categorical  level    T1                  
+      7 stage    categorical  level    T2                  
+      8 stage    categorical  level    T3                  
+      9 stage    categorical  level    T4                  
+
+# tbl_summary(type) proper errors/messages
+
+    Code
+      tbl <- tbl_summary(trial, include = grade, type = grade ~ "continuous")
+    Message
+      The following errors were returned while calculating statistics:
+      x For variable `grade` and "median" statistic: need numeric data
+      x For variable `grade` and "p25" and "p75" statistics: (unordered) factors are not allowed
+
+---
+
+    Code
+      tbl_summary(trial, include = grade, type = grade ~ "dichotomous", value = grade ~
+        "IV")
+    Condition
+      Error in `cards::ard_dichotomous()`:
+      ! Error in argument `value` for variable "grade".
+      i A value of "IV" was passed, but must be one of I, II, and III.
+
+---
+
+    Code
+      tbl_summary(trial, include = grade, type = grade ~ "dichotomous")
+    Condition
+      Error in `FUN()`:
+      ! Error in argument `value` for variable "grade".
+      i Summary type is "dichotomous" but no summary value has been assigned.
 
 # tbl_summary(value)
 
@@ -234,7 +284,7 @@
       tbl_summary(trial, value = "grade" ~ "IV", include = c(grade, response))
     Condition
       Error in `cards::ard_dichotomous()`:
-      ! Error in argument `values` for variable "grade".
+      ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
 
 # tbl_summary(sort) errors properly

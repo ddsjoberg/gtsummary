@@ -6,17 +6,19 @@
 
 * The counts in the header of `tbl_summary(by)` tables now appear on a new line.
 
-* If a column is all `NA` it is now removed from the summary table created with `tbl_summary()`.
+* If a column is all `NA_character_` in `tbl_summary()`, the default summary type is now `"continuous"`, where previously it was `"dichotomous"`.
 
 * Added a family of function `styfn_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
 
-* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be explicitly defined in a factor.
+* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a vector of all `"yes"` values will default to a categorical summary.
 
 * Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indentation = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
 
 * The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
 
 * In `tbl_summary()`, the default calculation for quantiles (e.g. statistics of the form `"p25"` or `"p75"`) has been updated with type `quantile(type=2)`.
+
+* In `tbl_summary()`, dates and times showed the minimum and maximum values only by default. They are now treated as all other continuous summaries and share their default statistics of the median and IQR.
 
 #### Internal Updates
 

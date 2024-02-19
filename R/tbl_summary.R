@@ -305,7 +305,7 @@ tbl_summary <- function(data,
         variables = all_dichotomous(),
         fmt_fn = digits,
         denominator = percent,
-        values = value,
+        value = value,
         stat_labels = ~ default_stat_labels()
       ),
       # calculate categorical summaries
@@ -313,12 +313,16 @@ tbl_summary <- function(data,
         data,
         by = all_of(by),
         variables = all_continuous(),
-        statistics =
+        statistic =
           .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
         fmt_fn = digits,
         stat_labels = ~ default_stat_labels()
       )
-    )
+    ) |>
+    cards::replace_null_statistic()
+
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
 
   # construct initial tbl_summary object ---------------------------------------
   x <-
@@ -538,6 +542,7 @@ tbl_summary <- function(data,
               eval(parse_expr(chr_fun_name), envir = attr(x, ".Environment") %||% current_env()),
               error = function(e) {
                 cli::cli_abort(c(
+                  "Problem with the {.arg statistic} argument.",
                   "Error converting string {.val {chr_fun_name}} to a function.",
                   i = "Is the name spelled correctly and available?"
                 ), call = call)
