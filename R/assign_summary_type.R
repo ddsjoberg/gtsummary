@@ -93,7 +93,7 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
 
   # numeric variables that are 0 and 1 only, will be dichotomous
   if (inherits(x, c("integer", "numeric")) &&
-    length(setdiff(stats::na.omit(x), c(0, 1))) == 0) {
+      setequal(unique(stats::na.omit(x)), c(0, 1))) {
     return(stats::na.omit(x) |> unique() |> sort() |> dplyr::last())
   }
 
@@ -107,7 +107,7 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
   # character variables that are "No" and "Yes" only, will be dichotomous
   if (inherits(x, "character") &&
     setequal(toupper(stats::na.omit(x)), c("NO", "YES")) &&
-    length(stats::na.omit(x)) == 2L) {
+    length(unique(stats::na.omit(x))) == 2L) {
     return(unique(x)[toupper(unique(x)) %in% "YES"])
   }
 

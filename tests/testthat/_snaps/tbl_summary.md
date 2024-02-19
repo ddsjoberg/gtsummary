@@ -70,7 +70,7 @@
       7         versicolor          50 (33%)
       8          virginica          50 (33%)
 
----
+# tbl_summary(data) errors properly
 
     Code
       tbl_summary()
@@ -163,7 +163,7 @@
       3       5.55 (5.10, 5.90)
       4       2.00 (1.80, 2.30)
 
----
+# tbl_summary(by) errors properly
 
     Code
       tbl_summary(mtcars, by = c("mpg", "am"))
@@ -171,7 +171,7 @@
       Error in `tbl_summary()`:
       ! The `by` argument must be length 1 or empty.
 
-# tbl_summary(label) allows for named list input
+# tbl_summary(label)
 
     Code
       as.data.frame(tbl)
@@ -183,7 +183,161 @@
       4                  6           4 (21%)           3 (23%)
       5                  8          12 (63%)           2 (15%)
 
-# tbl_summary(sort) works
+# tbl_summary(label) errors properly
+
+    Code
+      tbl_summary(trial["age"], label = list(age = letters))
+    Condition
+      Error in `tbl_summary()`:
+      ! Error in argument `label` for column "age": value must be a string.
+
+---
+
+    Code
+      tbl_summary(trial["age"], label = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `label` argument must be a named list, list of formulas, or a single formula.
+      i Review ?syntax (`?cards::syntax()`) for examples and details.
+
+# tbl_summary(statistic) errors properly
+
+    Code
+      tbl_summary(trial, include = response, statistic = ~"{n} ({not_a_statistic})")
+    Condition
+      Error in `tbl_summary()`:
+      ! Statistic "not_a_statistic" is not available for variable "response".
+      i Select among "p", "N", "n", "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", and "N_obs".
+
+---
+
+    Code
+      tbl_summary(trial, include = age, statistic = ~"({not_a_summary_statistic})")
+    Condition
+      Error in `tbl_summary()`:
+      ! Problem with the `statistic` argument.
+      Error converting string "not_a_summary_statistic" to a function.
+      i Is the name spelled correctly and available?
+
+# tbl_summary(type)
+
+    Code
+      dplyr::select(getElement(tbl_summary(trial, include = c(age, marker, response,
+        stage), type = list(age = "continuous", marker = "continuous2", response = "dichotomous",
+        state = "categorical"), missing = "no"), "table_body"), variable,
+      summary_type, row_type, label)
+    Output
+      # A tibble: 9 x 4
+        variable summary_type row_type label               
+        <chr>    <chr>        <chr>    <chr>               
+      1 age      continuous   header   Age                 
+      2 marker   continuous2  header   Marker Level (ng/mL)
+      3 marker   continuous2  level    Median (Q1, Q3)     
+      4 response dichotomous  header   Tumor Response      
+      5 stage    categorical  header   T Stage             
+      6 stage    categorical  level    T1                  
+      7 stage    categorical  level    T2                  
+      8 stage    categorical  level    T3                  
+      9 stage    categorical  level    T4                  
+
+# tbl_summary(type) proper errors/messages
+
+    Code
+      tbl <- tbl_summary(trial, include = grade, type = grade ~ "continuous")
+    Message
+      The following errors were returned while calculating statistics:
+      x For variable `grade` and "median" statistic: need numeric data
+      x For variable `grade` and "p25" and "p75" statistics: (unordered) factors are not allowed
+
+---
+
+    Code
+      tbl_summary(trial, include = grade, type = grade ~ "dichotomous", value = grade ~
+        "IV")
+    Condition
+      Error in `cards::ard_dichotomous()`:
+      ! Error in argument `value` for variable "grade".
+      i A value of "IV" was passed, but must be one of I, II, and III.
+
+---
+
+    Code
+      tbl_summary(trial, include = grade, type = grade ~ "dichotomous")
+    Condition
+      Error in `FUN()`:
+      ! Error in argument `value` for variable "grade".
+      i Summary type is "dichotomous" but no summary value has been assigned.
+
+# tbl_summary(value)
+
+    Code
+      as.data.frame(tbl)
+    Output
+        **Characteristic** **N = 200**
+      1              Grade    64 (32%)
+      2     Tumor Response    61 (32%)
+      3            Unknown           7
+
+# tbl_summary(value) errors properly
+
+    Code
+      tbl_summary(trial, value = "grade" ~ "IV", include = c(grade, response))
+    Condition
+      Error in `cards::ard_dichotomous()`:
+      ! Error in argument `value` for variable "grade".
+      i A value of "IV" was passed, but must be one of I, II, and III.
+
+# tbl_summary(missing)
+
+    Code
+      tbl_summary(trial, missing = "NOT AN OPTION")
+    Condition
+      Error in `tbl_summary()`:
+      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
+
+# tbl_summary(missing_text)
+
+    Code
+      as.data.frame(tbl_summary(trial, include = response, missing_text = "(MISSING)"),
+      col_label = FALSE)
+    Output
+                 label   stat_0
+      1 Tumor Response 61 (32%)
+      2      (MISSING)        7
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_text = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_text` argument must be length 1.
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_text = 10L)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_text` argument must be class <character>, not an integer.
+
+# tbl_summary(missing_stat)
+
+    Code
+      tbl_summary(trial, include = response, missing_stat = letters)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_stat` argument must be length 1.
+
+---
+
+    Code
+      tbl_summary(trial, include = response, missing_stat = 10L)
+    Condition
+      Error in `tbl_summary()`:
+      ! The `missing_stat` argument must be class <character>, not an integer.
+
+# tbl_summary(sort) errors properly
 
     Code
       tbl_summary(mtcars, sort = list(all_categorical() ~ c("frequency", "two")))
@@ -199,13 +353,48 @@
       Error in `tbl_summary()`:
       ! Error in argument `sort` for column "cyl": value must be one of "alphanumeric" and "frequency".
 
-# tbl_summary(value) works
+# tbl_summary(percent)
 
     Code
-      as.data.frame(tbl)
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "column",
+        statistic = ~"{p}%"), col_labels = FALSE)
     Output
-        **Characteristic** **N = 200**
-      1              Grade    64 (32%)
-      2     Tumor Response    61 (32%)
-      3            Unknown           7
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    36%    32%
+      3    II    33%    35%
+      4   III    32%    32%
+
+---
+
+    Code
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "row",
+        statistic = ~"{p}%"), col_labels = FALSE)
+    Output
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    51%    49%
+      3    II    47%    53%
+      4   III    48%    52%
+
+---
+
+    Code
+      as.data.frame(tbl_summary(trial, by = trt, include = grade, percent = "cell",
+        statistic = ~"{p}%"), col_labels = FALSE)
+    Output
+        label stat_1 stat_2
+      1 Grade   <NA>   <NA>
+      2     I    18%    17%
+      3    II    16%    18%
+      4   III    16%    17%
+
+---
+
+    Code
+      tbl_summary(trial, by = trt, include = grade, percent = letters, statistic = ~
+        "{p}%")
+    Condition
+      Error in `tbl_summary()`:
+      ! `percent` must be one of "column", "row", or "cell", not "a".
 

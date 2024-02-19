@@ -203,13 +203,21 @@ tbl_summary <- function(data,
   # processed arguments are saved into this env
   cards::process_formula_selectors(
     data = data[include],
-    label = label,
     statistic =
       .ifelse1(
         missing(statistic),
         get_theme_element("TODO:fill-this-in", default = statistic),
         statistic
       ),
+    include_env = TRUE
+  )
+
+  # add the calling env to the statistics
+  statistic <- .add_env_to_list_elements(statistic, env = caller_env())
+
+  cards::process_formula_selectors(
+    data = data[include],
+    label = label,
     sort =
       .ifelse1(
         missing(sort),
@@ -269,7 +277,9 @@ tbl_summary <- function(data,
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-        variables = all_of(include), by = all_of(by),
+        variables = all_of(include),
+        by = all_of(by),
+        fmt_fn = digits,
         stat_labels = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
@@ -295,7 +305,7 @@ tbl_summary <- function(data,
         variables = all_dichotomous(),
         fmt_fn = digits,
         denominator = percent,
-        values = value,
+        value = value,
         stat_labels = ~ default_stat_labels()
       ),
       # calculate categorical summaries
@@ -303,12 +313,16 @@ tbl_summary <- function(data,
         data,
         by = all_of(by),
         variables = all_continuous(),
-        statistics =
+        statistic =
           .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
         fmt_fn = digits,
         stat_labels = ~ default_stat_labels()
       )
-    )
+    ) |>
+    cards::replace_null_statistic()
+
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
 
   # construct initial tbl_summary object ---------------------------------------
   x <-
@@ -317,6 +331,7 @@ tbl_summary <- function(data,
       inputs = tbl_summary_inputs,
       call_list = list(tbl_summary = call)
     ) |>
+    .check_stats_available() |>
     brdg_summary() |>
     structure(class = c("tbl_summary", "gtsummary"))
 
@@ -342,6 +357,42 @@ tbl_summary <- function(data,
 
   # return tbl_summary table ---------------------------------------------------
   x
+}
+
+.check_stats_available <- function(x, call = parent.frame()) {
+  # TODO: this could be made more accurate by grouping the cards data frame by the group##_level columns
+  x$inputs$statistic |>
+    imap(
+      function(pre_glue_stat, variable) {
+        extracted_stats <- .extract_glue_elements(pre_glue_stat)
+        available_stats <-
+          x$cards |>
+          dplyr::filter(.data$variable %in% .env$variable, !.data$context %in% "attributes") |>
+          dplyr::pull("stat_name")
+
+        missing_stats <- extracted_stats[!extracted_stats %in% available_stats]
+        if (!is_empty(missing_stats)) {
+          cli::cli_abort(
+            c("Statistic {.val {missing_stats}} is not available for variable {.val {variable}}.",
+              i = "Select among {.val {rev(unique(available_stats))}}."),
+            call = call
+          )
+        }
+      }
+    )
+
+
+  x
+}
+
+.add_env_to_list_elements <- function(x, env) {
+  lapply(
+    x,
+    function(.x) {
+      attr(.x, ".Environment") <- attr(.x, ".Environment") %||% env
+      .x
+    }
+  )
 }
 
 .sort_data_infreq <- function(data, sort, type) {
@@ -459,7 +510,7 @@ tbl_summary <- function(data,
   invisible()
 }
 
-.continuous_statistics_chr_to_fun <- function(statistics) {
+.continuous_statistics_chr_to_fun <- function(statistics, call = parent.frame()) {
   # vector of all the categorical summary function names
   # these are defined internally, and we don't need to convert them to true fns
   chr_protected_cat_names <- .categorical_summary_functions() |>
@@ -487,11 +538,17 @@ tbl_summary <- function(data,
               return(.str_to_quantile_fun(chr_fun_name))
             }
             # otherwise, convert the string to an expr and evaluate
-            # TODO: for values that were converted from formulas,
-            #   this needs to be updated to evaluate from the formula env
-            #   this will first require an updated to the {cards} function that processes the inputs.
-            #   i am not sure if we need to track any other env, or just the formulas...
-            eval(rlang::parse_expr(chr_fun_name))
+            tryCatch(
+              eval(parse_expr(chr_fun_name), envir = attr(x, ".Environment") %||% current_env()),
+              error = function(e) {
+                cli::cli_abort(c(
+                  "Problem with the {.arg statistic} argument.",
+                  "Error converting string {.val {chr_fun_name}} to a function.",
+                  i = "Is the name spelled correctly and available?"
+                ), call = call)
+              }
+            )
+
           }
         ) |>
           set_names(chr_fun_names)

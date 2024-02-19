@@ -29,3 +29,21 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   # insert list
   append(calls, new_list, after = index)
 }
+
+
+#' Is a date/time
+#'
+#' `is_date_time()`: Predicate for date, time, or date-time vector identification.
+#'
+#' @param x a vector
+#'
+#' @return a scalar logical
+#' @keywords internal
+#'
+#' @examples
+#' iris |>
+#'   dplyr::mutate(date = as.Date("2000-01-01") + dplyr::row_number()) |>
+#'   lapply(gtsummary:::is_date_time)
+is_date_time <- function(x) {
+  inherits(x, c("Date", "POSIXct", "POSIXlt"))
+}
