@@ -287,6 +287,14 @@
       ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
 
+# tbl_summary(missing)
+
+    Code
+      tbl_summary(trial, missing = "NOT AN OPTION")
+    Condition
+      Error in `tbl_summary()`:
+      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
+
 # tbl_summary(sort) errors properly
 
     Code
