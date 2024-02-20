@@ -20,6 +20,10 @@
 
 * In `tbl_summary()`, dates and times showed the minimum and maximum values only by default. They are now treated as all other continuous summaries and share their default statistics of the median and IQR.
 
+* The values passed in `tbl_summary(value)` are now only checked for columns that are summary type `"dichotomous"`. 
+
+* Previously, the gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., would error if used out of context. Now they won't select the columns silently.
+
 #### Internal Updates
 
 * Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.

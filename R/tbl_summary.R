@@ -174,13 +174,19 @@ tbl_summary <- function(data,
   .data_dim_checks(data)
 
   # process arguments ----------------------------------------------------------
-  data <- dplyr::ungroup(data)
   cards::process_selectors(data, by = {{ by }}, include = {{ include }})
-  check_scalar(by, allow_empty = TRUE)
+  check_scalar(
+    by,
+    allow_empty = TRUE,
+    message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
+                i = "Use {.fun tbl_strata} for more than one {.arg by} variable.")
+  )
+  data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
   missing <- arg_match(arg = missing)
   percent <- arg_match(arg = percent)
   cards::process_formula_selectors(data = data[include], value = value)
+
 
   # assign summary type --------------------------------------------------------
   if (!is_empty(type)) {
@@ -357,6 +363,14 @@ tbl_summary <- function(data,
 
   # return tbl_summary table ---------------------------------------------------
   x
+}
+
+.drop_missing_by_obs <- function(data, by) {
+  if (is_empty(by) || !any(is.na(data[[by]]))) return(data)
+
+  obs_to_drop <- is.na(data[[by]])
+  cli::cli_inform("{.val {sum(obs_to_drop)}} missing observations in the {.val {by}} column have been removed.")
+  data[!obs_to_drop, ]
 }
 
 .check_stats_available <- function(x, call = parent.frame()) {

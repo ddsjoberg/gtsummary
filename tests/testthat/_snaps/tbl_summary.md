@@ -170,6 +170,7 @@
     Condition
       Error in `tbl_summary()`:
       ! The `by` argument must be length 1 or empty.
+      i Use `tbl_strata()` for more than one `by` variable.
 
 # tbl_summary(label)
 
