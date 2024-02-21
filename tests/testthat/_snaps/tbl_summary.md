@@ -198,7 +198,7 @@
       tbl_summary(trial["age"], label = letters)
     Condition
       Error in `tbl_summary()`:
-      ! The `label` argument must be a named list, list of formulas, or a single formula.
+      ! The `label` argument must be a named list, list of formulas, a single formula, or empty.
       i Review ?syntax (`?cards::syntax()`) for examples and details.
 
 # tbl_summary(statistic) errors properly
