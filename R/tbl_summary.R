@@ -286,13 +286,13 @@ tbl_summary <- function(data,
         variables = all_of(include),
         by = all_of(by),
         fmt_fn = digits,
-        stat_labels = ~ default_stat_labels()
+        stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
       if (!rlang::is_empty(by)) {
         cards::ard_categorical(data,
           variables = all_of(by),
-          stat_labels = ~ default_stat_labels()
+          stat_label = ~ default_stat_labels()
         )
       },
       # tabulate categorical summaries
@@ -302,7 +302,7 @@ tbl_summary <- function(data,
         variables = all_categorical(FALSE),
         fmt_fn = digits,
         denominator = percent,
-        stat_labels = ~ default_stat_labels()
+        stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
@@ -312,7 +312,7 @@ tbl_summary <- function(data,
         fmt_fn = digits,
         denominator = percent,
         value = value,
-        stat_labels = ~ default_stat_labels()
+        stat_label = ~ default_stat_labels()
       ),
       # calculate categorical summaries
       cards::ard_continuous(
@@ -322,7 +322,7 @@ tbl_summary <- function(data,
         statistic =
           .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
         fmt_fn = digits,
-        stat_labels = ~ default_stat_labels()
+        stat_label = ~ default_stat_labels()
       )
     ) |>
     cards::replace_null_statistic()

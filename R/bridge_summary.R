@@ -160,7 +160,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
   card <-
     x$cards |>
     dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("categorical", "missing")) |>
-    cards::apply_statistic_fmt_fn()
+    cards::apply_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -173,7 +173,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
           cards::get_ard_statistics(
             df_variable_stats,
             .data$variable_level %in% list(NULL),
-            .column = "statistic_fmt"
+            .column = "stat_fmt"
           )
 
         str_statistic_pre_glue <-
@@ -196,7 +196,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
                             glue::glue(
                               str_to_glue,
                               .envir =
-                                cards::get_ard_statistics(df_variable_level_stats, .column = "statistic_fmt") |>
+                                cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
                                   c(lst_variable_stats)
                             ) |>
                             as.character()
@@ -224,7 +224,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
           .data$context %in% "attributes",
           .data$stat_name %in% "label"
         ) |>
-        dplyr::select("variable", var_label = "statistic"),
+        dplyr::select("variable", var_label = "stat"),
       by = "variable"
     ) |>
     dplyr::mutate(
@@ -274,7 +274,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
   card <-
     x$cards |>
     dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
-    cards::apply_statistic_fmt_fn()
+    cards::apply_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -292,7 +292,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
                 stat <-
                   glue::glue(
                     str_to_glue,
-                    .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
+                    .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
                   ) |>
                   as.character()
               }
@@ -327,7 +327,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
           .data$context %in% "attributes",
           .data$stat_name %in% "label"
         ) |>
-        dplyr::select("variable", var_label = "statistic"),
+        dplyr::select("variable", var_label = "stat"),
       by = "variable"
     ) |>
     dplyr::mutate(
@@ -377,7 +377,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
   card <-
     x$cards |>
     dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
-    cards::apply_statistic_fmt_fn()
+    cards::apply_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -385,15 +385,17 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
     card |>
     dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
-      ~ dplyr::mutate(
-        .data = .y,
-        stat =
-          glue::glue(
-            x$inputs$statistic[[.data$variable[1]]],
-            .envir = cards::get_ard_statistics(.x, .column = "statistic_fmt")
-          ) |>
+      function(.x, .y) {
+        dplyr::mutate(
+          .data = .y,
+          stat =
+            glue::glue(
+              x$inputs$statistic[[.data$variable[1]]],
+              .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
+            ) |>
             as.character()
-      )
+        )
+      }
     ) |>
     dplyr::bind_rows()
 
@@ -408,7 +410,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
           .data$context %in% "attributes",
           .data$stat_name %in% "label"
         ) |>
-        dplyr::select("variable", var_label = "statistic"),
+        dplyr::select("variable", var_label = "stat"),
       by = "variable"
     ) |>
     dplyr::mutate(
@@ -441,7 +443,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
     variables <-
       x$cards |>
       dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
-      dplyr::filter(.data$statistic > 0L) |>
+      dplyr::filter(.data$stat > 0L) |>
       dplyr::pull("variable") |>
       unique()
   }
@@ -470,7 +472,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
         modify_stat_N =
           x$cards |>
             dplyr::filter(.data$stat_name %in% "N_obs") |>
-            dplyr::pull("statistic") |>
+            dplyr::pull("stat") |>
             unlist() |>
             getElement(1),
         modify_stat_n = .data$modify_stat_N,
@@ -492,7 +494,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       {
         dplyr::bind_rows(
           .,
-          dplyr::select(., "variable_level", "column", statistic = "variable_level") |>
+          dplyr::select(., "variable_level", "column", stat = "variable_level") |>
             dplyr::mutate(stat_name = "level") |>
             dplyr::distinct()
         )
@@ -500,7 +502,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
       tidyr::pivot_wider(
         id_cols = "column",
         names_from = "stat_name",
-        values_from = "statistic"
+        values_from = "stat"
       ) |>
       dplyr::mutate(
         dplyr::across(-"column", unlist),
@@ -518,7 +520,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include) {
         modify_stat_N =
           df_by_stats |>
             dplyr::filter(.data$stat_name %in% "N") |>
-            dplyr::pull("statistic") |>
+            dplyr::pull("stat") |>
             unlist() |>
             getElement(1L)
       ) |>
