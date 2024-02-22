@@ -226,7 +226,8 @@ tbl %>%
   the Weill Cornell Biostatistics Department and the Memorial Sloan
   Kettering R Users Group.
 
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+- Video: Presentation-ready Summary Tables with {gtsummary}
+[![gtsummary](https://img.youtube.com/vi/tANo9E1SYJE/maxresdefault.jpg)](https://www.youtube.com/watch?v=tANo9E1SYJE)
 
 ## Cite gtsummary
 
