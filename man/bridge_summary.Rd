@@ -12,15 +12,45 @@
 \usage{
 brdg_summary(x, calling_function = "tbl_summary")
 
-pier_summary_dichotomous(x, variables, value = x$inputs$value)
+pier_summary_dichotomous(
+  x,
+  variables,
+  value = x$inputs$value,
+  calling_function = "tbl_summary"
+)
 
-pier_summary_categorical(x, variables, missing, missing_text, missing_stat)
+pier_summary_categorical(
+  x,
+  variables,
+  missing,
+  missing_text,
+  missing_stat,
+  calling_function = "tbl_summary"
+)
 
-pier_summary_continuous2(x, variables, missing, missing_text, missing_stat)
+pier_summary_continuous2(
+  x,
+  variables,
+  missing,
+  missing_text,
+  missing_stat,
+  calling_function = "tbl_summary"
+)
 
-pier_summary_continuous(x, variables, missing, missing_text, missing_stat)
+pier_summary_continuous(
+  x,
+  variables,
+  missing,
+  missing_text,
+  missing_stat,
+  calling_function = "tbl_summary"
+)
 
-pier_summary_missing_row(x, variables = x$inputs$include)
+pier_summary_missing_row(
+  x,
+  variables = x$inputs$include,
+  calling_function = "tbl_summary"
+)
 }
 \arguments{
 \item{x}{gtsummary object of class \code{"tbl_summary"}}

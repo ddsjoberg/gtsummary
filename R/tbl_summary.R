@@ -333,7 +333,7 @@ tbl_summary <- function(data,
   # construct initial tbl_summary object ---------------------------------------
   x <-
     list(
-      cards = cards,
+      cards = list(tbl_summary = cards),
       inputs = tbl_summary_inputs,
       call_list = list(tbl_summary = call)
     ) |>
@@ -354,7 +354,7 @@ tbl_summary <- function(data,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_summary_footnote(x$cards, x$inputs$include, x$inputs$statistic, x$inputs$type)
+        .construct_summary_footnote(x$cards[["tbl_summary"]], x$inputs$include, x$inputs$statistic, x$inputs$type)
     ) |>
     # updating the headers for the stats columns
     modify_header(
@@ -380,7 +380,7 @@ tbl_summary <- function(data,
       function(pre_glue_stat, variable) {
         extracted_stats <- .extract_glue_elements(pre_glue_stat)
         available_stats <-
-          x$cards |>
+          x$cards$tbl_summary |>
           dplyr::filter(.data$variable %in% .env$variable, !.data$context %in% "attributes") |>
           dplyr::pull("stat_name")
 
