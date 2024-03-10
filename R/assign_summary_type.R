@@ -115,13 +115,3 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
   NULL
 }
 
-.add_summary_type_as_attr <- function(data, type) {
-  type <- type[names(type) %in% names(data)]
-  type_names <- names(type)
-
-  for (i in seq_along(type)) {
-    attr(data[[type_names[i]]], "gtsummary.type") <- type[[i]]
-  }
-
-  data
-}

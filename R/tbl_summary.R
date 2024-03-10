@@ -193,58 +193,61 @@ tbl_summary <- function(data,
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
     default_types <- assign_summary_type(data, include, value)
-    data <- .add_summary_type_as_attr(data, default_types)
     # process the user-passed type argument
-    cards::process_formula_selectors(data = data[include], type = type)
+    cards::process_formula_selectors(
+      data = select_prep(.list2tb(default_types, "summary_type"), data[include]),
+      type = type
+      )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
   } else {
     type <- assign_summary_type(data, include, value)
   }
-  data <- .add_summary_type_as_attr(data, type)
 
-  value <- .assign_default_values(data[include], value, type)
+  value <-
+    select_prep(.list2tb(type, "summary_type"), data[include]) |>
+    .assign_default_values(value, type)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
-  cards::process_formula_selectors(
-    data = data[include],
-    statistic =
-      .ifelse1(
-        missing(statistic),
-        get_theme_element("TODO:fill-this-in", default = statistic),
-        statistic
-      ),
-    include_env = TRUE
-  )
+  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+    cards::process_formula_selectors(
+      statistic =
+        .ifelse1(
+          missing(statistic),
+          get_theme_element("TODO:fill-this-in", default = statistic),
+          statistic
+        ),
+      include_env = TRUE
+    )
 
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
-  cards::process_formula_selectors(
-    data = data[include],
-    label = label,
-    sort =
-      .ifelse1(
-        missing(sort),
-        get_theme_element("TODO:fill-this-in", default = sort),
-        sort
-      )
-  )
+  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+    cards::process_formula_selectors(
+      label = label,
+      sort =
+        .ifelse1(
+          missing(sort),
+          get_theme_element("TODO:fill-this-in", default = sort),
+          sort
+        )
+    )
 
-  cards::process_formula_selectors(
-    data = data[include],
-    digits =
-      .ifelse1(
-        is_empty(digits),
-        get_theme_element("TODO:fill-this-in", default = assign_summary_digits(data, statistic, type)),
-        digits
-      )
-  )
+  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+    cards::process_formula_selectors(
+      digits =
+        .ifelse1(
+          is_empty(digits),
+          get_theme_element("TODO:fill-this-in", default = assign_summary_digits(data, statistic, type)),
+          digits
+        )
+    )
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    data[include],
+    select_prep(.list2tb(type, "summary_type"), data[include]),
     statistic =
       get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
@@ -256,7 +259,9 @@ tbl_summary <- function(data,
   # fill each element of digits argument
   # TODO: this needs to be updated to account for the scenario where there is a template override that may not fill in all the values
   if (!missing(digits)) {
-    digits <- assign_summary_digits(data[include], statistic, type, digits = digits)
+    digits <-
+      select_prep(.list2tb(type, "summary_type"), data[include]) |>
+      assign_summary_digits(statistic, type, digits = digits)
   }
 
   # check inputs ---------------------------------------------------------------
@@ -271,7 +276,7 @@ tbl_summary <- function(data,
   )
 
   # sort requested columns by frequency
-  data <- .sort_data_infreq(data, sort, type)
+  data <- .sort_data_infreq(data, sort)
 
   # save processed function inputs ---------------------------------------------
   tbl_summary_inputs <- as.list(environment())
@@ -297,7 +302,7 @@ tbl_summary <- function(data,
       },
       # tabulate categorical summaries
       cards::ard_categorical(
-        data,
+        select_prep(.list2tb(type, "summary_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
         fmt_fn = digits,
@@ -306,7 +311,7 @@ tbl_summary <- function(data,
       ),
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
-        data,
+        select_prep(.list2tb(type, "summary_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
         fmt_fn = digits,
@@ -316,11 +321,13 @@ tbl_summary <- function(data,
       ),
       # calculate categorical summaries
       cards::ard_continuous(
-        data,
+        select_prep(.list2tb(type, "summary_type"), data),
         by = all_of(by),
         variables = all_continuous(),
         statistic =
-          .continuous_statistics_chr_to_fun(statistic[select(data, all_continuous()) |> names()]),
+          .continuous_statistics_chr_to_fun(
+            statistic[select(select_prep(.list2tb(type, "summary_type"), data), all_continuous()) |> names()]
+          ),
         fmt_fn = digits,
         stat_label = ~ default_stat_labels()
       )
@@ -409,7 +416,7 @@ tbl_summary <- function(data,
   )
 }
 
-.sort_data_infreq <- function(data, sort, type) {
+.sort_data_infreq <- function(data, sort) {
   # if no frequency sorts requested, just return data frame
   if (every(sort, function(x) x %in% "alphanumeric")) {
     return(data)
@@ -421,7 +428,7 @@ tbl_summary <- function(data,
     }
   }
 
-  .add_summary_type_as_attr(data, type)
+  data
 }
 
 .construct_summary_footnote <- function(card, include, statistic, type) {
