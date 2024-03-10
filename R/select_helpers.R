@@ -38,13 +38,13 @@ NULL
 all_continuous <- function(continuous2 = TRUE) {
   types <- if (continuous2) c("continuous", "continuous2") else "continuous"
 
-  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% types))
+  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% "continuous2"))
+  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% "continuous2"))
 }
 
 #' @rdname select_helpers
@@ -52,13 +52,13 @@ all_continuous2 <- function() {
 all_categorical <- function(dichotomous = TRUE) {
   types <- if (dichotomous) c("categorical", "dichotomous") else "categorical"
 
-  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% types))
+  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_dichotomous <- function() {
-  where(function(x) isTRUE(attr(x, "gtsummary.type") %in% "dichotomous"))
+  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% "dichotomous"))
 }
 
 # #' @rdname select_helpers
@@ -101,6 +101,7 @@ all_stat_cols <- function(stat_0 = TRUE) {
   }
 }
 
+
 # #' @rdname select_helpers
 # #' @export
 # all_interaction <- broom.helpers::all_interaction
@@ -112,3 +113,60 @@ all_stat_cols <- function(stat_0 = TRUE) {
 # #' @rdname select_helpers
 # #' @export
 # all_contrasts <- broom.helpers::all_contrasts
+
+
+
+#' Table Body Select Prep
+#'
+#' This function uses the information in `.$table_body` and adds them
+#' as attributes to `data` (if passed). Once they've been assigned as
+#' proper gtsummary attributes, gtsummary selectors like `all_continuous()`
+#' will work properly.
+#'
+#' @param table_body a data frame from `.$table_body`
+#' @param data an optional data frame the attributes will be added to
+#'
+#' @return a data frame
+#' @keywords internal
+select_prep <- function(table_body, data = NULL) {
+  # if data not passed, use table_body to construct one
+  if (is.null(data)) {
+    data <- dplyr::tibble(!!!rep_named(table_body$variable, character(0L)))
+  }
+
+  # only keeping rows that have corresponding column names in data
+  table_body <- table_body |> dplyr::filter(.data$variable %in% names(data))
+
+  # if table_body passed, add columns as attr to data
+  if (!is.null(table_body)) {
+    attr_cols <- intersect(names(table_body), c("summary_type", "test_name"))
+    for (v in attr_cols) {
+      df_attr <- table_body[c("variable", v)] |> unique() |> tidyr::drop_na()
+      for (i in seq_len(nrow(df_attr))) {
+        attr(data[[df_attr$variable[i]]], paste0("gtsummary.", v)) <- df_attr[[v]][i]
+      }
+    }
+  }
+
+  data
+}
+
+
+# converts a named list to a table_body format.
+# the result of this fn will often be passed to `select_prep()`
+#' Convert Named List to Table Body
+#'
+#' Many arguments in 'gtsummary' accept named lists. This function converts
+#' a named list to the `.$table_body` format expected in `select_prep()`
+#'
+#' @param x named list
+#' @param colname string of column name to assign. Default is `caller_arg(x)`
+#'
+#' @return `.$table_body` data frame
+#' @keywords internal
+#' @examples
+#' type <- list(age = "continuous", response = "dichotomous")
+#' gtsummary:::.list2tb(type, "summary_type")
+.list2tb <- function(x, colname = caller_arg(x)) {
+  enframe(unlist(x), "variable", colname)
+}
