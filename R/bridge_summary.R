@@ -95,7 +95,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
     dplyr::left_join(
       dplyr::tibble(
         variable = x$inputs$include,
-        summary_type = x$inputs$type[.data$variable] |> unlist() |> unname()
+        var_type = x$inputs$type[.data$variable] |> unlist() |> unname()
       ),
       dplyr::bind_rows(
         pier_summary_continuous(

@@ -195,7 +195,7 @@ tbl_summary <- function(data,
     default_types <- assign_summary_type(data, include, value)
     # process the user-passed type argument
     cards::process_formula_selectors(
-      data = select_prep(.list2tb(default_types, "summary_type"), data[include]),
+      data = select_prep(.list2tb(default_types, "var_type"), data[include]),
       type = type
       )
     # fill in any types not specified by user
@@ -205,12 +205,12 @@ tbl_summary <- function(data,
   }
 
   value <-
-    select_prep(.list2tb(type, "summary_type"), data[include]) |>
+    select_prep(.list2tb(type, "var_type"), data[include]) |>
     .assign_default_values(value, type)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
-  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+  select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       statistic =
         .ifelse1(
@@ -224,7 +224,7 @@ tbl_summary <- function(data,
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
-  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+  select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       label = label,
       sort =
@@ -235,7 +235,7 @@ tbl_summary <- function(data,
         )
     )
 
-  select_prep(.list2tb(type, "summary_type"), data[include]) |>
+  select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       digits =
         .ifelse1(
@@ -247,7 +247,7 @@ tbl_summary <- function(data,
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(.list2tb(type, "summary_type"), data[include]),
+    select_prep(.list2tb(type, "var_type"), data[include]),
     statistic =
       get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
@@ -260,7 +260,7 @@ tbl_summary <- function(data,
   # TODO: this needs to be updated to account for the scenario where there is a template override that may not fill in all the values
   if (!missing(digits)) {
     digits <-
-      select_prep(.list2tb(type, "summary_type"), data[include]) |>
+      select_prep(.list2tb(type, "var_type"), data[include]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -302,7 +302,7 @@ tbl_summary <- function(data,
       },
       # tabulate categorical summaries
       cards::ard_categorical(
-        select_prep(.list2tb(type, "summary_type"), data),
+        select_prep(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
         fmt_fn = digits,
@@ -311,7 +311,7 @@ tbl_summary <- function(data,
       ),
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
-        select_prep(.list2tb(type, "summary_type"), data),
+        select_prep(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
         fmt_fn = digits,
@@ -321,12 +321,12 @@ tbl_summary <- function(data,
       ),
       # calculate categorical summaries
       cards::ard_continuous(
-        select_prep(.list2tb(type, "summary_type"), data),
+        select_prep(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_continuous(),
         statistic =
           .continuous_statistics_chr_to_fun(
-            statistic[select(select_prep(.list2tb(type, "summary_type"), data), all_continuous()) |> names()]
+            statistic[select(select_prep(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
         fmt_fn = digits,
         stat_label = ~ default_stat_labels()

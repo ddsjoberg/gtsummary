@@ -203,7 +203,7 @@ test_that("tbl_summary(type)", {
       missing = "no"
     ) |>
       getElement("table_body") |>
-      dplyr::select(variable, summary_type, row_type, label)
+      dplyr::select(variable, var_type, row_type, label)
   )
 
   # can use the default type to select variables to change the summary type
@@ -350,7 +350,7 @@ test_that("tbl_summary(value)", {
 
   # check all summary types are assigned to dichotomous
   expect_equal(
-    tbl$table_body$summary_type |> unique(),
+    tbl$table_body$var_type |> unique(),
     "dichotomous"
   )
 

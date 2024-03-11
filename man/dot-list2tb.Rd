@@ -20,6 +20,6 @@ a named list to the \code{.$table_body} format expected in \code{select_prep()}
 }
 \examples{
 type <- list(age = "continuous", response = "dichotomous")
-gtsummary:::.list2tb(type, "summary_type")
+gtsummary:::.list2tb(type, "var_type")
 }
 \keyword{internal}
