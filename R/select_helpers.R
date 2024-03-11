@@ -38,13 +38,13 @@ NULL
 all_continuous <- function(continuous2 = TRUE) {
   types <- if (continuous2) c("continuous", "continuous2") else "continuous"
 
-  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% types))
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% "continuous2"))
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "continuous2"))
 }
 
 #' @rdname select_helpers
@@ -52,13 +52,13 @@ all_continuous2 <- function() {
 all_categorical <- function(dichotomous = TRUE) {
   types <- if (dichotomous) c("categorical", "dichotomous") else "categorical"
 
-  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% types))
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_dichotomous <- function() {
-  where(function(x) isTRUE(attr(x, "gtsummary.summary_type") %in% "dichotomous"))
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "dichotomous"))
 }
 
 # #' @rdname select_helpers
@@ -139,7 +139,7 @@ select_prep <- function(table_body, data = NULL) {
 
   # if table_body passed, add columns as attr to data
   if (!is.null(table_body)) {
-    attr_cols <- intersect(names(table_body), c("summary_type", "test_name"))
+    attr_cols <- intersect(names(table_body), c("var_type", "test_name"))
     for (v in attr_cols) {
       df_attr <- table_body[c("variable", v)] |> unique() |> tidyr::drop_na()
       for (i in seq_len(nrow(df_attr))) {
@@ -166,7 +166,7 @@ select_prep <- function(table_body, data = NULL) {
 #' @keywords internal
 #' @examples
 #' type <- list(age = "continuous", response = "dichotomous")
-#' gtsummary:::.list2tb(type, "summary_type")
+#' gtsummary:::.list2tb(type, "var_type")
 .list2tb <- function(x, colname = caller_arg(x)) {
   enframe(unlist(x), "variable", colname)
 }

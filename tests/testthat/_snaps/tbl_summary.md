@@ -225,21 +225,21 @@
     Code
       dplyr::select(getElement(tbl_summary(trial, include = c(age, marker, response,
         stage), type = list(age = "continuous", marker = "continuous2", response = "dichotomous",
-        state = "categorical"), missing = "no"), "table_body"), variable,
-      summary_type, row_type, label)
+        state = "categorical"), missing = "no"), "table_body"), variable, var_type,
+      row_type, label)
     Output
       # A tibble: 9 x 4
-        variable summary_type row_type label               
-        <chr>    <chr>        <chr>    <chr>               
-      1 age      continuous   header   Age                 
-      2 marker   continuous2  header   Marker Level (ng/mL)
-      3 marker   continuous2  level    Median (Q1, Q3)     
-      4 response dichotomous  header   Tumor Response      
-      5 stage    categorical  header   T Stage             
-      6 stage    categorical  level    T1                  
-      7 stage    categorical  level    T2                  
-      8 stage    categorical  level    T3                  
-      9 stage    categorical  level    T4                  
+        variable var_type    row_type label               
+        <chr>    <chr>       <chr>    <chr>               
+      1 age      continuous  header   Age                 
+      2 marker   continuous2 header   Marker Level (ng/mL)
+      3 marker   continuous2 level    Median (Q1, Q3)     
+      4 response dichotomous header   Tumor Response      
+      5 stage    categorical header   T Stage             
+      6 stage    categorical level    T1                  
+      7 stage    categorical level    T2                  
+      8 stage    categorical level    T3                  
+      9 stage    categorical level    T4                  
 
 # tbl_summary(type) proper errors/messages
 
