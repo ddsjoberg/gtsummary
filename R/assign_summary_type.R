@@ -93,7 +93,7 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
 
   # numeric variables that are 0 and 1 only, will be dichotomous
   if (inherits(x, c("integer", "numeric")) &&
-      setequal(unique(stats::na.omit(x)), c(0, 1))) {
+    setequal(unique(stats::na.omit(x)), c(0, 1))) {
     return(stats::na.omit(x) |> unique() |> sort() |> dplyr::last())
   }
 
@@ -114,4 +114,3 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
   # otherwise, return NULL
   NULL
 }
-
