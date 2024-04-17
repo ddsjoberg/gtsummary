@@ -125,16 +125,22 @@
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
-#' @examples
-#' # Example 1 ----------------------------------
-#' tbl_summary_ex1 <-
-#'   trial |>
+#' @section Examples:
+#' Basic `tbl_summary` function:
+#' ```{r, eval = getOption("gtsummary_update_examples", default = FALSE)}
+#' ex1 <- trial |>
 #'   select(age, grade, response) |>
 #'   tbl_summary()
+#' ```
+#' \if{html}{\out{
+#' ```{r, echo = FALSE, results = 'asis'}
+#' write_and_read_html_output(ex1, "tbl_summary")
+#' ```
+#' }}
 #'
-#' # Example 2 ----------------------------------
-#' tbl_summary_ex2 <-
-#'   trial |>
+#' Customizing the `tbl_summary` function:
+#' ```{r, eval = getOption("gtsummary_update_examples", default = FALSE)}
+#' ex2 <- trial |>
 #'   select(age, grade, response, trt) |>
 #'   tbl_summary(
 #'     by = trt,
@@ -142,16 +148,31 @@
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(age = c(0, 1))
 #'   )
+#'   print(getOption("gtsummary_update_examples"))
+#' ```
+#' \if{html}{\out{
+#' ```{r, echo = FALSE, results = 'asis'}
+#' write_and_read_html_output(ex2, "tbl_summary")
+#' ```
+#' }}
 #'
-#' # Example 3 ----------------------------------
-#' tbl_summary_ex3 <-
-#'   trial |>
+#' Multiple statistics for continuous variables:
+#' ```{r, eval = getOption("gtsummary_update_examples", default = FALSE)}
+#' ex3 <- trial |>
 #'   select(age, marker) |>
 #'   tbl_summary(
 #'     type = all_continuous() ~ "continuous2",
 #'     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
 #'     missing = "no"
 #'   )
+#' ```
+#'
+#' \if{html}{\out{
+#' ```{r, echo = FALSE, results = 'asis', eval = TRUE}
+#' write_and_read_html_output(ex3, "tbl_summary")
+#' ```
+#' }}
+#' @md
 tbl_summary <- function(data,
                         by = NULL,
                         label = NULL,
