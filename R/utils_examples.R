@@ -23,11 +23,6 @@ write_example_output <- function(tbl,
   }
 
   if (getOption("gtsummary_update_examples", default = FALSE)) {
-    folder_name <- file.path(
-      sub("(^.*/gtsummary).*", "\\1", getwd()),
-      "inst",
-      "example_outputs"
-    )
     if (is(tbl, "html")) {
       html_output <- tbl
     } else if (is(tbl, "gtsummary")) {
@@ -38,11 +33,16 @@ write_example_output <- function(tbl,
     } else {
       stop("tbl needs a html or gtsummary table. Got something else.")
     }
-    fl_nm <- paste0(folder_name, "/", example_name, "_", out_var_name)
+    fl_nm <- file.path(
+      sub("(^.*/gtsummary).*", "\\1", getwd()),
+      "inst",
+      "example_outputs",
+      paste0(example_name, "_", out_var_name, ".", method)
+    )
     if (method == "txt") {
-      writeLines(text = html_output, con = paste0(fl_nm, ".txt"))
+      writeLines(text = html_output, con = fl_nm)
     } else if (method == "rds") {
-      saveRDS(html_output, file = paste0(fl_nm, ".rds"))
+      saveRDS(html_output, file = fl_nm)
     }
   }
 }
@@ -51,19 +51,15 @@ write_example_output <- function(tbl,
 read_example_output <- function(out_var_name,
                                 example_name = "example",
                                 method = c("txt", "rds")[2]) {
-  folder_name <- file.path(
+  fl_nm <- file.path(
     sub("(^.*/gtsummary).*", "\\1", getwd()),
     "inst",
-    "example_outputs"
+    "example_outputs",
+    paste0(example_name, "_", out_var_name, ".", method)
   )
   if (isFALSE(method %in% c("txt", "rds"))) {
     stop("Inserted method is not supported.")
   }
-
-  fl_nm <- file.path(
-    folder_name,
-    paste0(example_name, "_", out_var_name, ".", method)
-  )
 
   if (require("htmltools", quietly = TRUE) && file.exists(fl_nm)) {
     if (method == "txt") {
