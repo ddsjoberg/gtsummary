@@ -134,7 +134,7 @@
 #' ```
 #' \if{html}{\out{
 #' ```{r, echo = FALSE, results = 'asis'}
-#' write_and_read_html_output(ex1, "tbl_summary")
+#' write_read_example_output(ex1, "tbl_summary")
 #' ```
 #' }}
 #'
@@ -152,7 +152,7 @@
 #' ```
 #' \if{html}{\out{
 #' ```{r, echo = FALSE, results = 'asis'}
-#' write_and_read_html_output(ex2, "tbl_summary")
+#' write_read_example_output(ex2, "tbl_summary")
 #' ```
 #' }}
 #'
@@ -169,7 +169,7 @@
 #'
 #' \if{html}{\out{
 #' ```{r, echo = FALSE, results = 'asis', eval = TRUE}
-#' write_and_read_html_output(ex3, "tbl_summary")
+#' write_read_example_output(ex3, "tbl_summary")
 #' ```
 #' }}
 #' @md

@@ -10,24 +10,24 @@ test_that("writing and reading examples work", {
     as_gt() |>
     gt::tab_options() |>
     gt::as_raw_html()
-  write_html_output(html_tbl)
-  read_html_tbl <- read_html_output("html_tbl")
+  write_example_output(html_tbl)
+  read_html_tbl <- read_example_output("html_tbl")
   expect_equal(html_tbl, read_html_tbl)
 
   # txt
-  write_html_output(html_tbl, method = "txt")
-  read_html_tbl <- read_html_output("html_tbl", method = "txt")
+  write_example_output(html_tbl, method = "txt")
+  read_html_tbl <- read_example_output("html_tbl", method = "txt")
   expect_equal(html_tbl, read_html_tbl)
 
   # One function
-  html_output2 <- write_and_read_html_output(html_tbl)
+  html_output2 <- write_read_example_output(html_tbl)
   expect_equal(html_tbl, html_output2)
-  expect_error(write_html_output(html_tbl, method = "sdads"))
-  expect_error(read_html_output("html_tbl", method = "sdads"))
+  expect_error(write_example_output(html_tbl, method = "sdads"))
+  expect_error(read_example_output("html_tbl", method = "sdads"))
 
   # Starting from tbl (common behavior)
-  write_html_output(tbl_to_write)
-  read_html_tbl <- read_html_output("tbl_to_write")
+  write_example_output(tbl_to_write)
+  read_html_tbl <- read_example_output("tbl_to_write")
   html_tbl2 <- strsplit(as.character(html_tbl), "\n")[[1]]
   read_html_tbl2 <- strsplit(as.character(read_html_tbl), "\n")[[1]]
   html_tbl2[1] <- paste0('<div id=\"\" style', strsplit(html_tbl2[1], "style")[[1]][2])
@@ -36,7 +36,7 @@ test_that("writing and reading examples work", {
 
   # Impossible error
   expect_error(
-    write_html_output("not_a_tbl_or_html"),
+    write_example_output("not_a_tbl_or_html"),
     "tbl needs a html or gtsummary table. Got something else."
   )
   options(gtsummary_update_examples = NULL)

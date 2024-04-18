@@ -2,25 +2,25 @@
 % Please edit documentation in R/utils_examples.R
 \name{utils_examples}
 \alias{utils_examples}
-\alias{write_html_output}
-\alias{read_html_output}
-\alias{write_and_read_html_output}
+\alias{write_example_output}
+\alias{read_example_output}
+\alias{write_read_example_output}
 \title{Utilities to write and read tables in html for function documentation}
 \usage{
-write_html_output(
+write_example_output(
   tbl,
   example_name = "example",
   out_var_name = deparse(substitute(tbl)),
   method = c("txt", "rds")[2]
 )
 
-read_html_output(
+read_example_output(
   out_var_name,
   example_name = "example",
   method = c("txt", "rds")[2]
 )
 
-write_and_read_html_output(
+write_read_example_output(
   tbl,
   example_name = "example",
   out_var_name = deparse(substitute(tbl)),
@@ -28,7 +28,17 @@ write_and_read_html_output(
 )
 }
 \arguments{
-\item{tbl}{}
+\item{tbl}{(\code{gtsummary} or \code{html})\cr tables are converted to html. Any html code (table or not)
+can be saved and retrieved for documentation purposes.}
+
+\item{example_name}{(\code{string})\cr usually the name of the function or file where the
+table is used.}
+
+\item{out_var_name}{(\code{string})\cr the name of the variable that will be saved. It defaults
+to the name of the variable passed to the function (\code{tbl}).}
+
+\item{method}{(\code{string})\cr saving method. Default is \code{"rds"} as it produces a smaller file,
+but we are planning to extend this to other, non-html outputs like \code{"png"}.}
 }
 \description{
 This is still experimental. We are planning to potentially expand this to other
