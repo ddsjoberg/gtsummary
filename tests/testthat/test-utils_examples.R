@@ -39,5 +39,17 @@ test_that("writing and reading examples work", {
     write_example_output("not_a_tbl_or_html"),
     "tbl needs a html or gtsummary table. Got something else."
   )
+
+  # Cleaning up
   options(gtsummary_update_examples = NULL)
+  folder_name <- file.path(
+    sub("(^.*/gtsummary).*", "\\1", getwd()),
+    "inst",
+    "example_outputs"
+  )
+  files <- file.path(
+    folder_name,
+    c("example_html_tbl.txt", "example_html_tbl.rds", "example_tbl_to_write.rds")
+  )
+  file.remove(files[file.exists(files)])
 })
