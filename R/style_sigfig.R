@@ -40,9 +40,7 @@ style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark
       "< 10^(", 1:digits - 1, ") - 0.5 * 10^(", -(digits:1), ") ~ ", digits:1,
       collapse = ", "
     ) %>%
-    {
-      paste0("dplyr::case_when(", ., ", TRUE ~ 0)")
-    } %>%
+    {paste0("dplyr::case_when(", ., ", TRUE ~ 0)")} %>% # styler: off
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()
