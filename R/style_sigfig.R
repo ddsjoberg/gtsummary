@@ -32,6 +32,7 @@
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
 style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
+  set_cli_abort_call()
   # calculating the number of digits to round number
   d <-
     paste0(

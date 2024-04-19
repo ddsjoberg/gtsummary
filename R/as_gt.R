@@ -25,6 +25,7 @@
 #' #   tbl_summary(by = trt) %>%
 #' #   as_gt()
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
+  set_cli_abort_call()
   check_class(x, "gtsummary")
 
   # running pre-conversion function, if present --------------------------------
@@ -57,12 +58,10 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
     )
 
   # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(gt_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(gt_calls)),
+    include = {{ include }}
+  )
 
   # user cannot omit the first 'gt' command
   include <- "gt" %>% union(include)

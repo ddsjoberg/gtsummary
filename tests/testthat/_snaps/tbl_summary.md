@@ -246,7 +246,7 @@
     Code
       tbl <- tbl_summary(trial, include = grade, type = grade ~ "continuous")
     Message
-      The following errors were returned while calculating statistics:
+      The following errors were returned during `tbl_summary()`:
       x For variable `grade` and "median" statistic: need numeric data
       x For variable `grade` and "p25" and "p75" statistics: (unordered) factors are not allowed
 
@@ -256,7 +256,7 @@
       tbl_summary(trial, include = grade, type = grade ~ "dichotomous", value = grade ~
         "IV")
     Condition
-      Error in `cards::ard_dichotomous()`:
+      Error in `tbl_summary()`:
       ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
 
@@ -284,7 +284,7 @@
     Code
       tbl_summary(trial, value = "grade" ~ "IV", include = c(grade, response))
     Condition
-      Error in `cards::ard_dichotomous()`:
+      Error in `tbl_summary()`:
       ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
 

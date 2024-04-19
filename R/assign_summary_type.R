@@ -26,6 +26,7 @@
 #'   value = NULL
 #' )
 assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L) {
+  set_cli_abort_call()
   # base classes that can be summarized as continuous
   base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt", "double")
 

@@ -1,6 +1,5 @@
 #' @keywords internal
 #' @import rlang
-#' @importFrom broom.helpers .select_to_varnames
 #' @importFrom dplyr across
 "_PACKAGE"
 

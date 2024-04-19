@@ -29,6 +29,7 @@
 # #'   )
 # #' }
 modify_fmt_fun <- function(x, update, rows = NULL) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
   check_class(x, "gtsummary")
 

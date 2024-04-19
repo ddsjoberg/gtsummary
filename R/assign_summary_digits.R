@@ -23,6 +23,7 @@
 #'   type = list(mpg = "continuous")
 #' )
 assign_summary_digits <- function(data, statistic, type, digits = NULL) {
+  set_cli_abort_call()
   # stats returned for all variables
   lst_cat_summary_fns <- .categorical_summary_functions(c("n", "p"))
   lst_all_fmt_fns <-

@@ -65,6 +65,7 @@ NULL
 #' @rdname bridge_summary
 #' @export
 brdg_summary <- function(x, calling_function = "tbl_summary") {
+  set_cli_abort_call()
   # add gts info to the cards table --------------------------------------------
   # adding the name of the column the stats will populate
   if (is_empty(x$inputs$by)) {
@@ -136,6 +137,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
 #' @export
 pier_summary_dichotomous <- function(x, variables, value = x$inputs$value,
                                      calling_function = "tbl_summary") {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
@@ -154,6 +156,7 @@ pier_summary_dichotomous <- function(x, variables, value = x$inputs$value,
 #' @export
 pier_summary_categorical <- function(x, variables, missing, missing_text, missing_stat,
                                      calling_function = "tbl_summary") {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
@@ -269,6 +272,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
 #' @export
 pier_summary_continuous2 <- function(x, variables, missing, missing_text, missing_stat,
                                      calling_function = "tbl_summary") {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
@@ -373,6 +377,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
 #' @export
 pier_summary_continuous <- function(x, variables, missing, missing_text, missing_stat,
                                     calling_function = "tbl_summary") {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
@@ -436,6 +441,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
 #' @export
 pier_summary_missing_row <- function(x, variables = x$inputs$include,
                                      calling_function = "tbl_summary") {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
