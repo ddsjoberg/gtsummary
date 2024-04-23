@@ -37,7 +37,7 @@ test_that("writing and reading examples work", {
   # Impossible error
   expect_error(
     write_example_output("not_a_tbl_or_html"),
-    "tbl needs a html or gtsummary table. Got something else."
+    "tbl needs to be a html, gtsummary or gt table. Got something else."
   )
 
   # Cleaning up

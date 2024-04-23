@@ -23,15 +23,17 @@ write_example_output <- function(tbl,
   }
 
   if (getOption("gtsummary_update_examples", default = FALSE)) {
-    if (is(tbl, "html")) {
-      html_output <- tbl
-    } else if (is(tbl, "gtsummary")) {
+    if (is(tbl, "gtsummary")) {
+      tbl <- tbl |>
+        as_gt()
+    }
+    if (is(tbl, "gt_tbl")) {
       html_output <- tbl |>
-        as_gt() |>
         gt::tab_options() |>
         gt::as_raw_html()
-    } else {
-      stop("tbl needs a html or gtsummary table. Got something else.")
+    }
+    if (!is(tbl, "html")) {
+      stop("tbl needs to be a html, gtsummary or gt table. Got something else.")
     }
     fl_nm <- file.path(
       sub("(^.*/gtsummary).*", "\\1", getwd()),
