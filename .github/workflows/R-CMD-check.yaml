@@ -51,7 +51,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install cardx deps
-        run: remotes::install_github('insightsengineering/cardx', dependencies = TRUE)
+        run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE)
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
