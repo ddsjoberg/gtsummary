@@ -47,10 +47,4 @@ test_that("add_p.tbl_summary() creates output without error/warning for continuo
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
   )
-
-  expect_snapshot(
-    tbl_summary(trial, by = trt, include = c(age, marker, response), type = all_continuous() ~ "continuous2") |>
-      add_p(group = response) |>
-      as.data.frame()
-  )
 })

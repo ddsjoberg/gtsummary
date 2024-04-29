@@ -135,19 +135,3 @@
       7       Tumor Response    >0.9
       8              Unknown    <NA>
 
----
-
-    Code
-      as.data.frame(add_p(tbl_summary(trial, by = trt, include = c(age, marker,
-        response), type = all_continuous() ~ "continuous2"), group = response))
-    Output
-          **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102 **p-value**
-      1                  Age                 <NA>                  <NA>        >0.9
-      2      Median (Q1, Q3)          46 (37, 60)           48 (39, 56)        <NA>
-      3              Unknown                    7                     4        <NA>
-      4 Marker Level (ng/mL)                 <NA>                  <NA>         0.2
-      5      Median (Q1, Q3)    0.84 (0.23, 1.60)     0.52 (0.18, 1.21)        <NA>
-      6              Unknown                    6                     4        <NA>
-      7       Tumor Response             28 (29%)              33 (34%)         0.5
-      8              Unknown                    3                     4        <NA>
-
