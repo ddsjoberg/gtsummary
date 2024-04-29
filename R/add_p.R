@@ -45,6 +45,9 @@ add_p <- function(x, ...) {
 #'   Containing additional arguments to pass to tests that accept arguments.
 #'   For example, add an argument for all t-tests, use
 #'   `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`.
+#' @param adj.vars ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Variables to include in adjusted calculations (e.g. in ANCOVA models).
+#'   Default is `NULL`.
 #' @param ... Not used
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
@@ -74,6 +77,7 @@ add_p.tbl_summary <- function(x,
                               group = NULL,
                               include = everything(),
                               test.args = NULL,
+                              adj.vars = NULL,
                               ...) {
   set_cli_abort_call()
   # check/process inputs -------------------------------------------------------
@@ -90,7 +94,7 @@ add_p.tbl_summary <- function(x,
     select_prep(x$table_body, x$inputs$data[x$inputs$include]),
     include = {{ include }}
   )
-  cards::process_selectors(x$inputs$data, group = {{ group }})
+  cards::process_selectors(x$inputs$data, group = {{ group }}, adj.vars = {{ adj.vars }})
   check_scalar(group, allow_empty = TRUE)
 
   cards::process_formula_selectors(
@@ -153,30 +157,70 @@ add_p.tbl_summary <- function(x,
   )
 
   # calculate p-values ---------------------------------------------------------
+  x <-
+    calculate_and_add_test_results(
+      x = x, include = include, group = group, test.args = test.args, adj.vars = adj.vars,
+      df_test_meta_data = df_test_meta_data, calling_fun = "add_p"
+    )
+
+  # update call list
+  x$call_list <- updated_call_list
+
+  x
+}
+
+calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars,
+                                           df_test_meta_data, estimate_fun = NULL,
+                                           calling_fun) {
   # list of ARDs or broom::tidy-like results
   lst_results <-
     lapply(
       include,
       \(variable) {
-        do.call(
-          what =
-            df_test_meta_data |>
-            dplyr::filter(.data$variable %in% .env$variable) |>
-            dplyr::pull("fun_to_run") %>%
-            getElement(1) |>
-            eval(),
-          args = list(
-            data = x$inputs$data,
-            variable = variable,
-            by = x$inputs$by,
-            group = group,
-            type = x$inputs$type[[variable]],
-            test.args = test.args[[variable]]
+        # evaluate the test
+        lst_captured_results <-
+          cards::eval_capture_conditions(
+            do.call(
+              what =
+                df_test_meta_data |>
+                dplyr::filter(.data$variable %in% .env$variable) |>
+                dplyr::pull("fun_to_run") %>%
+                getElement(1) |>
+                eval(),
+              args = list(
+                data = x$inputs$data,
+                variable = variable,
+                by = x$inputs$by,
+                group = group,
+                type = x$inputs$type[[variable]],
+                test.args = test.args[[variable]]
+              )
+            )
           )
-        )
+
+        # if test evaluated without error, return the result
+        if (!is.null(lst_captured_results[["result"]])) return(lst_captured_results[["result"]]) # styler: off
+        # otherwise, construct a {cards}-like object with error
+        dplyr::tibble(
+          group1 = x$inputs$by,
+          variable = variable,
+          stat_name = switch(calling_fun, "add_p" = "p.value", "add_difference" = "estimate"),
+          stat = list(NULL),
+          warning = lst_captured_results["result"],
+          error = lst_captured_results["error"]
+        ) %>%
+          structure(., class = c("card", class(.)))
       }
     ) |>
     stats::setNames(include)
+
+  # print any errors or warnings
+  lst_results |>
+    map(\(x) if (inherits(x, "card")) x else NULL) |>
+    dplyr::bind_rows() |>
+    dplyr::filter(.data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
+                                         "conf.low", "conf.high", "p.value")) |>
+    cards::print_ard_conditions()
 
   # combine results into a single data frame
   df_results <-
@@ -186,8 +230,9 @@ add_p.tbl_summary <- function(x,
         # if results are an ARD, reshape into broom::tidy-like format
         if (inherits(x, "card")) {
           res <-
-            dplyr::filter(x, .data$stat_name %in% c("estimate", "parameter", "statistic",
+            dplyr::filter(x, .data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
                                                     "conf.low", "conf.high", "p.value")) |>
+            cards::replace_null_statistic() |>
             tidyr::pivot_wider(
               id_cols = "variable",
               names_from = "stat_name",
@@ -197,7 +242,7 @@ add_p.tbl_summary <- function(x,
         }
         else {
           res <-
-            dplyr::select(x, any_of(c("estimate", "parameter", "statistic",
+            dplyr::select(x, any_of(c("estimate", "std.error", "parameter", "statistic",
                                       "conf.low", "conf.high", "p.value"))) |>
             dplyr::mutate(variable = .env$variable, .before = 1L)
         }
@@ -223,6 +268,7 @@ add_p.tbl_summary <- function(x,
     }
   ) |>
     unlist() |>
+    unique() |>
     paste(collapse = "; ")
 
   # add results to `.$table_body` ----------------------------------------------
@@ -232,10 +278,13 @@ add_p.tbl_summary <- function(x,
         .x,
         df_results |> dplyr::mutate(row_type = "header"),
         by = c("variable", "row_type")
+      )
     )
-    ) |>
+
+  x <-
     modify_table_styling(
-      columns = "p.value",
+      x,
+      columns = any_of("p.value"),
       label = "**p-value**",
       hide = FALSE,
       fmt_fun = styfn_pvalue(),
@@ -252,13 +301,11 @@ add_p.tbl_summary <- function(x,
 
 
   # add raw results to `.$card`
-  x$cards$add_p <- lst_results
-
-  # update call list
-  x$call_list <- updated_call_list
+  x$cards[[calling_fun]] <- lst_results
 
   x
 }
+
 
 # TODO: add the data set of tests to the package so we can assign the name
 #       perhaps we can allow test names to be attributes of user-defined
@@ -289,13 +336,13 @@ add_p.tbl_summary <- function(x,
             fun_to_run =
               # styler: off
               if (is.function(passed_test)) passed_test |> list()
-              else {
-                rlang::parse_expr(passed_test) |>
-                  eval_tidy(env = attr(passed_test, ".Environment")) |>
-                  structure(.Environment = attr(passed_test, ".Environment")) |>
-                  list()
-              },
-              # styler: on
+            else {
+              rlang::parse_expr(passed_test) |>
+                eval_tidy(env = attr(passed_test, ".Environment")) |>
+                structure(.Environment = attr(passed_test, ".Environment")) |>
+                list()
+            },
+            # styler: on
             accept_dots = FALSE # TODO: is this true? in the last version of gtsummary, did user-defined functions accept dots?
           )
       }

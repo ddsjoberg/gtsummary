@@ -11,6 +11,7 @@
   group = NULL,
   include = everything(),
   test.args = NULL,
+  adj.vars = NULL,
   ...
 )
 }
@@ -46,6 +47,10 @@ Variables to include in output. Default is \code{everything()}.}
 Containing additional arguments to pass to tests that accept arguments.
 For example, add an argument for all t-tests, use
 \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
+
+\item{adj.vars}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in adjusted calculations (e.g. in ANCOVA models).
+Default is \code{NULL}.}
 
 \item{...}{Not used}
 }

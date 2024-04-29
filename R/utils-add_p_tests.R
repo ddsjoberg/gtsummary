@@ -1,4 +1,21 @@
 # add_p.tbl_summary ------------------------------------------------------------
+# TODO: added paired cohens d, hedges g, paired hedges g (any more?)
+# TODO: how to handle wilcox test with CIs? add them by default? separate test that includes CIs?
+
+add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+
+  rlang::inject(
+    cardx::ard_effectsize_cohens_d(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      ci = conf.level,
+      !!!test.args
+    )
+  )
+}
+
 
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
@@ -34,7 +51,21 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
     )
 }
 
-add_p_test_mcnemar.test <- function(data, variable, by, test.args, ...) {
+add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+
+  rlang::inject(
+    cardx::ard_stats_mcnemar_test_long(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
 
   rlang::inject(
@@ -42,7 +73,6 @@ add_p_test_mcnemar.test <- function(data, variable, by, test.args, ...) {
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      conf.level = conf.level,
       !!!test.args
     )
   )
@@ -86,18 +116,14 @@ add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
   )
 }
 
-add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
-  # TODO: Add this function
-}
+
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
 
-  rlang::inject(
-    cardx::ard_stats_kruskal_test(
-      data = data,
-      variable = all_of(variable),
-      by = all_of(by)
-    )
+  cardx::ard_stats_kruskal_test(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by)
   )
 }
 
@@ -129,8 +155,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
     cardx::ard_stats_aov(
       # TODO: Update this to cardx::reformulate2()
       formula = stats::reformulate(termlabels = by, response = variable),
-      data = data,
-      !!!test.args
+      data = data
     )
   )
 }
@@ -164,8 +189,12 @@ add_p_test_lme4 <- function(data, variable, by, group, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_pkg_installed("lme4", reference_pkg = "cardx")
 
+  if (is_empty(group)) {
+    cli::cli_abort("The {.arg group} argument cannot be missing for {.val lme4} tests.")
+  }
+
   cardx::ard_stats_anova(
-    x = data,
+    x = data |> tidyr::drop_na(any_of(c(variable, by, group))),
     formulas = list(
       glue::glue("as.factor({cardx::bt(by)}) ~ 1 + (1 | {cardx::bt(group)})") |> stats::as.formula(),
       glue::glue("as.factor({cardx::bt(by)}) ~ {cardx::bt(variable)} + (1 | {cardx::bt(group)})") |> stats::as.formula()
@@ -192,7 +221,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      id = all_of(id),
+      id = all_of(group),
       conf.level = conf.level,
       !!!test.args
     )
@@ -207,7 +236,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      id = all_of(id),
+      id = all_of(group),
       conf.level = conf.level,
       !!!test.args
     )
@@ -222,7 +251,6 @@ add_p_test_prop.test <- function(data, variable, by, group, test.args, conf.leve
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      id = all_of(id),
       conf.level = conf.level,
       !!!test.args
     )
@@ -332,108 +360,73 @@ add_p_test_smd <- function(data, variable, by, ...) {
   )
 }
 
-
-# TODO: Do we need an ARD solution for this? This is just copied from the previous version
 add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
                                type, group = NULL, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+
   if (!is.null(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", reference_pkg = "cardx")
-
-  data_frame <-
-    .extract_data_frame(data)
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
     cli::cli_abort("Variable must be summary type 'continuous' or 'dichotomous'", call = get_cli_abort_call())
   }
-  if (dplyr::n_distinct(data_frame[[by]], na.rm = TRUE) != 2) {
-    cli::cli_abort("`by=` must have exactly 2 levels", call = get_cli_abort_call())
+  if (dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
+    cli::cli_abort("The {.arg by} argument must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (type %in% "dichotomous" && dplyr::n_distinct(data_frame[[by]], na.rm = TRUE) != 2) {
-    cli::cli_abort("`variable=` must have exactly 2 levels", call = get_cli_abort_call())
+  if (type %in% "dichotomous" && dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
+    cli::cli_abort("Variable {.val {variable}} must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (is_survey(data) && !is.null(group)) {
-    cli::cli_abort("Cannot use `group=` argument with 'emmeans' and survey data.", call = get_cli_abort_call())
+  if (inherits(data, "survey.design") && !is.null(group)) {
+    cli::cli_abort("Cannot use {.arg group} argument with {.val emmeans} and survey data.", call = get_cli_abort_call())
   }
 
   # assembling formula
   # styler: off
   termlabels <-
-    if (is.null(group)) c(by, adj.vars)
-    else c(by, adj.vars, glue::glue("(1 | {cardx::bt(group)})"))
+    if (is.null(group)) cardx::bt(c(by, adj.vars))
+    else c(cardx::bt(by), cardx::bt(adj.vars), glue::glue("(1 | {cardx::bt(group)})"))
   response <-
     if (type == "dichotomous") glue::glue("as.factor({cardx::bt(variable)})")
     else cardx::bt(variable)
-  f <- stats::reformulate(termlabels, response)
-  f_by <- cardx::reformulate2(by)
-
-    rlang::inject(~ !!rlang::sym(chr_w_backtick(by)))
+  formula <- stats::reformulate(termlabels, response)
   # styler: on
 
-  type2 <-
-    dplyr::case_when(
-      is.data.frame(data) && is.null(group) ~ type,
-      inherits(data, "survey.design") && is.null(group) && type == "dichotomous" ~ "dichotomous_svy",
-      inherits(data, "survey.design") && is.null(group) && type == "continuous" ~ "continuous_svy",
-      is.data.frame(data) && type == "dichotomous" ~ "dichotomous_mixed",
-      is.data.frame(data) && type == "continuous" ~ "continuous_mixed",
-    )
+  # set regression function and any additional arguments
+  # styler: off
+  method.args <- list()
+  package <- "base"
+  if (is.data.frame(data) && is.null(group) && type %in% "continuous") {
+    method <- "lm"
+  }
+  else if (is.data.frame(data) && is.null(group) && type %in% "dichotomous") {
+    method <- "lm"
+    method.args <- list(family = stats::binomial())
+  }
+  else if (inherits(data, "survey.design")) {
+    package <- "survey"
+    method <- "svyglm"
+    if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
+  }
+  else if (is.data.frame(data) && !is.null(group)) {
+    package <- "lme4"
+    method <- "glmer"
+    if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
+  }
+  # styler: on
 
-  model_fun <-
-    switch(type2,
-           "dichotomous" =
-             cardx::construct_model(x = data)
-             purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
-           "continuous" =
-             purrr::partial(stats::lm, formula = f, data = data),
-           "dichotomous_svy" =
-             purrr::partial(survey::svyglm, formula = f, design = data, family = stats::binomial),
-           "continuous_svy" =
-             purrr::partial(survey::svyglm, formula = f, design = data),
-           "dichotomous_mixed" =
-             purrr::partial(lme4::glmer, formula = f, data = data, family = stats::binomial),
-           "continuous_mixed" =
-             purrr::partial(lme4::lmer, formula = f, data = data)
-    )
-
-  emmeans_fun <-
-    switch(type,
-           "dichotomous" =
-             purrr::partial(emmeans::emmeans, specs = f_by, regrid = "response"),
-           "continuous" =
-             purrr::partial(emmeans::emmeans, specs = f_by)
-    )
-
-  # building model
-  model_fun() %>%
-    emmeans_fun() %>%
-    emmeans::contrast(method = "pairwise") %>%
-    summary(infer = TRUE, level = conf.level) %>%
-    tibble::as_tibble() %>%
-    dplyr::rename(
-      conf.low = any_of("asymp.LCL"),
-      conf.high = any_of("asymp.UCL"),
-      conf.low = any_of("lower.CL"),
-      conf.high = any_of("upper.CL")
-    ) %>%
-    dplyr::select(
-      "estimate",
-      std.error = "SE",
-      "conf.low", "conf.high",
-      "p.value"
-    ) %>%
-    dplyr::mutate(
-      method =
-        ifelse(
-          is.null(.env$adj.vars),
-          "Regression least-squares mean difference",
-          "Regression least-squares adjusted mean difference"
-        )
-    )
-
+  cardx::ard_emmeans_mean_difference(
+    data = data,
+    formula = formula,
+    method = method,
+    method.args = method.args,
+    package = package,
+    response_type = type,
+    conf.level = conf.level,
+    primary_covariate = by
+  )
 }
 
-# TODO: we should be able to delete this is the emmeans functions gets deleted.
 .extract_data_frame <- function(x) {
   if (is.data.frame(x)) {
     return(x)

@@ -120,12 +120,12 @@ add_p_tbl_summary_default_test <- function(data, variable, by, group, summary_ty
   # now setting default tests for grouped data
   # if group variable supplied, fit a random effects model
   if (!is_empty(group) && length(unique(data[[by]])) == 2) {
-    if (summary_type[[variable]] %in% c("continuous", "continuous2")) {
+    if (summary_type %in% c("continuous", "continuous2")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2", default = "lme4")
       return(test_func)
     }
-    if (summary_type[[variable]] %in% c("categorical", "dichotomous")) {
+    if (summary_type %in% c("categorical", "dichotomous")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.categorical.group_by2", default = "lme4")
       return(test_func)
