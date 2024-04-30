@@ -50,9 +50,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Install cardx deps
-        run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE); rownames(installed.packages())
-        shell: Rscript {0}
+      # - name: Install cardx deps
+      #   run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE); rownames(installed.packages())
+      #   shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
