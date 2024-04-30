@@ -50,8 +50,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      # installing the Suggested pkg from cardx
       - name: Install cardx deps
-        run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE); rownames(installed.packages())
+        run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE)
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
@@ -59,6 +60,7 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      # not using the default '--as-cran' arg, because it sets up private libs (see https://github.com/r-lib/devtools/issues/2044#issuecomment-526209877)
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
