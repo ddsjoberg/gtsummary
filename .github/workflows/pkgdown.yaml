@@ -30,15 +30,15 @@ jobs:
         with:
           use-public-rspm: true
 
-       # installing the Suggested pkg from cardx
-     - name: Install cardx deps
-        run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE)
-        shell: Rscript {0}
+     #   # installing the Suggested pkg from cardx
+     # - name: Install cardx deps
+     #    run: install.packages('remotes'); remotes::install_github('insightsengineering/cardx', dependencies = TRUE)
+     #    shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
-          needs: website
+          needs: check
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
