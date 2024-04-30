@@ -2,21 +2,6 @@
 # TODO: added paired cohens d, hedges g, paired hedges g (any more?)
 # TODO: how to handle wilcox test with CIs? add them by default? separate test that includes CIs?
 
-add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx", reference_pkg = "gtsummary")
-
-  rlang::inject(
-    cardx::ard_effectsize_cohens_d(
-      data = data,
-      variable = all_of(variable),
-      by = all_of(by),
-      ci = conf.level,
-      !!!test.args
-    )
-  )
-}
-
-
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
 
@@ -153,8 +138,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
 
   rlang::inject(
     cardx::ard_stats_aov(
-      # TODO: Update this to cardx::reformulate2()
-      formula = stats::reformulate(termlabels = by, response = variable),
+      formula = cardx::reformulate2(termlabels = by, response = variable),
       data = data
     )
   )
@@ -165,8 +149,7 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
 
   rlang::inject(
     cardx::ard_stats_oneway_test(
-      # TODO: Update this to cardx::reformulate2()
-      formula = stats::reformulate(termlabels = by, response = variable),
+      formula = cardx::reformulate2(termlabels = by, response = variable),
       data = data,
       !!!test.args
     )
@@ -369,7 +352,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
-    cli::cli_abort("Variable must be summary type 'continuous' or 'dichotomous'", call = get_cli_abort_call())
+    cli::cli_abort("Variable {.val {variable}} must be summary type 'continuous' or 'dichotomous'", call = get_cli_abort_call())
   }
   if (dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
     cli::cli_abort("The {.arg by} argument must have exactly 2 levels.", call = get_cli_abort_call())
