@@ -40,7 +40,7 @@ When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{
 A character vector of column names selected
 }
 \description{
-Set of functions to supplement the {tidyselect} set of
+Set of functions to supplement the \{tidyselect\} set of
 functions for selecting columns of data frames (and other items as well).
 \itemize{
 \item \code{all_continuous()} selects continuous variables

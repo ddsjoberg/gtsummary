@@ -1,6 +1,6 @@
 #' Select helper functions
 #'
-#' @description Set of functions to supplement the {tidyselect} set of
+#' @description Set of functions to supplement the \{tidyselect\} set of
 #' functions for selecting columns of data frames (and other items as well).
 #' - `all_continuous()` selects continuous variables
 #' - `all_continuous2()` selects only type `"continuous2"`

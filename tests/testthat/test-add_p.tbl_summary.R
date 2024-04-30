@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed("broom", reference_pkg = "cardx"))
+
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
     tbl_summary(trial, by = grade) |>
