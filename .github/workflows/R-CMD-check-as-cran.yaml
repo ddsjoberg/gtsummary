@@ -1,16 +1,13 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
-#
-# NOTE: This workflow is overkill for most R packages and
-# check-standard.yaml is likely a better choice.
-# usethis::use_github_action("check-standard") will install it.
+
 on:
   push:
     branches: [main, master]
   pull_request:
     # branches: [main, master]
 
-name: R-CMD-check
+name: R-CMD-check-as-cran
 
 jobs:
   R-CMD-check:
@@ -55,8 +52,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      # not using the default '--as-cran' arg, because it sets up private libs (see https://github.com/r-lib/devtools/issues/2044#issuecomment-526209877)
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: 'c("--no-manual")'

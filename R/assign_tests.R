@@ -65,9 +65,9 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, include,
       if (is.null(default_test)) {
         cli::cli_abort(c(
           "There is no default test set for column {.val {variable}}.",
-          i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}.",
+          i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}."),
           call = get_cli_abort_call()
-        ))
+        )
       }
       default_test
     }

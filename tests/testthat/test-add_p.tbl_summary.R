@@ -50,3 +50,17 @@ test_that("add_p.tbl_summary() creates output without error/warning for continuo
       select(-all_stat_cols())
   )
 })
+
+test_that("add_p() creates errors with bad args", {
+  expect_error(
+    tbl_summary(mtcars, by = am) |>
+      add_p(pvalue_fun = mtcars),
+    NULL
+  )
+
+  expect_error(
+    tbl_summary(trial, by = grade, include = -response) |>
+      add_p(group = response),
+    NULL
+  )
+})
