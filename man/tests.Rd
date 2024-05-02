@@ -11,7 +11,7 @@ passed to them using \code{add_p(test.args=)}. For example, to
 calculate a p-value from \code{t.test()} assuming equal variance, use
 \code{tbl_summary(trial, by = trt) \%>\% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))}
 }
-\section{tbl_summary() \%>\% add_p()}{
+\section{\code{tbl_summary() \%>\% add_p()}}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
@@ -34,7 +34,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_svysummary() \%>\% add_p()}{
+\section{\code{tbl_svysummary() \%>\% add_p()}}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'svy.t.test'} \tab t-test adapted to complex survey samples \tab \code{survey::svyttest(~variable + by, data)} \tab  \cr
@@ -52,7 +52,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_survfit() \%>\% add_p()}{
+\section{\code{tbl_survfit() \%>\% add_p()}}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{'logrank'} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 0)} \cr
@@ -65,7 +65,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_continuous() \%>\% add_p()}{
+\section{\code{tbl_continuous() \%>\% add_p()}}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{'anova_2way'} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
@@ -106,9 +106,13 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 To report a p-value (or difference) for a test not available in gtsummary, you can create a
 custom function. The output is a data frame that is one line long. The
 structure is similar to the output of \code{broom::tidy()} of a typical
-statistical test. The \code{add_p()} and \code{add_comparison()} functions will look for columns called
-\code{"p.value"}, \code{"estimate"}, \code{"conf.low"}, \code{"conf.high"}, and \code{"method"} for the
-p-value, difference, confidence interval, and the test name used in the footnote.
+statistical test. The \code{add_p()} and \code{add_difference()} functions will look for columns called
+\code{"p.value"}, \code{"estimate"}, \code{"statistic"}, \code{"std.error"}, \code{"parameter"},
+\code{"conf.low"}, \code{"conf.high"}, and \code{"method"}.
+
+You can also pass an Analysis Results Dataset (ARD) object with the results
+for your custom result. These objects follow the structures outlined
+by the \{cards\} and \{cardx\} packages.
 
 Example calculating a p-value from a t-test assuming a common variance
 between groups.

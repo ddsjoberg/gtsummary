@@ -1,4 +1,4 @@
-skip_if_not(is_pkg_installed("broom", reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), reference_pkg = "cardx"))
 
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
