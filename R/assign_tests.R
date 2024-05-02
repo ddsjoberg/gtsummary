@@ -52,30 +52,77 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, include,
   lapply(
     include,
     function(variable) {
-      # if there is a user-supplied test, use that one
-      if (!is.null(test[[variable]])) return(test[[variable]]) # styler: off
-
-      if (calling_fun %in% "add_p") {
-        default_test <-
-          add_p_tbl_summary_default_test(data, variable = variable,
-                                         by = by, group = group,
-                                         summary_type = summary_type[[variable]])
+      if (is.null(test[[variable]]) && calling_fun %in% "add_p") {
+        test[[variable]] <-
+          .add_p_tbl_summary_default_test(data, variable = variable,
+                                          by = by, group = group,
+                                          summary_type = summary_type[[variable]])
       }
 
-      if (is.null(default_test)) {
+      if (is.null(test[[variable]])) {
         cli::cli_abort(c(
           "There is no default test set for column {.val {variable}}.",
           i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}."),
           call = get_cli_abort_call()
         )
       }
-      default_test
+
+      test[[variable]] <-
+        .process_test_argument_value(
+          test = test[[variable]],
+          class = "tbl_summary",
+          calling_fun = calling_fun
+        )
     }
   ) |>
     stats::setNames(include)
 }
 
-add_p_tbl_summary_default_test <- function(data, variable, by, group, summary_type) {
+
+.process_test_argument_value <- function(test, class, calling_fun) {
+  # subset the data frame
+  df_tests <-
+    df_add_p_tests |>
+    dplyr::filter(.data$class %in% .env$class, .data[[calling_fun]])
+
+  # if the test is character and it's an internal test
+  if (is.character(test) && test %in% df_tests$test_name) {
+    test_to_return <- df_tests$fun_to_run[df_tests$test_name %in% test][[1]] |> eval()
+    attr(test_to_return, "test_name") <- df_tests$test_name[df_tests$test_name %in% test]
+    return(test_to_return)
+  }
+
+  # if the test is character and it's NOT an internal test
+  if (is.character(test)) {
+    return(eval(parse_expr(test), envir = attr(test, ".Environment")))
+  }
+
+  # if passed test is a function and it's an internal test
+  internal_test_index <- df_tests$test_fun |>
+    map_lgl(~identical_no_attr(eval(.x), test)) |>
+    which()
+  if (is.function(test) && !is_empty(internal_test_index)) {
+    test_to_return <- df_add_p_tests$fun_to_run[[internal_test_index]] |> eval()
+    attr(test_to_return, "test_name") <- df_add_p_tests$test_name[internal_test_index]
+    return(test_to_return)
+  }
+
+  # otherwise, if it's a function, return it
+  return(eval(test, envir = attr(test, ".Environment")))
+
+}
+
+# compare after removing attributes
+identical_no_attr <- function(x, y) {
+  tryCatch({
+    attributes(x) <- NULL
+    attributes(y) <- NULL
+    identical(x, y)},
+    error = \(x) FALSE
+  )
+}
+
+.add_p_tbl_summary_default_test <- function(data, variable, by, group, summary_type) {
   # for continuous data, default to non-parametric tests
   if (is_empty(group) && summary_type %in% c("continuous", "continuous2") && length(unique(data[[by]])) == 2) {
     test_func <-
@@ -131,4 +178,6 @@ add_p_tbl_summary_default_test <- function(data, variable, by, group, summary_ty
       return(test_func)
     }
   }
+
+  return(NULL)
 }

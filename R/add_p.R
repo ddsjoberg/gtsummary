@@ -87,7 +87,7 @@ add_p.tbl_summary <- function(x,
   # checking that input x has a by var
   if (is_empty(x$inputs$by)) {
     "Cannot run {.fun add_p} when {.code tbl_summary(by)} argument not included." |>
-      cli::cli_abort()
+      cli::cli_abort(call = get_cli_abort_call())
   }
 
   cards::process_selectors(
@@ -133,16 +133,34 @@ add_p.tbl_summary <- function(x,
     )
 
   # add all available test meta data to a data frame ---------------------------
-  df_test_meta_data <- .test_meta_data(test)
+  df_test_meta_data <-
+    imap(
+      test,
+      ~dplyr::tibble(variable = .y, fun_to_run = list(.x), test_name = attr(.x, "test_name") %||% NA_character_)
+    ) |>
+    dplyr::bind_rows()
 
   # add test names to `.$table_body` so it can be used in selectors ------------
-  x$table_body <-
-    dplyr::left_join(
-      x$table_body,
-      df_test_meta_data[c("variable", "test_name")],
-      by = "variable"
-    ) |>
-    dplyr::relocate("test_name", .after = "variable")
+  if (!"test_name" %in% names(x$table_body)) {
+    x$table_body <-
+      dplyr::left_join(
+        x$table_body,
+        df_test_meta_data[c("variable", "test_name")],
+        by = "variable"
+      ) |>
+      dplyr::relocate("test_name", .after = "variable")
+  }
+  else {
+    x$table_body <-
+      dplyr::rows_update(
+        x$table_body,
+        df_test_meta_data[c("variable", "test_name")],
+        by = "variable",
+        unmatched = "ignore"
+      ) |>
+      dplyr::relocate("test_name", .after = "variable")
+  }
+
 
   # now process the `test.args` argument ---------------------------------------
   cards::process_formula_selectors(
@@ -185,8 +203,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
                 df_test_meta_data |>
                 dplyr::filter(.data$variable %in% .env$variable) |>
                 dplyr::pull("fun_to_run") %>%
-                getElement(1) |>
-                eval(),
+                getElement(1),
               args = list(
                 data = x$inputs$data,
                 variable = variable,
@@ -198,6 +215,14 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
             )
           )
 
+        # if there was a warning captured, print it now
+        if (!is.null(lst_captured_results[["warning"]])) {
+          cli::cli_inform(c(
+            "The following warning was returned in {.fun {calling_fun}} for variable {.val {variable}}",
+            "!" = lst_captured_results[["warning"]]
+          ))
+        }
+
         # if test evaluated without error, return the result
         if (!is.null(lst_captured_results[["result"]])) return(lst_captured_results[["result"]]) # styler: off
         # otherwise, construct a {cards}-like object with error
@@ -206,7 +231,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
           variable = variable,
           stat_name = switch(calling_fun, "add_p" = "p.value", "add_difference" = "estimate"),
           stat = list(NULL),
-          warning = lst_captured_results["result"],
+          warning = lst_captured_results["warning"],
           error = lst_captured_results["error"]
         ) %>%
           structure(., class = c("card", class(.)))
@@ -217,10 +242,14 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   # print any errors or warnings
   lst_results |>
     map(\(x) if (inherits(x, "card")) x else NULL) |>
-    dplyr::bind_rows() |>
-    dplyr::filter(.data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
-                                         "conf.low", "conf.high", "p.value")) |>
-    cards::print_ard_conditions()
+    dplyr::bind_rows() %>%
+    {switch(
+      !is_empty(.),
+      dplyr::filter(., .data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
+                                           "conf.low", "conf.high", "p.value")) |>
+        cards::print_ard_conditions()
+    )}
+
 
   # combine results into a single data frame
   df_results <-
@@ -251,6 +280,16 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     ) |>
     dplyr::bind_rows()
 
+  # remove new columns that already exist in gtsummary table
+  new_columns <- names(df_results) |> setdiff(names(x$table_body))
+  if (is_empty(new_columns)) {
+    cli::cli_abort(
+      c("Columns {.val {names(df_results) |> setdiff('variable')}} are already present in table (although, some may be hidden), and no new columns were added.",
+        i = "Use {.code tbl |> modify_table_body(\\(x) dplyr::select(x, -p.value))} to remove columns and they will be replaced by the new columns from the current call."),
+      call = get_cli_abort_call()
+    )
+  }
+
   # create default footnote text
   footnote <- map(
     lst_results,
@@ -270,6 +309,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     unlist() |>
     unique() |>
     paste(collapse = "; ")
+  if (footnote == "" || is_empty(footnote)) footnote <- NULL
 
   # add results to `.$table_body` ----------------------------------------------
   x <- x |>
@@ -284,10 +324,20 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   x <-
     modify_table_styling(
       x,
-      columns = any_of("p.value"),
+      columns = intersect("p.value", new_columns),
       label = "**p-value**",
       hide = FALSE,
       fmt_fun = styfn_pvalue(),
+      footnote = footnote
+    ) |>
+    modify_table_styling(
+      columns =
+        intersect(
+          c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high"),
+          new_columns
+        ),
+      hide = TRUE,
+      fmt_fun = styfn_sigfig(),
       footnote = footnote
     )
 
@@ -297,8 +347,6 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
       label = ifelse(.data$column %in% "statistic", "**Statistic**", .data$label)
     ) |>
     tidyr::fill("modify_stat_N", .direction = "downup") # fill missing N for new cols
-
-
 
   # add raw results to `.$card`
   x$cards[[calling_fun]] <- lst_results

@@ -10,7 +10,7 @@
 
 * Added a family of function `styfn_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
 
-* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a vector of all `"yes"` values will default to a categorical summary.
+* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a character vector of all `"yes"` or all `"no"` values will default to a categorical summary instead of dichotomous.
 
 * Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indentation = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
 
@@ -22,7 +22,7 @@
 
 * The values passed in `tbl_summary(value)` are now only checked for columns that are summary type `"dichotomous"`. 
 
-* Previously, the gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., would error if used out of context. Now they won't select the columns silently.
+* Previously, the gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., would error if used out of context. They will now select no columns when used out-of-context.
 
 #### Internal Updates
 
@@ -37,6 +37,12 @@
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
 
 * The `modify_header(stat_by)` argument was deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package.
+
+* Use of the `vars()` selector was first removed in v1.2.5 (2020-02-11), and the messaging about the deprecation was kicked up in June 2022. This use is now defunct and the function will soon no longer be exported.
+
+* The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
+
+* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. One example, is that we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
 
 # gtsummary 1.7.2
 

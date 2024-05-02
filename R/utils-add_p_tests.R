@@ -38,6 +38,7 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  warn_unbalanced_pairs(data, by, variable, group)
 
   rlang::inject(
     cardx::ard_stats_mcnemar_test_long(
@@ -135,13 +136,13 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 
 add_p_test_aov <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  cli::cli_warn(c(
+    "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
+    i = "The same functionality is covered with {.val oneway.test}. Use the following code instead:",
+    i = "{.code add_p(test = list({variable} = 'oneway.test'), test.args = list({variable} = list(var.equal = TRUE)))}."
+  ))
 
-  rlang::inject(
-    cardx::ard_stats_aov(
-      formula = cardx::reformulate2(termlabels = by, response = variable),
-      data = data
-    )
-  )
+  add_p_test_oneway.test(data = data, variable = variable, by = by, test.args = list(var.equal = TRUE))
 }
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
@@ -198,6 +199,8 @@ add_p_test_lme4 <- function(data, variable, by, group, ...) {
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
 
   rlang::inject(
     cardx::ard_stats_paired_t_test(
@@ -213,6 +216,8 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
 
   rlang::inject(
     cardx::ard_stats_paired_wilcox_test(
@@ -289,6 +294,8 @@ add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95
 # TODO: Add this function to the test xlsx file
 add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
 
   rlang::inject(
     cardx::ard_effectsize_paired_cohens_d(
@@ -320,6 +327,8 @@ add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95
 # TODO: Add this function to the test xlsx file
 add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
 
   rlang::inject(
     cardx::ard_effectsize_paired_hedges_g(
@@ -415,4 +424,28 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
     return(x)
   }
   x$variables # return survey object data frame
+}
+
+warn_unbalanced_pairs <- function(data, by, variable, group) {
+  balanced_pairs <-
+    data[c(group, by, variable)] |>
+    tidyr::drop_na() |>
+    tidyr::pivot_wider(
+      id_cols = all_of(group),
+      names_from = all_of(by),
+      values_from = all_of(variable)
+    ) |>
+    dplyr::select(-all_of(group)) |>
+    dplyr::mutate(across(everything(), is.na)) |>
+    apply(MARGIN = 1, FUN = sum) |>
+    keep(~ . == 1L) |>
+    is_empty()
+
+  if (!balanced_pairs) {
+    cli::cli_warn(
+      "Some observations included in the stratified summary statistics were omitted
+       from the comparison due to unbalanced missingness within group."
+    )
+  }
+  invisible()
 }
