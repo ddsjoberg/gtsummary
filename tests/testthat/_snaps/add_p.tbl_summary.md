@@ -84,6 +84,34 @@
       16           Patient Died     0.4
       17 Months to Death/Censor    0.14
 
+# add_p.tbl_summary() error messaging with bad inputs
+
+    Code
+      add_p(tbl_summary(trial[c("trt", "age")]))
+    Condition
+      Error in `add_p()`:
+      ! Cannot run `add_p()` when `tbl_summary(by)` argument not included.
+
+---
+
+    Code
+      add_p(tbl_summary(trial[c("trt", "age")], by = trt), test = list(age = function(
+        ...) mtcars))
+    Condition
+      Error in `add_p()`:
+      ! The test result object for variable "age" is not the expected structure.
+      i Review `?gtsummary::tests()` for details on constructing a custom function.
+
+---
+
+    Code
+      add_p(tbl_summary(trial[c("trt", "age")], by = trt), test = list(age = function(
+        ...) letters))
+    Condition
+      Error in `add_p()`:
+      ! Expecting the test result object for variable "age" to be a <data.frame/tibble>.
+      i Review `?gtsummary::tests()` for details on constructing a custom function.
+
 # add_p.tbl_summary() & lme4
 
     Code

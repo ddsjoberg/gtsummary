@@ -11,6 +11,7 @@ assign_tests(x, ...)
   x,
   test = NULL,
   group = NULL,
+  adj.vars = NULL,
   include,
   calling_fun = c("add_p", "add_difference"),
   ...
@@ -29,6 +30,9 @@ a named list of tests.}
 \item{group}{(\code{string})\cr
 a variable name indicating the grouping column for correlated data.
 Default is \code{NULL}.}
+
+\item{adj.vars}{(\code{character})\cr
+Variables to include in adjusted calculations (e.g. in ANCOVA models).}
 
 \item{include}{(\code{character})\cr
 Character vector of column names to assign a default tests.}

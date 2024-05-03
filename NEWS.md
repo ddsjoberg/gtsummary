@@ -4,6 +4,8 @@
 
 #### User-facing Updates
 
+* Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
+
 * The counts in the header of `tbl_summary(by)` tables now appear on a new line.
 
 * If a column is all `NA_character_` in `tbl_summary()`, the default summary type is now `"continuous"`, where previously it was `"dichotomous"`.

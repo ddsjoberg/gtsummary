@@ -13,7 +13,9 @@ Object with class 'gtsummary'}
 \item{...}{Passed to other methods.}
 }
 \description{
-Adds P-value
+\itemize{
+\item \code{\link[=add_p.tbl_summary]{add_p.tbl_summary()}}
+}
 }
 \seealso{
 \code{\link[=add_p.tbl_summary]{add_p.tbl_summary()}}

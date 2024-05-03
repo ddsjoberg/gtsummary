@@ -20,7 +20,12 @@
 table created with \code{tbl_summary()}}
 
 \item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the statistical tests to perform for each variable, e.g. \code{ list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
+Specifies the statistical tests to perform for each variable, e.g.
+\code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
+
+See below for details on default tests and \link{tests} for details on available
+tests and creating custom tests.
+
 Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
 \code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data).
 See \link{tests} for details, more tests, and instruction for implementing a custom test.
@@ -60,6 +65,45 @@ a gtsummary table of class \code{"tbl_summary"}
 \description{
 Adds p-values to tables created by \code{\link[=tbl_summary]{tbl_summary()}} by comparing values across groups.
 }
+\section{test argument}{
+
+
+See the \link{tests} help file for details on available tests and creating custom tests.
+The \link{tests} help file also includes psuedo-code for each test to be clear
+precisely how the calculation is performed.
+
+The default test used in \code{add_p()} primarily depends on these factors:
+\itemize{
+\item whether the variable is categorical/dichotomous vs continuous
+\item number of levels in the \code{tbl_summary(by)} variable
+\item whether the \code{add_p(group)} argument is specified
+\item whether the \code{add_p(adj.vars)} argument is specified
+}
+\subsection{Specified neither \code{add_p(group)} nor \code{add_p(adj.vars)}}{
+\itemize{
+\item \code{"wilcox.test"} when \code{by} variable has two levels and variable is continuous.
+\item \code{"krustkal.test"} when \code{by} variable has more than two levels and variable is continuous.
+\item \code{"chisq.test.no.correct"} for categorical variables with all expected cell counts >=5,
+and \code{"fisher.test"} for categorical variables with any expected cell count <5.
+}
+}
+
+\subsection{Specified \code{add_p(group)} and not \code{add_p(adj.vars)}}{
+\itemize{
+\item \code{"lme4"} when \code{by} variable has two levels for all summary types.
+}
+
+\emph{There is no default for grouped data when \code{by} variable has more than two levels.}
+\emph{Users must create custom tests for this scenario.}
+}
+
+\subsection{Specified \code{add_p(adj.vars)} and not \code{add_p(group)}}{
+\itemize{
+\item \code{"ancova"} when variable is continuous and \code{by} variable has two levels.
+}
+}
+}
+
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------

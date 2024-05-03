@@ -10,6 +10,8 @@
 #' @param group (`string`)\cr
 #'   a variable name indicating the grouping column for correlated data.
 #'   Default is `NULL`.
+#' @param adj.vars (`character`)\cr
+#'   Variables to include in adjusted calculations (e.g. in ANCOVA models).
 #' @param include (`character`)\cr
 #'   Character vector of column names to assign a default tests.
 #' @param calling_fun (`string`)\cr
@@ -39,7 +41,7 @@ assign_tests <- function(x, ...) {
 
 #' @rdname assign_tests
 #' @export
-assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, include,
+assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NULL, include,
                                      calling_fun = c("add_p", "add_difference"), ...) {
   set_cli_abort_call()
   # processing inputs ----------------------------------------------------------
@@ -55,7 +57,7 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, include,
       if (is.null(test[[variable]]) && calling_fun %in% "add_p") {
         test[[variable]] <-
           .add_p_tbl_summary_default_test(data, variable = variable,
-                                          by = by, group = group,
+                                          by = by, group = group, adj.vars = adj.vars,
                                           summary_type = summary_type[[variable]])
       }
 
@@ -122,20 +124,20 @@ identical_no_attr <- function(x, y) {
   )
 }
 
-.add_p_tbl_summary_default_test <- function(data, variable, by, group, summary_type) {
+.add_p_tbl_summary_default_test <- function(data, variable, by, group, adj.vars, summary_type) {
   # for continuous data, default to non-parametric tests
-  if (is_empty(group) && summary_type %in% c("continuous", "continuous2") && length(unique(data[[by]])) == 2) {
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% c("continuous", "continuous2") && length(unique(data[[by]])) == 2) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous_by2", default = "wilcox.test")
     return(test_func)
   }
-  if (is_empty(group) && summary_type %in% c("continuous", "continuous2")) {
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% c("continuous", "continuous2")) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous", default = "kruskal.test")
     return(test_func)
   }
   # now assign categorical default tests
-  if (is_empty(group) && summary_type %in% c("categorical", "dichotomous")) {
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% c("categorical", "dichotomous")) {
     # calculate expected counts to select between chi-square and fisher
     min_exp <-
       tryCatch(
@@ -166,7 +168,7 @@ identical_no_attr <- function(x, y) {
 
   # now setting default tests for grouped data
   # if group variable supplied, fit a random effects model
-  if (!is_empty(group) && length(unique(data[[by]])) == 2) {
+  if (!is_empty(group) && is_empty(adj.vars) && length(unique(data[[by]])) == 2) {
     if (summary_type %in% c("continuous", "continuous2")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2", default = "lme4")
@@ -178,6 +180,14 @@ identical_no_attr <- function(x, y) {
       return(test_func)
     }
   }
+
+  # now setting default tests for adjusted comparisons
+  if (is_empty(group) && !is_empty(adj.vars) && length(unique(data[[by]])) == 2) {
+    if (summary_type %in% c("continuous", "continuous2")) {
+      return("ancova")
+    }
+  }
+
 
   return(NULL)
 }

@@ -1,5 +1,7 @@
 #' Adds P-value
 #'
+#' - [`add_p.tbl_summary()`]
+#'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
 #' @param ... Passed to other methods.
@@ -21,8 +23,12 @@ add_p <- function(x, ...) {
 #' @param x (`tbl_summary`)\cr
 #'   table created with `tbl_summary()`
 #' @param test ([`formula-list-selector`][syntax])\cr
-#'   Specifies the statistical tests to perform for each variable, e.g. `
-#'   list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")`.
+#'   Specifies the statistical tests to perform for each variable, e.g.
+#'   `list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")`.
+#'
+#'   See below for details on default tests and [tests] for details on available
+#'   tests and creating custom tests.
+#'
 #'   Common tests include `"t.test"`, `"aov"`, `"wilcox.test"`, `"kruskal.test"`,
 #'   `"chisq.test"`, `"fisher.test"`, and `"lme4"` (for clustered data).
 #'   See [tests] for details, more tests, and instruction for implementing a custom test.
@@ -52,6 +58,36 @@ add_p <- function(x, ...) {
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
+#'
+#' @section test argument:
+#'
+#' See the [tests] help file for details on available tests and creating custom tests.
+#' The [tests] help file also includes psuedo-code for each test to be clear
+#' precisely how the calculation is performed.
+#'
+#' The default test used in `add_p()` primarily depends on these factors:
+#' - whether the variable is categorical/dichotomous vs continuous
+#' - number of levels in the `tbl_summary(by)` variable
+#' - whether the `add_p(group)` argument is specified
+#' - whether the `add_p(adj.vars)` argument is specified
+#'
+#' #### Specified neither `add_p(group)` nor `add_p(adj.vars)`
+#'
+#' - `"wilcox.test"` when `by` variable has two levels and variable is continuous.
+#' - `"krustkal.test"` when `by` variable has more than two levels and variable is continuous.
+#' - `"chisq.test.no.correct"` for categorical variables with all expected cell counts >=5,
+#'    and `"fisher.test"` for categorical variables with any expected cell count <5.
+#'
+#' #### Specified `add_p(group)` and not `add_p(adj.vars)`
+#'
+#'  - `"lme4"` when `by` variable has two levels for all summary types.
+#'
+#'  *There is no default for grouped data when `by` variable has more than two levels.*
+#'  *Users must create custom tests for this scenario.*
+#'
+#' #### Specified `add_p(adj.vars)` and not `add_p(group)`
+#'
+#'  - `"ancova"` when variable is continuous and `by` variable has two levels.
 #'
 #' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
@@ -128,6 +164,7 @@ add_p.tbl_summary <- function(x,
       x = x,
       test = test,
       group = group,
+      adj.vars = adj.vars,
       include = include,
       calling_fun = "add_p"
     )
@@ -217,6 +254,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
 
         # if there was a warning captured, print it now
         if (!is.null(lst_captured_results[["warning"]])) {
+          browser()
           cli::cli_inform(c(
             "The following warning was returned in {.fun {calling_fun}} for variable {.val {variable}}",
             "!" = lst_captured_results[["warning"]]
@@ -270,10 +308,26 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
             dplyr::mutate(across(-"variable", unlist))
         }
         else {
+          if (!is.data.frame(x)) {
+            cli::cli_abort(
+              c("Expecting the test result object for variable {.val {variable}} to be a {.cls {c('data.frame', 'tibble')}}.",
+                i = "Review {.help gtsummary::tests} for details on constructing a custom function."),
+              call = get_cli_abort_call()
+            )
+          }
+
           res <-
             dplyr::select(x, any_of(c("estimate", "std.error", "parameter", "statistic",
                                       "conf.low", "conf.high", "p.value"))) |>
             dplyr::mutate(variable = .env$variable, .before = 1L)
+          # check the result structure
+          if (identical(names(res), "variable") || nrow(res) != 1L) {
+            cli::cli_abort(
+              c("The test result object for variable {.val {variable}} is not the expected structure.",
+                i = "Review {.help gtsummary::tests} for details on constructing a custom function."),
+              call = get_cli_abort_call()
+            )
+          }
         }
         res
       }
@@ -353,52 +407,3 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
 
   x
 }
-
-
-# TODO: add the data set of tests to the package so we can assign the name
-#       perhaps we can allow test names to be attributes of user-defined
-#       tests, so that custom tests can also be used in selectors?
-.test_meta_data <- function(test) {
-  imap(
-    test,
-    function(passed_test, variable) {
-      # this selects tests that ship with the package
-      df_test_meta_data <-
-        df_add_p_tests |>
-        dplyr::filter(.data$class %in% "tbl_summary", .data$add_p) |>
-        dplyr::filter(
-          # styler: off
-          if (is.character(.env$passed_test)) .data$test_name %in% .env$passed_test
-          else map_lgl(.data$test_fun, ~tryCatch(identical(.x, .env$passed_test), error = \(x) FALSE))
-          # styler: on
-        ) |>
-        dplyr::select("test_name", "fun_to_run", "accept_dots") |>
-        dplyr::mutate(variable = .env$variable, .before = 1L)
-
-      # TODO: Add support for user-defined tests having an associted name (via an attr?)
-      if (nrow(df_test_meta_data) == 0L) {
-        df_test_meta_data <-
-          dplyr::tibble(
-            variable = .env$variable,
-            test_name = NA_character_,
-            fun_to_run =
-              # styler: off
-              if (is.function(passed_test)) passed_test |> list()
-            else {
-              rlang::parse_expr(passed_test) |>
-                eval_tidy(env = attr(passed_test, ".Environment")) |>
-                structure(.Environment = attr(passed_test, ".Environment")) |>
-                list()
-            },
-            # styler: on
-            accept_dots = FALSE # TODO: is this true? in the last version of gtsummary, did user-defined functions accept dots?
-          )
-      }
-
-      df_test_meta_data
-    }
-  ) |>
-    dplyr::bind_rows()
-}
-
-

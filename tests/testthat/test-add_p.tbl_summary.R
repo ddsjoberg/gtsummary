@@ -23,6 +23,47 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
   )
 })
 
+test_that("add_p.tbl_summary() error messaging with bad inputs", {
+  # no by arg in tbl_summary
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial[c("trt", "age")]) |>
+      add_p()
+  )
+
+  # bad test argument values
+  expect_error(
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(test = mtcars)
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(test = list(age = \(...) mtcars))
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(test = list(age = \(...) letters))
+  )
+
+  expect_error(
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(pvalue_fun = mtcars)
+  )
+
+  expect_error(
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(group = \(x) round(x))
+  )
+  expect_error(
+    tbl_summary(trial[c("trt", "age")], by = trt) |>
+      add_p(group = c("trt", "age"))
+  )
+
+
+})
+
 test_that("add_p.tbl_summary() & lme4", {
   skip_if_not(is_pkg_installed("lme4", reference_pkg = "cardx"))
 
