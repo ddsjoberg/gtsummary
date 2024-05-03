@@ -254,7 +254,6 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
 
         # if there was a warning captured, print it now
         if (!is.null(lst_captured_results[["warning"]])) {
-          browser()
           cli::cli_inform(c(
             "The following warning was returned in {.fun {calling_fun}} for variable {.val {variable}}",
             "!" = lst_captured_results[["warning"]]
