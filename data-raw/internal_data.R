@@ -16,13 +16,13 @@ df_add_p_tests <-
 #   stop("STOOOOOOOOOPPPPP, error in the translations data")
 # }
 
-# special_char <- list()
-# special_char$interpunct <- "·"
+special_char <- list()
+special_char$interpunct <- "·"
 
 usethis::use_data(
   # df_theme_elements,
   # df_translations,
-  # special_char,
+  special_char,
   df_add_p_tests,
   internal = TRUE, overwrite = TRUE
 )

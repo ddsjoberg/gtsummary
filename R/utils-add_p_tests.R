@@ -1,5 +1,4 @@
 # add_p.tbl_summary ------------------------------------------------------------
-# TODO: added paired cohens d, hedges g, paired hedges g (any more?)
 # TODO: how to handle wilcox test with CIs? add them by default? separate test that includes CIs?
 
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
@@ -318,7 +317,6 @@ add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95
   )
 }
 
-# TODO: Add this function to the test xlsx file
 add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_null(c("adj.vars"), ...)
@@ -337,7 +335,6 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
   )
 }
 
-# TODO: Add this function to the test xlsx file
 add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_null(c("group", "adj.vars"), ...)
@@ -353,7 +350,6 @@ add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95
   )
 }
 
-# TODO: Add this function to the test xlsx file
 add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_null(c("adj.vars"), ...)
