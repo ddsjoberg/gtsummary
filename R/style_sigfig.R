@@ -32,6 +32,7 @@
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
 style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
+  set_cli_abort_call()
   # calculating the number of digits to round number
   d <-
     paste0(
@@ -39,9 +40,7 @@ style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark
       "< 10^(", 1:digits - 1, ") - 0.5 * 10^(", -(digits:1), ") ~ ", digits:1,
       collapse = ", "
     ) %>%
-    {
-      paste0("dplyr::case_when(", ., ", TRUE ~ 0)")
-    } %>%
+    {paste0("dplyr::case_when(", ., ", TRUE ~ 0)")} %>% # styler: off
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()

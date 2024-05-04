@@ -20,6 +20,7 @@
 #' style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
                          big.mark = NULL, decimal.mark = NULL, ...) {
+  set_cli_abort_call()
   # rounding large p-values to 1 digits
   if (digits == 1) {
     p_fmt <-

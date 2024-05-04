@@ -29,6 +29,7 @@ NULL
 #' @rdname as_tibble.gtsummary
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, fmt_missing = FALSE, ...) {
+  set_cli_abort_call()
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
@@ -44,12 +45,10 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
 
   # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(tibble_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(tibble_calls)),
+    include = {{ include }}
+  )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
@@ -69,6 +68,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 #' @export
 #' @rdname as_tibble.gtsummary
 as.data.frame.gtsummary <- function(...) {
+  set_cli_abort_call()
   res <- as_tibble(...)
 
   if (inherits(res, "data.frame")) {

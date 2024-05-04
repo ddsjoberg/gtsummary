@@ -59,6 +59,7 @@ dplyr::where
 #' @export
 dplyr::one_of
 
+# Remove after Jan 1, 2025
 #' @importFrom dplyr vars
 #' @export
 dplyr::vars
