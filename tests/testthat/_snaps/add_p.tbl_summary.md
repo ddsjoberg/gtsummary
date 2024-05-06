@@ -28,12 +28,18 @@
       as.data.frame(add_p(tbl_summary(mtcars, by = am)))
     Message
       The following warnings were returned during `add_p()`:
-      ! For variable `disp` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `drat` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `hp` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `mpg` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `qsec` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `wt` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
+      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `hp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `hp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
     Output
          **Characteristic**      **0**  \nN = 19      **1**  \nN = 13 **p-value**
       1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)       0.002
@@ -192,15 +198,18 @@
 
     Code
       as.data.frame(add_p(tbl_summary(mtcars, by = am), test = list(mpg = "t.test",
-        disp = "aov", hp = "oneway.test", cyl = "chisq.test.no.correct", carb = "mood.test")))
+        hp = "oneway.test", cyl = "chisq.test.no.correct", carb = "mood.test")))
     Message
-      The following warning was returned in `add_p()` for variable "disp"
-      ! The test "aov" in `add_p(test)` was deprecated in gtsummary 2.0.0. i The same functionality is covered with "oneway.test". Use the following code instead: i `add_p(test = list(disp = 'oneway.test'), test.args = list(disp = list(var.equal = TRUE)))`.
       The following warnings were returned during `add_p()`:
       ! For variable `cyl` (`am`) and "statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect
-      ! For variable `drat` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `qsec` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
-      ! For variable `wt` (`am`) and "statistic" and "p.value" statistics: cannot compute exact p-value with ties
+      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
+      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
+      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
     Output
          **Characteristic**      **0**  \nN = 19      **1**  \nN = 13 **p-value**
       1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)       0.001
@@ -250,6 +259,14 @@
       add_p(add_p(tbl_summary(select(trial, age, trt), by = trt)))
     Condition
       Error in `add_p()`:
-      ! Columns "statistic" and "p.value" are already present in table (although, some may be hidden), and no new columns were added.
+      ! Columns "estimate", "statistic", "conf.low", "conf.high", and "p.value" are already present in table (although, some may be hidden), and no new columns were added.
       i Use `tbl |> modify_table_body(\(x) dplyr::select(x, -p.value))` to remove columns and they will be replaced by the new columns from the current call.
+
+---
+
+    Code
+      tbl
+    Output
+        label stat_1 stat_2 estimate    conf.low p.value
+      1   Age 47.011 47.449    -0.03 -0.32, 0.25     0.8
 

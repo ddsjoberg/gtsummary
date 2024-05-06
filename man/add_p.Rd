@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_p.R
 \name{add_p}
 \alias{add_p}
-\title{Adds P-value}
+\title{Add p-values}
 \usage{
 add_p(x, ...)
 }

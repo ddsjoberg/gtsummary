@@ -1,4 +1,4 @@
-#' Adds P-value
+#' Add p-values
 #'
 #' - [`add_p.tbl_summary()`]
 #'
@@ -26,17 +26,8 @@ add_p <- function(x, ...) {
 #'   Specifies the statistical tests to perform for each variable, e.g.
 #'   `list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")`.
 #'
-#'   See below for details on default tests and [tests] for details on available
+#'   See below for details on default tests and [?tests][tests] for details on available
 #'   tests and creating custom tests.
-#'
-#'   Common tests include `"t.test"`, `"aov"`, `"wilcox.test"`, `"kruskal.test"`,
-#'   `"chisq.test"`, `"fisher.test"`, and `"lme4"` (for clustered data).
-#'   See [tests] for details, more tests, and instruction for implementing a custom test.
-#'
-#'   Default tests when `group` argument not specified are `"kruskal.test"`
-#'   for continuous variables (`"wilcox.test"` when "by" variable has two levels),
-#'   `"chisq.test.no.correct"` for categorical variables with all expected cell
-#'   counts >=5, and `"fisher.test"` for categorical variables with any expected cell count <5.
 #' @param pvalue_fun (`function`)\cr
 #'   Function to round and format p-values. Default is `styfn_pvalue()`.
 #'   The function must have a numeric vector input, and return a string that is
@@ -61,8 +52,8 @@ add_p <- function(x, ...) {
 #'
 #' @section test argument:
 #'
-#' See the [tests] help file for details on available tests and creating custom tests.
-#' The [tests] help file also includes psuedo-code for each test to be clear
+#' See the [?tests][tests] help file for details on available tests and creating custom tests.
+#' The [?tests][tests] help file also includes psuedo-code for each test to be clear
 #' precisely how the calculation is performed.
 #'
 #' The default test used in `add_p()` primarily depends on these factors:
@@ -141,7 +132,6 @@ add_p.tbl_summary <- function(x,
   # add the calling env to the test
   test <- .add_env_to_list_elements(test, env = caller_env())
 
-
   cards::check_list_elements(
     test,
     predicate = \(x) is.character(x) || is.function(x),
@@ -211,11 +201,11 @@ add_p.tbl_summary <- function(x,
                   i = "Value must be a named list.")
   )
 
-  # calculate p-values ---------------------------------------------------------
+  # calculate tests ------------------------------------------------------------
   x <-
     calculate_and_add_test_results(
       x = x, include = include, group = group, test.args = test.args, adj.vars = adj.vars,
-      df_test_meta_data = df_test_meta_data, calling_fun = "add_p"
+      df_test_meta_data = df_test_meta_data, pvalue_fun = pvalue_fun, calling_fun = "add_p"
     )
 
   # update call list
@@ -224,8 +214,9 @@ add_p.tbl_summary <- function(x,
   x
 }
 
-calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars,
-                                           df_test_meta_data, estimate_fun = NULL,
+calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars = NULL,
+                                           df_test_meta_data, pvalue_fun = NULL,
+                                           estimate_fun = NULL, conf.level = 0.95,
                                            calling_fun) {
   # list of ARDs or broom::tidy-like results
   lst_results <-
@@ -247,7 +238,9 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
                 by = x$inputs$by,
                 group = group,
                 type = x$inputs$type[[variable]],
-                test.args = test.args[[variable]]
+                test.args = test.args[[variable]],
+                adj.vars = adj.vars,
+                conf.level = conf.level
               )
             )
           )
@@ -278,12 +271,22 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
 
   # print any errors or warnings
   lst_results |>
-    map(\(x) if (inherits(x, "card")) x else NULL) |>
+    map(
+      \(x) {
+        if (inherits(x, "card")) {
+          x |>
+            dplyr::mutate(
+              across(c(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")), ~unlist(.) |> as.character())
+            )
+        }
+        else NULL
+      }
+    ) |>
     dplyr::bind_rows() %>%
     {switch(
       !is_empty(.),
       dplyr::filter(., .data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
-                                           "conf.low", "conf.high", "p.value")) |>
+                                              "conf.low", "conf.high", "p.value")) |>
         cards::print_ard_conditions()
     )}
 
@@ -331,7 +334,11 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         res
       }
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    dplyr::select(
+      any_of(c("variable", "estimate", "std.error", "parameter", "statistic",
+               "conf.low", "conf.high", "p.value"))
+    )
 
   # remove new columns that already exist in gtsummary table
   new_columns <- names(df_results) |> setdiff(names(x$table_body))
@@ -362,14 +369,14 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     unlist() |>
     unique() |>
     paste(collapse = "; ")
-  if (footnote == "" || is_empty(footnote)) footnote <- NULL
+  if (footnote == "" || is_empty(footnote)) footnote <- NULL # styler: off
 
   # add results to `.$table_body` ----------------------------------------------
   x <- x |>
     modify_table_body(
       ~dplyr::left_join(
         .x,
-        df_results |> dplyr::mutate(row_type = "header"),
+        df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "header"),
         by = c("variable", "row_type")
       )
     )
@@ -377,29 +384,76 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   x <-
     modify_table_styling(
       x,
-      columns = intersect("p.value", new_columns),
+      columns = any_of(intersect("p.value", new_columns)),
       label = "**p-value**",
       hide = FALSE,
-      fmt_fun = styfn_pvalue(),
+      fmt_fun = pvalue_fun %||% styfn_pvalue(),
       footnote = footnote
     ) |>
     modify_table_styling(
       columns =
-        intersect(
-          c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high"),
-          new_columns
-        ),
+        intersect("estimate", new_columns),
+      hide = calling_fun %in% "add_p",
+      label = ifelse(is_empty(adj.vars), "**Difference**", "**Adjusted Difference**"),
+      footnote = footnote
+    ) |>
+    modify_table_styling(
+      columns =
+        intersect("std.error", new_columns),
       hide = TRUE,
+      label = "**Standard Error**",
+      footnote = footnote
+    ) |>
+    modify_table_styling(
+      columns =
+        intersect("parameter", new_columns),
+      hide = TRUE,
+      label = "**Parameter**",
       fmt_fun = styfn_sigfig(),
       footnote = footnote
+    ) |>
+    modify_table_styling(
+      columns =
+        intersect("statistic", new_columns),
+      hide = TRUE,
+      label = "**Statistic**",
+      fmt_fun = styfn_sigfig(),
+      footnote = footnote
+    ) |>
+    modify_table_styling(
+      columns =
+        intersect("conf.low", new_columns),
+      hide = calling_fun %in% "add_p",
+      label = glue("**{conf.level * 100}% CI**"),
+      footnote = footnote,
+      footnote_abbrev = "CI = Confidence Interval"
     )
 
-  # adding labels for hidden columns
+  if (calling_fun %in% "add_difference" && all(c("conf.low", "conf.high") %in% new_columns)) {
+    x <-
+      modify_column_merge(
+        x,
+        pattern = "{conf.low}, {conf.high}",
+        rows = !is.na(.data$conf.low)
+      )
+  }
+
+  # add the specified formatting functions
+  for (i in seq_along(estimate_fun)) {
+    x <-
+      rlang::inject(
+        modify_table_styling(
+          x,
+          columns = any_of(c("estimate", "conf.low", "conf.high")),
+          rows = .data$variable %in% !!names(estimate_fun[i]),
+          fmt_fun = !!(estimate_fun[[i]] %||% styfn_sigfig())
+        )
+      )
+  }
+
+  # extending modify_stat_N to new columns
   x$table_styling$header <- x$table_styling$header |>
-    dplyr::mutate(
-      label = ifelse(.data$column %in% "statistic", "**Statistic**", .data$label)
-    ) |>
-    tidyr::fill("modify_stat_N", .direction = "downup") # fill missing N for new cols
+    tidyr::fill("modify_stat_N", .direction = "downup")
 
   # add raw results to `.$card`
   x$cards[[calling_fun]] <- lst_results

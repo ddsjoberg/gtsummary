@@ -1,0 +1,63 @@
+# add_difference.tbl_summary() works with basic usage
+
+    Code
+      as.data.frame(modify_column_hide(tbl_diff, all_stat_cols()))
+    Output
+          **Characteristic** **Difference**  **95% CI** **p-value**
+      1 Marker Level (ng/mL)           0.20 -0.05, 0.44        0.12
+      2                  Age          -0.44   -4.6, 3.7         0.8
+
+---
+
+    Code
+      as.data.frame(modify_column_hide(add_difference(tbl_summary(select(trial, trt,
+        response, grade), by = trt, percent = "row")), all_stat_cols()))
+    Condition
+      Warning:
+      The `add_difference()` results for categorical variables may not compatible with `tbl_summary(percent = c('cell', 'row'))`.
+      i Use column percentages instead, `tbl_summary(percent = 'column')`.
+    Output
+        **Characteristic** **Difference**  **95% CI** **p-value**
+      1     Tumor Response          -4.2%  -18%, 9.9%         0.6
+      2            Unknown           <NA>        <NA>        <NA>
+      3              Grade           0.07 -0.20, 0.35        <NA>
+      4                  I           <NA>        <NA>        <NA>
+      5                 II           <NA>        <NA>        <NA>
+      6                III           <NA>        <NA>        <NA>
+
+# statistics are replicated within add_difference.tbl_summary()
+
+    Code
+      as.data.frame(modify_column_hide(tbl_test.args, all_stat_cols()))
+    Output
+           **Characteristic** **Difference**  **95% CI** **p-value**
+      1            var_t.test          -0.44   -4.6, 3.7         0.8
+      2       var_t.test_dots          -0.44   -4.6, 3.7         0.8
+      3       var_wilcox.test           -1.0   -5.0, 4.0         0.7
+      4  var_wilcox.test_dots           -1.0   -5.0, 4.0         0.7
+      5         var_prop.test          -4.2%  -18%, 9.9%         0.6
+      6    var_prop.test_dots          -4.2%  -16%, 100%         0.7
+      7            var_ancova          -0.44   -4.6, 3.7         0.8
+      8          var_cohens_d          -0.03 -0.32, 0.25        <NA>
+      9          var_hedges_g          -0.03 -0.31, 0.25        <NA>
+      10              var_smd          -0.03 -0.32, 0.25        <NA>
+      11          var_emmeans          -0.44   -4.6, 3.7         0.8
+
+# statistics are replicated within add_difference.tbl_summary(group)
+
+    Code
+      as.data.frame(tbl_groups)
+    Output
+         **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102 **Difference**
+      1     age_ancova_lme4          46 (37, 60)           48 (39, 56)          -0.57
+      2   age_paired_t_test          46 (37, 60)           48 (39, 56)          -0.85
+      3 age_paired_cohens_d          46 (37, 60)           48 (39, 56)          -0.05
+      4 age_paired_hedges_g          46 (37, 60)           48 (39, 56)          -0.05
+      5         age_emmeans          46 (37, 60)           48 (39, 56)          -0.57
+         **95% CI** **p-value**
+      1   -4.0, 2.8        <NA>
+      2   -4.4, 2.7         0.6
+      3 -0.26, 0.16        <NA>
+      4 -0.26, 0.16        <NA>
+      5   -4.0, 2.9         0.7
+

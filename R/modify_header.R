@@ -1,3 +1,98 @@
+#' Modify column headers, footnotes, spanning headers, and table captions
+#'
+#' These functions assist with updating or adding column headers
+#' (`modify_header()`), footnotes (`modify_footnote()`), spanning
+#' headers (`modify_spanning_header()`), and table captions
+#' (`modify_caption()`). Use `show_header_names()` to learn
+#' the column names.
+#'
+#' @name modify
+#' @param x a gtsummary object
+#' @param update,... use these arguments to assign updates to headers,
+#' spanning headers, and footnotes. See examples below.
+#' - `update` expects a list of assignments, with the variable name or selector
+#' on the LHS of the formula, and the updated string on the RHS. Also accepts
+#' a named list.
+#' - `...` pass individual updates outside of a list, e.g,
+#' `modify_header(p.value = "**P**", all_stat_cols() ~ "**{level}**")`
+#'
+#' Use the `show_header_names()` to see the column names that can be modified.
+# #' @param abbreviation Logical indicating if an abbreviation is being updated.
+#' @param text_interpret String indicates whether text will be interpreted with
+#' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+# #' @param caption a string of the table caption/title
+# #' @param include_example logical whether to include print of `modify_header()` example
+#' @param quiet (scalar `logical`)\cr
+#'   When `TRUE`, additional messaging is not printed.
+#'   TODO: Set defaults here and theme control of argument
+# #' @inheritParams modify_table_styling
+#' @family tbl_summary tools
+#' @family tbl_svysummary tools
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
+#' @family tbl_survfit tools
+#' @author Daniel D. Sjoberg
+#'
+#' @section tbl_summary(), tbl_svysummary(), and tbl_cross():
+#' When assigning column headers, footnotes, spanning headers, and captions
+#' for these gtsummary tables,
+#' you may use `{N}` to insert the number of observations.
+#' `tbl_svysummary` objects additionally have `{N_unweighted}` available.
+#'
+#' When there is a stratifying `by=` argument present, the following fields are
+#' additionally available to stratifying columns: `{level}`, `{n}`, and `{p}`
+#' (`{n_unweighted}` and `{p_unweighted}` for `tbl_svysummary` objects)
+#'
+#' Syntax follows [glue::glue()], e.g. `all_stat_cols() ~ "**{level}**, N = {n}"`.
+#' @section tbl_regression():
+#' When assigning column headers for `tbl_regression` tables,
+#' you may use `{N}` to insert the number of observations, and `{N_event}`
+#' for the number of events (when applicable).
+#'
+#' @section captions:
+#' Captions are assigned based on output type.
+#' - `gt::gt(caption=)`
+#' - `flextable::set_caption(caption=)`
+#' - `huxtable::set_caption(value=)`
+#' - `knitr::kable(caption=)`
+#'
+#' @examplesIf FALSE
+#' \donttest{
+#' # create summary table
+#' tbl <- trial[c("age", "grade", "trt")] %>%
+#'   tbl_summary(by = trt, missing = "no") %>%
+#'   add_p()
+#'
+#' # print the column names that can be modified
+#' show_header_names(tbl)
+#'
+#' # Example 1 ----------------------------------
+#' # updating column headers, footnote, and table caption
+#' modify_ex1 <- tbl %>%
+#'   modify_header(label = "**Variable**", p.value = "**P**") %>%
+#'   modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade") %>%
+#'   modify_caption("**Patient Characteristics** (N = {N})")
+#'
+#' # Example 2 ----------------------------------
+#' # updating headers, remove all footnotes, add spanning header
+#' modify_ex2 <- tbl %>%
+#'   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") %>%
+#'   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
+#'   modify_footnote(update = everything() ~ NA) %>%
+#'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
+#'
+#' # Example 3 ----------------------------------
+#' # updating an abbreviation in table footnote
+#' modify_ex3 <-
+#'   glm(response ~ age + grade, trial, family = binomial) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
+#' }
+#' @return Updated gtsummary object
+NULL
+
+#' @name modify
+#' @export
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
                           quiet = NULL, update = NULL) {
   # process inputs -------------------------------------------------------------

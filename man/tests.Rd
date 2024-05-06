@@ -19,7 +19,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{'mood.test'} \tab Mood two-sample test of scale \tab \code{mood.test(variable ~ as.factor(by), data = data, ...)} \tab Not to be confused with the Brown-Mood test of medians \cr
    \code{'oneway.test'} \tab One-way ANOVA \tab \code{oneway.test(variable ~ as.factor(by), data = data, ...)} \tab  \cr
    \code{'kruskal.test'} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \tab  \cr
-   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)} \tab  \cr
+   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, conf.int = TRUE, conf.level = conf.level,  ...)} \tab  \cr
    \code{'chisq.test'} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \tab  \cr
    \code{'chisq.test.no.correct'} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \tab  \cr
    \code{'fisher.test'} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \tab  \cr
@@ -82,6 +82,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
+   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab  \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, conf.int = TRUE, conf.level = conf.level,  ...)} \tab  \cr
    \code{'paired.t.test'} \tab Paired t-test \tab mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \tab  \cr
    \code{'prop.test'} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \tab  \cr
    \code{'ancova'} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \tab  \cr
