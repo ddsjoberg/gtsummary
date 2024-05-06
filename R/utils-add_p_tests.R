@@ -428,7 +428,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
     method <- "lm"
   }
   else if (is.data.frame(data) && is_empty(group) && type %in% "dichotomous") {
-    method <- "lm"
+    method <- "glm"
     method.args <- list(family = stats::binomial())
   }
   else if (inherits(data, "survey.design")) {

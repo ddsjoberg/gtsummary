@@ -396,3 +396,138 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
   )
 })
 
+test_that("row formatting of differences and CIs work", {
+  expect_error(
+    tbl1 <-
+      trial |>
+      select(trt, age, marker, response, death) |>
+      tbl_summary(
+        by = trt,
+        statistic =
+          list(
+            all_continuous() ~ "{mean} ({sd})",
+            all_dichotomous() ~ "{p}%"
+          ),
+        missing = "no"
+      ) %>%
+      add_difference() |>
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_snapshot(tbl1)
+
+  expect_equal(
+    tbl1$estimate,
+    c("-0.44", "0.20", "-4.2%", "-5.8%")
+  )
+
+  expect_equal(
+    tbl1$conf.low,
+    c("-4.6, 3.7", "-0.05, 0.44", "-18%, 9.9%", "-21%, 9.0%")
+  )
+})
+
+test_that("no error with missing data", {
+  expect_message(
+    t1 <-
+      mtcars |>
+      mutate(mpg = NA, hp = NA) |>
+      select(mpg, hp, am) |>
+      tbl_summary(by = "am", type = hp ~ "continuous", missing = "no") |>
+      add_difference()
+  )
+  expect_snapshot(t1 |> modify_column_hide(all_stat_cols()) |> as.data.frame())
+
+  expect_equal(
+    t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
+    rep_len(NA_character_, 2)
+  )
+})
+
+test_that("add_difference() with smd", {
+  expect_error(
+    tbl <-
+      trial |>
+      select(trt, age, response, grade) |>
+      tbl_summary(by = trt, missing = "no") |>
+      add_difference(test = everything() ~ "smd") |>
+      as.data.frame(col_labels = FALSE),
+    NA
+  )
+  expect_equal(
+    tbl$estimate[1:3],
+    c("-0.03", "-0.09", "0.07")
+  )
+  expect_equal(
+    tbl$conf.low[1:3],
+    c("-0.32, 0.25", "-0.37, 0.19", "-0.20, 0.35")
+  )
+  expect_snapshot(tbl)
+})
+
+test_that("add_difference.tbl_summary() with emmeans()", {
+  tbl <-
+    tbl_summary(
+      trial,
+      by = trt,
+      include = c(age, response),
+      missing = "no"
+    )
+
+  expect_error(
+    res <- add_difference(tbl, test = everything() ~ "emmeans", adj.vars = "stage"),
+    NA
+  )
+  expect_snapshot(res |> as.data.frame())
+  expect_error(
+    tbl |>
+      add_difference(test = everything() ~ "emmeans", group = "death"),
+    NA
+  )
+
+  # TODO: Add this after `tbl_svysummary()` added to pkg
+  # expect_error(
+  #   survey::svydesign(ids = ~1, data = trial, weights = ~1) %>%
+  #     tbl_svysummary(
+  #       by = trt,
+  #       include = c(age, response),
+  #       missing = "no"
+  #     ) %>%
+  #     add_difference(test = everything() ~ "emmeans", adj.vars = "marker"),
+  #   NA
+  # )
+})
+
+test_that("ordering in add_difference.tbl_summary() with paired tests", {
+  expect_snapshot(
+    mtcars |>
+      mutate(
+        .by = am,
+        id = dplyr::row_number(),
+        am = factor(am, levels = c(0, 1))
+      ) %>%
+      tbl_summary(
+        by = am,
+        include = mpg
+      ) |>
+      add_difference(test = ~"paired.t.test", group = id) |>
+      modify_column_hide(all_stat_cols()) |>
+      as.data.frame()
+  )
+  expect_snapshot(
+    mtcars |>
+      mutate(
+        .by = am,
+        id = dplyr::row_number(),
+        am = factor(am, levels = c(1, 0))
+      ) |>
+      tbl_summary(
+        by = am,
+        include = mpg
+      ) |>
+      add_difference(test = ~"paired.t.test", group = id) |>
+      modify_column_hide(all_stat_cols()) |>
+      as.data.frame()
+  )
+})
+

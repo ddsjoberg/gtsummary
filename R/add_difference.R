@@ -82,7 +82,8 @@ add_difference.tbl_summary <- function(x,
                                        include = everything(),
                                        pvalue_fun = styfn_pvalue(),
                                        estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
-                                                           all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%"))),
+                                                           all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%")),
+                                                           all_tests("smd") ~ styfn_sigfig()),
                                        ...) {
   set_cli_abort_call()
   # check/process inputs -------------------------------------------------------
