@@ -46,20 +46,14 @@
 # statistics are replicated within add_difference.tbl_summary(group)
 
     Code
-      as.data.frame(tbl_groups)
+      as.data.frame(modify_column_hide(tbl_groups, all_stat_cols()))
     Output
-         **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102 **Difference**
-      1     age_ancova_lme4          46 (37, 60)           48 (39, 56)          -0.57
-      2   age_paired_t_test          46 (37, 60)           48 (39, 56)          -0.85
-      3 age_paired_cohens_d          46 (37, 60)           48 (39, 56)          -0.05
-      4 age_paired_hedges_g          46 (37, 60)           48 (39, 56)          -0.05
-      5         age_emmeans          46 (37, 60)           48 (39, 56)          -0.57
-         **95% CI** **p-value**
-      1   -4.0, 2.8        <NA>
-      2   -4.4, 2.7         0.6
-      3 -0.26, 0.16        <NA>
-      4 -0.26, 0.16        <NA>
-      5   -4.0, 2.9         0.7
+         **Characteristic** **Difference**  **95% CI** **p-value**
+      1     age_ancova_lme4          -0.57   -4.0, 2.8        <NA>
+      2   age_paired_t_test          -0.85   -4.4, 2.7         0.6
+      3 age_paired_cohens_d          -0.05 -0.26, 0.16        <NA>
+      4 age_paired_hedges_g          -0.05 -0.26, 0.16        <NA>
+      5         age_emmeans          -0.57   -4.0, 2.9         0.7
 
 # row formatting of differences and CIs work
 
@@ -99,14 +93,11 @@
 # add_difference.tbl_summary() with emmeans()
 
     Code
-      as.data.frame(res)
+      as.data.frame(modify_column_hide(res, all_stat_cols()))
     Output
-        **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102
-      1                Age          46 (37, 60)           48 (39, 56)
-      2     Tumor Response             28 (29%)              33 (34%)
-        **Adjusted Difference** **95% CI** **p-value**
-      1                   -0.42  -4.5, 3.7         0.8
-      2                   -4.7% -18%, 8.4%         0.5
+        **Characteristic** **Adjusted Difference** **95% CI** **p-value**
+      1                Age                   -0.42  -4.5, 3.7         0.8
+      2     Tumor Response                   -4.7% -18%, 8.4%         0.5
 
 # ordering in add_difference.tbl_summary() with paired tests
 

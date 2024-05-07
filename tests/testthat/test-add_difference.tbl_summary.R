@@ -305,7 +305,11 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
                   age_emmeans = "emmeans"),
       group = "id"
     )
-  expect_snapshot(tbl_groups |> as.data.frame())
+  expect_snapshot(
+    tbl_groups |>
+      modify_column_hide(all_stat_cols()) |>
+      as.data.frame()
+  )
 
   expect_equal(
     tbl_groups$cards$add_difference$age_ancova_lme4 |>
@@ -478,7 +482,11 @@ test_that("add_difference.tbl_summary() with emmeans()", {
     res <- add_difference(tbl, test = everything() ~ "emmeans", adj.vars = "stage"),
     NA
   )
-  expect_snapshot(res |> as.data.frame())
+  expect_snapshot(
+    res |>
+      modify_column_hide(all_stat_cols()) |>
+      as.data.frame()
+  )
   expect_error(
     tbl |>
       add_difference(test = everything() ~ "emmeans", group = "death"),
