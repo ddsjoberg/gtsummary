@@ -1,4 +1,5 @@
-skip_if_not(is_pkg_installed(c("broom", "broom.helpers", "lme4", "smd", "emmeans"), reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c("broom", "broom.helpers", "lme4", "smd",
+                               "effectsize", "emmeans"), reference_pkg = "cardx"))
 
 test_that("add_difference.tbl_summary() works with basic usage", {
   expect_error(
