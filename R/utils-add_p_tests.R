@@ -1,7 +1,7 @@
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_t_test(
@@ -16,7 +16,7 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_wilcox_test(
@@ -40,7 +40,7 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0
 
 add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -57,7 +57,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
 
 add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mcnemar_test(
@@ -71,7 +71,7 @@ add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_chisq_test(
@@ -97,7 +97,7 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, test.args, ...)
 
 add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mood_test(
@@ -112,7 +112,7 @@ add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_stats_kruskal_test(
     data = data,
@@ -123,7 +123,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_fisher_test(
@@ -156,7 +156,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_oneway_test(
@@ -169,7 +169,7 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_mood.test <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   rlang::inject(
     cardx::ard_stats_mood_test(
@@ -183,7 +183,7 @@ add_p_test_mood.test <- function(data, variable, by, ...) {
 add_p_test_lme4 <- function(data, variable, by, group, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_pkg_installed("lme4", reference_pkg = "cardx")
-  check_null(c("test.args", "adj.vars"), ...)
+  check_empty(c("test.args", "adj.vars"), ...)
 
   if (is_empty(group)) {
     cli::cli_abort("The {.arg group} argument cannot be missing for {.val lme4} tests.")
@@ -214,7 +214,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_paired_t_test(
@@ -230,7 +230,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -248,7 +248,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
 
 add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars", "group"), ...)
+  check_empty(c("adj.vars", "group"), ...)
 
   rlang::inject(
     cardx::ard_stats_prop_test(
@@ -263,7 +263,7 @@ add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.9
 
 add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "test.args"), ...)
+  check_empty(c("group", "test.args"), ...)
   check_n_levels(data[[by]], 2L, message = "The {.arg by} column must have {.val {length}} levels.")
 
   # reverse coding the 'by' variable
@@ -307,7 +307,7 @@ add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
 
 add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_cohens_d(
@@ -323,7 +323,7 @@ add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95
 
 add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -342,7 +342,7 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
 
 add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_hedges_g(
@@ -358,7 +358,7 @@ add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95
 
 add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -377,7 +377,7 @@ add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, con
 
 add_p_test_smd <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_smd_smd(
     data = data,
@@ -390,7 +390,7 @@ add_p_test_smd <- function(data, variable, by, ...) {
 add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
                                type, group = NULL, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("test.args"), ...)
+  check_empty(c("test.args"), ...)
 
   if (!is.null(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", reference_pkg = "cardx")
@@ -466,7 +466,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("test.args"), ...)
+  check_empty(c("test.args"), ...)
   check_length(group, 1L)
 
   # reverse coding the 'by' variable
@@ -547,7 +547,7 @@ warn_unbalanced_pairs <- function(data, by, variable, group) {
   invisible()
 }
 
-check_null <- function(x, variable = get("variable", envir = caller_env()),
+check_empty <- function(x, variable = get("variable", envir = caller_env()),
                        call = get_cli_abort_call(), ...) {
   dots <- dots_list(...)
   walk(
