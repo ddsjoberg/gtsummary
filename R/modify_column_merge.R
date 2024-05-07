@@ -40,7 +40,7 @@
 #' @export
 #'
 #' @family Advanced modifiers
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
 #' modify_column_merge_ex1 <-
 #'   trial |>

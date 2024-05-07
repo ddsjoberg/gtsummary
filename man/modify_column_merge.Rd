@@ -59,6 +59,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 }
 
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 modify_column_merge_ex1 <-
   trial |>
@@ -67,7 +68,7 @@ modify_column_merge_ex1 <-
   modify_fmt_fun(statistic ~ styfn_sigfig()) |>
   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
   modify_header(statistic = "**t-test**")
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other Advanced modifiers: 
