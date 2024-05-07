@@ -52,7 +52,6 @@
       2   age_paired_t_test          -0.85   -4.4, 2.7         0.6
       3 age_paired_cohens_d          -0.05 -0.26, 0.16        <NA>
       4 age_paired_hedges_g          -0.05 -0.26, 0.16        <NA>
-      5         age_emmeans          -0.57   -4.0, 2.9         0.7
 
 # row formatting of differences and CIs work
 

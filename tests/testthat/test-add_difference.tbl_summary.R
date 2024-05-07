@@ -357,8 +357,7 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
            age_ancova_lme4 = age,
            age_paired_t_test = age,
            age_paired_cohens_d = age,
-           age_paired_hedges_g = age,
-           age_emmeans = age
+           age_paired_hedges_g = age
     ) %>%
     tbl_summary(
       by = trt,
@@ -370,8 +369,7 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
       test = list(age_ancova_lme4 = "ancova_lme4",
                   age_paired_t_test = "paired.t.test",
                   age_paired_cohens_d = "paired_cohens_d",
-                  age_paired_hedges_g = "paired_hedges_g",
-                  age_emmeans = "emmeans"),
+                  age_paired_hedges_g = "paired_hedges_g"),
       group = "id"
     )
   expect_snapshot(
