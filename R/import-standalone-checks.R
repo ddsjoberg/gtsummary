@@ -5,7 +5,7 @@
 # ---
 # repo: ddsjoberg/standalone
 # file: standalone-checks.R
-# last-updated: 2024-04-10
+# last-updated: 2024-05-04
 # license: https://unlicense.org
 # dependencies: standalone-cli_call_env.R
 # imports: [rlang, cli]
@@ -240,6 +240,27 @@ check_scalar <- function(x,
   check_length(
     x = x, length = 1L, message = message,
     allow_empty = allow_empty, arg_name = arg_name,
+    class = class, call = call
+  )
+}
+
+#' Check Number of Levels
+#'
+#' @param n_levels Number of required levels (after NA are removed).
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_n_levels <- function(x,
+                           n_levels,
+                           message =
+                             "The {.arg {arg_name}} argument must have {.val {length}} levels.",
+                           arg_name = rlang::caller_arg(x),
+                           class = "check_n_levels",
+                           call = get_cli_abort_call()) {
+  check_length(
+    x = stats::na.omit(x) |> unique(),
+    length = n_levels, message = message,
+    allow_empty = FALSE, arg_name = arg_name,
     class = class, call = call
   )
 }

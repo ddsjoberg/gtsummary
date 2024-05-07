@@ -30,6 +30,7 @@ To show a column, add a column header with \code{modify_header()}.
 \seealso{
 Other Advanced modifiers: 
 \code{\link{modify_column_hide}()},
+\code{\link{modify_column_merge}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_styling}()}
 }

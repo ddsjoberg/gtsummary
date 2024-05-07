@@ -22,6 +22,7 @@ Use these functions to hide or unhide columns in a gtsummary table.
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other Advanced modifiers: 
+\code{\link{modify_column_merge}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}

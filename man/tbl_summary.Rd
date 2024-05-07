@@ -192,6 +192,9 @@ See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tb
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
+Other tbl_summary tools: 
+\code{\link{modify}}
 }
 \author{
 Daniel D. Sjoberg

@@ -113,7 +113,6 @@ test_that("add_p.tbl_summary() works well", {
       add_p(
         test = list(
           mpg = "t.test",
-          disp = "aov",
           hp = "oneway.test",
           cyl = "chisq.test.no.correct",
           carb = "mood.test"
@@ -437,15 +436,14 @@ test_that("no error with missing data", {
   )
 })
 
-# TODO: After add_difference() has been added, we need to re-add these tests!
 test_that("add_p.tbl_summary() can be run after add_difference()", {
-  # expect_error(
-  #   trial %>%
-  #     select(age, trt) %>%
-  #     tbl_summary(by = trt) %>%
-  #     add_difference() %>%
-  #     add_p(all_continuous() ~ "t.test")
-  # )
+  expect_error(
+    trial |>
+      select(age, trt) |>
+      tbl_summary(by = trt) |>
+      add_difference() |>
+      add_p(all_continuous() ~ "t.test")
+  )
 
   expect_snapshot(
     error = TRUE,
@@ -456,49 +454,49 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       add_p()
   )
 
-  # expect_error(
-  #   trial %>%
-  #     select(age, trt) %>%
-  #     tbl_summary(by = trt) %>%
-  #     add_difference() %>%
-  #     add_difference()
-  # )
-  #
-  # expect_error(
-  #   tbl <-
-  #     trial %>%
-  #     select(age, trt) %>%
-  #     tbl_summary(
-  #       by = trt,
-  #       missing = "no",
-  #       statistic = all_continuous() ~ "{mean}",
-  #       digits = all_continuous() ~ 3
-  #     ) %>%
-  #     add_difference(all_continuous() ~ "cohens_d") %>%
-  #     add_p(all_continuous() ~ "t.test") %>%
-  #     as_tibble(col_labels = FALSE),
-  #   NA
-  # )
-  # expect_snapshot(tbl)
-  #
-  # expect_equal(
-  #   tbl %>%
-  #     unlist(),
-  #   c(
-  #     label = "Age",
-  #     stat_1 = "47.011",
-  #     stat_2 = "47.449",
-  #     estimate = "-0.03",
-  #     ci = "-0.32, 0.25",
-  #     p.value = "0.8"
-  #   )
-  # )
-  # expect_true(
-  #   tbl %>%
-  #     select(ends_with(".x") | ends_with(".y")) %>%
-  #     names() %>%
-  #     rlang::is_empty()
-  # )
+  expect_error(
+    trial |>
+      select(age, trt) |>
+      tbl_summary(by = trt) |>
+      add_difference() |>
+      add_difference()
+  )
+
+  expect_error(
+    tbl <-
+      trial |>
+      select(age, trt) |>
+      tbl_summary(
+        by = trt,
+        missing = "no",
+        statistic = all_continuous() ~ "{mean}",
+        digits = all_continuous() ~ 3
+      ) %>%
+      add_difference(all_continuous() ~ "cohens_d") |>
+      add_p(all_continuous() ~ "t.test") |>
+      as.data.frame(col_labels = FALSE),
+    NA
+  )
+  expect_snapshot(tbl)
+
+  expect_equal(
+    tbl |>
+      unlist(),
+    c(
+      label = "Age",
+      stat_1 = "47.011",
+      stat_2 = "47.449",
+      estimate = "-0.03",
+      conf.low = "-0.32, 0.25",
+      p.value = "0.8"
+    )
+  )
+  expect_true(
+    tbl %>%
+      select(ends_with(".x") | ends_with(".y")) %>%
+      names() %>%
+      rlang::is_empty()
+  )
 })
 
 

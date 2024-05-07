@@ -23,17 +23,8 @@ table created with \code{tbl_summary()}}
 Specifies the statistical tests to perform for each variable, e.g.
 \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 
-See below for details on default tests and \link{tests} for details on available
-tests and creating custom tests.
-
-Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
-\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data).
-See \link{tests} for details, more tests, and instruction for implementing a custom test.
-
-Default tests when \code{group} argument not specified are \code{"kruskal.test"}
-for continuous variables (\code{"wilcox.test"} when "by" variable has two levels),
-\code{"chisq.test.no.correct"} for categorical variables with all expected cell
-counts >=5, and \code{"fisher.test"} for categorical variables with any expected cell count <5.}
+See below for details on default tests and \link[=tests]{?tests} for details on available
+tests and creating custom tests.}
 
 \item{pvalue_fun}{(\code{function})\cr
 Function to round and format p-values. Default is \code{styfn_pvalue()}.
@@ -68,8 +59,8 @@ Adds p-values to tables created by \code{\link[=tbl_summary]{tbl_summary()}} by 
 \section{test argument}{
 
 
-See the \link{tests} help file for details on available tests and creating custom tests.
-The \link{tests} help file also includes psuedo-code for each test to be clear
+See the \link[=tests]{?tests} help file for details on available tests and creating custom tests.
+The \link[=tests]{?tests} help file also includes psuedo-code for each test to be clear
 precisely how the calculation is performed.
 
 The default test used in \code{add_p()} primarily depends on these factors:

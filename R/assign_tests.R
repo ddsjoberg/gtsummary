@@ -54,11 +54,19 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
   lapply(
     include,
     function(variable) {
-      if (is.null(test[[variable]]) && calling_fun %in% "add_p") {
+      if (is.null(test[[variable]])) {
         test[[variable]] <-
-          .add_p_tbl_summary_default_test(data, variable = variable,
-                                          by = by, group = group, adj.vars = adj.vars,
-                                          summary_type = summary_type[[variable]])
+          switch(
+            calling_fun,
+            "add_p" =
+              .add_p_tbl_summary_default_test(data, variable = variable,
+                                              by = by, group = group, adj.vars = adj.vars,
+                                              summary_type = summary_type[[variable]]),
+            "add_difference" =
+              .add_difference_tbl_summary_default_test(data, variable = variable,
+                                                       by = by, group = group, adj.vars = adj.vars,
+                                                       summary_type = summary_type[[variable]])
+          )
       }
 
       if (is.null(test[[variable]])) {
@@ -104,8 +112,8 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
     map_lgl(~identical_no_attr(eval(.x), test)) |>
     which()
   if (is.function(test) && !is_empty(internal_test_index)) {
-    test_to_return <- df_add_p_tests$fun_to_run[[internal_test_index]] |> eval()
-    attr(test_to_return, "test_name") <- df_add_p_tests$test_name[internal_test_index]
+    test_to_return <- df_tests$fun_to_run[[internal_test_index]] |> eval()
+    attr(test_to_return, "test_name") <- df_tests$test_name[internal_test_index]
     return(test_to_return)
   }
 
@@ -188,6 +196,28 @@ identical_no_attr <- function(x, y) {
     }
   }
 
+
+  return(NULL)
+}
+
+
+.add_difference_tbl_summary_default_test <- function(data, variable, by, group, adj.vars, summary_type) {
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% c("continuous", "continuous2")) {
+    return("t.test")
+  }
+  if (is_empty(group) && summary_type %in% c("continuous", "continuous2")) {
+    return("ancova")
+  }
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% "dichotomous") {
+    return("prop.test")
+  }
+  if (is_empty(group) && is_empty(adj.vars) && summary_type %in% "categorical") {
+    return("smd")
+  }
+
+  if (!is_empty(group) && summary_type %in% c("continuous", "continuous2")) {
+    return("ancova_lme4")
+  }
 
   return(NULL)
 }

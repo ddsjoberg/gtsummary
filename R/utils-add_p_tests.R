@@ -1,9 +1,7 @@
 # add_p.tbl_summary ------------------------------------------------------------
-# TODO: how to handle wilcox test with CIs? add them by default? separate test that includes CIs?
-
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_t_test(
@@ -16,15 +14,17 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
   )
 }
 
-add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
+add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_wilcox_test(
       data = data,
       variable = all_of(variable),
       by = all_of(by),
+      conf.int = TRUE,
+      conf.level = conf.level,
       !!!test.args
     )
   ) |>
@@ -37,9 +37,10 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
     )
 }
 
+
 add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -56,7 +57,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
 
 add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mcnemar_test(
@@ -70,7 +71,7 @@ add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_chisq_test(
@@ -96,7 +97,7 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, test.args, ...)
 
 add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mood_test(
@@ -111,7 +112,7 @@ add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_stats_kruskal_test(
     data = data,
@@ -122,7 +123,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_fisher_test(
@@ -155,7 +156,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_oneway_test(
@@ -168,7 +169,7 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_mood.test <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   rlang::inject(
     cardx::ard_stats_mood_test(
@@ -182,7 +183,7 @@ add_p_test_mood.test <- function(data, variable, by, ...) {
 add_p_test_lme4 <- function(data, variable, by, group, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_pkg_installed("lme4", reference_pkg = "cardx")
-  check_null(c("test.args", "adj.vars"), ...)
+  check_empty(c("test.args", "adj.vars"), ...)
 
   if (is_empty(group)) {
     cli::cli_abort("The {.arg group} argument cannot be missing for {.val lme4} tests.")
@@ -213,7 +214,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_paired_t_test(
@@ -229,7 +230,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -247,7 +248,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
 
 add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars", "group"), ...)
+  check_empty(c("adj.vars", "group"), ...)
 
   rlang::inject(
     cardx::ard_stats_prop_test(
@@ -260,23 +261,18 @@ add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.9
   )
 }
 
-add_p_test_ancova <- function(data, variable, by, adj.vars, ...) {
+add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "test.args"), ...)
+  check_empty(c("group", "test.args"), ...)
+  check_n_levels(data[[by]], 2L, message = "The {.arg by} column must have {.val {length}} levels.")
 
-  if (dplyr::n_distinct(data[[by]], na.rm = TRUE) != 2L) {
-    cli::cli_abort(
-      c("Error in {.val ancova} model for variable {.val {variable}}.",
-        i = "This inplementation requires the {.val by} variable to have {.val {2}} levels,
-             but it has {.val {dplyr::n_distinct(data[[by]], na.rm = TRUE)}}"),
-      call = get_cli_abort_call()
-    )
-  }
+  # reverse coding the 'by' variable
+  data[[by]] <- fct_rev(factor(data[[by]]))
 
   cardx::ard_regression_basic(
     x =
       cardx::construct_model(
-        data = data,
+        x = data,
         formula = cardx::reformulate2(c(by, adj.vars), response = variable),
         method = "lm"
       )
@@ -291,27 +287,35 @@ add_p_test_ancova <- function(data, variable, by, adj.vars, ...) {
         dplyr::mutate(
           stat = "method",
           stat_name = "method",
+          stat_label = "method",
           stat =
             dplyr::case_when(
-              is.null(adj.vars) ~ "One-way ANOVA",
-              TRUE ~ "ANCOVA"
+              is.null(adj.vars) ~ list("One-way ANOVA"),
+              TRUE ~ list("ANCOVA")
             ),
           fmt_fun = list(NULL)
         )
+    ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
+    dplyr::mutate(
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
     )
 }
 
 
 add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_cohens_d(
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      ci = conf.level,
+      conf.level = conf.level,
+      verbose = FALSE,
       !!!test.args
     )
   )
@@ -319,7 +323,7 @@ add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95
 
 add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -329,7 +333,8 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
       variable = all_of(variable),
       by = all_of(by),
       id = all_of(group),
-      ci = conf.level,
+      conf.level = conf.level,
+      verbose = FALSE,
       !!!test.args
     )
   )
@@ -337,14 +342,15 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
 
 add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars"), ...)
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_hedges_g(
       data = data,
       variable = all_of(variable),
       by = all_of(by),
-      ci = conf.level,
+      conf.level = conf.level,
+      verbose = FALSE,
       !!!test.args
     )
   )
@@ -352,7 +358,7 @@ add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95
 
 add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("adj.vars"), ...)
+  check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
 
@@ -362,7 +368,8 @@ add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, con
       variable = all_of(variable),
       by = all_of(by),
       id = all_of(group),
-      ci = conf.level,
+      conf.level = conf.level,
+      verbose = FALSE,
       !!!test.args
     )
   )
@@ -370,19 +377,20 @@ add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, con
 
 add_p_test_smd <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("group", "adj.vars", "test.args"), ...)
+  check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_smd_smd(
     data = data,
     variable = all_of(variable),
-    by = all_of(by)
+    by = all_of(by),
+    std.error = TRUE
   )
 }
 
-add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
+add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
                                type, group = NULL, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
-  check_null(c("test.args"), ...)
+  check_empty(c("test.args"), ...)
 
   if (!is.null(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", reference_pkg = "cardx")
@@ -416,11 +424,11 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
   # styler: off
   method.args <- list()
   package <- "base"
-  if (is.data.frame(data) && is.null(group) && type %in% "continuous") {
+  if (is.data.frame(data) && is_empty(group) && type %in% c("continuous", "continuous2")) {
     method <- "lm"
   }
-  else if (is.data.frame(data) && is.null(group) && type %in% "dichotomous") {
-    method <- "lm"
+  else if (is.data.frame(data) && is_empty(group) && type %in% "dichotomous") {
+    method <- "glm"
     method.args <- list(family = stats::binomial())
   }
   else if (inherits(data, "survey.design")) {
@@ -428,10 +436,13 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
     method <- "svyglm"
     if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
   }
-  else if (is.data.frame(data) && !is.null(group)) {
+  else if (is.data.frame(data) && !is_empty(group)) {
     package <- "lme4"
-    method <- "glmer"
-    if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
+    if (type %in% "dichotomous") {
+      method <- "glmer"
+      method.args <- list(family = stats::binomial())
+    }
+    else method <- "lmer"
   }
   # styler: on
 
@@ -444,8 +455,65 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars, conf.level = 0.95,
     response_type = type,
     conf.level = conf.level,
     primary_covariate = by
-  )
+  ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
+    dplyr::mutate(
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
+    )
 }
+
+add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  check_length(group, 1L)
+
+  # reverse coding the 'by' variable
+  data[[by]] <- fct_rev(factor(data[[by]]))
+
+  # building model
+  cardx::ard_regression_basic(
+    x =
+      cardx::construct_model(
+        x = data,
+        formula =
+          stats::reformulate(
+            termlabels = c(cardx::bt(c(by, adj.vars)), glue("(1 | {cardx::bt(group)})")),
+            response = cardx::bt(variable)
+          ),
+        method = "lmer",
+        package = "lme4"
+      ),
+    effects = "fixed"
+  ) |>
+    dplyr::filter(
+      .data$variable %in% .env$by,
+      .data$stat_name %in% c("estimate", "std.error", "statistic", "conf.low", "conf.high", "p.value")
+    ) %>%
+    dplyr::bind_rows(
+      .,
+      dplyr::filter(., dplyr::row_number() == 1L) |>
+        dplyr::mutate(
+          stat = "method",
+          stat_name = "method",
+          stat_label = "method",
+          stat =
+            dplyr::case_when(
+              is.null(adj.vars) ~ list("One-way ANOVA with random intercept"),
+              TRUE ~ list("ANCOVA with random intercept")
+            ),
+          fmt_fun = list(NULL)
+        )
+    ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
+    dplyr::mutate(
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
+    )
+}
+
 
 # UTILITY FUNCTIONS ------------------------------------------------------------
 .extract_data_frame <- function(x) {
@@ -479,7 +547,7 @@ warn_unbalanced_pairs <- function(data, by, variable, group) {
   invisible()
 }
 
-check_null <- function(x, variable = get("variable", envir = caller_env()),
+check_empty <- function(x, variable = get("variable", envir = caller_env()),
                        call = get_cli_abort_call(), ...) {
   dots <- dots_list(...)
   walk(
@@ -496,3 +564,4 @@ check_null <- function(x, variable = get("variable", envir = caller_env()),
 
   invisible()
 }
+

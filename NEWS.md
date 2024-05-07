@@ -26,6 +26,8 @@
 
 * Previously, the gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., would error if used out of context. They will now select no columns when used out-of-context.
 
+* Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
+
 #### Internal Updates
 
 * Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
