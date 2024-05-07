@@ -44,6 +44,89 @@ test_that("add_difference.tbl_summary() works with basic usage", {
   )
 })
 
+test_that("add_difference.tbl_summary(tests = 'emmeans')", {
+  skip_if_not(is_pkg_installed("emmeans", reference_pkg = "cardx"))
+  tbl1 <-
+    trial |>
+    tbl_summary(
+      by = trt,
+      include = ttdeath
+    ) |>
+    add_difference(test = ~"emmeans")
+
+  expect_equal(
+    tbl1$cards$add_difference$ttdeath |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      ),
+    cardx::ard_emmeans_mean_difference(
+      data = trial,
+      formula = ttdeath ~ trt,
+      method = "lm",
+      response_type = "continuous"
+    ) |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      )
+  )
+
+  tbl2 <-
+    trial |>
+    tbl_summary(
+      by = trt,
+      include = ttdeath
+    ) |>
+    add_difference(test = ~"emmeans", group = "grade")
+
+  expect_equal(
+    tbl2$cards$add_difference$ttdeath |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      ),
+    cardx::ard_emmeans_mean_difference(
+      data = trial,
+      formula = ttdeath ~ trt + (1 | grade),
+      method = "lmer",
+      package = "lme4",
+      response_type = "continuous"
+    ) |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      )
+  )
+
+  tbl3 <-
+    trial |>
+    tbl_summary(
+      by = trt,
+      include = response
+    ) |>
+    add_difference(test = ~"emmeans")
+
+  expect_equal(
+    tbl3$cards$add_difference$response |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      ),
+    cardx::ard_emmeans_mean_difference(
+      data = trial,
+      formula = response ~ trt,
+      method = "glm",
+      method.args = list(family = binomial),
+      response_type = "dichotomous"
+    ) |>
+      dplyr::select(
+        -cards::all_ard_groups(),
+        -cards::all_ard_variables()
+      )
+  )
+})
+
 test_that("statistics are replicated within add_difference.tbl_summary()", {
   tbl_test.args <-
     trial |>
@@ -57,8 +140,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
            var_ancova = age,
            var_cohens_d = age,
            var_hedges_g = age,
-           var_smd = age,
-           var_emmeans = age,
+           var_smd = age
     ) %>%
     tbl_summary(
       by = trt, missing = "no",
@@ -253,20 +335,6 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       select(-CI) |>
       set_names(c("estimate", "conf.low", "conf.high")),
     ignore_attr = TRUE
-  )
-
-  expect_equal(
-    tbl_test.args$cards$add_difference$var_emmeans |>
-      dplyr::filter(stat_name %in% c("estimate", "conf.low", "conf.high", "p.value")) |>
-      tidyr::pivot_wider(
-        id_cols = c(variable),
-        names_from = stat_name,
-        values_from = stat,
-        values_fn = unlist
-      ) |>
-      select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    dplyr::tibble(estimate = -0.4379906, conf.low = -4.558684, conf.high = 3.682703, p.value = 0.8341437),
-    tolerance = 0.00001
   )
 })
 

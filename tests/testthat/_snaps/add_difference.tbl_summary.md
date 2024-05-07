@@ -41,7 +41,6 @@
       8          var_cohens_d          -0.03 -0.32, 0.25        <NA>
       9          var_hedges_g          -0.03 -0.31, 0.25        <NA>
       10              var_smd          -0.03 -0.32, 0.25        <NA>
-      11          var_emmeans          -0.44   -4.6, 3.7         0.8
 
 # statistics are replicated within add_difference.tbl_summary(group)
 
