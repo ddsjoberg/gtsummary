@@ -1,4 +1,4 @@
-#' Summary statistics table
+#' Summary table
 #'
 #' The `tbl_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
@@ -297,7 +297,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
-      if (!rlang::is_empty(by)) {
+      if (!is_empty(by)) {
         cards::ard_categorical(data,
           variables = all_of(by),
           stat_label = ~ default_stat_labels()

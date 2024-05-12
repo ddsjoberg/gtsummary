@@ -64,11 +64,15 @@ NULL
 
 #' @rdname bridge_summary
 #' @export
-brdg_summary <- function(x, calling_function = "tbl_summary") {
+brdg_summary <- function(x,
+                         calling_function = "tbl_summary",
+                         by = x$inputs$by,
+                         include = x$inputs$include,
+                         type = x$inputs$type) {
   set_cli_abort_call()
   # add gts info to the cards table --------------------------------------------
   # adding the name of the column the stats will populate
-  if (is_empty(x$inputs$by)) {
+  if (is_empty(by)) {
     x[["cards"]][[calling_function]]$gts_column <-
       ifelse(
         x[["cards"]][[calling_function]]$context %in% c("continuous", "categorical", "dichotomous", "missing"),
@@ -77,17 +81,22 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
       )
   } else {
     x[["cards"]][[calling_function]] <-
-      x[["cards"]][[calling_function]] |>
-      dplyr::mutate(
-        .by = cards::all_ard_groups(),
-        gts_column =
-          ifelse(
-            .data$context %in% c("continuous", "categorical", "dichotomous", "missing") &
-              !.data$variable %in% .env$x$inputs$tbl_summary$by,
-            paste0("stat_", dplyr::cur_group_id() - 1L),
-            NA_character_
-          )
-      )
+      x[["cards"]][[calling_function]] %>%
+      {dplyr::left_join(
+        .,
+        dplyr::filter(
+          .,
+          .data$variable %in% .env$include,
+          .data$context %in% c("continuous", "categorical", "dichotomous", "missing")
+        ) |>
+          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+          dplyr::distinct() |>
+          dplyr::mutate(
+            .by = cards::all_ard_groups(),
+            gts_column = paste0("stat_", dplyr::cur_group_id())
+          ),
+        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+      )}
   }
 
 
@@ -95,31 +104,31 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   x$table_body <-
     dplyr::left_join(
       dplyr::tibble(
-        variable = x$inputs$include,
-        var_type = x$inputs$type[.data$variable] |> unlist() |> unname()
+        variable = include,
+        var_type = type[.data$variable] |> unlist() |> unname()
       ),
       dplyr::bind_rows(
         pier_summary_continuous(
           x,
-          variables = .get_variables_by_type(x$inputs$type, type = "continuous"),
+          variables = .get_variables_by_type(type, type = "continuous"),
           calling_function = calling_function
         ),
         pier_summary_continuous2(
           x,
-          variables = .get_variables_by_type(x$inputs$type, type = "continuous2"),
+          variables = .get_variables_by_type(type, type = "continuous2"),
           calling_function = calling_function
         ),
         pier_summary_categorical(
           x,
-          variables = .get_variables_by_type(x$inputs$type, type = "categorical"),
+          variables = .get_variables_by_type(type, type = "categorical"),
           calling_function = calling_function
         ),
         pier_summary_dichotomous(
           x,
-          variables = .get_variables_by_type(x$inputs$type, type = "dichotomous"),
+          variables = .get_variables_by_type(type, type = "dichotomous"),
           calling_function = calling_function
         ),
-        pier_summary_missing_row(x, calling_function = calling_function)
+        pier_summary_missing_row(x, variables = include, calling_function = calling_function)
       ),
       by = "variable"
     )
@@ -128,7 +137,7 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   x <- construct_initial_table_styling(x)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
-  x <- .add_table_styling_stats(x)
+  x <- .add_table_styling_stats(x, by = by, calling_function = calling_function)
 
   x
 }
@@ -154,7 +163,8 @@ pier_summary_dichotomous <- function(x, variables, value = x$inputs$value,
 
 #' @rdname bridge_summary
 #' @export
-pier_summary_categorical <- function(x, variables, missing, missing_text, missing_stat,
+pier_summary_categorical <- function(x, variables,
+                                     missing, missing_text, missing_stat,
                                      calling_function = "tbl_summary") {
   set_cli_abort_call()
   if (is_empty(variables)) {
@@ -375,7 +385,10 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
 
 #' @rdname bridge_summary
 #' @export
-pier_summary_continuous <- function(x, variables, missing, missing_text, missing_stat,
+pier_summary_continuous <- function(x,
+                                    variables,
+                                    statistic = x$inputs$statistic,
+                                    missing, missing_text, missing_stat,
                                     calling_function = "tbl_summary") {
   set_cli_abort_call()
   if (is_empty(variables)) {
@@ -398,7 +411,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
           .data = .y,
           stat =
             glue::glue(
-              x$inputs$statistic[[.data$variable[1]]],
+              statistic[[.data$variable[1]]],
               .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
             ) |>
             as.character()
@@ -439,7 +452,10 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
 
 #' @rdname bridge_summary
 #' @export
-pier_summary_missing_row <- function(x, variables = x$inputs$include,
+pier_summary_missing_row <- function(x,
+                                     variables = x$inputs$include,
+                                     missing_stat = x$inputs$missing_stat,
+                                     missing_text = x$inputs$missing_text,
                                      calling_function = "tbl_summary") {
   set_cli_abort_call()
   if (is_empty(variables)) {
@@ -463,19 +479,19 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include,
 
   # slightly modifying the `x` object for missing value calculations -----------
   # make all the summary stats the same for all vars
-  x$inputs$statistic <- rep_named(variables, list(x$inputs$missing_stat))
+  statistic <- rep_named(variables, list(missing_stat))
 
 
-  pier_summary_continuous(x, variables = variables) |>
+  pier_summary_continuous(x, variables = variables, statistic = statistic) |>
     # update the row_type and label
     dplyr::mutate(
       row_type = "missing",
-      label = x$inputs$missing_text
+      label = missing_text
     )
 }
 
-.add_table_styling_stats <- function(x, calling_function = "tbl_summary") {
-  if (is_empty(x$inputs$by)) {
+.add_table_styling_stats <- function(x, by = x$inputs$by, calling_function = "tbl_summary") {
+  if (is_empty(by)) {
     x$table_styling$header <-
       x$table_styling$header |>
       dplyr::mutate(
@@ -491,7 +507,7 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include,
       )
   } else {
     df_by_stats <- x[["cards"]][[calling_function]] |>
-      dplyr::filter(.data$variable %in% .env$x$inputs$by & .data$stat_name %in% c("N", "n", "p"))
+      dplyr::filter(.data$variable %in% .env$by & .data$stat_name %in% c("N", "n", "p"))
 
     # get a data frame with the by variable stats
     df_by_stats_wide <-
@@ -501,14 +517,11 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include,
         .by = "variable_level",
         column = paste0("stat_", dplyr::cur_group_id())
       ) %>%
-      {
-        dplyr::bind_rows(
-          .,
-          dplyr::select(., "variable_level", "column", stat = "variable_level") |>
-            dplyr::mutate(stat_name = "level") |>
-            dplyr::distinct()
-        )
-      } |>
+      dplyr::bind_rows(
+        dplyr::select(., "variable_level", "column", stat = "variable_level") |>
+          dplyr::mutate(stat_name = "level") |>
+          dplyr::distinct()
+      ) |>
       tidyr::pivot_wider(
         id_cols = "column",
         names_from = "stat_name",
