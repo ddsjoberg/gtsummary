@@ -149,7 +149,7 @@ card_summary <- function(cards,
       include,
       function(variable) {
         if (default_types[[variable]] %in% "continuous" &&
-             !type[[variable]] %in% c("continuous", "continuous2")) {
+            !type[[variable]] %in% c("continuous", "continuous2")) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be one of
              {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
@@ -157,12 +157,12 @@ card_summary <- function(cards,
           )
         }
         else if (default_types[[variable]] %in% c("categorical", "dichotomous") &&
-              !identical(type[[variable]], default_types[[variable]])) {
-            cli::cli_abort(
-              "Summary type for variable {.val {variable}} must be
+                 !identical(type[[variable]], default_types[[variable]])) {
+          cli::cli_abort(
+            "Summary type for variable {.val {variable}} must be
              {.val {default_types[[variable]]}}, not {.val {type[[variable]]}}.",
-              call = get_cli_abort_call()
-            )
+            call = get_cli_abort_call()
+          )
         }
       }
     )
@@ -200,7 +200,19 @@ card_summary <- function(cards,
       }
     }
   )
-
+  walk(
+    include,
+    \(variable) {
+      if (type[[variable]] %in% c("categorical", "dichotomous", "continuous") &&
+          !is_string(statistic[[variable]])) {
+        cli::cli_abort(
+          "Variable {.val {variable}} is type {.arg {type[[variable]]}} and
+           {.arg statistic} argument value must be a string of length one.",
+          call = get_cli_abort_call()
+        )
+      }
+    }
+  )
   # save inputs
   card_summary_inputs <- as.list(environment())[names(formals(card_summary))]
   call <- match.call()

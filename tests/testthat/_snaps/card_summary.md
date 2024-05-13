@@ -32,6 +32,34 @@
       4                >80        77 (30.3%)
       5                Age 77.0 (70.0, 81.0)
 
+# card_summary(statistic) argument works
+
+    Code
+      as.data.frame(card_summary(ard, statistic = list(all_continuous() ~ "{median}",
+      all_categorical() ~ "{n} / {N} (Total {N_obs})")))
+    Output
+        **Characteristic**           **N = 254**
+      1 Pooled Age Group 1                  <NA>
+      2              65-80 144 / 254 (Total 254)
+      3                <65  33 / 254 (Total 254)
+      4                >80  77 / 254 (Total 254)
+      5                Age                  77.0
+
+---
+
+    Code
+      as.data.frame(card_summary(ard, type = list(all_continuous() ~ "continuous2"),
+      statistic = list(all_continuous() ~ c("{median}", "{mean}"))))
+    Output
+        **Characteristic** **N = 254**
+      1 Pooled Age Group 1        <NA>
+      2              65-80 144 (56.7%)
+      3                <65  33 (13.0%)
+      4                >80  77 (30.3%)
+      5                Age        <NA>
+      6             Median        77.0
+      7               Mean        75.1
+
 # card_summary(cards) error messages
 
     Code
@@ -79,4 +107,14 @@
       Error in `card_summary()`:
       ! The "not_a_valid_summary_statistic" statistics for variable "AGE" are not present in the `cards` ARD object.
       i Choose among the following statistics "N", "mean", "sd", "median", "p25", "p75", "min", "max", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
+
+---
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      .attributes = TRUE, .missing = TRUE), statistic = list(AGE = c("{mean}",
+        "{median}")))
+    Condition
+      Error in `card_summary()`:
+      ! Variable "AGE" is type `continuous` and `statistic` argument value must be a string of length one.
 
