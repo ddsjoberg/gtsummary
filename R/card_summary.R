@@ -66,7 +66,8 @@ card_summary <- function(cards,
   missing <- arg_match(missing)
 
   # check structure of ARD input -----------------------------------------------
-  # - TODO: What other checks should we add?
+  # TODO: What other checks should we add?
+  # - for the moment, the cards object requires the missing and attributes summaries.
   if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
     cli::cli_abort(
       c("The {.arg cards} object may only contain a single stratifying variable.",
@@ -107,6 +108,7 @@ card_summary <- function(cards,
     as.list()
 
   # process arguments ----------------------------------------------------------
+  # TODO: Add check that the specified types are compatible with the summaries in the ARD
   cards::process_formula_selectors(
     data = select_prep(.list2tb(default_types, "var_type"), data[include]),
     type = type
@@ -126,6 +128,7 @@ card_summary <- function(cards,
     select_prep(.list2tb(type, "var_type"), data[include]),
     statistic = eval(formals(gtsummary::card_summary)[["statistic"]]),
   )
+  # TODO: add check that all selected stats are present in the ARD
 
   # TODO: `type` should be an argument because there is no way to request a single line continuous2 summary.
   type <- imap(
@@ -175,6 +178,6 @@ card_summary <- function(cards,
       all_stat_cols() ~ ifelse(is_empty(by), "**N = {N}**", "**{level}**  \nN = {n}")
     )
 
-  # return tbl_summary table ---------------------------------------------------
+  # return card_summary table --------------------------------------------------
   x
 }
