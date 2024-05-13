@@ -75,32 +75,36 @@ test_that("tbl_summary(statistic)", {
   )
 
   # continuous summary, testing cv function and passed in formula
-  expect_equal({
-    cv  <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE) * 100
-    trial |>
-      tbl_summary(
-        include = age,
-        statistic =
-          age ~ "cv={cv} | N_obs={N_obs} | N_miss={N_miss} | N_nonmiss={N_nonmiss} | p_miss={p_miss} | p_nonmiss={p_nonmiss}",
-        missing = "no"
-      ) |>
-      as.data.frame(col_labels = FALSE) |>
-      dplyr::pull(stat_0)},
+  expect_equal(
+    {
+      cv <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE) * 100
+      trial |>
+        tbl_summary(
+          include = age,
+          statistic =
+            age ~ "cv={cv} | N_obs={N_obs} | N_miss={N_miss} | N_nonmiss={N_nonmiss} | p_miss={p_miss} | p_nonmiss={p_nonmiss}",
+          missing = "no"
+        ) |>
+        as.data.frame(col_labels = FALSE) |>
+        dplyr::pull(stat_0)
+    },
     "cv=30 | N_obs=200 | N_miss=11 | N_nonmiss=189 | p_miss=5.5 | p_nonmiss=95"
   )
 
   # continuous summary, testing cv function and passed in named list
-  expect_equal({
-    cv  <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE) * 100
-    trial |>
-      tbl_summary(
-        include = age,
-        statistic =
-          list(age = "cv={cv} | N_obs={N_obs} | N_miss={N_miss} | N_nonmiss={N_nonmiss} | p_miss={p_miss} | p_nonmiss={p_nonmiss}"),
-        missing = "no"
-      ) |>
-      as.data.frame(col_labels = FALSE) |>
-      dplyr::pull(stat_0)},
+  expect_equal(
+    {
+      cv <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE) * 100
+      trial |>
+        tbl_summary(
+          include = age,
+          statistic =
+            list(age = "cv={cv} | N_obs={N_obs} | N_miss={N_miss} | N_nonmiss={N_nonmiss} | p_miss={p_miss} | p_nonmiss={p_nonmiss}"),
+          missing = "no"
+        ) |>
+        as.data.frame(col_labels = FALSE) |>
+        dplyr::pull(stat_0)
+    },
     "cv=30 | N_obs=200 | N_miss=11 | N_nonmiss=189 | p_miss=5.5 | p_nonmiss=95"
   )
 })
@@ -184,8 +188,10 @@ test_that("tbl_summary(digit) errors properly", {
       trial,
       include = age,
       digits = list(
-        age = list(median = letters, # this is not a function!
-                   p25 = \(x) style_number(x, digits = 2))
+        age = list(
+          median = letters, # this is not a function!
+          p25 = \(x) style_number(x, digits = 2)
+        )
       ),
       missing = "no"
     ),
@@ -302,8 +308,6 @@ test_that("tbl_summary(type)", {
       getElement("yn"),
     "categorical"
   )
-
-
 })
 
 test_that("tbl_summary(type) proper errors/messages", {
@@ -397,7 +401,7 @@ test_that("tbl_summary(missing)", {
       as.data.frame()
   )
   # age includes an Unknown row, and trt does not
-  expect_equal(tbl[,1], c("Chemotherapy Treatment", "Drug A", "Drug B", "Age", "Unknown"))
+  expect_equal(tbl[, 1], c("Chemotherapy Treatment", "Drug A", "Drug B", "Age", "Unknown"))
 
   # all vars have a missing row when requested
   expect_equal(

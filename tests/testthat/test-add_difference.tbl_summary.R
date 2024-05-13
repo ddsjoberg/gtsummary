@@ -1,5 +1,7 @@
-skip_if_not(is_pkg_installed(c("broom", "broom.helpers", "lme4", "smd",
-                               "effectsize", "emmeans"), reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c(
+  "broom", "broom.helpers", "lme4", "smd",
+  "effectsize", "emmeans"
+), reference_pkg = "cardx"))
 
 test_that("add_difference.tbl_summary() works with basic usage", {
   expect_error(
@@ -16,7 +18,8 @@ test_that("add_difference.tbl_summary() works with basic usage", {
   expect_snapshot(
     tbl_diff |>
       modify_column_hide(all_stat_cols()) |>
-      as.data.frame())
+      as.data.frame()
+  )
 
   expect_equal(
     tbl_diff$cards$add_difference$marker |>
@@ -29,7 +32,9 @@ test_that("add_difference.tbl_summary() works with basic usage", {
       ) |>
       dplyr::select(all_of(c("estimate", "statistic", "parameter", "conf.low", "conf.high", "p.value"))),
     t.test(marker ~ trt, trial, var.equal = TRUE) %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(all_of(c("estimate", "statistic", "parameter", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -131,16 +136,16 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
   tbl_test.args <-
     trial |>
     select(trt,
-           var_t.test = age,
-           var_t.test_dots = age,
-           var_wilcox.test = age,
-           var_wilcox.test_dots = age,
-           var_prop.test = response,
-           var_prop.test_dots = response,
-           var_ancova = age,
-           var_cohens_d = age,
-           var_hedges_g = age,
-           var_smd = age
+      var_t.test = age,
+      var_t.test_dots = age,
+      var_wilcox.test = age,
+      var_wilcox.test_dots = age,
+      var_prop.test = response,
+      var_prop.test_dots = response,
+      var_ancova = age,
+      var_cohens_d = age,
+      var_hedges_g = age,
+      var_smd = age
     ) %>%
     tbl_summary(
       by = trt, missing = "no",
@@ -182,7 +187,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     t.test(age ~ as.factor(trt), data = trial) %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -198,7 +205,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     t.test(age ~ as.factor(trt), data = trial, var.equal = TRUE) %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -215,7 +224,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     wilcox.test(age ~ trt, data = trial, conf.int = TRUE) %>%
-    {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -231,7 +242,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     wilcox.test(age ~ trt, data = trial, correct = FALSE, conf.int = TRUE) %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -248,7 +261,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     table(trial$trt, factor(trial$response) %>% fct_rev()) |>
       prop.test() %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       dplyr::mutate(estimate = estimate1 - estimate2) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
@@ -266,7 +281,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     table(trial$trt, factor(trial$response) %>% fct_rev()) |>
       prop.test(alternative = "greater") %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       dplyr::mutate(estimate = estimate1 - estimate2) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
@@ -283,7 +300,9 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     lm(age ~ fct_rev(trt), trial) %>%
-      {withr::with_package("broom", tidy(., conf.int = TRUE))} |>
+      {
+        withr::with_package("broom", tidy(., conf.int = TRUE))
+      } |>
       dplyr::slice(dplyr::n()) %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
@@ -354,10 +373,10 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
   tbl_groups <-
     trial_group |>
     select(trt, id, stage, marker,
-           age_ancova_lme4 = age,
-           age_paired_t_test = age,
-           age_paired_cohens_d = age,
-           age_paired_hedges_g = age
+      age_ancova_lme4 = age,
+      age_paired_t_test = age,
+      age_paired_cohens_d = age,
+      age_paired_hedges_g = age
     ) %>%
     tbl_summary(
       by = trt,
@@ -366,10 +385,12 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
       label = as.list(names(.)) |> setNames(names(.))
     ) |>
     add_difference(
-      test = list(age_ancova_lme4 = "ancova_lme4",
-                  age_paired_t_test = "paired.t.test",
-                  age_paired_cohens_d = "paired_cohens_d",
-                  age_paired_hedges_g = "paired_hedges_g"),
+      test = list(
+        age_ancova_lme4 = "ancova_lme4",
+        age_paired_t_test = "paired.t.test",
+        age_paired_cohens_d = "paired_cohens_d",
+        age_paired_hedges_g = "paired_hedges_g"
+      ),
       group = "id"
     )
   expect_snapshot(
@@ -392,7 +413,9 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
       package = "lme4",
       lmer(age ~ fct_rev(factor(trt)) + (1 | id), trial_group)
     ) %>%
-      {withr::with_package("broom.mixed", tidy(., conf.int = TRUE, effects = "fixed"))} |>
+      {
+        withr::with_package("broom.mixed", tidy(., conf.int = TRUE, effects = "fixed"))
+      } |>
       dplyr::slice(dplyr::n()) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
@@ -413,7 +436,9 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
       y = trial_group_wide$age.y,
       paired = TRUE
     ) %>%
-      {withr::with_package("broom", tidy(.))} |>
+      {
+        withr::with_package("broom", tidy(.))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -437,7 +462,9 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
         verbose = FALSE
       )
     ) %>%
-      {withr::with_package("parameters", standardize_names(., style = "broom"))} |>
+      {
+        withr::with_package("parameters", standardize_names(., style = "broom"))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -461,7 +488,9 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
         verbose = FALSE
       )
     ) %>%
-      {withr::with_package("parameters", standardize_names(., style = "broom"))} |>
+      {
+        withr::with_package("parameters", standardize_names(., style = "broom"))
+      } |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     ignore_attr = TRUE
   )
@@ -605,4 +634,3 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
       as.data.frame()
   )
 })
-

@@ -71,15 +71,18 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   if (is_empty(columns)) {
     cli::cli_abort(
       c("No column names found in {.code modify_column_merge(pattern)} argument.",
-         i = "Wrap all column names in curly brackets, e.g {.code modify_column_merge(pattern = '{{conf.low}}, {{conf.high}}')}."),
+        i = "Wrap all column names in curly brackets, e.g {.code modify_column_merge(pattern = '{{conf.low}}, {{conf.high}}')}."
+      ),
       call = get_cli_abort_call()
     )
   }
   if (!all(columns %in% names(x$table_body))) {
     problem_cols <- columns %>% setdiff(names(x$table_body))
     cli::cli_abort(
-      c("Columns specified in the {.code modify_column_merge(pattern)} argument are not present in table.",
-        "Columns {.val {problem_cols}} not found."),
+      c(
+        "Columns specified in the {.code modify_column_merge(pattern)} argument are not present in table.",
+        "Columns {.val {problem_cols}} not found."
+      ),
       call = get_cli_abort_call()
     )
   }

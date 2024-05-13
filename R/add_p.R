@@ -136,7 +136,8 @@ add_p.tbl_summary <- function(x,
     test,
     predicate = \(x) is.character(x) || is.function(x),
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
-                  i = "Value must be {.cls character} or {.cls function}.")
+      i = "Value must be {.cls character} or {.cls function}."
+    )
   )
 
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
@@ -163,7 +164,7 @@ add_p.tbl_summary <- function(x,
   df_test_meta_data <-
     imap(
       test,
-      ~dplyr::tibble(variable = .y, fun_to_run = list(.x), test_name = attr(.x, "test_name") %||% NA_character_)
+      ~ dplyr::tibble(variable = .y, fun_to_run = list(.x), test_name = attr(.x, "test_name") %||% NA_character_)
     ) |>
     dplyr::bind_rows()
 
@@ -176,8 +177,7 @@ add_p.tbl_summary <- function(x,
         by = "variable"
       ) |>
       dplyr::relocate("test_name", .after = "variable")
-  }
-  else {
+  } else {
     x$table_body <-
       dplyr::rows_update(
         x$table_body,
@@ -198,7 +198,8 @@ add_p.tbl_summary <- function(x,
     test.args,
     predicate = \(x) is.list(x) && is_named(x),
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
-                  i = "Value must be a named list.")
+      i = "Value must be a named list."
+    )
   )
 
   # calculate tests ------------------------------------------------------------
@@ -229,9 +230,9 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
             do.call(
               what =
                 df_test_meta_data |>
-                dplyr::filter(.data$variable %in% .env$variable) |>
-                dplyr::pull("fun_to_run") %>%
-                getElement(1),
+                  dplyr::filter(.data$variable %in% .env$variable) |>
+                  dplyr::pull("fun_to_run") %>%
+                  getElement(1),
               args = list(
                 data = x$inputs$data,
                 variable = variable,
@@ -259,7 +260,10 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         dplyr::tibble(
           group1 = x$inputs$by,
           variable = variable,
-          stat_name = switch(calling_fun, "add_p" = "p.value", "add_difference" = "estimate"),
+          stat_name = switch(calling_fun,
+            "add_p" = "p.value",
+            "add_difference" = "estimate"
+          ),
           stat = list(NULL),
           warning = lst_captured_results["warning"],
           error = lst_captured_results["error"]
@@ -276,19 +280,23 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         if (inherits(x, "card")) {
           x |>
             dplyr::mutate(
-              across(c(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")), ~unlist(.) |> as.character())
+              across(c(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")), ~ unlist(.) |> as.character())
             )
+        } else {
+          NULL
         }
-        else NULL
       }
     ) |>
     dplyr::bind_rows() %>%
-    {switch(
-      !is_empty(.),
-      dplyr::filter(., .data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
-                                              "conf.low", "conf.high", "p.value")) |>
-        cards::print_ard_conditions()
-    )}
+    {
+      switch(!is_empty(.),
+        dplyr::filter(., .data$stat_name %in% c(
+          "estimate", "std.error", "parameter", "statistic",
+          "conf.low", "conf.high", "p.value"
+        )) |>
+          cards::print_ard_conditions()
+      )
+    }
 
 
   # combine results into a single data frame
@@ -299,8 +307,10 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         # if results are an ARD, reshape into broom::tidy-like format
         if (inherits(x, "card")) {
           res <-
-            dplyr::filter(x, .data$stat_name %in% c("estimate", "std.error", "parameter", "statistic",
-                                                    "conf.low", "conf.high", "p.value")) |>
+            dplyr::filter(x, .data$stat_name %in% c(
+              "estimate", "std.error", "parameter", "statistic",
+              "conf.low", "conf.high", "p.value"
+            )) |>
             cards::replace_null_statistic() |>
             tidyr::pivot_wider(
               id_cols = "variable",
@@ -308,25 +318,28 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
               values_from = "stat"
             ) |>
             dplyr::mutate(across(-"variable", unlist))
-        }
-        else {
+        } else {
           if (!is.data.frame(x)) {
             cli::cli_abort(
               c("Expecting the test result object for variable {.val {variable}} to be a {.cls {c('data.frame', 'tibble')}}.",
-                i = "Review {.help gtsummary::tests} for details on constructing a custom function."),
+                i = "Review {.help gtsummary::tests} for details on constructing a custom function."
+              ),
               call = get_cli_abort_call()
             )
           }
 
           res <-
-            dplyr::select(x, any_of(c("estimate", "std.error", "parameter", "statistic",
-                                      "conf.low", "conf.high", "p.value"))) |>
+            dplyr::select(x, any_of(c(
+              "estimate", "std.error", "parameter", "statistic",
+              "conf.low", "conf.high", "p.value"
+            ))) |>
             dplyr::mutate(variable = .env$variable, .before = 1L)
           # check the result structure
           if (identical(names(res), "variable") || nrow(res) != 1L) {
             cli::cli_abort(
               c("The test result object for variable {.val {variable}} is not the expected structure.",
-                i = "Review {.help gtsummary::tests} for details on constructing a custom function."),
+                i = "Review {.help gtsummary::tests} for details on constructing a custom function."
+              ),
               call = get_cli_abort_call()
             )
           }
@@ -336,8 +349,10 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     ) |>
     dplyr::bind_rows() |>
     dplyr::select(
-      any_of(c("variable", "estimate", "std.error", "parameter", "statistic",
-               "conf.low", "conf.high", "p.value"))
+      any_of(c(
+        "variable", "estimate", "std.error", "parameter", "statistic",
+        "conf.low", "conf.high", "p.value"
+      ))
     )
 
   # remove new columns that already exist in gtsummary table
@@ -345,7 +360,8 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   if (is_empty(new_columns)) {
     cli::cli_abort(
       c("Columns {.val {names(df_results) |> setdiff('variable')}} are already present in table (although, some may be hidden), and no new columns were added.",
-        i = "Use {.code tbl |> modify_table_body(\\(x) dplyr::select(x, -p.value))} to remove columns and they will be replaced by the new columns from the current call."),
+        i = "Use {.code tbl |> modify_table_body(\\(x) dplyr::select(x, -p.value))} to remove columns and they will be replaced by the new columns from the current call."
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -359,8 +375,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
           dplyr::filter(.data$stat_name %in% "method") |>
           dplyr::pull("stat") |>
           unlist()
-      }
-      else  {
+      } else {
         ft <- x[["method"]]
       }
       ft
@@ -374,7 +389,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   # add results to `.$table_body` ----------------------------------------------
   x <- x |>
     modify_table_body(
-      ~dplyr::left_join(
+      ~ dplyr::left_join(
         .x,
         df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "header"),
         by = c("variable", "row_type")

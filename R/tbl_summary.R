@@ -1,4 +1,4 @@
-#' Summary statistics table
+#' Summary table
 #'
 #' The `tbl_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
@@ -182,7 +182,8 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
-                i = "Use {.fun tbl_strata} for more than one {.arg by} variable.")
+      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+    )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
@@ -200,7 +201,7 @@ tbl_summary <- function(data,
     cards::process_formula_selectors(
       data = select_prep(.list2tb(default_types, "var_type"), data[include]),
       type = type
-      )
+    )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
   } else {
@@ -297,7 +298,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
-      if (!rlang::is_empty(by)) {
+      if (!is_empty(by)) {
         cards::ard_categorical(data,
           variables = all_of(by),
           stat_label = ~ default_stat_labels()
@@ -376,7 +377,9 @@ tbl_summary <- function(data,
 }
 
 .drop_missing_by_obs <- function(data, by) {
-  if (is_empty(by) || !any(is.na(data[[by]]))) return(data)
+  if (is_empty(by) || !any(is.na(data[[by]]))) {
+    return(data)
+  }
 
   obs_to_drop <- is.na(data[[by]])
   cli::cli_inform("{.val {sum(obs_to_drop)}} missing observations in the {.val {by}} column have been removed.")
@@ -398,7 +401,8 @@ tbl_summary <- function(data,
         if (!is_empty(missing_stats)) {
           cli::cli_abort(
             c("Statistic {.val {missing_stats}} is not available for variable {.val {variable}}.",
-              i = "Select among {.val {rev(unique(available_stats))}}."),
+              i = "Select among {.val {rev(unique(available_stats))}}."
+            ),
             call = get_cli_abort_call()
           )
         }
@@ -572,7 +576,6 @@ tbl_summary <- function(data,
                 ), call = get_cli_abort_call())
               }
             )
-
           }
         ) |>
           set_names(chr_fun_names)
