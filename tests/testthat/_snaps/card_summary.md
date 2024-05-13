@@ -32,3 +32,51 @@
       4                >80        77 (30.3%)
       5                Age 77.0 (70.0, 81.0)
 
+# card_summary(cards) error messages
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = c(ARM, AGEGR1), ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE))
+    Condition
+      Error in `card_summary()`:
+      ! The `cards` object may only contain a single stratifying variable.
+      i But contains "group2" and "group2_level".
+
+---
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      .attributes = FALSE, .missing = TRUE))
+    Condition
+      Error in `card_summary()`:
+      ! "AGE" does not have associated missing or attributes ARD results.
+      i Use `cards::ard_missing()`, `cards::ard_attributes()`, or `cards::ard_stack(.missing=TRUE, .attributes=TRUE)` to calculate needed results.
+
+# card_summary(type) error messages
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      .attributes = TRUE, .missing = TRUE), type = list(AGE = "categorical"))
+    Condition
+      Error in `card_summary()`:
+      ! Summary type for variable "AGE" must be one of "continuous" and "continuous2", not "categorical".
+
+---
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = ARM, ard_categorical(variables = "AGEGR1"),
+      .attributes = TRUE, .missing = TRUE), type = list(AGEGR1 = "continuous"))
+    Condition
+      Error in `card_summary()`:
+      ! Summary type for variable "AGEGR1" must be "categorical", not "continuous".
+
+# card_summary(statistic) error messages
+
+    Code
+      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      .attributes = TRUE, .missing = TRUE), statistic = list(AGE = "{not_a_valid_summary_statistic}"))
+    Condition
+      Error in `card_summary()`:
+      ! The "not_a_valid_summary_statistic" statistics for variable "AGE" are not present in the `cards` ARD object.
+      i Choose among the following statistics "N", "mean", "sd", "median", "p25", "p75", "min", "max", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
+

@@ -67,7 +67,6 @@ card_summary <- function(cards,
 
   # check structure of ARD input -----------------------------------------------
   # TODO: What other checks should we add?
-  # - for the moment, the cards object requires the missing and attributes summaries.
   if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
     cli::cli_abort(
       c("The {.arg cards} object may only contain a single stratifying variable.",
@@ -97,6 +96,28 @@ card_summary <- function(cards,
   cards::process_selectors(data, include = {{ include }})
   include <- setdiff(include, by) # remove by variable from list vars included
 
+  # check that each included variable has 'missing' and 'attributes' ARDs (this can probably be relaxed later)
+  missing_or_attributes_ard <-
+    imap(
+      include,
+      ~dplyr::filter(cards, .data$variable %in% .env$.x, .data$context %in% c("missing", "attributes")) |>
+        dplyr::select("variable", "context") |>
+        dplyr::distinct() |>
+        nrow() %>%
+        {!identical(., 2L)} # styler: off
+    ) |>
+    set_names(include) |>
+    unlist()
+  if (any(missing_or_attributes_ard)) {
+    cli::cli_abort(
+      c("{.val {names(missing_or_attributes_ard)[missing_or_attributes_ard]}}
+          {?does/do} not have associated {.field missing} or {.field attributes} ARD results.",
+        i = "Use {.fun cards::ard_missing}, {.fun cards::ard_attributes}, or
+             {.code cards::ard_stack(.missing=TRUE, .attributes=TRUE)} to calculate needed results."),
+      call = get_cli_abort_call()
+    )
+  }
+
   # temporary type so we can evaluate `statistic`, then we'll update it
   default_types <- dplyr::select(cards, "variable", "context") |>
     dplyr::distinct() |>
@@ -108,7 +129,6 @@ card_summary <- function(cards,
     as.list()
 
   # process arguments ----------------------------------------------------------
-  # TODO: Add check that the specified types are compatible with the summaries in the ARD
   cards::process_formula_selectors(
     data = select_prep(.list2tb(default_types, "var_type"), data[include]),
     type = type
@@ -118,6 +138,35 @@ card_summary <- function(cards,
     select_prep(.list2tb(default_types, "var_type"), data[include]),
     type = default_types,
   )
+  cards::check_list_elements(
+    x = type,
+    predicate = \(x) is.character(x) && length(x) == 1L && x %in% c("categorical", "dichotomous", "continuous", "continuous2"),
+    error_msg = "Elements of the {.arg type} argumnet must be one of {.val {c('categorical', 'dichotomous', 'continuous', 'continuous2')}}."
+  )
+  # if the user passed `type` then check that the values are compatible with ARD summary types
+  if (!missing(type)) {
+    walk(
+      include,
+      function(variable) {
+        if (default_types[[variable]] %in% "continuous" &&
+             !type[[variable]] %in% c("continuous", "continuous2")) {
+          cli::cli_abort(
+            "Summary type for variable {.val {variable}} must be one of
+             {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
+            call = get_cli_abort_call()
+          )
+        }
+        else if (default_types[[variable]] %in% c("categorical", "dichotomous") &&
+              !identical(type[[variable]], default_types[[variable]])) {
+            cli::cli_abort(
+              "Summary type for variable {.val {variable}} must be
+             {.val {default_types[[variable]]}}, not {.val {type[[variable]]}}.",
+              call = get_cli_abort_call()
+            )
+        }
+      }
+    )
+  }
 
   cards::process_formula_selectors(
     data = select_prep(.list2tb(type, "var_type"), data[include]),
@@ -128,14 +177,27 @@ card_summary <- function(cards,
     select_prep(.list2tb(type, "var_type"), data[include]),
     statistic = eval(formals(gtsummary::card_summary)[["statistic"]]),
   )
-  # TODO: add check that all selected stats are present in the ARD
-
-  # TODO: `type` should be an argument because there is no way to request a single line continuous2 summary.
-  type <- imap(
-    default_types,
-    \(.x, .y) {
-      if (.x == "continuous" && length(statistic[[.y]]) > 1L) return("continuous2")
-      .x
+  cards::check_list_elements(
+    x = statistic,
+    predicate = \(x) is.character(x),
+    error_msg = "The {.arg statistic} argument values must be class {.cls character} vector."
+  )
+  walk(
+    include,
+    \(variable) {
+      stat_names <- .extract_glue_elements(statistic[[variable]])
+      stat_names_not_in_cards <-
+        stat_names |>
+        discard(~.x %in% dplyr::filter(cards, .data$variable %in% .env$variable)$stat_name)
+      if (!is_empty(stat_names_not_in_cards)) {
+        cli::cli_abort(
+          c("The {.val {stat_names_not_in_cards}} statistics for variable {.val {variable}}
+             are not present in the {.arg cards} ARD object.",
+            i = "Choose among the following statistics
+                 {.val {dplyr::filter(cards, .data$variable %in% .env$variable, !.data$context %in% 'attributes')$stat_name |> unique()}}."),
+          call = get_cli_abort_call()
+        )
+      }
     }
   )
 
