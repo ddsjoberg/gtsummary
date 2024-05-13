@@ -26,7 +26,7 @@
 #' trial |>
 #'   tbl_summary(
 #'     by = trt,
-#'     include  = c(age, stage)
+#'     include = c(age, stage)
 #'   ) |>
 #'   assign_tests(include = c("age", "stage"), calling_fun = "add_p")
 NULL
@@ -56,23 +56,28 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
     function(variable) {
       if (is.null(test[[variable]])) {
         test[[variable]] <-
-          switch(
-            calling_fun,
+          switch(calling_fun,
             "add_p" =
-              .add_p_tbl_summary_default_test(data, variable = variable,
-                                              by = by, group = group, adj.vars = adj.vars,
-                                              summary_type = summary_type[[variable]]),
+              .add_p_tbl_summary_default_test(data,
+                variable = variable,
+                by = by, group = group, adj.vars = adj.vars,
+                summary_type = summary_type[[variable]]
+              ),
             "add_difference" =
-              .add_difference_tbl_summary_default_test(data, variable = variable,
-                                                       by = by, group = group, adj.vars = adj.vars,
-                                                       summary_type = summary_type[[variable]])
+              .add_difference_tbl_summary_default_test(data,
+                variable = variable,
+                by = by, group = group, adj.vars = adj.vars,
+                summary_type = summary_type[[variable]]
+              )
           )
       }
 
       if (is.null(test[[variable]])) {
-        cli::cli_abort(c(
-          "There is no default test set for column {.val {variable}}.",
-          i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}."),
+        cli::cli_abort(
+          c(
+            "There is no default test set for column {.val {variable}}.",
+            i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}."
+          ),
           call = get_cli_abort_call()
         )
       }
@@ -109,7 +114,7 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
 
   # if passed test is a function and it's an internal test
   internal_test_index <- df_tests$test_fun |>
-    map_lgl(~identical_no_attr(eval(.x), test)) |>
+    map_lgl(~ identical_no_attr(eval(.x), test)) |>
     which()
   if (is.function(test) && !is_empty(internal_test_index)) {
     test_to_return <- df_tests$fun_to_run[[internal_test_index]] |> eval()
@@ -119,15 +124,16 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
 
   # otherwise, if it's a function, return it
   return(eval(test, envir = attr(test, ".Environment")))
-
 }
 
 # compare after removing attributes
 identical_no_attr <- function(x, y) {
-  tryCatch({
-    attributes(x) <- NULL
-    attributes(y) <- NULL
-    identical(x, y)},
+  tryCatch(
+    {
+      attributes(x) <- NULL
+      attributes(y) <- NULL
+      identical(x, y)
+    },
     error = \(x) FALSE
   )
 }

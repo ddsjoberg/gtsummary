@@ -91,8 +91,10 @@ add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, test.args, ...) {
-  add_p_test_chisq.test(data = data, variable = variable, by = by,
-                        test.args = c(list(correct = FALSE), test.args), ...)
+  add_p_test_chisq.test(
+    data = data, variable = variable, by = by,
+    test.args = c(list(correct = FALSE), test.args), ...
+  )
 }
 
 add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
@@ -548,7 +550,7 @@ warn_unbalanced_pairs <- function(data, by, variable, group) {
 }
 
 check_empty <- function(x, variable = get("variable", envir = caller_env()),
-                       call = get_cli_abort_call(), ...) {
+                        call = get_cli_abort_call(), ...) {
   dots <- dots_list(...)
   walk(
     x,
@@ -564,4 +566,3 @@ check_empty <- function(x, variable = get("variable", envir = caller_env()),
 
   invisible()
 }
-

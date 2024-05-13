@@ -81,9 +81,11 @@ add_difference.tbl_summary <- function(x,
                                        conf.level = 0.95,
                                        include = everything(),
                                        pvalue_fun = styfn_pvalue(),
-                                       estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
-                                                           all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%")),
-                                                           all_tests("smd") ~ styfn_sigfig()),
+                                       estimate_fun = list(
+                                         c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
+                                         all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%")),
+                                         all_tests("smd") ~ styfn_sigfig()
+                                       ),
                                        ...) {
   set_cli_abort_call()
   # check/process inputs -------------------------------------------------------
@@ -119,7 +121,7 @@ add_difference.tbl_summary <- function(x,
 
   # checking for `tbl_summary(percent = c("cell", "row"))`, which don't apply
   if (!x$inputs$percent %in% "column" &&
-      any(unlist(x$inputs$type[include]) %in% c("categorical", "dichotomous"))) {
+    any(unlist(x$inputs$type[include]) %in% c("categorical", "dichotomous"))) {
     cli::cli_warn(c(
       "The {.code add_difference()} results for categorical variables may not
        compatible with {.code tbl_summary(percent = c('cell', 'row'))}.",
@@ -153,7 +155,7 @@ add_difference.tbl_summary <- function(x,
   df_test_meta_data <-
     imap(
       test,
-      ~dplyr::tibble(variable = .y, fun_to_run = list(.x), test_name = attr(.x, "test_name") %||% NA_character_)
+      ~ dplyr::tibble(variable = .y, fun_to_run = list(.x), test_name = attr(.x, "test_name") %||% NA_character_)
     ) |>
     dplyr::bind_rows()
 
@@ -166,8 +168,7 @@ add_difference.tbl_summary <- function(x,
         by = "variable"
       ) |>
       dplyr::relocate("test_name", .after = "variable")
-  }
-  else {
+  } else {
     x$table_body <-
       dplyr::rows_update(
         x$table_body,
@@ -197,7 +198,8 @@ add_difference.tbl_summary <- function(x,
     test.args,
     predicate = \(x) is.list(x) && is_named(x),
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
-                  i = "Value must be a named list.")
+      i = "Value must be a named list."
+    )
   )
 
   # calculate tests ------------------------------------------------------------
@@ -213,5 +215,3 @@ add_difference.tbl_summary <- function(x,
 
   x
 }
-
-

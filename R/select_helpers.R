@@ -150,7 +150,9 @@ select_prep <- function(table_body, data = NULL) {
   if (!is.null(table_body)) {
     attr_cols <- intersect(names(table_body), c("var_type", "test_name"))
     for (v in attr_cols) {
-      df_attr <- table_body[c("variable", v)] |> unique() |> tidyr::drop_na()
+      df_attr <- table_body[c("variable", v)] |>
+        unique() |>
+        tidyr::drop_na()
       for (i in seq_len(nrow(df_attr))) {
         attr(data[[df_attr$variable[i]]], paste0("gtsummary.", v)) <- df_attr[[v]][i]
       }

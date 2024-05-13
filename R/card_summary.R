@@ -52,8 +52,10 @@
 #' ) |>
 #'   card_summary()
 card_summary <- function(cards,
-                         statistic = list(all_continuous() ~ "{median} ({p25}, {p75})",
-                                          all_categorical() ~ "{n} ({p}%)"),
+                         statistic = list(
+                           all_continuous() ~ "{median} ({p25}, {p75})",
+                           all_categorical() ~ "{n} ({p}%)"
+                         ),
                          type = NULL,
                          missing = c("ifany", "no", "always"),
                          missing_text = "Unknown",
@@ -70,7 +72,8 @@ card_summary <- function(cards,
   if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
     cli::cli_abort(
       c("The {.arg cards} object may only contain a single stratifying variable.",
-        i = "But contains {.val {names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c('group1', 'group1_level'))}}."),
+        i = "But contains {.val {names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c('group1', 'group1_level'))}}."
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -84,15 +87,18 @@ card_summary <- function(cards,
     ) |>
     dplyr::filter(!is.na(.data$variable)) |>
     dplyr::slice(.by = "variable", 1L) |>
-    dplyr::mutate(variable_level = map(.data$variable_level, ~.x %||% NA_real_)) |>
+    dplyr::mutate(variable_level = map(.data$variable_level, ~ .x %||% NA_real_)) |>
     tidyr::pivot_wider(
       names_from = "variable",
       values_from = "variable_level"
     ) |>
     dplyr::mutate(across(everything(), unlist))
 
-  if ("group1" %in% names(cards)) by <- stats::na.omit(cards$group1)[1] |> unclass()
-  else by <- character(0L)
+  if ("group1" %in% names(cards)) {
+    by <- stats::na.omit(cards$group1)[1] |> unclass()
+  } else {
+    by <- character(0L)
+  }
   cards::process_selectors(data, include = {{ include }})
   include <- setdiff(include, by) # remove by variable from list vars included
 
@@ -100,7 +106,7 @@ card_summary <- function(cards,
   missing_or_attributes_ard <-
     imap(
       include,
-      ~dplyr::filter(cards, .data$variable %in% .env$.x, .data$context %in% c("missing", "attributes")) |>
+      ~ dplyr::filter(cards, .data$variable %in% .env$.x, .data$context %in% c("missing", "attributes")) |>
         dplyr::select("variable", "context") |>
         dplyr::distinct() |>
         nrow() %>%
@@ -113,7 +119,8 @@ card_summary <- function(cards,
       c("{.val {names(missing_or_attributes_ard)[missing_or_attributes_ard]}}
           {?does/do} not have associated {.field missing} or {.field attributes} ARD results.",
         i = "Use {.fun cards::ard_missing}, {.fun cards::ard_attributes}, or
-             {.code cards::ard_stack(.missing=TRUE, .attributes=TRUE)} to calculate needed results."),
+             {.code cards::ard_stack(.missing=TRUE, .attributes=TRUE)} to calculate needed results."
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -149,15 +156,14 @@ card_summary <- function(cards,
       include,
       function(variable) {
         if (default_types[[variable]] %in% "continuous" &&
-            !type[[variable]] %in% c("continuous", "continuous2")) {
+          !type[[variable]] %in% c("continuous", "continuous2")) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be one of
              {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
             call = get_cli_abort_call()
           )
-        }
-        else if (default_types[[variable]] %in% c("categorical", "dichotomous") &&
-                 !identical(type[[variable]], default_types[[variable]])) {
+        } else if (default_types[[variable]] %in% c("categorical", "dichotomous") &&
+          !identical(type[[variable]], default_types[[variable]])) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be
              {.val {default_types[[variable]]}}, not {.val {type[[variable]]}}.",
@@ -188,13 +194,14 @@ card_summary <- function(cards,
       stat_names <- .extract_glue_elements(statistic[[variable]])
       stat_names_not_in_cards <-
         stat_names |>
-        discard(~.x %in% dplyr::filter(cards, .data$variable %in% .env$variable)$stat_name)
+        discard(~ .x %in% dplyr::filter(cards, .data$variable %in% .env$variable)$stat_name)
       if (!is_empty(stat_names_not_in_cards)) {
         cli::cli_abort(
           c("The {.val {stat_names_not_in_cards}} statistics for variable {.val {variable}}
              are not present in the {.arg cards} ARD object.",
             i = "Choose among the following statistics
-                 {.val {dplyr::filter(cards, .data$variable %in% .env$variable, !.data$context %in% 'attributes')$stat_name |> unique()}}."),
+                 {.val {dplyr::filter(cards, .data$variable %in% .env$variable, !.data$context %in% 'attributes')$stat_name |> unique()}}."
+          ),
           call = get_cli_abort_call()
         )
       }
@@ -204,7 +211,7 @@ card_summary <- function(cards,
     include,
     \(variable) {
       if (type[[variable]] %in% c("categorical", "dichotomous", "continuous") &&
-          !is_string(statistic[[variable]])) {
+        !is_string(statistic[[variable]])) {
         cli::cli_abort(
           "Variable {.val {variable}} is type {.arg {type[[variable]]}} and
            {.arg statistic} argument value must be a string of length one.",

@@ -82,21 +82,23 @@ brdg_summary <- function(x,
   } else {
     x[["cards"]][[calling_function]] <-
       x[["cards"]][[calling_function]] %>%
-      {dplyr::left_join(
-        .,
-        dplyr::filter(
+      {
+        dplyr::left_join(
           .,
-          .data$variable %in% .env$include,
-          .data$context %in% c("continuous", "categorical", "dichotomous", "missing")
-        ) |>
-          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
-          dplyr::distinct() |>
-          dplyr::mutate(
-            .by = cards::all_ard_groups(),
-            gts_column = paste0("stat_", dplyr::cur_group_id())
-          ),
-        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
-      )}
+          dplyr::filter(
+            .,
+            .data$variable %in% .env$include,
+            .data$context %in% c("continuous", "categorical", "dichotomous", "missing")
+          ) |>
+            dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+            dplyr::distinct() |>
+            dplyr::mutate(
+              .by = cards::all_ard_groups(),
+              gts_column = paste0("stat_", dplyr::cur_group_id())
+            ),
+          by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+        )
+      }
   }
 
 
@@ -414,7 +416,7 @@ pier_summary_continuous <- function(x,
               statistic[[.data$variable[1]]],
               .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
             ) |>
-            as.character()
+              as.character()
         )
       }
     ) |>

@@ -52,7 +52,7 @@ and \code{add_difference()}.
 trial |>
   tbl_summary(
     by = trt,
-    include  = c(age, stage)
+    include = c(age, stage)
   ) |>
   assign_tests(include = c("age", "stage"), calling_fun = "add_p")
 }

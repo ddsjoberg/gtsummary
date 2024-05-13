@@ -60,8 +60,6 @@ test_that("add_p.tbl_summary() error messaging with bad inputs", {
     tbl_summary(trial[c("trt", "age")], by = trt) |>
       add_p(group = c("trt", "age"))
   )
-
-
 })
 
 test_that("add_p.tbl_summary() & lme4", {
@@ -149,7 +147,7 @@ test_that("add_p with custom p-value function", {
   )
   expect_equal(
     as.data.frame(tbl),
-    trial[c("response", "trt")]  |>
+    trial[c("response", "trt")] |>
       tbl_summary(by = trt) |>
       add_p(test = response ~ my_mcnemar) |>
       as.data.frame()
@@ -172,7 +170,8 @@ test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
   expect_true(
     all(
       (t1$cards$add_p |> dplyr::bind_rows() |> dplyr::filter(stat_name %in% "p.value") |> dplyr::pull(stat) |> unlist()) -
-        (t2$cards$add_p |> dplyr::bind_rows() |> dplyr::filter(stat_name %in% "p.value") |> dplyr::pull(stat) |> unlist()) < 0.001)
+        (t2$cards$add_p |> dplyr::bind_rows() |> dplyr::filter(stat_name %in% "p.value") |> dplyr::pull(stat) |> unlist()) < 0.001
+    )
   )
 })
 
@@ -183,19 +182,19 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial |>
     dplyr::select(trt,
-                  var_t.test = age,
-                  var_t.test_dots = age,
-                  var_kruskal.test = age,
-                  var_wilcox.test = age,
-                  var_wilcox.test_dots = age,
-                  var_oneway.test = age,
-                  var_chisq.test = response,
-                  var_chisq.test_dots = response,
-                  var_chisq.test.no.correct = response,
-                  var_fisher.test = response,
-                  var_fisher.test_dots = response,
-                  var_mcnemar.test = response,
-                  var_mcnemar.test_dots = response,
+      var_t.test = age,
+      var_t.test_dots = age,
+      var_kruskal.test = age,
+      var_wilcox.test = age,
+      var_wilcox.test_dots = age,
+      var_oneway.test = age,
+      var_chisq.test = response,
+      var_chisq.test_dots = response,
+      var_chisq.test.no.correct = response,
+      var_fisher.test = response,
+      var_fisher.test_dots = response,
+      var_mcnemar.test = response,
+      var_mcnemar.test_dots = response,
     ) |>
     tbl_summary(by = trt, missing = "no") |>
     add_p(
@@ -295,7 +294,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
     trial_group |>
     dplyr::filter(trt == "Drug A") |>
     dplyr::full_join(
-      trial_group  |>
+      trial_group |>
         dplyr::filter(trt == "Drug B"),
       by = "id"
     )
@@ -347,7 +346,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
   expect_equal(
     tbl_groups$cards$add_p[["response_mcnemar.test_dots"]] |> dplyr::filter(stat_name %in% "p.value") |> dplyr::pull(stat) |> unlist() |> unname(),
     mcnemar.test(trial_group_wide[["response.x"]], trial_group_wide[["response.y"]],
-                 correct = FALSE
+      correct = FALSE
     )$p.value
   )
 
@@ -396,7 +395,7 @@ test_that("Groups arg and lme4", {
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-           age_lme4 = age
+      age_lme4 = age
     ) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
@@ -511,7 +510,7 @@ test_that("addressing GH #1513, where the default test was incorrect", {
       tibble::add_row(tidyr::uncount(tibble::tibble(type = "A", answer = NA), 400)) |>
       tibble::add_row(tidyr::uncount(tibble::tibble(type = "B", answer = NA), 300)) |>
       tbl_summary(by = type) |>
-      assign_tests(include = "answer", calling_fun ="add_p") |>
+      assign_tests(include = "answer", calling_fun = "add_p") |>
       getElement(1L) |>
       attr("test_name"),
     "fisher.test"
