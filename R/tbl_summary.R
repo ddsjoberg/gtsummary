@@ -341,15 +341,28 @@ tbl_summary <- function(data,
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
 
+  # check the requested stats are present in ARD data frame
+  .check_stats_available(cards = cards, statistic = statistic)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
-    list(
-      cards = list(tbl_summary = cards),
-      inputs = tbl_summary_inputs,
-      call_list = list(tbl_summary = call)
+    brdg_summary(
+      cards = cards,
+      by = by,
+      variables = include,
+      statistic = statistic,
+      type = type,
+      missing = missing,
+      missing_stat = missing_stat,
+      missing_text = missing_text
     ) |>
-    .check_stats_available() |>
-    brdg_summary() |>
+    append(
+      list(
+        cards = list(tbl_summary = cards),
+        inputs = tbl_summary_inputs,
+        call_list = list(tbl_summary = call)
+      )
+    ) |>
     structure(class = c("tbl_summary", "gtsummary"))
 
   # adding styling -------------------------------------------------------------
@@ -386,14 +399,14 @@ tbl_summary <- function(data,
   data[!obs_to_drop, ]
 }
 
-.check_stats_available <- function(x) {
+.check_stats_available <- function(cards, statistic) {
   # TODO: this could be made more accurate by grouping the cards data frame by the group##_level columns
-  x$inputs$statistic |>
+  statistic |>
     imap(
       function(pre_glue_stat, variable) {
         extracted_stats <- .extract_glue_elements(pre_glue_stat)
         available_stats <-
-          x$cards$tbl_summary |>
+          cards |>
           dplyr::filter(.data$variable %in% .env$variable, !.data$context %in% "attributes") |>
           dplyr::pull("stat_name")
 
@@ -408,9 +421,6 @@ tbl_summary <- function(data,
         }
       }
     )
-
-
-  x
 }
 
 .add_env_to_list_elements <- function(x, env) {

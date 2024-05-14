@@ -11,80 +11,47 @@
 \title{Summary Table Bridges}
 \usage{
 brdg_summary(
-  x,
-  calling_function = "tbl_summary",
-  by = x$inputs$by,
-  include = x$inputs$include,
-  type = x$inputs$type
+  cards,
+  variables,
+  type,
+  statistic,
+  by = NULL,
+  missing = "no",
+  missing_stat = "{N_miss}",
+  missing_text = "Unknown"
 )
 
-pier_summary_dichotomous(
-  x,
-  variables,
-  value = x$inputs$value,
-  calling_function = "tbl_summary"
-)
+pier_summary_dichotomous(cards, variables, statistic)
 
-pier_summary_categorical(
-  x,
-  variables,
-  missing,
-  missing_text,
-  missing_stat,
-  calling_function = "tbl_summary"
-)
+pier_summary_categorical(cards, variables, statistic)
 
-pier_summary_continuous2(
-  x,
-  variables,
-  missing,
-  missing_text,
-  missing_stat,
-  calling_function = "tbl_summary"
-)
+pier_summary_continuous2(cards, variables, statistic)
 
-pier_summary_continuous(
-  x,
-  variables,
-  statistic = x$inputs$statistic,
-  missing,
-  missing_text,
-  missing_stat,
-  calling_function = "tbl_summary"
-)
+pier_summary_continuous(cards, variables, statistic)
 
 pier_summary_missing_row(
-  x,
-  variables = x$inputs$include,
-  missing_stat = x$inputs$missing_stat,
-  missing_text = x$inputs$missing_text,
-  calling_function = "tbl_summary"
+  cards,
+  variables,
+  missing = "no",
+  missing_stat = "{N_miss}",
+  missing_text = "Unknown"
 )
 }
 \arguments{
-\item{x}{gtsummary object of class \code{"tbl_summary"}}
+\item{cards}{(\code{card})\cr
+An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()} functions.}
 
-\item{calling_function}{string indicating the name of the function that is
-calling thie bridge function, e.g. \code{call_function = "tbl_summary"}. This is used
-internally to organize results.}
+\item{variables}{(\code{character})\cr
+character list of variables}
 
-\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-A single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}}
+\item{type}{(named \code{list})\cr
+named list of summary types}
 
-\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+\item{statistic}{(named \code{list})\cr
+named list of summary statistic names}
 
-\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
-\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
-If not specified, default type is assigned via
-\code{assign_summary_type()}. See below for details.}
-
-\item{variables}{character list of variables}
-
-\item{value}{named list of values to be summarized. the names are the
-variable names.}
+\item{by}{(\code{string})\cr
+string indicating the stratifying column}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
@@ -93,11 +60,6 @@ variable names.}
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
 }}
-
-\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies summary statistics to display for each variable.  The default is
-\code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
-See below for details.}
 }
 \value{
 data frame
@@ -108,46 +70,80 @@ All bridge functions begin with prefix \verb{brdg_*()}.
 
 This file also contains helper functions for constructing the bridge,
 referred to as the piers (supports for a bridge) and begin with \verb{pier_*()}.
+\itemize{
+\item \code{brdg_summary()}: The bridge function ingests an ARD data frame and returns
+a gtsummary table that includes \code{.$table_body} and a basic \code{.$table_styling}.
+The \code{.$table_styling$header} data frame includes the header statistics.
+Based on context, this function adds a column to the ARD data frame named
+\code{"gts_column"}. This column is used during the reshaping in the \verb{pier_*()}
+functions defining column names.
+\item \verb{pier_*()}: these functions accept a cards tibble and returns a tibble
+that is a piece of the \code{.$table_body}. Typically these will be stacked
+to construct the final table body data frame. The ARD object passed here
+will have two primary parts: the calculated summary statistics and the
+attributes ARD. The attributes ARD is used for labeling. The ARD data frame
+passed to this function must include a \code{"gts_column"} column, which is
+added in \code{brdg_summary()}.
+}
 }
 \examples{
-tbl <-
-  tbl_summary(
-    data = mtcars,
-    include = c("cyl", "am", "mpg", "hp"),
-    type =
-      list(
-        cyl = "categorical",
-        am = "dichotomous",
-        mpg = "continuous",
-        hp = "continuous2"
-      ),
-    value = list(am = 1),
-    statistic =
-      list(
-        c(cyl, am) ~ "{n} ({p}\%)",
-        mpg = "{mean} ({sd})",
-        hp = c("{mean}", "{median}")
-      )
-  )
+library(cards)
+
+# first build ARD data frame
+cards <-
+  ard_stack(
+    mtcars,
+    by = NULL,
+    ard_continuous(variables = c("mpg", "hp")),
+    ard_categorical(variables = "cyl"),
+    ard_dichotomous(variables = "am"),
+    .missing = TRUE,
+    .attributes = TRUE
+  ) |>
+  # this column is used by the `pier_*()` functions
+  dplyr::mutate(gts_column = ifelse(context == "attributes", NA, "stat_0"))
+
+brdg_summary(
+  cards = cards,
+  variables = c("cyl", "am", "mpg", "hp"),
+  type =
+    list(
+      cyl = "categorical",
+      am = "dichotomous",
+      mpg = "continuous",
+      hp = "continuous2"
+    ),
+  statistic =
+    list(
+      cyl = "{n} / {N}",
+      am = "{n} / {N}",
+      mpg = "{mean} ({sd})",
+      hp = c("{median} ({p25}, {p75})", "{mean} ({sd})")
+    )
+) |>
+  as_tibble()
 
 pier_summary_dichotomous(
-  x = tbl,
+  cards = cards,
   variables = "am",
-  value = list(am = 1)
+  statistic = list(am = "{n} ({p})")
 )
 
 pier_summary_categorical(
-  x = tbl,
-  variables = "cyl"
+  cards = cards,
+  variables = "cyl",
+  statistic = list(cyl = "{n} ({p})")
 )
 
 pier_summary_continuous2(
-  x = tbl,
-  variables = "hp"
+  cards = cards,
+  variables = "hp",
+  statistic = list(hp = c("{median}", "{mean}"))
 )
 
 pier_summary_continuous(
-  x = tbl,
-  variables = "mpg"
+  cards = cards,
+  variables = "mpg",
+  statistic = list(mpg = "{median}")
 )
 }
