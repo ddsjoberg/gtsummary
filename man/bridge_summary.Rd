@@ -12,10 +12,10 @@
 \usage{
 brdg_summary(
   cards,
-  by = NULL,
   variables,
-  statistic,
   type,
+  statistic,
+  by = NULL,
   missing = "no",
   missing_stat = "{N_miss}",
   missing_text = "Unknown"
@@ -41,17 +41,17 @@ pier_summary_missing_row(
 \item{cards}{(\code{card})\cr
 An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()} functions.}
 
-\item{by}{(\code{string})\cr
-string indicating the stratifying column}
-
 \item{variables}{(\code{character})\cr
 character list of variables}
+
+\item{type}{(named \code{list})\cr
+named list of summary types}
 
 \item{statistic}{(named \code{list})\cr
 named list of summary statistic names}
 
-\item{type}{(named \code{list})\cr
-named list of summary types}
+\item{by}{(\code{string})\cr
+string indicating the stratifying column}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
@@ -89,6 +89,7 @@ added in \code{brdg_summary()}.
 \examples{
 library(cards)
 
+# first build ARD data frame
 cards <-
   ard_stack(
     mtcars,
@@ -99,20 +100,28 @@ cards <-
     .missing = TRUE,
     .attributes = TRUE
   ) |>
+  # this column is used by the `pier_*()` functions
   dplyr::mutate(gts_column = ifelse(context == "attributes", NA, "stat_0"))
 
-tbl <-
-  tbl_summary(
-    data = mtcars,
-    include = c("cyl", "am", "mpg", "hp"),
-    type =
-      list(
-        cyl = "categorical",
-        am = "dichotomous",
-        mpg = "continuous",
-        hp = "continuous2"
-      )
-  )
+brdg_summary(
+  cards = cards,
+  variables = c("cyl", "am", "mpg", "hp"),
+  type =
+    list(
+      cyl = "categorical",
+      am = "dichotomous",
+      mpg = "continuous",
+      hp = "continuous2"
+    ),
+  statistic =
+    list(
+      cyl = "{n} / {N}",
+      am = "{n} / {N}",
+      mpg = "{mean} ({sd})",
+      hp = c("{median} ({p25}, {p75})", "{mean} ({sd})")
+    )
+) |>
+  as_tibble()
 
 pier_summary_dichotomous(
   cards = cards,

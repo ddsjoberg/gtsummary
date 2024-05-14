@@ -40,6 +40,7 @@
 #' @examples
 #' library(cards)
 #'
+#' # first build ARD data frame
 #' cards <-
 #'   ard_stack(
 #'     mtcars,
@@ -50,20 +51,28 @@
 #'     .missing = TRUE,
 #'     .attributes = TRUE
 #'   ) |>
+#'   # this column is used by the `pier_*()` functions
 #'   dplyr::mutate(gts_column = ifelse(context == "attributes", NA, "stat_0"))
 #'
-#' tbl <-
-#'   tbl_summary(
-#'     data = mtcars,
-#'     include = c("cyl", "am", "mpg", "hp"),
-#'     type =
-#'       list(
-#'         cyl = "categorical",
-#'         am = "dichotomous",
-#'         mpg = "continuous",
-#'         hp = "continuous2"
-#'       )
-#'   )
+#' brdg_summary(
+#'   cards = cards,
+#'   variables = c("cyl", "am", "mpg", "hp"),
+#'   type =
+#'     list(
+#'       cyl = "categorical",
+#'       am = "dichotomous",
+#'       mpg = "continuous",
+#'       hp = "continuous2"
+#'     ),
+#'   statistic =
+#'     list(
+#'       cyl = "{n} / {N}",
+#'       am = "{n} / {N}",
+#'       mpg = "{mean} ({sd})",
+#'       hp = c("{median} ({p25}, {p75})", "{mean} ({sd})")
+#'     )
+#' ) |>
+#'   as_tibble()
 #'
 #' pier_summary_dichotomous(
 #'   cards = cards,
@@ -93,14 +102,15 @@ NULL
 #' @rdname bridge_summary
 #' @export
 brdg_summary <- function(cards,
-                         by = NULL,
                          variables,
-                         statistic,
                          type,
+                         statistic,
+                         by = NULL,
                          missing = "no",
                          missing_stat = "{N_miss}",
                          missing_text = "Unknown") {
   set_cli_abort_call()
+
   # add gts info to the cards table --------------------------------------------
   # adding the name of the column the stats will populate
   if (is_empty(by)) {
@@ -179,7 +189,9 @@ brdg_summary <- function(cards,
   # add info to x$table_styling$header for dynamic headers ---------------------
   x <- .add_table_styling_stats(x, cards = cards, by = by)
 
-  x
+  x |>
+    structure(class = "gtsummary") |>
+    modify_column_unhide(columns = all_stat_cols())
 }
 
 #' @rdname bridge_summary
