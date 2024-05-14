@@ -105,8 +105,8 @@
       .attributes = TRUE, .missing = TRUE), statistic = list(AGE = "{not_a_valid_summary_statistic}"))
     Condition
       Error in `card_summary()`:
-      ! The "not_a_valid_summary_statistic" statistics for variable "AGE" are not present in the `cards` ARD object.
-      i Choose among the following statistics "N", "mean", "sd", "median", "p25", "p75", "min", "max", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
+      ! Statistic "not_a_valid_summary_statistic" is not available for variable "AGE".
+      i Select among "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", "N_obs", "max", "min", "p75", "p25", "median", "sd", "mean", and "N".
 
 ---
 

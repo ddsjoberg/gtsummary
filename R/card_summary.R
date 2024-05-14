@@ -188,25 +188,8 @@ card_summary <- function(cards,
     predicate = \(x) is.character(x),
     error_msg = "The {.arg statistic} argument values must be class {.cls character} vector."
   )
-  walk(
-    include,
-    \(variable) {
-      stat_names <- .extract_glue_elements(statistic[[variable]])
-      stat_names_not_in_cards <-
-        stat_names |>
-        discard(~ .x %in% dplyr::filter(cards, .data$variable %in% .env$variable)$stat_name)
-      if (!is_empty(stat_names_not_in_cards)) {
-        cli::cli_abort(
-          c("The {.val {stat_names_not_in_cards}} statistics for variable {.val {variable}}
-             are not present in the {.arg cards} ARD object.",
-            i = "Choose among the following statistics
-                 {.val {dplyr::filter(cards, .data$variable %in% .env$variable, !.data$context %in% 'attributes')$stat_name |> unique()}}."
-          ),
-          call = get_cli_abort_call()
-        )
-      }
-    }
-  )
+  .check_stats_available(cards, statistic)
+
   walk(
     include,
     \(variable) {
@@ -226,16 +209,22 @@ card_summary <- function(cards,
 
   # construct initial card_summary object --------------------------------------
   x <-
-    list(
-      cards = list(card_summary = cards),
-      inputs = card_summary_inputs,
-      call_list = list(card_summary = call)
-    ) |>
     brdg_summary(
-      calling_function = "card_summary",
+      cards = cards,
       by = by,
-      include = include,
-      type = type
+      variables = include,
+      statistic = statistic,
+      type = type,
+      missing = missing,
+      missing_stat = missing_stat,
+      missing_text = missing_text
+    ) |>
+    append(
+      list(
+        cards = list(card_summary = cards),
+        inputs = card_summary_inputs,
+        call_list = list(card_summary = call)
+      )
     ) |>
     structure(class = c("card_summary", "gtsummary"))
 
