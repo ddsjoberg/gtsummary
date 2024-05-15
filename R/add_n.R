@@ -59,7 +59,7 @@ add_n <- function(x, ...) {
 add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(add_n = match.call()))
+  updated_call_list <- c(x[["call_list"]], list(add_n = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_string(statistic)
@@ -67,20 +67,35 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
   check_scalar_logical(footnote)
   check_scalar_logical(last)
 
-  # calculate the needed ARD results -------------------------------------------
-  # TODO: Utilize themes to change the default formatting types
-  # TODO: If `add_overall()` was previously run, we can get the stats from there instead of re-calculating
-  x$cards$add_n <-
-    cards::ard_missing(
-      data = x$inputs$data,
-      variables = x$inputs$include,
-      by = character(0L),
-      fmt_fn = ~ list(
-        starts_with("N_") ~ styfn_number(),
-        starts_with("p_") ~ styfn_percent()
-      )
-    ) |>
-    cards::apply_fmt_fn()
+  # calculate/grab the needed ARD results --------------------------------------
+  if ("add_overall" %in% names(x[["call_list"]])) {
+    # TODO: If `add_overall()` was previously run, we can get the stats from there instead of re-calculating
+  }
+  else if (is_empty(x$inputs$by)) {
+    # TODO: If `tbl_summary(by)` is empty, then we can grab this from `x$card%tbl_summary`
+    x$cards$add_n <-
+      x[["cards"]][[1]] |>
+      dplyr::filter(
+        .data$variable %in% .env$x$inputs$include,
+        .data$context %in% "missing"
+      ) |>
+      cards::apply_fmt_fn()
+  }
+  else {
+    x$cards$add_n <-
+      cards::ard_missing(
+        data = x$inputs$data,
+        variables = x$inputs$include,
+        by = character(0L),
+        # TODO: Utilize themes to change the default formatting types
+        fmt_fn = ~ list(
+          starts_with("N_") ~ styfn_number(),
+          starts_with("p_") ~ styfn_percent()
+        )
+      ) |>
+      cards::apply_fmt_fn()
+  }
+
 
   # check statistic argument ---------------------------------------------------
   if (is_empty(.extract_glue_elements(statistic))) {
@@ -159,6 +174,7 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         if (isFALSE(last)) {
           table_body <- dplyr::relocate(table_body, "n", .after = "label")
         }
+        table_body
       }
     ) |>
     modify_header(n = col_label)

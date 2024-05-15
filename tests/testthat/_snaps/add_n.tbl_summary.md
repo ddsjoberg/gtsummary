@@ -1,3 +1,19 @@
+# add_n.tbl_summary() works
+
+    Code
+      as.data.frame(add_n(tbl_summary(trial, include = c(age, grade, response)),
+      statistic = "{N_nonmiss} / {N_obs}", footnote = TRUE, last = TRUE))
+    Output
+        **Characteristic** **N = 200**     **N**
+      1                Age 47 (38, 57) 189 / 200
+      2            Unknown          11      <NA>
+      3              Grade        <NA> 200 / 200
+      4                  I    68 (34%)      <NA>
+      5                 II    68 (34%)      <NA>
+      6                III    64 (32%)      <NA>
+      7     Tumor Response    61 (32%) 193 / 200
+      8            Unknown           7      <NA>
+
 # add_n.tbl_summary(statistic) error messaging
 
     Code

@@ -5,7 +5,7 @@ test_that("card_summary() works", {
   expect_snapshot(
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_categorical(variables = "AGEGR1"),
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
@@ -18,7 +18,6 @@ test_that("card_summary() works", {
   expect_snapshot(
     ard_stack(
       data = ADSL,
-      by = NULL,
       ard_categorical(variables = "AGEGR1"),
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
@@ -35,7 +34,6 @@ test_that("card_summary(statistic) argument works", {
   ard <-
     ard_stack(
       data = ADSL,
-      by = NULL,
       ard_categorical(variables = "AGEGR1"),
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
@@ -68,7 +66,7 @@ test_that("card_summary(cards) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = c(ARM, AGEGR1),
+      .by = c(ARM, AGEGR1),
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
@@ -80,7 +78,7 @@ test_that("card_summary(cards) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_continuous(variables = "AGE"),
       .attributes = FALSE,
       .missing = TRUE
@@ -96,7 +94,7 @@ test_that("card_summary(type) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
@@ -108,7 +106,7 @@ test_that("card_summary(type) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_categorical(variables = "AGEGR1"),
       .attributes = TRUE,
       .missing = TRUE
@@ -124,7 +122,7 @@ test_that("card_summary(statistic) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
@@ -136,7 +134,7 @@ test_that("card_summary(statistic) error messages", {
     error = TRUE,
     ard_stack(
       data = ADSL,
-      by = ARM,
+      .by = ARM,
       ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE

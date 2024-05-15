@@ -56,7 +56,6 @@ library(cards)
 
 ard_stack(
   data = ADSL,
-  by = NULL,
   ard_categorical(variables = "AGEGR1"),
   ard_continuous(variables = "AGE"),
   .attributes = TRUE,
@@ -66,7 +65,7 @@ ard_stack(
 
 ard_stack(
   data = ADSL,
-  by = ARM,
+  .by = ARM,
   ard_categorical(variables = "AGEGR1"),
   ard_continuous(variables = "AGE"),
   .attributes = TRUE,
