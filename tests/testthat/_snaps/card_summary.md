@@ -1,7 +1,7 @@
 # card_summary() works
 
     Code
-      as.data.frame(card_summary(ard_stack(data = ADSL, by = ARM, ard_categorical(
+      as.data.frame(card_summary(ard_stack(data = ADSL, .by = ARM, ard_categorical(
         variables = "AGEGR1"), ard_continuous(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE)))
     Output
@@ -21,9 +21,8 @@
 ---
 
     Code
-      as.data.frame(card_summary(ard_stack(data = ADSL, by = NULL, ard_categorical(
-        variables = "AGEGR1"), ard_continuous(variables = "AGE"), .attributes = TRUE,
-      .missing = TRUE)))
+      as.data.frame(card_summary(ard_stack(data = ADSL, ard_categorical(variables = "AGEGR1"),
+      ard_continuous(variables = "AGE"), .attributes = TRUE, .missing = TRUE)))
     Output
         **Characteristic**       **N = 254**
       1 Pooled Age Group 1              <NA>
@@ -63,7 +62,7 @@
 # card_summary(cards) error messages
 
     Code
-      card_summary(ard_stack(data = ADSL, by = c(ARM, AGEGR1), ard_continuous(
+      card_summary(ard_stack(data = ADSL, .by = c(ARM, AGEGR1), ard_continuous(
         variables = "AGE"), .attributes = TRUE, .missing = TRUE))
     Condition
       Error in `card_summary()`:
@@ -73,7 +72,7 @@
 ---
 
     Code
-      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      card_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
       .attributes = FALSE, .missing = TRUE))
     Condition
       Error in `card_summary()`:
@@ -83,7 +82,7 @@
 # card_summary(type) error messages
 
     Code
-      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      card_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), type = list(AGE = "categorical"))
     Condition
       Error in `card_summary()`:
@@ -92,7 +91,7 @@
 ---
 
     Code
-      card_summary(ard_stack(data = ADSL, by = ARM, ard_categorical(variables = "AGEGR1"),
+      card_summary(ard_stack(data = ADSL, .by = ARM, ard_categorical(variables = "AGEGR1"),
       .attributes = TRUE, .missing = TRUE), type = list(AGEGR1 = "continuous"))
     Condition
       Error in `card_summary()`:
@@ -101,7 +100,7 @@
 # card_summary(statistic) error messages
 
     Code
-      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      card_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), statistic = list(AGE = "{not_a_valid_summary_statistic}"))
     Condition
       Error in `card_summary()`:
@@ -111,7 +110,7 @@
 ---
 
     Code
-      card_summary(ard_stack(data = ADSL, by = ARM, ard_continuous(variables = "AGE"),
+      card_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), statistic = list(AGE = c("{mean}",
         "{median}")))
     Condition

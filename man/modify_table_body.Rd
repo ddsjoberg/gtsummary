@@ -26,6 +26,26 @@ To show a column, add a column header with \code{modify_header()}.
 }
 \examples{
 # Example 1 --------------------------------
+# # Add number of cases and controls to regression table
+# modify_table_body_ex1 <-
+#  trial \%>\%
+#  select(response, age, marker) \%>\%
+#  tbl_uvregression(
+#    y = response,
+#    method = glm,
+#    method.args = list(family = binomial),
+#    exponentiate = TRUE,
+#    hide_n = TRUE
+#  ) \%>\%
+#  # adding number of non-events to table
+#  modify_table_body(
+#    ~ .x \%>\%
+#      dplyr::mutate(N_nonevent = N_obs - N_event) \%>\%
+#      dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
+#  ) \%>\%
+#  # assigning header labels
+#  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
+#  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
 }
 \seealso{
 Other Advanced modifiers: 

@@ -288,6 +288,7 @@ tbl_summary <- function(data,
 
 
   # construct cards ------------------------------------------------------------
+  # TODO: Utilize themes to change the default formatting types
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
