@@ -75,8 +75,10 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
       data = x$inputs$data,
       variables = x$inputs$include,
       by = character(0L),
-      fmt_fn = ~list(starts_with("N_") ~ styfn_number(),
-                     starts_with("p_") ~ styfn_percent())
+      fmt_fn = ~ list(
+        starts_with("N_") ~ styfn_number(),
+        starts_with("p_") ~ styfn_percent()
+      )
     ) |>
     cards::apply_fmt_fn()
 
@@ -84,7 +86,8 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
   if (is_empty(.extract_glue_elements(statistic))) {
     cli::cli_abort(
       c("No glue elements found in the {.arg statistic} argument ({.val {statistic}}).",
-        i = "Do you need to wrap the statistic name in curly brackets, e.g. {.val {{N_nonmiss}}}?"),
+        i = "Do you need to wrap the statistic name in curly brackets, e.g. {.val {{N_nonmiss}}}?"
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -92,7 +95,8 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
     missing_stats <- .extract_glue_elements(statistic) |> setdiff(x$cards$add_n$stat_name)
     cli::cli_abort(
       c("The following statistics are not valid for the {.arg statistic} argument: {.val {missing_stats}}.",
-        i = "Select from {.val {unique(x$cards$add_n$stat_name)}}."),
+        i = "Select from {.val {unique(x$cards$add_n$stat_name)}}."
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -166,8 +170,8 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         expr = expr(glue(statistic)),
         data =
           x$cards$add_n |>
-          dplyr::slice(.by = "stat_name", 1L) |>
-          cards::get_ard_statistics(.column = "stat_label")
+            dplyr::slice(.by = "stat_name", 1L) |>
+            cards::get_ard_statistics(.column = "stat_label")
       )
 
     x <- modify_table_styling(x, columns = "n", footnote = footnote_text)
