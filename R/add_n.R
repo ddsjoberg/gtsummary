@@ -59,6 +59,7 @@ add_n <- function(x, ...) {
 add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
   set_cli_abort_call()
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_string(statistic)
@@ -173,5 +174,7 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
   }
 
   # return final table ---------------------------------------------------------
+  # add updated call
+  x$call_list <- updated_call_list
   x
 }
