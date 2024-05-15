@@ -59,7 +59,6 @@ add_n <- function(x, ...) {
 #' \if{html}{\out{
 #' `r man_create_image_tag(file = "tbl_n_ex.png", width = "50")`
 #' }}
-
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
