@@ -1,31 +1,12 @@
 #' Regression model summary
 #'
+#' @description
 #' This function takes a regression model object and returns a formatted table
 #' that is publication-ready. The function is highly customizable
-#' allowing the user to obtain a bespoke summary table of the
-#' regression model results. Review the
+#' allowing the user to create bespoke regression model summary tables.
+#' Review the
 #' [`tbl_regression()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
 #' for detailed examples.
-#'
-#' @section Methods:
-#'
-#' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
-#' to perform the initial tidying of the model object. There are, however,
-#' a few models that use `[modifications][tbl_regression_methods]`.
-#' # TODO: Added the tbl_regression_methods help mentioned file above.
-#'
-#' - `"parsnip/workflows"`: If the model was prepared using parsnip/workflows,
-#' the original model fit is extracted and the original `x=` argument
-#' is replaced with the model fit. This will typically go unnoticed; however,if you've
-#' provided a custom tidier in `tidy_fun=` the tidier will be applied to the model
-#' fit object and not the parsnip/workflows object.
-#' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
-#' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
-#' - `"gam"`: Uses the internal tidier `tidy_gam()` to print both parametric and smooth terms.
-#' - `"tidycrr"`: Uses the tidier `tidycmprsk::tidy()` to print the model terms.
-#' - `"lmerMod"`, `"glmerMod"`, `"glmmTMB"`, `"glmmadmb"`, `"stanreg"`, `"brmsfit"`: These mixed effects
-#' models use `broom.mixed::tidy(x, effects = "fixed")`. Specify `tidy_fun = broom.mixed::tidy`
-#' to print the random components.
 #'
 #' @param x (regression model)\cr
 #'   Regression model object
@@ -60,6 +41,26 @@
 #'   Logical indicating whether or not to include a confidence
 #'   interval in the output. Default is `TRUE`.
 #' @param ... Additional arguments passed to [`broom.helpers::tidy_plus_plus()`].
+#'
+#' @section Methods:
+#'
+#' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
+#' to perform the initial tidying of the model object. There are, however,
+#' a few models that use `[modifications][tbl_regression_methods]`.
+#' TODO: Added the tbl_regression_methods help mentioned file above.
+#'
+#' - `"parsnip/workflows"`: If the model was prepared using parsnip/workflows,
+#' the original model fit is extracted and the original `x=` argument
+#' is replaced with the model fit. This will typically go unnoticed; however,if you've
+#' provided a custom tidier in `tidy_fun=` the tidier will be applied to the model
+#' fit object and not the parsnip/workflows object.
+#' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
+#' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
+#' - `"gam"`: Uses the internal tidier `tidy_gam()` to print both parametric and smooth terms.
+#' - `"tidycrr"`: Uses the tidier `tidycmprsk::tidy()` to print the model terms.
+#' - `"lmerMod"`, `"glmerMod"`, `"glmmTMB"`, `"glmmadmb"`, `"stanreg"`, `"brmsfit"`: These mixed effects
+#' models use `broom.mixed::tidy(x, effects = "fixed")`. Specify `tidy_fun = broom.mixed::tidy`
+#' to print the random components.
 #'
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples

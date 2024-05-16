@@ -76,8 +76,8 @@ A \code{tbl_regression} object
 \description{
 This function takes a regression model object and returns a formatted table
 that is publication-ready. The function is highly customizable
-allowing the user to obtain a bespoke summary table of the
-regression model results. Review the
+allowing the user to create bespoke regression model summary tables.
+Review the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{\code{tbl_regression()} vignette}
 for detailed examples.
 }
@@ -86,7 +86,8 @@ for detailed examples.
 
 The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
 to perform the initial tidying of the model object. There are, however,
-a few models that use \verb{[modifications][tbl_regression_methods]}.TODO: Added the tbl_regression_methods help file.
+a few models that use \verb{[modifications][tbl_regression_methods]}.
+TODO: Added the tbl_regression_methods help mentioned file above.
 \itemize{
 \item \code{"parsnip/workflows"}: If the model was prepared using parsnip/workflows,
 the original model fit is extracted and the original \verb{x=} argument
