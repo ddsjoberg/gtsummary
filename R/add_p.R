@@ -100,7 +100,7 @@ add_p <- function(x, ...) {
 #'   )
 add_p.tbl_summary <- function(x,
                               test = NULL,
-                              pvalue_fun = styfn_pvalue(),
+                              pvalue_fun = styfn_pvalue(digits = 1),
                               group = NULL,
                               include = everything(),
                               test.args = NULL,

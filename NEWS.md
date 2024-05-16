@@ -4,6 +4,8 @@
 
 #### User-facing Updates
 
+* The `add_q(quiet)` argument has been deprecated.
+
 * After `tbl_regression()`, the `.$model_obj` is no longer returned with the object. This is (and always has been) available in `.$inputs$x`.
 
 * Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 

@@ -93,7 +93,7 @@ tbl_regression.default <- function(x,
                                    conf.level = 0.95,
                                    intercept = FALSE,
                                    estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-                                   pvalue_fun = styfn_pvalue(),
+                                   pvalue_fun = styfn_pvalue(digits = 1),
                                    tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = TRUE, ...) {

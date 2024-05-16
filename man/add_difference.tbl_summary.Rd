@@ -12,7 +12,7 @@
   test.args = NULL,
   conf.level = 0.95,
   include = everything(),
-  pvalue_fun = styfn_pvalue(),
+  pvalue_fun = styfn_pvalue(digits = 1),
   estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
     all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_,
     paste0(style_sigfig(x, scale = 100), "\%")), all_tests("smd") ~ styfn_sigfig()),
