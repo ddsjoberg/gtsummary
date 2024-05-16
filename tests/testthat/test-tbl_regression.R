@@ -147,3 +147,14 @@ test_that("tbl_regression(add_estimate_to_reference_rows)", {
       as.data.frame()
   )
 })
+
+test_that("tbl_regression(conf.int)", {
+  # no confidence interval
+  expect_equal(
+    lm(age ~ marker, trial) |>
+      tbl_regression(conf.int = FALSE) |>
+      as.data.frame(col_labels = FALSE) |>
+      names(),
+    c("label", "estimate", "p.value")
+  )
+})
