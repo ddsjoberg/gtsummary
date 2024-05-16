@@ -35,7 +35,7 @@
 #' @inheritParams tbl_summary
 #'
 #' @return data frame
-#' @name bridge_summary
+#' @name brdg_summary
 #'
 #' @examples
 #' library(cards)
@@ -98,7 +98,7 @@
 #' )
 NULL
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 brdg_summary <- function(cards,
                          variables,
@@ -115,7 +115,8 @@ brdg_summary <- function(cards,
   if (is_empty(by)) {
     cards$gts_column <-
       ifelse(
-        cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
+        !cards$context %in% "attributes",
+        # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
         "stat_0",
         NA_character_
       )
@@ -128,7 +129,8 @@ brdg_summary <- function(cards,
           dplyr::filter(
             .,
             .data$variable %in% .env$variables,
-            .data$context %in% c("continuous", "categorical", "dichotomous", "missing")
+            !cards$context %in% "attributes",
+            # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
           ) |>
             dplyr::select(cards::all_ard_groups(), "variable", "context") |>
             dplyr::distinct() |>
@@ -193,7 +195,7 @@ brdg_summary <- function(cards,
     modify_column_unhide(columns = all_stat_cols())
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 pier_summary_dichotomous <- function(cards,
                                      variables,
@@ -210,7 +212,7 @@ pier_summary_dichotomous <- function(cards,
   )
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 pier_summary_categorical <- function(cards,
                                      variables,
@@ -328,7 +330,7 @@ pier_summary_categorical <- function(cards,
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 pier_summary_continuous2 <- function(cards,
                                      variables,
@@ -434,7 +436,7 @@ pier_summary_continuous2 <- function(cards,
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 pier_summary_continuous <- function(cards,
                                     variables,
@@ -499,7 +501,7 @@ pier_summary_continuous <- function(cards,
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
 pier_summary_missing_row <- function(cards,
                                      variables,
