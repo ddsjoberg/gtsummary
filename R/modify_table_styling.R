@@ -95,6 +95,20 @@ modify_table_styling <- function(x,
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
 
+  # update table_styling -------------------------------------------------------
+  x <- .update_table_styling(x)
+
+  # convert column input to string ---------------------------------------------
+  cards::process_selectors(
+    data = x$table_body,
+    columns = {{ columns }}
+  )
+
+  # if no columns selected, returning unaltered
+  if (is_empty(columns)) {
+    return(x)
+  }
+
   # deprecation ----------------------------------------------------------------
   if (isTRUE(undo_text_format)) {
     # set new values for the user
@@ -163,26 +177,6 @@ modify_table_styling <- function(x,
     )
   if (rows_eval_error) {
     abort("The `rows=` predicate expression must result in logical vector when evaluated with `x$table_body`")
-  }
-
-  # update table_styling -------------------------------------------------------
-  x <- .update_table_styling(x)
-
-  # convert column input to string ---------------------------------------------
-  cards::process_selectors(
-    data = x$table_body,
-    columns = {{ columns }}
-  )
-  # columns <-
-  #   broom.helpers::.select_to_varnames(
-  #     select = {{ columns }},
-  #     data = x$table_body,
-  #     arg_name = "columns"
-  #   )
-
-  # if no columns selected, returning unaltered
-  if (is.null(columns)) {
-    return(x)
   }
 
   # label ----------------------------------------------------------------------

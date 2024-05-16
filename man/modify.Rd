@@ -115,6 +115,9 @@ modify_ex3 <-
 \seealso{
 Other tbl_summary tools: 
 \code{\link{tbl_summary}()}
+
+Other tbl_regression tools: 
+\code{\link{tbl_regression}()}
 }
 \author{
 Daniel D. Sjoberg
