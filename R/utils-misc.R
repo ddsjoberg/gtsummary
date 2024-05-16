@@ -13,6 +13,10 @@
   no
 }
 
+vec_paste0 <- function(..., collapse = NULL) {
+  args <- vctrs::vec_recycle_common(...)
+  rlang::inject(paste0(!!!args, collapse = collapse))
+}
 
 # used in the as_flex_table (and friends) functions for inserting calls
 add_expr_after <- function(calls, add_after, expr, new_name = NULL) {

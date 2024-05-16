@@ -4,6 +4,8 @@
 
 #### User-facing Updates
 
+* After `tbl_regression()`, the `.$model_obj` is no longer returned with the object. This is (and always has been) available in `.$inputs$x`.
+
 * Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
 
 * The counts in the header of `tbl_summary(by)` tables now appear on a new line.
@@ -46,7 +48,7 @@
 
 * The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
 
-* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. One example, is that we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
+* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
 
 # gtsummary 1.7.2
 

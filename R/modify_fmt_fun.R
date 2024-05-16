@@ -24,7 +24,7 @@
 # #'   lm(age ~ marker + grade, trial) %>%
 # #'   tbl_regression() %>%
 # #'   modify_fmt_fun(
-# #'     update = p.value ~ function(x) style_pvalue(x, digits = 3),
+# #'     update = p.value ~ styfn_pvalue(digits = 3),
 # #'     rows = variable == "grade"
 # #'   )
 # #' }
