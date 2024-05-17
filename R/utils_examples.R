@@ -16,7 +16,8 @@
 #' @name utils_examples
 write_example_output <- function(tbl,
                                  example_name = "example",
-                                 out_var_name = deparse(substitute(tbl))) {
+                                 out_var_name = NULL) {
+  if(is.null(out_var_name)) out_var_name <- deparse(substitute(tbl))
   if (getOption("gtsummary_update_examples", default = FALSE)) {
     if (is(tbl, "gtsummary")) {
       tbl <- tbl |>
