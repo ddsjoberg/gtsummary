@@ -123,6 +123,8 @@ Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsumm
 
 Other Advanced modifiers: 
 \code{\link{modify_column_hide}()},
-\code{\link{modify_fmt_fun}()}
+\code{\link{modify_column_merge}()},
+\code{\link{modify_fmt_fun}()},
+\code{\link{modify_table_body}()}
 }
 \concept{Advanced modifiers}

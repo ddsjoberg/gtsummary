@@ -26,6 +26,7 @@
 #'   value = NULL
 #' )
 assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L) {
+  set_cli_abort_call()
   # base classes that can be summarized as continuous
   base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt", "double")
 
@@ -93,7 +94,7 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
 
   # numeric variables that are 0 and 1 only, will be dichotomous
   if (inherits(x, c("integer", "numeric")) &&
-      setequal(unique(stats::na.omit(x)), c(0, 1))) {
+    setequal(unique(stats::na.omit(x)), c(0, 1))) {
     return(stats::na.omit(x) |> unique() |> sort() |> dplyr::last())
   }
 
@@ -114,4 +115,3 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
   # otherwise, return NULL
   NULL
 }
-

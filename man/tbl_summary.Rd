@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Summary statistics table}
+\title{Summary table}
 \usage{
 tbl_summary(
   data,
@@ -67,10 +67,12 @@ Specifies sorting to perform for categorical variables.
 Values must be one of \code{c("alphanumeric", "frequency")}.
 Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
 
-\item{percent}{Indicates the type of percentage to return.
+\item{percent}{(\code{string})\cr
+Indicates the type of percentage to return.
 Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
-\item{include}{Variables to include in the summary table. Default is \code{everything()}}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in the summary table. Default is \code{everything()}}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}
@@ -311,6 +313,9 @@ See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tb
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
+Other tbl_summary tools: 
+\code{\link{modify}}
 }
 \author{
 Daniel D. Sjoberg

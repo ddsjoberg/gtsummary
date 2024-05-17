@@ -24,11 +24,12 @@
 # #'   lm(age ~ marker + grade, trial) %>%
 # #'   tbl_regression() %>%
 # #'   modify_fmt_fun(
-# #'     update = p.value ~ function(x) style_pvalue(x, digits = 3),
+# #'     update = p.value ~ styfn_pvalue(digits = 3),
 # #'     rows = variable == "grade"
 # #'   )
 # #' }
 modify_fmt_fun <- function(x, update, rows = NULL) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
   check_class(x, "gtsummary")
 

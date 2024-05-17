@@ -4,7 +4,7 @@
 #
 # ---
 # file: standalone-tibble.R
-# last-updated: 2024-03-09
+# last-updated: 2024-05-07
 # license: https://unlicense.org
 # imports: [dplyr]
 # ---
@@ -17,6 +17,11 @@
 #
 # nocov start
 # styler: off
+
+deframe <- function(x) {
+  if (ncol(x) == 1L) return(x[[1]])
+  x[[2]] |> stats::setNames(x[[1]])
+}
 
 enframe <- function(x, name = "name", value = "value") {
   if (!is.null(names(x))) {

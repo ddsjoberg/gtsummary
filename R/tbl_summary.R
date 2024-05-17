@@ -1,4 +1,4 @@
-#' Summary statistics table
+#' Summary table
 #'
 #' The `tbl_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
@@ -46,9 +46,11 @@
 #'   Specifies sorting to perform for categorical variables.
 #'   Values must be one of `c("alphanumeric", "frequency")`.
 #'   Default is `all_categorical(FALSE) ~ "alphanumeric"`
-#' @param percent Indicates the type of percentage to return.
+#' @param percent (`string`)\cr
+#'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
-#' @param include Variables to include in the summary table. Default is `everything()`
+#' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Variables to include in the summary table. Default is `everything()`
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
@@ -189,6 +191,7 @@ tbl_summary <- function(data,
                         sort = all_categorical(FALSE) ~ "alphanumeric",
                         percent = c("column", "row", "cell"),
                         include = everything()) {
+  set_cli_abort_call()
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
@@ -200,7 +203,8 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
-                i = "Use {.fun tbl_strata} for more than one {.arg by} variable.")
+      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+    )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
@@ -218,7 +222,7 @@ tbl_summary <- function(data,
     cards::process_formula_selectors(
       data = select_prep(.list2tb(default_types, "var_type"), data[include]),
       type = type
-      )
+    )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
   } else {
@@ -286,9 +290,9 @@ tbl_summary <- function(data,
   }
 
   # check inputs ---------------------------------------------------------------
-  check_class(missing_text, class = "character")
+  check_class(missing_text, cls = "character")
   check_scalar(missing_text)
-  check_class(missing_stat, class = "character")
+  check_class(missing_stat, cls = "character")
   check_scalar(missing_stat)
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
@@ -305,6 +309,7 @@ tbl_summary <- function(data,
 
 
   # construct cards ------------------------------------------------------------
+  # TODO: Utilize themes to change the default formatting types
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
@@ -315,7 +320,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
-      if (!rlang::is_empty(by)) {
+      if (!is_empty(by)) {
         cards::ard_categorical(data,
           variables = all_of(by),
           stat_label = ~ default_stat_labels()
@@ -358,15 +363,28 @@ tbl_summary <- function(data,
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
 
+  # check the requested stats are present in ARD data frame
+  .check_stats_available(cards = cards, statistic = statistic)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
-    list(
-      cards = list(tbl_summary = cards),
-      inputs = tbl_summary_inputs,
-      call_list = list(tbl_summary = call)
+    brdg_summary(
+      cards = cards,
+      by = by,
+      variables = include,
+      statistic = statistic,
+      type = type,
+      missing = missing,
+      missing_stat = missing_stat,
+      missing_text = missing_text
     ) |>
-    .check_stats_available() |>
-    brdg_summary() |>
+    append(
+      list(
+        cards = list(tbl_summary = cards),
+        inputs = tbl_summary_inputs,
+        call_list = list(tbl_summary = call)
+      )
+    ) |>
     structure(class = c("tbl_summary", "gtsummary"))
 
   # adding styling -------------------------------------------------------------
@@ -394,21 +412,23 @@ tbl_summary <- function(data,
 }
 
 .drop_missing_by_obs <- function(data, by) {
-  if (is_empty(by) || !any(is.na(data[[by]]))) return(data)
+  if (is_empty(by) || !any(is.na(data[[by]]))) {
+    return(data)
+  }
 
   obs_to_drop <- is.na(data[[by]])
   cli::cli_inform("{.val {sum(obs_to_drop)}} missing observations in the {.val {by}} column have been removed.")
   data[!obs_to_drop, ]
 }
 
-.check_stats_available <- function(x, call = parent.frame()) {
+.check_stats_available <- function(cards, statistic) {
   # TODO: this could be made more accurate by grouping the cards data frame by the group##_level columns
-  x$inputs$statistic |>
+  statistic |>
     imap(
       function(pre_glue_stat, variable) {
         extracted_stats <- .extract_glue_elements(pre_glue_stat)
         available_stats <-
-          x$cards$tbl_summary |>
+          cards |>
           dplyr::filter(.data$variable %in% .env$variable, !.data$context %in% "attributes") |>
           dplyr::pull("stat_name")
 
@@ -416,15 +436,13 @@ tbl_summary <- function(data,
         if (!is_empty(missing_stats)) {
           cli::cli_abort(
             c("Statistic {.val {missing_stats}} is not available for variable {.val {variable}}.",
-              i = "Select among {.val {rev(unique(available_stats))}}."),
-            call = call
+              i = "Select among {.val {rev(unique(available_stats))}}."
+            ),
+            call = get_cli_abort_call()
           )
         }
       }
     )
-
-
-  x
 }
 
 .add_env_to_list_elements <- function(x, env) {
@@ -477,7 +495,7 @@ tbl_summary <- function(data,
     unique() %>%
     {
       switch(!is.null(.),
-        paste(., collapse = ", ")
+        paste(., collapse = "; ")
       )
     }
 }
@@ -516,10 +534,10 @@ tbl_summary <- function(data,
 }
 
 
-.data_dim_checks <- function(data, call = rlang::caller_env()) {
+.data_dim_checks <- function(data) {
   # cannot be empty data frame
   if (nrow(data) == 0L || ncol(data) == 0L) {
-    cli::cli_abort("Expecting {.arg data} argument to have at least 1 row and 1 column.", call = call)
+    cli::cli_abort("Expecting {.arg data} argument to have at least 1 row and 1 column.", call = get_cli_abort_call())
   }
   invisible()
 }
@@ -552,7 +570,7 @@ tbl_summary <- function(data,
   invisible()
 }
 
-.continuous_statistics_chr_to_fun <- function(statistics, call = parent.frame()) {
+.continuous_statistics_chr_to_fun <- function(statistics) {
   # vector of all the categorical summary function names
   # these are defined internally, and we don't need to convert them to true fns
   chr_protected_cat_names <- .categorical_summary_functions() |>
@@ -587,10 +605,9 @@ tbl_summary <- function(data,
                   "Problem with the {.arg statistic} argument.",
                   "Error converting string {.val {chr_fun_name}} to a function.",
                   i = "Is the name spelled correctly and available?"
-                ), call = call)
+                ), call = get_cli_abort_call())
               }
             )
-
           }
         ) |>
           set_names(chr_fun_names)
@@ -605,43 +622,38 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort, env = parent.frame()) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
   cards::check_list_elements(
     x = label,
     predicate = function(x) is_string(x),
-    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a string.",
-    env = env
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a string."
   )
 
   cards::check_list_elements(
     x = statistic,
     predicate = function(x) is.character(x),
-    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a character vector.",
-    env = env
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be a character vector."
   )
 
   cards::check_list_elements(
     x = type,
     predicate = function(x) is_string(x) && x %in% c("continuous", "continuous2", "categorical", "dichotomous"),
     error_msg =
-      "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('continuous', 'continuous2', 'categorical', 'dichotomous')}}.",
-    env = env
+      "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('continuous', 'continuous2', 'categorical', 'dichotomous')}}."
   )
 
   cards::check_list_elements(
     x = value,
     predicate = function(x) is.null(x) || length(x) == 1L,
-    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be either {.val {NULL}} or a scalar.",
-    env = env
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be either {.val {NULL}} or a scalar."
   )
 
   cards::check_list_elements(
     x = sort,
     predicate = function(x) is.null(x) || (is_string(x) && x %in% c("alphanumeric", "frequency")),
-    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}.",
-    env = env
+    error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}."
   )
 }
