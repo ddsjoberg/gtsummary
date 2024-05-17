@@ -26,7 +26,7 @@ add_overall <- function(x, ...) {
 #'   A stratified 'gtsummary' table
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
-#' @param col_label String indicating the column label. Default is `"**Overall**,  N = {N}"`
+#' @param col_label String indicating the column label. Default is `"**Overall**  \nN = {N}"`
 #' @param statistic Override the statistic argument in initial `tbl_*` function.
 #' call. Default is `NULL`.
 #' @param digits Override the digits argument in initial `tbl_*` function
@@ -67,10 +67,15 @@ add_overall <- function(x, ...) {
 #' #     include = grade
 #' #   ) %>%
 #' #   add_overall(last = TRUE)
-add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL,
+add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \nN = {N}",
                                     statistic = NULL, digits = NULL, ...) {
   set_cli_abort_call()
   check_dots_empty()
+
+  # translating the col_label, if nothing passed by user
+  if (missing(col_label)) {
+    paste0("**", translate_text("Overall"), "**  \nN = {N}")
+  }
 
   add_overall_generic(
     x = x,
@@ -88,7 +93,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
   check_string(col_label, allow_empty = TRUE)
 
   # checking that input x has a by var
-  if (is.null(x$inputs[["by"]])) {
+  if (is_empty(x$inputs[["by"]])) {
     cli::cli_abort(
       "Cannot run {.fun add_overall} when original table function is not statified with {.code {calling_fun}(by)}.",
       call = get_cli_abort_call()
@@ -173,26 +178,9 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
         dplyr::filter(.data$column %in% "stat_0")
     )
 
-  # use user-specified label
-  if (!is_empty(col_label)) {
-    x <- modify_header(x, stat_0 = col_label)
-  }
-  else {
-    # if no header specified by user, removed bold marks from stat_0 header to match the others
-    x$table_styling$header <-
-      x$table_styling$header |>
-      dplyr::mutate(
-        label =
-          ifelse(
-            .data$column %in% "stat_0",
-            paste0(
-              "**", translate_text("Overall"), "**  \n",
-              str_remove_all(.data$label, "\\*\\*")
-            ),
-            .data$label
-          )
-      )
-  }
+  # Add
+  x <- modify_header(x, stat_0 = col_label)
+
 
 
   x

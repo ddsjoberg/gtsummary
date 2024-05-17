@@ -7,7 +7,7 @@
 \method{add_overall}{tbl_summary}(
   x,
   last = FALSE,
-  col_label = NULL,
+  col_label = "**Overall**  \\nN = {N}",
   statistic = NULL,
   digits = NULL,
   ...
@@ -20,7 +20,7 @@ A stratified 'gtsummary' table}
 \item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 
-\item{col_label}{String indicating the column label. Default is \code{"**Overall**,  N = {N}"}}
+\item{col_label}{String indicating the column label. Default is \code{"**Overall**  \\nN = {N}"}}
 
 \item{statistic}{Override the statistic argument in initial \verb{tbl_*} function.
 call. Default is \code{NULL}.}
