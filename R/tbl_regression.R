@@ -63,9 +63,7 @@
 #' to print the random components.
 #'
 #' @author Daniel D. Sjoberg
-#' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #'
-#' @family tbl_regression tools
 #' @name tbl_regression
 #' @return A `tbl_regression` object
 #'
