@@ -32,13 +32,17 @@
 #' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
 #' variables, and `c("t.test", "wilcox.test")` for continuous variables.
 #'
+#' ### Continuous Variables
+#'
+#' Confidence intervals for means are calculated using `t.test()` and
+#' `wilcox.test()` for pseudo-medians.
+#'
+#' ### Categorical/Dichotomous Variables
+#'
 #' Methods `c("wilson", "wilson.no.correct")` are calculated with
 #' `prop.test(correct = c(TRUE, FALSE))`.
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
-#'
-#' Confidence intervals for means are calculated using `t.test()` and
-#' `wilcox.test()` for pseudo-medians.
 #'
 #' @return gtsummary table
 #' @name add_ci

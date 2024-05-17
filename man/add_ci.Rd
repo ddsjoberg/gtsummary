@@ -17,7 +17,6 @@ add_ci(x, ...)
   style_fun = list(all_continuous() ~ styfn_sigfig(), all_categorical() ~
     styfn_sigfig(scale = 100)),
   pattern = NULL,
-  df = NULL,
   ...
 )
 }
@@ -66,14 +65,19 @@ Add a new column with the confidence intervals for proportions, means, etc.
 Must be one of
 \code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
 variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
+\subsection{Continuous Variables}{
+
+Confidence intervals for means are calculated using \code{t.test()} and
+\code{wilcox.test()} for pseudo-medians.
+}
+
+\subsection{Categorical/Dichotomous Variables}{
 
 Methods \code{c("wilson", "wilson.no.correct")} are calculated with
 \code{prop.test(correct = c(TRUE, FALSE))}.
 The default method, \code{"wilson"}, includes the Yates continuity correction.
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
-
-Confidence intervals for means are calculated using \code{t.test()} and
-\code{wilcox.test()} for pseudo-medians.
+}
 }
 
 \examples{
