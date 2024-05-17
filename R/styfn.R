@@ -30,7 +30,7 @@ styfn_sigfig <- function(digits = 2, scale = 1, big.mark = NULL, decimal.mark = 
 #' @rdname styfn
 #' @export
 styfn_pvalue <- function(digits = 1, prepend_p = FALSE, big.mark = NULL, decimal.mark = NULL, ...) {
-  function(x) styfn_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  function(x) style_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
 #' @rdname styfn

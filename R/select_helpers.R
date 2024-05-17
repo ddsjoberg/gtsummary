@@ -1,6 +1,6 @@
 #' Select helper functions
 #'
-#' @description Set of functions to supplement the {tidyselect} set of
+#' @description Set of functions to supplement the \{tidyselect\} set of
 #' functions for selecting columns of data frames (and other items as well).
 #' - `all_continuous()` selects continuous variables
 #' - `all_continuous2()` selects only type `"continuous2"`
@@ -11,26 +11,29 @@
 #' - `all_interaction()` selects interaction terms from a regression model
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
-# #' @param tests string indicating the test type of the variables to select, e.g.
-# #' select all variables being compared with `"t.test"`
-#' @param stat_0 When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
-#' @param continuous2 Logical indicating whether to include continuous2 variables. Default is `TRUE`
-#' @param dichotomous Logical indicating whether to include dichotomous variables.
-#' Default is `TRUE`
-# #' @param contrasts_type type of contrast to select. When `NULL`, all variables with a
-# #' contrast will be selected. Default is `NULL`.  Select among contrast types
-# #' `c("treatment", "sum", "poly", "helmert", "other")`
+#'
+#' @param stat_0 (scalar `logical`)\cr
+#'   When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
+#' @param continuous2 (scalar `logical`)\cr
+#'   Logical indicating whether to include continuous2 variables. Default is `TRUE`
+#' @param dichotomous (scalar `logical`)\cr
+#'   Logical indicating whether to include dichotomous variables. Default is `TRUE`
+#' @param tests (`character`)\cr
+#'   character vector indicating the test type of the variables to select, e.g.
+#'   select all variables being compared with `"t.test"`.
+#'
 #' @name select_helpers
 #' @return A character vector of column names selected
+#'
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
-# #' @examples
-# #' select_ex1 <-
-# #'   trial %>%
-# #'   select(age, response, grade) %>%
-# #'   tbl_summary(
-# #'     statistic = all_continuous() ~ "{mean} ({sd})",
-# #'     type = all_dichotomous() ~ "categorical"
-# #'   )
+#' @examples
+#' select_ex1 <-
+#'   trial |>
+#'   select(age, response, grade) |>
+#'   tbl_summary(
+#'     statistic = all_continuous() ~ "{mean} ({sd})",
+#'     type = all_dichotomous() ~ "categorical"
+#'   )
 NULL
 
 #' @rdname select_helpers
@@ -59,6 +62,12 @@ all_categorical <- function(dichotomous = TRUE) {
 #' @export
 all_dichotomous <- function() {
   where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "dichotomous"))
+}
+
+#' @rdname select_helpers
+#' @export
+all_tests <- function(tests) {
+  where(function(x) isTRUE(attr(x, "gtsummary.test_name") %in% tests))
 }
 
 # #' @rdname select_helpers
@@ -131,7 +140,7 @@ all_stat_cols <- function(stat_0 = TRUE) {
 select_prep <- function(table_body, data = NULL) {
   # if data not passed, use table_body to construct one
   if (is.null(data)) {
-    data <- dplyr::tibble(!!!rep_named(table_body$variable, character(0L)))
+    data <- dplyr::tibble(!!!rep_named(unique(table_body$variable), logical(0L)))
   }
 
   # only keeping rows that have corresponding column names in data
@@ -141,7 +150,9 @@ select_prep <- function(table_body, data = NULL) {
   if (!is.null(table_body)) {
     attr_cols <- intersect(names(table_body), c("var_type", "test_name"))
     for (v in attr_cols) {
-      df_attr <- table_body[c("variable", v)] |> unique() |> tidyr::drop_na()
+      df_attr <- table_body[c("variable", v)] |>
+        unique() |>
+        tidyr::drop_na()
       for (i in seq_len(nrow(df_attr))) {
         attr(data[[df_attr$variable[i]]], paste0("gtsummary.", v)) <- df_attr[[v]][i]
       }
@@ -149,6 +160,23 @@ select_prep <- function(table_body, data = NULL) {
   }
 
   data
+}
+
+
+#' Convert character vector to data frame
+#'
+#' This is used in some of the selecting we allow for, for example in
+#' `as_gt(include=)` you can use tidyselect to select among the call
+#' names to include.
+#'
+#' @param x character vector
+#'
+#' @return data frame
+#' @keywords internal
+vec_to_df <- function(x) {
+  matrix(ncol = length(x), nrow = 0) |>
+    data.frame() |>
+    stats::setNames(x)
 }
 
 

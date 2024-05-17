@@ -23,6 +23,7 @@
 #'   type = list(mpg = "continuous")
 #' )
 assign_summary_digits <- function(data, statistic, type, digits = NULL) {
+  set_cli_abort_call()
   # stats returned for all variables
   lst_cat_summary_fns <- .categorical_summary_functions(c("n", "p"))
   lst_all_fmt_fns <-
@@ -115,24 +116,25 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 
   # otherwise guess the number of digits to use based on the spread
   # calculate the spread of the variable
-  tryCatch({
-    var_spread <-
-      stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
-      stats::quantile(x, probs = c(0.05), na.rm = TRUE)
+  tryCatch(
+    {
+      var_spread <-
+        stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
+        stats::quantile(x, probs = c(0.05), na.rm = TRUE)
 
-    styfn_number(
-      digits =
-        dplyr::case_when(
-          var_spread < 0.01 ~ 4L,
-          var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
-          var_spread >= 0.1 & var_spread < 10 ~ 2L,
-          var_spread >= 10 & var_spread < 20 ~ 1L,
-          var_spread >= 20 ~ 0L
-        )
-    )},
+      styfn_number(
+        digits =
+          dplyr::case_when(
+            var_spread < 0.01 ~ 4L,
+            var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
+            var_spread >= 0.1 & var_spread < 10 ~ 2L,
+            var_spread >= 10 & var_spread < 20 ~ 1L,
+            var_spread >= 20 ~ 0L
+          )
+      )
+    },
     error = function(e) 0L
   )
-
 }
 
 .categorical_summary_functions <-

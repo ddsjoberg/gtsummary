@@ -1,7 +1,7 @@
 #' @keywords internal
 #' @import rlang
-#' @importFrom broom.helpers .select_to_varnames
 #' @importFrom dplyr across
+#' @importFrom glue glue
 "_PACKAGE"
 
 ## usethis namespace: start

@@ -42,6 +42,7 @@
 #'   tbl_summary(include = c(age, grade)) %>%
 #'   .table_styling_expr_to_row_number()
 .table_styling_expr_to_row_number <- function(x) {
+  set_cli_abort_call()
   # text_format ----------------------------------------------------------------
   x$table_styling$text_format <-
     x$table_styling$text_format %>%

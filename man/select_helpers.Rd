@@ -6,6 +6,7 @@
 \alias{all_continuous2}
 \alias{all_categorical}
 \alias{all_dichotomous}
+\alias{all_tests}
 \alias{all_stat_cols}
 \title{Select helper functions}
 \usage{
@@ -17,21 +18,29 @@ all_categorical(dichotomous = TRUE)
 
 all_dichotomous()
 
+all_tests(tests)
+
 all_stat_cols(stat_0 = TRUE)
 }
 \arguments{
-\item{continuous2}{Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
+\item{continuous2}{(scalar \code{logical})\cr
+Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
 
-\item{dichotomous}{Logical indicating whether to include dichotomous variables.
-Default is \code{TRUE}}
+\item{dichotomous}{(scalar \code{logical})\cr
+Logical indicating whether to include dichotomous variables. Default is \code{TRUE}}
 
-\item{stat_0}{When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
+\item{tests}{(\code{character})\cr
+character vector indicating the test type of the variables to select, e.g.
+select all variables being compared with \code{"t.test"}.}
+
+\item{stat_0}{(scalar \code{logical})\cr
+When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
 }
 \value{
 A character vector of column names selected
 }
 \description{
-Set of functions to supplement the {tidyselect} set of
+Set of functions to supplement the \{tidyselect\} set of
 functions for selecting columns of data frames (and other items as well).
 \itemize{
 \item \code{all_continuous()} selects continuous variables
@@ -44,6 +53,15 @@ functions for selecting columns of data frames (and other items as well).
 \item \code{all_intercepts()} selects intercept terms from a regression model
 \item \code{all_contrasts()} selects variables in regression model based on their type of contrast
 }
+}
+\examples{
+select_ex1 <-
+  trial |>
+  select(age, response, grade) |>
+  tbl_summary(
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    type = all_dichotomous() ~ "categorical"
+  )
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

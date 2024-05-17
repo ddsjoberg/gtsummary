@@ -23,6 +23,7 @@
 #' ) %>%
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
+  set_cli_abort_call()
   x_fmt <-
     dplyr::case_when(
       round2(abs(x), digits = digits) < 1 ~

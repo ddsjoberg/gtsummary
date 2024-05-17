@@ -7,118 +7,179 @@
 #' This file also contains helper functions for constructing the bridge,
 #' referred to as the piers (supports for a bridge) and begin with `pier_*()`.
 #'
-#' @param x gtsummary object of class `"tbl_summary"`
-#' @param variables character list of variables
-#' @param value named list of values to be summarized. the names are the
-#' variable names.
-#' @param calling_function string indicating the name of the function that is
-#' calling thie bridge function, e.g. `call_function = "tbl_summary"`. This is used
-#' internally to organize results.
+#' - `brdg_summary()`: The bridge function ingests an ARD data frame and returns
+#'   a gtsummary table that includes `.$table_body` and a basic `.$table_styling`.
+#'   The `.$table_styling$header` data frame includes the header statistics.
+#'   Based on context, this function adds a column to the ARD data frame named
+#'   `"gts_column"`. This column is used during the reshaping in the `pier_*()`
+#'   functions defining column names.
+#'
+#' - `pier_*()`: these functions accept a cards tibble and returns a tibble
+#'   that is a piece of the `.$table_body`. Typically these will be stacked
+#'   to construct the final table body data frame. The ARD object passed here
+#'   will have two primary parts: the calculated summary statistics and the
+#'   attributes ARD. The attributes ARD is used for labeling. The ARD data frame
+#'   passed to this function must include a `"gts_column"` column, which is
+#'   added in `brdg_summary()`.
+#'
+#' @param cards (`card`)\cr
+#'   An ARD object of class `"card"` typically created with `cards::ard_*()` functions.
+#' @param variables (`character`)\cr
+#'   character list of variables
+#' @param by (`string`)\cr
+#'   string indicating the stratifying column
+#' @param type (named `list`)\cr
+#'   named list of summary types
+#' @param statistic (named `list`)\cr
+#'   named list of summary statistic names
 #' @inheritParams tbl_summary
 #'
 #' @return data frame
-#' @name bridge_summary
+#' @name brdg_summary
 #'
 #' @examples
-#' tbl <-
-#'   tbl_summary(
-#'     data = mtcars,
-#'     include = c("cyl", "am", "mpg", "hp"),
-#'     type =
-#'       list(
-#'         cyl = "categorical",
-#'         am = "dichotomous",
-#'         mpg = "continuous",
-#'         hp = "continuous2"
-#'       ),
-#'     value = list(am = 1),
-#'     statistic =
-#'       list(
-#'         c(cyl, am) ~ "{n} ({p}%)",
-#'         mpg = "{mean} ({sd})",
-#'         hp = c("{mean}", "{median}")
-#'       )
-#'   )
+#' library(cards)
+#'
+#' # first build ARD data frame
+#' cards <-
+#'   ard_stack(
+#'     mtcars,
+#'     ard_continuous(variables = c("mpg", "hp")),
+#'     ard_categorical(variables = "cyl"),
+#'     ard_dichotomous(variables = "am"),
+#'     .missing = TRUE,
+#'     .attributes = TRUE
+#'   ) |>
+#'   # this column is used by the `pier_*()` functions
+#'   dplyr::mutate(gts_column = ifelse(context == "attributes", NA, "stat_0"))
+#'
+#' brdg_summary(
+#'   cards = cards,
+#'   variables = c("cyl", "am", "mpg", "hp"),
+#'   type =
+#'     list(
+#'       cyl = "categorical",
+#'       am = "dichotomous",
+#'       mpg = "continuous",
+#'       hp = "continuous2"
+#'     ),
+#'   statistic =
+#'     list(
+#'       cyl = "{n} / {N}",
+#'       am = "{n} / {N}",
+#'       mpg = "{mean} ({sd})",
+#'       hp = c("{median} ({p25}, {p75})", "{mean} ({sd})")
+#'     )
+#' ) |>
+#'   as_tibble()
 #'
 #' pier_summary_dichotomous(
-#'   x = tbl,
+#'   cards = cards,
 #'   variables = "am",
-#'   value = list(am = 1)
+#'   statistic = list(am = "{n} ({p})")
 #' )
 #'
 #' pier_summary_categorical(
-#'   x = tbl,
-#'   variables = "cyl"
+#'   cards = cards,
+#'   variables = "cyl",
+#'   statistic = list(cyl = "{n} ({p})")
 #' )
 #'
 #' pier_summary_continuous2(
-#'   x = tbl,
-#'   variables = "hp"
+#'   cards = cards,
+#'   variables = "hp",
+#'   statistic = list(hp = c("{median}", "{mean}"))
 #' )
 #'
 #' pier_summary_continuous(
-#'   x = tbl,
-#'   variables = "mpg"
+#'   cards = cards,
+#'   variables = "mpg",
+#'   statistic = list(mpg = "{median}")
 #' )
 NULL
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-brdg_summary <- function(x, calling_function = "tbl_summary") {
+brdg_summary <- function(cards,
+                         variables,
+                         type,
+                         statistic,
+                         by = NULL,
+                         missing = "no",
+                         missing_stat = "{N_miss}",
+                         missing_text = "Unknown") {
+  set_cli_abort_call()
+
   # add gts info to the cards table --------------------------------------------
   # adding the name of the column the stats will populate
-  if (is_empty(x$inputs$by)) {
-    x[["cards"]][[calling_function]]$gts_column <-
+  if (is_empty(by)) {
+    cards$gts_column <-
       ifelse(
-        x[["cards"]][[calling_function]]$context %in% c("continuous", "categorical", "dichotomous", "missing"),
+        !cards$context %in% "attributes",
+        # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
         "stat_0",
         NA_character_
       )
   } else {
-    x[["cards"]][[calling_function]] <-
-      x[["cards"]][[calling_function]] |>
-      dplyr::mutate(
-        .by = cards::all_ard_groups(),
-        gts_column =
-          ifelse(
-            .data$context %in% c("continuous", "categorical", "dichotomous", "missing") &
-              !.data$variable %in% .env$x$inputs$tbl_summary$by,
-            paste0("stat_", dplyr::cur_group_id() - 1L),
-            NA_character_
-          )
-      )
+    cards <-
+      cards %>%
+      {
+        dplyr::left_join(
+          .,
+          dplyr::filter(
+            .,
+            .data$variable %in% .env$variables,
+            !cards$context %in% "attributes",
+            # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
+          ) |>
+            dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+            dplyr::distinct() |>
+            dplyr::mutate(
+              .by = cards::all_ard_groups(),
+              gts_column = paste0("stat_", dplyr::cur_group_id())
+            ),
+          by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+        )
+      }
   }
 
 
   # build the table body pieces with bridge functions and stack them -----------
+  x <- list()
   x$table_body <-
     dplyr::left_join(
       dplyr::tibble(
-        variable = x$inputs$include,
-        var_type = x$inputs$type[.data$variable] |> unlist() |> unname()
+        variable = variables,
+        var_type = type[.data$variable] |> unlist() |> unname()
       ),
       dplyr::bind_rows(
         pier_summary_continuous(
-          x,
-          variables = .get_variables_by_type(x$inputs$type, type = "continuous"),
-          calling_function = calling_function
+          cards = cards,
+          variables = .get_variables_by_type(type, type = "continuous"),
+          statistic = statistic
         ),
         pier_summary_continuous2(
-          x,
-          variables = .get_variables_by_type(x$inputs$type, type = "continuous2"),
-          calling_function = calling_function
+          cards = cards,
+          variables = .get_variables_by_type(type, type = "continuous2"),
+          statistic = statistic
         ),
         pier_summary_categorical(
-          x,
-          variables = .get_variables_by_type(x$inputs$type, type = "categorical"),
-          calling_function = calling_function
+          cards = cards,
+          variables = .get_variables_by_type(type, type = "categorical"),
+          statistic = statistic
         ),
         pier_summary_dichotomous(
-          x,
-          variables = .get_variables_by_type(x$inputs$type, type = "dichotomous"),
-          calling_function = calling_function
+          cards = cards,
+          variables = .get_variables_by_type(type, type = "dichotomous"),
+          statistic = statistic
         ),
-        pier_summary_missing_row(x, calling_function = calling_function)
+        pier_summary_missing_row(
+          cards = cards,
+          variables = variables,
+          missing = missing,
+          missing_stat = missing_stat,
+          missing_text = missing_text
+        )
       ),
       by = "variable"
     )
@@ -127,46 +188,50 @@ brdg_summary <- function(x, calling_function = "tbl_summary") {
   x <- construct_initial_table_styling(x)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
-  x <- .add_table_styling_stats(x)
+  x <- .add_table_styling_stats(x, cards = cards, by = by)
 
-  x
+  x |>
+    structure(class = "gtsummary") |>
+    modify_column_unhide(columns = all_stat_cols())
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-pier_summary_dichotomous <- function(x, variables, value = x$inputs$value,
-                                     calling_function = "tbl_summary") {
+pier_summary_dichotomous <- function(cards,
+                                     variables,
+                                     statistic) {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
 
-  # updating the context to continuous, because it will be processed that way below
-  x[["cards"]][[calling_function]] <-
-    x[["cards"]][[calling_function]] |>
-    dplyr::mutate(
-      context = ifelse(.data$context %in% "dichotomous", "continuous", .data$context)
-    )
-
-  pier_summary_continuous(x = x, variables = variables)
+  pier_summary_continuous(
+    cards = cards,
+    variables = variables,
+    statistic = statistic
+  )
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-pier_summary_categorical <- function(x, variables, missing, missing_text, missing_stat,
-                                     calling_function = "tbl_summary") {
+pier_summary_categorical <- function(cards,
+                                     variables,
+                                     statistic) {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
   # subsetting cards object on categorical summaries ----------------------------
-  card <-
-    x[["cards"]][[calling_function]] |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("categorical", "missing")) |>
+  cards_no_attr <-
+    cards |>
+    dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
     cards::apply_fmt_fn()
+
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
-    card |>
+    cards_no_attr |>
     dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
       function(df_variable_stats, df_groups_and_variable) {
@@ -178,7 +243,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
           )
 
         str_statistic_pre_glue <-
-          x$inputs$statistic[[df_groups_and_variable$variable[1]]]
+          statistic[[df_groups_and_variable$variable[1]]]
 
         dplyr::mutate(
           .data = df_groups_and_variable,
@@ -219,7 +284,7 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
     df_glued |>
     # merge in variable label
     dplyr::left_join(
-      x[["cards"]][[calling_function]] |>
+      cards |>
         dplyr::filter(
           .data$variable %in% .env$variables,
           .data$context %in% "attributes",
@@ -265,23 +330,25 @@ pier_summary_categorical <- function(x, variables, missing, missing_text, missin
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-pier_summary_continuous2 <- function(x, variables, missing, missing_text, missing_stat,
-                                     calling_function = "tbl_summary") {
+pier_summary_continuous2 <- function(cards,
+                                     variables,
+                                     statistic) {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
   # subsetting cards object on continuous2 summaries ----------------------------
-  card <-
-    x[["cards"]][[calling_function]] |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
+  cards_no_attr <-
+    cards |>
+    dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
     cards::apply_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
-    card |>
+    cards_no_attr |>
     dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
       function(.x, .y) {
@@ -289,7 +356,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
           .data = .y,
           stat =
             map(
-              x$inputs$statistic[[.y$variable[1]]],
+              statistic[[.y$variable[1]]],
               function(str_to_glue) {
                 stat <-
                   glue::glue(
@@ -302,7 +369,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
               list(),
           label =
             map(
-              x$inputs$statistic[[.y$variable[1]]],
+              statistic[[.y$variable[1]]],
               function(str_to_glue) {
                 label <-
                   glue::glue(
@@ -323,7 +390,7 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
     df_glued |>
     # merge in variable label
     dplyr::left_join(
-      x[["cards"]][[calling_function]] |>
+      cards |>
         dplyr::filter(
           .data$variable %in% .env$variables,
           .data$context %in% "attributes",
@@ -369,23 +436,25 @@ pier_summary_continuous2 <- function(x, variables, missing, missing_text, missin
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-pier_summary_continuous <- function(x, variables, missing, missing_text, missing_stat,
-                                    calling_function = "tbl_summary") {
+pier_summary_continuous <- function(cards,
+                                    variables,
+                                    statistic) {
+  set_cli_abort_call()
   if (is_empty(variables)) {
     return(dplyr::tibble())
   }
-  # subsetting cards object on continuous summaries ----------------------------
-  card <-
-    x[["cards"]][[calling_function]] |>
-    dplyr::filter(.data$variable %in% .env$variables, .data$context %in% c("continuous", "missing")) |>
+  # subsetting cards object on statistical summaries ---------------------------
+  cards_no_attr <-
+    cards |>
+    dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
     cards::apply_fmt_fn()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
-    card |>
+    cards_no_attr |>
     dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
     dplyr::group_map(
       function(.x, .y) {
@@ -393,10 +462,10 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
           .data = .y,
           stat =
             glue::glue(
-              x$inputs$statistic[[.data$variable[1]]],
+              statistic[[.data$variable[1]]],
               .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
             ) |>
-            as.character()
+              as.character()
         )
       }
     ) |>
@@ -407,7 +476,7 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
     df_glued |>
     # merge in variable label
     dplyr::left_join(
-      x[["cards"]][[calling_function]] |>
+      cards |>
         dplyr::filter(
           .data$variable %in% .env$variables,
           .data$context %in% "attributes",
@@ -432,49 +501,54 @@ pier_summary_continuous <- function(x, variables, missing, missing_text, missing
   df_results
 }
 
-#' @rdname bridge_summary
+#' @rdname brdg_summary
 #' @export
-pier_summary_missing_row <- function(x, variables = x$inputs$include,
-                                     calling_function = "tbl_summary") {
-  if (is_empty(variables)) {
+pier_summary_missing_row <- function(cards,
+                                     variables,
+                                     missing = "no",
+                                     missing_stat = "{N_miss}",
+                                     missing_text = "Unknown") {
+  set_cli_abort_call()
+
+  # return empty tibble if no missing row requested
+  if (is_empty(variables) || missing == "no") {
     return(dplyr::tibble())
   }
-  # keeping variables to report missing obs for (or returning empty df if none)
-  if (x$inputs$missing == "no") {
-    return(dplyr::tibble())
-  }
-  if (x$inputs$missing == "ifany") {
+
+  # if "ifany", replace the variables vector with those that have missing values
+  if (missing == "ifany") {
     variables <-
-      x[["cards"]][[calling_function]] |>
+      cards |>
       dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
       dplyr::filter(.data$stat > 0L) |>
       dplyr::pull("variable") |>
       unique()
   }
-  if (is_empty(variables)) {
-    return(dplyr::tibble())
-  }
 
   # slightly modifying the `x` object for missing value calculations -----------
   # make all the summary stats the same for all vars
-  x$inputs$statistic <- rep_named(variables, list(x$inputs$missing_stat))
+  statistic <- rep_named(variables, list(missing_stat))
 
-
-  pier_summary_continuous(x, variables = variables) |>
+  # reshape the missing stats
+  pier_summary_continuous(
+    cards = cards,
+    variables = variables,
+    statistic = statistic
+  ) |>
     # update the row_type and label
     dplyr::mutate(
       row_type = "missing",
-      label = x$inputs$missing_text
+      label = missing_text
     )
 }
 
-.add_table_styling_stats <- function(x, calling_function = "tbl_summary") {
-  if (is_empty(x$inputs$by)) {
+.add_table_styling_stats <- function(x, cards, by) {
+  if (is_empty(by)) {
     x$table_styling$header <-
       x$table_styling$header |>
       dplyr::mutate(
         modify_stat_N =
-          x[["cards"]][[calling_function]] |>
+          cards |>
             dplyr::filter(.data$stat_name %in% "N_obs") |>
             dplyr::pull("stat") |>
             unlist() |>
@@ -484,8 +558,8 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include,
         modify_stat_level = "Overall"
       )
   } else {
-    df_by_stats <- x[["cards"]][[calling_function]] |>
-      dplyr::filter(.data$variable %in% .env$x$inputs$by & .data$stat_name %in% c("N", "n", "p"))
+    df_by_stats <- cards |>
+      dplyr::filter(.data$variable %in% .env$by & .data$stat_name %in% c("N", "n", "p"))
 
     # get a data frame with the by variable stats
     df_by_stats_wide <-
@@ -495,14 +569,11 @@ pier_summary_missing_row <- function(x, variables = x$inputs$include,
         .by = "variable_level",
         column = paste0("stat_", dplyr::cur_group_id())
       ) %>%
-      {
-        dplyr::bind_rows(
-          .,
-          dplyr::select(., "variable_level", "column", stat = "variable_level") |>
-            dplyr::mutate(stat_name = "level") |>
-            dplyr::distinct()
-        )
-      } |>
+      dplyr::bind_rows(
+        dplyr::select(., "variable_level", "column", stat = "variable_level") |>
+          dplyr::mutate(stat_name = "level") |>
+          dplyr::distinct()
+      ) |>
       tidyr::pivot_wider(
         id_cols = "column",
         names_from = "stat_name",

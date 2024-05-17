@@ -20,6 +20,8 @@
 #' c(0.111, 12.3) %>% style_number(digits = c(1, 0))
 style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
                          scale = 1, ...) {
+  set_cli_abort_call()
+
   # setting defaults -----------------------------------------------------------
   decimal.mark <-
     decimal.mark %||%

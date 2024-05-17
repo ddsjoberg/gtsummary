@@ -4,7 +4,7 @@
 #
 # ---
 # file: standalone-forcats.R
-# last-updated: 2024-01-24
+# last-updated: 2024-05-04
 # license: https://unlicense.org
 # imports:
 # ---
@@ -32,6 +32,16 @@ fct_inorder <- function(f, ordered = NA) {
     f,
     levels = stats::na.omit(unique(f)) |> union(levels(f)),
     ordered = ifelse(is.na(ordered), is.ordered(f), ordered)
+  )
+}
+
+fct_rev <- function(f) {
+  if (!inherits(f, "factor")) f <- factor(f)
+
+  factor(
+    f,
+    levels = rev(levels(f)),
+    ordered = is.ordered(f)
   )
 }
 
