@@ -2,9 +2,6 @@
 #'
 #' @return named list
 #' @keywords internal
-#'
-#' @examples
-#' default_stat_labels()
 default_stat_labels <- function() {
   list(
     # standard summary stat labels
