@@ -1,7 +1,7 @@
 #' Default Statistics Labels
 #'
 #' @return named list
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' default_stat_labels()
