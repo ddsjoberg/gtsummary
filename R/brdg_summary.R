@@ -319,7 +319,7 @@ pier_summary_categorical <- function(cards,
           dplyr::filter(dplyr::row_number() %in% 1L) |>
           dplyr::mutate(
             label = .data$var_label,
-            row_type = "header"
+            row_type = "label"
           ),
         df_result_levels |>
           dplyr::filter(.data$variable %in% .x)
@@ -425,7 +425,7 @@ pier_summary_continuous2 <- function(cards,
           dplyr::filter(dplyr::row_number() %in% 1L) |>
           dplyr::mutate(
             label = .data$var_label,
-            row_type = "header"
+            row_type = "label"
           ),
         df_result_levels |>
           dplyr::filter(.data$variable %in% .x)
@@ -487,7 +487,7 @@ pier_summary_continuous <- function(cards,
     ) |>
     dplyr::mutate(
       .by = "variable",
-      row_type = "header",
+      row_type = "label",
       var_label = unlist(.data$var_label),
       label = .data$var_label,
       .after = 0L

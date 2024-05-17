@@ -391,7 +391,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     modify_table_body(
       ~ dplyr::left_join(
         .x,
-        df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "header"),
+        df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "label"),
         by = c("variable", "row_type")
       )
     )

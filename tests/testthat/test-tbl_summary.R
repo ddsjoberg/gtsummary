@@ -40,7 +40,7 @@ test_that("tbl_summary(label)", {
 
   expect_equal(
     tbl$table_body |>
-      dplyr::filter(row_type %in% "header") |>
+      dplyr::filter(row_type %in% "label") |>
       dplyr::pull(label),
     c("New mpg", "New cyl")
   )
