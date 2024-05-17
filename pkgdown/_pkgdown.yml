@@ -1,0 +1,190 @@
+url: https://www.danieldsjoberg.com/gtsummary/
+
+template:
+  params:
+    docsearch:
+      api_key: fd7c21cad87500b8877c475ed3a4cece
+      index_name: gtsummary
+    ganalytics: UA-145876596-1
+    bootswatch: flatly
+development:
+  mode: auto
+  version_label: default
+
+authors:
+  Daniel D. Sjoberg:
+    href: "https://www.danieldsjoberg.com/"
+  Emily C. Zabor:
+    href: "http://www.emilyzabor.com/"
+  Jessica Lavery:
+    href: "http://www.jessicalavery.com/"
+  Joseph Larmarange:
+    href: "https://joseph.larmarange.net/"
+
+navbar:
+  type: default
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    menu:
+    # - text: "tbl_summary() tutorial"
+    #   href: articles/tbl_summary.html
+    # - text: "tbl_regression() tutorial"
+    #   href: articles/tbl_regression.html
+    # - text: "inline_text() tutorial"
+    #   href: articles/inline_text.html
+    # - text: "gtsummary + Quarto/Rmarkdown"
+    #   href: articles/rmarkdown.html
+    # - text: "gtsummary + Shiny"
+    #   href: articles/shiny.html
+    # - text: "gtsummary + themes"
+    #   href: articles/themes.html
+    - text: "cheat sheet"
+      href: https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf
+    # - text: "FAQ + gallery"
+    #   href: articles/gallery.html
+  - text: News
+    href: news/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/ddsjoberg/gtsummary
+
+reference:
+  - title: Data Summary Tables
+  - subtitle: Standard Summary Tables
+  - contents:
+      - tbl_summary
+      - add_p.tbl_summary
+      - add_q
+      - add_overall.tbl_summary
+      - add_difference.tbl_summary
+      - add_n.tbl_summary
+      # - add_ci
+      # - add_stat_label
+      # - add_stat
+      # - separate_p_footnotes
+  # - subtitle: Cross Tables
+  # - contents:
+  #     - tbl_cross
+  #     - add_p.tbl_cross
+  # - subtitle: Continuous Variable Summary
+  # - contents:
+  #     - tbl_continuous
+  #     - add_overall
+  #     - add_p.tbl_continuous
+  # - subtitle: Time-to-event Summary Tables
+  # - contents:
+  #     - tbl_survfit
+  #     - add_p.tbl_survfit
+  #     - add_n.tbl_survfit
+  #     - add_nevent.tbl_survfit
+  #     - add_q
+  # - subtitle: Survey Design Summary Tables
+  # - contents:
+  #     - tbl_svysummary
+  #     - add_p.tbl_svysummary
+  #     - add_q
+  #     - add_overall.tbl_svysummary
+  #     - add_difference
+  #     - add_ci
+  #     - add_n.tbl_svysummary
+  #     - add_stat_label
+  #     - add_stat
+  #     - separate_p_footnotes
+  # - subtitle: Custom Summary Tables
+  # - contents:
+  #     - tbl_custom_summary
+  #     - add_overall
+  #     - continuous_summary
+  #     - proportion_summary
+  #     - ratio_summary
+
+  - title: Regression Model Summary Tables
+  - contents:
+      - tbl_regression
+      # - tbl_uvregression
+      # - add_global_p
+      - add_n.tbl_regression
+      - add_nevent.tbl_regression
+      # - combine_terms
+      # - add_glance
+      # - add_q
+      # - add_significance_stars
+      # - add_vif
+      # - plot
+
+  # - title: Inline Reporting
+  # - contents:
+  #     - inline_text.tbl_summary
+  #     - inline_text.tbl_regression
+  #     - inline_text.tbl_uvregression
+  #     - inline_text.tbl_cross
+  #     - inline_text.tbl_survfit
+  #     - inline_text.gtsummary
+
+  - title: Output Types
+  - contents:
+      - as_gt
+      # - as_flex_table
+      # - as_kable
+      # - as_kable_extra
+      # - as_hux_table
+      - as_tibble.gtsummary
+
+  # - title: Other Functions
+  # - subtitle: Merge, Stack, Stratify, or Split Summary Tables
+  # - contents:
+  #     - tbl_merge
+  #     - tbl_stack
+  #     - tbl_strata
+  #     - tbl_split
+  #     - tbl_butcher
+  - subtitle: Style Summary Tables
+  - contents:
+      - modify
+      # - bold_italicize_labels_levels
+      # - bold_p
+      # - sort_filter_p
+      # - remove_row_type
+  - subtitle: Style/Format Numeric Vectors
+  - contents:
+      - style_percent
+      - style_pvalue
+      - style_sigfig
+      - style_ratio
+      - style_number
+      - styfn
+  # - subtitle: Themes
+  # - contents:
+  #     - set_gtsummary_theme
+  #     - theme_gtsummary
+  - subtitle: Advanced modifiers
+  - contents:
+      - modify_table_styling
+      - modify_table_body
+      - modify_column_hide
+      # - modify_column_alignment
+      - modify_fmt_fun
+      - modify_column_merge
+      # - modify_column_indent
+  - subtitle: Select Helpers
+  - contents:
+      - select_helpers
+  # - subtitle: Custom Tidiers
+  # - contents:
+  #     - custom_tidiers
+  - subtitle: ARD Constructors
+  - contents:
+      - starts_with("card_")
+
+  - subtitle: Construction Helpers
+  - contents:
+      - starts_with("assign_")
+      - starts_with("brdg_")
+
+  - subtitle: Data
+  - contents:
+      - trial

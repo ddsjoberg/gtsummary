@@ -12,6 +12,4 @@ named list
 \description{
 Default Statistics Labels
 }
-\examples{
-default_stat_labels()
-}
+\keyword{internal}
