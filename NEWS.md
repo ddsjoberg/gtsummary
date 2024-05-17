@@ -4,6 +4,8 @@
 
 #### User-facing Updates
 
+* The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
+
 * The `add_q(quiet)` argument has been deprecated.
 
 * After `tbl_regression()`, the `.$model_obj` is no longer returned with the object. This is (and always has been) available in `.$inputs$x`.
