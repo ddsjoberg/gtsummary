@@ -28,7 +28,7 @@
         return_two_by_two_10s, location = everything() ~ "level")
     Condition
       Error in `add_stat()`:
-      ! Cannot add new column that already exist in gtsummary table: "one" and "two".
+      ! Cannot add new column that already exist in <gtsummary> table: "one" and "two".
 
 # add_stat(x) messaging
 
