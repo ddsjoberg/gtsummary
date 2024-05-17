@@ -111,13 +111,6 @@ glm(response ~ age + grade, trial, family = binomial()) \%>\%
   tbl_regression(exponentiate = TRUE)
 \dontshow{\}) # examplesIf}
 }
-\seealso{
-See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
-
-Other tbl_regression tools: 
-\code{\link{modify}}
-}
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
