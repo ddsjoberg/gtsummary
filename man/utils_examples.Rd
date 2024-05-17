@@ -10,21 +10,15 @@
 write_example_output(
   tbl,
   example_name = "example",
-  out_var_name = deparse(substitute(tbl)),
-  method = c("txt", "rds")[2]
+  out_var_name = deparse(substitute(tbl))
 )
 
-read_example_output(
-  out_var_name,
-  example_name = "example",
-  method = c("txt", "rds")[2]
-)
+read_example_output(out_var_name, example_name = "example")
 
 write_read_example_output(
   tbl,
   example_name = "example",
-  out_var_name = deparse(substitute(tbl)),
-  method = c("txt", "rds")[2]
+  out_var_name = deparse(substitute(tbl))
 )
 }
 \arguments{

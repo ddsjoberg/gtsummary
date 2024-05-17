@@ -14,16 +14,9 @@ test_that("writing and reading examples work", {
   read_html_tbl <- read_example_output("html_tbl")
   expect_equal(html_tbl, read_html_tbl)
 
-  # txt
-  write_example_output(html_tbl, method = "txt")
-  read_html_tbl <- read_example_output("html_tbl", method = "txt")
-  expect_equal(html_tbl, read_html_tbl)
-
   # One function
   html_output2 <- write_read_example_output(html_tbl)
   expect_equal(html_tbl, html_output2)
-  expect_error(write_example_output(html_tbl, method = "sdads"))
-  expect_error(read_example_output("html_tbl", method = "sdads"))
 
   # Starting from tbl (common behavior)
   write_example_output(tbl_to_write)
@@ -34,7 +27,7 @@ test_that("writing and reading examples work", {
   read_html_tbl2[1] <- paste0('<div id=\"\" style', strsplit(read_html_tbl2[1], "style")[[1]][2])
   expect_equal(html_tbl2, read_html_tbl2)
 
-  # Impossible error
+  # Not impossible error
   expect_error(
     write_example_output("not_a_tbl_or_html"),
     "tbl needs to be a html, gtsummary or gt table. Got something else."

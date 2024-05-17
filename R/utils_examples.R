@@ -16,19 +16,14 @@
 #' @name utils_examples
 write_example_output <- function(tbl,
                                  example_name = "example",
-                                 out_var_name = deparse(substitute(tbl)),
-                                 method = c("txt", "rds")[2]) {
-  if (isFALSE(method %in% c("txt", "rds"))) {
-    stop("Inserted method is not supported.")
-  }
-
+                                 out_var_name = deparse(substitute(tbl))) {
   if (getOption("gtsummary_update_examples", default = FALSE)) {
     if (is(tbl, "gtsummary")) {
       tbl <- tbl |>
         as_gt()
     }
     if (is(tbl, "gt_tbl")) {
-      html_output <- tbl |>
+      tbl <- tbl |>
         gt::tab_options() |>
         gt::as_raw_html()
     }
@@ -39,47 +34,30 @@ write_example_output <- function(tbl,
       sub("(^.*/gtsummary).*", "\\1", getwd()),
       "inst",
       "example_outputs",
-      paste0(example_name, "_", out_var_name, ".", method)
+      paste0(example_name, "_", out_var_name, ".rds")
     )
-    if (method == "txt") {
-      writeLines(text = html_output, con = fl_nm)
-    } else if (method == "rds") {
-      saveRDS(html_output, file = fl_nm)
-    }
+    saveRDS(tbl, file = fl_nm)
   }
 }
 #' @keywords internal
 #' @name utils_examples
-read_example_output <- function(out_var_name,
-                                example_name = "example",
-                                method = c("txt", "rds")[2]) {
+read_example_output <- function(out_var_name, example_name = "example") {
   fl_nm <- file.path(
     sub("(^.*/gtsummary).*", "\\1", getwd()),
     "inst",
     "example_outputs",
-    paste0(example_name, "_", out_var_name, ".", method)
+    paste0(example_name, "_", out_var_name, ".rds")
   )
-  if (isFALSE(method %in% c("txt", "rds"))) {
-    stop("Inserted method is not supported.")
-  }
 
   if (require("htmltools", quietly = TRUE) && file.exists(fl_nm)) {
-    if (method == "txt") {
-      out <- readLines(fl_nm) |>
-        paste0(collapse = "\n") |>
-        htmltools::HTML()
-    } else if (method == "rds") {
-      out <- readRDS(fl_nm)
-    }
-    return(out)
+    readRDS(fl_nm)
   }
 }
 #' @keywords internal
 #' @name utils_examples
 write_read_example_output <- function(tbl,
                                       example_name = "example",
-                                      out_var_name = deparse(substitute(tbl)),
-                                      method = c("txt", "rds")[2]) {
-  write_example_output(tbl, example_name, out_var_name, method)
-  read_example_output(out_var_name, example_name, method)
+                                      out_var_name = deparse(substitute(tbl))) {
+  write_example_output(tbl, example_name, out_var_name)
+  read_example_output(out_var_name, example_name)
 }

@@ -213,7 +213,6 @@ Customizing the `tbl_summary` function:
     digits = list(age = c(0, 1))
   )
   print(getOption("gtsummary_update_examples"))
-#> [1] TRUE
 }\if{html}{\out{</div>}}
 
 \if{html}{\out{<!--html_preserve--><div id="frcpmdeqta" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
