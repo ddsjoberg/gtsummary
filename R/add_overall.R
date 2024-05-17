@@ -132,11 +132,13 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   # are the same before binding (excluding headers)
   if (!identical(
     select(x$table_body, c("row_type", "variable", "label")),
-    select(tbl_overall$table_body, c("row_type", "variable", "label")) |>  as_tibble()
+    select(tbl_overall$table_body, c("row_type", "variable", "label")) |> as_tibble()
   )) {
     cli::cli_abort(
-      c("An error occured in {.fun add_overall}, and the overall statistic cannot be added.",
-        "Have variable labels changed since the original call to {.fun {calling_fun}}?"),
+      c(
+        "An error occured in {.fun add_overall}, and the overall statistic cannot be added.",
+        "Have variable labels changed since the original call to {.fun {calling_fun}}?"
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -149,7 +151,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
     dplyr::bind_cols(
       x$table_body,
       tbl_overall$table_body |> dplyr::select("stat_0")
-  )
+    )
 
   # add the overall header row to the primary table
   x$table_styling$header <-
@@ -159,7 +161,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
         dplyr::filter(.data$column %in% "stat_0")
     )
 
-    x$table_styling$header %>%
+  x$table_styling$header %>%
     dplyr::rows_update(
       tbl_overall$table_styling$header %>%
         dplyr::filter(.data$column %in% "stat_0"),
