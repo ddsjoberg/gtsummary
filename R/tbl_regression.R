@@ -194,7 +194,7 @@ tbl_regression.default <- function(x,
   # TODO: Deprecate this... this was an odd choice?
   tidy_columns_to_report <-
     get_theme_element("tbl_regression-chr:tidy_columns",
-                      default = c("conf.low", "conf.high", "p.value")
+      default = c("conf.low", "conf.high", "p.value")
     ) |>
     union("estimate") |>
     intersect(names(table_body))
@@ -213,7 +213,7 @@ tbl_regression.default <- function(x,
   # adding the Ns to the `x$table_styling$header`
   if (!rlang::is_empty(res[c("N", "N_event")] |> compact())) {
     res$table_styling$header <-
-      res[c("N","N_event")] |>
+      res[c("N", "N_event")] |>
       compact() |>
       dplyr::as_tibble() |>
       dplyr::rename_with(.fn = ~ vec_paste0("modify_stat_", .), .cols = everything()) |>

@@ -2,8 +2,8 @@ mod_lm <- lm(hp ~ am, data = mtcars)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <-
   glm(count ~ age + trt,
-      trial |> dplyr::mutate(count = dplyr::row_number() %% 10),
-      family = poisson
+    trial |> dplyr::mutate(count = dplyr::row_number() %% 10),
+    family = poisson
   )
 mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
 

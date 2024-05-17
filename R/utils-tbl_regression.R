@@ -37,7 +37,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
         tibble::as_tibble()
     )}
-    # styler: on
+  # styler: on
 
   if (!"header_row" %in% names(df_tidy)) {
     df_tidy$header_row <- NA
@@ -138,8 +138,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   x <-
     modify_table_styling(x,
-                         columns = any_of(c("conf.low", "conf.high")),
-                         fmt_fun = estimate_fun
+      columns = any_of(c("conf.low", "conf.high")),
+      fmt_fun = estimate_fun
     )
 
   # p.value --------------------------------------------------------------------
@@ -210,7 +210,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   if (result$label %in% c("Beta", "exp(Beta)")) {
     exponentiate <- x$inputs$exponentiate
     result$label <- get_theme_element("tbl_regression-str:coef_header",
-                                      default = result$label
+      default = result$label
     )
   }
 
@@ -226,4 +226,3 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   result$label <- translate_text(result$label, language)
   result
 }
-

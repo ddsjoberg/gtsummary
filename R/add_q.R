@@ -65,16 +65,16 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     get_theme_element("add_q-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
     # default from p-value formatting function
-    (dplyr::filter(x$table_styling$fmt_fun, .data$column == "p.value") |> dplyr::pull("fmt_fun") |> rev() |>  getElement(1)) |>
+    (dplyr::filter(x$table_styling$fmt_fun, .data$column == "p.value") |> dplyr::pull("fmt_fun") |> rev() |> getElement(1)) |>
     as_function(arg = "pvalue_fun")
 
   # calculate the adjusted p-value ---------------------------------------------
   # TODO: add error handling here
-   q.value <- stats::p.adjust(x$table_body$p.value, method = method)
+  q.value <- stats::p.adjust(x$table_body$p.value, method = method)
 
   # update gtsummary table -----------------------------------------------------
   x <-
-    modify_table_body(x, ~dplyr::mutate(.x, q.value = q.value)) |>
+    modify_table_body(x, ~ dplyr::mutate(.x, q.value = q.value)) |>
     modify_table_styling(
       columns = "q.value",
       label = paste0("**", translate_text("q-value"), "**"),
@@ -97,16 +97,15 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
 .add_q_method_label <- function(method) {
   lst_method_labels <-
     list(
-        "holm" = "Holm correction for multiple testing",
-        "hochberg" = "Hochberg correction for multiple testing",
-        "hommel" = "Hommel correction for multiple testing",
-        "bonferroni" = "Bonferroni correction for multiple testing",
-        "BH" = "Benjamini & Hochberg correction for multiple testing",
-        "BY" = "Benjamini & Yekutieli correction for multiple testing",
-        "fdr" = "False discovery rate correction for multiple testing",
-        "none" = "No correction for multiple testing"
+      "holm" = "Holm correction for multiple testing",
+      "hochberg" = "Hochberg correction for multiple testing",
+      "hommel" = "Hommel correction for multiple testing",
+      "bonferroni" = "Bonferroni correction for multiple testing",
+      "BH" = "Benjamini & Hochberg correction for multiple testing",
+      "BY" = "Benjamini & Yekutieli correction for multiple testing",
+      "fdr" = "False discovery rate correction for multiple testing",
+      "none" = "No correction for multiple testing"
     )
 
   lst_method_labels[[method]]
 }
-
