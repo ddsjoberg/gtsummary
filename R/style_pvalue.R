@@ -103,7 +103,6 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
     p_fmt <- dplyr::case_when(
       is.na(p_fmt) ~ NA_character_,
       grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
-      # stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)
     )
   }

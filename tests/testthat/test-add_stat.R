@@ -6,7 +6,7 @@ my_ttest2 <- function(data, variable, by, ...) {
   tt <- t.test(data[[variable]] ~ as.factor(data[[by]]))
 
   # returning test statistic and pvalue
-  stringr::str_glue(
+  glue::glue(
     "t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"
   )
 }
