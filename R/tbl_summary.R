@@ -460,11 +460,9 @@ tbl_summary <- function(data,
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
-          {
-            stats::setNames(as.list(.$stat_label), .$stat_name)
-          } |>
+          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>
@@ -472,11 +470,7 @@ tbl_summary <- function(data,
     compact() |>
     unlist() |>
     unique() %>%
-    {
-      switch(!is.null(.),
-        paste(., collapse = "; ")
-      )
-    }
+    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
 }
 
 
