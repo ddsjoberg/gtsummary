@@ -10,7 +10,7 @@ add_stat_label(x, ...)
 \method{add_stat_label}{tbl_summary}(x, location = c("row", "column"), label = NULL, ...)
 }
 \arguments{
-\item{x}{(\code{tbl_summary}/\code{tbl_svysummary})\cr
+\item{x}{(\code{tbl_summary})\cr
 Object with class \code{'tbl_summary'} or with class \code{'tbl_svysummary'}}
 
 \item{...}{These dots are for future extensions and must be empty.}
@@ -30,7 +30,7 @@ A \code{tbl_summary} or \code{tbl_svysummary} object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}\cr
 Adds or modifies labels describing the summary statistics presented for
-each variable in the \code{\link[=tbl_summary]{tbl_summary()}} / \code{\link[=tbl_svysummary]{tbl_svysummary()}} table.
+each variable in a \code{\link[=tbl_summary]{tbl_summary()}} table.
 }
 \section{Tips}{
 

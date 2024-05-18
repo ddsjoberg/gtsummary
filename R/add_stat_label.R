@@ -2,9 +2,9 @@
 #'
 #' `r lifecycle::badge('questioning')`\cr
 #' Adds or modifies labels describing the summary statistics presented for
-#' each variable in the [`tbl_summary()`] / [`tbl_svysummary()`] table.
+#' each variable in a [`tbl_summary()`] table.
 #'
-#' @param x (`tbl_summary`/`tbl_svysummary`)\cr
+#' @param x (`tbl_summary`)\cr
 #'   Object with class `'tbl_summary'` or with class `'tbl_svysummary'`
 #' @param location (`string`)\cr
 #'   Location where statistic label will be included.

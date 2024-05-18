@@ -46,7 +46,8 @@
 #'
 #' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
 #' to perform the initial tidying of the model object. There are, however,
-#' a few models that use [modifications][tbl_regression_methods].
+#' a few models that use `[modifications][tbl_regression_methods]`.
+#' TODO: Re-add link to tbl_regression_methods above.
 #'
 #' - `"parsnip/workflows"`: If the model was prepared using parsnip/workflows,
 #'   the original model fit is extracted and the original `x=` argument
