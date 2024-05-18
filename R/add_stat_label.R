@@ -191,9 +191,8 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   }
 
   # add df_stat_label to `.$table_body` ----------------------------------------
-  x <-
+  x <- x |>
     modify_table_body(
-      x,
       ~ dplyr::left_join(
         .x,
         df_stat_label,
@@ -205,6 +204,11 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
       columns = "stat_label",
       hide = location %in% "row",
       label = paste0("**", translate_text("Statistic"), "**")
+    ) |>
+    # removing stat footnote, since it's in the table now
+    modify_table_styling(
+      columns = all_stat_cols(),
+      footnote = NA_character_
     )
 
   if (location %in% "row") {
