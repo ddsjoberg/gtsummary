@@ -2,42 +2,55 @@
 #'
 #' This is a function meant for advanced users to gain
 #' more control over the characteristics of the resulting
-#' gtsummary table by directly modifying `.$table_styling`
+#' gtsummary table by directly modifying `.$table_styling`.
+#' This function is primarily used in the development of other gtsummary
+#' functions, and very little checking of the passed arguments is performed.
 #'
 #' Review the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 #' vignette for information on `.$table_styling` objects.
 #'
-#' @param x gtsummary object
-#' @param columns vector or selector of columns in `x$table_body`
-#' @param rows predicate expression to select rows in `x$table_body`.
-#' Can be used to style footnote, formatting functions, missing symbols,
-#' and text formatting. Default is `NULL`. See details below.
-#' @param label string of column label(s)
-#' @param hide logical indicating whether to hide column from output
-#' @param align string indicating alignment of column, must be one of
-#' `c("left", "right", "center")`
-#' @param text_format,undo_text_format
-#' string indicated which type of text formatting to apply/remove to the rows and columns.
-#' Must be one of `c("bold", "italic")`.
-#' @param text_interpret string, must be one of `"md"` or `"html"`
-#' @param fmt_fun function that formats the statistics in the
-#' columns/rows in `columns=` and `rows=`
-#' @param footnote_abbrev string with abbreviation definition, e.g.
-#' `"CI = Confidence Interval"`
-#' @param footnote string with text for footnote
-#' @param spanning_header string with text for spanning header
-#' @param missing_symbol string indicating how missing values are formatted.
-#' @param cols_merge_pattern \lifecycle{experimental} glue-syntax string
-#' indicating how to merge
-#' columns in `x$table_body`. For example, to construct a confidence interval
-#' use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
-#' string must match the single column name passed in `columns=`.
-#' @param indentation an integer indicating how many space to indent text
+#' @param x (`gtsummary`)\cr
+#'   gtsummary object
+#' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Selector of columns in `x$table_body`
+#' @param rows (predicate `expression`)
+#'   Predicate expression to select rows in `x$table_body`.
+#'   Can be used to style footnote, formatting functions, missing symbols,
+#'   and text formatting. Default is `NULL`. See details below.
+#' @param label (`character`)\cr
+#'   Character vector of column label(s). Must be the same length as `columns`.
+#' @param hide (scalar `logical`)
+#'   Logical indicating whether to hide column from output
+#' @param align (`string`)
+#'   String indicating alignment of column, must be one of `c("left", "right", "center")`
+#' @param text_format,undo_text_format (`string`)\cr
+#'   String indicated which type of text formatting to apply/remove to the rows and columns.
+#'   Must be one of `c("bold", "italic")`.
+#' @param text_interpret (`string`)\cr
+#'   Must be one of `"md"` or `"html"` and indicates the processing function
+#'   as `gt::md()` or `gt::html()`. Use this in conjunction with arguments for
+#'   header and footnotes.
+#' @param fmt_fun (`function`)\cr
+#'   function that formats the statistics in the columns/rows in `columns` and `rows`
+#' @param footnote_abbrev (`string`)\cr
+#'   string with abbreviation definition, e.g. `"CI = Confidence Interval"`
+#' @param footnote (`string`)\cr
+#'   string with text for footnote
+#' @param spanning_header (`string`)\cr
+#'   string with text for spanning header
+#' @param missing_symbol (`string`)\cr
+#'   string indicating how missing values are formatted.
+#' @param cols_merge_pattern (`string`) \lifecycle{experimental}\cr
+#'   glue-syntax string indicating how to merge
+#'   columns in `x$table_body`. For example, to construct a confidence interval
+#'   use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
+#'   string must match the single column name passed in `columns=`.
+#' @param indentation (`integer`)\cr
+#'  An integer indicating how many space to indent text
 #'
-#' @seealso `modify_table_body()`
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#'
 #' @export
 #' @family Advanced modifiers
 #'
@@ -47,14 +60,14 @@
 #' evaluated in `x$table_body`. For example, to apply formatting to the age rows
 #' pass `rows = variable == "age"`. A vector of row numbers is NOT acceptable.
 #'
-#' A couple of things to note when using the `rows=` argument.
+#' A couple of things to note when using the `rows` argument.
 #' 1. You can use saved objects to create the predicate argument, e.g.
-#' `rows = variable == letters[1]`.
+#'   `rows = variable == letters[1]`.
 #' 2. The saved object cannot share a name with a column in `x$table_body`.
-#' The reason for this is that in `tbl_merge()` the columns are renamed,
-#' and the renaming process cannot disambiguate the `variable` column from
-#' an external object named `variable` in the following expression
-#' `rows = .data$variable = .env$variable`.
+#'   The reason for this is that in `tbl_merge()` the columns are renamed,
+#'   and the renaming process cannot disambiguate the `variable` column from
+#'   an external object named `variable` in the following expression
+#'   `rows = .data$variable = .env$variable`.
 #'
 #' @section cols_merge_pattern argument:
 #'
@@ -162,10 +175,10 @@ modify_table_styling <- function(x,
 
   text_interpret <- paste0("gt::", arg_match(text_interpret))
 
-  if (!is.null(text_format)) {
+  if (!is_empty(text_format)) {
     text_format <- arg_match(text_format, values = c("bold", "italic"), multiple = TRUE)
   }
-  if (!is.null(undo_text_format)) {
+  if (!is_empty(undo_text_format)) {
     undo_text_format <- arg_match(undo_text_format, values = c("bold", "italic"), multiple = TRUE)
   }
   rows <- enquo(rows)
@@ -176,11 +189,14 @@ modify_table_styling <- function(x,
       error = function(e) TRUE
     )
   if (rows_eval_error) {
-    abort("The `rows=` predicate expression must result in logical vector when evaluated with `x$table_body`")
+    cli::cli_abort(
+      "The {.arg rows} argument must be an expression that evaluates to a logical vector in {.code x$table_body}.",
+      call = get_cli_abort_call()
+    )
   }
 
   # label ----------------------------------------------------------------------
-  if (!is.null(label)) {
+  if (!is_empty(label)) {
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
@@ -190,7 +206,7 @@ modify_table_styling <- function(x,
   }
 
   # spanning_header ------------------------------------------------------------
-  if (!is.null(spanning_header)) {
+  if (!is_empty(spanning_header)) {
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
@@ -200,7 +216,7 @@ modify_table_styling <- function(x,
   }
 
   # hide -----------------------------------------------------------------------
-  if (!is.null(hide)) {
+  if (!is_empty(hide)) {
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
@@ -210,7 +226,7 @@ modify_table_styling <- function(x,
   }
 
   # align ----------------------------------------------------------------------
-  if (!is.null(align)) {
+  if (!is_empty(align)) {
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
@@ -220,7 +236,7 @@ modify_table_styling <- function(x,
   }
 
   # footnote -------------------------------------------------------------------
-  if (!is.null(footnote)) {
+  if (!is_empty(footnote)) {
     x$table_styling$footnote <-
       dplyr::bind_rows(
         x$table_styling$footnote,
@@ -234,7 +250,7 @@ modify_table_styling <- function(x,
   }
 
   # footnote_abbrev ------------------------------------------------------------
-  if (!is.null(footnote_abbrev)) {
+  if (!is_empty(footnote_abbrev)) {
     x$table_styling$footnote_abbrev <-
       dplyr::bind_rows(
         x$table_styling$footnote_abbrev,
@@ -248,7 +264,7 @@ modify_table_styling <- function(x,
   }
 
   # fmt_fun --------------------------------------------------------------------
-  if (!is.null(fmt_fun)) {
+  if (!is_empty(fmt_fun)) {
     if (rlang::is_function(fmt_fun)) fmt_fun <- list(fmt_fun)
     x$table_styling$fmt_fun <-
       dplyr::bind_rows(
@@ -262,7 +278,7 @@ modify_table_styling <- function(x,
   }
 
   # text_format ----------------------------------------------------------------
-  if (!is.null(text_format)) {
+  if (!is_empty(text_format)) {
     x$table_styling$text_format <-
       list(
         column = columns,
@@ -273,7 +289,7 @@ modify_table_styling <- function(x,
       {tidyr::expand_grid(!!!.)} %>% # styler: off
       {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
   }
-  if (!is.null(undo_text_format)) {
+  if (!is_empty(undo_text_format)) {
     x$table_styling$text_format <-
       list(
         column = columns,
@@ -286,7 +302,7 @@ modify_table_styling <- function(x,
   }
 
   # indentation ----------------------------------------------------------------
-  if (!is.null(indentation)) {
+  if (!is_empty(indentation)) {
     if (!rlang::is_scalar_integerish(indentation)) {
       cli::cli_abort("The {.arg indentation} argument must be a scalar integer.")
     }
@@ -302,7 +318,7 @@ modify_table_styling <- function(x,
   }
 
   # missing_symbol -------------------------------------------------------------
-  if (!is.null(missing_symbol)) {
+  if (!is_empty(missing_symbol)) {
     x$table_styling$fmt_missing <-
       list(
         column = columns,
@@ -314,7 +330,8 @@ modify_table_styling <- function(x,
   }
 
   # cols_merge_pattern ---------------------------------------------------------
-  if (!is.null(cols_merge_pattern)) {
+  if (!is_empty(cols_merge_pattern)) {
+    check_string(cols_merge_pattern)
     x <-
       .modify_cols_merge(
         x,
@@ -336,18 +353,21 @@ modify_table_styling <- function(x,
   all_columns <- .extract_glue_elements(pattern)
 
   if (!is_empty(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
-    cli::cli_abort(c(
-      "All columns specified in {.arg cols_merge_pattern} argument must be present in {.code x$table_body}",
-      "i" = "The following columns are not present: {.val {setdiff(all_columns, x$table_styling$header$column)}}"
-    ))
+    cli::cli_abort(
+      c("All columns specified in {.arg cols_merge_pattern} argument must be present in {.code x$table_body}",
+        "i" = "The following columns are not present: {.val {setdiff(all_columns, x$table_styling$header$column)}}"),
+      call = get_cli_abort_call()
+    )
   }
 
   if (!is_empty(pattern) && !identical(column, all_columns[1])) {
-    paste(
-      "A single column must be passed when using {.arg cols_merge_pattern},",
-      "and that column must be the first to appear in the pattern argument."
-    ) %>%
-      cli::cli_abort()
+    cli::cli_abort(
+      c("A single column must be specified in the {.arg columns} argument when
+         using {.arg cols_merge_pattern}, and that column must be the first to
+         appear in the pattern argument.",
+        i = "For example, {.code modify_table_styling(columns={.val {all_columns[1]}}, cols_merge_pattern={.val {pattern}})}"),
+      call = get_cli_abort_call()
+    )
   }
 
   x$table_styling$cols_merge <-

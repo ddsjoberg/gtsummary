@@ -7,7 +7,8 @@
 modify_fmt_fun(x, update, rows = NULL)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
 \item{update}{list of formulas or a single formula specifying the updated
 formatting function.
@@ -29,7 +30,7 @@ rows to apply formatting. The expression must evaluate to a logical when
 evaluated in \code{x$table_body}. For example, to apply formatting to the age rows
 pass \code{rows = variable == "age"}. A vector of row numbers is NOT acceptable.
 
-A couple of things to note when using the \verb{rows=} argument.
+A couple of things to note when using the \code{rows} argument.
 \enumerate{
 \item You can use saved objects to create the predicate argument, e.g.
 \code{rows = variable == letters[1]}.

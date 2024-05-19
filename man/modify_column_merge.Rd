@@ -7,13 +7,15 @@
 modify_column_merge(x, pattern, rows = NULL)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
 \item{pattern}{glue syntax string indicating how to merge columns in
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
-\item{rows}{predicate expression to select rows in \code{x$table_body}.
+\item{rows}{(predicate \code{expression})
+Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
 }
