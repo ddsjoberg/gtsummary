@@ -3,8 +3,8 @@
 #' This is a function meant for advanced users to gain
 #' more control over the characteristics of the resulting
 #' gtsummary table by directly modifying `.$table_styling`.
-#' This function is primarily used in the development of other gtsummary
-#' functions, and very little checking of the passed arguments is performed.
+#' *This function is primarily used in the development of other gtsummary
+#' functions, and very little checking of the passed arguments is performed.*
 #'
 #' Review the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
@@ -331,7 +331,7 @@ modify_table_styling <- function(x,
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is_empty(cols_merge_pattern)) {
-    check_string(cols_merge_pattern)
+    if (!is.na(cols_merge_pattern)) check_string(cols_merge_pattern)
     x <-
       .modify_cols_merge(
         x,
@@ -360,7 +360,7 @@ modify_table_styling <- function(x,
     )
   }
 
-  if (!is_empty(pattern) && !identical(column, all_columns[1])) {
+  if (!is.na(pattern) && !identical(column, all_columns[1])) {
     cli::cli_abort(
       c("A single column must be specified in the {.arg columns} argument when
          using {.arg cols_merge_pattern}, and that column must be the first to

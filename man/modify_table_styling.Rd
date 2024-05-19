@@ -81,8 +81,8 @@ string must match the single column name passed in \verb{columns=}.}
 This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
 gtsummary table by directly modifying \code{.$table_styling}.
-This function is primarily used in the development of other gtsummary
-functions, and very little checking of the passed arguments is performed.
+\emph{This function is primarily used in the development of other gtsummary
+functions, and very little checking of the passed arguments is performed.}
 }
 \details{
 Review the

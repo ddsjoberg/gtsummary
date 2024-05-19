@@ -63,6 +63,21 @@ test_that("modify_table_styling(text_format=c('indent', 'indent2')) deprecation"
   )
 })
 
+test_that("modify_table_styling(rows)", {
+  # works with objects defined outside of the expression
+  footnote_variable <- "age"
+  expect_error(
+    tbl_summary(trial[c("trt", "age")]) %>%
+      modify_table_styling(
+        columns = label,
+        footnote = "test footnote",
+        rows = variable == footnote_variable
+      ),
+    NA
+  )
+})
+
+
 
 test_that("modify_table_styling(label)", {
   expect_equal(
@@ -313,6 +328,20 @@ test_that("modify_table_styling(cols_merge_pattern)", {
       dplyr::filter(.by = "column", column == "conf.low", dplyr::n() == dplyr::row_number()) |>
       dplyr::pull(pattern),
     "{conf.low}:::{conf.high}"
+  )
+
+  # test we can undo merging
+  expect_equal(
+    lm(mpg ~ factor(am), mtcars) |>
+      tbl_regression() |>
+      modify_table_styling(
+        columns = conf.low,
+        cols_merge_pattern = NA_character_
+      ) |>
+      modify_column_unhide(c("conf.low", "conf.high")) |>
+      as.data.frame(col_label = FALSE) |>
+      names(),
+    c("label", "estimate",  "conf.low",  "conf.high", "p.value")
   )
 })
 
