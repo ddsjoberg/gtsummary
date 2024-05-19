@@ -48,7 +48,6 @@ Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsumm
 Other Advanced modifiers: 
 \code{\link{modify_column_hide}()},
 \code{\link{modify_column_merge}()},
-\code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

@@ -135,7 +135,6 @@ See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition
 Other Advanced modifiers: 
 \code{\link{modify_column_hide}()},
 \code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()}
+\code{\link{modify_fmt_fun}()}
 }
 \concept{Advanced modifiers}
