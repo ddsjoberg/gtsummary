@@ -76,7 +76,6 @@ modify_column_merge_ex1 <-
 Other Advanced modifiers: 
 \code{\link{modify_column_hide}()},
 \code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}
