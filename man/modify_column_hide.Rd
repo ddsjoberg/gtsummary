@@ -10,9 +10,11 @@ modify_column_hide(x, columns)
 modify_column_unhide(x, columns)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{columns}{vector or selector of columns in \code{x$table_body}}
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 }
 \description{
 \lifecycle{maturing}
