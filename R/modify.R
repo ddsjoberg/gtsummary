@@ -1,4 +1,4 @@
-#' Modify column headers, footnotes, spanning headers, and table captions
+#' Modify column headers, footnotes, and spanning headers
 #'
 #' @description
 #' These functions assist with modifying the aesthetics/style of a table.
@@ -6,7 +6,6 @@
 #' - `modify_header()` update column headers
 #' - `modify_footnote()` update/add table footnotes
 #' - `modify_spanning_header()` update/add spanning headers
-#' - `modify_caption()` update/add table caption
 #'
 #' The functions often require users to know the underlying column names.
 #' Run `show_header_names()` to print the column names to the console.
@@ -28,8 +27,6 @@
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
-#' @param caption (`string`)\cr
-#'   A string for the table caption/title
 # TODO: add this back when show function is added
 # @param include_example (scalar `logical`)\cr
 #   Logical whether to include print of `modify_header()` example
@@ -41,8 +38,7 @@
 #' @name modify
 #'
 #' @section `tbl_summary()`, `tbl_svysummary()`, and `tbl_cross()`:
-#' When assigning column headers, footnotes, spanning headers, and captions
-#' for these gtsummary tables,
+#' When assigning column headers, footnotes, and spanning headers,
 #' you may use `{N}` to insert the number of observations.
 #' `tbl_svysummary` objects additionally have `{N_unweighted}` available.
 #'
@@ -56,13 +52,6 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @section captions:
-#' Captions are assigned based on output type.
-#' - `gt::gt(caption=)`
-#' - `flextable::set_caption(caption=)`
-#' - `huxtable::set_caption(value=)`
-#' - `knitr::kable(caption=)`
-#'
 #' @examples
 #' # create summary table
 #' tbl <- trial |>
@@ -74,11 +63,10 @@
 #' # show_header_names(tbl)
 #'
 #' # Example 1 ----------------------------------
-#' # updating column headers, footnote, and table caption
+#' # updating column headers and footnote
 #' tbl |>
 #'   modify_header(label = "**Variable**", p.value = "**P**") |>
-#'   modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade") |>
-#'   modify_caption("**Patient Characteristics** (N = {N})")
+#'   modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade")
 #'
 #' # Example 2 ----------------------------------
 #' # updating headers, remove all footnotes, add spanning header
@@ -236,34 +224,6 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
   x$call_list <- updated_call_list
   x
 }
-
-#' @name modify
-#' @export
-modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
-  set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
-
-  # checking inputs ------------------------------------------------------------
-  check_class(x, "gtsummary")
-  check_string(caption)
-  text_interpret <- arg_match(text_interpret)
-
-  # evaluating update with glue ------------------------------------------------
-  if ("label" %in% x$table_styling$header$column) {
-    caption <- .evaluate_string_with_glue(x, list(label = caption)) |>
-      unlist() |>
-      unname()
-  }
-
-  # adding caption to gtsummary object ----------------------------------------
-  x$table_styling$caption <- caption
-  attr(x$table_styling$caption, "text_interpret") <- text_interpret
-
-  # returning updated object ---------------------------------------------------
-  x$call_list <- updated_call_list
-  x
-}
-
 
 .evaluate_string_with_glue <- function(x, dots) {
   # only keep values that are in the table_body

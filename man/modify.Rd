@@ -5,8 +5,7 @@
 \alias{modify_header}
 \alias{modify_footnote}
 \alias{modify_spanning_header}
-\alias{modify_caption}
-\title{Modify column headers, footnotes, spanning headers, and table captions}
+\title{Modify column headers, footnotes, and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
@@ -20,8 +19,6 @@ modify_footnote(
 )
 
 modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
-
-modify_caption(x, caption, text_interpret = c("md", "html"))
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -46,9 +43,6 @@ String indicates whether text will be interpreted with
 
 \item{abbreviation}{(scalar \code{logical})\cr
 Logical indicating if an abbreviation is being updated.}
-
-\item{caption}{(\code{string})\cr
-A string for the table caption/title}
 }
 \value{
 Updated gtsummary object
@@ -59,7 +53,6 @@ These functions assist with modifying the aesthetics/style of a table.
 \item \code{modify_header()} update column headers
 \item \code{modify_footnote()} update/add table footnotes
 \item \code{modify_spanning_header()} update/add spanning headers
-\item \code{modify_caption()} update/add table caption
 }
 
 The functions often require users to know the underlying column names.
@@ -67,8 +60,7 @@ Run \code{show_header_names()} to print the column names to the console.
 }
 \section{\code{tbl_summary()}, \code{tbl_svysummary()}, and \code{tbl_cross()}}{
 
-When assigning column headers, footnotes, spanning headers, and captions
-for these gtsummary tables,
+When assigning column headers, footnotes, and spanning headers,
 you may use \code{{N}} to insert the number of observations.
 \code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
 
@@ -86,17 +78,6 @@ you may use \code{{N}} to insert the number of observations, and \code{{N_event}
 for the number of events (when applicable).
 }
 
-\section{captions}{
-
-Captions are assigned based on output type.
-\itemize{
-\item \code{gt::gt(caption=)}
-\item \code{flextable::set_caption(caption=)}
-\item \code{huxtable::set_caption(value=)}
-\item \code{knitr::kable(caption=)}
-}
-}
-
 \examples{
 # create summary table
 tbl <- trial |>
@@ -108,11 +89,10 @@ tbl <- trial |>
 # show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers, footnote, and table caption
+# updating column headers and footnote
 tbl |>
   modify_header(label = "**Variable**", p.value = "**P**") |>
-  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade") |>
-  modify_caption("**Patient Characteristics** (N = {N})")
+  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade")
 
 # Example 2 ----------------------------------
 # updating headers, remove all footnotes, add spanning header

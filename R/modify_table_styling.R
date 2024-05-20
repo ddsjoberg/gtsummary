@@ -210,7 +210,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_label = text_interpret, spanning_header = spanning_header),
+        dplyr::tibble(column = columns, interpret_spanning_header = text_interpret, spanning_header = spanning_header),
         by = "column"
       )
   }
