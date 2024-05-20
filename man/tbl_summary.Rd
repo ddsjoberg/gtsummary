@@ -140,7 +140,7 @@ statistic, e.g. \code{list(sd = styfn_number(digits=1))}.
 
 \section{type and value arguments}{
 
-There are four summary types:
+There are four summary types. Use the \code{type} argument to change the default summary types.
 \itemize{
 \item \code{"continuous"} summaries are shown on a \emph{single row}. Most numeric
 variables default to summary type continuous.
@@ -192,9 +192,6 @@ See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tb
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{modify}}
 }
 \author{
 Daniel D. Sjoberg

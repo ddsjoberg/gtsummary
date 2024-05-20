@@ -104,7 +104,7 @@
 #' statistic, e.g. `list(sd = styfn_number(digits=1))`.
 #'
 #' @section type and value arguments:
-#' There are four summary types:
+#' There are four summary types. Use the `type` argument to change the default summary types.
 #'    - `"continuous"` summaries are shown on a *single row*. Most numeric
 #'    variables default to summary type continuous.
 #'    - `"continuous2"` summaries are shown on *2 or more rows*
