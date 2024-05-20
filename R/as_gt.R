@@ -87,8 +87,9 @@ table_styling_to_gt_calls <- function(x, ...) {
   caption <-
     switch(!is.null(x$table_styling$caption),
       rlang::call2(
-        attr(x$table_styling$caption, "text_interpret"),
-        x$table_styling$caption
+        .fn = attr(x$table_styling$caption, "text_interpret"),
+        x$table_styling$caption,
+        .ns = "gt"
       )
     )
   gt_calls[["gt"]] <-

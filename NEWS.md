@@ -44,6 +44,10 @@
 
 ### Deprecations 
 
+* Arguments `modify_header(quiet)`, `modify_footnote(quiet)`, and  `modify_spanning_header(quiet)` have been deprecated. Verbose messaging is no longer available.
+
+* Arguments `modify_header(update)`, `modify_footnote(update)`, and  `modify_spanning_header(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`
+
 * Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
 
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
