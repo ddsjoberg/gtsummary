@@ -18,20 +18,20 @@
       ! All columns specified in `cols_merge_pattern` argument must be present in `x$table_body`
       i The following columns are not present: "not_in_table"
 
-# modify_table_styling(indentation) messaging
+# modify_table_styling(indent) messaging
 
     Code
       modify_table_styling(tbl_summary(trial, include = grade), columns = "label",
-      rows = !row_type %in% "label", indentation = "not an integer")
+      rows = !row_type %in% "label", indent = "not an integer")
     Condition
       Error in `modify_table_styling()`:
-      ! The `indentation` argument must be a scalar integer.
+      ! The `indent` argument must be a scalar integer.
 
 # modify_table_styling(rows) messaging
 
     Code
       modify_table_styling(tbl_summary(trial, include = grade), columns = "label",
-      rows = "not_a_predicate", indentation = 8L)
+      rows = "not_a_predicate", indent = 8L)
     Condition
       Error in `modify_table_styling()`:
       ! The `rows` argument must be an expression that evaluates to a logical vector in `x$table_body`.

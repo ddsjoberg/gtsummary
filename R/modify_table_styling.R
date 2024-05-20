@@ -46,7 +46,7 @@
 #'   columns in `x$table_body`. For example, to construct a confidence interval
 #'   use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
 #'   string must match the single column name passed in `columns=`.
-#' @param indentation (`integer`)\cr
+#' @param indent (`integer`)\cr
 #'  An integer indicating how many space to indent text
 #'
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
@@ -100,7 +100,7 @@ modify_table_styling <- function(x,
                                  fmt_fun = NULL,
                                  text_format = NULL,
                                  undo_text_format = NULL,
-                                 indentation = NULL,
+                                 indent = NULL,
                                  text_interpret = c("md", "html"),
                                  cols_merge_pattern = NULL) {
   set_cli_abort_call()
@@ -123,10 +123,11 @@ modify_table_styling <- function(x,
   }
 
   # deprecation ----------------------------------------------------------------
+  if (isFALSE(undo_text_format)) undo_text_format <- NULL
   if (isTRUE(undo_text_format)) {
     # set new values for the user
     if (any(c("indent", "indent2") %in% text_format)) {
-      indentation <- 0L
+      indent <- 0L
     }
     undo_text_format <- text_format |> setdiff(c("indent", "indent2"))
     text_format <- NULL
@@ -135,7 +136,7 @@ modify_table_styling <- function(x,
       match.call() |>
       as.list() |>
       utils::modifyList(
-        list(text_format = NULL, undo_text_format = undo_text_format, indentation = indentation)
+        list(text_format = NULL, undo_text_format = undo_text_format, indent = indent)
       ) |>
       compact()
     if (nchar(expr_deparse(updated_call[["x"]])) > 30L) updated_call[["x"]] <- expr(.)
@@ -150,7 +151,7 @@ modify_table_styling <- function(x,
   if (any(c("indent", "indent2") %in% text_format)) {
     lst_new_args <-
       list(
-        indentation = ifelse("indent" %in% text_format, 4L, 8L),
+        indent = ifelse("indent" %in% text_format, 4L, 8L),
         text_format =
           text_format |>
             setdiff(c("indent", "indent2")) %>%
@@ -301,18 +302,18 @@ modify_table_styling <- function(x,
       {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
   }
 
-  # indentation ----------------------------------------------------------------
-  if (!is_empty(indentation)) {
-    if (!rlang::is_scalar_integerish(indentation)) {
-      cli::cli_abort("The {.arg indentation} argument must be a scalar integer.")
+  # indent ---------------------------------------------------------------------
+  if (!is_empty(indent)) {
+    if (!is_scalar_integerish(indent) || indent < 0L) {
+      cli::cli_abort("The {.arg indent} argument must be a non-negative scalar integer.")
     }
-    x$table_styling$indentation <-
+    x$table_styling$indent <-
       dplyr::bind_rows(
-        x$table_styling$indentation,
+        x$table_styling$indent,
         dplyr::tibble(
           column = columns,
           rows = list(rows),
-          n_spaces = as.integer(indentation)
+          n_spaces = as.integer(indent)
         )
       )
   }

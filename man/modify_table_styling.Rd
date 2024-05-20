@@ -18,7 +18,7 @@ modify_table_styling(
   fmt_fun = NULL,
   text_format = NULL,
   undo_text_format = NULL,
-  indentation = NULL,
+  indent = NULL,
   text_interpret = c("md", "html"),
   cols_merge_pattern = NULL
 )
@@ -63,7 +63,7 @@ function that formats the statistics in the columns/rows in \code{columns} and \
 String indicated which type of text formatting to apply/remove to the rows and columns.
 Must be one of \code{c("bold", "italic")}.}
 
-\item{indentation}{(\code{integer})\cr
+\item{indent}{(\code{integer})\cr
 An integer indicating how many space to indent text}
 
 \item{text_interpret}{(\code{string})\cr

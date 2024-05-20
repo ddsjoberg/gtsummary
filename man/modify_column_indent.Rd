@@ -4,14 +4,7 @@
 \alias{modify_column_indent}
 \title{Modify column indentation}
 \usage{
-modify_column_indent(
-  x,
-  columns,
-  rows = NULL,
-  indentation = 4L,
-  double_indent = FALSE,
-  undo = FALSE
-)
+modify_column_indent(x, columns, rows = NULL, indent = 4L, double_indent, undo)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -25,7 +18,7 @@ Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
 
-\item{indentation}{(\code{integer})\cr
+\item{indent}{(\code{integer})\cr
 An integer indicating how many space to indent text}
 
 \item{double_indent, undo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
@@ -40,7 +33,12 @@ Add, increase, or reduce indentation for columns.
 # remove indentation from `tbl_summary()`
 trial |>
   tbl_summary(include = grade) |>
-  modify_column_indent(columns = label, indentation = 0L)
+  modify_column_indent(columns = label, indent = 0L)
+
+# increase indentation in `tbl_summary`
+trial |>
+  tbl_summary(include = grade) |>
+  modify_column_indent(columns = label, rows = !row_type \%in\% 'label', indent = 8L)
 }
 \seealso{
 Other Advanced modifiers: 

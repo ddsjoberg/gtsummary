@@ -235,6 +235,6 @@ tbl_regression.default <- function(x,
     modify_table_styling(
       columns = "label",
       rows = .data$row_type %in% c("level", "missing"),
-      indentation = 4
+      indent = 4
     )
 }

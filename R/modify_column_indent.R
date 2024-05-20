@@ -13,9 +13,14 @@
 #' # remove indentation from `tbl_summary()`
 #' trial |>
 #'   tbl_summary(include = grade) |>
-#'   modify_column_indent(columns = label, indentation = 0L)
-modify_column_indent <- function(x, columns, rows = NULL, indentation = 4L,
-                                 double_indent = FALSE, undo = FALSE) {
+#'   modify_column_indent(columns = label, indent = 0L)
+#'
+#' # increase indentation in `tbl_summary`
+#' trial |>
+#'   tbl_summary(include = grade) |>
+#'   modify_column_indent(columns = label, rows = !row_type %in% 'label', indent = 8L)
+modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
+                                 double_indent, undo) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
 
@@ -23,31 +28,34 @@ modify_column_indent <- function(x, columns, rows = NULL, indentation = 4L,
   check_class(x, "gtsummary")
   check_not_missing(x)
   check_not_missing(columns)
-  if (!is_integerish(indentation) || indentation < 0L) {
-    cli::cli_abort(
-      "The {.arg indentation} argument must be a non-negative integer.",
-      call = get_cli_abort_call()
-    )
-  }
 
   # if deprecated arguments passed ---------------------------------------------
   if (!missing(double_indent) || !missing(undo)) {
+    check_pkg_installed("withr", reference_pkg = "gtsummary")
     if (!missing(double_indent)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",
-        what = I("modify_column_indent(double_indent=TRUE)"),
-        with = I("modify_column_indent(indentation=8)")
+        what = I(glue("modify_column_indent(double_indent={double_indent})")),
+        with = I(glue("modify_column_indent(indent={ifelse(double_indent, 8, 4)})"))
       )
-    }
-    if (!missing(undo)) {
+    } else double_indent <- FALSE
+    if (!missing(undo) && isTRUE(undo)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",
-        what = I("modify_column_indent(undo=TRUE)"),
-        with = I("modify_column_indent(indentation=0)")
+        what = I(glue("modify_column_indent(undo=TRUE)")),
+        with = I("modify_column_indent(indent=0)")
       )
     }
+    else if (!missing(undo) && isFALSE(undo)) {
+      lifecycle::deprecate_warn(
+        when = "2.0.0",
+        what = I(glue("modify_column_indent(undo)")),
+        details = "Argument has been ignored."
+      )
+    } else undo <- FALSE
 
     x <-
+      # run without triggering additional deprecation messaging
       withr::with_options(
        new = list(lifecycle_verbosity = "quiet"),
        code =
@@ -67,7 +75,7 @@ modify_column_indent <- function(x, columns, rows = NULL, indentation = 4L,
         x,
         columns = {{ columns }},
         rows = {{ rows }},
-        indentation = indentation
+        indent = indent
       )
   }
 
