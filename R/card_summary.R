@@ -234,7 +234,7 @@ card_summary <- function(cards,
       columns = "label",
       label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
-      indentation = 4L
+      indent = 4L
     ) |>
     # adding the statistic footnote
     modify_table_styling(

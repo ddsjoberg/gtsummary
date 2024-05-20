@@ -20,15 +20,15 @@ test_that("modify_table_styling(undo_text_format=logical()) deprecation", {
         undo_text_format = TRUE
       ) |>
       getElement("table_styling") |>
-      getElement("indentation"),
+      getElement("indent"),
     mtcars |>
       tbl_summary(include = mpg) |>
       modify_table_styling(
         columns = "label",
-        indentation = 0L
+        indent = 0L
       ) |>
       getElement("table_styling") |>
-      getElement("indentation")
+      getElement("indent")
   )
 })
 
@@ -51,15 +51,15 @@ test_that("modify_table_styling(text_format=c('indent', 'indent2')) deprecation"
         text_format = "indent"
       ) |>
       getElement("table_styling") |>
-      getElement("indentation"),
+      getElement("indent"),
     mtcars |>
       tbl_summary(include = mpg) |>
       modify_table_styling(
         columns = "label",
-        indentation = 4L
+        indent = 4L
       ) |>
       getElement("table_styling") |>
-      getElement("indentation")
+      getElement("indent")
   )
 })
 
@@ -265,17 +265,17 @@ test_that("modify_table_styling(undo_text_format)", {
   )
 })
 
-test_that("modify_table_styling(indentation)", {
+test_that("modify_table_styling(indent)", {
   expect_equal(
     trial |>
       tbl_summary(include = grade) |>
       modify_table_styling(
         columns = "label",
         rows = !row_type %in% "label",
-        indentation = 8L
+        indent = 8L
       ) |>
       getElement("table_styling") |>
-      getElement("indentation") |>
+      getElement("indent") |>
       dplyr::filter(.by = "column", column == "label", dplyr::n() == dplyr::row_number()) |>
       dplyr::pull(n_spaces),
     8L
@@ -369,7 +369,7 @@ test_that("modify_table_styling(cols_merge_pattern) messaging", {
     )
 })
 
-test_that("modify_table_styling(indentation) messaging", {
+test_that("modify_table_styling(indent) messaging", {
   expect_snapshot(
     error = TRUE,
     trial |>
@@ -377,7 +377,7 @@ test_that("modify_table_styling(indentation) messaging", {
       modify_table_styling(
         columns = "label",
         rows = !row_type %in% "label",
-        indentation = "not an integer"
+        indent = "not an integer"
       )
   )
 })
@@ -390,7 +390,7 @@ test_that("modify_table_styling(rows) messaging", {
       modify_table_styling(
         columns = "label",
         rows = "not_a_predicate",
-        indentation = 8L
+        indent = 8L
       )
   )
 })

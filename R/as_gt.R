@@ -136,13 +136,13 @@ table_styling_to_gt_calls <- function(x, ...) {
   # indent ---------------------------------------------------------------------
   gt_calls[["indent"]] <-
     map(
-      seq_len(nrow(x$table_styling$indentation)),
+      seq_len(nrow(x$table_styling$indent)),
       ~ expr(gt::text_transform(
         locations = gt::cells_body(
-          columns = !!x$table_styling$indentation$column[[.x]],
-          rows = !!x$table_styling$indentation$row_numbers[[.x]]
+          columns = !!x$table_styling$indent$column[[.x]],
+          rows = !!x$table_styling$indent$row_numbers[[.x]]
         ),
-        fn = function(x) paste0(!!paste(rep_len("\U00A0", x$table_styling$indentation$n_spaces[[.x]]), collapse = ""), x)
+        fn = function(x) paste0(!!paste(rep_len("\U00A0", x$table_styling$indent$n_spaces[[.x]]), collapse = ""), x)
       ))
     )
 

@@ -72,8 +72,8 @@
     dplyr::ungroup()
 
   # indentation ----------------------------------------------------------------
-  x$table_styling$indentation <-
-    x$table_styling$indentation %>%
+  x$table_styling$indent <-
+    x$table_styling$indent %>%
     dplyr::filter(.data$column %in% .cols_to_show(x)) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
