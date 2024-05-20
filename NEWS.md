@@ -56,6 +56,12 @@
 
 * Use of the `vars()` selector was first removed in v1.2.5 (2020-02-11), and the messaging about the deprecation was kicked up in June 2022. This use is now defunct and the function will soon no longer be exported.
 
+* The `as_flextable()` function was deprecated in v1.3.3 (2020-08-11), and has now been fully removed from the package.
+
+* Custom selectors `all_numeric()`, `all_character()`, `all_integer()`, `all_double()`, `all_logical()`, `all_factor()` functions were deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package. These functions were added before the `tidyselect::where()` function was released, which is a replacement for all these functions.
+
+* The `modify_cols_merge()` functions was renamed to `modify_column_merge()` to match the other function names in v1.6.1 (2022-06-22). The deprecation has been upgraded from a warning to an error.
+
 * The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
 
 * Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.

@@ -63,13 +63,20 @@ numeric columns numeric. For the \emph{vast majority} of users,
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-modify_column_merge_ex1 <-
-  trial |>
+trial |>
   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
   add_p(all_continuous() ~ "t.test", pvalue_fun = styfn_pvalue(prepend_p = TRUE)) |>
   modify_fmt_fun(statistic ~ styfn_sigfig()) |>
   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
   modify_header(statistic = "**t-test**")
+
+# Example 2 ----------------------------------
+lm(marker ~ age + grade, trial) |>
+  tbl_regression() |>
+  modify_column_merge(
+    pattern = "{estimate} ({conf.low}, {conf.high})",
+    rows = !is.na(estimate)
+  )
 \dontshow{\}) # examplesIf}
 }
 \seealso{
