@@ -133,7 +133,7 @@ internally with care, and it is \emph{not} recommended for users.
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
 Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
+\code{\link{modify_column_indent}()},
 \code{\link{modify_column_merge}()},
 \code{\link{modify_fmt_fun}()}
 }

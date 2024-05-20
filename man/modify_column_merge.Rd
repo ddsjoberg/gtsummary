@@ -81,7 +81,7 @@ lm(marker ~ age + grade, trial) |>
 }
 \seealso{
 Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
+\code{\link{modify_column_indent}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_styling}()}
 }
