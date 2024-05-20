@@ -25,7 +25,7 @@
       rows = !row_type %in% "label", indent = "not an integer")
     Condition
       Error in `modify_table_styling()`:
-      ! The `indent` argument must be a scalar integer.
+      ! The `indent` argument must be a non-negative scalar integer.
 
 # modify_table_styling(rows) messaging
 
