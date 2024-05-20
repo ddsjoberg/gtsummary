@@ -14,7 +14,7 @@ gtsummary object}
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
-\item{rows}{(predicate \code{expression})
+\item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
@@ -82,7 +82,6 @@ lm(marker ~ age + grade, trial) |>
 \seealso{
 Other Advanced modifiers: 
 \code{\link{modify_column_indent}()},
-\code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

@@ -13,7 +13,7 @@ gtsummary object}
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Selector of columns in \code{x$table_body}}
 
-\item{rows}{(predicate \code{expression})
+\item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
@@ -43,7 +43,6 @@ trial |>
 \seealso{
 Other Advanced modifiers: 
 \code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

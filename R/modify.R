@@ -21,6 +21,7 @@
 #'   The dynamic dots allow syntax like `modify_header(x, !!!list(label = "Variable"))`.
 #'   See examples below.
 #'
+#'   TODO: Add link when the function below is added.
 #'   Use the `show_header_names()` to see the column names that can be modified.
 #' @param abbreviation (scalar `logical`)\cr
 #'   Logical indicating if an abbreviation is being updated.
@@ -273,7 +274,7 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
       "2.0.0", glue("gtsummary::{calling_fun}(update=)"),
       details =
         glue("Use `{calling_fun}(...)` input instead.
-            Dynamic dots allow for syntax like `{calling_fun}(!!!update)`."),
+            Dynamic dots allow for syntax like `{calling_fun}(!!!list(...))`."),
       env = get_cli_abort_call()
     )
     dots <- c(dots, update)

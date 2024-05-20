@@ -33,6 +33,7 @@ formula will invoke tidyselect, e.g. \code{modify_*(all_stat_cols() ~ "**{level}
 The dynamic dots allow syntax like \code{modify_header(x, !!!list(label = "Variable"))}.
 See examples below.
 
+TODO: Add link when the function below is added.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
 \item{text_interpret}{(\code{string})\cr
