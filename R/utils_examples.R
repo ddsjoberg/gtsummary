@@ -3,20 +3,25 @@
 #' This is still experimental. We are planning to potentially expand this to other
 #' html output. Principally based on [as_gt()] and [gt::as_raw_html()].
 #'
-#' @param tbl (`gtsummary` or `html`)\cr tables are converted to html. Any html code (table or not)
-#'   can be saved and retrieved for documentation purposes.
-#' @param example_name (`string`)\cr usually the name of the function or file where the
-#'   table is used.
-#' @param out_var_name (`string`)\cr the name of the variable that will be saved. It defaults
-#'   to the name of the variable passed to the function (`tbl`).
-#' @param method (`string`)\cr saving method. Default is `"rds"` as it produces a smaller file,
-#'   but we are planning to extend this to other, non-html outputs like `"png"`.
+#' @param tbl (`gtsummary` or `html`)\cr
+#'   Tables are converted to html. Any html code (table or not) can be saved and
+#'   retrieved for documentation purposes.
+#' @param example_name (`string`)\cr
+#'   Usually the name of the function or file where the table is used.
+#' @param out_var_name (`string`)\cr
+#'   The name of the variable that will be saved. It defaults to the name of the
+#'   variable passed to the function (`tbl`).
+#' @param decoration_function (`NULL` or `function`)\cr
+#'   Function of the form `function(x) tab_options(x) |> tab_style()` where additional
+#'   specifications can be added to the table before saving it. If `NULL` only a white
+#'   `gt::cell_fill` is used.
 #'
-#' @keywords internal
 #' @name utils_examples
+#' @keywords internal
 write_example_output <- function(tbl,
                                  example_name = "example",
-                                 out_var_name = NULL) {
+                                 out_var_name = NULL,
+                                 decoration_function = NULL) {
   if(is.null(out_var_name)) out_var_name <- deparse(substitute(tbl))
   if (getOption("gtsummary_update_examples", default = FALSE)) {
     if (is(tbl, "gtsummary")) {
@@ -24,8 +29,21 @@ write_example_output <- function(tbl,
         as_gt()
     }
     if (is(tbl, "gt_tbl")) {
+      if (is.null(decoration_function)) {
+        decoration_function <- function(x) {
+          gt::tab_options(x) |>
+            gt::tab_style(
+              style = list(
+                gt::cell_fill(color = "white"),
+                gt::cell_text(color = "black"),
+                gt::cell_borders(color = "lightgrey", sides = c("top", "bottom"))
+              ),
+              locations = gt::cells_body()
+            )
+          }
+      }
       tbl <- tbl |>
-        gt::tab_options() |>
+        decoration_function() |>
         gt::as_raw_html()
     }
     if (!is(tbl, "html")) {

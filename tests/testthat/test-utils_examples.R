@@ -6,9 +6,17 @@ test_that("writing and reading examples work", {
     tbl_summary()
 
   # Direct html
-  html_tbl <- tbl_to_write |>
+  tbl_to_write |>
     as_gt() |>
     gt::tab_options() |>
+    gt::tab_style(
+      style = list(
+        gt::cell_fill(color = "white"),
+        gt::cell_text(color = "black"),
+        gt::cell_borders(color = "lightgrey", sides = c("top", "bottom"))
+      ),
+      locations = gt::cells_body()
+    ) #|>
     gt::as_raw_html()
   write_example_output(html_tbl)
   read_html_tbl <- read_example_output("html_tbl")

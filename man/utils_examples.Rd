@@ -10,7 +10,8 @@
 write_example_output(
   tbl,
   example_name = "example",
-  out_var_name = deparse(substitute(tbl))
+  out_var_name = NULL,
+  decoration_function = NULL
 )
 
 read_example_output(out_var_name, example_name = "example")
@@ -22,17 +23,21 @@ write_read_example_output(
 )
 }
 \arguments{
-\item{tbl}{(\code{gtsummary} or \code{html})\cr tables are converted to html. Any html code (table or not)
-can be saved and retrieved for documentation purposes.}
+\item{tbl}{(\code{gtsummary} or \code{html})\cr
+Tables are converted to html. Any html code (table or not) can be saved and
+retrieved for documentation purposes.}
 
-\item{example_name}{(\code{string})\cr usually the name of the function or file where the
-table is used.}
+\item{example_name}{(\code{string})\cr
+Usually the name of the function or file where the table is used.}
 
-\item{out_var_name}{(\code{string})\cr the name of the variable that will be saved. It defaults
-to the name of the variable passed to the function (\code{tbl}).}
+\item{out_var_name}{(\code{string})\cr
+The name of the variable that will be saved. It defaults to the name of the
+variable passed to the function (\code{tbl}).}
 
-\item{method}{(\code{string})\cr saving method. Default is \code{"rds"} as it produces a smaller file,
-but we are planning to extend this to other, non-html outputs like \code{"png"}.}
+\item{decoration_function}{(\code{NULL} or \code{function})\cr
+Function of the form \code{function(x) tab_options(x) |> tab_style()} where additional
+specifications can be added to the table before saving it. If \code{NULL} only a white
+\code{gt::cell_fill} is used.}
 }
 \description{
 This is still experimental. We are planning to potentially expand this to other

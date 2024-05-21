@@ -150,7 +150,6 @@
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(age = c(0, 1))
 #'   )
-#'   print(getOption("gtsummary_update_examples"))
 #' ```
 #' \if{html}{\out{
 #' ```{r, echo = FALSE, results = 'asis'}
@@ -174,6 +173,7 @@
 #' write_read_example_output(ex3, "tbl_summary")
 #' ```
 #' }}
+#'
 #' @md
 tbl_summary <- function(data,
                         by = NULL,
