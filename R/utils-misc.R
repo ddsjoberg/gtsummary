@@ -13,6 +13,18 @@
   no
 }
 
+case_switch <- function(..., .default = NULL) {
+  dots <- dots_list(...)
+
+  for (f in dots) {
+    if (isTRUE(eval(f_lhs(f), envir = attr(f, ".Environment")))) {
+      return(eval(f_rhs(f), envir = attr(f, ".Environment")))
+    }
+  }
+
+  return(.default)
+}
+
 vec_paste0 <- function(..., collapse = NULL) {
   args <- vctrs::vec_recycle_common(...)
   rlang::inject(paste0(!!!args, collapse = collapse))

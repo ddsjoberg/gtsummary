@@ -1,0 +1,86 @@
+fn,name,argument,desc,example
+add_global_p,add_global_p-str:type,FALSE,set argument default for `add_global_p.tbl_regression(type=)` and `add_global_p.tbl_uvregression(type=)`,"""II"""
+add_global_p,add_global_p-str:type,FALSE,"set argument default for `add_global_p.tbl_regression(type=)` and `add_global_p.tbl_uvregression(type=)`; default is `""III""`","""II"""
+add_p.tbl_cross,add_p.tbl_cross-arg:pvalue_fun,TRUE,,
+add_p.tbl_cross,add_p.tbl_cross-arg:source_note ,TRUE,,
+add_p.tbl_cross,add_p.tbl_cross-arg:test,TRUE,,
+add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""chisq.test"""
+add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.group_by2,FALSE,default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable,"""lme4"""
+add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.low_count,FALSE,default test for categorical/dichotomous variables with minimum expected count <5,"""fisher.test"""
+add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous,FALSE,default test for continuous variables with a 3- or more level by variable,"""aov"""
+add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous.group_by2,FALSE,default test for continuous grouped/correlated variables with a 2-level by variable,"""lme4"""
+add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous_by2,FALSE,default test for continuous variables with a 2-level by variable,"""t.test"""
+add_p.tbl_summary,add_p.tbl_summary-arg:pvalue_fun,TRUE,,
+add_p.tbl_summary,add_p.tbl_summary-arg:test,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""svy.chisq.test"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.continuous,FALSE,default test for continuous variables,"""svy.wilcox.test"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:pvalue_fun,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:test,TRUE,,
+add_q,add_q-arg:method,TRUE,,
+add_q,add_q-arg:pvalue_fun,TRUE,,
+add_stat_label,add_stat_label-arg:location,TRUE,,
+as_flex_table,as_flex_table-lst:addl_cmds,FALSE,"named list of expressions of {flextable} package commands inserted in the `as_flex_table()` call; do not include the `data=` argument; the list of expressions is inserted after the named call, e.g. if the named list element is `""tab_spanner""` the expressions will be inserted after expressions named `""tab_spanner""`; to see the names of the expressions run `as_flex_table(x, return_calls = TRUE)` and check the names.","list(autofit = list(rlang::expr(flextable::font(fontname = ""Bodoni 72"", part = ""all"")), rlang::expr(flextable::fontsize(size = 8, part = ""all""))))"
+as_gt,as_gt-lst:addl_cmds,FALSE,"named list of expressions of {gt} package commands inserted in the `as_gt()` call; do not include the `data=` argument; the list of expressions is inserted after the named call, e.g. if the named list element is `""tab_spanner""` the expressions will be inserted after expressions named `""tab_spanner""`; to see the names of the expressions run `as_gt(x, return_calls = TRUE)` and check the names.",list(tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')))
+as_hux_table,as_hux_table.gtsummary-lst:addl_cmds,FALSE,"named list of expressions of {huxtable} package commands inserted in the `as_hux_table()` call; do not include the `data=` argument; the list of expressions is inserted after the named call, e.g. if the named list element is `""tab_spanner""` the expressions will be inserted after expressions named `""tab_spanner""`; to see the names of the expressions run `as_hux_table(x, return_calls = TRUE)` and check the names.",
+as_kable,as_kable-arg:dots,TRUE,"named list of arguments passed to `knitr::kable()`, which also applies to calls from `as_kable_extra()`","list(booktabs = TRUE, longtable = TRUE, linesep = """")"
+as_kable_extra,as_kable_extra-lst:addl_cmds,FALSE,"named list of expressions of {kableExtra} package commands inserted in the `as_kable_extra()` call; do not include the `data=` argument; the list of expressions is inserted after the named call, e.g. if the named list element is `""tab_spanner""` the expressions will be inserted after expressions named `""tab_spanner""`; to see the names of the expressions run `as_kable_extra(x, return_calls = TRUE)` and check the names.",
+Package-wide,pkgwide-fn:prependpvalue_fun,FALSE,"function to style p-values throughout package that include a ""p"" prefix, e.g. ""p<0.001"" or ""p=0.12""; this is common in the `inline_text()` functions; default is `function(x) style_pvalue(x, prepend_p = TRUE)`","function(x) style_pvalue(x, digits = 2, prepend_p = TRUE)"
+Package-wide,pkgwide-fn:pvalue_fun,FALSE,function to style p-values throughout package; default is `style_pvalue`,"function(x) style_pvalue(x, digits = 2)"
+Package-wide,pkgwide-lgl:quiet,FALSE,logical indicating whether to suppress messages or not; default is `FALSE`,
+Package-wide,pkgwide-str:ci.sep,FALSE,"string indicating separator between upper and lower bounds of confidence intervals. Default is `"", ""`",""" to """
+Package-wide,pkgwide-str:language,FALSE,"string indicating language; default is `""en""`","""es"""
+Package-wide,pkgwide-str:print_engine,FALSE,"string indicating the default print engine; default is `""gt""`","""flextable"""
+Package-wide,pkgwide-str:theme_name,FALSE,optional name of theme; name is printed when theme loaded,"""My Personal Theme"""
+Package-wide,pkgwide-fun:pre_conversion,FALSE,"function that is executed on the gtsummary object before it is converted with `as_gt()`, `as_flex_table()`, etc. Must be a function that can be run on every and any gtsummary object",bold_levels
+style_number,style_number-arg:big.mark,TRUE,,
+style_number,style_number-arg:decimal.mark,TRUE,,
+tbl_regression,tbl_regression-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_regression()` call,bold_labels
+tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"
+tbl_regression,tbl_regression-lst:tidy_plus_plus,FALSE,"Additional `tidy_plus_plus()` arguments. Cannot be one of `model=`, `tidy_fun=`, `exponentiate=`, `variable_labels=`, `show_single_row=`, `intercept=`, `include=`, `conf.level=`, `conf.int=`, or `strict=` as these are controlled by `tbl_regression()`. The default value for the additional arguments is `list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = FALSE)`.","list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = TRUE)"
+tbl_regression,tbl_regression-str:coef_header,FALSE,"string setting the default term for the beta coefficient column header; default is `""Beta""`","ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
+tbl_regression,tbl_regression-str:ref_row_text,FALSE,string indicating the text to print on reference rows (default is an em-dash),"""Reference"""
+tbl_regression,tbl_regression-arg:conf.level,TRUE,,
+tbl_regression,tbl_regression-arg:conf.int,TRUE,,
+tbl_regression,tbl_regression-arg:estimate_fun ,TRUE,,
+tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
+tbl_regression,tbl_regression-arg:add_estimate_to_reference_rows,TRUE,,
+tbl_regression,tbl_regression-arg:tidy_fun ,TRUE,,
+tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column header used in `as_tibble()`, `as_flex_table()`, etc. where row headers are not supported; default is `""**Group**""`","""**Group Status**"""
+tbl_summary,tbl_summary-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_summary()` call,bold_labels
+tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
+tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages; default is `style_percent`,function(x) style_percent(x)
+tbl_summary,tbl_summary-str:categorical_stat,FALSE,"glue string defining the default categorical and dichotomous summary statistics to display; default is `""{n} ({p}%)""`. Also sets default statistic for `tbl_svysummary()`","""{n} / {N} ({p}%)"""
+tbl_summary,tbl_summary-str:continuous_stat,FALSE,"glue string defining the default continuous summary statistics to display; default is `""{median} ({p25}, {p75})""`. Also sets default statistic for `tbl_svysummary()`","""{mean} ({sd})"""
+tbl_summary,tbl_summary-str:default_con_type,FALSE,"string indicating the default summary type for continuous variables; default is `""continuous""`; update to `""continuous2""` for multi-line summaries of continuous variables","""continuous2"""
+tbl_summary,tbl_summary-str:missing_stat,FALSE,"string indicating the statistic(s) to present on the missing row. The default is `""{N_miss}""`. Select among `c(""N_miss"", ""N_obs"", ""p_miss"", ""N_nonmiss"", ""p_nonmiss"")`","""{N_miss} ({p_miss}%)"""
+tbl_summary,tbl_summary-str:header-noby,FALSE,string indicating the statistic header when there is no by variable present,"""N={N}"""
+tbl_summary,tbl_summary-str:header-withby,FALSE,string indicating the statistic header when there is a by variable present,"""**{level}**  \nN={n}"""
+tbl_summary,tbl_summary-arg:digits,TRUE,,
+tbl_summary,tbl_summary-arg:label,TRUE,,
+tbl_summary,tbl_summary-arg:missing,TRUE,,
+tbl_summary,tbl_summary-arg:missing_text,TRUE,,
+tbl_summary,tbl_summary-arg:percent,TRUE,,
+tbl_summary,tbl_summary-arg:sort,TRUE,,
+tbl_summary,tbl_summary-arg:statistic,TRUE,,
+tbl_summary,tbl_summary-arg:type,TRUE,,
+tbl_summary,tbl_summary-arg:value,TRUE,,
+tbl_survfit,tbl_survfit-arg:statistic,TRUE,,
+tbl_svysummary,tbl_svysummary-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_svysummary()` call,bold_labels
+tbl_svysummary,tbl_svysummary-str:header-noby,FALSE,string indicating the statistic header when there is no by variable present,"""N={N}"""
+tbl_svysummary,tbl_svysummary-str:header-withby,FALSE,string indicating the statistic header when there is a by variable present,"""**{level}**  \nN={n}"""
+tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:label,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:missing,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:missing_text,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:percent,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:sort,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:statistic,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:type,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:value,TRUE,,
+add_difference,add_difference-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `add_difference()` call,bold_labels
+tbl_custom_summary,tbl_custom_summary-arg:digits,TRUE,,
+tbl_custom_summary,tbl_custom_summary-arg:label,TRUE,,
+tbl_custom_summary,tbl_custom_summary-arg:missing,TRUE,,
+tbl_custom_summary,tbl_custom_summary-arg:missing_text,TRUE,,
+tbl_custom_summary,tbl_custom_summary-arg:type,TRUE,,
+tbl_custom_summary,tbl_custom_summary-arg:value,TRUE,,

@@ -44,6 +44,10 @@
 
 ### Deprecations 
 
+* The following theme elements have been deprecated and will eventually be removed: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. These theme elements have been removed from the package immediately due to structural changes within the package: `'tbl_summary-str:continuous_sta'`, `'tbl_summary-str:categorical_stat'`.
+
+* The `set_gtsummary_theme(quiet)` argument has been deprecated.
+
 * Arguments `modify_header(quiet)`, `modify_footnote(quiet)`, and  `modify_spanning_header(quiet)` have been deprecated. Verbose messaging is no longer available.
 
 * Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun()` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`
