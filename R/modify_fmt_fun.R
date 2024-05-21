@@ -1,46 +1,52 @@
-#' Modify Formatting Functions
+#' Modify formatting functions
 #'
-#' \lifecycle{maturing}
 #' Use this function to update the way numeric columns and rows of `.$table_body`
 #' are formatted
 #'
-#' @param update list of formulas or a single formula specifying the updated
-#' formatting function.
-#' The LHS specifies the column(s) to be updated,
-#' and the RHS is the updated formatting function.
-#' @param rows predicate expression to select rows in `x$table_body`.
-#' Default is `NULL`. See details below.
+#' @param ... [`dynamic-dots`][rlang::dyn-dots]\cr
+#'   Used to assign updates to formatting functions.
+#'
+#'   Use `modify_fmt_fun(colname = <fmt fn>)` to update a single column. Using a
+#'   formula will invoke tidyselect, e.g. `modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)`.
+#'
+#'   TODO: Add link when the function below is added.
+#'   Use the `show_header_names()` to see the column names that can be modified.
+#' @inheritParams modify
 #' @inheritParams modify_table_styling
 #'
 #' @inheritSection modify_table_styling rows argument
-#' @family Advanced modifiers
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#'
 #' @export
-# #' @examples
-# #' \donttest{
-# #' # Example 1 ----------------------------------
-# #' # show 'grade' p-values to 3 decimal places
-# #' modify_fmt_fun_ex1 <-
-# #'   lm(age ~ marker + grade, trial) %>%
-# #'   tbl_regression() %>%
-# #'   modify_fmt_fun(
-# #'     update = p.value ~ styfn_pvalue(digits = 3),
-# #'     rows = variable == "grade"
-# #'   )
-# #' }
-modify_fmt_fun <- function(x, update, rows = NULL) {
+#' @examples
+#' # Example 1 ----------------------------------
+#' # show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
+#' lm(age ~ marker + grade, trial) |>
+#'   tbl_regression() %>%
+#'   modify_fmt_fun(
+#'     p.value = styfn_pvalue(digits = 3),
+#'     c(estimate, conf.low, conf.high) ~ styfn_sigfig(digits = 4),
+#'     rows = variable == "grade"
+#'   )
+modify_fmt_fun <- function(x, ..., rows = NULL, update, quiet) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
   check_class(x, "gtsummary")
 
-  # converting update arg to a tidyselect list ---------------------------------
+  # process inputs -------------------------------------------------------------
+  dots <- dots_list(...)
+  dots <-
+    .deprecate_modify_update_and_quiet_args(
+      dots = dots, update = update, quiet = quiet, calling_fun = "modify_fmt_fun"
+    )
+
+  # converting dots arg to a tidyselect list -----------------------------------
   cards::process_formula_selectors(
     data = x$table_body,
-    update = update
+    dots = dots
   )
   cards::check_list_elements(
-    x = update,
-    predicate = function(x) is_function(x),
+    x = dots,
+    predicate = \(x) is_function(x),
     error_msg = "The value passed in {.arg {arg_name}} for variable {.val {variable}} must be a function."
   )
 
@@ -48,9 +54,9 @@ modify_fmt_fun <- function(x, update, rows = NULL) {
   x <-
     modify_table_styling(
       x = x,
-      columns = names(update),
+      columns = names(dots),
       rows = {{ rows }},
-      fmt_fun = update
+      fmt_fun = dots
     )
 
   x$call_list <- updated_call_list

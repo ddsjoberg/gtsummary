@@ -274,7 +274,7 @@
     dplyr::filter(FALSE)
 
   # replacing formatting functions for merged columns --------------------------
-  x <- modify_fmt_fun(x, update = inject(!!merging_columns ~ as.character))
+  x <- modify_fmt_fun(x, any_of(merging_columns) ~ as.character)
 
   # return merged gtsummary table ----------------------------------------------
   x

@@ -104,7 +104,7 @@
 #'   ) |>
 #'   add_stat(fns = everything() ~ my_ttest3) |>
 #'   modify_header(statistic = "**t-statistic**", p.value = "**p-value**") |>
-#'   modify_fmt_fun(list(statistic = styfn_sigfig(), p.value = styfn_pvalue(digits = 2)))
+#'   modify_fmt_fun(statistic = styfn_sigfig(), p.value = styfn_pvalue(digits = 2))
 add_stat <- function(x, fns, location = everything() ~ "label") {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_stat = match.call()))

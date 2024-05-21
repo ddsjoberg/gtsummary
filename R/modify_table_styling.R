@@ -14,7 +14,7 @@
 #'   gtsummary object
 #' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Selector of columns in `x$table_body`
-#' @param rows (predicate `expression`)
+#' @param rows (predicate `expression`)\cr
 #'   Predicate expression to select rows in `x$table_body`.
 #'   Can be used to style footnote, formatting functions, missing symbols,
 #'   and text formatting. Default is `NULL`. See details below.
