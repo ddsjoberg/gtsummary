@@ -20,6 +20,18 @@ test_that("modify_fmt_fun() works", {
       unique(),
     list(styfn_pvalue(digits = 3))
   )
+  expect_equal(
+    tbl |>
+      getElement("table_styling") |>
+      getElement("fmt_fun") |>
+      dplyr::filter(column %in% "p.value") |>
+      dplyr::slice_tail(n = 1, by = "column") |>
+      dplyr::pull(rows) |>
+      unique() |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(variable == "grade")
+  )
 
   expect_equal(
     tbl |>
@@ -30,5 +42,17 @@ test_that("modify_fmt_fun() works", {
       dplyr::pull(fmt_fun) |>
       unique(),
     list(styfn_sigfig(digits = 4))
+  )
+  expect_equal(
+    tbl |>
+      getElement("table_styling") |>
+      getElement("fmt_fun") |>
+      dplyr::filter(column %in% c("estimate", "conf.low", "conf.high")) |>
+      dplyr::slice_tail(n = 1, by = "column") |>
+      dplyr::pull(rows) |>
+      unique() |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(variable == "grade")
   )
 })
