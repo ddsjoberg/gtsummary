@@ -277,11 +277,11 @@ tbl_summary <- function(data,
   cards::fill_formula_selectors(
     select_prep(.list2tb(type, "var_type"), data[include]),
     statistic =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
+      get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
+      get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
+      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
   )
 
   # fill each element of digits argument

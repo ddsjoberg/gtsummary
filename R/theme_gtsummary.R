@@ -80,10 +80,18 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "style_number-arg:decimal.mark" = ".",
         "style_number-arg:big.mark" = ",",
         "add_stat_label-arg:location" = "row",
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
-        "tbl_summary-str:categorical_stat" = "{n} ({p})",
+        "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
+                                           all_categorical() ~ "{n} ({p})"),
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
-          add_stat_label(x)
+          add_stat_label(x) |>
+            modify_table_body(
+              \(x) {
+                if ("stat_label" %in% names(x)) {
+                  x$stat_label <- gsub("Q1 \U2013 Q3", "IQR", x = x$stat_label)
+                }
+                x
+              }
+            )
         },
         "add_difference-fn:addnl-fn-to-run" = function(x) {
           # merging coef and CI columns, if error, returning x unaltered
@@ -93,7 +101,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                 paste0(
                   x$table_styling$header |> dplyr::filter(.data$column == "estimate") |> dplyr::pull("label"),
                   " **(**",
-                  x$table_styling$header |> dplyr::filter(.data$column == "ci") |> dplyr::pull("label"),
+                  x$table_styling$header |> dplyr::filter(.data$column == "conf.low") |> dplyr::pull("label"),
                   "**)**"
                 )
 
@@ -107,11 +115,10 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                 paste(collapse = ", ")
               x %>%
                 # merge estimate and CI into one cell
-                modify_table_styling(
-                  columns = "estimate",
+                modify_column_merge(
                   rows = !!expr(.data$variable %in% !!x$table_body$variable &
                                   !is.na(.data$estimate)),
-                  cols_merge_pattern = "{estimate} ({conf.low} to {conf.high})"
+                  pattern = "{estimate} ({conf.low} to {conf.high})"
                 ) |>
                 # update column header
                 modify_header(estimate = new_header_text) |>
@@ -141,12 +148,11 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                 paste(collapse = ", ")
               x %>%
                 # merge estimate and CI into one cell
-                modify_table_styling(
-                  columns = "estimate",
+                modify_column_merge(
                   rows = !!expr(.data$variable %in% !!x$table_body$variable &
                                   !is.na(.data$estimate) &
                                   !.data$reference_row %in% TRUE),
-                  cols_merge_pattern = "{estimate} ({conf.low} to {conf.high})"
+                  pattern = "{estimate} ({conf.low} to {conf.high})"
                 ) |>
                 # update column header
                 modify_header(estimate = new_header_text) |>
@@ -165,9 +171,14 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "pkgwide-fn:prependpvalue_fun" = styfn_pvalue(digits = 2, prepend_p = TRUE),
         "style_number-arg:decimal.mark" = ".",
         "style_number-arg:big.mark" = ",",
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
-        "tbl_summary-str:categorical_stat" = "{n} ({p})",
-        "pkgwide-str:ci.sep" = " to "
+        "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
+                                           all_categorical() ~ "{n} ({p})"),
+        "pkgwide-str:ci.sep" = " to ",
+        "tbl_summary-fn:addnl-fn-to-run" = function(x) {
+          x$table_styling$footnote$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x
+        }
       )
   } else if (journal == "lancet") {
     lst_theme <-
@@ -225,7 +236,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             attributes(p_fmt) <- attributes(x)
             return(p_fmt)
           },
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
+        "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
+                                           all_categorical() ~ "{n} ({p}%)"),
         "style_number-arg:decimal.mark" =
           ifelse(.Platform$OS.type == "windows", special_char$interpunct, "\U00B7"),
         "style_number-arg:big.mark" = "\U2009",
@@ -334,7 +346,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = NULL) {
 #' @export
 theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
                                     set_theme = TRUE) {
-  lst_theme <- list("pkgwide-str:print_engine" = match.arg(print_engine))
+  lst_theme <- list("pkgwide-str:print_engine" = arg_match(print_engine))
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))
@@ -410,7 +422,7 @@ theme_gtsummary_language <- function(language = c(
 theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", set_theme = TRUE) {
   lst_theme <- list(
     "tbl_summary-str:default_con_type" = "continuous2",
-    "tbl_summary-str:continuous_stat" = statistic
+    "tbl_summary-arg:statistic" = list(all_continuous() ~ statistic, all_categorical() ~ "{n} ({p}%)")
   )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)

@@ -128,14 +128,14 @@ with_gtsummary_theme <- function(x, expr,
 
   # on exit, restore theme -----------------------------------------------------
   on.exit(reset_gtsummary_theme(), add = TRUE)
-  on.exit(set_gtsummary_theme(current_theme, quiet = TRUE), add = TRUE)
+  on.exit(set_gtsummary_theme(current_theme), add = TRUE)
 
   # message ignored theme elements ---------------------------------------------
   # TODO: Do we need this messaging? Can we delete?
   .msg_ignored_elements(x, current_theme, msg_ignored_elements)
 
   # add specified theme --------------------------------------------------------
-  set_gtsummary_theme(suppressMessages(x), quiet = TRUE)
+  set_gtsummary_theme(suppressMessages(x))
 
   # evaluate expression
   eval_tidy({{ expr }}, env = env)

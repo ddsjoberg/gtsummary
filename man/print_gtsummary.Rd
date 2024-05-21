@@ -3,9 +3,16 @@
 \name{print_gtsummary}
 \alias{print_gtsummary}
 \alias{print.gtsummary}
+\alias{knit_print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
 \method{print}{gtsummary}(
+  x,
+  print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
+  ...
+)
+
+\method{knit_print}{gtsummary}(
   x,
   print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
   ...

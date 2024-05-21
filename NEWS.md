@@ -2,6 +2,8 @@
 
 ### Overview of Changes
 
+* Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. *Note: There is still one known remaining issue with {gt} and indentation for RTF tables. We leave it to the user to change the printer if using RTF documents, which can be done using `theme_gtsummary_printer()`.*
+
 #### User-facing Updates
 
 * The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
@@ -44,7 +46,11 @@
 
 ### Deprecations 
 
-* The following theme elements have been deprecated and will eventually be removed: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. These theme elements have been removed from the package immediately due to structural changes within the package: `'tbl_summary-str:continuous_sta'`, `'tbl_summary-str:categorical_stat'`.
+* The following theme elements have been deprecated:
+    - These theme elements will eventually be removed from the package: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. 
+      - The `pvalue_fun` elements should switch to the package-wide theme for p-value styling--`'pkgwide-fn:pvalue_fun'`.
+    - These theme elements have been removed from the package immediately due to structural changes within the package: `'tbl_summary-str:continuous_stat'`, `'tbl_summary-str:categorical_stat'`.
+      - The default statistics can still be modified with `'tbl_summary-arg:statistic'`
 
 * The `set_gtsummary_theme(quiet)` argument has been deprecated.
 
