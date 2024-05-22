@@ -18,11 +18,10 @@
 #' @examples
 #' # Example 1 ----------------------------------
 #' trial |>
-#'   dplyr::select(trt, age) |>
 #'   dplyr::mutate(
-#'     age60 = case_when(age < 60 ~ "<60", age >= 60 ~ "60+")
+#'     age60 = ifelse(age < 60, "<60", "60+")
 #'   ) |>
-#'   tbl_summary(by = trt, missing = "no") %>%
+#'   tbl_summary(by = trt, missing = "no", include = c(trt, age, age60)) |>
 #'   remove_row_type(age60, type = "header")
 remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing", "level", "all"),
