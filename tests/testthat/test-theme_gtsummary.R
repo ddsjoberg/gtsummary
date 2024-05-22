@@ -9,6 +9,9 @@
 # TODO: After inline_text() is added: theme_gtsummary_journal(c('jama', 'nejm', 'lancet')) with preprend_p examples
 
 test_that("theme_gtsummary_journal('lancet') works", {
+  # R 4.1 wasn't working with the UTF8 midpoint character, but is working on release (4.4 as of May 2024)
+  skip_if(.Platform$OS.type == "windows" && startsWith(R.version$version.string, "R version 4.1"))
+
   # check that we get
   #  - IQR separated with emdash in table
   #  - pvalues are rounded to 2 places
