@@ -426,6 +426,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("std.error", new_columns),
       hide = TRUE,
       label = "**Standard Error**",
+      fmt_fun = styfn_sigfig(digits = 3),,
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -433,7 +434,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("parameter", new_columns),
       hide = TRUE,
       label = "**Parameter**",
-      fmt_fun = styfn_sigfig(),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -441,7 +442,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("statistic", new_columns),
       hide = TRUE,
       label = "**Statistic**",
-      fmt_fun = styfn_sigfig(),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(

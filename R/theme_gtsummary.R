@@ -241,7 +241,12 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "style_number-arg:decimal.mark" =
           ifelse(.Platform$OS.type == "windows", special_char$interpunct, "\U00B7"),
         "style_number-arg:big.mark" = "\U2009",
-        "pkgwide-str:ci.sep" = " to "
+        "pkgwide-str:ci.sep" = " to ",
+        "tbl_summary-fn:addnl-fn-to-run" = function(x) {
+          x$table_styling$footnote$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x
+        }
       )
   } else if (journal == "qjecon") {
     lst_theme <-
