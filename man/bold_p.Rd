@@ -15,7 +15,7 @@ Threshold below which values will be bold. Default is 0.05.}
 
 \item{q}{(scalar \code{logical})\cr
 When \code{TRUE} will bold the q-value column rather
-than the p-values. Default is \code{FALSE}.}
+than the p-value. Default is \code{FALSE}.}
 }
 \description{
 Bold values below a chosen threshold (e.g. <0.05)
