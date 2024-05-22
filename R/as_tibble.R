@@ -128,7 +128,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
       seq_len(nrow(df_bold)),
       ~ expr(dplyr::mutate_at(
         gt::vars(!!!syms(df_bold$column[[.x]])),
-        ~ ifelse(row_number() %in% !!df_bold$row_numbers[[.x]],
+        ~ ifelse(dplyr::row_number() %in% !!df_bold$row_numbers[[.x]],
           paste0("__", ., "__"), .
         )
       ))
