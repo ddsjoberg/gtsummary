@@ -104,7 +104,7 @@
 #' statistic, e.g. `list(sd = styfn_number(digits=1))`.
 #'
 #' @section type and value arguments:
-#' There are four summary types:
+#' There are four summary types. Use the `type` argument to change the default summary types.
 #'    - `"continuous"` summaries are shown on a *single row*. Most numeric
 #'    variables default to summary type continuous.
 #'    - `"continuous2"` summaries are shown on *2 or more rows*
@@ -394,7 +394,7 @@ tbl_summary <- function(data,
       columns = "label",
       label = "**Characteristic**",
       rows = .data$row_type %in% c("level", "missing"),
-      indentation = 4L
+      indent = 4L
     ) |>
     # adding the statistic footnote
     modify_table_styling(
@@ -481,11 +481,9 @@ tbl_summary <- function(data,
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
-          {
-            stats::setNames(as.list(.$stat_label), .$stat_name)
-          } |>
+          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>
@@ -493,11 +491,7 @@ tbl_summary <- function(data,
     compact() |>
     unlist() |>
     unique() %>%
-    {
-      switch(!is.null(.),
-        paste(., collapse = "; ")
-      )
-    }
+    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
 }
 
 

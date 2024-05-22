@@ -1,10 +1,7 @@
 #' Default Statistics Labels
 #'
 #' @return named list
-#' @export
-#'
-#' @examples
-#' default_stat_labels()
+#' @keywords internal
 default_stat_labels <- function() {
   list(
     # standard summary stat labels

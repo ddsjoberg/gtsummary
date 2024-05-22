@@ -75,7 +75,7 @@ A \code{tbl_regression} object
 }
 \description{
 This function takes a regression model object and returns a formatted table
-that is publication-ready. The function is highly customizable
+that is publication-ready. The function is customizable
 allowing the user to create bespoke regression model summary tables.
 Review the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{\code{tbl_regression()} vignette}
@@ -87,7 +87,7 @@ for detailed examples.
 The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
 to perform the initial tidying of the model object. There are, however,
 a few models that use \verb{[modifications][tbl_regression_methods]}.
-TODO: Added the tbl_regression_methods help mentioned file above.
+TODO: Re-add link to tbl_regression_methods above.
 \itemize{
 \item \code{"parsnip/workflows"}: If the model was prepared using parsnip/workflows,
 the original model fit is extracted and the original \verb{x=} argument
@@ -97,7 +97,6 @@ fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
-\item \code{"tidycrr"}: Uses the tidier \code{tidycmprsk::tidy()} to print the model terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.

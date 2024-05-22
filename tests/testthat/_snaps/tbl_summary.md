@@ -231,11 +231,11 @@
       # A tibble: 9 x 4
         variable var_type    row_type label               
         <chr>    <chr>       <chr>    <chr>               
-      1 age      continuous  header   Age                 
-      2 marker   continuous2 header   Marker Level (ng/mL)
+      1 age      continuous  label    Age                 
+      2 marker   continuous2 label    Marker Level (ng/mL)
       3 marker   continuous2 level    Median (Q1, Q3)     
-      4 response dichotomous header   Tumor Response      
-      5 stage    categorical header   T Stage             
+      4 response dichotomous label    Tumor Response      
+      5 stage    categorical label    T Stage             
       6 stage    categorical level    T1                  
       7 stage    categorical level    T2                  
       8 stage    categorical level    T3                  

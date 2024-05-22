@@ -87,8 +87,9 @@ table_styling_to_gt_calls <- function(x, ...) {
   caption <-
     switch(!is.null(x$table_styling$caption),
       rlang::call2(
-        attr(x$table_styling$caption, "text_interpret"),
-        x$table_styling$caption
+        .fn = attr(x$table_styling$caption, "text_interpret"),
+        x$table_styling$caption,
+        .ns = "gt"
       )
     )
   gt_calls[["gt"]] <-
@@ -135,13 +136,13 @@ table_styling_to_gt_calls <- function(x, ...) {
   # indent ---------------------------------------------------------------------
   gt_calls[["indent"]] <-
     map(
-      seq_len(nrow(x$table_styling$indentation)),
+      seq_len(nrow(x$table_styling$indent)),
       ~ expr(gt::text_transform(
         locations = gt::cells_body(
-          columns = !!x$table_styling$indentation$column[[.x]],
-          rows = !!x$table_styling$indentation$row_numbers[[.x]]
+          columns = !!x$table_styling$indent$column[[.x]],
+          rows = !!x$table_styling$indent$row_numbers[[.x]]
         ),
-        fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0", x)
+        fn = function(x) paste0(!!paste(rep_len("\U00A0", x$table_styling$indent$n_spaces[[.x]]), collapse = ""), x)
       ))
     )
 

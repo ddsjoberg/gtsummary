@@ -34,7 +34,7 @@ construct_initial_table_styling <- function(x) {
       format_type = character(), undo_text_format = logical()
     )
 
-  x$table_styling$indentation <-
+  x$table_styling$indent <-
     # if there is a label column, make it
     if ("label" %in% x$table_styling$header$column) {
       dplyr::tibble(
