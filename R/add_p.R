@@ -126,7 +126,11 @@ add_p.tbl_summary <- function(x,
 
   cards::process_formula_selectors(
     select_prep(x$table_body, x$inputs$data[include]),
-    test = test,
+    test =
+      case_switch(
+        missing(test) ~ get_theme_element("add_p.tbl_summary-arg:test", default = test),
+        .default = test
+      ),
     include_env = TRUE
   )
   # add the calling env to the test
@@ -143,7 +147,7 @@ add_p.tbl_summary <- function(x,
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
   if (missing(pvalue_fun)) {
     pvalue_fun <-
-      get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
+      get_deprecated_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
       get_theme_element("pkgwide-fn:pvalue_fun") %||%
       pvalue_fun
   }
@@ -211,6 +215,11 @@ add_p.tbl_summary <- function(x,
 
   # update call list
   x$call_list <- updated_call_list
+
+  # running any additional mods
+  x <-
+    get_theme_element("add_p-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 
   x
 }
@@ -417,6 +426,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("std.error", new_columns),
       hide = TRUE,
       label = "**Standard Error**",
+      fmt_fun = styfn_sigfig(digits = 3),,
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -424,7 +434,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("parameter", new_columns),
       hide = TRUE,
       label = "**Parameter**",
-      fmt_fun = styfn_sigfig(),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -432,7 +442,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("statistic", new_columns),
       hide = TRUE,
       label = "**Statistic**",
-      fmt_fun = styfn_sigfig(),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -448,7 +458,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     x <-
       modify_column_merge(
         x,
-        pattern = "{conf.low}, {conf.high}",
+        pattern = paste("{conf.low}", "{conf.high}", sep = get_theme_element("pkgwide-str:ci.sep", default = ", ")),
         rows = !is.na(.data$conf.low)
       )
   }

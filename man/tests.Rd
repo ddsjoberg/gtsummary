@@ -87,10 +87,10 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{'prop.test'} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \tab  \cr
    \code{'ancova'} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \tab  \cr
    \code{'ancova_lme4'} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \tab  \cr
-   \code{'cohens_d'} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \tab  \cr
-   \code{'hedges_g'} \tab Hedge's G \tab standardized mean difference \tab \code{effectsize::hedges_g(variable ~ by, data, ci = conf.level, ...)} \tab  \cr
-   \code{'paired_cohens_d'} \tab Paired Cohen's D \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::cohens_d(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \tab  \cr
-   \code{'paired_hedges_g'} \tab Paired Hedge's G \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::hedges_g(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \tab  \cr
+   \code{'cohens_d'} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, verbose = FALSE, ...)} \tab  \cr
+   \code{'hedges_g'} \tab Hedge's G \tab standardized mean difference \tab \code{effectsize::hedges_g(variable ~ by, data, ci = conf.level, verbose = FALSE, ...)} \tab  \cr
+   \code{'paired_cohens_d'} \tab Paired Cohen's D \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::cohens_d(by_1, by_2, paired = TRUE, conf.level = 0.95, verbose = FALSE, ...)} \tab  \cr
+   \code{'paired_hedges_g'} \tab Paired Hedge's G \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::hedges_g(by_1, by_2, paired = TRUE, conf.level = 0.95, verbose = FALSE, ...)} \tab  \cr
    \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)} \tab  \cr
    \code{'emmeans'} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
 }

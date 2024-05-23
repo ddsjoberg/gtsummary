@@ -115,7 +115,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("conf.low"),
-      label = glue("**{style_percent(conf.level, symbol = TRUE)} {translate_text('CI')}**") |> as.character(),
+      label = glue("**{style_number(conf.level*100,)}% {translate_text('CI')}**") |> as.character(),
       hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
       footnote_abbrev =
         ifelse(

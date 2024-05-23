@@ -85,7 +85,6 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         data = x$inputs$data,
         variables = x$inputs$include,
         by = character(0L),
-        # TODO: Utilize themes to change the default formatting types
         fmt_fn = ~ list(
           starts_with("N_") ~ styfn_number(),
           starts_with("p_") ~ styfn_percent()
