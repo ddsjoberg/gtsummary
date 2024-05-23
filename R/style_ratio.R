@@ -26,7 +26,7 @@ style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...
   set_cli_abort_call()
   x_fmt <-
     dplyr::case_when(
-      round2(abs(x), digits = digits) < 1 ~
+      cards::round5(abs(x), digits = digits) < 1 ~
         style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
       x > 0 ~
         style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),

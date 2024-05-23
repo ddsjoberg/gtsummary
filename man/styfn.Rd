@@ -48,7 +48,6 @@ my_style(3.14)
 }
 \seealso{
 Other style tools: 
-\code{\link{style_number}()},
 \code{\link{style_percent}()},
 \code{\link{style_pvalue}()},
 \code{\link{style_ratio}()},

@@ -22,14 +22,16 @@ Default is 1.}
 \item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
 Default is \code{FALSE}}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{...}{Other arguments passed on to \code{base::format()}}
+\item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled p-values
@@ -50,7 +52,6 @@ See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summ
 
 Other style tools: 
 \code{\link{styfn}},
-\code{\link{style_number}()},
 \code{\link{style_percent}()},
 \code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}

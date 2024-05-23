@@ -8,8 +8,8 @@ style_percent(
   x,
   symbol = FALSE,
   digits = 0,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 }
@@ -23,14 +23,16 @@ Default is \code{FALSE}.}
 Smaller percentages are rounded to \code{digits + 1} places.
 Default is \code{0}}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{...}{Other arguments passed on to \code{base::format()}}
+\item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled percentages
@@ -48,7 +50,6 @@ See Table Gallery \href{https://www.danieldsjoberg.com/gtsummary/articles/galler
 
 Other style tools: 
 \code{\link{styfn}},
-\code{\link{style_number}()},
 \code{\link{style_pvalue}()},
 \code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}

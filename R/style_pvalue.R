@@ -32,11 +32,11 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           x = 0.9, digits = 1, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         )),
-        round2(x, 1) >= 0.2 ~ style_number(x,
+        cards::round5(x, 1) >= 0.2 ~ style_number(x,
           digits = 1, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         ),
-        round2(x, 2) >= 0.1 ~ style_number(x,
+        cards::round5(x, 2) >= 0.1 ~ style_number(x,
           digits = 2, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         ),
@@ -60,7 +60,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           x = 0.99, digits = 2, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         )),
-        round2(x, 2) >= 0.1 ~ style_number(x,
+        cards::round5(x, 2) >= 0.1 ~ style_number(x,
           digits = 2, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         ),
