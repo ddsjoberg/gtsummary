@@ -213,5 +213,10 @@ add_difference.tbl_summary <- function(x,
   # update call list
   x$call_list <- updated_call_list
 
+  # running any additional mods
+  x <-
+    get_theme_element("add_difference-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
+
   x
 }

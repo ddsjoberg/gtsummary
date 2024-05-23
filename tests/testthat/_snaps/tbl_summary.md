@@ -312,7 +312,7 @@
       tbl_summary(trial, include = response, missing_text = letters)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_text` argument must be length 1.
+      ! The `missing_text` argument must be a string, not a character vector.
 
 ---
 
@@ -320,7 +320,7 @@
       tbl_summary(trial, include = response, missing_text = 10L)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_text` argument must be class <character>, not an integer.
+      ! The `missing_text` argument must be a string, not an integer.
 
 # tbl_summary(missing_stat)
 
@@ -328,7 +328,7 @@
       tbl_summary(trial, include = response, missing_stat = letters)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_stat` argument must be length 1.
+      ! The `missing_stat` argument must be a string, not a character vector.
 
 ---
 
@@ -336,7 +336,7 @@
       tbl_summary(trial, include = response, missing_stat = 10L)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_stat` argument must be class <character>, not an integer.
+      ! The `missing_stat` argument must be a string, not an integer.
 
 # tbl_summary(sort) errors properly
 

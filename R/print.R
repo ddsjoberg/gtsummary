@@ -14,20 +14,53 @@ NULL
 print.gtsummary <- function(x,
                             print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
                             ...) {
-  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
+  set_cli_abort_call()
+  check_dots_empty()
   print_engine <-
-    if (missing(print_engine)) get_theme_element("pkgwide-str:print_engine") %||% print_engine else print_engine
-  print_engine <- arg_match(print_engine)
+    case_switch(
+      missing(print_engine) ~ get_theme_element("pkgwide-str:print_engine", default = print_engine),
+      .default = print_engine
+    )
+  print_engine <- arg_match(print_engine, values = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"))
 
   # printing results
-  switch(print_engine,
-    "gt" = as_gt(x)
-    # ,
+  res <- switch(
+    print_engine,
+    "gt" = as_gt(x),
     # "kable" = as_kable(x),
     # "flextable" = as_flex_table(x),
     # "kable_extra" = as_kable_extra(x),
     # "huxtable" = as_hux_table(x),
-    # "tibble" = as_tibble(x)
-  ) %>%
-    print()
+    "tibble" = as_tibble(x)
+  )
+
+  print(res)
+  invisible(res)
+}
+
+#' @rdname print_gtsummary
+#' @exportS3Method knitr::knit_print
+knit_print.gtsummary <- function(x,
+                                 print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"), ...) {
+  set_cli_abort_call()
+
+  print_engine <-
+    case_switch(
+      missing(print_engine) ~ get_theme_element("pkgwide-str:print_engine", default = print_engine),
+      .default = print_engine
+    )
+  print_engine <- arg_match(print_engine, values = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"))
+
+  # printing results
+  res <- switch(
+    print_engine,
+    "gt" = as_gt(x),
+    # "kable" = as_kable(x),
+    # "flextable" = as_flex_table(x),
+    # "kable_extra" = as_kable_extra(x),
+    # "huxtable" = as_hux_table(x),
+    "tibble" = as_tibble(x)
+  )
+
+  knitr::knit_print(res)
 }

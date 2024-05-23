@@ -1,5 +1,5 @@
 # internal data ----------------------------------------------------------------
-# df_theme_elements <- readr::read_csv("data-raw/gtsummary_theme_elements.csv")
+df_theme_elements <- readr::read_csv("data-raw/gtsummary_theme_elements.csv")
 
 df_add_p_tests <-
   readr::read_csv("data-raw/gtsummary_tests.csv") |>
@@ -20,7 +20,7 @@ special_char <- list()
 special_char$interpunct <- "·"
 
 usethis::use_data(
-  # df_theme_elements,
+  df_theme_elements,
   # df_translations,
   special_char,
   df_add_p_tests,
