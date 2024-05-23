@@ -1,6 +1,6 @@
 #' Add N to regression table
 #'
-#' @param x (`tbl_regression`\`tbl_uvregression`)\cr
+#' @param x (`tbl_regression`/`tbl_uvregression`)\cr
 #'   a `tbl_regression` or `tbl_uvregression` table
 #' @param location (`character`)\cr
 #'   location to place Ns. Select one or more of `c('label', 'level')`.
@@ -12,7 +12,7 @@
 #'   row for continuous.
 #' @inheritParams rlang::args_dots_empty
 #'
-#' @name add_n.tbl_regression
+#' @name add_n_regression
 #' @examples
 #' # TODO: Re-add after tbl_uvregression() is added
 #' # # Example 1 ----------------------------------
@@ -28,12 +28,12 @@
 #' #   add_n(location = "label")
 #'
 #' # Example 2 ----------------------------------
-#' glm(response ~ age + grade, trial, family = binomial) %>%
-#'   tbl_regression(exponentiate = TRUE) %>%
+#' glm(response ~ age + grade, trial, family = binomial) |>
+#'   tbl_regression(exponentiate = TRUE) |>
 #'   add_n(location = "level")
 NULL
 
-#' @rdname add_n.tbl_regression
+#' @rdname add_n_regression
 #' @export
 add_n.tbl_regression <- function(x, location = "label", ...) {
   set_cli_abort_call()

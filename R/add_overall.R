@@ -22,7 +22,7 @@ add_overall <- function(x, ...) {
 #' created by `tbl_summary`, `tbl_svysummary`, `tbl_continuous` or
 #' `tbl_custom_summary`.
 #'
-#' @param x (`tbl_summary`\`tbl_svysummary`\`tbl_continuous`\`tbl_custom_summary`)\cr
+#' @param x (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`/`tbl_custom_summary`)\cr
 #'   A stratified 'gtsummary' table
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
@@ -74,7 +74,7 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
-    paste0("**", translate_text("Overall"), "**  \nN = {N}")
+    paste0("**", translate_string("Overall"), "**  \nN = {N}")
   }
 
   add_overall_generic(

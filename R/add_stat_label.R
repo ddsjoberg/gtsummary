@@ -203,7 +203,7 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
     modify_table_styling(
       columns = "stat_label",
       hide = location %in% "row",
-      label = paste0("**", translate_text("Statistic"), "**")
+      label = paste0("**", translate_string("Statistic"), "**")
     ) |>
     # removing stat footnote, since it's in the table now
     modify_table_styling(

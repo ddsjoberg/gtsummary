@@ -17,8 +17,32 @@ add_nevent <- function(x, ...) {
 }
 
 
+#' Add event N
+#'
+#' @inheritParams add_n_regression
+#' @name add_nevent_regression
+#'
+#' @examples
+#' # TODO: Re-add after tbl_uvregression() is migrated
+#' # Example 1 ----------------------------------
+#' # add_nevent.tbl_regression_ex1 <-
+#' #   trial %>%
+#' #   select(response, trt, grade) %>%
+#' #   tbl_uvregression(
+#' #     y = response,
+#' #     method = glm,
+#' #     method.args = list(family = binomial),
+#' #   ) %>%
+#' #   add_nevent()
+#'
+#' # Example 2 ----------------------------------
+#' glm(response ~ age + grade, trial, family = binomial) |>
+#'   tbl_regression(exponentiate = TRUE) |>
+#'   add_nevent(location = "level")
+NULL
+
+#' @rdname add_nevent_regression
 #' @export
-#' @rdname add_nevent
 add_nevent.tbl_regression <- function(x, location = "label", ...) {
   set_cli_abort_call()
   check_dots_empty()

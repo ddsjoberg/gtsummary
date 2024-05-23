@@ -193,9 +193,11 @@ tbl_summary <- function(data,
     missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
   missing <- arg_match(missing, values = c("ifany", "no", "always"))
 
-  if (missing(missing_text))
-    missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = missing_text) # styler: off
+  if (missing(missing_text)) {
+    missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
+  }
   check_string(missing_text)
+
 
   if (missing(percent))
     percent <- get_theme_element("tbl_summary-arg:percent", default = percent) # styler: off
@@ -367,6 +369,9 @@ tbl_summary <- function(data,
   # check the requested stats are present in ARD data frame
   .check_stats_available(cards = cards, statistic = statistic)
 
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_summary(
@@ -393,7 +398,7 @@ tbl_summary <- function(data,
     # add header to label column and add default indentation
     modify_table_styling(
       columns = "label",
-      label = "**Characteristic**",
+      label = glue("**{translate_string('Characteristic')}**"),
       rows = .data$row_type %in% c("level", "missing"),
       indent = 4L
     ) |>
