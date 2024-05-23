@@ -120,7 +120,7 @@ add_ci.tbl_summary <- function(x,
   )
 
   cards::process_formula_selectors(
-    x = select_prep(x$table_body |> filter(.data$variable %in% .env$include)),
+    x = select_prep(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
     method = method,
     statistic = statistic,
     style_fun = style_fun
@@ -137,6 +137,14 @@ add_ci.tbl_summary <- function(x,
            requested; however, the primary table does not contain a mean."
         )
       }
+    }
+  )
+
+  # calculate the ARDs ---------------------------------------------------------
+  map(
+    include,
+    function(variable) {
+
     }
   )
 }
