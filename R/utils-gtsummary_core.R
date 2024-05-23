@@ -1,4 +1,3 @@
-get_theme_element <- function(..., default = NULL) default
 
 construct_initial_table_styling <- function(x) {
   # table_styling --------------------------------------------------------------
