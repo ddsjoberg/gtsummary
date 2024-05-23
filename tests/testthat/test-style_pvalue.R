@@ -39,8 +39,15 @@ test_that("style_pvalue() works", {
 })
 
 
-test_that("NA, <0, and >1 returns NA", {
+test_that("style_pvalue() works NA, <0, and >1 returns NA", {
   expect_true(is.na(style_pvalue(NA)))
   expect_true(is.na(style_pvalue(-1)))
   expect_true(is.na(style_pvalue(2)))
+})
+
+test_that("style_pvalue() messaging", {
+  expect_snapshot(
+    error = TRUE,
+    style_pvalue(0.05, digits = 8)
+  )
 })
