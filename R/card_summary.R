@@ -66,6 +66,11 @@ card_summary <- function(cards,
   check_class(cards, "card")
   missing <- arg_match(missing)
 
+  if (missing(missing_text)) {
+    missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
+  }
+  check_string(missing_text)
+
   # check structure of ARD input -----------------------------------------------
   # TODO: What other checks should we add?
   if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
@@ -206,6 +211,9 @@ card_summary <- function(cards,
   card_summary_inputs <- as.list(environment())[names(formals(card_summary))]
   call <- match.call()
 
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
   # construct initial card_summary object --------------------------------------
   x <-
     brdg_summary(
@@ -232,7 +240,7 @@ card_summary <- function(cards,
     # add header to label column and add default indentation
     modify_table_styling(
       columns = "label",
-      label = "**Characteristic**",
+      label = glue("**{translate_string('Characteristic')}**"),
       rows = .data$row_type %in% c("level", "missing"),
       indent = 4L
     ) |>

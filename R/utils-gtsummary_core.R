@@ -1,4 +1,3 @@
-translate_text <- function(x, ...) x
 
 construct_initial_table_styling <- function(x) {
   # table_styling --------------------------------------------------------------

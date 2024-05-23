@@ -76,7 +76,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("label"),
-      label = paste0("**", translate_text("Characteristic"), "**"),
+      label = paste0("**", translate_string("Characteristic"), "**"),
       hide = FALSE
     )
 
@@ -102,7 +102,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("N"),
-      label = glue("**{translate_text('N')}**") %>% as.character(),
+      label = glue("**{translate_string('N')}**") %>% as.character(),
       fmt_fun = styfn_number()
     ) |>
     modify_table_styling(
@@ -115,13 +115,13 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("conf.low"),
-      label = glue("**{style_number(conf.level*100,)}% {translate_text('CI')}**") |> as.character(),
+      label = glue("**{style_number(conf.level*100,)}% {translate_string('CI')}**") |> as.character(),
       hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
       footnote_abbrev =
         ifelse(
           inherits(x$inputs$x, c("stanreg", "stanfit", "brmsfit", "rjags")),
-          translate_text("CI = Credible Interval"),
-          translate_text("CI = Confidence Interval")
+          translate_string("CI = Credible Interval"),
+          translate_string("CI = Confidence Interval")
         )
     ) |>
     modify_table_styling(
@@ -146,7 +146,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   x <- modify_table_styling(
     x,
     columns = any_of("p.value"),
-    label = paste0("**", translate_text("p-value"), "**"),
+    label = paste0("**", translate_string("p-value"), "**"),
     fmt_fun = pvalue_fun,
     hide = !"p.value" %in% tidy_columns_to_report
   )
@@ -156,8 +156,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("std.error"),
-      label = paste0("**", translate_text("SE"), "**"),
-      footnote_abbrev = translate_text("SE = Standard Error"),
+      label = paste0("**", translate_string("SE"), "**"),
+      footnote_abbrev = translate_string("SE = Standard Error"),
       fmt_fun = styfn_sigfig(digits = 3),
       hide = !"std.error" %in% tidy_columns_to_report
     ) |>
@@ -172,7 +172,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("statistic"),
-      label = paste0("**", translate_text("Statistic"), "**"),
+      label = paste0("**", translate_string("Statistic"), "**"),
       fmt_fun = styfn_sigfig(digits = 3),
       hide = !"statistic" %in% tidy_columns_to_report
     ) |>
@@ -221,8 +221,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       result$label %in% c("RR", "log(RR)") ~ "RR = Relative Risk",
       result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
     ) %>%
-    translate_text(language) %>%
+    translate_string(language) %>%
     {switch(!is.na(.), .)} # styler: off
-  result$label <- translate_text(result$label, language)
+  result$label <- translate_string(result$label, language)
   result
 }

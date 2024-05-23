@@ -48,7 +48,7 @@ For example, add an argument for all t-tests, use
 Variables to include in adjusted calculations (e.g. in ANCOVA models).
 Default is \code{NULL}.}
 
-\item{...}{Not used}
+\item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}
@@ -98,14 +98,12 @@ and \code{"fisher.test"} for categorical variables with any expected cell count 
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_p_ex1 <-
-  trial |>
+trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   add_p()
 
 # Example 2 ----------------------------------
-add_p_ex2 <-
-  trial \%>\%
+trial |>
   select(trt, age, marker) |>
   tbl_summary(by = trt, missing = "no") |>
   add_p(
