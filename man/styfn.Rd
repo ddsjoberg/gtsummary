@@ -9,25 +9,42 @@
 \alias{styfn_percent}
 \title{Style Functions}
 \usage{
-styfn_number(digits = 0, big.mark = NULL, decimal.mark = NULL, scale = 1, ...)
+styfn_number(
+  digits = 0,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
+  scale = 1,
+  ...
+)
 
-styfn_sigfig(digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...)
+styfn_sigfig(
+  digits = 2,
+  scale = 1,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
+  ...
+)
 
 styfn_pvalue(
   digits = 1,
   prepend_p = FALSE,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 
-styfn_ratio(digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
+styfn_ratio(
+  digits = 2,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
+  ...
+)
 
 styfn_percent(
   symbol = FALSE,
   digits = 0,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 }
@@ -48,9 +65,6 @@ my_style(3.14)
 }
 \seealso{
 Other style tools: 
-\code{\link{style_percent}()},
-\code{\link{style_pvalue}()},
-\code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}
 }
 \concept{style tools}

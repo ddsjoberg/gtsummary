@@ -33,13 +33,11 @@ style_number <- function(x,
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
     decimal.mark <-
-      get_theme_element("style_number-arg:decimal.mark",
-                        default = decimal.mark)
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark",
-                        default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
   }
 
   digits <- rep(digits, length.out = length(x))

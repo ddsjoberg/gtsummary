@@ -1,15 +1,18 @@
 #' Style p-values
 #'
-#' @param x Numeric vector of p-values.
-#' @param digits Number of digits large p-values are rounded. Must be 1, 2, or 3.
-#' Default is 1.
-#' @param prepend_p Logical. Should 'p=' be prepended to formatted p-value.
-#' Default is `FALSE`
+#' @param x (`numeric`)\cr
+#'   Numeric vector of p-values.
+#' @param digits (`integer`)\cr
+#'   Number of digits large p-values are rounded. Must be 1, 2, or 3.
+#'   Default is 1.
+#' @param prepend_p (scalar `logical`)\cr
+#'   Logical. Should 'p=' be prepended to formatted p-value.
+#'   Default is `FALSE`
 #' @inheritParams style_number
+#'
 #' @export
 #' @return A character vector of styled p-values
-#' @family style tools
-#' @seealso See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+#'
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
@@ -18,9 +21,24 @@
 #' )
 #' style_pvalue(pvals)
 #' style_pvalue(pvals, digits = 2, prepend_p = TRUE)
-style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
-                         big.mark = NULL, decimal.mark = NULL, ...) {
+style_pvalue <- function(x,
+                         digits = 1,
+                         prepend_p = FALSE,
+                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         decimal.mark = getOption("OutDec"),
+                         ...) {
   set_cli_abort_call()
+
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   # rounding large p-values to 1 digits
   if (digits == 1) {
     p_fmt <-
@@ -33,16 +51,16 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           decimal.mark = decimal.mark, ...
         )),
         cards::round5(x, 1) >= 0.2 ~ style_number(x,
-          digits = 1, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                                  digits = 1, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
         cards::round5(x, 2) >= 0.1 ~ style_number(x,
-          digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                                  digits = 2, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -61,12 +79,12 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           decimal.mark = decimal.mark, ...
         )),
         cards::round5(x, 2) >= 0.1 ~ style_number(x,
-          digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                                  digits = 2, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -86,8 +104,8 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           decimal.mark = decimal.mark, ...
         )),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -95,7 +113,10 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
         ))
       )
   } else {
-    stop("The `digits=` argument must be 1, 2, or 3.")
+    cli::cli_abort(
+      "The {.arg digits} argument must be one of {.val {1:3}}.",
+      call = get_cli_abort_call()
+    )
   }
 
   # prepending a p = in front of value

@@ -31,8 +31,24 @@
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
-style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
+style_sigfig <- function(x,
+                         digits = 2,
+                         scale = 1,
+                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         decimal.mark = getOption("OutDec"),
+                         ...) {
   set_cli_abort_call()
+
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   # calculating the number of digits to round number
   d <-
     paste0(

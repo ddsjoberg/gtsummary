@@ -7,10 +7,10 @@
 #' @param symbol Logical indicator to include percent symbol in output.
 #' Default is `FALSE`.
 #' @inheritParams style_number
+#'
 #' @export
 #' @return A character vector of styled percentages
-#' @family style tools
-#' @seealso See Table Gallery \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
+#'
 #' @author Daniel D. Sjoberg
 #' @examples
 #' percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
@@ -23,6 +23,17 @@ style_percent <- function(x,
                           decimal.mark = getOption("OutDec"),
                           ...) {
   set_cli_abort_call()
+
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   y <- dplyr::case_when(
     x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
     x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),

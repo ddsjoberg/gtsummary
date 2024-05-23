@@ -8,18 +8,21 @@ style_pvalue(
   x,
   digits = 1,
   prepend_p = FALSE,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 }
 \arguments{
-\item{x}{Numeric vector of p-values.}
+\item{x}{(\code{numeric})\cr
+Numeric vector of p-values.}
 
-\item{digits}{Number of digits large p-values are rounded. Must be 1, 2, or 3.
+\item{digits}{(\code{integer})\cr
+Number of digits large p-values are rounded. Must be 1, 2, or 3.
 Default is 1.}
 
-\item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
+\item{prepend_p}{(scalar \code{logical})\cr
+Logical. Should 'p=' be prepended to formatted p-value.
 Default is \code{FALSE}}
 
 \item{big.mark}{(\code{string})\cr
@@ -47,16 +50,6 @@ pvals <- c(
 style_pvalue(pvals)
 style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
-\seealso{
-See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
-
-Other style tools: 
-\code{\link{styfn}},
-\code{\link{style_percent}()},
-\code{\link{style_ratio}()},
-\code{\link{style_sigfig}()}
-}
 \author{
 Daniel D. Sjoberg
 }
-\concept{style tools}

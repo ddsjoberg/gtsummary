@@ -2,14 +2,22 @@
 % Please edit documentation in R/style_ratio.R
 \name{style_ratio}
 \alias{style_ratio}
-\title{Style significant figure-like rounding for ratios}
+\title{Style ratios}
 \usage{
-style_ratio(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
+style_ratio(
+  x,
+  digits = 2,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
+  ...
+)
 }
 \arguments{
-\item{x}{Numeric vector}
+\item{x}{(\code{numeric})
+Numeric vector}
 
-\item{digits}{Integer specifying the number of significant
+\item{digits}{(\code{integer})\cr
+Integer specifying the number of significant
 digits to display for numbers below 1. Numbers larger than 1 will be be \code{digits + 1}.
 Default is \code{digits = 2}.}
 
@@ -36,20 +44,9 @@ we would want to round to two decimal places for all values. In other words,
 larger. \code{style_ratio()} performs significant figure-like rounding in this manner.
 }
 \examples{
-c(
-  0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
-  -0.9, -1.1234, -12.345, -101.234
-) \%>\%
+c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123, -0.9, -1.1234, -12.345, -101.234) |>
   style_ratio()
-}
-\seealso{
-Other style tools: 
-\code{\link{styfn}},
-\code{\link{style_percent}()},
-\code{\link{style_pvalue}()},
-\code{\link{style_sigfig}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{style tools}

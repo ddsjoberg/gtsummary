@@ -17,30 +17,99 @@ NULL
 
 #' @rdname styfn
 #' @export
-styfn_number <- function(digits = 0, big.mark = NULL, decimal.mark = NULL, scale = 1, ...) {
+styfn_number <- function(digits = 0,
+                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         decimal.mark = getOption("OutDec"),
+                         scale = 1,
+                         ...) {
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   function(x) style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, scale = scale, ...)
 }
 
 #' @rdname styfn
 #' @export
-styfn_sigfig <- function(digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
+styfn_sigfig <- function(digits = 2,
+                         scale = 1,
+                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         decimal.mark = getOption("OutDec"),
+                         ...) {
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   function(x) style_sigfig(x, digits = digits, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
 #' @rdname styfn
 #' @export
-styfn_pvalue <- function(digits = 1, prepend_p = FALSE, big.mark = NULL, decimal.mark = NULL, ...) {
+styfn_pvalue <- function(digits = 1,
+                         prepend_p = FALSE,
+                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         decimal.mark = getOption("OutDec"),
+                         ...) {
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   function(x) style_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
 #' @rdname styfn
 #' @export
-styfn_ratio <- function(digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
+styfn_ratio <- function(digits = 2,
+                        big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                        decimal.mark = getOption("OutDec"),
+                        ...) {
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   function(x) style_ratio(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
 #' @rdname styfn
 #' @export
-styfn_percent <- function(symbol = FALSE, digits = 0, big.mark = NULL, decimal.mark = NULL, ...) {
+styfn_percent <- function(symbol = FALSE,
+                          digits = 0,
+                          big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                          decimal.mark = getOption("OutDec"),
+                          ...) {
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = big.mark)
+  }
+
   function(x) style_percent(x, symbol = symbol, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
