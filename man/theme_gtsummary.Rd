@@ -68,10 +68,12 @@ If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
 with the translated text.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
