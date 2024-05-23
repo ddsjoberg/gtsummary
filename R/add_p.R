@@ -45,7 +45,7 @@ add_p <- function(x, ...) {
 #' @param adj.vars ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in adjusted calculations (e.g. in ANCOVA models).
 #'   Default is `NULL`.
-#' @param ... Not used
+#' @inheritParams rlang::args_dots_empty
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
@@ -82,14 +82,12 @@ add_p <- function(x, ...) {
 #'
 #' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
-#' add_p_ex1 <-
-#'   trial |>
+#' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>
 #'   add_p()
 #'
 #' # Example 2 ----------------------------------
-#' add_p_ex2 <-
-#'   trial %>%
+#' trial |>
 #'   select(trt, age, marker) |>
 #'   tbl_summary(by = trt, missing = "no") |>
 #'   add_p(
@@ -126,7 +124,11 @@ add_p.tbl_summary <- function(x,
 
   cards::process_formula_selectors(
     select_prep(x$table_body, x$inputs$data[include]),
-    test = test,
+    test =
+      case_switch(
+        missing(test) ~ get_theme_element("add_p.tbl_summary-arg:test", default = test),
+        .default = test
+      ),
     include_env = TRUE
   )
   # add the calling env to the test
@@ -143,7 +145,7 @@ add_p.tbl_summary <- function(x,
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
   if (missing(pvalue_fun)) {
     pvalue_fun <-
-      get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
+      get_deprecated_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
       get_theme_element("pkgwide-fn:pvalue_fun") %||%
       pvalue_fun
   }
@@ -211,6 +213,11 @@ add_p.tbl_summary <- function(x,
 
   # update call list
   x$call_list <- updated_call_list
+
+  # running any additional mods
+  x <-
+    get_theme_element("add_p-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 
   x
 }
@@ -383,6 +390,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
   ) |>
     unlist() |>
     unique() |>
+    translate_vector() |>
     paste(collapse = "; ")
   if (footnote == "" || is_empty(footnote)) footnote <- NULL # styler: off
 
@@ -391,7 +399,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     modify_table_body(
       ~ dplyr::left_join(
         .x,
-        df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "header"),
+        df_results[c("variable", new_columns)] |> dplyr::mutate(row_type = "label"),
         by = c("variable", "row_type")
       )
     )
@@ -400,7 +408,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
     modify_table_styling(
       x,
       columns = any_of(intersect("p.value", new_columns)),
-      label = "**p-value**",
+      label = glue("**{translate_string('p-value')}**"),
       hide = FALSE,
       fmt_fun = pvalue_fun %||% styfn_pvalue(),
       footnote = footnote
@@ -409,46 +417,50 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
       columns =
         intersect("estimate", new_columns),
       hide = calling_fun %in% "add_p",
-      label = ifelse(is_empty(adj.vars), "**Difference**", "**Adjusted Difference**"),
+      label = ifelse(is_empty(adj.vars),
+                     glue("**{translate_string('Difference')}**"),
+                     glue("**{translate_string('Adjusted Difference')}**")),
       footnote = footnote
     ) |>
     modify_table_styling(
       columns =
         intersect("std.error", new_columns),
       hide = TRUE,
-      label = "**Standard Error**",
+      label = glue("**{translate_string('SE')}**"),
+      fmt_fun = styfn_sigfig(digits = 3),
+      footnote_abbrev = glue("**{translate_string('SE = Standard Error')}**"),
       footnote = footnote
     ) |>
     modify_table_styling(
       columns =
         intersect("parameter", new_columns),
       hide = TRUE,
-      label = "**Parameter**",
-      fmt_fun = styfn_sigfig(),
+      label = glue("**{translate_string('Parameter')}**"),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
       columns =
         intersect("statistic", new_columns),
       hide = TRUE,
-      label = "**Statistic**",
-      fmt_fun = styfn_sigfig(),
+      label = glue("**{translate_string('Statistic')}**"),
+      fmt_fun = styfn_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
       columns =
         intersect("conf.low", new_columns),
       hide = calling_fun %in% "add_p",
-      label = glue("**{conf.level * 100}% CI**"),
+      label = glue("**{conf.level * 100}% {translate_string('CI')}**"),
       footnote = footnote,
-      footnote_abbrev = "CI = Confidence Interval"
+      footnote_abbrev = glue("{translate_string('CI = Confidence Interval')}")
     )
 
   if (calling_fun %in% "add_difference" && all(c("conf.low", "conf.high") %in% new_columns)) {
     x <-
       modify_column_merge(
         x,
-        pattern = "{conf.low}, {conf.high}",
+        pattern = paste("{conf.low}", "{conf.high}", sep = get_theme_element("pkgwide-str:ci.sep", default = ", ")),
         rows = !is.na(.data$conf.low)
       )
   }

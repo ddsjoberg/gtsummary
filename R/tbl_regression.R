@@ -47,7 +47,7 @@
 #' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
 #' to perform the initial tidying of the model object. There are, however,
 #' a few models that use `[modifications][tbl_regression_methods]`.
-#' TODO: Added the tbl_regression_methods help mentioned file above.
+#' TODO: Re-add link to tbl_regression_methods above.
 #'
 #' - `"parsnip/workflows"`: If the model was prepared using parsnip/workflows,
 #'   the original model fit is extracted and the original `x=` argument
@@ -103,17 +103,15 @@ tbl_regression.default <- function(x,
   # setting theme defaults -----------------------------------------------------
   if (missing(pvalue_fun)) {
     pvalue_fun <-
-      get_theme_element("tbl_regression-arg:pvalue_fun") %||%
-      get_theme_element("pkgwide-fn:pvalue_fun") %||%
-      pvalue_fun
+      get_deprecated_theme_element("tbl_regression-arg:pvalue_fun") %||%
+      get_theme_element("pkgwide-fn:pvalue_fun", default = pvalue_fun)
   }
   pvalue_fun <- as_function(pvalue_fun, arg = "pvalue_fun")
 
   check_scalar_logical(exponentiate)
   if (missing(estimate_fun)) {
     estimate_fun <-
-      get_theme_element("tbl_regression-arg:estimate_fun") %||%
-      estimate_fun
+      get_theme_element("tbl_regression-arg:estimate_fun", default = estimate_fun)
   }
   estimate_fun <- as_function(estimate_fun, arg = "estimate_fun")
 
@@ -126,7 +124,8 @@ tbl_regression.default <- function(x,
   }
 
   if (missing(add_estimate_to_reference_rows)) {
-    add_estimate_to_reference_rows <- get_theme_element("tbl_regression-arg:add_estimate_to_reference_rows", default = add_estimate_to_reference_rows)
+    add_estimate_to_reference_rows <-
+      get_theme_element("tbl_regression-arg:add_estimate_to_reference_rows", default = add_estimate_to_reference_rows)
   }
 
   # check inputs ---------------------------------------------------------------
@@ -191,11 +190,9 @@ tbl_regression.default <- function(x,
     structure(class = c("tbl_regression", "gtsummary"))
 
   # setting column headers, and print instructions
-  # TODO: Deprecate this... this was an odd choice?
   tidy_columns_to_report <-
-    get_theme_element("tbl_regression-chr:tidy_columns",
-      default = c("conf.low", "conf.high", "p.value")
-    ) |>
+    get_deprecated_theme_element("tbl_regression-chr:tidy_columns",
+                                 default = c("conf.low", "conf.high", "p.value")) |>
     union("estimate") |>
     intersect(names(table_body))
 
@@ -234,6 +231,6 @@ tbl_regression.default <- function(x,
     modify_table_styling(
       columns = "label",
       rows = .data$row_type %in% c("level", "missing"),
-      indentation = 4
+      indent = 4
     )
 }

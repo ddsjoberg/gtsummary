@@ -42,23 +42,20 @@
 #' @family Advanced modifiers
 #' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
-#' modify_column_merge_ex1 <-
-#'   trial |>
+#' trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
 #'   add_p(all_continuous() ~ "t.test", pvalue_fun = styfn_pvalue(prepend_p = TRUE)) |>
 #'   modify_fmt_fun(statistic ~ styfn_sigfig()) |>
 #'   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
 #'   modify_header(statistic = "**t-test**")
 #'
-# #' # TODO: Re-add the second example after `tbl_regression()` is added
-# #' # # Example 2 ----------------------------------
-# #' # modify_column_merge_ex2 <-
-# #' #   lm(marker ~ age + grade, trial) |>
-# #' #   tbl_regression() |>
-# #' #   modify_column_merge(
-# #' #     pattern = "{estimate} ({ci})",
-# #' #     rows = !is.na(estimate)
-# #' #   )
+#' # Example 2 ----------------------------------
+#' lm(marker ~ age + grade, trial) |>
+#'   tbl_regression() |>
+#'   modify_column_merge(
+#'     pattern = "{estimate} ({conf.low}, {conf.high})",
+#'     rows = !is.na(estimate)
+#'   )
 modify_column_merge <- function(x, pattern, rows = NULL) {
   set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
@@ -71,7 +68,7 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   if (is_empty(columns)) {
     cli::cli_abort(
       c("No column names found in {.code modify_column_merge(pattern)} argument.",
-        i = "Wrap all column names in curly brackets, e.g {.code modify_column_merge(pattern = '{{conf.low}}, {{conf.high}}')}."
+        i = "Wrap column names in curly brackets, e.g {.code modify_column_merge(pattern = '{{conf.low}}, {{conf.high}}')}."
       ),
       call = get_cli_abort_call()
     )
@@ -88,9 +85,15 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   }
 
   # merge columns --------------------------------------------------------------
-  x <-
+  x <- x |>
+    # remove prior merging for the specified columns
     modify_table_styling(
-      x,
+      columns = all_of(columns),
+      rows = {{ rows }},
+      cols_merge_pattern = NA,
+    ) |>
+    # add the newly specified pattern of merging
+    modify_table_styling(
       columns = columns[1],
       rows = {{ rows }},
       hide = FALSE,

@@ -45,7 +45,7 @@ BugReports: https://github.com/ddsjoberg/gtsummary/issues
 Depends: 
     R (>= 4.1)
 Imports: 
-    cards (>= 0.1.0.9024),
+    cards (>= 0.1.0.9031),
     cli (>= 3.6.1),
     dplyr (>= 1.1.3),
     glue (>= 1.6.2),
@@ -60,17 +60,24 @@ Suggests:
     broom.helpers (>= 1.15.0),
     broom.mixed,
     cardx (>= 0.1.0.9039),
+    effectsize,
+    emmeans,
     knitr,
+    lme4,
+    smd,
     testthat (>= 3.2.0),
     withr,
-    lme4, smd, effectsize, emmeans
+    rmarkdown,
+    huxtable,
+    flextable,
+    kableExtra
 VignetteBuilder: 
     knitr
 RdMacros: 
     lifecycle
 Remotes: 
-    insightsengineering/cards,
-    insightsengineering/cardx
+    github::insightsengineering/cards,
+    github::insightsengineering/cardx
 Config/Needs/check: broom, broom.helpers, broom.mixed, lme4, effectsize,
     emmeans, smd
 Config/testthat/edition: 3

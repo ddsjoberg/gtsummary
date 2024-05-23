@@ -40,8 +40,8 @@ navbar:
     #   href: articles/rmarkdown.html
     # - text: "gtsummary + Shiny"
     #   href: articles/shiny.html
-    # - text: "gtsummary + themes"
-    #   href: articles/themes.html
+    - text: "gtsummary + themes"
+      href: articles/themes.html
     - text: "cheat sheet"
       href: https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf
     # - text: "FAQ + gallery"
@@ -63,27 +63,28 @@ reference:
       - add_difference.tbl_summary
       - add_n.tbl_summary
       # - add_ci
-      # - add_stat_label
-      # - add_stat
+      - add_stat_label
+      - add_stat
       # - separate_p_footnotes
   # - subtitle: Cross Tables
   # - contents:
   #     - tbl_cross
   #     - add_p.tbl_cross
-  # - subtitle: Continuous Variable Summary
-  # - contents:
+  - subtitle: Continuous Variable Summary
+  - contents:
   #     - tbl_continuous
   #     - add_overall
   #     - add_p.tbl_continuous
-  # - subtitle: Time-to-event Summary Tables
+       - add_stat
+ # - subtitle: Time-to-event Summary Tables
   # - contents:
   #     - tbl_survfit
   #     - add_p.tbl_survfit
   #     - add_n.tbl_survfit
   #     - add_nevent.tbl_survfit
   #     - add_q
-  # - subtitle: Survey Design Summary Tables
-  # - contents:
+  - subtitle: Survey Design Summary Tables
+  - contents:
   #     - tbl_svysummary
   #     - add_p.tbl_svysummary
   #     - add_q
@@ -92,7 +93,7 @@ reference:
   #     - add_ci
   #     - add_n.tbl_svysummary
   #     - add_stat_label
-  #     - add_stat
+      - add_stat
   #     - separate_p_footnotes
   # - subtitle: Custom Summary Tables
   # - contents:
@@ -145,10 +146,11 @@ reference:
   - subtitle: Style Summary Tables
   - contents:
       - modify
-      # - bold_italicize_labels_levels
-      # - bold_p
-      # - sort_filter_p
-      # - remove_row_type
+      - modify_caption
+      - bold_italicize_labels_levels
+      - bold_p
+      - sort_filter_p
+      - remove_row_type
   - subtitle: Style/Format Numeric Vectors
   - contents:
       - style_percent
@@ -157,19 +159,19 @@ reference:
       - style_ratio
       - style_number
       - styfn
-  # - subtitle: Themes
-  # - contents:
-  #     - set_gtsummary_theme
-  #     - theme_gtsummary
+  - subtitle: Themes
+  - contents:
+      - set_gtsummary_theme
+      - theme_gtsummary
   - subtitle: Advanced modifiers
   - contents:
       - modify_table_styling
       - modify_table_body
       - modify_column_hide
-      # - modify_column_alignment
+      - modify_column_alignment
       - modify_fmt_fun
       - modify_column_merge
-      # - modify_column_indent
+      - modify_column_indent
   - subtitle: Select Helpers
   - contents:
       - select_helpers
@@ -182,8 +184,8 @@ reference:
 
   - subtitle: Construction Helpers
   - contents:
-      - starts_with("assign_")
       - starts_with("brdg_")
+      - starts_with("assign_")
 
   - subtitle: Data
   - contents:

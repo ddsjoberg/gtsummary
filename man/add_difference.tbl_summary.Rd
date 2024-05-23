@@ -61,7 +61,7 @@ to round and format differences and confidence limits.
 Default is
 \verb{list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(), all_categorical() ~ \\(x) paste0(style_sigfig(x, scale = 100), "\%"))}}
 
-\item{...}{Not used}
+\item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}

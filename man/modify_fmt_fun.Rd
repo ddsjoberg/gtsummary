@@ -2,23 +2,31 @@
 % Please edit documentation in R/modify_fmt_fun.R
 \name{modify_fmt_fun}
 \alias{modify_fmt_fun}
-\title{Modify Formatting Functions}
+\title{Modify formatting functions}
 \usage{
-modify_fmt_fun(x, update, rows = NULL)
+modify_fmt_fun(x, ..., rows = NULL, update, quiet)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+A gtsummary object}
 
-\item{update}{list of formulas or a single formula specifying the updated
-formatting function.
-The LHS specifies the column(s) to be updated,
-and the RHS is the updated formatting function.}
+\item{...}{\code{\link[rlang:dyn-dots]{dynamic-dots}}\cr
+Used to assign updates to formatting functions.
 
-\item{rows}{predicate expression to select rows in \code{x$table_body}.
-Default is \code{NULL}. See details below.}
+Use \verb{modify_fmt_fun(colname = <fmt fn>)} to update a single column. Using a
+formula will invoke tidyselect, e.g. \verb{modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)}.
+
+TODO: Add link when the function below is added.
+Use the \code{show_header_names()} to see the column names that can be modified.}
+
+\item{rows}{(predicate \code{expression})\cr
+Predicate expression to select rows in \code{x$table_body}.
+Can be used to style footnote, formatting functions, missing symbols,
+and text formatting. Default is \code{NULL}. See details below.}
+
+\item{update, quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-\lifecycle{maturing}
 Use this function to update the way numeric columns and rows of \code{.$table_body}
 are formatted
 }
@@ -29,7 +37,7 @@ rows to apply formatting. The expression must evaluate to a logical when
 evaluated in \code{x$table_body}. For example, to apply formatting to the age rows
 pass \code{rows = variable == "age"}. A vector of row numbers is NOT acceptable.
 
-A couple of things to note when using the \verb{rows=} argument.
+A couple of things to note when using the \code{rows} argument.
 \enumerate{
 \item You can use saved objects to create the predicate argument, e.g.
 \code{rows = variable == letters[1]}.
@@ -41,13 +49,14 @@ an external object named \code{variable} in the following expression
 }
 }
 
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_table_body}()},
-\code{\link{modify_table_styling}()}
+\examples{
+# Example 1 ----------------------------------
+# show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
+lm(age ~ marker + grade, trial) |>
+  tbl_regression() \%>\%
+  modify_fmt_fun(
+    p.value = styfn_pvalue(digits = 3),
+    c(estimate, conf.low, conf.high) ~ styfn_sigfig(digits = 4),
+    rows = variable == "grade"
+  )
 }
-\concept{Advanced modifiers}

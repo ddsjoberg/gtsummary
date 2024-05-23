@@ -77,7 +77,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     modify_table_body(x, ~ dplyr::mutate(.x, q.value = q.value)) |>
     modify_table_styling(
       columns = "q.value",
-      label = paste0("**", translate_text("q-value"), "**"),
+      label = paste0("**", translate_string("q-value"), "**"),
       hide = FALSE,
       footnote = .add_q_method_label(method),
       fmt_fun = pvalue_fun
@@ -107,5 +107,6 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
       "none" = "No correction for multiple testing"
     )
 
-  lst_method_labels[[method]]
+  lst_method_labels[[method]] |>
+    translate_string()
 }

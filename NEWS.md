@@ -2,6 +2,8 @@
 
 ### Overview of Changes
 
+* Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. *Note: There is still one known remaining issue with {gt} and indentation for RTF tables. We leave it to the user to change the printer if using RTF documents, which can be done using `theme_gtsummary_printer()`.*
+
 #### User-facing Updates
 
 * The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
@@ -20,7 +22,7 @@
 
 * Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a character vector of all `"yes"` or all `"no"` values will default to a categorical summary instead of dichotomous.
 
-* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indentation = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
+* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indent = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
 
 * The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
 
@@ -44,11 +46,31 @@
 
 ### Deprecations 
 
+* The following theme elements have been deprecated:
+    - These theme elements will eventually be removed from the package: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. 
+      - The `pvalue_fun` elements should switch to the package-wide theme for p-value styling--`'pkgwide-fn:pvalue_fun'`.
+    - These theme elements have been removed from the package immediately due to structural changes within the package: `'tbl_summary-str:continuous_stat'`, `'tbl_summary-str:categorical_stat'`.
+      - The default statistics can still be modified with `'tbl_summary-arg:statistic'`
+
+* The `set_gtsummary_theme(quiet)` argument has been deprecated.
+
+* Arguments `modify_header(quiet)`, `modify_footnote(quiet)`, and  `modify_spanning_header(quiet)` have been deprecated. Verbose messaging is no longer available.
+
+* Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun()` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`
+
+* Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
+
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
 
 * The `modify_header(stat_by)` argument was deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package.
 
 * Use of the `vars()` selector was first removed in v1.2.5 (2020-02-11), and the messaging about the deprecation was kicked up in June 2022. This use is now defunct and the function will soon no longer be exported.
+
+* The `as_flextable()` function was deprecated in v1.3.3 (2020-08-11), and has now been fully removed from the package.
+
+* Custom selectors `all_numeric()`, `all_character()`, `all_integer()`, `all_double()`, `all_logical()`, `all_factor()` functions were deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package. These functions were added before the `tidyselect::where()` function was released, which is a replacement for all these functions.
+
+* The `modify_cols_merge()` functions was renamed to `modify_column_merge()` to match the other function names in v1.6.1 (2022-06-22). The deprecation has been upgraded from a warning to an error.
 
 * The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
 

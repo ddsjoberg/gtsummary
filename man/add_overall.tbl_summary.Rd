@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{x}{(\code{tbl_summary}\\code{tbl_svysummary}\\code{tbl_continuous}\\code{tbl_custom_summary})\cr
+\item{x}{(\code{tbl_summary}/\code{tbl_svysummary}/\code{tbl_continuous}/\code{tbl_custom_summary})\cr
 A stratified 'gtsummary' table}
 
 \item{last}{Logical indicator to display overall column last in table.

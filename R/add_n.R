@@ -67,9 +67,21 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
   check_scalar_logical(footnote)
   check_scalar_logical(last)
 
+  if (missing(col_label)) {
+    col_label <- paste0("**", translate_string("N"), "**")
+  }
+
   # calculate/grab the needed ARD results --------------------------------------
   if ("add_overall" %in% names(x[["call_list"]])) {
+    browser()
     # TODO: If `add_overall()` was previously run, we can get the stats from there instead of re-calculating
+    x$cards$add_n <-
+      x[["cards"]][["add_overall"]] |>
+      dplyr::filter(
+        .data$variable %in% .env$x$inputs$include,
+        .data$context %in% "missing"
+      ) |>
+      cards::apply_fmt_fn()
   } else if (is_empty(x$inputs$by)) {
     # TODO: If `tbl_summary(by)` is empty, then we can grab this from `x$card%tbl_summary`
     x$cards$add_n <-
@@ -85,13 +97,14 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         data = x$inputs$data,
         variables = x$inputs$include,
         by = character(0L),
-        # TODO: Utilize themes to change the default formatting types
         fmt_fn = ~ list(
           starts_with("N_") ~ styfn_number(),
           starts_with("p_") ~ styfn_percent()
         )
       ) |>
       cards::apply_fmt_fn()
+
+    x$cards$add_n$stat_label <- translate_vector(x$cards$add_n$stat_label)
   }
 
 

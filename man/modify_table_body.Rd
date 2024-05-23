@@ -7,13 +7,18 @@
 modify_table_body(x, fun, ...)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+A 'gtsummary' object}
 
-\item{fun}{A function or formula. If a \emph{function}, it is used as is.
-If a \emph{formula}, e.g. \code{fun = ~ .x \%>\% arrange(variable)},
-it is converted to a function. The argument passed to \verb{fun=} is \code{x$table_body}.}
+\item{fun}{(\code{function})\cr
+A function or formula. If a \emph{function}, it is used as is.
+If a \emph{formula}, e.g. \code{fun = ~ .x |> arrange(variable)},
+it is converted to a function. The argument passed to \code{fun} is \code{x$table_body}.}
 
-\item{...}{Additional arguments passed on to the mapped function}
+\item{...}{Additional arguments passed on to the function}
+}
+\value{
+A 'gtsummary' object
 }
 \description{
 Function is for advanced manipulation of gtsummary tables.
@@ -22,10 +27,12 @@ in each gtsummary object.
 
 If a new column is added to the table, default printing instructions will then
 be added to \code{.$table_styling}. By default, columns are hidden.
-To show a column, add a column header with \code{modify_header()}.
+To show a column, add a column header with \code{modify_header()} or call
+\code{modify_column_unhide()}.
 }
 \examples{
 # Example 1 --------------------------------
+# TODO: Re-add example when tbl_uvregression() is added
 # # Add number of cases and controls to regression table
 # modify_table_body_ex1 <-
 #  trial \%>\%
@@ -47,11 +54,3 @@ To show a column, add a column header with \code{modify_header()}.
 #  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
 #  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
 }
-\seealso{
-Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_styling}()}
-}
-\concept{Advanced modifiers}

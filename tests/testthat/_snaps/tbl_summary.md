@@ -231,11 +231,11 @@
       # A tibble: 9 x 4
         variable var_type    row_type label               
         <chr>    <chr>       <chr>    <chr>               
-      1 age      continuous  header   Age                 
-      2 marker   continuous2 header   Marker Level (ng/mL)
+      1 age      continuous  label    Age                 
+      2 marker   continuous2 label    Marker Level (ng/mL)
       3 marker   continuous2 level    Median (Q1, Q3)     
-      4 response dichotomous header   Tumor Response      
-      5 stage    categorical header   T Stage             
+      4 response dichotomous label    Tumor Response      
+      5 stage    categorical label    T Stage             
       6 stage    categorical level    T1                  
       7 stage    categorical level    T2                  
       8 stage    categorical level    T3                  
@@ -312,7 +312,7 @@
       tbl_summary(trial, include = response, missing_text = letters)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_text` argument must be length 1.
+      ! The `missing_text` argument must be a string, not a character vector.
 
 ---
 
@@ -320,7 +320,7 @@
       tbl_summary(trial, include = response, missing_text = 10L)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_text` argument must be class <character>, not an integer.
+      ! The `missing_text` argument must be a string, not an integer.
 
 # tbl_summary(missing_stat)
 
@@ -328,7 +328,7 @@
       tbl_summary(trial, include = response, missing_stat = letters)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_stat` argument must be length 1.
+      ! The `missing_stat` argument must be a string, not a character vector.
 
 ---
 
@@ -336,7 +336,7 @@
       tbl_summary(trial, include = response, missing_stat = 10L)
     Condition
       Error in `tbl_summary()`:
-      ! The `missing_stat` argument must be class <character>, not an integer.
+      ! The `missing_stat` argument must be a string, not an integer.
 
 # tbl_summary(sort) errors properly
 

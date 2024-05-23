@@ -104,7 +104,7 @@
 #' statistic, e.g. `list(sd = styfn_number(digits=1))`.
 #'
 #' @section type and value arguments:
-#' There are four summary types:
+#' There are four summary types. Use the `type` argument to change the default summary types.
 #'    - `"continuous"` summaries are shown on a *single row*. Most numeric
 #'    variables default to summary type continuous.
 #'    - `"continuous2"` summaries are shown on *2 or more rows*
@@ -187,9 +187,30 @@ tbl_summary <- function(data,
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
-  missing <- arg_match(arg = missing)
-  percent <- arg_match(arg = percent)
-  cards::process_formula_selectors(data = data[include], value = value)
+
+
+  if (missing(missing))
+    missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
+  missing <- arg_match(missing, values = c("ifany", "no", "always"))
+
+  if (missing(missing_text)) {
+    missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
+  }
+  check_string(missing_text)
+
+
+  if (missing(percent))
+    percent <- get_theme_element("tbl_summary-arg:percent", default = percent) # styler: off
+  percent <- arg_match(percent, values = c("column", "row", "cell"))
+
+  cards::process_formula_selectors(
+    data = data[include],
+    value =
+      case_switch(
+        missing(value) ~ get_theme_element("tbl_summary-arg:value", default = value),
+        .default = value
+      )
+  )
 
 
   # assign summary type --------------------------------------------------------
@@ -200,7 +221,11 @@ tbl_summary <- function(data,
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = select_prep(.list2tb(default_types, "var_type"), data[include]),
-      type = type
+      type =
+        case_switch(
+          missing(type) ~ get_theme_element("tbl_summary-arg:type", default = type),
+          .default = type
+        )
     )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
@@ -217,10 +242,9 @@ tbl_summary <- function(data,
   select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       statistic =
-        .ifelse1(
-          missing(statistic),
-          get_theme_element("TODO:fill-this-in", default = statistic),
-          statistic
+        case_switch(
+          missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
+          .default = statistic
         ),
       include_env = TRUE
     )
@@ -230,22 +254,24 @@ tbl_summary <- function(data,
 
   select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
-      label = label,
+      label =
+        case_switch(
+          missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
+          .default = label
+        ),
       sort =
-        .ifelse1(
-          missing(sort),
-          get_theme_element("TODO:fill-this-in", default = sort),
-          sort
+        case_switch(
+          missing(sort) ~ get_theme_element("tbl_summary-arg:sort", default = sort),
+          .default = sort
         )
     )
 
   select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       digits =
-        .ifelse1(
-          is_empty(digits),
-          get_theme_element("TODO:fill-this-in", default = assign_summary_digits(data, statistic, type)),
-          digits
+        case_switch(
+          missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
+          .default = digits
         )
     )
 
@@ -253,11 +279,11 @@ tbl_summary <- function(data,
   cards::fill_formula_selectors(
     select_prep(.list2tb(type, "var_type"), data[include]),
     statistic =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
+      get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
+      get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
-      get_theme_element("TODO:fill-this-in", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
+      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
   )
 
   # fill each element of digits argument
@@ -269,10 +295,8 @@ tbl_summary <- function(data,
   }
 
   # check inputs ---------------------------------------------------------------
-  check_class(missing_text, cls = "character")
-  check_scalar(missing_text)
-  check_class(missing_stat, cls = "character")
-  check_scalar(missing_stat)
+  check_string(missing_stat)
+  check_string(missing_text)
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
@@ -345,6 +369,9 @@ tbl_summary <- function(data,
   # check the requested stats are present in ARD data frame
   .check_stats_available(cards = cards, statistic = statistic)
 
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_summary(
@@ -371,9 +398,9 @@ tbl_summary <- function(data,
     # add header to label column and add default indentation
     modify_table_styling(
       columns = "label",
-      label = "**Characteristic**",
+      label = glue("**{translate_string('Characteristic')}**"),
       rows = .data$row_type %in% c("level", "missing"),
-      indentation = 4L
+      indent = 4L
     ) |>
     # adding the statistic footnote
     modify_table_styling(
@@ -383,10 +410,22 @@ tbl_summary <- function(data,
     ) |>
     # updating the headers for the stats columns
     modify_header(
-      all_stat_cols() ~ ifelse(is_empty(by), "**N = {N}**", "**{level}**  \nN = {n}")
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          get_theme_element("tbl_summary-str:header-noby",
+                            default = "**N = {style_number(N)}**"),
+          get_theme_element("tbl_summary-str:header-withby",
+                            default = "**{level}**  \nN = {style_number(n)}")
+        )
     )
 
   # return tbl_summary table ---------------------------------------------------
+  # running any additional mods
+  x <-
+    get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
+
   x
 }
 
@@ -460,11 +499,9 @@ tbl_summary <- function(data,
           dplyr::filter(.data$variable %in% .env$variable) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
-          {
-            stats::setNames(as.list(.$stat_label), .$stat_name)
-          } |>
+          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>
@@ -472,11 +509,7 @@ tbl_summary <- function(data,
     compact() |>
     unlist() |>
     unique() %>%
-    {
-      switch(!is.null(.),
-        paste(., collapse = "; ")
-      )
-    }
+    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
 }
 
 

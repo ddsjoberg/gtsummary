@@ -7,13 +7,15 @@
 modify_column_merge(x, pattern, rows = NULL)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
 \item{pattern}{glue syntax string indicating how to merge columns in
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
-\item{rows}{predicate expression to select rows in \code{x$table_body}.
+\item{rows}{(predicate \code{expression})\cr
+Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
 }
@@ -61,20 +63,25 @@ numeric columns numeric. For the \emph{vast majority} of users,
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-modify_column_merge_ex1 <-
-  trial |>
+trial |>
   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
   add_p(all_continuous() ~ "t.test", pvalue_fun = styfn_pvalue(prepend_p = TRUE)) |>
   modify_fmt_fun(statistic ~ styfn_sigfig()) |>
   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
   modify_header(statistic = "**t-test**")
+
+# Example 2 ----------------------------------
+lm(marker ~ age + grade, trial) |>
+  tbl_regression() |>
+  modify_column_merge(
+    pattern = "{estimate} ({conf.low}, {conf.high})",
+    rows = !is.na(estimate)
+  )
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
+\code{\link{modify_column_indent}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

@@ -197,8 +197,6 @@ bold_levels.tbl_cross <- function(x) {
         )
     )
 
-
-
   x
 }
 

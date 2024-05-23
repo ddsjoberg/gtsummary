@@ -2,12 +2,9 @@
 % Please edit documentation in R/add_nevent.R
 \name{add_nevent}
 \alias{add_nevent}
-\alias{add_nevent.tbl_regression}
 \title{Add p-values}
 \usage{
 add_nevent(x, ...)
-
-\method{add_nevent}{tbl_regression}(x, location = "label", ...)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
