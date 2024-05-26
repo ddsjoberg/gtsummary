@@ -63,42 +63,37 @@ Add a new column with the confidence intervals for proportions, means, etc.
 
 
 Must be one of
-\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
-variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
-\subsection{Continuous Variables}{
-
-Confidence intervals for means are calculated using \code{t.test()} and
-\code{wilcox.test()} for pseudo-medians.
-}
-
-\subsection{Categorical/Dichotomous Variables}{
-
-Methods \code{c("wilson", "wilson.no.correct")} are calculated with
-\code{prop.test(correct = c(TRUE, FALSE))}.
-The default method, \code{"wilson"}, includes the Yates continuity correction.
-Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
+\itemize{
+\item \code{c("wilson", "wilson.no.correct")} calculated via \code{prop.test(correct = c(TRUE, FALSE))} for \strong{categorical} variables
+\item \code{"exact"} calculated via \code{stats::binom.test()} for \strong{categorical} variables
+\item \code{c("wald", "wald.no.correct")} calculated via \verb{cardx::proportion_ci_wald(correct = c(TRUE, FALSE)} for \strong{categorical} variables
+\item \code{"agresti-coull"} calculated via \code{cardx::proportion_ci_agresti_coull()} for \strong{categorical} variables
+\item \code{"jeffreys"} calculated via \code{cardx::proportion_ci_jeffreys()} for \strong{categorical} variables
+\item \code{"t.test"} calculated via \code{stats::t.test()} for \strong{continuous} variables
+\item \code{"wilcox.test"} calculated via \code{stats::wilcox.test()} for \strong{continuous} variables
 }
 }
 
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_ci_ex1 <-
-  trial \%>\%
-  select(marker, response, trt) \%>\%
+trial |>
   tbl_summary(
     missing = "no",
-    statistic = all_continuous() ~ "{mean} ({sd})"
-  ) \%>\%
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    include = c(marker, response, trt)
+  ) |>
   add_ci()
 
 # Example 2 ----------------------------------
-add_ci_ex2 <-
-  trial \%>\%
+trial |>
   select(response, grade) \%>\%
   tbl_summary(
     statistic = all_categorical() ~ "{p}\%",
-    missing = "no"
-  ) \%>\%
-  add_ci(pattern = "{stat} ({ci})") \%>\%
+    missing = "no",
+    include = c(response, grade)
+  ) |>
+  add_ci(pattern = "{stat} ({ci})") |>
   modify_footnote(everything() ~ NA)
+\dontshow{\}) # examplesIf}
 }
