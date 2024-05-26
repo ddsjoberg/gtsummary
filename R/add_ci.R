@@ -11,7 +11,7 @@
 #'   Confidence interval method. Default is
 #'   `list(all_continuous() ~ "t.test", all_categorical() ~ "wilson")`.
 #'   See details below.
-#' @param conf.level(scalar `real`)\cr
+#' @param conf.level (scalar `real`)\cr
 #'   Confidence level. Default is `0.95`
 #' @param style_fun (`function`)\cr
 #'   Function to style upper and lower bound of confidence interval. Default is
@@ -274,7 +274,7 @@ add_ci.tbl_summary <- function(x,
       x$table_body |>
       select(all_stat_cols()) |>
       names()
-    chr_index <- stringr::str_replace(stat_column_names, pattern = "^stat_", "")
+    chr_index <- gsub(x = stat_column_names, pattern = "^stat_", replacement = "")
 
     # create list of column merging expressions
     cols_merge_expr <-
@@ -294,7 +294,7 @@ add_ci.tbl_summary <- function(x,
     # merge columns
     x <-
       cols_merge_expr |>
-      purrr::reduce(~ rlang::inject(!!.x %>% !!.y), .init = x) |>
+      reduce(\(.x, .y) inject(!!.x %>% !!.y), .init = x) |>
       modify_footnote(
         all_stat_cols() ~ translate_string("CI = Confidence Interval"),
         abbreviation = TRUE

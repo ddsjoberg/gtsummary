@@ -38,6 +38,9 @@ Variables to include in the summary table. Default is \code{everything()}}
 Indicates how the confidence interval will be displayed.
 Default is \code{list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~ "{conf.low}\%, {conf.high}\%")}}
 
+\item{conf.level}{(scalar \code{real})\cr
+Confidence level. Default is \code{0.95}}
+
 \item{style_fun}{(\code{function})\cr
 Function to style upper and lower bound of confidence interval. Default is
 \code{list(all_continuous() ~ styfn_sigfig(), all_categorical() ~ styfn_sigfig(scale =  100))}.}
@@ -49,9 +52,6 @@ The two columns that will be merged are the statistics column,
 represented by \code{"{stat}"} and the CI column represented by \code{"{ci}"},
 e.g. \code{pattern = "{stat} ({ci})"} will merge the two columns with the CI
 in parentheses. Default is \code{NULL}, and no merging is performed.}
-
-\item{conf.level(scalar}{\code{real})\cr
-Confidence level. Default is \code{0.95}}
 }
 \value{
 gtsummary table
