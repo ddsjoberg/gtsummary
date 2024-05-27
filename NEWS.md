@@ -6,6 +6,8 @@
 
 #### User-facing Updates
 
+* The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
+
 * The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
 
 * The `add_q(quiet)` argument has been deprecated.
