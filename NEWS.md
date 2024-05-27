@@ -44,6 +44,8 @@
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
 
+* Fix when `add_ci()` was run after `add_overall()`, the overall column would not populate with the confidence interval. (#1569)
+
 ### Deprecations 
 
 * The following theme elements have been deprecated:
