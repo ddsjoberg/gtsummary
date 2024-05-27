@@ -72,7 +72,7 @@
 #'   y = Surv(ttdeath, death),
 #'   exponentiate = TRUE,
 #'   include = c("age", "grade", "response"),
-#'   pvalue_fun = function(x) style_pvalue(x, digits = 2)
+#'   pvalue_fun = styfn_pvalue(digits = 2)
 #' )
 NULL
 
@@ -234,6 +234,10 @@ tbl_uvregression.data.frame <- function(data,
 
   results
 }
+
+#' @export
+#' @name tbl_uvregression
+tbl_uvregression.survey.design <- tbl_uvregression.data.frame
 
 .construct_uvregression_tbls <- function(models, label, exponentiate, tidy_fun,
                                          show_single_row, conf.level,
