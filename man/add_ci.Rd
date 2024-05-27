@@ -67,7 +67,7 @@ Must be one of
 \item \code{c("wilson", "wilson.no.correct")} calculated via \code{prop.test(correct = c(TRUE, FALSE))} for \strong{categorical} variables
 \item \code{"exact"} calculated via \code{stats::binom.test()} for \strong{categorical} variables
 \item \code{c("wald", "wald.no.correct")} calculated via \verb{cardx::proportion_ci_wald(correct = c(TRUE, FALSE)} for \strong{categorical} variables
-\item \code{"agresti-coull"} calculated via \code{cardx::proportion_ci_agresti_coull()} for \strong{categorical} variables
+\item \code{"agresti.coull"} calculated via \code{cardx::proportion_ci_agresti_coull()} for \strong{categorical} variables
 \item \code{"jeffreys"} calculated via \code{cardx::proportion_ci_jeffreys()} for \strong{categorical} variables
 \item \code{"t.test"} calculated via \code{stats::t.test()} for \strong{continuous} variables
 \item \code{"wilcox.test"} calculated via \code{stats::wilcox.test()} for \strong{continuous} variables

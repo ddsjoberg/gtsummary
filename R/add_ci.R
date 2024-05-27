@@ -32,7 +32,7 @@
 #' - `c("wilson", "wilson.no.correct")` calculated via `prop.test(correct = c(TRUE, FALSE))` for **categorical** variables
 #' - `"exact"` calculated via `stats::binom.test()` for **categorical** variables
 #' - `c("wald", "wald.no.correct")` calculated via `cardx::proportion_ci_wald(correct = c(TRUE, FALSE)` for **categorical** variables
-#' - `"agresti-coull"` calculated via `cardx::proportion_ci_agresti_coull()` for **categorical** variables
+#' - `"agresti.coull"` calculated via `cardx::proportion_ci_agresti_coull()` for **categorical** variables
 #' - `"jeffreys"` calculated via `cardx::proportion_ci_jeffreys()` for **categorical** variables
 #' - `"t.test"` calculated via `stats::t.test()` for **continuous** variables
 #' - `"wilcox.test"` calculated via `stats::wilcox.test()` for **continuous** variables
@@ -158,10 +158,10 @@ add_ci.tbl_summary <- function(x,
         )
       }
       else if (x$input$type[[variable]] %in% c("categorical", "dichotomous") &&
-               !method[[variable]] %in% c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti-coull", "jeffreys", "asymptotic")) {
+               !method[[variable]] %in% c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti.coull", "jeffreys", "asymptotic")) {
         cli::cli_abort(
           'The value of the {.arg method} argument for categorical variable
-           {.val {variable}} must be one of {.val {c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti-coull", "jeffreys")}}',
+           {.val {variable}} must be one of {.val {c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti.coull", "jeffreys")}}',
           call = get_cli_abort_call()
         )
       }
@@ -211,9 +211,15 @@ add_ci.tbl_summary <- function(x,
     dplyr::mutate(
       gts_colname =
         if (is_empty(x$inputs$by)) "ci_stat_0"
-        else if (!"add_overall" %in% names(x$call_list)) paste0("ci_stat_", dplyr::cur_group_id())
-        # this assumes the overall group of ARDs appears first!
-        else paste0("ci_stat_", dplyr::cur_group_id() - 1L)
+        else {
+          ifelse(
+            !is.na(.data[["group1"]]),
+            paste0("ci_stat_", dplyr::cur_group_id()),
+            "ci_stat_0" # this accounts for overall stats if run after `add_overall()`
+          )
+        }
+        # # this assumes the overall group of ARDs appears first!
+        # else paste0("ci_stat_", dplyr::cur_group_id() - 1L)
     ) |>
     tidyr::pivot_wider(
       id_cols = cards::all_ard_variables(),
@@ -225,7 +231,7 @@ add_ci.tbl_summary <- function(x,
   x <- x |>
     add_stat(
       fns =
-        ~ \(variable, ...) dplyr::filter(df_prepped_for_merge, .data$variable %in% .env$variable) |> dplyr::select(matches("^ci_stat_\\d+$")),
+        all_of(include) ~ \(variable, ...) dplyr::filter(df_prepped_for_merge, .data$variable %in% .env$variable) |> dplyr::select(matches("^ci_stat_\\d+$")),
       location = list(everything() ~ "label", all_categorical(FALSE) ~ "level")
     ) |>
     # moving the CI cols to after the original stat cols (when `by=` variable present)
@@ -280,15 +286,17 @@ add_ci.tbl_summary <- function(x,
     cols_merge_expr <-
       chr_index |>
       map(
-        ~ expr(modify_table_styling(
-          columns = !!glue("stat_{.x}"),
-          rows = !is.na(!!sym(paste0("ci_stat_", .x))),
-          cols_merge_pattern =
-            !!glue::glue_data(
-              .x = list(stat = paste0("{stat_", .x, "}"), ci = paste0("{ci_stat_", .x, "}")),
-              pattern
-            )
-        ))
+        ~ expr(
+          modify_table_styling(
+            columns = !!glue("stat_{.x}"),
+            rows = !is.na(!!sym(paste0("ci_stat_", .x))),
+            cols_merge_pattern =
+              !!glue::glue_data(
+                .x = list(stat = paste0("{stat_", .x, "}"), ci = paste0("{ci_stat_", .x, "}")),
+                pattern
+              )
+          )
+        )
       )
 
     # merge columns
@@ -300,14 +308,14 @@ add_ci.tbl_summary <- function(x,
         abbreviation = TRUE
       )
 
-    # pdating header using `pattern=` argument
+    # updating header using `pattern=` argument
     x$table_styling$header <-
       x$table_styling$header |>
       dplyr::rowwise() %>%
       dplyr::mutate(
         label =
           ifelse(
-            .data$column %in% stat_column_names,
+            .data$column %in% .env$stat_column_names,
             glue::glue_data(
               .x = list(stat = .data$label, ci = paste0("**", .env$conf.level * 100, "% CI**")),
               pattern
@@ -356,20 +364,21 @@ add_ci.tbl_summary <- function(x,
       ) |>
         cards::apply_fmt_fn()
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    cards::tidy_ard_column_order()
 }
 
 .calculate_one_ci_ard <- function(data, variable, by, method, conf.level) {
   switch(
     method[[variable]],
     "t.test" = cardx::ard_stats_t_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level),
-    "wilcox.test" = cardx::ard_stats_wilcox_test_onesample(data, variables = all_of(variable), conf.level = conf.level),
+    "wilcox.test" = cardx::ard_stats_wilcox_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, conf.int = TRUE),
     "wald" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "waldcc", conf.level = conf.level),
     "wald.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level),
     "exact" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "clopper-pearson", conf.level = conf.level),
     "wilson" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilsoncc", conf.level = conf.level),
     "wilson.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilson", conf.level = conf.level),
-    "agresti-coull" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "agresti-coull", conf.level = conf.level),
+    "agresti.coull" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "agresti-coull", conf.level = conf.level),
     "jeffreys" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "jeffreys", conf.level = conf.level),
     # Documentation for 'asymptotic' was removed in v2.0.0
     "asymptotic" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level)
