@@ -94,3 +94,7 @@ add_n.tbl_regression <- function(x, location = "label", ...) {
   x$call_list <- updated_call_list
   x
 }
+
+#' @export
+#' @rdname add_n_regression
+add_n.tbl_uvregression <- add_n.tbl_regression

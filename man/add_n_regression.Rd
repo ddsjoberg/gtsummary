@@ -3,9 +3,12 @@
 \name{add_n_regression}
 \alias{add_n_regression}
 \alias{add_n.tbl_regression}
+\alias{add_n.tbl_uvregression}
 \title{Add N to regression table}
 \usage{
 \method{add_n}{tbl_regression}(x, location = "label", ...)
+
+\method{add_n}{tbl_uvregression}(x, location = "label", ...)
 }
 \arguments{
 \item{x}{(\code{tbl_regression}/\code{tbl_uvregression})\cr
