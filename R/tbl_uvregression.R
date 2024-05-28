@@ -103,6 +103,8 @@ tbl_uvregression.data.frame <- function(data,
                                         add_estimate_to_reference_rows = FALSE,
                                         conf.int = TRUE, ...) {
   set_cli_abort_call()
+  y <- enquo(y)
+  x <- enquo(x)
 
   # setting default values -----------------------------------------------------
   if (missing(pvalue_fun)) {
@@ -140,7 +142,7 @@ tbl_uvregression.data.frame <- function(data,
   check_uvregression_formula(formula)
 
   # check that only one of arguments x and y is specified
-  if ((!is_empty(x) && !is_empty(y)) || (is_empty(x) && is_empty(y))) {
+  if ((!is_quo_empty(x) && !is_quo_empty(y)) || (is_quo_empty(x) && is_quo_empty(y))) {
     cli::cli_abort(
       "Must specify one and only one of arguments {.arg x} and {.arg y}.",
       call = get_cli_abort_call()
@@ -148,8 +150,8 @@ tbl_uvregression.data.frame <- function(data,
   }
 
   # process inputs -------------------------------------------------------------
-  if (!missing(x)) x <- .process_x_and_y_args_as_string(data, x)
-  if (!missing(y)) y <- .process_x_and_y_args_as_string(data, y)
+  x <- .process_x_and_y_args_as_string(data, x)
+  y <- .process_x_and_y_args_as_string(data, y)
   check_scalar(x, allow_empty = TRUE)
   check_scalar(y, allow_empty = TRUE)
 
@@ -238,6 +240,10 @@ tbl_uvregression.data.frame <- function(data,
 #' @export
 #' @name tbl_uvregression
 tbl_uvregression.survey.design <- tbl_uvregression.data.frame
+
+is_quo_empty <- function(x) {
+  tryCatch(is_empty(eval_tidy(x)), error = \(e) FALSE)
+}
 
 .construct_uvregression_tbls <- function(models, label, exponentiate, tidy_fun,
                                          show_single_row, conf.level,
@@ -376,8 +382,8 @@ check_uvregression_formula <- function(formula) {
 
 # convert whatever is passed in `x` and `y` to a string
 .process_x_and_y_args_as_string <- function(data, x, arg_name = rlang::caller_arg(x)) {
-  # capture input as quosure
-  x <- enquo(x)
+  # if quo is empty, then return NULL
+  if (is_quo_empty(x)) return(NULL) # styler: off
 
   # if a character was passed, return it as it
   if (tryCatch(is.character(eval_tidy(x)), error = \(e) FALSE)) return(eval_tidy(x)) # styler: off
