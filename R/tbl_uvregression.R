@@ -157,7 +157,7 @@ tbl_uvregression.data.frame <- function(data,
   check_scalar(y, allow_empty = TRUE)
 
   cards::process_selectors(
-    data,
+    as.data.frame(data),
     include = {{ include }},
     show_single_row = {{ show_single_row }}
   )
@@ -173,7 +173,7 @@ tbl_uvregression.data.frame <- function(data,
   #styler: on
 
   cards::process_formula_selectors(
-    data[include],
+    as.data.frame(data)[include],
     label = label
   )
   cards::check_list_elements(
@@ -182,11 +182,11 @@ tbl_uvregression.data.frame <- function(data,
     error_msg = "Each value passed in the {.arg label} argument must be a string of length {.val {1}}."
   )
 
-  .check_haven_labelled(data[include])
+  .check_haven_labelled(as.data.frame(data)[include])
 
   # fill in labels
   label <-
-    map(include, ~label[[.x]] %||% attr(data[[.x]], 'label') %||% .x) |>
+    map(include, ~label[[.x]] %||% attr(as.data.frame(data)[[.x]], 'label') %||% .x) |>
     set_names(include)
 
   # will return call, and all object passed to in table1 call
@@ -410,7 +410,7 @@ check_uvregression_formula <- function(formula) {
 
   # try tidy evaluation, and if that doesn't work, then return string of input
   tryCatch(
-    cards::cards_select(data = data, expr = x) |> cardx::bt(),
+    cards::cards_select(data = as.data.frame(data), expr = x) |> cardx::bt(),
     error = function(e) {
       tryCatch(
         # lastly, convert quosure to a string

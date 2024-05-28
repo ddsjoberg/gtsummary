@@ -1,4 +1,4 @@
-skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
 
 test_that("tbl_uvregression(x)", {
   expect_silent(
@@ -462,5 +462,26 @@ test_that("tbl_uvregression() messaging", {
         broom::tidy(x, ...)
       }
     )
+  )
+})
+
+# check function works with a survey.design object
+test_that("tbl_uvregression() with survey.design", {
+  data(api, package = "survey")
+  dclus2 <- survey::svydesign(id = ~dnum + snum, weights = ~pw, data = apiclus2)
+  survey::svyglm(api00 ~ ell + meals + mobility, design = dclus2)
+
+  expect_silent(
+    tbl1 <- tbl_uvregression(
+      dclus2,
+      y = api00,
+      include = c(ell, meals),
+      method = survey::svyglm
+    )
+  )
+  # check models are the same
+  expect_equal(
+    tbl1$tbls$ell$inputs$x |> broom::tidy(),
+    survey::svyglm(api00 ~ ell, design = dclus2) |> broom::tidy()
   )
 })
