@@ -10,9 +10,9 @@ tbl_uvregression(data, ...)
 
 \method{tbl_uvregression}{data.frame}(
   data,
-  method,
   y = NULL,
   x = NULL,
+  method,
   method.args = list(),
   exponentiate = FALSE,
   label = NULL,
@@ -31,9 +31,9 @@ tbl_uvregression(data, ...)
 
 \method{tbl_uvregression}{survey.design}(
   data,
-  method,
   y = NULL,
   x = NULL,
+  method,
   method.args = list(),
   exponentiate = FALSE,
   label = NULL,
@@ -56,15 +56,15 @@ A data frame or a survey design object.}
 
 \item{...}{Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.}
 
-\item{method}{(\code{string}/\code{function})\cr
-Regression method or function, e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, \code{survey::svyglm}, etc.
-Methods may be passed as functions (\code{method=lm}) or as strings (\code{method='lm'}).}
-
 \item{y, x}{(\code{expression}\\code{string})\cr
 Model outcome (e.g. \code{y=recurrence} or \code{y=Surv(time, recur)}) or
 covariate (e.g. \code{x=trt}.
 All other column specified in \code{include} will be regressed against the constant \code{y} or \code{x}.
 Specify one and only one of \code{y} or \code{x}.}
+
+\item{method}{(\code{string}/\code{function})\cr
+Regression method or function, e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, \code{survey::svyglm}, etc.
+Methods may be passed as functions (\code{method=lm}) or as strings (\code{method='lm'}).}
 
 \item{method.args}{(named \code{list})\cr
 Named list of arguments assed to \code{method}.}
