@@ -164,7 +164,8 @@ tbl_uvregression.data.frame <- function(data,
 
   # styler: off
   # remove any variables specified in arguments `x`/`y` from include
-  include <- include |> setdiff(stats::reformulate(c(x, y)) |> all.vars())
+  include <- include |>
+    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character()))
   # remove any variables not in include
   show_single_row <-
     if (is_empty(x)) intersect(show_single_row, include)
@@ -298,8 +299,8 @@ is_quo_empty <- function(x) {
       }
       if (!is_empty(tbl_i[["warning"]])) {
         cli::cli_inform(
-          c("There was an {cli::col_yellow('warning')} running {.fun tbl_regression} for variable {.val {variable}}. See message below.",
-            "!" = tbl_i[["error"]])
+          c("There was a {cli::col_yellow('warning')} running {.fun tbl_regression} for variable {.val {variable}}. See message below.",
+            "!" = tbl_i[["warning"]])
         )
       }
 
@@ -326,7 +327,7 @@ is_quo_empty <- function(x) {
       }
       if (!is_empty(model_i[["warning"]])) {
         cli::cli_inform(
-          c("There was an {cli::col_yellow('warning')} constructing the model for variable {.val {variable}}. See message below.",
+          c("There was a {cli::col_yellow('warning')} constructing the model for variable {.val {variable}}. See message below.",
             "!" = model_i[["warning"]])
         )
       }
@@ -391,7 +392,7 @@ check_uvregression_formula <- function(formula) {
       length(unlist(regmatches(formula_split[[2]], m = gregexpr("{x}", formula_split[[2]], fixed = TRUE)))) != 1L) {
     cli::cli_abort(
       c("Error in argument {.arg formula} structure.",
-        i = "The substring {.val {{x}}} must appear once in the string and it must be on the LHS of the formula."),
+        i = "The substring {.val {{x}}} must appear once in the string and it must be on the RHS of the formula."),
       call = get_cli_abort_call()
     )
   }

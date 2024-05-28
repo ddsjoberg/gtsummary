@@ -330,3 +330,125 @@ test_that("tbl_uvregression(conf.int)", {
       as.data.frame()
   )
 })
+
+# test the dots are passed on to broom.helpers, and the tidy function
+test_that("tbl_uvregression(...)", {
+  expect_snapshot(
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(family = binomial),
+      include = trt,
+      add_header_rows = FALSE
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_uvregression(x,y) messaging", {
+  # expect error when both or neither x/y specified
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      method = lm,
+      include = trt
+    )
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      x = age, y = marker,
+      method = lm,
+      include = trt
+    )
+  )
+})
+
+test_that("tbl_uvregression(formula) messaging", {
+  # problems with formula argument
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} ~ {y}"
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} ~ {x} + {x}"
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial |> dplyr::rename(`Tx Effect` = trt),
+      y = "Tx Effect",
+      method = glm,
+      method.args = list(family = binomial),
+      include = age
+    )
+  )
+})
+
+test_that("tbl_uvregression(method.args) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(not_an_arg = FALSE),
+      include = trt
+    )
+  )
+
+  expect_snapshot(
+    tbl <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      method.args = list(not_an_arg = FALSE),
+      include = trt
+    )
+  )
+})
+
+test_that("tbl_uvregression() messaging", {
+  # introduce an error in the `tbl_regression()` step
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      tidy_fun = \(x, ...) stop("Inducing an error")
+    )
+  )
+
+  expect_snapshot(
+    tbl <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      tidy_fun = \(x, ...) {
+        warning("Inducing an warning")
+        broom::tidy(x, ...)
+      }
+    )
+  )
+})

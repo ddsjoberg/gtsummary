@@ -94,3 +94,98 @@
       2                 Drug A  <NA>        <NA>        <NA>
       3                 Drug B  <NA>        0.19         0.5
 
+# tbl_uvregression(...)
+
+    Code
+      as.data.frame(tbl_uvregression(trial, y = response, method = glm, method.args = list(
+        family = binomial), include = trt, add_header_rows = FALSE))
+    Output
+        **Characteristic** **N** **log(OR)**  **95% CI** **p-value**
+      1             Drug A   193        <NA>        <NA>        <NA>
+      2             Drug B   193        0.19 -0.41, 0.81         0.5
+
+# tbl_uvregression(x,y) messaging
+
+    Code
+      tbl_uvregression(trial, method = lm, include = trt)
+    Condition
+      Error in `tbl_uvregression()`:
+      ! Must specify one and only one of arguments `x` and `y`.
+
+---
+
+    Code
+      tbl_uvregression(trial, x = age, y = marker, method = lm, include = trt)
+    Condition
+      Error in `tbl_uvregression()`:
+      ! Must specify one and only one of arguments `x` and `y`.
+
+# tbl_uvregression(formula) messaging
+
+    Code
+      tbl_uvregression(trial, y = age, method = lm, include = trt, formula = "{y} ~ {y}")
+    Condition
+      Error in `tbl_uvregression()`:
+      ! Error in argument `formula` structure.
+      i The substring "{y}" must appear once in the string and it must be on the LHS of the formula.
+
+---
+
+    Code
+      tbl_uvregression(trial, y = age, method = lm, include = trt, formula = "{y} ~ {x} + {x}")
+    Condition
+      Error in `tbl_uvregression()`:
+      ! Error in argument `formula` structure.
+      i The substring "{x}" must appear once in the string and it must be on the RHS of the formula.
+
+---
+
+    Code
+      tbl_uvregression(dplyr::rename(trial, `Tx Effect` = trt), y = "Tx Effect",
+      method = glm, method.args = list(family = binomial), include = age)
+    Condition
+      Error in `tbl_uvregression()`:
+      ! There was an error constructing the formula for variable "age". See message below.
+      x <text>:1:4: unexpected symbol 1: Tx Effect ^
+
+# tbl_uvregression(method.args) messaging
+
+    Code
+      tbl_uvregression(trial, y = response, method = glm, method.args = list(
+        not_an_arg = FALSE), include = trt)
+    Condition
+      Error in `tbl_uvregression()`:
+      ! There was an error constructing the model for variable "trt". See message below.
+      x unused argument (not_an_arg = FALSE)
+
+---
+
+    Code
+      tbl <- tbl_uvregression(trial, y = age, method = lm, method.args = list(
+        not_an_arg = FALSE), include = trt)
+    Message
+      There was a warning constructing the model for variable "trt". See message below.
+      ! In lm.fit(x, y, offset = offset, singular.ok = singular.ok, ...) : extra argument 'not_an_arg' will be disregarded
+
+# tbl_uvregression() messaging
+
+    Code
+      tbl_uvregression(trial, y = age, method = lm, include = trt, tidy_fun = function(
+        x, ...) stop("Inducing an error"))
+    Condition
+      Error in `tbl_uvregression()`:
+      ! There was an error running `tbl_regression()` for variable "trt". See message below.
+      x Error in (function (x, ...) : Inducing an error
+
+---
+
+    Code
+      tbl <- tbl_uvregression(trial, y = age, method = lm, include = trt, tidy_fun = function(
+        x, ...) {
+        warning("Inducing an warning")
+        broom::tidy(x, ...)
+      })
+    Message
+      There was a warning running `tbl_regression()` for variable "trt". See message below.
+      ! Inducing an warning
+
