@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_stack.R
 \name{tbl_stack}
 \alias{tbl_stack}
-\title{Stacks tables}
+\title{Stack tables}
 \usage{
 tbl_stack(tbls, group_header = NULL, quiet = FALSE)
 }
@@ -26,6 +26,7 @@ Column attributes, including number formatting and column footnotes, are
 retained from the first passed gtsummary object.
 }
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("survival", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # stacking two tbl_regression objects
 t1 <-
@@ -69,6 +70,7 @@ t4 <-
 # row2 <- tbl_merge(list(t2, t4))
 #
 # tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg

@@ -15,7 +15,8 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A `tbl_stack` object
-#' @examples
+#'
+#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("survival", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
 #' # stacking two tbl_regression objects
 #' t1 <-
