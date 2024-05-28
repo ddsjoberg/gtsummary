@@ -15,6 +15,7 @@ Object with class 'gtsummary'}
 \description{
 \itemize{
 \item \code{\link[=add_nevent.tbl_regression]{add_nevent.tbl_regression()}}
+\item \code{\link[=add_nevent.tbl_uvregression]{add_nevent.tbl_uvregression()}}
 }
 }
 \seealso{

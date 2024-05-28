@@ -1,6 +1,7 @@
 #' Add p-values
 #'
 #' - [`add_nevent.tbl_regression()`]
+#' - [`add_nevent.tbl_uvregression()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
@@ -19,21 +20,25 @@ add_nevent <- function(x, ...) {
 
 #' Add event N
 #'
+#' Adds a column of the number of events to tables created with
+#' [`tbl_regression()`] or [`tbl_uvregression()`].  Supported
+#' model types are among GLMs with binomial distribution family (e.g.
+#' [`stats::glm()`], `[lme4::glmer()]`, and
+#' `[geepack::geeglm()]`) and Cox
+#' Proportion Hazards regression models ([survival::coxph]).
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
 #' @examples
-#' # TODO: Re-add after tbl_uvregression() is migrated
 #' # Example 1 ----------------------------------
-#' # add_nevent.tbl_regression_ex1 <-
-#' #   trial %>%
-#' #   select(response, trt, grade) %>%
-#' #   tbl_uvregression(
-#' #     y = response,
-#' #     method = glm,
-#' #     method.args = list(family = binomial),
-#' #   ) %>%
-#' #   add_nevent()
+#' trial |>
+#'   select(response, trt, grade) |>
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'   ) |>
+#'   add_nevent()
 #'
 #' # Example 2 ----------------------------------
 #' glm(response ~ age + grade, trial, family = binomial) |>
@@ -104,6 +109,10 @@ add_nevent.tbl_regression <- function(x, location = "label", ...) {
   x$call_list <- updated_call_list
   x
 }
+
+#' @rdname add_nevent_regression
+#' @export
+add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 # this function is used to fill in missing values in the
 # x$table_styling$header$modify_stat_* columns

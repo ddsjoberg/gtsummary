@@ -3,9 +3,12 @@
 \name{add_nevent_regression}
 \alias{add_nevent_regression}
 \alias{add_nevent.tbl_regression}
+\alias{add_nevent.tbl_uvregression}
 \title{Add event N}
 \usage{
 \method{add_nevent}{tbl_regression}(x, location = "label", ...)
+
+\method{add_nevent}{tbl_uvregression}(x, location = "label", ...)
 }
 \arguments{
 \item{x}{(\code{tbl_regression}/\code{tbl_uvregression})\cr
@@ -23,20 +26,23 @@ row for continuous.}
 \item{...}{These dots are for future extensions and must be empty.}
 }
 \description{
-Add event N
+Adds a column of the number of events to tables created with
+\code{\link[=tbl_regression]{tbl_regression()}} or \code{\link[=tbl_uvregression]{tbl_uvregression()}}.  Supported
+model types are among GLMs with binomial distribution family (e.g.
+\code{\link[stats:glm]{stats::glm()}}, \verb{[lme4::glmer()]}, and
+\verb{[geepack::geeglm()]}) and Cox
+Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
 }
 \examples{
-# TODO: Re-add after tbl_uvregression() is migrated
 # Example 1 ----------------------------------
-# add_nevent.tbl_regression_ex1 <-
-#   trial \%>\%
-#   select(response, trt, grade) \%>\%
-#   tbl_uvregression(
-#     y = response,
-#     method = glm,
-#     method.args = list(family = binomial),
-#   ) \%>\%
-#   add_nevent()
+trial |>
+  select(response, trt, grade) |>
+  tbl_uvregression(
+    y = response,
+    method = glm,
+    method.args = list(family = binomial),
+  ) |>
+  add_nevent()
 
 # Example 2 ----------------------------------
 glm(response ~ age + grade, trial, family = binomial) |>
