@@ -86,9 +86,9 @@ tbl_uvregression <- function(data, ...) {
 #' @export
 #' @name tbl_uvregression
 tbl_uvregression.data.frame <- function(data,
-                                        method,
                                         y = NULL,
                                         x = NULL,
+                                        method,
                                         method.args = list(),
                                         exponentiate = FALSE,
                                         label = NULL,
@@ -105,6 +105,7 @@ tbl_uvregression.data.frame <- function(data,
   set_cli_abort_call()
   y <- enquo(y)
   x <- enquo(x)
+  method.args <- enquo(method.args)
 
   # setting default values -----------------------------------------------------
   if (missing(pvalue_fun)) {
@@ -161,10 +162,14 @@ tbl_uvregression.data.frame <- function(data,
     show_single_row = {{ show_single_row }}
   )
 
+  # styler: off
   # remove any variables specified in arguments `x`/`y` from include
   include <- include |> setdiff(stats::reformulate(c(x, y)) |> all.vars())
   # remove any variables not in include
-  show_single_row <- intersect(show_single_row, include)
+  show_single_row <-
+    if (is_empty(x)) intersect(show_single_row, include)
+    else intersect(show_single_row, x)
+  #styler: on
 
   cards::process_formula_selectors(
     data[include],
@@ -178,6 +183,11 @@ tbl_uvregression.data.frame <- function(data,
 
   .check_haven_labelled(data[include])
 
+  # fill in labels
+  label <-
+    map(include, ~label[[.x]] %||% attr(data[[.x]], 'label') %||% .x) |>
+    set_names(include)
+
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
   tbl_uvregression_inputs <- as.list(environment())
@@ -188,7 +198,7 @@ tbl_uvregression.data.frame <- function(data,
     # construct a formula for each model
     .construct_uvregression_formulas(formula = formula, x = x, y = y) |>
     # build models
-    .construct_uvregression_models(data = data, method = method, method.args = {{ method.args }})
+    .construct_uvregression_models(data = data, method = method, method.args = !!method.args)
 
   # summarize each regression model with `tbl_regression()` --------------------
   lst_tbls <-
@@ -198,7 +208,7 @@ tbl_uvregression.data.frame <- function(data,
       show_single_row = show_single_row, conf.level = conf.level,
       estimate_fun = estimate_fun, pvalue_fun = pvalue_fun,
       add_estimate_to_reference_rows = add_estimate_to_reference_rows,
-      conf.int = conf.int, ...
+      conf.int = conf.int, x = x, ...
     )
 
   # if the outcome varied, then replace the variable names within tbls
@@ -249,7 +259,7 @@ is_quo_empty <- function(x) {
                                          show_single_row, conf.level,
                                          estimate_fun, pvalue_fun,
                                          add_estimate_to_reference_rows,
-                                         conf.int, ...) {
+                                         conf.int, x, ...) {
   imap(
     models,
     function(model, variable) {
@@ -257,11 +267,19 @@ is_quo_empty <- function(x) {
         cards::eval_capture_conditions(
           tbl_regression(
             x = model,
-            include = all_of(variable),
-            label = label[[variable]],
+            include = ifelse(is_empty(x), variable, x),
+            label =
+              # styler: off
+              if (is_empty(x)) label[variable]
+              else label[variable] |> set_names(x),
+              # styler: on
             exponentiate = exponentiate,
             tidy_fun = tidy_fun,
-            show_single_row = intersect(variable, show_single_row),
+            show_single_row =
+              # styler: off
+              if (is_empty(x)) intersect(variable, show_single_row)
+              else intersect(x, show_single_row),
+              # styler: on
             conf.level = conf.level,
             estimate_fun = estimate_fun,
             pvalue_fun = pvalue_fun,
@@ -292,12 +310,13 @@ is_quo_empty <- function(x) {
 }
 
 .construct_uvregression_models <- function(formulas, data, method, method.args) {
+  method.args <- enquo(method.args)
   imap(
     formulas,
-    \(.x, .y) {
-      model_i <- cards::eval_capture_conditions(
-        cardx::construct_model(data, formula = .x, method = method, method.args = {{ method.args }})
-      )
+    \(formula, variable) {
+      model_i <- cards::eval_capture_conditions({
+        cardx::construct_model(data, formula = formula, method = method, method.args = !!method.args)
+      })
       if (!is_empty(model_i[["error"]])) {
         cli::cli_abort(
           c("There was an {cli::col_red('error')} constructing the model for variable {.val {variable}}. See message below.",
@@ -308,7 +327,7 @@ is_quo_empty <- function(x) {
       if (!is_empty(model_i[["warning"]])) {
         cli::cli_inform(
           c("There was an {cli::col_yellow('warning')} constructing the model for variable {.val {variable}}. See message below.",
-            "!" = model_i[["error"]])
+            "!" = model_i[["warning"]])
         )
       }
 
