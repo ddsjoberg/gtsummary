@@ -391,6 +391,18 @@ test_that("tbl_uvregression(formula) messaging", {
     )
   )
 
+  # no tilda
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} {x}"
+    )
+  )
+
   expect_snapshot(
     error = TRUE,
     tbl_uvregression(

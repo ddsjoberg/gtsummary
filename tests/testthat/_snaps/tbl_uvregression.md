@@ -141,6 +141,14 @@
 ---
 
     Code
+      tbl_uvregression(trial, y = age, method = lm, include = trt, formula = "{y} {x}")
+    Condition
+      Error in `tbl_uvregression()`:
+      ! The `formula` argument must be have structure of a standard formula, e.g. "{y} ~ {x}".
+
+---
+
+    Code
       tbl_uvregression(dplyr::rename(trial, `Tx Effect` = trt), y = "Tx Effect",
       method = glm, method.args = list(family = binomial), include = age)
     Condition
