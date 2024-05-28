@@ -274,7 +274,7 @@ add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
   cardx::ard_regression_basic(
     x =
       cardx::construct_model(
-        x = data,
+        data = data,
         formula = cardx::reformulate2(c(by, adj.vars), response = variable),
         method = "lm"
       )
@@ -478,7 +478,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
   cardx::ard_regression_basic(
     x =
       cardx::construct_model(
-        x = data,
+        data = data,
         formula =
           stats::reformulate(
             termlabels = c(cardx::bt(c(by, adj.vars)), glue("(1 | {cardx::bt(group)})")),
