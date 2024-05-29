@@ -84,9 +84,14 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
     statistic = statistic,
     digits = digits,
     call = c(x$call_list, list(add_overall = match.call())),
-    calling_fun = "tbl_summary"
+    calling_fun = names(x$call_list)[1]
   )
 }
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_custom_summary <- add_overall.tbl_summary
+
 
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
