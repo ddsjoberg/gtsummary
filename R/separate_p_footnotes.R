@@ -1,6 +1,6 @@
 #' Create footnotes for individual p-values
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{questioning}
 #' The usual presentation of footnotes for p-values on a gtsummary table is
 #' to have a single footnote that lists all statistical tests that were used to
 #' compute p-values on a given table. The `separate_p_footnotes()` function
