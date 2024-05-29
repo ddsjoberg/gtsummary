@@ -90,7 +90,7 @@ add_difference.tbl_summary <- function(x,
   set_cli_abort_call()
   # check/process inputs -------------------------------------------------------
   check_dots_empty()
-  updated_call_list <- c(x$call_list, list(add_p = match.call()))
+  updated_call_list <- c(x$call_list, list(add_difference = match.call()))
 
   if (rlang::is_function(estimate_fun)) {
     lifecycle::deprecate_stop(
