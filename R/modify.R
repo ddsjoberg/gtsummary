@@ -248,7 +248,10 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
 
       glued_value <-
         cards::eval_capture_conditions(
-          expr(glue::glue(value)),
+          case_switch(
+            is.na(value) ~ NA_character_,
+            .default = expr(glue::glue(value))
+          ),
           data = df_header_subset
         )
 
