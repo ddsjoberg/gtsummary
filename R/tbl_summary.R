@@ -171,6 +171,7 @@ tbl_summary <- function(data,
                         percent = c("column", "row", "cell"),
                         include = everything()) {
   set_cli_abort_call()
+
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
@@ -266,14 +267,14 @@ tbl_summary <- function(data,
         )
     )
 
-  select_prep(.list2tb(type, "var_type"), data[include]) |>
-    cards::process_formula_selectors(
-      digits =
-        case_switch(
-          missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
-          .default = digits
-        )
-    )
+  cards::process_formula_selectors(
+    select_prep(.list2tb(type, "var_type"), data[include]),
+    digits =
+      case_switch(
+        missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
+        .default = digits
+      )
+  )
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
@@ -287,7 +288,6 @@ tbl_summary <- function(data,
   )
 
   # fill each element of digits argument
-  # TODO: this needs to be updated to account for the scenario where there is a template override that may not fill in all the values
   if (!missing(digits)) {
     digits <-
       select_prep(.list2tb(type, "var_type"), data[include]) |>
@@ -312,7 +312,6 @@ tbl_summary <- function(data,
 
 
   # construct cards ------------------------------------------------------------
-  # TODO: Utilize themes to change the default formatting types
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
@@ -387,8 +386,7 @@ tbl_summary <- function(data,
     append(
       list(
         cards = list(tbl_summary = cards),
-        inputs = tbl_summary_inputs,
-        call_list = list(tbl_summary = call)
+        inputs = tbl_summary_inputs
       )
     ) |>
     structure(class = c("tbl_summary", "gtsummary"))
@@ -421,13 +419,13 @@ tbl_summary <- function(data,
     )
 
   # return tbl_summary table ---------------------------------------------------
+  x$call_list <- list(tbl_summary = call)
   # running any additional mods
   x <-
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
 
-  x
-}
+  x}
 
 .drop_missing_by_obs <- function(data, by) {
   if (is_empty(by) || !any(is.na(data[[by]]))) {
@@ -549,7 +547,10 @@ tbl_summary <- function(data,
 .data_dim_checks <- function(data) {
   # cannot be empty data frame
   if (nrow(data) == 0L || ncol(data) == 0L) {
-    cli::cli_abort("Expecting {.arg data} argument to have at least 1 row and 1 column.", call = get_cli_abort_call())
+    cli::cli_abort(
+      "Expecting {.arg data} argument to have at least 1 row and 1 column.",
+      call = get_cli_abort_call()
+    )
   }
   invisible()
 }
@@ -634,7 +635,7 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
