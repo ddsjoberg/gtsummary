@@ -347,7 +347,7 @@ tbl_summary <- function(data,
         value = value,
         stat_label = ~ default_stat_labels()
       ),
-      # calculate categorical summaries
+      # calculate continuous summaries
       cards::ard_continuous(
         select_prep(.list2tb(type, "var_type"), data),
         by = all_of(by),

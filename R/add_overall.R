@@ -90,6 +90,11 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 
 #' @rdname add_overall
 #' @export
+add_overall.tbl_continuous <- add_overall.tbl_summary
+
+
+#' @rdname add_overall
+#' @export
 add_overall.tbl_custom_summary <- add_overall.tbl_summary
 
 
