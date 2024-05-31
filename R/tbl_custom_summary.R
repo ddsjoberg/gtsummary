@@ -1,6 +1,6 @@
 #' Create a table of summary statistics using a custom summary function
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{experimental}\cr
 #' The `tbl_custom_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' This function is similar to [tbl_summary()] but allows you to provide
@@ -178,6 +178,7 @@
 #'     by = "trt",
 #'     stat_fns = ~diff_to_great_mean,
 #'     statistic = ~"{mean} ({level}, diff: {diff})",
+#'     digits = ~list(level = as.character),
 #'     overall_row = TRUE
 #'   ) |>
 #'   bold_labels()
@@ -196,7 +197,7 @@ tbl_custom_summary <- function(data,
                                overall_row = FALSE,
                                overall_row_last = FALSE,
                                overall_row_label = "Overall") {
-  get_cli_abort_call()
+  set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
   check_not_missing(data)
@@ -289,6 +290,11 @@ tbl_custom_summary <- function(data,
       ),
     stat_fns = stat_fns
   )
+  cards::check_list_elements(
+    x = stat_fns,
+    predicate = \(x) is.function(x),
+    error_msg = "Each value passed in the {.arg stat_fns} argument must be a function."
+  )
 
   select_prep(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
@@ -315,7 +321,7 @@ tbl_custom_summary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      select_prep(.list2tb(type, "var_type"), data[include]) |>
+      select_prep(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]) |>
       assign_summary_digits(statistic, rep_named(include, list("continuous")), digits = digits)
   }
 
@@ -333,50 +339,56 @@ tbl_custom_summary <- function(data,
 
 
   # construct cards ------------------------------------------------------------
-  variables_categorical <- keep(type, \(x) x %in% "categorical") |> names()
+  variables_categorical <- keep(type, \(x) x %in% c("categorical", "dichotomous")) |> names()
   ard_categorical <-
-    if (is_empty(variables_categorical)) dplyr::tibble()
+    if (is_empty(variables_categorical)) dplyr::tibble() # styler: off
     else {
       map(
         variables_categorical,
         \(variable) {
-          ard <- cards::ard_complex(
-            data,
-            variables = all_of(variable),
-            by = all_of(c(by, variable)),
-            statistic = stat_fns[variable] |> map(~list(complex = .x))
-          ) |>
-            dplyr::select(-cards::all_ard_variables())
+          ard <-
+            cards::ard_complex(
+              data |> tidyr::drop_na(all_of(variable)),
+              variables = all_of(variable),
+              by = all_of(c(by, variable)),
+              statistic = stat_fns[variable] |> map(~list(complex = .x)),
+              fmt_fn = digits[variable]
+            ) |>
+            dplyr::select(-cards::all_ard_variables()) |>
+            dplyr::mutate(context = type[[variable]])
 
-          if (!is_empty(by)) {
-            ard <- ard |>
-              dplyr::rename(variable = "group2", variable_level = "group2_level")
-          }
-          else {
-            ard <- ard |>
-              dplyr::rename(variable = "group1", variable_level = "group1_level")
-          }
+          # rename columns to align with expectations similar to `tbl_summary()` results
+          ard <-
+            case_switch(
+              !is_empty(by) ~ dplyr::rename(ard, variable = "group2", variable_level = "group2_level"),
+              .default = dplyr::rename(ard, variable = "group1", variable_level = "group1_level")
+            )
         }
       ) |>
         cards::bind_ard() |>
-        dplyr::mutate(context = "categorical") |>
-        cards::tidy_ard_column_order()
+        cards::tidy_ard_column_order() |>
+        # for dichotomous, keep the value of interest
+        dplyr::filter(
+          map2_lgl(
+            .data$variable, .data$variable_level,
+            ~type[[.x]] == "categorical" | (type[[.x]] == "dichotomous" & .y %in% value[[.x]])
+          )
+        )
     }
 
 
-  variables_continuous <- keep(type, \(x) x %in% c("continuous", "continuous2", "dichotomous")) |> names()
+  variables_continuous <- keep(type, \(x) x %in% c("continuous", "continuous2")) |> names()
   ard_continuous <-
     cards::ard_complex(
       data,
       variables = all_of(variables_continuous),
       by = any_of(by),
-      statistic = stat_fns[variables_continuous] |> map(~list(complex = .x))
+      statistic = stat_fns[variables_continuous] |> map(~list(complex = .x)),
+      fmt_fn = digits[variables_continuous]
     ) |>
     dplyr::mutate(context = "continuous")
 
-
   # construct cards ------------------------------------------------------------
-  # TODO: Utilize themes to change the default formatting types
   cards <-
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
@@ -396,8 +408,17 @@ tbl_custom_summary <- function(data,
       ard_continuous,
       ard_categorical
     ) |>
-    cards::replace_null_statistic()
-
+    cards::replace_null_statistic() |>
+    # fixing integer fmt_fn that have defaulted to character/date results
+    dplyr::mutate(
+      fmt_fn = map2(
+        .data$fmt_fn, .data$stat,
+        function(.x, .y) {
+          if (inherits(.y, c("character", "Date")) && is_scalar_integerish(.x)) return(as.character)
+          .x
+        }
+      )
+    )
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)

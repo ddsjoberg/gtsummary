@@ -288,7 +288,6 @@ tbl_summary <- function(data,
   )
 
   # fill each element of digits argument
-  # TODO: this needs to be updated to account for the scenario where there is a template override that may not fill in all the values
   if (!missing(digits)) {
     digits <-
       select_prep(.list2tb(type, "var_type"), data[include]) |>
@@ -420,7 +419,7 @@ tbl_summary <- function(data,
     )
 
   # return tbl_summary table ---------------------------------------------------
-  x$call_list <- list(tbl_custom_summary = call)
+  x$call_list <- list(tbl_summary = call)
   # running any additional mods
   x <-
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
@@ -548,7 +547,10 @@ tbl_summary <- function(data,
 .data_dim_checks <- function(data) {
   # cannot be empty data frame
   if (nrow(data) == 0L || ncol(data) == 0L) {
-    cli::cli_abort("Expecting {.arg data} argument to have at least 1 row and 1 column.", call = get_cli_abort_call())
+    cli::cli_abort(
+      "Expecting {.arg data} argument to have at least 1 row and 1 column.",
+      call = get_cli_abort_call()
+    )
   }
   invisible()
 }

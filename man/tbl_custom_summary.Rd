@@ -87,7 +87,7 @@ String indicating the overall row label. Default is \code{"Overall"}.}
 A \code{tbl_custom_summary} object
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{experimental}\cr
 The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide
@@ -250,6 +250,7 @@ trial |>
     by = "trt",
     stat_fns = ~diff_to_great_mean,
     statistic = ~"{mean} ({level}, diff: {diff})",
+    digits = ~list(level = as.character),
     overall_row = TRUE
   ) |>
   bold_labels()
