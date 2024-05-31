@@ -75,11 +75,6 @@ Titanic |>
   bold_labels() |>
   modify_footnote(all_stat_cols() ~ "Proportion (\%) of survivors (n/N) [95\% CI]")
 }
-\seealso{
-Other tbl_custom_summary tools: 
-\code{\link{continuous_summary}()}
-}
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}

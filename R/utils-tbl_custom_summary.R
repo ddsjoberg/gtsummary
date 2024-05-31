@@ -15,10 +15,10 @@
 #' [`tbl_summary()`].
 #'
 #' @export
-#' @family tbl_custom_summary tools
+#' @return NULL
+#' @keywords internal
+#'
 #' @author Joseph Larmarange
-#' @examples
-#' # TODO: Add an example using tbl_continuous() after it's been added
 continuous_summary <- function(variable) {
   lifecycle::deprecate_stop(
     when = "2.0.0",
@@ -141,7 +141,6 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' and the corresponding method.
 #'
 #' @export
-#' @family tbl_custom_summary tools
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------

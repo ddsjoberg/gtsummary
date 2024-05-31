@@ -22,14 +22,7 @@ of \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} the same continuous s
 \code{\link[=tbl_summary]{tbl_summary()}}. See the \emph{statistic argument} section of the help file of
 \code{\link[=tbl_summary]{tbl_summary()}}.
 }
-\examples{
-# TODO: Add an example using tbl_continuous() after it's been added
-}
-\seealso{
-Other tbl_custom_summary tools: 
-\code{\link{proportion_summary}()}
-}
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}
+\keyword{internal}
