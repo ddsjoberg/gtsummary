@@ -313,9 +313,9 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
           Terms = .data$model_terms_id
         ) %>%
         list(),
-      df = .data$wald_test$result$chi2 %>% purrr::pluck("df"),
-      statistic = .data$wald_test$result$chi2 %>% purrr::pluck("chi2"),
-      p.value = .data$wald_test$result$chi2 %>% purrr::pluck("P"),
+      df = .data$wald_test$result$chi2 %>% getElement("df"),
+      statistic = .data$wald_test$result$chi2 %>% getElement("chi2"),
+      p.value = .data$wald_test$result$chi2 %>% getElement("P"),
     ) %>%
     dplyr::ungroup() %>%
     dplyr::select("term", "df", "statistic", "p.value")
