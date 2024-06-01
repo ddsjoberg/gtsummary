@@ -82,7 +82,7 @@
 \item{x}{(regression model)\cr
 Regression model object}
 
-\item{...}{arguments passed to \code{tbl_regression.default()}}
+\item{...}{arguments passed to \code{tbl_regression()}}
 
 \item{tidy_fun}{(\code{function})\cr
 Tidier function for the model. Default is to use \code{broom::tidy()}.
@@ -90,7 +90,7 @@ If an error occurs, the tidying of the model is attempted with
 \code{parameters::model_parameters()}, if installed.}
 }
 \description{
-Most regression models are handled by \code{\link[=tbl_regression.default]{tbl_regression.default()}},
+Most regression models are handled by \code{\link[=tbl_regression]{tbl_regression()}},
 which uses \code{\link[broom:reexports]{broom::tidy()}} to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.

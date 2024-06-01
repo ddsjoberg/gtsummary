@@ -1,17 +1,18 @@
 #' @title Methods for tbl_regression
 #'
-#' @description Most regression models are handled by [`tbl_regression.default()`],
+#' @description Most regression models are handled by [`tbl_regression()`],
 #' which uses [`broom::tidy()`] to perform initial tidying of results. There are,
 #' however, some model types that have modified default printing behavior.
 #' Those methods are listed below.
 #'
-#' @inheritSection tbl_regression Methods
-#' @name tbl_regression_methods
-#' @keywords internal
-#' @rdname tbl_regression_methods
-#' @param ... arguments passed to `tbl_regression.default()`
+#' @param ... arguments passed to `tbl_regression()`
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_stack
+#'
+#' @name tbl_regression_methods
+#' @keywords internal
+#'
+#' @inheritSection tbl_regression Methods
 NULL
 
 #' @export
