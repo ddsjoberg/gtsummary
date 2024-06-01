@@ -100,8 +100,7 @@ Those methods are listed below.
 
 The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
 to perform the initial tidying of the model object. There are, however,
-a few models that use \verb{[modifications][tbl_regression_methods]}.
-TODO: Re-add link to tbl_regression_methods above.
+a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
 \item \code{"parsnip/workflows"}: If the model was prepared using parsnip/workflows,
 the original model fit is extracted and the original \verb{x=} argument
