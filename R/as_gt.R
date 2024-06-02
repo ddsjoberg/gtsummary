@@ -303,7 +303,10 @@ table_styling_to_gt_calls <- function(x, ...) {
   # adding other calls from x$table_styling$source_note
   if (!is.null(x$table_styling$source_note)) {
     source_note <-
-      rlang::call2(attr(x$table_styling$source_note, "text_interpret"), x$table_styling$source_note)
+      rlang::call2(
+        get(attr(x$table_styling$source_note, "text_interpret"), envir = asNamespace("gt")),
+        x$table_styling$source_note
+      )
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!source_note))
   }
 
