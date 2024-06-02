@@ -53,7 +53,8 @@ construct_initial_table_styling <- function(x) {
 
 
   # returning gtsummary object -------------------------------------------------
-  x
+  x |>
+    structure(class = "gtsummary")
 }
 
 
