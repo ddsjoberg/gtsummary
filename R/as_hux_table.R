@@ -16,7 +16,7 @@
 #' Default is `TRUE`
 #' @param strip_md_bold DEPRECATED
 #' @name as_hux_table
-#' @return A {huxtable} object
+#' @return A \{huxtable\} object
 #'
 #' @author David Hugh-Jones, Daniel D. Sjoberg
 #' @examplesIf gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")

@@ -1,13 +1,13 @@
 #' Create footnotes for individual p-values
 #'
-#' \lifecycle{questioning}
+#' \lifecycle{questioning}\cr
 #' The usual presentation of footnotes for p-values on a gtsummary table is
 #' to have a single footnote that lists all statistical tests that were used to
 #' compute p-values on a given table. The `separate_p_footnotes()` function
 #' separates aggregated p-value footnotes to individual footnotes that denote
 #' the specific test used for each of the p-values.
 #'
-#' @param x (`tbl_summary`\`tbl_svysummary`)\cr
+#' @param x (`tbl_summary`, `tbl_svysummary`)\cr
 #'   Object with class `"tbl_summary"` or `"tbl_svysummary"`
 #'
 #' @export

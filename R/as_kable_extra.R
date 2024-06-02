@@ -2,7 +2,7 @@
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' This allows the customized formatting available via `knitr::kable()`
-#' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
+#' and \{kableExtra\}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies. Users
 #' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
@@ -49,7 +49,7 @@
 #' Default is `TRUE`. This is primarily used to escape special characters,
 #' convert markdown to LaTeX, and remove line breaks from the footnote.
 #' @export
-#' @return A {kableExtra} table
+#' @return A \{kableExtra\} table
 #'
 #' @author Daniel D. Sjoberg
 #' @examplesIf gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")
