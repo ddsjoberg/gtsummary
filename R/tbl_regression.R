@@ -227,10 +227,12 @@ tbl_regression.default <- function(x,
     do.call(list(res))
 
   # return results -------------------------------------------------------------
-  res |>
+  res <- res |>
     modify_table_styling(
       columns = "label",
       rows = .data$row_type %in% c("level", "missing"),
       indent = 4
     )
+  res$call_list <- list(tbl_regression = match.call())
+  res
 }
