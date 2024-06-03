@@ -2,9 +2,29 @@
 % Please edit documentation in R/add_overall.R
 \name{add_overall}
 \alias{add_overall}
+\alias{add_overall.tbl_continuous}
+\alias{add_overall.tbl_custom_summary}
 \title{Add overall column}
 \usage{
 add_overall(x, ...)
+
+\method{add_overall}{tbl_continuous}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {N}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+\method{add_overall}{tbl_custom_summary}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {N}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr

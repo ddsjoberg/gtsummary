@@ -73,8 +73,6 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
 
   # calculate/grab the needed ARD results --------------------------------------
   if ("add_overall" %in% names(x[["call_list"]])) {
-    browser()
-    # TODO: If `add_overall()` was previously run, we can get the stats from there instead of re-calculating
     x$cards$add_n <-
       x[["cards"]][["add_overall"]] |>
       dplyr::filter(
@@ -83,7 +81,6 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
       ) |>
       cards::apply_fmt_fn()
   } else if (is_empty(x$inputs$by)) {
-    # TODO: If `tbl_summary(by)` is empty, then we can grab this from `x$card%tbl_summary`
     x$cards$add_n <-
       x[["cards"]][[1]] |>
       dplyr::filter(

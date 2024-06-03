@@ -130,7 +130,6 @@ brdg_summary <- function(cards,
             .,
             .data$variable %in% .env$variables,
             !cards$context %in% "attributes",
-            # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
           ) |>
             dplyr::select(cards::all_ard_groups(), "variable", "context") |>
             dplyr::distinct() |>
