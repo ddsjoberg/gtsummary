@@ -29,9 +29,9 @@
 #' @section method argument:
 #'
 #' Must be one of
-#' - `c("wilson", "wilson.no.correct")` calculated via `prop.test(correct = c(TRUE, FALSE))` for **categorical** variables
+#' - `"wilson"`, `"wilson.no.correct"` calculated via `prop.test(correct = c(TRUE, FALSE))` for **categorical** variables
 #' - `"exact"` calculated via `stats::binom.test()` for **categorical** variables
-#' - `c("wald", "wald.no.correct")` calculated via `cardx::proportion_ci_wald(correct = c(TRUE, FALSE)` for **categorical** variables
+#' - `"wald"`, `"wald.no.correct"` calculated via `cardx::proportion_ci_wald(correct = c(TRUE, FALSE)` for **categorical** variables
 #' - `"agresti.coull"` calculated via `cardx::proportion_ci_agresti_coull()` for **categorical** variables
 #' - `"jeffreys"` calculated via `cardx::proportion_ci_jeffreys()` for **categorical** variables
 #' - `"t.test"` calculated via `stats::t.test()` for **continuous** variables
