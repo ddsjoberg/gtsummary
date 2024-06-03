@@ -218,8 +218,6 @@ add_ci.tbl_summary <- function(x,
             "ci_stat_0" # this accounts for overall stats if run after `add_overall()`
           )
         }
-        # # this assumes the overall group of ARDs appears first!
-        # else paste0("ci_stat_", dplyr::cur_group_id() - 1L)
     ) |>
     tidyr::pivot_wider(
       id_cols = cards::all_ard_variables(),
