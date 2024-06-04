@@ -8,7 +8,7 @@
 
 * The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
 
-* The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
+* The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()`.
 
 * The `add_q(quiet)` argument has been deprecated.
 
