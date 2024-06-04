@@ -11,7 +11,7 @@
 #' @param pvalue_fun (`function`)\cr
 #'   Function to round and format q-values. Default is the function specified
 #'   to round the existing `'p.value'` column.
-#' @param quiet DEPRECATED
+#' @param quiet `r lifecycle::badge("deprecated")`
 #'
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
