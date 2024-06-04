@@ -2,14 +2,22 @@
 % Please edit documentation in R/add_nevent.R
 \name{add_nevent_regression}
 \alias{add_nevent_regression}
+\alias{add_nevent}
 \alias{add_nevent.tbl_regression}
+\alias{add_nevent.tbl_uvregression}
 \title{Add event N}
 \usage{
+add_nevent(x, ...)
+
 \method{add_nevent}{tbl_regression}(x, location = "label", ...)
+
+\method{add_nevent}{tbl_uvregression}(x, location = "label", ...)
 }
 \arguments{
-\item{x}{(\code{tbl_regression}/\code{tbl_uvregression})\cr
+\item{x}{(\code{tbl_regression}, \code{tbl_uvregression})\cr
 a \code{tbl_regression} or \code{tbl_uvregression} table}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{location}{(\code{character})\cr
 location to place Ns. Select one or more of \code{c('label', 'level')}.
@@ -19,27 +27,26 @@ When \code{"label"} total Ns are placed
 on each variable's label row. When \code{"level"} level counts are placed on the
 variable level for categorical variables, and total N on the variable's label
 row for continuous.}
-
-\item{...}{These dots are for future extensions and must be empty.}
 }
 \description{
 Add event N
 }
 \examples{
-# TODO: Re-add after tbl_uvregression() is migrated
+\dontshow{if (gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-# add_nevent.tbl_regression_ex1 <-
-#   trial \%>\%
-#   select(response, trt, grade) \%>\%
-#   tbl_uvregression(
-#     y = response,
-#     method = glm,
-#     method.args = list(family = binomial),
-#   ) \%>\%
-#   add_nevent()
+trial |>
+  select(response, trt, grade) |>
+  tbl_uvregression(
+    y = response,
+    exponentiate = TRUE,
+    method = glm,
+    method.args = list(family = binomial),
+  ) |>
+  add_nevent()
 
 # Example 2 ----------------------------------
 glm(response ~ age + grade, trial, family = binomial) |>
   tbl_regression(exponentiate = TRUE) |>
   add_nevent(location = "level")
+\dontshow{\}) # examplesIf}
 }
