@@ -14,7 +14,7 @@ add_nevent(x, ...)
 \method{add_nevent}{tbl_uvregression}(x, location = "label", ...)
 }
 \arguments{
-\item{x}{(\code{tbl_regression}/\code{tbl_uvregression})\cr
+\item{x}{(\code{tbl_regression}, \code{tbl_uvregression})\cr
 a \code{tbl_regression} or \code{tbl_uvregression} table}
 
 \item{...}{These dots are for future extensions and must be empty.}
@@ -33,7 +33,7 @@ Add event N
 }
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-Example 1 ----------------------------------
+# Example 1 ----------------------------------
 trial |>
   select(response, trt, grade) |>
   tbl_uvregression(

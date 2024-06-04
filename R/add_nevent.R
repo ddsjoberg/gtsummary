@@ -4,7 +4,7 @@
 #' @name add_nevent_regression
 #'
 #' @examplesIf gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")
-#' Example 1 ----------------------------------
+#' # Example 1 ----------------------------------
 #' trial |>
 #'   select(response, trt, grade) |>
 #'   tbl_uvregression(

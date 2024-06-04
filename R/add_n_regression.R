@@ -1,6 +1,6 @@
 #' Add N to regression table
 #'
-#' @param x (`tbl_regression`/`tbl_uvregression`)\cr
+#' @param x (`tbl_regression`, `tbl_uvregression`)\cr
 #'   a `tbl_regression` or `tbl_uvregression` table
 #' @param location (`character`)\cr
 #'   location to place Ns. Select one or more of `c('label', 'level')`.
@@ -14,18 +14,17 @@
 #'
 #' @name add_n_regression
 #' @examples
-#' # TODO: Re-add after tbl_uvregression() is added
-#' # # Example 1 ----------------------------------
-#' # add_n.tbl_regression_ex1 <-
-#' #   trial %>%
-#' #   select(response, age, grade) %>%
-#' #   tbl_uvregression(
-#' #     y = response,
-#' #     method = glm,
-#' #     method.args = list(family = binomial),
-#' #     hide_n = TRUE
-#' #   ) %>%
-#' #   add_n(location = "label")
+#' # Example 1 ----------------------------------
+#' trial |>
+#'   select(response, age, grade) |>
+#'   tbl_uvregression(
+#'     y = response,
+#'     exponentiate = TRUE,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     hide_n = TRUE
+#'   ) |>
+#'   add_n(location = "label")
 #'
 #' # Example 2 ----------------------------------
 #' glm(response ~ age + grade, trial, family = binomial) |>
