@@ -46,6 +46,8 @@
 
 ### Deprecations 
 
+* The `tbl_butcher(include)` argument now only accepts character vectors.
+
 * The following theme elements have been deprecated:
     - These theme elements will eventually be removed from the package: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. 
       - The `pvalue_fun` elements should switch to the package-wide theme for p-value styling--`'pkgwide-fn:pvalue_fun'`.
