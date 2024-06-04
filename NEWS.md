@@ -6,6 +6,8 @@
 
 #### User-facing Updates
 
+* The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
+
 * The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()`.
 
 * The `add_q(quiet)` argument has been deprecated.
@@ -43,6 +45,8 @@
 ### Bug Fixes 
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
+
+* Fix when `add_ci()` was run after `add_overall()`, the overall column would not populate with the confidence interval. (#1569)
 
 ### Deprecations 
 

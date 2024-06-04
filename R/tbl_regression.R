@@ -131,8 +131,7 @@ tbl_regression.default <- function(x,
   check_scalar_logical(intercept)
   check_scalar_logical(add_estimate_to_reference_rows)
   check_scalar_logical(conf.int)
-  check_scalar(conf.level)
-  check_range(conf.level, range = c(0, 1))
+  check_scalar_range(conf.level, range = c(0, 1))
 
   # quote inputs and save argument values --------------------------------------
   include <- enquo(include)
