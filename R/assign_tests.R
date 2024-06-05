@@ -17,6 +17,12 @@
 #' @param calling_fun (`string`)\cr
 #'   Must be one of `'add_p'` and `'add_difference'`. Depending on the context,
 #'   different defaults are set.
+#' @param by (`string`)\cr
+#'   a single stratifying column name
+#' @param cont_variable (`string`)\cr
+#'   a column name of the continuous summary variable in `tbl_continuous()`
+#' @param summary_type (named `list`)\cr
+#'   naemd list of summary types
 #' @inheritParams cli::cli_abort
 #'
 #' @return A table of class `'gtsummary'`
@@ -41,14 +47,18 @@ assign_tests <- function(x, ...) {
 
 #' @rdname assign_tests
 #' @export
-assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NULL, include,
+assign_tests.tbl_summary <- function(x,
+                                     include,
+                                     by = x$inputs$by,
+                                     test = NULL,
+                                     group = NULL,
+                                     adj.vars = NULL,
+                                     summary_type = x$inputs$type,
                                      calling_fun = c("add_p", "add_difference"), ...) {
   set_cli_abort_call()
   # processing inputs ----------------------------------------------------------
   calling_fun <- arg_match(calling_fun)
   data <- x$inputs$data
-  by <- x$inputs$by
-  summary_type <- x$inputs$type
 
   # loop over the variables and assign default test if not provided by user
   lapply(
@@ -85,7 +95,7 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
       test[[variable]] <-
         .process_test_argument_value(
           test = test[[variable]],
-          class = "tbl_summary",
+          class = intersect(class(x), c("tbl_summary", "tbl_continuous")),
           calling_fun = calling_fun
         )
     }
@@ -93,6 +103,47 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
     stats::setNames(include)
 }
 
+#' @rdname assign_tests
+#' @export
+assign_tests.tbl_continuous <- function(x,
+                                        include,
+                                        by,
+                                        cont_variable,
+                                        test = NULL,
+                                        group = NULL, ...) {
+  set_cli_abort_call()
+
+  # if there is a by variable (without grouping), then the default test is 'anova_2way'
+  if (!is_empty(by) && is_empty(group)) {
+    test <-
+      rep_named(include, list("anova_2way")) |>
+        utils::modifyList(val = test)
+  }
+
+  # when there is no by variable, use the same defaults as `add_p.tbl_summary`
+  updated_test <-
+    map(
+      include,
+      function(variable) {
+        assign_tests.tbl_summary(x = x,
+                                 include = cont_variable,
+                                 by = variable,
+                                 test = test[variable] |> set_names(cont_variable),
+                                 group = group,
+                                 adj.vars = NULL,
+                                 summary_type = list("continuous") |> set_names(cont_variable),
+                                 calling_fun = "add_p")[[1]]
+      }
+    ) |>
+      set_names(include)
+  return(updated_test)
+
+  # otherwise, there is no default test.
+  cli::cli_abort(
+    "There is no default test for this data profile. Please specify {.arg test} argument.",
+    call = get_cli_abort_call()
+  )
+}
 
 .process_test_argument_value <- function(test, class, calling_fun) {
   # subset the data frame
@@ -128,14 +179,14 @@ assign_tests.tbl_summary <- function(x, test = NULL, group = NULL, adj.vars = NU
 
 # compare after removing attributes
 identical_no_attr <- function(x, y) {
-  tryCatch(
-    {
+  # styler: off
+  tryCatch({
       attributes(x) <- NULL
       attributes(y) <- NULL
-      identical(x, y)
-    },
+      identical(x, y)},
     error = \(x) FALSE
   )
+  # styler: on
 }
 
 .add_p_tbl_summary_default_test <- function(data, variable, by, group, adj.vars, summary_type) {
