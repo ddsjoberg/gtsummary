@@ -36,10 +36,6 @@ available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 #   tbl_summary(by = trt) \%>\%
 #   as_gt()
 }
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_tibble.gtsummary}()}
-}
 \author{
 Daniel D. Sjoberg
 }
