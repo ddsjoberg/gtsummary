@@ -17,7 +17,8 @@
 \method{as.data.frame}{gtsummary}(...)
 }
 \arguments{
-\item{x}{An object of class `"gtsummary"}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper

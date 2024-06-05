@@ -2,12 +2,13 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Convert gtsummary object to a gt object}
+\title{Convert gtsummary object to gt}
 \usage{
 as_gt(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
-\item{x}{An object of class `"gtsummary"}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -30,13 +31,11 @@ A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 }
 \examples{
-# # Example 1 ----------------------------------
-# as_gt_ex1 <-
-#   trial[c("trt", "age", "response", "grade")] \%>\%
-#   tbl_summary(by = trt) \%>\%
-#   as_gt()
+# Example 1 ----------------------------------
+trial |>
+  tbl_summary(by = trt, include = c(age, grade, response)) |>
+  as_gt()
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}
