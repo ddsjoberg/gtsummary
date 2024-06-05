@@ -7,7 +7,8 @@
 as_flex_table(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
-\item{x}{An object of class `"gtsummary"}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
