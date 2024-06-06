@@ -1,3 +1,6 @@
+skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
+
+
 test_that("add_nevent.tbl_regression() works", {
   expect_silent(
     tbl <-
