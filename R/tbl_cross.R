@@ -137,12 +137,11 @@ tbl_cross <- function(data,
           "no" = .,
           "ifany" =
             case_switch(
-              any(is.na(.)) ~ forcats::fct_na_value_to_level(., level = missing_text),
+              any(is.na(.)) ~ fct_na_value_to_level(., level = missing_text),
               .default = .
             ),
           "always" =
-            forcats::fct_na_value_to_level(., level = missing_text) |>
-            forcats::fct_expand(missing_text)
+            fct_na_value_to_level(., level = missing_text)
         )
       )
     )

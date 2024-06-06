@@ -123,9 +123,9 @@ add_p.tbl_cross <- function(x,
       label =
         ifelse(
           .data$column %in% "p.value",
-          stringr::str_replace_all(.data$label,
-                                   pattern = "\\*\\*(.*?)\\*\\*",
-                                   replacement = "\\1"
+          str_replace_all(.data$label,
+                          pattern = "\\*\\*(.*?)\\*\\*",
+                          replacement = "\\1"
           ),
           .data$label
         )
