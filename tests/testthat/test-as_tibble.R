@@ -91,20 +91,58 @@ test_that("as_tibble works with bold_p()", {
 })
 
 test_that("as_tibble works with formatting functions", {
-  # expect_silent(as_tibble(t1), NA)
-  # expect_no_warning(as_tibble(t1), NA)
-  # expect_snapshot(as_tibble(t1) %>% as.data.frame())
-  #
+  t2_modify_fmt <- t2 %>%
+    modify_fmt_fun(
+      p.value ~ function(x) style_pvalue(x, digits = 3),
+      rows = variable == "grade"
+    ) %>%
+    modify_fmt_fun(
+      estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
+    )
 
+  expect_silent(res <- as_tibble(t2_modify_fmt))
+  expect_snapshot(res %>% as.data.frame())
+  expect_equal(
+    as_tibble(t2_modify_fmt, col_labels = FALSE)$p.value,
+    c("__0.10__", NA, NA, "0.688", "0.972")
+  )
+  expect_equal(
+    as_tibble(t2_modify_fmt, col_labels = FALSE)$estimate,
+    c("1,0191", NA, NA, "0,8535", "1,0136")
+  )
+
+  t3_modify_fmt <- t3 %>%
+    modify_fmt_fun(
+      stat_n ~ function(x) style_number(x, digits = 2),
+      rows = variable == "age"
+    ) %>%
+    modify_fmt_fun(
+      stat_n ~ styfn_number(digits = 4),
+      rows = variable == "grade"
+    ) %>%
+    modify_fmt_fun(
+      c(conf.low, conf.high) ~ styfn_sigfig(digits = 3)
+    )
+
+  expect_silent(res <- as_tibble(t3_modify_fmt))
+  expect_snapshot(res %>% as.data.frame())
+  expect_equal(
+    as_tibble(t3_modify_fmt, col_labels = FALSE)$stat_n,
+    c("183.00", "193.0000", NA, NA, NA)
+  )
+  expect_equal(
+    as_tibble(t3_modify_fmt, col_labels = FALSE)$conf.low,
+    c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
+  )
 })
 
-t1 <- lm(mpg ~ factor(cyl), mtcars) %>%
+t4 <- lm(mpg ~ factor(cyl), mtcars) %>%
   tbl_regression()
 
-t2 <- lm(mpg ~ factor(cyl), mtcars %>% dplyr::filter(cyl != 4)) %>%
+t5 <- lm(mpg ~ factor(cyl), mtcars %>% dplyr::filter(cyl != 4)) %>%
   tbl_regression()
 
-tbl <- tbl_merge(list(t1, t2))
+tbl <- tbl_merge(list(t4, t5))
 
 test_that("as_tibble works with column merging", {
   expect_silent(res <- as_tibble(tbl))

@@ -100,6 +100,30 @@
       4             __II__  <NA>   0.95 0.45, 2.00         0.9
       5            __III__  <NA>   1.10 0.52, 2.29         0.8
 
+# as_tibble works with formatting functions
+
+    Code
+      res %>% as.data.frame()
+    Output
+        **Characteristic** **OR** **95% CI** **p-value**
+      1            __Age__ 1,0191 1.00, 1.04    __0.10__
+      2          __Grade__   <NA>       <NA>        <NA>
+      3                _I_   <NA>       <NA>        <NA>
+      4               _II_ 0,8535 0.39, 1.85       0.688
+      5              _III_ 1,0136 0.47, 2.16       0.972
+
+---
+
+    Code
+      res %>% as.data.frame()
+    Output
+        **Characteristic**    **N** **OR**  **95% CI** **p-value**
+      1              _Age_   183.00   1.02 0.997, 1.04        0.10
+      2            _Grade_ 193.0000   <NA>        <NA>        <NA>
+      3              __I__     <NA>   <NA>        <NA>        <NA>
+      4             __II__     <NA>   0.95 0.446, 2.00         0.9
+      5            __III__     <NA>   1.10 0.524, 2.29         0.8
+
 # as_tibble works with column merging
 
     Code
