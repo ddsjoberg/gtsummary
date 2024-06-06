@@ -4,7 +4,7 @@
 #
 # ---
 # file: standalone-forcats.R
-# last-updated: 2024-05-04
+# last-updated: 2024-06-05
 # license: https://unlicense.org
 # imports:
 # ---
@@ -44,6 +44,30 @@ fct_rev <- function(f) {
     ordered = is.ordered(f)
   )
 }
+
+fct_expand <- function(f, ..., after = Inf) {
+  if (!inherits(f, "factor")) f <- factor(f)
+
+  old_levels <- levels(f)
+  new_levels <-
+    old_levels |>
+    append(values = setdiff(c(...), old_levels), after = after)
+  factor(f, levels = new_levels)
+}
+
+fct_na_value_to_level <- function(f, level = NA) {
+  if (!inherits(f, "factor")) f <- factor(f)
+
+  # make NA an explicit level
+  f <- addNA(f, ifany = FALSE)
+
+  # replace NA level with the string passed in `level` argument
+  if (!is.na(level)) levels(f)[is.na(levels(f))] <- level
+
+  f
+}
+
+
 
 # nocov end
 # styler: on

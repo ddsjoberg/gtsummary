@@ -5,7 +5,7 @@
 # ---
 # repo: ddsjoberg/standalone
 # file: standalone-check_pkg_installed.R
-# last-updated: 2024-04-15
+# last-updated: 2024-04-19
 # license: https://unlicense.org
 # dependencies: standalone-cli_call_env.R
 # imports: [rlang, dplyr, tidyr]
@@ -145,7 +145,12 @@ get_pkg_dependencies <- function(reference_pkg = "cards", lib.loc = NULL, call =
       names_to = "dependency_type",
     ) |>
     tidyr::separate_rows("pkg", sep = ",") |>
-    dplyr::mutate(pkg = str_squish(.data$pkg)) |>
+    dplyr::mutate(
+      pkg = trimws(
+        x = gsub(x = .data$pkg, pattern = "\\s+", replacement = " "),
+        which = "both", whitespace = "[ \t\r\n]"
+      )
+    ) |>
     dplyr::filter(!is.na(.data$pkg)) |>
     tidyr::separate(
       .data$pkg,
