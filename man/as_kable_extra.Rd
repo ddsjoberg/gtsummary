@@ -34,12 +34,12 @@ convert markdown to LaTeX, and remove line breaks from the footnote.}
 as a list of expressions.}
 }
 \value{
-A {kableExtra} table
+A \{kableExtra\} table
 }
 \description{
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
 This allows the customized formatting available via \code{knitr::kable()}
-and {kableExtra}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
+and \{kableExtra\}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
 \code{as_kable_extra()} output via gtsummary supports
 bold and italic cells for table bodies. Users
 are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html

@@ -307,7 +307,9 @@ tbl_summary <- function(data,
   data <- .sort_data_infreq(data, sort)
 
   # save processed function inputs ---------------------------------------------
-  tbl_summary_inputs <- as.list(environment())
+  tbl_summary_inputs <-
+    as.list(environment()) |>
+    utils::modifyList(list(default_types = NULL))
   call <- match.call()
 
 

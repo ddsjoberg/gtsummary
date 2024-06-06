@@ -10,6 +10,10 @@
 \alias{bold_levels.gtsummary}
 \alias{italicize_labels.gtsummary}
 \alias{italicize_levels.gtsummary}
+\alias{bold_labels.tbl_cross}
+\alias{bold_levels.tbl_cross}
+\alias{italicize_labels.tbl_cross}
+\alias{italicize_levels.tbl_cross}
 \title{Bold or Italicize}
 \usage{
 bold_labels(x)
@@ -27,6 +31,14 @@ italicize_levels(x)
 \method{italicize_labels}{gtsummary}(x)
 
 \method{italicize_levels}{gtsummary}(x)
+
+\method{bold_labels}{tbl_cross}(x)
+
+\method{bold_levels}{tbl_cross}(x)
+
+\method{italicize_labels}{tbl_cross}(x)
+
+\method{italicize_levels}{tbl_cross}(x)
 }
 \arguments{
 \item{x}{(\code{gtsummary})

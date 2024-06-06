@@ -51,7 +51,7 @@ tbl_uvregression(data, ...)
 )
 }
 \arguments{
-\item{data}{(\code{data.frame}/\code{survey.design})\cr
+\item{data}{(\code{data.frame}, \code{survey.design})\cr
 A data frame or a survey design object.}
 
 \item{...}{Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.}
