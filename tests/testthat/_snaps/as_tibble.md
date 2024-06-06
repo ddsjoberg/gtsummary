@@ -1,7 +1,7 @@
 # as_tibble works with standard use
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
              **Characteristic**       **N = 200**
       1  Chemotherapy Treatment              <NA>
@@ -28,7 +28,7 @@
 ---
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **OR** **95% CI** **p-value**
       1                Age   1.02 1.00, 1.04        0.10
@@ -40,7 +40,7 @@
 ---
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **N** **OR** **95% CI** **p-value**
       1                Age   183   1.02 1.00, 1.04        0.10
@@ -52,7 +52,7 @@
 # as_tibble works with bold/italics
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
                  **Characteristic**       **N = 200**
       1  __Chemotherapy Treatment__              <NA>
@@ -79,7 +79,7 @@
 ---
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **OR** **95% CI** **p-value**
       1            __Age__   1.02 1.00, 1.04        0.10
@@ -91,7 +91,7 @@
 ---
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **N** **OR** **95% CI** **p-value**
       1              _Age_   183   1.02 1.00, 1.04        0.10
@@ -103,7 +103,7 @@
 # as_tibble works with formatting functions
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **OR** **95% CI** **p-value**
       1            __Age__ 1,0191 1.00, 1.04    __0.10__
@@ -115,7 +115,7 @@
 ---
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic**    **N** **OR**  **95% CI** **p-value**
       1              _Age_   183.00   1.02 0.997, 1.04        0.10
@@ -127,7 +127,7 @@
 # as_tibble works with column merging
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
         **Characteristic** **Beta** **95% CI** **p-value** **Beta** **95% CI**
       1        factor(cyl)     <NA>       <NA>        <NA>     <NA>       <NA>
@@ -143,7 +143,7 @@
 # as_tibble(fmt_missing=) works
 
     Code
-      res %>% as.data.frame()
+      as.data.frame(res)
     Output
               label estimate_1 conf.low_1 p.value_1 estimate_2 conf.low_2 p.value_2
       1 factor(cyl)       <NA>       <NA>      <NA>       <NA>       <NA>      <NA>
