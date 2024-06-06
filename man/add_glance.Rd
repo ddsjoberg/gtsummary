@@ -3,6 +3,7 @@
 \name{add_glance}
 \alias{add_glance}
 \alias{add_glance_table}
+\alias{add_glance_source_note}
 \title{Add model statistics}
 \usage{
 add_glance_table(
@@ -12,6 +13,18 @@ add_glance_table(
   fmt_fun = list(everything() ~ styfn_sigfig(digits = 3), any_of("p.value") ~
     styfn_pvalue(digits = 1), where(is.integer) ~ styfn_number()),
   glance_fun = broom::glance
+)
+
+add_glance_source_note(
+  x,
+  include = everything(),
+  label = NULL,
+  fmt_fun = list(everything() ~ styfn_sigfig(digits = 3), any_of("p.value") ~
+    styfn_pvalue(digits = 1), where(is.integer) ~ styfn_number()),
+  glance_fun = broom::glance,
+  text_interpret = c("md", "html"),
+  sep1 = " = ",
+  sep2 = "; "
 )
 }
 \arguments{
@@ -39,14 +52,14 @@ are styled with \code{style_sigfig(x, digits = 3)}}
 \code{broom::glance(mice::pool())} for MICE 'mira' models.
 Custom functions must return a single row tibble.}
 
+\item{text_interpret}{String indicates whether source note text
+will be interpreted with
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
+
 \item{sep1}{Separator between statistic name and statistic.
 Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 
 \item{sep2}{Separator between statistics. Default is \code{"; "}}
-
-\item{text_interpret}{String indicates whether source note text
-will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 }
 \value{
 gtsummary table
@@ -73,14 +86,14 @@ mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 # Example 1 ----------------------------------
 mod |>
   add_glance_table(
-    label = list(sigma ~ "\U03C3"),
+    label = list(sigma = "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
 
 # Example 2 ----------------------------------
 mod |>
   add_glance_source_note(
-    label = list(sigma ~ "\U03C3"),
+    label = list(sigma = "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
 }

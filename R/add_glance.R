@@ -49,14 +49,14 @@
 #' # Example 1 ----------------------------------
 #' mod |>
 #'   add_glance_table(
-#'     label = list(sigma ~ "\U03C3"),
+#'     label = list(sigma = "\U03C3"),
 #'     include = c(r.squared, AIC, sigma)
 #'   )
 #'
 #' # Example 2 ----------------------------------
 #' mod |>
 #'   add_glance_source_note(
-#'     label = list(sigma ~ "\U03C3"),
+#'     label = list(sigma = "\U03C3"),
 #'     include = c(r.squared, AIC, sigma)
 #'   )
 NULL
@@ -73,27 +73,119 @@ add_glance_table <- function(x,
                                  where(is.integer) ~ styfn_number()
                                ),
                              glance_fun = broom::glance) {
+  # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
+  check_pkg_installed("broom", reference_pkg = "gtsummary")
   check_not_missing(x)
   check_class(x, "tbl_regression")
-  check_pkg_installed("broom", reference_pkg = "gtsummary")
 
+  # use a modified glance for mice models --------------------------------------
   if (missing(glance_fun) && inherits(x$inputs$x, "mice")) {
-    check_pkg_installed("broom", reference_pkg = "gtsummary")
+    check_pkg_installed("mice", reference_pkg = "gtsummary")
     glance_fun <- \(x) broom::glance(mice::pool(x))
   }
 
-  .prep_glance_statistics(x = x, include = {{ include }}, label = label, fmt_fun = fmt_fun, glance_fun = glance_fun)
+  # calculate and prepare the glance function results --------------------------
+  lst_prep_glance <-
+    .prep_glance_statistics(
+      x = x,
+      include = {{ include }},
+      label = label,
+      fmt_fun = fmt_fun,
+      glance_fun = glance_fun
+    )
 
+  # add instructions to print horizontal line ----------------------------------
+  x$table_styling$horizontal_line_above <-
+    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!lst_prep_glance$df_glance$variable[1])
+
+  # updating regression gtsummary object ---------------------------------------
+  # appending stats to table_body
+  x$table_body <-
+    x$table_body %>%
+    dplyr::bind_rows(lst_prep_glance$df_glance)
+
+  # apply formatting functions
+  for (fun in unique(lst_prep_glance$fmt_fun)) {
+    x <- x |>
+      modify_fmt_fun(
+        estimate = fun,
+        rows = .data$row_type == "glance_statistic" & .data$variable %in% !!names(keep(lst_prep_glance$fmt_fun, ~identical(.x, fun)))
+      )
+  }
+
+  # returning gtsummary table --------------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }
+
+#' @export
+#' @rdname add_glance
+add_glance_source_note <- function(x,
+                                   include = everything(),
+                                   label = NULL,
+                                   fmt_fun =
+                                     list(
+                                       everything() ~ styfn_sigfig(digits = 3),
+                                       any_of("p.value") ~ styfn_pvalue(digits = 1),
+                                       where(is.integer) ~ styfn_number()
+                                     ),
+                                   glance_fun = broom::glance,
+                                   text_interpret = c("md", "html"),
+                                   sep1 = " = ", sep2 = "; ") {
+  # check inputs ---------------------------------------------------------------
+  set_cli_abort_call()
+  updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
+  check_pkg_installed("broom", reference_pkg = "gtsummary")
+  check_not_missing(x)
+  check_class(x, "tbl_regression")
+  text_interpret <- arg_match(text_interpret)
+  check_string(sep1)
+  check_string(sep2)
+
+  # use a modified glance for mice models --------------------------------------
+  if (missing(glance_fun) && inherits(x$inputs$x, "mice")) {
+    check_pkg_installed("mice", reference_pkg = "gtsummary")
+    glance_fun <- \(x) broom::glance(mice::pool(x))
+  }
+
+  # calculate and prepare the glance function results --------------------------
+  lst_prep_glance <-
+    .prep_glance_statistics(
+      x = x,
+      include = {{ include }},
+      label = label,
+      fmt_fun = fmt_fun,
+      glance_fun = glance_fun
+    )
+
+  # apply formatting function to glance statistics -----------------------------
+  lst_prep_glance$df_glance$estimate_fmt <- NA_character_
+
+  for (fun in unique(lst_prep_glance$fmt_fun)) {
+    idx <- lst_prep_glance$df_glance$variable %in% names(keep(lst_prep_glance$fmt_fun, ~identical(.x, fun)))
+    lst_prep_glance$df_glance$estimate_fmt[idx] <-
+      fun(lst_prep_glance$df_glance$estimate[idx])
+  }
+
+  # compile stats into source note ---------------------------------------------
+  x$table_styling$source_note <-
+    paste(lst_prep_glance$df_glance$label, lst_prep_glance$df_glance$estimate_fmt, sep = sep1, collapse = sep2)
+  attr(x$table_styling$source_note, "text_interpret") <- match.arg(text_interpret)
+
+  # returning gtsummary table --------------------------------------------------
+  x$call_list <- updated_call_list
+  x
+}
+
 
 .prep_glance_statistics <- function(x, include, label, fmt_fun, glance_fun) {
   # checking inputs ------------------------------------------------------------
   glance_fun <- as_function(glance_fun)
 
   # prepping glance table ------------------------------------------------------
-  df_glance_orig <- glance_fun(x$model_obj)
+  df_glance_orig <- glance_fun(x$inputs$x)
   cards::process_selectors(df_glance_orig, include = {{ include }})
   df_glance_orig <- df_glance_orig[include]
 
@@ -114,7 +206,7 @@ add_glance_table <- function(x,
     error_msg = "Elements of {.arg fmt_fun} argument must be functions."
   )
   cards::fill_formula_selectors(
-    x = df_glance_orig,
+    data = df_glance_orig,
     fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fn"]] |> eval()
   )
 
@@ -135,7 +227,7 @@ add_glance_table <- function(x,
       values_transform = list(estimate = unlist)
     ) |>
     # adding default labels
-    left_join(df_default_glance_labels(), by = c("variable" = "statistic_name")) %>%
+    dplyr::left_join(df_default_glance_labels(), by = c("variable" = "statistic_name")) %>%
     dplyr::mutate(
       label =
         dplyr::coalesce(.data$label, .data$variable) |>
@@ -148,38 +240,8 @@ add_glance_table <- function(x,
       var_label = .data$label
     )
 
-  # parsing fmt_fun instructions -----------------------------------------------
-  browser()
-  fmt_fun <-
-    .formula_list_to_named_list(
-      x = fmt_fun,
-      data = df_glance_orig,
-      arg_name = "fmt_fun",
-      type_check = chuck(type_check, "is_function", "fn"),
-      type_check_msg = chuck(type_check, "is_function", "msg")
-    )
-
-  df_fmt_fun <- enframe(fmt_fun, )
-
-
-    tibble(glance_statistic = df_glance$variable) %>%
-    mutate(
-      fmt_fun = map(
-        .data$glance_statistic,
-        function(.x) {
-          if (.x %in% c("nobs", "df", "df.residual")) {
-            return(fmt_fun[[.x]] %||% style_number)
-          }
-          if (.x %in% c("p.value")) {
-            return(fmt_fun[[.x]] %||% x$inputs$pvalue_fun)
-          }
-          return(fmt_fun[[.x]] %||% function(x) style_sigfig(x, digits = 3))
-        }
-      )
-    )
-
   # return objects needed to finalize glance stats
-  list(df_glance = df_glance, df_fmt_fun = df_fmt_fun)
+  list(df_glance = df_glance, fmt_fun = fmt_fun)
 }
 
 # default statistic labels
