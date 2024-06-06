@@ -24,7 +24,7 @@
 #'
 #' @inheritSection tbl_regression Methods
 #'
-#' @param data (`data.frame`/`survey.design`)\cr
+#' @param data (`data.frame`, `survey.design`)\cr
 #'   A data frame or a survey design object.
 #' @param method (`string`/`function`)\cr
 #'   Regression method or function, e.g. [lm], [glm], [survival::coxph], `survey::svyglm`, etc.

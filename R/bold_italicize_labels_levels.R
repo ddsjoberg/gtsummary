@@ -140,6 +140,109 @@ italicize_levels.gtsummary <- function(x) {
   x
 }
 
+#' @export
+#' @rdname bold_italicize_labels_levels
+bold_labels.tbl_cross <- function(x) {
+  # bold labels ----------------------------------------------------------------
+  x <- bold_labels.gtsummary(x)
+
+  cols_to_style <-
+    select(x$table_body, all_stat_cols(FALSE)) %>%
+    names()
+
+  x$table_styling$header <-
+    dplyr::mutate(x$table_styling$header,
+           spanning_header =
+             dplyr::case_when(
+               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
+                 paste0("**", spanning_header, "**"),
+               TRUE ~ spanning_header
+             )
+    ) %>%
+    dplyr::mutate(label = dplyr::case_when(
+      .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
+        paste0("**", label, "**"),
+      TRUE ~ label
+    ))
+
+  x
+}
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+bold_levels.tbl_cross <- function(x) {
+  # bold levels ----------------------------------------------------------------
+  x <- bold_levels.gtsummary(x)
+
+  cols_to_style <- x$table_body |>
+    dplyr::select(all_stat_cols(FALSE)) |>
+    names()
+
+  x$table_styling$header <-
+    dplyr::mutate(x$table_styling$header,
+           label =
+             dplyr::case_when(
+               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
+                 paste0("**", label, "**"),
+               TRUE ~ label
+             )
+    )
+
+  x
+}
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+italicize_labels.tbl_cross <- function(x) {
+  # italicize labels -----------------------------------------------------------
+  x <- italicize_labels.gtsummary(x)
+
+  cols_to_style <-
+    dplyr::select(x$table_body, all_stat_cols(FALSE)) %>%
+    names()
+
+  x$table_styling$header <-
+    dplyr::mutate(x$table_styling$header,
+           spanning_header =
+             dplyr::case_when(
+               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
+                 paste0("*", spanning_header, "*"),
+               TRUE ~ spanning_header
+             )
+    ) |>
+    dplyr::mutate(label = dplyr::case_when(
+      .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
+        paste0("*", label, "*"),
+      TRUE ~ label
+    ))
+
+  x
+}
+
+
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+italicize_levels.tbl_cross <- function(x) {
+  x <- italicize_levels.gtsummary(x)
+
+  # italicize levels ----------------------------------------------------------------
+  cols_to_style <- x$table_body |>
+    dplyr::select(all_stat_cols(FALSE)) |>
+    names()
+
+  x$table_styling$header <-
+    dplyr::mutate(x$table_styling$header,
+           label =
+             dplyr::case_when(
+               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
+                 paste0("*", label, "*"),
+               TRUE ~ label
+             )
+    )
+  x
+}
+
 
 .first_unhidden_column <- function(x) {
   x$table_styling$header |>

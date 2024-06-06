@@ -416,6 +416,7 @@ test_that("tbl_uvregression(formula) messaging", {
 })
 
 test_that("tbl_uvregression(method.args) messaging", {
+  # error with an incorrect argument passed
   expect_snapshot(
     error = TRUE,
     tbl_uvregression(

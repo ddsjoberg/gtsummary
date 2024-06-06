@@ -182,7 +182,7 @@ tbl_summary <- function(data,
   check_scalar(
     by,
     allow_empty = TRUE,
-    message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
+    message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
       i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
@@ -307,7 +307,9 @@ tbl_summary <- function(data,
   data <- .sort_data_infreq(data, sort)
 
   # save processed function inputs ---------------------------------------------
-  tbl_summary_inputs <- as.list(environment())
+  tbl_summary_inputs <-
+    as.list(environment()) |>
+    utils::modifyList(list(default_types = NULL))
   call <- match.call()
 
 
@@ -425,7 +427,8 @@ tbl_summary <- function(data,
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
 
-  x}
+  x
+}
 
 .drop_missing_by_obs <- function(data, by) {
   if (is_empty(by) || !any(is.na(data[[by]]))) {

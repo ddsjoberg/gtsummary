@@ -34,7 +34,7 @@ as a list of expressions.}
 Default is \code{TRUE}}
 }
 \value{
-A {huxtable} object
+A \{huxtable\} object
 }
 \description{
 Function converts a gtsummary object to a huxtable object.
