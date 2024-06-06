@@ -1,13 +1,15 @@
 skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
 
 test_that("add_n.tbl_uvregression() works", {
-  tbl1 <- tbl_uvregression(
-    trial,
-    x = trt,
-    include = c(marker, age),
-    show_single_row = trt,
-    method = lm,
-    hide_n = TRUE
+  expect_silent(
+    tbl1 <- tbl_uvregression(
+      trial,
+      x = trt,
+      include = c(marker, age),
+      show_single_row = trt,
+      method = lm,
+      hide_n = TRUE
+    )
   )
   # total N added to table is accurate
   expect_error(
@@ -23,9 +25,7 @@ test_that("add_n.tbl_uvregression() works", {
       tidyr::drop_na(trial, age) |> nrow() |> as.character()
     )
   )
-})
 
-test_that("add_n works for level and label", {
   expect_silent(
     tbl1 <-
       tbl_uvregression(
@@ -54,7 +54,7 @@ test_that("add_n works for level and label", {
 
   # N for label added to table is accurate
   expect_error(
-    res <- tbl1 |> add_n(location = "label"),
+    res <- tbl1 |> add_n(location = c("label", "level")),
     NA
   )
   expect_equal(
@@ -62,7 +62,9 @@ test_that("add_n works for level and label", {
       na.omit() |>
       unique(),
     tidyr::drop_na(trial, response, trt) |>
-      nrow() |>
+      with(table(trt)) |>
+      as.integer() %>%
+      {c(sum(.), .)} |> # styler: off
       as.character()
   )
 })
