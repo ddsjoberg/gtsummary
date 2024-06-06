@@ -67,7 +67,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
   check_class(tbls, "list")
   walk(tbls, ~check_class(.x, "gtsummary", message = "Each element of the list {.arg tbls} must be class {.cls gtsummary}."))
   check_scalar_logical(quiet)
-  check_class(group_header, allow_empty = TRUE)
+  check_class(group_header, cls = "character", allow_empty = TRUE)
   check_length(group_header, length = length(tbls), allow_empty = TRUE)
 
   # will return call, and all arguments passed to tbl_stack
