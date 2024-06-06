@@ -176,3 +176,18 @@ test_that("as_tibble(fmt_missing=) works", {
     c("n / a", "n / a")
   )
 })
+
+test_that("as_tibble works with grouped columns", {
+  tbl <- tbl_summary(trial, include = age, missing = "no")
+  tbl <- tbl_stack(list(tbl, tbl), group_header = c("T1", "T2"))
+
+  expect_silent(res <- tbl |> as_tibble())
+  expect_snapshot(res |> as.data.frame())
+
+  expect_equal(
+    tbl |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(groupname_col),
+    c("T1", "T2")
+  )
+})

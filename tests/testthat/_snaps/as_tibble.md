@@ -151,3 +151,12 @@
       3           6       -6.9  -10, -3.7    <0.001          —          —      <NA>
       4           8        -12  -14, -8.9    <0.001       -4.6 -6.8, -2.4    <0.001
 
+# as_tibble works with column grouping
+
+    Code
+      as.data.frame(res)
+    Output
+        **Group** **Characteristic** **N = 200**
+      1        T1                Age 47 (38, 57)
+      2        T2                Age 47 (38, 57)
+
