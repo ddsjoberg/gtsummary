@@ -62,7 +62,7 @@ reference:
       - add_overall.tbl_summary
       - add_difference.tbl_summary
       - add_n.tbl_summary
-      # - add_ci
+      - add_ci
       - add_stat_label
       - add_stat
       - separate_p_footnotes
@@ -74,15 +74,15 @@ reference:
   - contents:
       - tbl_continuous
       - add_overall
-  #     - add_p.tbl_continuous
+      - add_p.tbl_continuous
       - add_stat
- # - subtitle: Time-to-event Summary Tables
-  # - contents:
+   # - subtitle: Time-to-event Summary Tables
+   # - contents:
   #     - tbl_survfit
   #     - add_p.tbl_survfit
   #     - add_n.tbl_survfit
   #     - add_nevent.tbl_survfit
-  #     - add_q
+      # - add_q
   - subtitle: Survey Design Summary Tables
   - contents:
   #     - tbl_svysummary
@@ -95,8 +95,8 @@ reference:
   #     - add_stat_label
       - add_stat
   #     - separate_p_footnotes
-  # - subtitle: Custom Summary Tables
-  # - contents:
+  - subtitle: Custom Summary Tables
+  - contents:
       - tbl_custom_summary
       - add_overall
       - proportion_summary
@@ -106,15 +106,15 @@ reference:
   - contents:
       - tbl_regression
       - tbl_uvregression
-      # - add_global_p
+      - add_global_p
       - add_n_regression
-      - add_nevent.tbl_regression
-      # - combine_terms
+      - add_nevent_regression
+      - combine_terms
       # - add_glance
-      # - add_q
-      # - add_significance_stars
-      # - add_vif
-      # - plot
+      - add_q
+      - add_significance_stars
+      - add_vif
+      - plot
 
   # - title: Inline Reporting
   # - contents:
@@ -141,7 +141,7 @@ reference:
       - tbl_stack
   #     - tbl_strata
   #     - tbl_split
-  #     - tbl_butcher
+      - tbl_butcher
   - subtitle: Style Summary Tables
   - contents:
       - modify

@@ -6,7 +6,9 @@
 
 #### User-facing Updates
 
-* The `tbl_regression.tidycrr()` S3 method has been removed and migrated to the {tidycmprsk} package.
+* The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
+
+* The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()`.
 
 * The `add_q(quiet)` argument has been deprecated.
 
@@ -44,7 +46,11 @@
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
 
+* Fix when `add_ci()` was run after `add_overall()`, the overall column would not populate with the confidence interval. (#1569)
+
 ### Deprecations 
+
+* The `tbl_butcher(include)` argument now only accepts character vectors.
 
 * The following theme elements have been deprecated:
     - These theme elements will eventually be removed from the package: `'tbl_summary-arg:label'`, `'add_p.tbl_summary-arg:pvalue_fun'`, `'tbl_regression-arg:pvalue_fun'`, `'tbl_regression-chr:tidy_columns'`. 

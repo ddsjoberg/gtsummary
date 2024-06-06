@@ -76,7 +76,7 @@ tbl_continuous <- function(data,
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   # save processed function inputs ---------------------------------------------
-  tbl_summary_inputs <- as.list(environment())
+  tbl_continuous_inputs <- as.list(environment())
   call <- match.call()
 
 
@@ -95,14 +95,7 @@ tbl_continuous <- function(data,
         )
       }
     ) |>
-    dplyr::bind_rows() |>
-    dplyr::mutate(context = "categorical") |>
-    dplyr::select(-cards::all_ard_variables()) %>%
-    {case_switch(
-      all(c("group2", "group2_level") %in% names(.)) ~
-        dplyr::rename(., variable = "group2", variable_level = "group2_level"),
-      .default = dplyr::rename(., variable = "group1", variable_level = "group1_level")
-    )}
+    dplyr::bind_rows()
 
   # add attributes and missing information
   cards <-
@@ -116,41 +109,16 @@ tbl_continuous <- function(data,
 
   # build table ----------------------------------------------------------------
   result <-
-    card_continuous(cards = cards, statistic = statistic, include = all_of(include), variable = variable)
+    card_continuous(cards = cards, by = by, statistic = statistic, include = all_of(include), variable = variable)
 
   # add other information to the returned object
   result$cards <- list(tbl_continuous = cards)
-  result$inputs <- tbl_summary_inputs
+  result$inputs <- tbl_continuous_inputs
   result$call_list <- list(tbl_continuous = call)
 
-  result
-}
-
-
-card_continuous <- function(cards, statistic, include, variable) {
-  set_cli_abort_call()
-
-  # Create table via `card_summary()`
-  result <-
-    card_summary(
-      cards = cards,
-      statistic = statistic,
-      type = everything() ~ "categorical",
-      include = all_of(include),
-      missing = "no"
-    ) |>
+  result |>
     structure(class = c("tbl_continuous", "gtsummary"))
-
-  # prepend the footnote with information about the variable
-  result$table_styling$footnote$footnote <-
-    paste0(
-      cards |>
-        dplyr::filter(.data$context == "attributes", .data$variable == .env$variable, .data$stat_name == "label") |>
-        dplyr::pull("stat") |>
-        unlist(),
-      ": ",
-      result$table_styling$footnote$footnote
-    )
-
-  result
 }
+
+
+

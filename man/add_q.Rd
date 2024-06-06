@@ -19,7 +19,7 @@ Must be one of 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr', 'n
 Function to round and format q-values. Default is the function specified
 to round the existing \code{'p.value'} column.}
 
-\item{quiet}{DEPRECATED}
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
 Adjustments to p-values are performed with \code{\link[stats:p.adjust]{stats::p.adjust()}}.

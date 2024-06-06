@@ -516,6 +516,62 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
     )
 }
 
+# add_p.tbl_continuous ---------------------------------------------------------
+# TODO: Do we need an ARD for storing glance() results? This is not a cards object.
+add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
+  stats::lm(
+    formula = cardx::reformulate2(c(variable, by), response = continuous_variable),
+    data = data |> dplyr::mutate(across(all_of(c(variable, by)), factor))
+  ) |>
+    broom::glance() |>
+    dplyr::select("statistic", "p.value") |>
+    mutate(method = "Two-way ANOVA")
+}
+
+add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continuous_variable, test.args = NULL, group = NULL,
+                                                     test_name, ...) {
+  if (!is_empty(by)) {
+    cli::cli_abort(
+      "The {.val {test_name}} cannot be used when the {.arg by} argument is specified.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  switch(test_name,
+         "t.test" = add_p_test_t.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "aov" = add_p_test_aov(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "kruskal.test" = add_p_test_kruskal.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "wilcox.test" = add_p_test_wilcox.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "lme4" = add_p_test_lme4(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, group = group, ...
+         ),
+         "ancova" = add_p_test_ancova(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "ancova_lme4" = add_p_test_ancova_lme4(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args,
+           group = group, ...
+         )
+  ) %||%
+    stop("No test selected", call. = FALSE) %>%
+    dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))
+}
+
 
 # UTILITY FUNCTIONS ------------------------------------------------------------
 .extract_data_frame <- function(x) {
