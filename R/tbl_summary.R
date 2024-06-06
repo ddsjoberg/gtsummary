@@ -182,7 +182,7 @@ tbl_summary <- function(data,
   check_scalar(
     by,
     allow_empty = TRUE,
-    message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
+    message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
       i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )

@@ -3,26 +3,25 @@
 #' Function converts a gtsummary object to a tibble.
 #'
 #' @inheritParams as_gt
-#' @param col_labels Logical argument adding column labels to output tibble.
-#' Default is `TRUE`.
-#' @param fmt_missing Logical argument adding the missing value formats.
-#' @param ... Not used
+#' @param col_labels (scalar `logical`)\cr
+#'   Logical argument adding column labels to output tibble. Default is `TRUE`.
+#' @param fmt_missing (scalar `logical`)\cr
+#'   Logical argument adding the missing value formats.
+#' @inheritParams rlang::args_dots_empty
+#'
 #' @return a [tibble][tibble::tibble-package]
-#' @family gtsummary output types
+#'
 #' @author Daniel D. Sjoberg
 #' @name as_tibble.gtsummary
 #' @examples
-#' \donttest{
 #' tbl <-
-#'   trial %>%
-#'   select(trt, age, grade, response) %>%
-#'   tbl_summary(by = trt)
+#'   trial |>
+#'   tbl_summary(by = trt, include = c(age, grade, response))
 #'
 #' as_tibble(tbl)
 #'
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
-#' }
 NULL
 
 #' @export

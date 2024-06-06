@@ -17,22 +17,24 @@
 \method{as.data.frame}{gtsummary}(...)
 }
 \arguments{
-\item{x}{An object of class `"gtsummary"}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is \code{everything()}.}
 
-\item{col_labels}{Logical argument adding column labels to output tibble.
-Default is \code{TRUE}.}
+\item{col_labels}{(scalar \code{logical})\cr
+Logical argument adding column labels to output tibble. Default is \code{TRUE}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{fmt_missing}{Logical argument adding the missing value formats.}
+\item{fmt_missing}{(scalar \code{logical})\cr
+Logical argument adding the missing value formats.}
 
-\item{...}{Not used}
+\item{...}{Arguments passed on to \code{gt::gt(...)}}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
@@ -41,23 +43,15 @@ a \link[tibble:tibble-package]{tibble}
 Function converts a gtsummary object to a tibble.
 }
 \examples{
-\donttest{
 tbl <-
-  trial \%>\%
-  select(trt, age, grade, response) \%>\%
-  tbl_summary(by = trt)
+  trial |>
+  tbl_summary(by = trt, include = c(age, grade, response))
 
 as_tibble(tbl)
 
 # without column labels
 as_tibble(tbl, col_labels = FALSE)
 }
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_gt}()}
-}
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

@@ -20,11 +20,11 @@
 
 #' Check Class
 #'
+#' @param x `(object)`\cr
+#'   object to check
 #' @param cls (`character`)\cr
 #'   character vector or string indicating accepted classes.
 #'   Passed to `inherits(what=cls)`
-#' @param x `(object)`\cr
-#'   object to check
 #' @param message (`character`)\cr
 #'   string passed to `cli::cli_abort(message)`
 #' @param allow_empty (`logical(1)`)\cr
@@ -33,6 +33,9 @@
 #' @param arg_name (`string`)\cr
 #'   string indicating the label/symbol of the object being checked.
 #'   Default is `rlang::caller_arg(x)`
+#' @param envir (`environment`)\cr
+#'   Environment to evaluate the glue expressions in passed in `cli::cli_abort(message)`.
+#'   Default is `rlang::current_env()`
 #' @inheritParams cli::cli_abort
 #' @inheritParams rlang::abort
 #' @keywords internal
@@ -50,14 +53,15 @@ check_class <- function(x,
                           ),
                         arg_name = rlang::caller_arg(x),
                         class = "check_class",
-                        call = get_cli_abort_call()) {
+                        call = get_cli_abort_call(),
+                        envir = rlang::current_env()) {
   # if empty, skip test
   if (isTRUE(allow_empty) && rlang::is_empty(x)) {
     return(invisible(x))
   }
 
   if (!inherits(x, cls)) {
-    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
   invisible(x)
 }
@@ -73,16 +77,17 @@ check_data_frame <- function(x,
                                ifelse(
                                  allow_empty,
                                  "The {.arg {arg_name}} argument must be class
-                                  {.cls {cls}} or empty, not {.obj_type_friendly {x}}.",
+                                  {.cls data.frame} or empty, not {.obj_type_friendly {x}}.",
                                  "The {.arg {arg_name}} argument must be class
-                                  {.cls {cls}}, not {.obj_type_friendly {x}}."
+                                  {.cls data.frame}, not {.obj_type_friendly {x}}."
                                ),
                              arg_name = rlang::caller_arg(x),
                              class = "check_data_frame",
-                             call = get_cli_abort_call()) {
+                             call = get_cli_abort_call(),
+                             envir = rlang::current_env()) {
   check_class(
     x = x, cls = "data.frame", allow_empty = allow_empty,
-    message = message, arg_name = arg_name, class = class, call = call
+    message = message, arg_name = arg_name, class = class, call = call, envir = envir
   )
 }
 
@@ -97,16 +102,17 @@ check_logical <- function(x,
                             ifelse(
                               allow_empty,
                               "The {.arg {arg_name}} argument must be class
-                               {.cls {cls}} or empty, not {.obj_type_friendly {x}}.",
+                               {.cls logical} or empty, not {.obj_type_friendly {x}}.",
                               "The {.arg {arg_name}} argument must be class
-                               {.cls {cls}}, not {.obj_type_friendly {x}}."
+                               {.cls logical}, not {.obj_type_friendly {x}}."
                             ),
                           arg_name = rlang::caller_arg(x),
                           class = "check_logical",
-                          call = get_cli_abort_call()) {
+                          call = get_cli_abort_call(),
+                          envir = rlang::current_env()) {
   check_class(
     x = x, cls = "logical", allow_empty = allow_empty,
-    message = message, arg_name = arg_name, class = class, call = call
+    message = message, arg_name = arg_name, class = class, call = call, envir = envir
   )
 }
 
@@ -121,23 +127,24 @@ check_scalar_logical <- function(x,
                                    ifelse(
                                      allow_empty,
                                      "The {.arg {arg_name}} argument must be a scalar with class
-                                      {.cls {cls}} or empty, not {.obj_type_friendly {x}}.",
+                                      {.cls logical} or empty, not {.obj_type_friendly {x}}.",
                                      "The {.arg {arg_name}} argument must be a scalar with class
-                                      {.cls {cls}}, not {.obj_type_friendly {x}}."
+                                      {.cls logical}, not {.obj_type_friendly {x}}."
                                    ),
                                  arg_name = rlang::caller_arg(x),
                                  class = "check_scalar_logical",
-                                 call = get_cli_abort_call()) {
+                                 call = get_cli_abort_call(),
+                                 envir = rlang::current_env()) {
   check_logical(
     x = x, allow_empty = allow_empty,
     message = message, arg_name = arg_name,
-    class = class, call = call
+    class = class, call = call, envir = envir
   )
 
   check_scalar(
     x = x, allow_empty = allow_empty,
     message = message, arg_name = arg_name,
-    call = call
+    call = call, envir = envir
   )
 }
 
@@ -158,17 +165,18 @@ check_string <- function(x,
                            ),
                          arg_name = rlang::caller_arg(x),
                          class = "check_string",
-                         call = get_cli_abort_call()) {
+                         call = get_cli_abort_call(),
+                         envir = rlang::current_env()) {
   check_class(
     x = x, cls = "character", allow_empty = allow_empty,
     message = message, arg_name = arg_name,
-    class = class, call = call
+    class = class, call = call, envir = envir
   )
 
   check_scalar(
     x = x, allow_empty = allow_empty,
     message = message, arg_name = arg_name,
-    class = class, call = call
+    class = class, call = call, envir = envir
   )
 }
 
@@ -181,9 +189,10 @@ check_not_missing <- function(x,
                               message = "The {.arg {arg_name}} argument cannot be missing.",
                               arg_name = rlang::caller_arg(x),
                               class = "check_not_missing",
-                              call = get_cli_abort_call()) {
+                              call = get_cli_abort_call(),
+                              envir = rlang::current_env()) {
   if (missing(x)) {
-    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
 
   # can't return 'x' because it may be an unevaluable obj, eg a bare tidyselect
@@ -197,7 +206,8 @@ check_not_missing <- function(x,
 #' @inheritParams check_class
 #' @keywords internal
 #' @noRd
-check_length <- function(x, length,
+check_length <- function(x,
+                         length,
                          message =
                            ifelse(
                              allow_empty,
@@ -207,7 +217,8 @@ check_length <- function(x, length,
                          allow_empty = FALSE,
                          arg_name = rlang::caller_arg(x),
                          class = "check_length",
-                         call = get_cli_abort_call()) {
+                         call = get_cli_abort_call(),
+                         envir = rlang::current_env()) {
   # if empty, skip test
   if (isTRUE(allow_empty) && rlang::is_empty(x)) {
     return(invisible(x))
@@ -215,7 +226,7 @@ check_length <- function(x, length,
 
   # check length
   if (length(x) != length) {
-    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
 
   invisible(x)
@@ -231,16 +242,17 @@ check_scalar <- function(x,
                          message =
                            ifelse(
                              allow_empty,
-                             "The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
-                             "The {.arg {arg_name}} argument must be length {.val {length}}."
+                             "The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
+                             "The {.arg {arg_name}} argument must be length {.val {1}}."
                            ),
                          arg_name = rlang::caller_arg(x),
                          class = "check_scalar",
-                         call = get_cli_abort_call()) {
+                         call = get_cli_abort_call(),
+                         envir = rlang::current_env()) {
   check_length(
     x = x, length = 1L, message = message,
     allow_empty = allow_empty, arg_name = arg_name,
-    class = class, call = call
+    class = class, call = call, envir = envir
   )
 }
 
@@ -253,15 +265,16 @@ check_scalar <- function(x,
 check_n_levels <- function(x,
                            n_levels,
                            message =
-                             "The {.arg {arg_name}} argument must have {.val {length}} levels.",
+                             "The {.arg {arg_name}} argument must have {.val {n_levels}} levels.",
                            arg_name = rlang::caller_arg(x),
                            class = "check_n_levels",
-                           call = get_cli_abort_call()) {
+                           call = get_cli_abort_call(),
+                           envir = rlang::current_env()) {
   check_length(
     x = stats::na.omit(x) |> unique(),
     length = n_levels, message = message,
     allow_empty = FALSE, arg_name = arg_name,
-    class = class, call = call
+    class = class, call = call, envir = envir
   )
 }
 
@@ -286,7 +299,8 @@ check_range <- function(x,
                         allow_empty = FALSE,
                         arg_name = rlang::caller_arg(x),
                         class = "check_range",
-                        call = get_cli_abort_call()) {
+                        call = get_cli_abort_call(),
+                        envir = rlang::current_env()) {
   # if empty, skip test
   if (isTRUE(allow_empty) && rlang::is_empty(x)) {
     return(invisible(x))
@@ -316,7 +330,7 @@ check_range <- function(x,
 
   # print error
   if (print_error) {
-    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
 
   invisible(x)
@@ -344,13 +358,14 @@ check_scalar_range <- function(x,
                                   and length {.val {1}}.",
                                arg_name = rlang::caller_arg(x),
                                class = "check_scalar_range",
-                               call = get_cli_abort_call()) {
+                               call = get_cli_abort_call(),
+                               envir = rlang::current_env()) {
   check_scalar(x, message = message, arg_name = arg_name,
-               allow_empty = allow_empty, class = class, call = call)
+               allow_empty = allow_empty, class = class, call = call, envir = envir)
 
   check_range(x = x, range = range, include_bounds = include_bounds,
               message = message, allow_empty = allow_empty,
-              arg_name = arg_name, class = class, call = call)
+              arg_name = arg_name, class = class, call = call, envir = envir)
 }
 
 #' Check Binary
@@ -377,7 +392,8 @@ check_binary <- function(x,
                            ),
                          arg_name = rlang::caller_arg(x),
                          class = "check_binary",
-                         call = get_cli_abort_call()) {
+                         call = get_cli_abort_call(),
+                         envir = rlang::current_env()) {
   # if empty, skip test
   if (isTRUE(allow_empty) && rlang::is_empty(x)) {
     return(invisible(x))
@@ -385,11 +401,12 @@ check_binary <- function(x,
 
   # first check x is either logical or numeric
   check_class(x, cls = c("logical", "numeric", "integer"),
-              arg_name = arg_name, message = message, class = class, call = call)
+              arg_name = arg_name, message = message, class = class,
+              call = call, envir = envir)
 
   # if "numeric" or "integer", it must be coded as 0, 1
   if (!is.logical(x) && !(rlang::is_integerish(x) && rlang::is_empty(setdiff(x, c(0, 1, NA))))) {
-    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
 
   invisible(x)
@@ -420,7 +437,8 @@ check_formula_list_selector <- function(x,
                                           ),
                                         arg_name = rlang::caller_arg(x),
                                         class = "check_formula_list_selector",
-                                        call = get_cli_abort_call()) {
+                                        call = get_cli_abort_call(),
+                                        envir = rlang::current_env()) {
   # if empty, skip test
   if (isTRUE(allow_empty) && rlang::is_empty(x)) {
     return(invisible(x))
@@ -429,14 +447,14 @@ check_formula_list_selector <- function(x,
   # first check the general structure; must be a list or formula
   check_class(
     x = x, cls = c("list", "formula"), allow_empty = allow_empty,
-    message = message, arg_name = arg_name, class = class, call = call
+    message = message, arg_name = arg_name, class = class, call = call, envir = envir
   )
 
   # if it's a list, then check each element is either named or a formula
   if (inherits(x, "list")) {
     for (i in seq_along(x)) {
       if (!rlang::is_named(x[i]) && !inherits(x[[i]], "formula")) {
-        cli::cli_abort(message, class = c(class, "standalone-checks"), call = call)
+        cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
       }
     }
   }

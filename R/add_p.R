@@ -225,7 +225,7 @@ add_p.tbl_summary <- function(x,
 calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars = NULL,
                                            df_test_meta_data, pvalue_fun = NULL,
                                            estimate_fun = NULL, conf.level = 0.95,
-                                           calling_fun) {
+                                           calling_fun, continuous_variable = NULL) {
   # list of ARDs or broom::tidy-like results
   lst_results <-
     lapply(
@@ -248,7 +248,8 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
                 type = x$inputs$type[[variable]],
                 test.args = test.args[[variable]],
                 adj.vars = adj.vars,
-                conf.level = conf.level
+                conf.level = conf.level,
+                continuous_variable = continuous_variable
               )
             )
           )
@@ -324,7 +325,10 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
               names_from = "stat_name",
               values_from = "stat"
             ) |>
-            dplyr::mutate(across(-"variable", unlist))
+            dplyr::mutate(
+              across(-"variable", unlist),
+              variable = .env$variable
+            )
         } else {
           if (!is.data.frame(x)) {
             cli::cli_abort(

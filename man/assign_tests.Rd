@@ -3,19 +3,24 @@
 \name{assign_tests}
 \alias{assign_tests}
 \alias{assign_tests.tbl_summary}
+\alias{assign_tests.tbl_continuous}
 \title{Assign Test}
 \usage{
 assign_tests(x, ...)
 
 \method{assign_tests}{tbl_summary}(
   x,
+  include,
+  by = x$inputs$by,
   test = NULL,
   group = NULL,
   adj.vars = NULL,
-  include,
+  summary_type = x$inputs$type,
   calling_fun = c("add_p", "add_difference"),
   ...
 )
+
+\method{assign_tests}{tbl_continuous}(x, include, by, cont_variable, test = NULL, group = NULL, ...)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -23,6 +28,12 @@ a table of class \code{'gtsummary'}}
 
 \item{...}{Passed to \code{\link[rlang:abort]{rlang::abort()}}, \code{\link[rlang:abort]{rlang::warn()}} or
 \code{\link[rlang:abort]{rlang::inform()}}.}
+
+\item{include}{(\code{character})\cr
+Character vector of column names to assign a default tests.}
+
+\item{by}{(\code{string})\cr
+a single stratifying column name}
 
 \item{test}{(named \code{list})\cr
 a named list of tests.}
@@ -34,12 +45,15 @@ Default is \code{NULL}.}
 \item{adj.vars}{(\code{character})\cr
 Variables to include in adjusted calculations (e.g. in ANCOVA models).}
 
-\item{include}{(\code{character})\cr
-Character vector of column names to assign a default tests.}
+\item{summary_type}{(named \code{list})\cr
+naemd list of summary types}
 
 \item{calling_fun}{(\code{string})\cr
 Must be one of \code{'add_p'} and \code{'add_difference'}. Depending on the context,
 different defaults are set.}
+
+\item{cont_variable}{(\code{string})\cr
+a column name of the continuous summary variable in \code{tbl_continuous()}}
 }
 \value{
 A table of class \code{'gtsummary'}

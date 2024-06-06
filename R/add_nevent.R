@@ -1,45 +1,33 @@
-#' Add p-values
-#'
-#' - [`add_nevent.tbl_regression()`]
-#'
-#' @param x (`gtsummary`)\cr
-#'   Object with class 'gtsummary'
-#' @param ... Passed to other methods.
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-#' @export
-#'
-#' @seealso [`add_p.tbl_summary()`]
-add_nevent <- function(x, ...) {
-  check_not_missing(x)
-  check_class(x, "gtsummary")
-  UseMethod("add_nevent")
-}
-
-
 #' Add event N
 #'
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
-#' @examples
-#' # TODO: Re-add after tbl_uvregression() is migrated
+#' @examplesIf gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
-#' # add_nevent.tbl_regression_ex1 <-
-#' #   trial %>%
-#' #   select(response, trt, grade) %>%
-#' #   tbl_uvregression(
-#' #     y = response,
-#' #     method = glm,
-#' #     method.args = list(family = binomial),
-#' #   ) %>%
-#' #   add_nevent()
+#' trial |>
+#'   select(response, trt, grade) |>
+#'   tbl_uvregression(
+#'     y = response,
+#'     exponentiate = TRUE,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'   ) |>
+#'   add_nevent()
 #'
 #' # Example 2 ----------------------------------
 #' glm(response ~ age + grade, trial, family = binomial) |>
 #'   tbl_regression(exponentiate = TRUE) |>
 #'   add_nevent(location = "level")
 NULL
+
+#' @rdname add_nevent_regression
+#' @export
+add_nevent <- function(x, ...) {
+  check_not_missing(x)
+  check_class(x, "gtsummary")
+  UseMethod("add_nevent")
+}
 
 #' @rdname add_nevent_regression
 #' @export
@@ -104,6 +92,10 @@ add_nevent.tbl_regression <- function(x, location = "label", ...) {
   x$call_list <- updated_call_list
   x
 }
+
+#' @rdname add_nevent_regression
+#' @export
+add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 # this function is used to fill in missing values in the
 # x$table_styling$header$modify_stat_* columns
