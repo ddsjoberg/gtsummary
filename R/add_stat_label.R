@@ -143,7 +143,8 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
           .env$location %in% "column" & .data$var_type %in% "categorical",
           "level",
           "label"
-        )
+        ) |>
+        as.character()
     )
 
   if (location %in% "column") {

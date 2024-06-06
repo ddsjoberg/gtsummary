@@ -425,7 +425,8 @@ tbl_summary <- function(data,
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
 
-  x}
+  x
+}
 
 .drop_missing_by_obs <- function(data, by) {
   if (is_empty(by) || !any(is.na(data[[by]]))) {
