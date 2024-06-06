@@ -27,7 +27,7 @@ test_that("as_tibble works with standard use", {
 test_that("as_tibble(col_labels=) works", {
   expect_equal(
     as_tibble(t2, col_labels = FALSE) %>% names(),
-    c("label", "estimate", "conf.low", "p.value") # "ci" here?
+    c("label", "estimate", "conf.low", "p.value")
   )
 
   expect_equal(
