@@ -348,9 +348,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # get all variable names in expression to be renamed
   columns <- tbl$table_styling$header$column
   var_list <-
-    stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~ stringr::str_remove_all(.x, pattern = stringr::fixed("}"))) %>%
-    map(~ stringr::str_remove_all(.x, pattern = stringr::fixed("{"))) %>%
+    str_extract_all(pattern, "\\{.*?\\}") %>%
+    map(~ str_remove_all(.x, pattern = "}", fixed = TRUE)) %>%
+    map(~ str_remove_all(.x, pattern = "{", fixed = TRUE)) %>%
     unlist() %>%
     setdiff(c("label", "variable", "var_label", "row_type")) %>%
     intersect(columns)
@@ -363,10 +363,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # replace variables with new names in pattern string.
   for (v in var_list) {
     pattern <-
-      stringr::str_replace_all(
+      str_replace_all(
         string = pattern,
-        pattern = stringr::fixed(paste0("{", v, "}")),
-        replacement = stringr::fixed(paste0("{", v, "_", id, "}"))
+        pattern = paste0("{", v, "}"),
+        replacement = paste0("{", v, "_", id, "}"),
+        fixed = TRUE
       )
   }
 

@@ -104,9 +104,11 @@ test_that("tbl_merge throws errors", {
   expect_equal(
     trial %>%
       split(.$trt) %>%
-      purrr::map(tbl_summary, by = stage) %>%
+      map(tbl_summary, by = stage) %>%
       tbl_merge(tab_spanner = c("Drug A", "Drug B")) %>%
-      purrr::pluck("table_styling", "header", "spanning_header") %>%
+      getElement("table_styling") |>
+      getElement("header") |>
+      getElement("spanning_header") %>%
       unique(),
     c(NA, "Drug A", "Drug B")
   )
