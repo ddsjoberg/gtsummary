@@ -21,7 +21,9 @@
 #' @param tests (`character`)\cr
 #'   character vector indicating the test type of the variables to select, e.g.
 #'   select all variables being compared with `"t.test"`.
-#'
+#' @param contrasts_type (`character`)\cr
+#'   type of contrast to select. Select among contrast types `c("treatment", "sum", "poly", "helmert", "other")`.
+#'   Default is all contrast types.
 #' @name select_helpers
 #' @return A character vector of column names selected
 #'
@@ -67,25 +69,28 @@ all_dichotomous <- function() {
 #' @rdname select_helpers
 #' @export
 all_tests <- function(tests) {
+  check_class(tests, "character")
   where(function(x) isTRUE(attr(x, "gtsummary.test_name") %in% tests))
 }
 
-# #' @rdname select_helpers
-# #' @export
-# all_tests <- function(tests = NULL) {
-#   if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
-#     paste(
-#       "The `tests=` argument must be one or more of the following:",
-#       paste(shQuote(df_add_p_tests$test_name), collapse = ", ")
-#     ) %>%
-#       stop(call. = FALSE)
-#   }
-#
-#   .generic_selector("variable", "test_name",
-#     .data$test_name %in% .env$tests,
-#     fun_name = "all_tests"
-#   )
-# }
+#' @rdname select_helpers
+#' @export
+all_intercepts <- function() {
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "intercept"))
+}
+
+#' @rdname select_helpers
+#' @export
+all_interaction <- function() {
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "interaction"))
+}
+
+#' @rdname select_helpers
+#' @export
+all_contrasts <- function(contrasts_type = c("treatment", "sum", "poly", "helmert", "other")) {
+  contrasts_type <- arg_match(contrasts_type, multiple = TRUE)
+  where(function(x) isTRUE(attr(x, "gtsummary.contrasts_type") %in% contrasts_type))
+}
 
 #' @rdname select_helpers
 #' @export
@@ -111,20 +116,6 @@ all_stat_cols <- function(stat_0 = TRUE) {
 }
 
 
-# #' @rdname select_helpers
-# #' @export
-# all_interaction <- broom.helpers::all_interaction
-
-# #' @rdname select_helpers
-# #' @export
-# all_intercepts <- broom.helpers::all_intercepts
-
-# #' @rdname select_helpers
-# #' @export
-# all_contrasts <- broom.helpers::all_contrasts
-
-
-
 #' Table Body Select Prep
 #'
 #' This function uses the information in `.$table_body` and adds them
@@ -139,7 +130,7 @@ all_stat_cols <- function(stat_0 = TRUE) {
 #' @keywords internal
 select_prep <- function(table_body, data = NULL) {
   # if data not passed, use table_body to construct one
-  if (is.null(data)) {
+  if (is_empty(data)) {
     data <- dplyr::tibble(!!!rep_named(unique(table_body$variable), logical(0L)))
   }
 
@@ -148,7 +139,7 @@ select_prep <- function(table_body, data = NULL) {
 
   # if table_body passed, add columns as attr to data
   if (!is.null(table_body)) {
-    attr_cols <- intersect(names(table_body), c("var_type", "test_name"))
+    attr_cols <- intersect(names(table_body), c("var_type", "test_name", "contrasts_type"))
     for (v in attr_cols) {
       df_attr <- table_body[c("variable", v)] |>
         unique() |>
