@@ -68,7 +68,8 @@ all_dichotomous <- function() {
 
 #' @rdname select_helpers
 #' @export
-all_tests <- function() {
+all_tests <- function(tests) {
+  check_class(tests, "character")
   where(function(x) isTRUE(attr(x, "gtsummary.test_name") %in% tests))
 }
 
