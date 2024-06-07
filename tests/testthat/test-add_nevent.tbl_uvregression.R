@@ -1,5 +1,4 @@
-skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
-
+skip_if_not(is_pkg_installed(c("broom.helpers", "broom"), reference_pkg = "gtsummary"))
 
 test_that("add_nevent.tbl_regression() works", {
   expect_silent(
@@ -60,5 +59,22 @@ test_that("add_nevent.tbl_regression() works", {
       {c(sum(.), .)} |> # styler: off
       as.character(),
     ignore_attr = TRUE
+  )
+})
+
+test_that("add_nevent.tbl_regression() messaging for linear model", {
+  expect_silent(
+    tbl1 <- tbl_uvregression(
+      trial,
+      x = trt,
+      include = c(marker, age),
+      show_single_row = trt,
+      method = lm,
+      hide_n = TRUE
+    )
+  )
+  expect_error(
+    res <- tbl1 |> add_nevent(),
+    "Reporting event N on label rows is not available for this model type."
   )
 })
