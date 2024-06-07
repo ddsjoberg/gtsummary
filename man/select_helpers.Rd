@@ -7,6 +7,9 @@
 \alias{all_categorical}
 \alias{all_dichotomous}
 \alias{all_tests}
+\alias{all_intercepts}
+\alias{all_interaction}
+\alias{all_contrasts}
 \alias{all_stat_cols}
 \title{Select helper functions}
 \usage{
@@ -18,7 +21,15 @@ all_categorical(dichotomous = TRUE)
 
 all_dichotomous()
 
-all_tests(tests)
+all_tests()
+
+all_intercepts()
+
+all_interaction()
+
+all_contrasts(
+  contrasts_type = c("treatment", "sum", "poly", "helmert", "other")
+)
 
 all_stat_cols(stat_0 = TRUE)
 }
@@ -29,12 +40,16 @@ Logical indicating whether to include continuous2 variables. Default is \code{TR
 \item{dichotomous}{(scalar \code{logical})\cr
 Logical indicating whether to include dichotomous variables. Default is \code{TRUE}}
 
-\item{tests}{(\code{character})\cr
-character vector indicating the test type of the variables to select, e.g.
-select all variables being compared with \code{"t.test"}.}
+\item{contrasts_type}{(\code{character})\cr
+type of contrast to select. Select among contrast types \code{c("treatment", "sum", "poly", "helmert", "other")}.
+Default is all contrast types.}
 
 \item{stat_0}{(scalar \code{logical})\cr
 When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
+
+\item{tests}{(\code{character})\cr
+character vector indicating the test type of the variables to select, e.g.
+select all variables being compared with \code{"t.test"}.}
 }
 \value{
 A character vector of column names selected
