@@ -31,11 +31,13 @@ test_that("as_tibble works with standard use", {
 })
 
 test_that("as_tibble(col_labels=) works", {
+  # col_labels = FALSE
   expect_equal(
     as_tibble(t2_regression, col_labels = FALSE) |> names(),
     c("label", "estimate", "conf.low", "p.value")
   )
 
+  # col_labels = TRUE
   expect_equal(
     as_tibble(t2_regression) |> names(),
     c("**Characteristic**", "**OR**", "**95% CI**", "**p-value**")
@@ -108,10 +110,14 @@ test_that("as_tibble works with formatting functions", {
 
   expect_silent(res <- as_tibble(t2_regression_modify_fmt))
   expect_snapshot(res |> as.data.frame())
+
+  # formatted cells
   expect_equal(
     as_tibble(t2_regression_modify_fmt, col_labels = FALSE)$p.value,
     c("0.10", NA, NA, "0.688", "0.972")
   )
+
+  # formatted column
   expect_equal(
     as_tibble(t2_regression_modify_fmt, col_labels = FALSE)$estimate,
     c("1,0191", NA, NA, "0,8535", "1,0136")
@@ -132,10 +138,14 @@ test_that("as_tibble works with formatting functions", {
 
   expect_silent(res <- as_tibble(t3_uvregression_modify_fmt))
   expect_snapshot(res |> as.data.frame())
+
+  # formatted cell
   expect_equal(
     as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE)$stat_n,
     c("183.00", "193.0000", NA, NA, NA)
   )
+
+  # formatted column
   expect_equal(
     as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE)$conf.low,
     c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
@@ -152,6 +162,8 @@ test_that("as_tibble(fmt_missing=) works", {
     res <- t4_regression_merged |> as_tibble(fmt_missing = TRUE, col_labels = FALSE)
   )
   expect_snapshot(res |> as.data.frame())
+
+  # fmt_missing = TRUE, default missing_symbol
   expect_equal(
     res$estimate_1,
     c(NA_character_, "—", "-6.9", "-12")
@@ -160,6 +172,8 @@ test_that("as_tibble(fmt_missing=) works", {
     res$estimate_2,
     c(NA_character_, NA_character_, "—", "-4.6")
   )
+
+  # fmt_missing = FALSE
   expect_equal(
     t4_regression_merged |>
       as_tibble(fmt_missing = FALSE, col_labels = FALSE) |>
@@ -167,6 +181,7 @@ test_that("as_tibble(fmt_missing=) works", {
     c(NA_character_, NA_character_, "-6.9", "-12")
   )
 
+  # fmt_missing = TRUE, custom missing_symbol
   expect_equal(
     trial |>
       select(age) |>
