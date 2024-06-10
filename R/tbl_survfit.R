@@ -260,16 +260,23 @@ tbl_survfit.list <- function(x,
       }
     )
 
-  card_survfit(
+  res <- brdg_survfit(
     cards = cards,
     statistic = statistic,
     label = label,
     label_header = label_header
   ) |>
     structure(class = c("tbl_survfit", "gtsummary"))
+
+  res$call_list <- list(tbl_survfit = match.call())
+  names(res$cards) <- "tbl_survfit"
+  res$inputs <- tbl_survfit_inputs
+  names(res$inputs$x) <- names(res$cards$tbl_survfit)
+
+  res
 }
 
-card_survfit <- function(cards,
+brdg_survfit <- function(cards,
                          statistic = "{estimate} ({conf.low}, {conf.high})",
                          label = NULL,
                          label_header) {
@@ -377,7 +384,7 @@ card_survfit <- function(cards,
     dplyr::bind_rows()
 
   # construct gtsummary object -------------------------------------------------
-  res <- list(table_body = table_body)
+  res <- list(table_body = table_body, cards = list(brdg_survfit = cards))
   res <- construct_initial_table_styling(res)
 
   # add 'df_header_survfit' info to table_styling$header
