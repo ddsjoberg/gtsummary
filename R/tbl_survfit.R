@@ -46,7 +46,7 @@
 #' @param reverse `r lifecycle::badge("deprecated")`
 #' @param y outcome call, e.g. `y = Surv(ttdeath, death)`
 #' @param include Variable to include as stratifying variables.
-#' @param ... For [tbl_survfit.data.frame()]  and [tbl_survfit.survfit()] the arguments
+#' @param ... For [`tbl_survfit.data.frame()`]  and [`tbl_survfit.survfit()`] the arguments
 #' are passed to [tbl_survfit.list()]. They are not used when [tbl_survfit.list()]
 #' is called directly.
 #' @inheritParams add_global_p
@@ -57,6 +57,50 @@
 #' @author Daniel D. Sjoberg
 #' @examplesIf gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")
 #' library(survival)
+#'
+#' # Example 1 ----------------------------------
+#' # Pass single survfit() object
+#' tbl_survfit(
+#'   survfit(Surv(ttdeath, death) ~ trt, trial),
+#'   times = c(12, 24),
+#'   label_header = "**{time} Month**"
+#' )
+#'
+#' # Example 2 ----------------------------------
+#' # Pass a data frame
+#' tbl_survfit(
+#'   trial,
+#'   y = "Surv(ttdeath, death)",
+#'   include = c(trt, grade),
+#'   probs = 0.5,
+#'   label_header = "**Median Survival**"
+#' )
+#'
+#' # Example 3 ----------------------------------
+#' # Pass a list of survfit() objects
+#' list(
+#'  survfit(Surv(ttdeath, death) ~ 1, trial),
+#'  survfit(Surv(ttdeath, death) ~ trt, trial)
+#' ) |>
+#'   tbl_survfit(times = c(12, 24))
+#'
+#' # Example 4 Competing Events Example ---------
+#' # adding a competing event for death (cancer vs other causes)
+#' set.seed(1123)
+#' library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+#' trial2 <- trial |>
+#'   dplyr::mutate(
+#'     death_cr =
+#'       dplyr::case_when(
+#'         death == 0 ~ "censor",
+#'         runif(n()) < 0.5 ~ "death from cancer",
+#'         TRUE ~ "death other causes"
+#'       ) |>
+#'       factor()
+#'   )
+#'
+#' survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
+#'   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 NULL
 
 #' @export
@@ -67,13 +111,59 @@ tbl_survfit <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_survfit
+tbl_survfit.survfit <- function(x, ...) {
+  tbl_survfit.list(x = list(x), ...)
+}
+
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
+  set_cli_abort_call()
+  check_pkg_installed("survival", reference_pkg = "cardx")
+
+  # process inputs -------------------------------------------------------------
+  # convert to a string, in case it wasn't passed this way originally
+  y <- .process_x_and_y_args_as_string(x, enquo(y))
+  cards::process_selectors(x, include = {{ include }})
+  # remove any variables specified in arguments `y` from include
+  include <- include |>
+    setdiff(tryCatch(stats::reformulate(y) |> all.vars(), error = \(e) character()))
+
+  if (is_empty(include)) {
+    cli::cli_abort(
+      "No variables were selected in the {.arg include} argument.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # build survfit models -------------------------------------------------------
+  lst_survfits <-
+    lapply(
+      include,
+      function(variable) {
+        cardx::construct_model(
+          data = x,
+          formula = stats::reformulate(termlabels = cardx::bt(variable), response = y),
+          method = "survfit",
+          package = "survival"
+        )
+      }
+    ) |>
+    set_names(include)
+
+  # pass the list of survfit objects to create the final table -----------------
+  tbl_survfit.list(x = lst_survfits, ...)
+}
+
+#' @export
+#' @rdname tbl_survfit
 tbl_survfit.list <- function(x,
                              times = NULL,
                              probs = NULL,
                              statistic = "{estimate} ({conf.low}, {conf.high})",
                              label = NULL,
-                             label_header = ifelse(!is.null(times), "Time {time}", "{prob} Percentile"),
-                             estimate_fun = ifelse(!is.null(times), styfn_percent(), styfn_sigfig()),
+                             label_header = ifelse(!is.null(times), "**Time {time}**", "**{style_sigfig(prob, scale=100)}% Percentile**"),
+                             estimate_fun = ifelse(!is.null(times), styfn_percent(symbol=TRUE), styfn_sigfig()),
                              missing = "--",
                              conf.level = 0.95,
                              type = NULL,
@@ -122,10 +212,14 @@ tbl_survfit.list <- function(x,
     )
   }
   check_string(statistic)
-  if (is_string(label)) label <- ~label # styler: off
+  if (is_string(label)) label <- inject(everything() ~ !!label)
   if (missing(label_header)) {
-    # TODO: Add translations here. Be sure to review the old version..it's a bit different
-    # I think it may be best to add "{prob} Percentile" to the translation file, so we can easily invert it
+    label_header <- ifelse(
+      !is.null(times),
+      translate_string("Time {time}"),
+      translate_string("{style_sigfig(prob, scale=100)}% Percentile")
+    ) %>%
+      paste0("**", ., "**")
   }
   check_string(label_header)
   estimate_fun <- as_function(estimate_fun)
@@ -134,6 +228,16 @@ tbl_survfit.list <- function(x,
   if (!is_empty(type)) type <- arg_match(type, values = c("survival", "risk", "cumhaz"))
 
   tbl_survfit_inputs <- as.list(environment())
+
+  label <-
+    case_switch(
+      is_empty(label) ~ .default_survfit_labels(x),
+      is.list(label) ~ append(.default_survfit_labels(x), label),
+      is_formula(label) ~ append(.default_survfit_labels(x), list(label)),
+      .default = label
+    )
+
+
 
   # calculate cards objects ----------------------------------------------------
   cards <-
@@ -155,24 +259,26 @@ tbl_survfit.list <- function(x,
           )
       }
     )
-  browser()
 
   card_survfit(
     cards = cards,
     statistic = statistic,
     label = label,
     label_header = label_header
-  )
-
-    browser()
-
+  ) |>
+    structure(class = c("tbl_survfit", "gtsummary"))
 }
 
 card_survfit <- function(cards,
                          statistic = "{estimate} ({conf.low}, {conf.high})",
                          label = NULL,
-                         label_header = ifelse(!is.null(times), "Time {time}", "{prob} Percentile")) {
-  browser()
+                         label_header) {
+  # grab information for the headers -------------------------------------------
+  df_header_survfit <- cards[[1]] |>
+    dplyr::filter(!.data$context %in% "attributes") |>
+    dplyr::distinct(.data$variable, .data$variable_level) |>
+    dplyr::mutate(gts_column = paste0("stat_", dplyr::row_number()))
+
   # assign a variable name to the cards list -----------------------------------
   univariate_survift_count <- 0L
   cards_names <- vector(mode = "list", length = length(cards))
@@ -188,7 +294,7 @@ card_survfit <- function(cards,
     # check if there are more than one stratifying variable
     if (length(cards_names[[i]]) > 1L) {
       cli::cli_abort(
-        c("The {.fun tbl_survfit} fucntion supports {.fun survival::survfit} objects with no more than one stratifying variable.",
+        c("The {.fun tbl_survfit} function supports {.fun survival::survfit} objects with no more than one stratifying variable.",
           i = "The model is stratified by {.val {cards_names[[i]]}}.")
       )
     }
@@ -201,37 +307,115 @@ card_survfit <- function(cards,
     )
   }
 
+  # process the label argument -------------------------------------------------
+  cards::process_formula_selectors(
+    data = vec_to_df(names(cards)),
+    label = label
+  )
+  cards::fill_formula_selectors(
+    data = vec_to_df(names(cards)),
+    label =
+      as.list(names(cards)) |>
+      set_names(names(cards)) |>
+      utils::modifyList(
+        val = rep_named(paste0("..overall_", seq_along(cards), ".."), list(translate_string("Overall")))
+      )
+  )
+
   # add attributes ARD to the cards data frame ---------------------------------
   for (i in seq_along(cards)) {
     if (nrow(dplyr::filter(cards[[i]], .data$context %in% "attributes")) == 0L) {
       cards[[i]] <- cards[[i]] |>
         dplyr::bind_rows(
           dplyr::tibble(
-            variable = cards_names[i],
+            variable = cards_names[[i]],
             context = "attributes",
             stat_name = "label",
             stat_label = "Variable Label",
-            stat = list(label[[cards_names[i]]] %||% cards_names[i])
+            stat = label[cards_names[[i]]]
           )
         )
     }
   }
 
   # convert cards data frame to format for gtsummary table_body ----------------
-  map(
+  table_body <- imap(
     cards,
-    function(x) {
-      # assign gts_column
+    function(x, variable) {
+      # merge in gts_column
       x <- x %>%
         dplyr::left_join(
-          dplyr::filter(., .data$context %in% "attributes") |>
-            dplyr::distinct("variable", "variable_level") |>
-            dplyr::mutate(gts_column = paste0("stat_", dplyr::row_number()))
-        )
+          df_header_survfit,
+          by = c("variable", "variable_level")
+        ) |>
+        dplyr::mutate(variable = .env$variable)
 
 
       # no stratifying variable, process as a continuous tbl_summary() variable
+      if (dplyr::select(x, cards::all_ard_groups()) |> names() |> is_empty()) {
+        pier <- pier_summary_continuous(
+          cards = x,
+          variables = variable,
+          statistic = list(statistic) |> set_names(variable)
+        )
+      }
+      else {
+        pier <- pier_summary_categorical(
+          cards = x |>
+            dplyr::mutate(
+              variable = .env$variable,
+              variable_level = .data$group1_level
+            ) |>
+            dplyr::select(-cards::all_ard_groups()),
+          variables = variable,
+          statistic = list(statistic) |> set_names(variable)
+        )
+      }
 
     }
-  )
+  ) |>
+    dplyr::bind_rows()
+
+  # construct gtsummary object -------------------------------------------------
+  res <- list(table_body = table_body)
+  res <- construct_initial_table_styling(res)
+
+  # add 'df_header_survfit' info to table_styling$header
+  res$table_styling$header <-
+    res$table_styling$header |>
+    dplyr::left_join(
+      df_header_survfit  |>
+        dplyr::mutate(across(where(is.list), unlist)) %>%
+        dplyr::rename(column = "gts_column",  "modify_stat_{.$variable[1]}" := "variable_level") |>
+        dplyr::select(-"variable"),
+      by = "column"
+    )
+
+  res |>
+    # add header to label column and add default indentation
+    modify_table_styling(
+      columns = "label",
+      label = glue("**{translate_string('Characteristic')}**"),
+      rows = .data$row_type %in% c("level", "missing"),
+      indent = 4L
+    ) |>
+    modify_header(all_stat_cols() ~ label_header) |>
+    structure(class = c("card_survfit", "gtsummary"))
+}
+
+
+.default_survfit_labels <- function(x) {
+  label <- list()
+  for (i in seq_along(x)) {
+    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars()
+    if (!is_empty(variable_i)) {
+      label[[variable_i]] <-
+        tryCatch(
+          eval(x[[i]]$call$data)[[variable_i]] |> attr("label"),
+          error = \(e) variable_i # styler: off
+        )
+    }
+  }
+
+  compact(label)
 }

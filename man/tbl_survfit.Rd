@@ -2,10 +2,16 @@
 % Please edit documentation in R/tbl_survfit.R
 \name{tbl_survfit}
 \alias{tbl_survfit}
+\alias{tbl_survfit.survfit}
+\alias{tbl_survfit.data.frame}
 \alias{tbl_survfit.list}
 \title{Survival table}
 \usage{
 tbl_survfit(x, ...)
+
+\method{tbl_survfit}{survfit}(x, ...)
+
+\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
 
 \method{tbl_survfit}{list}(
   x,
@@ -13,8 +19,9 @@ tbl_survfit(x, ...)
   probs = NULL,
   statistic = "{estimate} ({conf.low}, {conf.high})",
   label = NULL,
-  label_header = ifelse(!is.null(times), "Time {time}", "{prob} Percentile"),
-  estimate_fun = ifelse(!is.null(times), styfn_percent(), styfn_sigfig()),
+  label_header = ifelse(!is.null(times), "**Time {time}**",
+    "**{style_sigfig(prob, scale=100)}\% Percentile**"),
+  estimate_fun = ifelse(!is.null(times), styfn_percent(symbol = TRUE), styfn_sigfig()),
   missing = "--",
   conf.level = 0.95,
   type = NULL,
@@ -32,6 +39,10 @@ each variable as a stratifying variable.}
 \item{...}{For \code{\link[=tbl_survfit.data.frame]{tbl_survfit.data.frame()}}  and \code{\link[=tbl_survfit.survfit]{tbl_survfit.survfit()}} the arguments
 are passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}. They are not used when \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}
 is called directly.}
+
+\item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
+
+\item{include}{Variable to include as stratifying variables.}
 
 \item{times}{(\code{numeric})\cr
 a vector of times for which to return survival probabilities.}
@@ -77,10 +88,6 @@ Must be one of the following:\tabular{ll}{
 \item{reverse}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
-
-\item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
-
-\item{include}{Variable to include as stratifying variables.}
 }
 \description{
 Function takes a \code{survfit} object as an argument, and provides a
@@ -89,6 +96,50 @@ formatted summary table of the results
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
+
+# Example 1 ----------------------------------
+# Pass single survfit() object
+tbl_survfit(
+  survfit(Surv(ttdeath, death) ~ trt, trial),
+  times = c(12, 24),
+  label_header = "**{time} Month**"
+)
+
+# Example 2 ----------------------------------
+# Pass a data frame
+tbl_survfit(
+  trial,
+  y = "Surv(ttdeath, death)",
+  include = c(trt, grade),
+  probs = 0.5,
+  label_header = "**Median Survival**"
+)
+
+# Example 3 ----------------------------------
+# Pass a list of survfit() objects
+list(
+ survfit(Surv(ttdeath, death) ~ 1, trial),
+ survfit(Surv(ttdeath, death) ~ trt, trial)
+) |>
+  tbl_survfit(times = c(12, 24))
+
+# Example 4 Competing Events Example ---------
+# adding a competing event for death (cancer vs other causes)
+set.seed(1123)
+library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+trial2 <- trial |>
+  dplyr::mutate(
+    death_cr =
+      dplyr::case_when(
+        death == 0 ~ "censor",
+        runif(n()) < 0.5 ~ "death from cancer",
+        TRUE ~ "death other causes"
+      ) |>
+      factor()
+  )
+
+survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
+  tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 \dontshow{\}) # examplesIf}
 }
 \author{

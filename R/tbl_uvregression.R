@@ -414,7 +414,7 @@ check_uvregression_formula <- function(formula) {
     error = function(e) {
       tryCatch(
         # lastly, convert quosure to a string
-        rlang::expr_deparse(quo_squash(x)),
+        rlang::expr_deparse(quo_get_expr(x)),
         error = function(e) {
           cli::cli_abort(
             "There was a problem processing argument {.arg {arg_name}}.",
