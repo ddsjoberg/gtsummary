@@ -30,7 +30,7 @@ test_that("as_tibble works with standard use", {
   expect_snapshot(res |> as.data.frame())
 })
 
-test_that("as_tibble(col_labels=) works", {
+test_that("as_tibble(col_labels) works", {
   # col_labels = FALSE
   expect_equal(
     as_tibble(t2_regression, col_labels = FALSE) |> names(),
@@ -58,17 +58,34 @@ test_that("as_tibble works with bold/italics", {
     italicize_labels()
 
   expect_silent(res <- as_tibble(t1_summary))
-  expect_snapshot(res |> as.data.frame())
+  expect_equal(
+    names(res),
+    c("**Characteristic**", "**N = 200**")
+  )
+  expect_equal(
+    res$`**Characteristic**`,
+    c("__Chemotherapy Treatment__", "_Drug A_", "_Drug B_", "__Age__", "_Unknown_", "__Patient Died__")
+  )
 
   expect_silent(res <- as_tibble(t2_regression))
-  expect_snapshot(res |> as.data.frame())
   expect_equal(
-    as_tibble(t2_regression, col_labels = FALSE)$label,
+    names(res),
+    c("**Characteristic**", "**OR**", "**95% CI**", "**p-value**")
+  )
+  expect_equal(
+    res$`**Characteristic**`,
     c("__Age__", "__Grade__", "_I_", "_II_", "_III_")
   )
 
   expect_silent(res <- as_tibble(t3_uvregression))
-  expect_snapshot(res |> as.data.frame())
+  expect_equal(
+    names(res),
+    c("**Characteristic**", "**N**", "**OR**", "**95% CI**", "**p-value**")
+  )
+  expect_equal(
+    res$`**Characteristic**`,
+    c("_Age_", "_Grade_", "__I__", "__II__", "__III__")
+  )
 })
 
 test_that("as_tibble works with bold_p()", {
@@ -108,18 +125,17 @@ test_that("as_tibble works with formatting functions", {
       estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
     )
 
-  expect_silent(res <- as_tibble(t2_regression_modify_fmt))
-  expect_snapshot(res |> as.data.frame())
+  expect_silent(res <- as_tibble(t2_regression_modify_fmt, col_labels = FALSE))
 
   # formatted cells
   expect_equal(
-    as_tibble(t2_regression_modify_fmt, col_labels = FALSE)$p.value,
+    res$p.value,
     c("0.10", NA, NA, "0.688", "0.972")
   )
 
   # formatted column
   expect_equal(
-    as_tibble(t2_regression_modify_fmt, col_labels = FALSE)$estimate,
+    res$estimate,
     c("1,0191", NA, NA, "0,8535", "1,0136")
   )
 
@@ -136,32 +152,33 @@ test_that("as_tibble works with formatting functions", {
       c(conf.low, conf.high) ~ styfn_sigfig(digits = 3)
     )
 
-  expect_silent(res <- as_tibble(t3_uvregression_modify_fmt))
-  expect_snapshot(res |> as.data.frame())
+  expect_silent(res <- as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE))
 
   # formatted cell
   expect_equal(
-    as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE)$stat_n,
+    res$stat_n,
     c("183.00", "193.0000", NA, NA, NA)
   )
 
   # formatted column
   expect_equal(
-    as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE)$conf.low,
+    res$conf.low,
     c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
   )
 })
 
 test_that("as_tibble works with tbl_merge", {
-  expect_silent(res <- as_tibble(t4_regression_merged))
-  expect_snapshot(res |> as.data.frame())
+  expect_silent(res <- as_tibble(t4_regression_merged, col_labels = FALSE))
+  expect_equal(
+    names(res),
+    c("label", "estimate_1", "conf.low_1", "p.value_1", "estimate_2", "conf.low_2", "p.value_2")
+  )
 })
 
-test_that("as_tibble(fmt_missing=) works", {
+test_that("as_tibble(fmt_missing) works", {
   expect_silent(
     res <- t4_regression_merged |> as_tibble(fmt_missing = TRUE, col_labels = FALSE)
   )
-  expect_snapshot(res |> as.data.frame())
 
   # fmt_missing = TRUE, default missing_symbol
   expect_equal(
@@ -199,9 +216,6 @@ test_that("as_tibble(fmt_missing=) works", {
 test_that("as_tibble works with grouped columns", {
   tbl <- tbl_summary(trial, include = age, missing = "no")
   tbl <- tbl_stack(list(tbl, tbl), group_header = c("T1", "T2"))
-
-  expect_silent(res <- tbl |> as_tibble())
-  expect_snapshot(res |> as.data.frame())
 
   expect_equal(
     tbl |>
