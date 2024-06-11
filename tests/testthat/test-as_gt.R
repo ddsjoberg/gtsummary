@@ -110,7 +110,7 @@ test_that("as_gt works with tbl_regression", {
   )
 
   # footnotes
-  vis_cols <- my_tbl_uvregression$table_styling$header |> filter(hide == FALSE) |> select(column) |> unlist()
+  vis_cols <- my_tbl_regression$table_styling$header |> filter(hide == FALSE) |> select(column) |> unlist()
   footnotes_vis <- my_tbl_regression$table_styling$footnote_abbrev |> filter(column %in% vis_cols)
   expect_equal(
     footnotes_vis$column,
