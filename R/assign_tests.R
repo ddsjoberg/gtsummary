@@ -67,18 +67,18 @@ assign_tests.tbl_summary <- function(x,
       if (is.null(test[[variable]])) {
         test[[variable]] <-
           switch(calling_fun,
-            "add_p" =
-              .add_p_tbl_summary_default_test(data,
-                variable = variable,
-                by = by, group = group, adj.vars = adj.vars,
-                summary_type = summary_type[[variable]]
-              ),
-            "add_difference" =
-              .add_difference_tbl_summary_default_test(data,
-                variable = variable,
-                by = by, group = group, adj.vars = adj.vars,
-                summary_type = summary_type[[variable]]
-              )
+                 "add_p" =
+                   .add_p_tbl_summary_default_test(data,
+                                                   variable = variable,
+                                                   by = by, group = group, adj.vars = adj.vars,
+                                                   summary_type = summary_type[[variable]]
+                   ),
+                 "add_difference" =
+                   .add_difference_tbl_summary_default_test(data,
+                                                            variable = variable,
+                                                            by = by, group = group, adj.vars = adj.vars,
+                                                            summary_type = summary_type[[variable]]
+                   )
           )
       }
 
@@ -117,7 +117,7 @@ assign_tests.tbl_continuous <- function(x,
   if (!is_empty(by) && is_empty(group)) {
     test <-
       rep_named(include, list("anova_2way")) |>
-        utils::modifyList(val = test)
+      utils::modifyList(val = test)
   }
 
   # when there is no by variable, use the same defaults as `add_p.tbl_summary`
@@ -135,7 +135,7 @@ assign_tests.tbl_continuous <- function(x,
                                  calling_fun = "add_p")[[1]]
       }
     ) |>
-      set_names(include)
+    set_names(include)
   return(updated_test)
 
   # otherwise, there is no default test.
@@ -143,6 +143,45 @@ assign_tests.tbl_continuous <- function(x,
     "There is no default test for this data profile. Please specify {.arg test} argument.",
     call = get_cli_abort_call()
   )
+}
+
+#' @rdname assign_tests
+#' @export
+assign_tests.tbl_survfit <- function(x,
+                                     include,
+                                     test = NULL, ...) {
+  set_cli_abort_call()
+
+  all_possible_tests <-
+    c("logrank", "tarone", "survdiff", "petopeto_gehanwilcoxon", "coxph_lrt", "coxph_wald", "coxph_score")
+  if (is_string(test)) {
+    test <- arg_match(test, values = all_possible_tests)
+    test <- inject(everything() ~ !!test)
+  }
+  cards::process_formula_selectors(
+    data = select_prep(x$table_body)[include],
+    test = test
+  )
+  cards::fill_formula_selectors(
+    data = select_prep(x$table_body)[include],
+    test = inject(everything() ~ !!test)
+  )
+  cards::check_list_elements(
+    x = test,
+    predicate = \(x) is_string(x) && x %in% all_possible_tests,
+    error_msg = "Each value passed in the {.arg test} argument must be one of {.val {all_possible_tests}}."
+  )
+
+  for (i in seq_along(test)) {
+    test[[i]] <-
+      .process_test_argument_value(
+        test = test[[i]],
+        class = "tbl_survfit",
+        calling_fun = "add_p"
+      )
+  }
+
+  test
 }
 
 .process_test_argument_value <- function(test, class, calling_fun) {
@@ -181,9 +220,9 @@ assign_tests.tbl_continuous <- function(x,
 identical_no_attr <- function(x, y) {
   # styler: off
   tryCatch({
-      attributes(x) <- NULL
-      attributes(y) <- NULL
-      identical(x, y)},
+    attributes(x) <- NULL
+    attributes(y) <- NULL
+    identical(x, y)},
     error = \(x) FALSE
   )
   # styler: on

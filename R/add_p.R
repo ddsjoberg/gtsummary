@@ -222,7 +222,7 @@ add_p.tbl_summary <- function(x,
   x
 }
 
-calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars = NULL,
+calculate_and_add_test_results <- function(x, include, group = NULL, test.args, adj.vars = NULL,
                                            df_test_meta_data, pvalue_fun = NULL,
                                            estimate_fun = NULL, conf.level = 0.95,
                                            calling_fun, continuous_variable = NULL) {
@@ -241,7 +241,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
                   dplyr::pull("fun_to_run") %>%
                   getElement(1),
               args = list(
-                data = x$inputs$data,
+                data = x$inputs[[1]], # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
                 variable = variable,
                 by = x$inputs$by,
                 group = group,
@@ -484,7 +484,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
 
   # extending modify_stat_N to new columns
   x$table_styling$header <- x$table_styling$header |>
-    tidyr::fill("modify_stat_N", .direction = "downup")
+    tidyr::fill(any_of("modify_stat_N"), .direction = "downup")
 
   # add raw results to `.$card`
   x$cards[[calling_fun]] <- lst_results
