@@ -15,7 +15,8 @@ as_kable_extra(
 )
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
+\item{x}{(\code{gtsummary})\cr
+Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
 \item{format, escape, ...}{arguments passed to \code{knitr::kable()}. Default is
