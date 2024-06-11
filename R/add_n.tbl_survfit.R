@@ -17,7 +17,8 @@
 #'   tbl_survfit(times = c(12, 24)) |>
 #'   add_n()
 add_n.tbl_survfit <- function(x, ...) {
-  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
+  set_cli_abort_call()
+  check_dots_empty()
   updated_call_list <- c(x$call_list, list(add_n = match.call()))
 
   # adding N to the table_body -------------------------------------------------

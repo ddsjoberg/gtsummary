@@ -1,6 +1,9 @@
 #' Add column with N
 #'
 #' - [`add_n.tbl_summary()`]
+#' - [`add_n.tbl_regression()`]
+#' - [`add_n.tbl_uvregression()`]
+#' - [`add_n.tbl_survfit()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'

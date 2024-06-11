@@ -4,6 +4,7 @@
 \alias{assign_tests}
 \alias{assign_tests.tbl_summary}
 \alias{assign_tests.tbl_continuous}
+\alias{assign_tests.tbl_survfit}
 \title{Assign Test}
 \usage{
 assign_tests(x, ...)
@@ -21,6 +22,8 @@ assign_tests(x, ...)
 )
 
 \method{assign_tests}{tbl_continuous}(x, include, by, cont_variable, test = NULL, group = NULL, ...)
+
+\method{assign_tests}{tbl_survfit}(x, include, test = NULL, ...)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
