@@ -31,19 +31,12 @@ test_that("as_gt works with standard use", {
   )
 
   # footnotes
-  vis_cols <- my_tbl_summary$table_styling$header |>
-    dplyr::filter(hide == FALSE) |>
-    dplyr::select(column) |>
-    unlist()
-  footnotes_vis <- my_tbl_summary$table_styling$footnote_abbrev |>
-    dplyr::filter(column %in% vis_cols) |>
-    unique()
   expect_equal(
-    footnotes_vis$column,
+    my_tbl_summary$table_styling$footnote$column,
     res$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    footnotes_vis$footnote,
+    my_tbl_summary$table_styling$footnote$footnote,
     res$`_footnotes`$footnotes |> unlist() |> unique()
   )
 
@@ -73,23 +66,6 @@ test_that("as_gt works with tbl_cross", {
   expect_equal(
     my_tbl_cross$table_styling$header$label,
     res$`_boxhead`$column_label |> unlist()
-  )
-
-  # footnotes
-  vis_cols <- my_tbl_cross$table_styling$header |>
-    dplyr::filter(hide == FALSE) |>
-    dplyr::select(column) |>
-    unlist()
-  footnotes_vis <- my_tbl_cross$table_styling$footnote_abbrev |>
-    dplyr::filter(column %in% vis_cols) |>
-    unique()
-  expect_equal(
-    footnotes_vis$column,
-    res$`_footnotes`$colname |> unique()
-  )
-  expect_equal(
-    footnotes_vis$footnote,
-    res$`_footnotes`$footnotes |> unlist() |> unique()
   )
 
   # indentation
@@ -214,20 +190,13 @@ test_that("as_gt works with spanning header-column gathering", {
   )
 
   # footnotes
-  vis_cols <- my_spanning_tbl$table_styling$header |>
-    dplyr::filter(hide == FALSE) |>
-    dplyr::select(column) |>
-    unlist()
-  footnotes_vis <- my_spanning_tbl$table_styling$footnote_abbrev |>
-    dplyr::filter(column %in% vis_cols) |>
-    unique()
   expect_equal(
-    footnotes_vis$column,
-    res$`_footnotes`$colname |> unique()
+    my_spanning_tbl$table_styling$footnote$column,
+    res$`_footnotes`$colname
   )
   expect_equal(
-    footnotes_vis$footnote,
-    res$`_footnotes`$footnotes |> unlist() |> unique()
+    my_spanning_tbl$table_styling$footnote$footnote,
+    res$`_footnotes`$footnotes |> unlist()
   )
 
   # indentation
