@@ -402,7 +402,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
           replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
         )
 
-      stringr::str_split(x, pattern = break_chr) %>%
+      str_split(x, pattern = break_chr) %>%
         unlist() %>%
         discard(~ . == "") %>%
         map(
