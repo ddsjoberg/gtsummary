@@ -415,10 +415,10 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   # styler: off
   termlabels <-
     if (is.null(group)) cardx::bt(c(by, adj.vars))
-    else c(cardx::bt(by), cardx::bt(adj.vars), glue::glue("(1 | {cardx::bt(group)})"))
+  else c(cardx::bt(by), cardx::bt(adj.vars), glue::glue("(1 | {cardx::bt(group)})"))
   response <-
     if (type == "dichotomous") glue::glue("as.factor({cardx::bt(variable)})")
-    else cardx::bt(variable)
+  else cardx::bt(variable)
   formula <- stats::reformulate(termlabels, response)
   # styler: on
 
@@ -572,6 +572,65 @@ add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continu
     dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))
 }
 
+# tbl_survfit ------------------------------------------------------------------
+# returns a list of the formula and data arg calls
+extract_formula_data_call <- function(x) {
+  # extracting survfit call
+  survfit_call <- x$call %>% as.list()
+  # index of formula and data
+  call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
+
+  survfit_call[call_index]
+}
+
+add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
+  check_pkg_installed(c("cardx", "survival"), reference_pkg = "gtsummary")
+
+  # formula and data calls
+  formula_data_call <-
+    extract_formula_data_call(data[[variable]]) |>
+    imap(~safe_survfit_eval(.x))
+
+  # calculate results
+  inject(cardx::ard_survival_survdiff(!!!formula_data_call, !!!test.args))
+}
+
+add_p_tbl_survfit_logrank <- function(data, variable, ...) {
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 0))
+}
+
+add_p_tbl_survfit_tarone <- function(data, variable, ...) {
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 1.5))
+}
+
+add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 1))
+}
+
+add_p_tbl_survfit_coxph <- function(data, variable, test_type = c("log", "sc", "wald"), test.args, ...) {
+  check_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary")
+  test_type <- arg_match(test_type)
+
+  # formula and data calls
+  formula_data_call <-
+    extract_formula_data_call(data[[variable]]) |>
+    imap(~safe_survfit_eval(.x))
+
+  inject(survival::coxph(!!!formula_data_call, !!!test.args)) |>
+    broom::glance() |>
+    dplyr::select(ends_with(paste0(".", test_type))) |>
+    dplyr::rename_with(.fn = ~str_remove(.x, pattern = paste0(".", test_type, "$"))) |>
+    dplyr::mutate(
+      method =
+        switch(
+          test_type,
+          "log" = "Cox regression (LRT)",
+          "wald" = "Cox regression (Wald)",
+          "sc" = "Cox regression (Score)"
+        )
+    )
+
+}
 
 # UTILITY FUNCTIONS ------------------------------------------------------------
 .extract_data_frame <- function(x) {
