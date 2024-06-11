@@ -12,9 +12,8 @@ test_that("add_n.tbl_uvregression() works", {
     )
   )
   # total N added to table is accurate
-  expect_error(
-    res <- tbl1 |> add_n(),
-    NA
+  expect_silent(
+    res <- tbl1 |> add_n()
   )
   expect_equal(
     as.data.frame(res, col_label = FALSE)$stat_n |>
@@ -39,9 +38,8 @@ test_that("add_n.tbl_uvregression() works", {
       )
   )
   # N for levels added to table is accurate
-  expect_error(
-    res <- tbl1 |> add_n(location = "level"),
-    NA
+  expect_silent(
+    res <- tbl1 |> add_n(location = "level")
   )
   expect_equal(
     as.data.frame(res, col_label = FALSE)$stat_n |>

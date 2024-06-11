@@ -1,6 +1,6 @@
 skip_if_not(is_pkg_installed(c("broom.helpers", "broom"), reference_pkg = "gtsummary"))
 
-test_that("add_nevent.tbl_regression() works", {
+test_that("add_nevent.tbl_uvregression() works", {
   expect_silent(
     tbl <-
       tbl_uvregression(
@@ -14,9 +14,8 @@ test_that("add_nevent.tbl_regression() works", {
       )
   )
   # total N added to table is accurate
-  expect_error(
-    res <- tbl |> add_nevent(),
-    NA
+  expect_silent(
+    res <- tbl |> add_nevent()
   )
   expect_equal(
     as.data.frame(res, col_label = FALSE)$stat_nevent |>
@@ -29,9 +28,8 @@ test_that("add_nevent.tbl_regression() works", {
   )
 
   # N added to levels is accurate
-  expect_error(
-    res <- tbl |> add_nevent(location = "level"),
-    NA
+  expect_silent(
+    res <- tbl |> add_nevent(location = "level")
   )
   expect_equal(
     as.data.frame(res, col_label = FALSE)$stat_nevent |>
@@ -62,7 +60,7 @@ test_that("add_nevent.tbl_regression() works", {
   )
 })
 
-test_that("add_nevent.tbl_regression() messaging for linear model", {
+test_that("add_nevent.tbl_uvregression() messaging for linear model", {
   expect_silent(
     tbl1 <- tbl_uvregression(
       trial,
