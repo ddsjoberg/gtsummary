@@ -6,6 +6,7 @@ test_that("as_gt works with standard use", {
 
   expect_silent(res <- my_tbl_summary |> as_gt())
   expect_silent(my_tbl_summary |> as_gt(return_calls = TRUE))
+  expect_silent(my_tbl_summary |> as_gt(include = gt))
   expect_equal(
     names(res),
     c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
@@ -30,12 +31,19 @@ test_that("as_gt works with standard use", {
   )
 
   # footnotes
+  vis_cols <- my_tbl_summary$table_styling$header |>
+    dplyr::filter(hide == FALSE) |>
+    dplyr::select(column) |>
+    unlist()
+  footnotes_vis <- my_tbl_summary$table_styling$footnote_abbrev |>
+    dplyr::filter(column %in% vis_cols) |>
+    unique()
   expect_equal(
-    my_tbl_summary$table_styling$footnote$column,
+    footnotes_vis$column,
     res$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    my_tbl_summary$table_styling$footnote$footnote,
+    footnotes_vis$footnote,
     res$`_footnotes`$footnotes |> unlist() |> unique()
   )
 
@@ -50,12 +58,6 @@ test_that("as_gt works with tbl_cross", {
   my_tbl_cross <- tbl_cross(trial, trt, grade)
 
   expect_silent(res <- my_tbl_cross |> as_gt())
-  expect_equal(
-    names(res),
-    c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
-      "_source_notes", "_formats", "_substitutions", "_styles", "_summary", "_options", "_transforms",
-      "_locale", "_has_built")
-  )
 
   # body
   expect_equal(
@@ -73,6 +75,23 @@ test_that("as_gt works with tbl_cross", {
     res$`_boxhead`$column_label |> unlist()
   )
 
+  # footnotes
+  vis_cols <- my_tbl_cross$table_styling$header |>
+    dplyr::filter(hide == FALSE) |>
+    dplyr::select(column) |>
+    unlist()
+  footnotes_vis <- my_tbl_cross$table_styling$footnote_abbrev |>
+    dplyr::filter(column %in% vis_cols) |>
+    unique()
+  expect_equal(
+    footnotes_vis$column,
+    res$`_footnotes`$colname |> unique()
+  )
+  expect_equal(
+    footnotes_vis$footnote,
+    res$`_footnotes`$footnotes |> unlist() |> unique()
+  )
+
   # indentation
   expect_equal(
     my_tbl_cross$table_styling$indent$n_spaces[2],
@@ -84,12 +103,6 @@ test_that("as_gt works with tbl_regression", {
   my_tbl_regression <- lm(marker ~ age, trial) |> tbl_regression()
 
   expect_silent(res <- my_tbl_regression |> as_gt())
-  expect_equal(
-    names(res),
-    c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
-      "_source_notes", "_formats", "_substitutions", "_styles", "_summary", "_options", "_transforms",
-      "_locale", "_has_built")
-  )
 
   # body
   expect_equal(
@@ -130,12 +143,6 @@ test_that("as_gt works with tbl_uvregression", {
   my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
 
   expect_silent(res <- my_tbl_uvregression |> as_gt())
-  expect_equal(
-    names(res),
-    c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
-      "_source_notes", "_formats", "_substitutions", "_styles", "_summary", "_options", "_transforms",
-      "_locale", "_has_built")
-  )
 
   # body
   expect_equal(
@@ -189,12 +196,6 @@ test_that("as_gt works with spanning header-column gathering", {
     modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**")
 
   expect_silent(res <- my_spanning_tbl |> as_gt())
-  expect_equal(
-    names(res),
-    c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
-      "_source_notes", "_formats", "_substitutions", "_styles", "_summary", "_options", "_transforms",
-      "_locale", "_has_built")
-  )
 
   # body
   expect_equal(
@@ -213,13 +214,20 @@ test_that("as_gt works with spanning header-column gathering", {
   )
 
   # footnotes
+  vis_cols <- my_spanning_tbl$table_styling$header |>
+    dplyr::filter(hide == FALSE) |>
+    dplyr::select(column) |>
+    unlist()
+  footnotes_vis <- my_spanning_tbl$table_styling$footnote_abbrev |>
+    dplyr::filter(column %in% vis_cols) |>
+    unique()
   expect_equal(
-    my_spanning_tbl$table_styling$footnote$column,
-    res$`_footnotes`$colname
+    footnotes_vis$column,
+    res$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    my_spanning_tbl$table_styling$footnote$footnote,
-    res$`_footnotes`$footnotes |> unlist()
+    footnotes_vis$footnote,
+    res$`_footnotes`$footnotes |> unlist() |> unique()
   )
 
   # indentation
