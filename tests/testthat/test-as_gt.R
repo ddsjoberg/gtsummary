@@ -94,7 +94,7 @@ test_that("as_gt works with tbl_regression", {
   # body
   expect_equal(
     my_tbl_regression$table_body |>
-      mutate(conf.low = paste0(round(conf.low, digits = 2), ", ", round(conf.high, digits = 2))),
+      dplyr::mutate(conf.low = paste0(round(conf.low, digits = 2), ", ", round(conf.high, digits = 2))),
     res$`_data`,
     ignore_attr = "class"
   )
@@ -110,8 +110,12 @@ test_that("as_gt works with tbl_regression", {
   )
 
   # footnotes
-  vis_cols <- my_tbl_regression$table_styling$header |> filter(hide == FALSE) |> select(column) |> unlist()
-  footnotes_vis <- my_tbl_regression$table_styling$footnote_abbrev |> filter(column %in% vis_cols)
+  vis_cols <- my_tbl_regression$table_styling$header |>
+    dplyr::filter(hide == FALSE) |>
+    dplyr::select(column) |>
+    unlist()
+  footnotes_vis <- my_tbl_regression$table_styling$footnote_abbrev |>
+    dplyr::filter(column %in% vis_cols)
   expect_equal(
     footnotes_vis$column,
     res$`_footnotes`$colname |> unique()
@@ -153,8 +157,13 @@ test_that("as_gt works with tbl_uvregression", {
   )
 
   # footnotes
-  vis_cols <- my_tbl_uvregression$table_styling$header |> filter(hide == FALSE) |> select(column) |> unlist()
-  footnotes_vis <- my_tbl_uvregression$table_styling$footnote_abbrev |> filter(column %in% vis_cols)
+  vis_cols <- my_tbl_uvregression$table_styling$header |>
+    dplyr::filter(hide == FALSE) |>
+    dplyr::select(column) |>
+    unlist()
+  footnotes_vis <- my_tbl_uvregression$table_styling$footnote_abbrev |>
+    dplyr::filter(column %in% vis_cols) |>
+    unique()
   expect_equal(
     footnotes_vis$column,
     res$`_footnotes`$colname |> unique()
