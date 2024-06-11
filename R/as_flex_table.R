@@ -142,7 +142,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     df_header <-
       df_header0 |>
       dplyr::group_by(.data$spanning_header_id) |>
-      dplyr::mutate(width = n()) |>
+      dplyr::mutate(width = dplyr::n()) |>
       dplyr::distinct() |>
       dplyr::ungroup() |>
       dplyr::mutate(
@@ -185,8 +185,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     x$table_styling$header |>
     dplyr::select("id", "column") |>
     dplyr::inner_join(
-      x$table_styling$text_format |>
-        dplyr::filter(.data$format_type == "indent"),
+      x$table_styling$indent,
       by = "column"
     )
 
@@ -195,26 +194,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     ~ expr(flextable::padding(
       i = !!df_padding$row_numbers[[.x]],
       j = !!df_padding$id[[.x]],
-      padding.left = 15
-    ))
-  )
-
-  # padding2 -------------------------------------------------------------------
-  df_padding2 <-
-    x$table_styling$header |>
-    dplyr::select("id", "column") |>
-    dplyr::inner_join(
-      x$table_styling$text_format %>%
-        dplyr::filter(.data$format_type == "indent2"),
-      by = "column"
-    )
-
-  flextable_calls[["padding2"]] <- map(
-    seq_len(nrow(df_padding2)),
-    ~ expr(flextable::padding(
-      i = !!df_padding2$row_numbers[[.x]],
-      j = !!df_padding2$id[[.x]],
-      padding.left = 30
+      padding.left = !!(df_padding$n_spaces[[.x]] * 15 / 4)
     ))
   )
 
