@@ -224,3 +224,10 @@ test_that("as_tibble works with grouped columns", {
     c("T1", "T2")
   )
 })
+
+test_that("as.data.frame works as expected", {
+  expect_equal(
+    t1_summary |> as_tibble() |> as.data.frame(),
+    t1_summary |> as.data.frame()
+  )
+})
