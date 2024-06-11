@@ -84,12 +84,8 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     )
 
   # return final object --------------------------------------------------------
-  # fill in the Ns in the header table modify_stat_* columns
-  x$table_styling$header <- tidyr::fill(x$table_styling$header, "modify_stat_N", .direction = "updown")
-  # adding call
-  x$call_list <- updated_call_list
-
-  x
+  x |>
+    .fill_table_header_modify_stats()
 }
 
 
