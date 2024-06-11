@@ -58,7 +58,7 @@ str_replace <- function(string, pattern, replacement, fixed = FALSE){
 }
 
 str_replace_all <- function (string, pattern, replacement, fixed = FALSE){
-  gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = TRUE)
+  gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = !fixed)
 }
 
 word <- function(string, start, end = start, sep = " ", fixed = TRUE) {
