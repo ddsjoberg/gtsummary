@@ -7,10 +7,11 @@
 as_kable(x, ..., include = everything(), return_calls = FALSE)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
+\item{x}{(\code{gtsummary})\cr
+Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
+\item{...}{Additional arguments passed to \code{\link[knitr:kable]{knitr::kable()}}}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -24,7 +25,7 @@ as a list of expressions.}
 A \code{knitr_kable} object
 }
 \description{
-Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
+Output from \code{\link[knitr:kable]{knitr::kable()}} is less full featured compared to
 summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.
 For example, kable summary tables do not include indentation, footnotes,
 or spanning header rows.
