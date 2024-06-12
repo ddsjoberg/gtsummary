@@ -289,22 +289,18 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
-    x$table_styling$text_format |>
-    dplyr::filter(.data$format_type == "indent", .data$column == "label")
+    x$table_styling$indent |>
+    dplyr::filter(.data$column == "label")
 
   if (nrow(df_indent) > 0) {
     kable_extra_calls[["add_indent"]] <-
-      expr(kableExtra::add_indent(!!df_indent$row_numbers[[1]]))
-  }
-
-  # add_indent2 -----------------------------------------------------------------
-  df_indent2 <-
-    x$table_styling$text_format |>
-    dplyr::filter(.data$format_type == "indent2", .data$column == "label")
-
-  if (nrow(df_indent2) > 0) {
-    kable_extra_calls[["add_indent2"]] <-
-      expr(kableExtra::add_indent(!!df_indent2$row_numbers[[1]], level_of_indent = 2))
+      map(
+        seq_along(nrow(df_indent)),
+        ~expr(
+          kableExtra::add_indent(!!df_indent$row_numbers[[.x]],
+                                 level_of_indent = !!(df_indent$n_spaces[[.x]] / 4L))
+        )
+      )
   }
 
   # add_header_above -----------------------------------------------------------
