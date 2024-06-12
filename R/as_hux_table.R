@@ -103,7 +103,7 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
 
   # create expressions to add indentations to `x$table_body`
   indent_exprs <-
-    purrr::pmap(
+    pmap(
       list(df_text_format$column, df_text_format$row_numbers, df_text_format$n_spaces),
       function(column, row_numbers, n_spaces) {
         indent_spaces <- strrep(" ", times = n_spaces)
