@@ -46,7 +46,7 @@
 add_p.tbl_survfit <- function(x,
                               test = "logrank",
                               test.args = NULL,
-                              pvalue_fun = styfn_pvalue(digits = 1),
+                              pvalue_fun = label_style_pvalue(digits = 1),
                               include = everything(),
                               quiet, ...) {
   set_cli_abort_call()

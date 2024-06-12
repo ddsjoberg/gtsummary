@@ -74,8 +74,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "JAMA",
-        "pkgwide-fn:pvalue_fun" = styfn_pvalue(digits = 2),
-        "pkgwide-fn:prependpvalue_fun" = styfn_pvalue(digits = 2, prepend_p = TRUE),
+        "pkgwide-fn:pvalue_fun" = label_style_pvalue(digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 2, prepend_p = TRUE),
         "pkgwide-str:ci.sep" = " to ",
         "style_number-arg:decimal.mark" = ".",
         "style_number-arg:big.mark" = ",",
@@ -167,8 +167,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "New England Journal of Medicine",
-        "pkgwide-fn:pvalue_fun" = styfn_pvalue(digits = 2),
-        "pkgwide-fn:prependpvalue_fun" = styfn_pvalue(digits = 2, prepend_p = TRUE),
+        "pkgwide-fn:pvalue_fun" = label_style_pvalue(digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 2, prepend_p = TRUE),
         "style_number-arg:decimal.mark" = ".",
         "style_number-arg:big.mark" = ",",
         "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
@@ -253,7 +253,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
       list(
         "pkgwide-str:theme_name" = "The Quarterly Journal of Economics",
         "tbl_regression-arg:conf.int" = FALSE,
-        "tbl_summary-fn:percent_fun" = styfn_number(digits = 1, scale = 100),
+        "tbl_summary-fn:percent_fun" = label_style_number(digits = 1, scale = 100),
         "tbl_regression-fn:addnl-fn-to-run" = function(x) {
           new_header_text <-
             paste(
@@ -460,7 +460,7 @@ theme_gtsummary_eda <- function(set_theme = TRUE) {
     "tbl_summary-arg:statistic" =
       list(all_continuous() ~ c("{median} ({p25}, {p75})", "{mean} ({sd})", "{min}, {max}"),
            all_categorical() ~ "{n} ({p}%)"),
-    "tbl_summary-fn:percent_fun" = styfn_percent(digits = 1)
+    "tbl_summary-fn:percent_fun" = label_style_percent(digits = 1)
   )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)

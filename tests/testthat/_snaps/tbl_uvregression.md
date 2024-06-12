@@ -63,7 +63,7 @@
 
     Code
       as.data.frame(tbl_uvregression(trial, y = age, method = lm, include = c(marker,
-        trt), estimate_fun = styfn_sigfig(digits = 4)), col_label = FALSE)
+        trt), estimate_fun = label_style_sigfig(digits = 4)), col_label = FALSE)
     Output
                          label stat_n estimate      conf.low p.value
       1   Marker Level (ng/mL)    179  -0.0545 -2.533, 2.424    >0.9
@@ -75,7 +75,7 @@
 
     Code
       as.data.frame(tbl_uvregression(trial, y = age, method = lm, include = c(marker,
-        trt), pvalue_fun = styfn_pvalue(digits = 3)), col_label = FALSE)
+        trt), pvalue_fun = label_style_pvalue(digits = 3)), col_label = FALSE)
     Output
                          label stat_n estimate  conf.low p.value
       1   Marker Level (ng/mL)    179    -0.05 -2.5, 2.4   0.965

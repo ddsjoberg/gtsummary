@@ -20,7 +20,7 @@
 
 * If a column is all `NA_character_` in `tbl_summary()`, the default summary type is now `"continuous"`, where previously it was `"dichotomous"`.
 
-* Added a family of function `styfn_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
+* Added a family of function `label_style_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
 
 * Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a character vector of all `"yes"` or all `"no"` values will default to a categorical summary instead of dichotomous.
 

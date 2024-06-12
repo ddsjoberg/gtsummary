@@ -4,7 +4,7 @@
 \alias{add_vif}
 \title{Add Variance Inflation Factor}
 \usage{
-add_vif(x, statistic = NULL, estimate_fun = styfn_sigfig(digits = 2))
+add_vif(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2))
 }
 \arguments{
 \item{x}{\code{'tbl_regression'} object}

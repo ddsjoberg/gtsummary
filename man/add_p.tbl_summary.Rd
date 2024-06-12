@@ -7,7 +7,7 @@
 \method{add_p}{tbl_summary}(
   x,
   test = NULL,
-  pvalue_fun = styfn_pvalue(digits = 1),
+  pvalue_fun = label_style_pvalue(digits = 1),
   group = NULL,
   include = everything(),
   test.args = NULL,
@@ -27,9 +27,9 @@ See below for details on default tests and \link[=tests]{?tests} for details on 
 tests and creating custom tests.}
 
 \item{pvalue_fun}{(\code{function})\cr
-Function to round and format p-values. Default is \code{styfn_pvalue()}.
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
 The function must have a numeric vector input, and return a string that is
-the rounded/formatted p-value (e.g. \code{pvalue_fun = styfn_pvalue(digits = 2)}).}
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
 
 \item{group}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variable name of an ID or grouping variable. The column can be used to

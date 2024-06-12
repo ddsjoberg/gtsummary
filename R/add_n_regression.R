@@ -85,7 +85,7 @@ add_n.tbl_regression <- function(x, location = "label", ...) {
       columns = all_of("stat_n"),
       label = "**N**",
       hide = FALSE,
-      fmt_fun = styfn_number()
+      fmt_fun = label_style_number()
     )
 
   # fill in the Ns in the header table modify_stat_* columns

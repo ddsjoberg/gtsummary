@@ -97,11 +97,11 @@
 #' function, or a list of functions. If a single integer or function is passed,
 #' it is recycled to the length of the number of statistics presented.
 #' For example, if the statistic is `"{mean} ({sd})"`, it is equivalent to
-#' pass `1`, `c(1, 1)`, `styfn_number(digits=1)`, and
-#' `list(styfn_number(digits=1), styfn_number(digits=1))`.
+#' pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
+#' `list(label_style_number(digits=1), label_style_number(digits=1))`.
 #'
 #' Named lists are also accepted to change the default formatting for a single
-#' statistic, e.g. `list(sd = styfn_number(digits=1))`.
+#' statistic, e.g. `list(sd = label_style_number(digits=1))`.
 #'
 #' @section type and value arguments:
 #' There are four summary types. Use the `type` argument to change the default summary types.

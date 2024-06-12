@@ -8,7 +8,7 @@
   x,
   test = "logrank",
   test.args = NULL,
-  pvalue_fun = styfn_pvalue(digits = 1),
+  pvalue_fun = label_style_pvalue(digits = 1),
   include = everything(),
   quiet,
   ...
@@ -29,9 +29,9 @@ For example, add an argument for all t-tests, use
 \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
 
 \item{pvalue_fun}{(\code{function})\cr
-Function to round and format p-values. Default is \code{styfn_pvalue()}.
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
 The function must have a numeric vector input, and return a string that is
-the rounded/formatted p-value (e.g. \code{pvalue_fun = styfn_pvalue(digits = 2)}).}
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in output. Default is \code{everything()}.}
