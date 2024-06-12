@@ -68,9 +68,9 @@ add_glance_table <- function(x,
                              label = NULL,
                              fmt_fun =
                                list(
-                                 everything() ~ styfn_sigfig(digits = 3),
-                                 any_of("p.value") ~ styfn_pvalue(digits = 1),
-                                 where(is.integer) ~ styfn_number()
+                                 everything() ~ label_style_sigfig(digits = 3),
+                                 any_of("p.value") ~ label_style_pvalue(digits = 1),
+                                 where(is.integer) ~ label_style_number()
                                ),
                              glance_fun = broom::glance) {
   # check inputs ---------------------------------------------------------------
@@ -127,9 +127,9 @@ add_glance_source_note <- function(x,
                                    label = NULL,
                                    fmt_fun =
                                      list(
-                                       everything() ~ styfn_sigfig(digits = 3),
-                                       any_of("p.value") ~ styfn_pvalue(digits = 1),
-                                       where(is.integer) ~ styfn_number()
+                                       everything() ~ label_style_sigfig(digits = 3),
+                                       any_of("p.value") ~ label_style_pvalue(digits = 1),
+                                       where(is.integer) ~ label_style_number()
                                      ),
                                    glance_fun = broom::glance,
                                    text_interpret = c("md", "html"),

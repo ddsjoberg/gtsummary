@@ -21,7 +21,8 @@ tbl_survfit(x, ...)
   label = NULL,
   label_header = ifelse(!is.null(times), "**Time {time}**",
     "**{style_sigfig(prob, scale=100)}\% Percentile**"),
-  estimate_fun = ifelse(!is.null(times), styfn_percent(symbol = TRUE), styfn_sigfig()),
+  estimate_fun = ifelse(!is.null(times), label_style_percent(symbol = TRUE),
+    label_style_sigfig()),
   missing = "--",
   conf.level = 0.95,
   type = NULL,
@@ -66,7 +67,7 @@ survival estimates}
 
 \item{estimate_fun}{(\code{function})\cr
 function to format the Kaplan-Meier estimates. Default
-is \code{\link[=styfn_percent]{styfn_percent()}} for survival probabilities and \code{\link[=styfn_sigfig]{styfn_sigfig()}} for
+is \code{\link[=label_style_percent]{label_style_percent()}} for survival probabilities and \code{\link[=label_style_sigfig]{label_style_sigfig()}} for
 survival times}
 
 \item{missing}{(\code{string})\cr

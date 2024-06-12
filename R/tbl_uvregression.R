@@ -72,7 +72,7 @@
 #'   y = Surv(ttdeath, death),
 #'   exponentiate = TRUE,
 #'   include = c("age", "grade", "response"),
-#'   pvalue_fun = styfn_pvalue(digits = 2)
+#'   pvalue_fun = label_style_pvalue(digits = 2)
 #' )
 NULL
 
@@ -97,8 +97,8 @@ tbl_uvregression.data.frame <- function(data,
                                         hide_n = FALSE,
                                         show_single_row = NULL,
                                         conf.level = 0.95,
-                                        estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-                                        pvalue_fun = styfn_pvalue(digits = 1),
+                                        estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+                                        pvalue_fun = label_style_pvalue(digits = 1),
                                         formula = "{y} ~ {x}",
                                         add_estimate_to_reference_rows = FALSE,
                                         conf.int = TRUE, ...) {

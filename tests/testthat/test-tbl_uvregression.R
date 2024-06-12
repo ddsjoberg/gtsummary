@@ -264,7 +264,7 @@ test_that("tbl_uvregression(estimate_fun)", {
       y = age,
       method = lm,
       include = c(marker, trt),
-      estimate_fun = styfn_sigfig(digits = 4)
+      estimate_fun = label_style_sigfig(digits = 4)
     ) |>
       as.data.frame(col_label = FALSE)
   )
@@ -277,7 +277,7 @@ test_that("tbl_uvregression(pvalue_fun)", {
       y = age,
       method = lm,
       include = c(marker, trt),
-      pvalue_fun = styfn_pvalue(digits = 3)
+      pvalue_fun = label_style_pvalue(digits = 3)
     ) |>
       as.data.frame(col_label = FALSE)
   )

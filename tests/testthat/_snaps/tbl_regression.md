@@ -14,7 +14,7 @@
 ---
 
     Code
-      as.data.frame(tbl_regression(mod_logistic, exponentiate = TRUE, estimate_fun = styfn_ratio(
+      as.data.frame(tbl_regression(mod_logistic, exponentiate = TRUE, estimate_fun = label_style_ratio(
         digits = 1)))
     Output
         **Characteristic** **OR** **95% CI** **p-value**
@@ -29,7 +29,7 @@
 
     Code
       as.data.frame(tbl_regression(mod_poisson, show_single_row = "trt",
-        estimate_fun = styfn_ratio(digits = 1)))
+        estimate_fun = label_style_ratio(digits = 1)))
     Output
             **Characteristic** **log(IRR)** **95% CI** **p-value**
       1                    Age          0.0   0.0, 0.0         0.6
@@ -39,7 +39,7 @@
 
     Code
       as.data.frame(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt",
-        estimate_fun = styfn_ratio(digits = 1)))
+        estimate_fun = label_style_ratio(digits = 1)))
     Output
             **Characteristic** **IRR** **95% CI** **p-value**
       1                    Age     1.0   1.0, 1.0         0.6

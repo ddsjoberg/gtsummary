@@ -24,7 +24,7 @@
 #'   survival estimates
 #' @param estimate_fun (`function`)\cr
 #'   function to format the Kaplan-Meier estimates. Default
-#'   is [`styfn_percent()`] for survival probabilities and [`styfn_sigfig()`] for
+#'   is [`label_style_percent()`] for survival probabilities and [`label_style_sigfig()`] for
 #'   survival times
 #' @param missing (`string`)\cr
 #'   text to fill when estimate is not estimable. Default is `"--"`
@@ -163,7 +163,7 @@ tbl_survfit.list <- function(x,
                              statistic = "{estimate} ({conf.low}, {conf.high})",
                              label = NULL,
                              label_header = ifelse(!is.null(times), "**Time {time}**", "**{style_sigfig(prob, scale=100)}% Percentile**"),
-                             estimate_fun = ifelse(!is.null(times), styfn_percent(symbol=TRUE), styfn_sigfig()),
+                             estimate_fun = ifelse(!is.null(times), label_style_percent(symbol=TRUE), label_style_sigfig()),
                              missing = "--",
                              conf.level = 0.95,
                              type = NULL,

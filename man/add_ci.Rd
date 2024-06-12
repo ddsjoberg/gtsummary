@@ -14,8 +14,8 @@ add_ci(x, ...)
   statistic = list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~
     "{conf.low}\%, {conf.high}\%"),
   conf.level = 0.95,
-  style_fun = list(all_continuous() ~ styfn_sigfig(), all_categorical() ~
-    styfn_sigfig(scale = 100)),
+  style_fun = list(all_continuous() ~ label_style_sigfig(), all_categorical() ~
+    label_style_sigfig(scale = 100)),
   pattern = NULL,
   ...
 )
@@ -43,7 +43,7 @@ Confidence level. Default is \code{0.95}}
 
 \item{style_fun}{(\code{function})\cr
 Function to style upper and lower bound of confidence interval. Default is
-\code{list(all_continuous() ~ styfn_sigfig(), all_categorical() ~ styfn_sigfig(scale =  100))}.}
+\code{list(all_continuous() ~ label_style_sigfig(), all_categorical() ~ label_style_sigfig(scale =  100))}.}
 
 \item{pattern}{(\code{string})\cr
 Indicates the pattern to use to merge the CI with

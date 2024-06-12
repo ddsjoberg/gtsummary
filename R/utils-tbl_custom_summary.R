@@ -151,7 +151,8 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'     by = "Sex",
 #'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
 #'     statistic = ~"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-#'     digits = ~ list(styfn_percent(digits = 1), 0, 0, styfn_percent(), styfn_percent()),
+#'     digits =
+#'       ~list(label_style_percent(digits=1), 0, 0, label_style_percent(), label_style_percent()),
 #'     overall_row = TRUE,
 #'     overall_row_last = TRUE
 #'   ) |>

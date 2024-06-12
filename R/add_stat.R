@@ -104,7 +104,7 @@
 #'   ) |>
 #'   add_stat(fns = everything() ~ my_ttest3) |>
 #'   modify_header(statistic = "**t-statistic**", p.value = "**p-value**") |>
-#'   modify_fmt_fun(statistic = styfn_sigfig(), p.value = styfn_pvalue(digits = 2))
+#'   modify_fmt_fun(statistic = label_style_sigfig(), p.value = label_style_pvalue(digits = 2))
 add_stat <- function(x, fns, location = everything() ~ "label") {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_stat = match.call()))
@@ -207,12 +207,12 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
     # assigning a default fmt_fun
     modify_table_styling(
       columns = c(where(is.numeric) & all_of(new_col_names)),
-      fmt_fun = styfn_sigfig(digits = 3)
+      fmt_fun = label_style_sigfig(digits = 3)
     ) |>
     # if a numeric column is called 'p.value' or 'q.value', giving p-value default formatting
     modify_table_styling(
       columns = c(where(is.numeric) & any_of(intersect(c("p.value", "q.value"), new_col_names))),
-      fmt_fun = get_theme_element("pkgwide-fn:pvalue_fun", default = styfn_pvalue())
+      fmt_fun = get_theme_element("pkgwide-fn:pvalue_fun", default = label_style_pvalue())
     )
 
   # return tbl_summary object --------------------------------------------------

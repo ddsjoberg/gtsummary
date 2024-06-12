@@ -131,11 +131,11 @@ The values passed can either be a single integer, a vector of integers, a
 function, or a list of functions. If a single integer or function is passed,
 it is recycled to the length of the number of statistics presented.
 For example, if the statistic is \code{"{mean} ({sd})"}, it is equivalent to
-pass \code{1}, \code{c(1, 1)}, \code{styfn_number(digits=1)}, and
-\code{list(styfn_number(digits=1), styfn_number(digits=1))}.
+pass \code{1}, \code{c(1, 1)}, \code{label_style_number(digits=1)}, and
+\code{list(label_style_number(digits=1), label_style_number(digits=1))}.
 
 Named lists are also accepted to change the default formatting for a single
-statistic, e.g. \code{list(sd = styfn_number(digits=1))}.
+statistic, e.g. \code{list(sd = label_style_number(digits=1))}.
 }
 
 \section{type and value arguments}{

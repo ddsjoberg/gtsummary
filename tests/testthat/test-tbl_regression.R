@@ -26,7 +26,7 @@ test_that("stats::glm() logistic regression works", {
     tbl_regression(
       mod_logistic,
       exponentiate = TRUE,
-      estimate_fun = styfn_ratio(digits = 1)
+      estimate_fun = label_style_ratio(digits = 1)
     ) |>
       as.data.frame()
   )
@@ -44,7 +44,7 @@ test_that("stats::glm() poisson regression works", {
     tbl_regression(
       mod_poisson,
       show_single_row = "trt",
-      estimate_fun = styfn_ratio(digits = 1)
+      estimate_fun = label_style_ratio(digits = 1)
     ) |>
       as.data.frame()
   )
@@ -61,7 +61,7 @@ test_that("stats::glm() poisson regression works", {
       mod_poisson,
       exponentiate = TRUE,
       show_single_row = "trt",
-      estimate_fun = styfn_ratio(digits = 1)
+      estimate_fun = label_style_ratio(digits = 1)
     ) |>
       as.data.frame()
   )

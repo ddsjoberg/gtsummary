@@ -7,17 +7,17 @@
 #' passed to the `style_*()` functions
 #'
 #' @return a function
-#' @name styfn
+#' @name label_style
 #' @family style tools
 #'
 #' @examples
-#' my_style <- styfn_number(digits = 1)
+#' my_style <- label_style_number(digits = 1)
 #' my_style(3.14)
 NULL
 
-#' @rdname styfn
+#' @rdname label_style
 #' @export
-styfn_number <- function(digits = 0,
+label_style_number <- function(digits = 0,
                          big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
                          decimal.mark = getOption("OutDec"),
                          scale = 1,
@@ -35,9 +35,9 @@ styfn_number <- function(digits = 0,
   function(x) style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, scale = scale, ...)
 }
 
-#' @rdname styfn
+#' @rdname label_style
 #' @export
-styfn_sigfig <- function(digits = 2,
+label_style_sigfig <- function(digits = 2,
                          scale = 1,
                          big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
                          decimal.mark = getOption("OutDec"),
@@ -55,9 +55,9 @@ styfn_sigfig <- function(digits = 2,
   function(x) style_sigfig(x, digits = digits, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
-#' @rdname styfn
+#' @rdname label_style
 #' @export
-styfn_pvalue <- function(digits = 1,
+label_style_pvalue <- function(digits = 1,
                          prepend_p = FALSE,
                          big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
                          decimal.mark = getOption("OutDec"),
@@ -75,9 +75,9 @@ styfn_pvalue <- function(digits = 1,
   function(x) style_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
-#' @rdname styfn
+#' @rdname label_style
 #' @export
-styfn_ratio <- function(digits = 2,
+label_style_ratio <- function(digits = 2,
                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
                         decimal.mark = getOption("OutDec"),
                         ...) {
@@ -94,9 +94,9 @@ styfn_ratio <- function(digits = 2,
   function(x) style_ratio(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }
 
-#' @rdname styfn
+#' @rdname label_style
 #' @export
-styfn_percent <- function(symbol = FALSE,
+label_style_percent <- function(symbol = FALSE,
                           digits = 0,
                           big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
                           decimal.mark = getOption("OutDec"),

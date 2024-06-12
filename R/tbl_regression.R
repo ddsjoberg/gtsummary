@@ -27,10 +27,10 @@
 #'   regression coefficient on a single row, include the variable name(s) here.
 #' @param estimate_fun (`function`)\cr
 #'   Function to round and format coefficient estimates.
-#'   Default is [`styfn_sigfig()`] when the coefficients are not transformed, and
-#'   [`styfn_ratio()`] when the coefficients have been exponentiated.
+#'   Default is [`label_style_sigfig()`] when the coefficients are not transformed, and
+#'   [`label_style_ratio()`] when the coefficients have been exponentiated.
 #' @param pvalue_fun (`function`)\cr
-#'   Function to round and format p-values. Default is [`styfn_pvalue()`].
+#'   Function to round and format p-values. Default is [`label_style_pvalue()`].
 #' @param tidy_fun (`function`)\cr
 #'   Tidier function for the model. Default is to use `broom::tidy()`.
 #'   If an error occurs, the tidying of the model is attempted with
@@ -92,8 +92,8 @@ tbl_regression.default <- function(x,
                                    show_single_row = NULL,
                                    conf.level = 0.95,
                                    intercept = FALSE,
-                                   estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-                                   pvalue_fun = styfn_pvalue(digits = 1),
+                                   estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+                                   pvalue_fun = label_style_pvalue(digits = 1),
                                    tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = TRUE, ...) {
