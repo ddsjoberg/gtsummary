@@ -7,8 +7,8 @@
 #'   Object with class `tbl_cross` created with the [`tbl_cross()`] function
 #' @param pvalue_fun (`function`)\cr
 #'   Function to round and format p-value.
-#'   Default is `styfn_pvalue(digits = 1)`, except when `source_note = TRUE` when the
-#'   default is `styfn_pvalue(digits = 1, prepend_p = TRUE)`
+#'   Default is `label_style_pvalue(digits = 1)`, except when `source_note = TRUE` when the
+#'   default is `label_style_pvalue(digits = 1, prepend_p = TRUE)`
 #' @param source_note (scalar `logical`)\cr
 #'   Logical value indicating whether to show p-value
 #'   in the \{gt\} table source notes rather than a column.
@@ -40,8 +40,8 @@ add_p.tbl_cross <- function(x,
                             pvalue_fun =
                               ifelse(
                                 source_note,
-                                styfn_pvalue(digits = 1, prepend_p = TRUE),
-                                styfn_pvalue(digits = 1)
+                                label_style_pvalue(digits = 1, prepend_p = TRUE),
+                                label_style_pvalue(digits = 1)
                               ),
                             source_note = FALSE,
                             test.args = NULL,

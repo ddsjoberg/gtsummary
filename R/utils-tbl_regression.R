@@ -103,11 +103,11 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       x,
       columns = any_of("N"),
       label = glue("**{translate_string('N')}**") %>% as.character(),
-      fmt_fun = styfn_number()
+      fmt_fun = label_style_number()
     ) |>
     modify_table_styling(
       columns = any_of(c("N_obs", "N_event", "n_obs", "n_event")),
-      fmt_fun = styfn_number()
+      fmt_fun = label_style_number()
     )
 
   # conf.low -------------------------------------------------------------------
@@ -158,7 +158,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       columns = any_of("std.error"),
       label = paste0("**", translate_string("SE"), "**"),
       footnote_abbrev = translate_string("SE = Standard Error"),
-      fmt_fun = styfn_sigfig(digits = 3),
+      fmt_fun = label_style_sigfig(digits = 3),
       hide = !"std.error" %in% tidy_columns_to_report
     ) |>
     modify_table_styling(
@@ -173,7 +173,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       x,
       columns = any_of("statistic"),
       label = paste0("**", translate_string("Statistic"), "**"),
-      fmt_fun = styfn_sigfig(digits = 3),
+      fmt_fun = label_style_sigfig(digits = 3),
       hide = !"statistic" %in% tidy_columns_to_report
     ) |>
     modify_table_styling(
@@ -194,7 +194,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
             "N", "N_obs", "N_event", "n_obs", "n_event"
           ))
         ),
-      fmt_fun = styfn_sigfig(digits = 3)
+      fmt_fun = label_style_sigfig(digits = 3)
     )
 
   x

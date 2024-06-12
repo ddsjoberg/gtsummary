@@ -3,8 +3,8 @@ test_that("modify_fmt_fun() works", {
     tbl <- lm(age ~ marker + grade, trial) |>
       tbl_regression() %>%
       modify_fmt_fun(
-        p.value = styfn_pvalue(digits = 3),
-        c(estimate, conf.low, conf.high) ~ styfn_sigfig(digits = 4),
+        p.value = label_style_pvalue(digits = 3),
+        c(estimate, conf.low, conf.high) ~ label_style_sigfig(digits = 4),
         rows = variable == "grade"
       ),
     NA
@@ -18,7 +18,7 @@ test_that("modify_fmt_fun() works", {
       dplyr::slice_tail(n = 1, by = "column") |>
       dplyr::pull(fmt_fun) |>
       unique(),
-    list(styfn_pvalue(digits = 3))
+    list(label_style_pvalue(digits = 3))
   )
   expect_equal(
     tbl |>
@@ -41,7 +41,7 @@ test_that("modify_fmt_fun() works", {
       dplyr::slice_tail(n = 1, by = "column") |>
       dplyr::pull(fmt_fun) |>
       unique(),
-    list(styfn_sigfig(digits = 4))
+    list(label_style_sigfig(digits = 4))
   )
   expect_equal(
     tbl |>

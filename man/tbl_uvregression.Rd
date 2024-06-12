@@ -21,8 +21,8 @@ tbl_uvregression(data, ...)
   hide_n = FALSE,
   show_single_row = NULL,
   conf.level = 0.95,
-  estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-  pvalue_fun = styfn_pvalue(digits = 1),
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
   formula = "{y} ~ {x}",
   add_estimate_to_reference_rows = FALSE,
   conf.int = TRUE,
@@ -42,8 +42,8 @@ tbl_uvregression(data, ...)
   hide_n = FALSE,
   show_single_row = NULL,
   conf.level = 0.95,
-  estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-  pvalue_fun = styfn_pvalue(digits = 1),
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
   formula = "{y} ~ {x}",
   add_estimate_to_reference_rows = FALSE,
   conf.int = TRUE,
@@ -97,11 +97,11 @@ Confidence level for confidence interval/credible interval. Defaults to \code{0.
 
 \item{estimate_fun}{(\code{function})\cr
 Function to round and format coefficient estimates.
-Default is \code{\link[=styfn_sigfig]{styfn_sigfig()}} when the coefficients are not transformed, and
-\code{\link[=styfn_ratio]{styfn_ratio()}} when the coefficients have been exponentiated.}
+Default is \code{\link[=label_style_sigfig]{label_style_sigfig()}} when the coefficients are not transformed, and
+\code{\link[=label_style_ratio]{label_style_ratio()}} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{(\code{function})\cr
-Function to round and format p-values. Default is \code{\link[=styfn_pvalue]{styfn_pvalue()}}.}
+Function to round and format p-values. Default is \code{\link[=label_style_pvalue]{label_style_pvalue()}}.}
 
 \item{formula}{(\code{string})\cr
 String of the model formula.
@@ -185,7 +185,7 @@ tbl_uvregression(
   y = Surv(ttdeath, death),
   exponentiate = TRUE,
   include = c("age", "grade", "response"),
-  pvalue_fun = styfn_pvalue(digits = 2)
+  pvalue_fun = label_style_pvalue(digits = 2)
 )
 }
 \seealso{

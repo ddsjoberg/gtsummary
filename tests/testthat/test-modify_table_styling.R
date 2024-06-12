@@ -220,14 +220,14 @@ test_that("modify_table_styling(fmt_fun)", {
       tbl_regression() |>
       modify_table_styling(
         columns = c("estimate", "conf.low", "conf.high", "p.value"),
-        fmt_fun = list(styfn_sigfig(digits = 1), styfn_sigfig(digits = 2), styfn_sigfig(digits = 4), styfn_pvalue(digits = 3))
+        fmt_fun = list(label_style_sigfig(digits = 1), label_style_sigfig(digits = 2), label_style_sigfig(digits = 4), label_style_pvalue(digits = 3))
       ) |>
       getElement("table_styling") |>
       getElement("fmt_fun") |>
       dplyr::filter(.by = column, dplyr::n() == dplyr::row_number()) |>
       dplyr::filter(column %in% c("estimate", "conf.low", "conf.high", "p.value")) |>
       dplyr::pull(fmt_fun),
-    list(styfn_sigfig(digits = 1), styfn_sigfig(digits = 2), styfn_sigfig(digits = 4), styfn_pvalue(digits = 3))
+    list(label_style_sigfig(digits = 1), label_style_sigfig(digits = 2), label_style_sigfig(digits = 4), label_style_pvalue(digits = 3))
   )
 })
 

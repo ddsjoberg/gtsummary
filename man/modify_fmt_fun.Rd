@@ -55,8 +55,8 @@ an external object named \code{variable} in the following expression
 lm(age ~ marker + grade, trial) |>
   tbl_regression() \%>\%
   modify_fmt_fun(
-    p.value = styfn_pvalue(digits = 3),
-    c(estimate, conf.low, conf.high) ~ styfn_sigfig(digits = 4),
+    p.value = label_style_pvalue(digits = 3),
+    c(estimate, conf.low, conf.high) ~ label_style_sigfig(digits = 4),
     rows = variable == "grade"
   )
 }

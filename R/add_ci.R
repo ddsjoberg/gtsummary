@@ -15,7 +15,7 @@
 #'   Confidence level. Default is `0.95`
 #' @param style_fun (`function`)\cr
 #'   Function to style upper and lower bound of confidence interval. Default is
-#'   `list(all_continuous() ~ styfn_sigfig(), all_categorical() ~ styfn_sigfig(scale =  100))`.
+#'   `list(all_continuous() ~ label_style_sigfig(), all_categorical() ~ label_style_sigfig(scale =  100))`.
 #' @param pattern (`string`)\cr
 #'   Indicates the pattern to use to merge the CI with
 #'   the statistics cell. The default is NULL, where no columns are merged.
@@ -80,8 +80,8 @@ add_ci.tbl_summary <- function(x,
                                       all_categorical() ~ "{conf.low}%, {conf.high}%"),
                                conf.level = 0.95,
                                style_fun =
-                                 list(all_continuous() ~ styfn_sigfig(),
-                                      all_categorical() ~ styfn_sigfig(scale =  100)),
+                                 list(all_continuous() ~ label_style_sigfig(),
+                                      all_categorical() ~ label_style_sigfig(scale =  100)),
                                pattern = NULL,
                                ...) {
   set_cli_abort_call()
