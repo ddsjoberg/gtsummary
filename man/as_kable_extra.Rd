@@ -106,19 +106,18 @@ as_kable_extra_ex1_pdf <-
 # Example 2 (PDF via LaTeX) ---------------------
 # additional styling in `knitr::kable()` and with
 #   call to `kableExtra::kable_styling()`
-# TODO: Readd when we add as_kable_extra()
-# as_kable_extra_ex2_pdf <-
-#   as_kable_extra_base \%>\%
-#   as_kable_extra(
-#     booktabs = TRUE,
-#     longtable = TRUE,
-#     linesep = ""
-#   ) \%>\%
-#   kableExtra::kable_styling(
-#     position = "left",
-#     latex_options = c("striped", "repeat_header"),
-#     stripe_color = "gray!15"
-#   )
+as_kable_extra_ex2_pdf <-
+  as_kable_extra_base |>
+  as_kable_extra(
+    booktabs = TRUE,
+    longtable = TRUE,
+    linesep = ""
+  ) |>
+  kableExtra::kable_styling(
+    position = "left",
+    latex_options = c("striped", "repeat_header"),
+    stripe_color = "gray!15"
+  )
 \dontshow{\}) # examplesIf}
 }
 \author{
