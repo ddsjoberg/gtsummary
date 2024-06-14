@@ -22,7 +22,7 @@
 #' lm(age ~ grade + marker, trial) |>
 #'   tbl_regression() |>
 #'   add_vif(c("aGVIF", "df"))
-add_vif <- function(x, statistic = NULL, estimate_fun = styfn_sigfig(digits = 2)) {
+add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2)) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_vif = match.call()))
 

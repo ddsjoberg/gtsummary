@@ -17,7 +17,7 @@
 #'   add_p()
 add_p.tbl_continuous <- function(x,
                                  test = NULL,
-                                 pvalue_fun = styfn_pvalue(digits = 1),
+                                 pvalue_fun = label_style_pvalue(digits = 1),
                                  include = everything(),
                                  test.args = NULL,
                                  group = NULL, ...) {

@@ -145,11 +145,11 @@ test_that("as_tibble works with formatting functions", {
       rows = variable == "age"
     ) |>
     modify_fmt_fun(
-      stat_n ~ styfn_number(digits = 4),
+      stat_n ~ label_style_number(digits = 4),
       rows = variable == "grade"
     ) |>
     modify_fmt_fun(
-      c(conf.low, conf.high) ~ styfn_sigfig(digits = 3)
+      c(conf.low, conf.high) ~ label_style_sigfig(digits = 3)
     )
 
   expect_silent(res <- as_tibble(t3_uvregression_modify_fmt, col_labels = FALSE))

@@ -34,8 +34,8 @@ test_that("add_ci(method) with no `by`", {
           ends_with("jeffreys") ~ "jeffreys"
         ),
         style_fun =
-          list(all_continuous() ~ styfn_sigfig(digits = 4),
-               all_categorical() ~ styfn_sigfig(digits = 4, scale =  100))
+          list(all_continuous() ~ label_style_sigfig(digits = 4),
+               all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
       )
   )
 
@@ -48,7 +48,7 @@ test_that("add_ci(method) with no `by`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -65,7 +65,7 @@ test_that("add_ci(method) with no `by`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -227,8 +227,8 @@ test_that("add_ci(method) with `by`", {
           ends_with("jeffreys") ~ "jeffreys"
         ),
         style_fun =
-          list(all_continuous() ~ styfn_sigfig(digits = 4),
-               all_categorical() ~ styfn_sigfig(digits = 4, scale =  100))
+          list(all_continuous() ~ label_style_sigfig(digits = 4),
+               all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
       )
   )
 
@@ -242,7 +242,7 @@ test_that("add_ci(method) with `by`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -260,7 +260,7 @@ test_that("add_ci(method) with `by`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -394,8 +394,8 @@ test_that("add_ci(method) after `add_overall()`", {
           ends_with("jeffreys") ~ "jeffreys"
         ),
         style_fun =
-          list(all_continuous() ~ styfn_sigfig(digits = 4),
-               all_categorical() ~ styfn_sigfig(digits = 4, scale =  100))
+          list(all_continuous() ~ label_style_sigfig(digits = 4),
+               all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
       )
   )
 
@@ -408,7 +408,7 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -425,7 +425,7 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -523,10 +523,10 @@ test_that("add_ci(method) after `add_overall()`", {
 test_that("add_ci(method= ~'asymptotic')", {
   expect_equal(
     tbl_summary(trial, include = response, missing = "no") |>
-      add_ci(method = ~"asymptotic", style_fun = ~styfn_number(digits = 2, scale = 100)) |>
+      add_ci(method = ~"asymptotic", style_fun = ~label_style_number(digits = 2, scale = 100)) |>
       as.data.frame(),
     tbl_summary(trial, include = response, missing = "no") |>
-      add_ci(method = ~"wald.no.correct", style_fun = ~styfn_number(digits = 2, scale = 100)) |>
+      add_ci(method = ~"wald.no.correct", style_fun = ~label_style_number(digits = 2, scale = 100)) |>
       as.data.frame()
   )
 })
@@ -593,8 +593,8 @@ test_that("add_ci(conf.level)", {
           ends_with("jeffreys") ~ "jeffreys"
         ),
         style_fun =
-          list(all_continuous() ~ styfn_sigfig(digits = 4),
-               all_categorical() ~ styfn_sigfig(digits = 4, scale =  100)),
+          list(all_continuous() ~ label_style_sigfig(digits = 4),
+               all_categorical() ~ label_style_sigfig(digits = 4, scale =  100)),
         conf.level = 0.80
       )
   )
@@ -608,7 +608,7 @@ test_that("add_ci(conf.level)", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>
@@ -625,7 +625,7 @@ test_that("add_ci(conf.level)", {
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
-          ~ ifelse(.y %in% c("conf.low", "conf.high"), styfn_sigfig(digits = 4), .x)
+          ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fn() |>

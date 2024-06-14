@@ -44,8 +44,8 @@
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
-#'   add_p(all_continuous() ~ "t.test", pvalue_fun = styfn_pvalue(prepend_p = TRUE)) |>
-#'   modify_fmt_fun(statistic ~ styfn_sigfig()) |>
+#'   add_p(all_continuous() ~ "t.test", pvalue_fun = label_style_pvalue(prepend_p = TRUE)) |>
+#'   modify_fmt_fun(statistic ~ label_style_sigfig()) |>
 #'   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
 #'   modify_header(statistic = "**t-test**")
 #'

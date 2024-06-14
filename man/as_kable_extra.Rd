@@ -91,34 +91,32 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 \dontshow{if (gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # basic gtsummary tbl to build upon
 as_kable_extra_base <-
-  trial \%>\%
-  select(trt, age, stage) \%>\%
-  tbl_summary(by = trt) \%>\%
+  trial |>
+  tbl_summary(by = trt, include = c(age, stage)) |>
   bold_labels()
 
 # Example 1 (PDF via LaTeX) ---------------------
 # add linebreak in table header with '\n'
 as_kable_extra_ex1_pdf <-
-  as_kable_extra_base \%>\%
-  modify_header(all_stat_cols() ~ "**{level}**  \n*N = {n}*") \%>\%
+  as_kable_extra_base |>
+  modify_header(all_stat_cols() ~ "**{level}**  \n*N = {n}*") |>
   as_kable_extra()
 
 # Example 2 (PDF via LaTeX) ---------------------
 # additional styling in `knitr::kable()` and with
 #   call to `kableExtra::kable_styling()`
-# TODO: Readd when we add as_kable_extra()
-# as_kable_extra_ex2_pdf <-
-#   as_kable_extra_base \%>\%
-#   as_kable_extra(
-#     booktabs = TRUE,
-#     longtable = TRUE,
-#     linesep = ""
-#   ) \%>\%
-#   kableExtra::kable_styling(
-#     position = "left",
-#     latex_options = c("striped", "repeat_header"),
-#     stripe_color = "gray!15"
-#   )
+as_kable_extra_ex2_pdf <-
+  as_kable_extra_base |>
+  as_kable_extra(
+    booktabs = TRUE,
+    longtable = TRUE,
+    linesep = ""
+  ) |>
+  kableExtra::kable_styling(
+    position = "left",
+    latex_options = c("striped", "repeat_header"),
+    stripe_color = "gray!15"
+  )
 \dontshow{\}) # examplesIf}
 }
 \author{

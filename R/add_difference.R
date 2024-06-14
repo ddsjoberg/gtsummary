@@ -35,7 +35,7 @@ add_difference <- function(x, ...) {
 #'   List of formulas specifying the functions
 #'   to round and format differences and confidence limits.
 #'   Default is
-#'   `list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(), all_categorical() ~ \(x) paste0(style_sigfig(x, scale = 100), "%"))`
+#'   `list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \(x) paste0(style_sigfig(x, scale = 100), "%"))`
 #' @param conf.level (`numeric`)\cr
 #'  a scalar in `⁠(0, 1`)⁠ indicating the confidence level. Default is 0.95
 #' @inheritParams  add_p.tbl_summary
@@ -80,11 +80,11 @@ add_difference.tbl_summary <- function(x,
                                        test.args = NULL,
                                        conf.level = 0.95,
                                        include = everything(),
-                                       pvalue_fun = styfn_pvalue(digits = 1),
+                                       pvalue_fun = label_style_pvalue(digits = 1),
                                        estimate_fun = list(
-                                         c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
+                                         c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
                                          all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%")),
-                                         all_tests("smd") ~ styfn_sigfig()
+                                         all_tests("smd") ~ label_style_sigfig()
                                        ),
                                        ...) {
   set_cli_abort_call()

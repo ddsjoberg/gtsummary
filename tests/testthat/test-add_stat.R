@@ -92,7 +92,7 @@ test_that("add_stat() works with fns that returns a tibble", {
       return_two_by_two_10s(),
       dplyr::tibble(one = NA, two = NA)
     ) |>
-      dplyr::mutate(across(everything(), styfn_sigfig(digits = 3)))
+      dplyr::mutate(across(everything(), label_style_sigfig(digits = 3)))
   )
 
   return_one_by_two_10s <- function(...) dplyr::tibble(one = rep_len(10, 1), two = rep_len(10, 1))
@@ -114,7 +114,7 @@ test_that("add_stat() works with fns that returns a tibble", {
       dplyr::tibble(one = c(NA, NA, NA), two = c(NA, NA, NA)),
       return_one_by_two_10s(),
     ) |>
-      dplyr::mutate(across(everything(), styfn_sigfig(digits = 3)))
+      dplyr::mutate(across(everything(), label_style_sigfig(digits = 3)))
   )
 })
 
