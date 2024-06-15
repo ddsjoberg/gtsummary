@@ -55,8 +55,8 @@ bind_ard(
   # add missing and attributes ARD
   ard_missing(
     trial,
-    by = trt,
-    variables = c(grade, age)
+    by = c(trt, grade),
+    variables = age
   ),
   ard_attributes(
     trial,
@@ -69,7 +69,7 @@ bind_ard(
   # the primary ARD with the results
   ard_continuous(trial, by = grade, variables = age),
   # add missing and attributes ARD
-  ard_missing(trial, variables = c(grade, age)),
+  ard_missing(trial, by = grade, variables = age),
   ard_attributes(trial, variables = c(grade, age))
 ) |>
   card_continuous(variable = "age", include = "grade")

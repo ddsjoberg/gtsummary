@@ -36,8 +36,8 @@
 #'   # add missing and attributes ARD
 #'   ard_missing(
 #'     trial,
-#'     by = trt,
-#'     variables = c(grade, age)
+#'     by = c(trt, grade),
+#'     variables = age
 #'   ),
 #'   ard_attributes(
 #'     trial,
@@ -50,7 +50,7 @@
 #'   # the primary ARD with the results
 #'   ard_continuous(trial, by = grade, variables = age),
 #'   # add missing and attributes ARD
-#'   ard_missing(trial, variables = c(grade, age)),
+#'   ard_missing(trial, by = grade, variables = age),
 #'   ard_attributes(trial, variables = c(grade, age))
 #' ) |>
 #'   card_continuous(variable = "age", include = "grade")
@@ -70,7 +70,7 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
     dplyr::group_by(.data$context) |>
     dplyr::group_map(
       \(.x, .y) {
-        if (.y$context %in% c("missing", "attributes") || identical(.x$variable[1], by)) {
+        if (.y$context %in% "attributes" || identical(.x$variable[1], by)) {
           return(dplyr::bind_cols(.x, .y))
         }
 
@@ -82,7 +82,9 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
             .default = dplyr::rename(., variable = "group1", variable_level = "group1_level")
           )} |>
           dplyr::bind_cols(.y) |>
-          dplyr::mutate(context = "categorical")
+          dplyr::mutate(
+            context = ifelse(.y$context %in% "missing", "missing", "categorical")
+          )
       }
     ) |>
     dplyr::bind_rows() |>
@@ -115,7 +117,7 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
 
   # add other information to the returned object
   result$inputs <- card_continuous_inputs
-  result$call_list <- list(tbl_continuous = call)
+  result$call_list <- list(card_continuous = call)
 
   result |>
     structure(class = c("tbl_continuous", "gtsummary"))
