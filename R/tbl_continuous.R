@@ -53,7 +53,7 @@ tbl_continuous <- function(data,
   check_scalar(
     by,
     allow_empty = TRUE,
-    message = c("The {.arg {arg_name}} argument must be length {.val {length}} or empty.",
+    message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
                 i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
@@ -71,9 +71,29 @@ tbl_continuous <- function(data,
       ),
     include_env = TRUE
   )
-
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
+
+  cards::check_list_elements(
+    statistic,
+    predicate = \(x) is_string(x) && !is_empty(.extract_glue_elements(x)),
+    error_msg =
+      c("Elements of the {.arg statistic} argument must be a string with {.arg glue} elements referring to functions.",
+        i = "For example {.code statistic = list(colname = '{{mean}} ({{sd}})')}, to report the {.field mean} and {.field standard deviation}.")
+  )
+
+  cards::check_list_elements(
+    label,
+    predicate = \(x) is_string(x),
+    error_msg =
+      c("Elements of the {.arg label} argument must be strings.")
+  )
+
+  cards::process_formula_selectors(
+    data = select_prep(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    digits = digits
+  )
+
 
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
@@ -85,14 +105,34 @@ tbl_continuous <- function(data,
     map(
       include,
       \(cat_variable) {
+        # convert digits input into the named lists expected by the {cards} functions
+        variable_digits <-
+          assign_summary_digits(
+            data = data,
+            statistic = statistic[cat_variable] |> set_names(variable),
+            type = list("continuous") |> set_names(variable),
+            digits = digits[cat_variable] |> set_names(variable)
+          )
+
+        # calculate the continuous summary stats
         cards::ard_continuous(
           data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
           variables = all_of(variable),
           by = any_of(c(by, cat_variable)),
           statistic = .continuous_statistics_chr_to_fun(statistic)[cat_variable] |> set_names(variable),
-          fmt_fn = digits,
+          fmt_fn = variable_digits,
           stat_label = ~ default_stat_labels()
-        )
+        ) |>
+          # add the missingness information
+          cards::bind_ard(
+            cards::ard_missing(
+              data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
+              variables = all_of(variable),
+              by = any_of(c(by, cat_variable)),
+              fmt_fn = variable_digits,
+              stat_label = ~ default_stat_labels()
+            )
+          )
       }
     ) |>
     dplyr::bind_rows()
@@ -102,7 +142,6 @@ tbl_continuous <- function(data,
     dplyr::bind_rows(
       cards,
       cards::ard_attributes(data, variables = all_of(c(variable, by, include)), label = label),
-      cards::ard_missing(data, by = any_of(by), variables = all_of(c(include, variable)), fmt_fn = digits),
       cards::ard_categorical(data, variables = any_of(by), stat_label = ~ default_stat_labels())
     )
 

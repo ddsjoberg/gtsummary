@@ -211,6 +211,12 @@ card_summary <- function(cards,
   card_summary_inputs <- as.list(environment())[names(formals(card_summary))]
   call <- match.call()
 
+  # fill NULL stats with NA
+  cards <- cards::replace_null_statistic(cards)
+
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
+
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
@@ -226,7 +232,7 @@ card_summary <- function(cards,
       missing_stat = missing_stat,
       missing_text = missing_text
     ) |>
-    append(
+    utils::modifyList(
       list(
         cards = list(card_summary = cards),
         inputs = card_summary_inputs,
