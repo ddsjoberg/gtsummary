@@ -1,5 +1,5 @@
 # adding a few basic tests here to ensure we don't break the function with other updates
-test_that("card_summary() works", {
+test_that("tbl_ard_summary() works", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 
   expect_snapshot(
@@ -11,7 +11,7 @@ test_that("card_summary() works", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary() |>
+      tbl_ard_summary() |>
       as.data.frame()
   )
 
@@ -23,12 +23,12 @@ test_that("card_summary() works", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary() |>
+      tbl_ard_summary() |>
       as.data.frame()
   )
 })
 
-test_that("card_summary(statistic) argument works", {
+test_that("tbl_ard_summary(statistic) argument works", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 
   ard <-
@@ -41,7 +41,7 @@ test_that("card_summary(statistic) argument works", {
     )
 
   expect_snapshot(
-    card_summary(
+    tbl_ard_summary(
       ard,
       statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{n} / {N} (Total {N_obs})")
     ) |>
@@ -49,7 +49,7 @@ test_that("card_summary(statistic) argument works", {
   )
 
   expect_snapshot(
-    card_summary(
+    tbl_ard_summary(
       ard,
       type = list(all_continuous() ~ "continuous2"),
       statistic = list(all_continuous() ~ c("{median}", "{mean}"))
@@ -59,7 +59,7 @@ test_that("card_summary(statistic) argument works", {
 })
 
 
-test_that("card_summary(cards) error messages", {
+test_that("tbl_ard_summary(cards) error messages", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 
   expect_snapshot(
@@ -71,7 +71,7 @@ test_that("card_summary(cards) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary()
+      tbl_ard_summary()
   )
 
   expect_snapshot(
@@ -83,11 +83,11 @@ test_that("card_summary(cards) error messages", {
       .attributes = FALSE,
       .missing = TRUE
     ) |>
-      card_summary()
+      tbl_ard_summary()
   )
 })
 
-test_that("card_summary(type) error messages", {
+test_that("tbl_ard_summary(type) error messages", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 
   expect_snapshot(
@@ -99,7 +99,7 @@ test_that("card_summary(type) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary(type = list(AGE = "categorical"))
+      tbl_ard_summary(type = list(AGE = "categorical"))
   )
 
   expect_snapshot(
@@ -111,11 +111,11 @@ test_that("card_summary(type) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary(type = list(AGEGR1 = "continuous"))
+      tbl_ard_summary(type = list(AGEGR1 = "continuous"))
   )
 })
 
-test_that("card_summary(statistic) error messages", {
+test_that("tbl_ard_summary(statistic) error messages", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 
   expect_snapshot(
@@ -127,7 +127,7 @@ test_that("card_summary(statistic) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary(statistic = list(AGE = "{not_a_valid_summary_statistic}"))
+      tbl_ard_summary(statistic = list(AGE = "{not_a_valid_summary_statistic}"))
   )
 
   expect_snapshot(
@@ -139,6 +139,6 @@ test_that("card_summary(statistic) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      card_summary(statistic = list(AGE = c("{mean}", "{median}")))
+      tbl_ard_summary(statistic = list(AGE = c("{mean}", "{median}")))
   )
 })

@@ -148,7 +148,7 @@ tbl_continuous <- function(data,
 
   # build table ----------------------------------------------------------------
   result <-
-    card_continuous(cards = cards, by = by, statistic = statistic, include = all_of(include), variable = variable)
+    tbl_ard_continuous(cards = cards, by = by, statistic = statistic, include = all_of(include), variable = variable)
 
   # add other information to the returned object
   result$cards <- list(tbl_continuous = cards)

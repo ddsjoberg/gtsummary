@@ -11,9 +11,9 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
-#' @inheritParams card_summary
+#' @inheritParams tbl_ard_summary
 #'
-#' @return a gtsummary table of class `"card_summary"`
+#' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export
 #'
 #' @examples
@@ -44,7 +44,7 @@
 #'     variables = c(trt, grade, age)
 #'   )
 #' ) |>
-#'   card_continuous(by = "trt", variable = "age", include = "grade")
+#'   tbl_ard_continuous(by = "trt", variable = "age", include = "grade")
 #'
 #' bind_ard(
 #'   # the primary ARD with the results
@@ -53,8 +53,8 @@
 #'   ard_missing(trial, by = grade, variables = age),
 #'   ard_attributes(trial, variables = c(grade, age))
 #' ) |>
-#'   card_continuous(variable = "age", include = "grade")
-card_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
+#'   tbl_ard_continuous(variable = "age", include = "grade")
+tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
   set_cli_abort_call()
   check_not_missing(cards)
   check_not_missing(variable)
@@ -62,10 +62,10 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
   include <- enquo(include)
 
   # save processed function inputs ---------------------------------------------
-  card_continuous_inputs <- as.list(environment())
+  tbl_ard_continuous_inputs <- as.list(environment())
   call <- match.call()
 
-  # prepare the cards object for `card_summary()` ------------------------------
+  # prepare the cards object for `tbl_ard_summary()` ------------------------------
   cards <- cards |>
     dplyr::group_by(.data$context) |>
     dplyr::group_map(
@@ -93,9 +93,9 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
     structure(class = class(cards))
 
 
-  # Create table via `card_summary()` ------------------------------------------
+  # Create table via `tbl_ard_summary()` ------------------------------------------
   result <-
-    card_summary(
+    tbl_ard_summary(
       cards = cards,
       statistic = statistic,
       type = everything() ~ "categorical",
@@ -116,8 +116,8 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
     )
 
   # add other information to the returned object
-  result$inputs <- card_continuous_inputs
-  result$call_list <- list(card_continuous = call)
+  result$inputs <- tbl_ard_continuous_inputs
+  result$call_list <- list(tbl_ard_continuous = call)
 
   result |>
     structure(class = c("tbl_continuous", "gtsummary"))
