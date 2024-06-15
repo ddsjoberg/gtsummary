@@ -1,6 +1,6 @@
 #' ARD summary table
 #'
-#' The `card_summary()` function tables descriptive statistics for
+#' The `tbl_ard_summary()` function tables descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' The functions accepts an ARD object.
 #'
@@ -26,7 +26,7 @@
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`
 #'
-#' @return a gtsummary table of class `"card_summary"`
+#' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export
 #'
 #' @examples
@@ -39,7 +39,7 @@
 #'   .attributes = TRUE,
 #'   .missing = TRUE
 #' ) |>
-#'   card_summary()
+#'   tbl_ard_summary()
 #'
 #' ard_stack(
 #'   data = ADSL,
@@ -49,8 +49,8 @@
 #'   .attributes = TRUE,
 #'   .missing = TRUE
 #' ) |>
-#'   card_summary()
-card_summary <- function(cards,
+#'   tbl_ard_summary()
+tbl_ard_summary <- function(cards,
                          statistic = list(
                            all_continuous() ~ "{median} ({p25}, {p75})",
                            all_categorical() ~ "{n} ({p}%)"
@@ -185,7 +185,7 @@ card_summary <- function(cards,
   # fill in unspecified variables
   cards::fill_formula_selectors(
     select_prep(.list2tb(type, "var_type"), data[include]),
-    statistic = eval(formals(gtsummary::card_summary)[["statistic"]]),
+    statistic = eval(formals(gtsummary::tbl_ard_summary)[["statistic"]]),
   )
   cards::check_list_elements(
     x = statistic,
@@ -208,13 +208,19 @@ card_summary <- function(cards,
     }
   )
   # save inputs
-  card_summary_inputs <- as.list(environment())[names(formals(card_summary))]
+  tbl_ard_summary_inputs <- as.list(environment())[names(formals(tbl_ard_summary))]
   call <- match.call()
+
+  # fill NULL stats with NA
+  cards <- cards::replace_null_statistic(cards)
+
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
 
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
-  # construct initial card_summary object --------------------------------------
+  # construct initial tbl_ard_summary object --------------------------------------
   x <-
     brdg_summary(
       cards = cards,
@@ -226,14 +232,14 @@ card_summary <- function(cards,
       missing_stat = missing_stat,
       missing_text = missing_text
     ) |>
-    append(
+    utils::modifyList(
       list(
-        cards = list(card_summary = cards),
-        inputs = card_summary_inputs,
-        call_list = list(card_summary = call)
+        cards = list(tbl_ard_summary = cards),
+        inputs = tbl_ard_summary_inputs,
+        call_list = list(tbl_ard_summary = call)
       )
     ) |>
-    structure(class = c("card_summary", "gtsummary"))
+    structure(class = c("tbl_ard_summary", "gtsummary"))
 
   # adding styling -------------------------------------------------------------
   x <- x |>
@@ -248,13 +254,13 @@ card_summary <- function(cards,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_summary_footnote(x$cards[["card_summary"]], include, statistic, type)
+        .construct_summary_footnote(x$cards[["tbl_ard_summary"]], include, statistic, type)
     ) |>
     # updating the headers for the stats columns
     modify_header(
       all_stat_cols() ~ ifelse(is_empty(by), "**N = {N}**", "**{level}**  \nN = {n}")
     )
 
-  # return card_summary table --------------------------------------------------
+  # return tbl_ard_summary table --------------------------------------------------
   x
 }

@@ -11,9 +11,9 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
-#' @inheritParams card_summary
+#' @inheritParams tbl_ard_summary
 #'
-#' @return a gtsummary table of class `"card_summary"`
+#' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export
 #'
 #' @examples
@@ -36,25 +36,25 @@
 #'   # add missing and attributes ARD
 #'   ard_missing(
 #'     trial,
-#'     by = trt,
-#'     variables = c(grade, age)
+#'     by = c(trt, grade),
+#'     variables = age
 #'   ),
 #'   ard_attributes(
 #'     trial,
 #'     variables = c(trt, grade, age)
 #'   )
 #' ) |>
-#'   card_continuous(by = "trt", variable = "age", include = "grade")
+#'   tbl_ard_continuous(by = "trt", variable = "age", include = "grade")
 #'
 #' bind_ard(
 #'   # the primary ARD with the results
 #'   ard_continuous(trial, by = grade, variables = age),
 #'   # add missing and attributes ARD
-#'   ard_missing(trial, variables = c(grade, age)),
+#'   ard_missing(trial, by = grade, variables = age),
 #'   ard_attributes(trial, variables = c(grade, age))
 #' ) |>
-#'   card_continuous(variable = "age", include = "grade")
-card_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
+#'   tbl_ard_continuous(variable = "age", include = "grade")
+tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
   set_cli_abort_call()
   check_not_missing(cards)
   check_not_missing(variable)
@@ -62,15 +62,15 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
   include <- enquo(include)
 
   # save processed function inputs ---------------------------------------------
-  card_continuous_inputs <- as.list(environment())
+  tbl_ard_continuous_inputs <- as.list(environment())
   call <- match.call()
 
-  # prepare the cards object for `card_summary()` ------------------------------
+  # prepare the cards object for `tbl_ard_summary()` ------------------------------
   cards <- cards |>
     dplyr::group_by(.data$context) |>
     dplyr::group_map(
       \(.x, .y) {
-        if (.y$context %in% c("missing", "attributes") || identical(.x$variable[1], by)) {
+        if (.y$context %in% "attributes" || identical(.x$variable[1], by)) {
           return(dplyr::bind_cols(.x, .y))
         }
 
@@ -82,7 +82,9 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
             .default = dplyr::rename(., variable = "group1", variable_level = "group1_level")
           )} |>
           dplyr::bind_cols(.y) |>
-          dplyr::mutate(context = "categorical")
+          dplyr::mutate(
+            context = ifelse(.y$context %in% "missing", "missing", "categorical")
+          )
       }
     ) |>
     dplyr::bind_rows() |>
@@ -91,9 +93,9 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
     structure(class = class(cards))
 
 
-  # Create table via `card_summary()` ------------------------------------------
+  # Create table via `tbl_ard_summary()` ------------------------------------------
   result <-
-    card_summary(
+    tbl_ard_summary(
       cards = cards,
       statistic = statistic,
       type = everything() ~ "categorical",
@@ -114,8 +116,8 @@ card_continuous <- function(cards, variable, include, by = NULL, statistic = eve
     )
 
   # add other information to the returned object
-  result$inputs <- card_continuous_inputs
-  result$call_list <- list(tbl_continuous = call)
+  result$inputs <- tbl_ard_continuous_inputs
+  result$call_list <- list(tbl_ard_continuous = call)
 
   result |>
     structure(class = c("tbl_continuous", "gtsummary"))
