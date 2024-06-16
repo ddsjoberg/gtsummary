@@ -18,10 +18,10 @@
       as.data.frame(tbl_continuous(trial, variable = grade, include = trt))
     Message
       The following errors were returned during `tbl_continuous()`:
-      x For variable `trt` and "median" statistic: need numeric data
-      x For variable `trt` and "p25" and "p75" statistics: (unordered) factors are not allowed
-      x For variable `trt` and "median" statistic: need numeric data
-      x For variable `trt` and "p25" and "p75" statistics: (unordered) factors are not allowed
+      x For variable `grade` (`trt = "Drug A"`) and "median" statistic: need numeric data
+      x For variable `grade` (`trt = "Drug A"`) and "p25" and "p75" statistics: (unordered) factors are not allowed
+      x For variable `grade` (`trt = "Drug B"`) and "median" statistic: need numeric data
+      x For variable `grade` (`trt = "Drug B"`) and "p25" and "p75" statistics: (unordered) factors are not allowed
     Output
             **Characteristic**  **N = 98**
       1 Chemotherapy Treatment        <NA>

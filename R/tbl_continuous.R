@@ -145,17 +145,50 @@ tbl_continuous <- function(data,
       cards::ard_categorical(data, variables = any_of(by), stat_label = ~ default_stat_labels())
     )
 
+  # fill NULL stats with NA
+  cards <- cards::replace_null_statistic(cards)
 
-  # build table ----------------------------------------------------------------
-  result <-
-    tbl_ard_continuous(cards = cards, by = by, statistic = statistic, include = all_of(include), variable = variable)
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
+
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
+  # prepare the base table via `brdg_continuous()` -----------------------------
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+
+  # adding styling -------------------------------------------------------------
+  x <- x |>
+    # updating the headers for the stats columns
+    modify_header(
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          "**N = {style_number(N)}**",
+          "**{level}**  \nN = {style_number(n)}"
+        )
+    )
+
+  # prepend the footnote with information about the variable -------------------
+  x$table_styling$footnote$footnote <-
+    paste0(
+      cards |>
+        dplyr::filter(.data$context == "attributes", .data$variable == .env$variable, .data$stat_name == "label") |>
+        dplyr::pull("stat") |>
+        unlist(),
+      ": ",
+      x$table_styling$footnote$footnote
+    )
+
+  x |>
+    structure(class = c("tbl_continuous", "gtsummary"))
 
   # add other information to the returned object
-  result$cards <- list(tbl_continuous = cards)
-  result$inputs <- tbl_continuous_inputs
-  result$call_list <- list(tbl_continuous = call)
+  x$cards <- list(tbl_continuous = cards)
+  x$inputs <- tbl_continuous_inputs
+  x$call_list <- list(tbl_continuous = call)
 
-  result |>
+  x |>
     structure(class = c("tbl_continuous", "gtsummary"))
 }
 

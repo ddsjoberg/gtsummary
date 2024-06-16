@@ -26,6 +26,70 @@ test_that("tbl_ard_summary() works", {
       tbl_ard_summary() |>
       as.data.frame()
   )
+
+
+})
+
+
+test_that("tbl_ard_summary(cards)", {
+  # when attribute labels are not provided, we defatult to variable names
+  expect_equal(
+    cards::ard_stack(
+      data = cards::ADSL,
+      .by = ARM,
+      cards::ard_continuous(variables = "AGE"),
+      cards::ard_categorical(variables = "AGEGR1"),
+      .attributes = FALSE,
+      .missing = TRUE
+    ) |>
+      tbl_ard_summary() |>
+      getElement("table_body") |>
+      getElement("var_label") |>
+      unique(),
+    c("AGE", "AGEGR1")
+  )
+
+  # no error when missing are not present AND missing='no'
+  expect_snapshot(
+    cards::ard_stack(
+      data = cards::ADSL,
+      .by = ARM,
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = FALSE,
+      .missing = FALSE
+    ) |>
+      tbl_ard_summary(missing = "no") |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_ard_summary(cards) error messages", {
+  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
+
+  expect_snapshot(
+    error = TRUE,
+    ard_stack(
+      data = ADSL,
+      .by = c(ARM, AGEGR1),
+      ard_continuous(variables = "AGE"),
+      .attributes = TRUE,
+      .missing = TRUE
+    ) |>
+      tbl_ard_summary()
+  )
+
+  # we get an error when missing ARDs are not present and missing values requested
+  expect_snapshot(
+    error = TRUE,
+    cards::ard_stack(
+      data = cards::ADSL,
+      .by = ARM,
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = FALSE,
+      .missing = FALSE
+    ) |>
+      tbl_ard_summary(missing = "ifany")
+  )
 })
 
 test_that("tbl_ard_summary(statistic) argument works", {
@@ -58,34 +122,6 @@ test_that("tbl_ard_summary(statistic) argument works", {
   )
 })
 
-
-test_that("tbl_ard_summary(cards) error messages", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
-  expect_snapshot(
-    error = TRUE,
-    ard_stack(
-      data = ADSL,
-      .by = c(ARM, AGEGR1),
-      ard_continuous(variables = "AGE"),
-      .attributes = TRUE,
-      .missing = TRUE
-    ) |>
-      tbl_ard_summary()
-  )
-
-  expect_snapshot(
-    error = TRUE,
-    ard_stack(
-      data = ADSL,
-      .by = ARM,
-      ard_continuous(variables = "AGE"),
-      .attributes = FALSE,
-      .missing = TRUE
-    ) |>
-      tbl_ard_summary()
-  )
-})
 
 test_that("tbl_ard_summary(type) error messages", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded

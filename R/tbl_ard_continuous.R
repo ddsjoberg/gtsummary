@@ -59,66 +59,86 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   check_not_missing(cards)
   check_not_missing(variable)
   check_not_missing(include)
-  include <- enquo(include)
+
+  # define a data frame based on the context of `card` -------------------------
+  data <- bootstrap_df_from_cards(cards)
+
+  cards::process_selectors(data, variable = {{ variable }}, include = {{ include }}, by = {{ by }})
+  include <- setdiff(include, c(by, variable)) # remove by variable from list vars included
+  check_scalar(variable)
+  check_scalar(
+    by,
+    allow_empty = TRUE,
+    message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
+                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+    )
+  )
+
+  cards::process_formula_selectors(
+    data[include],
+    statistic = statistic,
+    include_env = TRUE
+  )
+  # add the calling env to the statistics
+  statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   # save processed function inputs ---------------------------------------------
   tbl_ard_continuous_inputs <- as.list(environment())
+  tbl_ard_continuous_inputs$data <- NULL
   call <- match.call()
 
-  # prepare the cards object for `tbl_ard_summary()` ------------------------------
-  cards <- cards |>
-    dplyr::group_by(.data$context) |>
-    dplyr::group_map(
-      \(.x, .y) {
-        if (.y$context %in% "attributes" || identical(.x$variable[1], by)) {
-          return(dplyr::bind_cols(.x, .y))
-        }
+  # adding attributes if not already present
+  missing_ard_attributes <-
+    dplyr::filter(cards, .data$variable %in% .env$include, .data$context %in% "attributes") |>
+    dplyr::pull("variable") |>
+    unique() %>%
+    {setdiff(include, .)}
+  if (!is_empty(missing_ard_attributes)) {
+    cards <- cards |>
+      cards::bind_ard(
+        cards::ard_attributes(data, variables = all_of(missing_ard_attributes))
+      )
+  }
 
-        .x |>
-          dplyr::select(-cards::all_ard_variables()) %>%
-          {case_switch(
-            all(c("group2", "group2_level") %in% names(.)) ~
-              dplyr::rename(., variable = "group2", variable_level = "group2_level"),
-            .default = dplyr::rename(., variable = "group1", variable_level = "group1_level")
-          )} |>
-          dplyr::bind_cols(.y) |>
-          dplyr::mutate(
-            context = ifelse(.y$context %in% "missing", "missing", "categorical")
-          )
-      }
-    ) |>
-    dplyr::bind_rows() |>
-    # dropping group2 and group2_level since they are all NA or NULL
-    dplyr::select(-c(\(x) all(is.na(x)), \(x) is.null(unlist(x)))) |>
-    structure(class = class(cards))
+  # fill NULL stats with NA
+  cards <- cards::replace_null_statistic(cards)
 
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
 
-  # Create table via `tbl_ard_summary()` ------------------------------------------
-  result <-
-    tbl_ard_summary(
-      cards = cards,
-      statistic = statistic,
-      type = everything() ~ "categorical",
-      include = !!include,
-      missing = "no"
-    ) |>
-    structure(class = c("tbl_continuous", "gtsummary"))
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
+  # prepare the base table via `brdg_continuous()` -----------------------------
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+
+  # adding styling -------------------------------------------------------------
+  x <- x |>
+    # updating the headers for the stats columns
+    modify_header(
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          "**N = {style_number(N)}**",
+          "**{level}**  \nN = {style_number(n)}"
+        )
+    )
 
   # prepend the footnote with information about the variable -------------------
-  result$table_styling$footnote$footnote <-
+  x$table_styling$footnote$footnote <-
     paste0(
       cards |>
         dplyr::filter(.data$context == "attributes", .data$variable == .env$variable, .data$stat_name == "label") |>
         dplyr::pull("stat") |>
         unlist(),
       ": ",
-      result$table_styling$footnote$footnote
+      x$table_styling$footnote$footnote
     )
 
   # add other information to the returned object
-  result$inputs <- tbl_ard_continuous_inputs
-  result$call_list <- list(tbl_ard_continuous = call)
+  x$inputs <- tbl_ard_continuous_inputs
+  x$call_list <- list(tbl_ard_continuous = call)
 
-  result |>
-    structure(class = c("tbl_continuous", "gtsummary"))
+  x |>
+    structure(class = c("tbl_ard_continuous", "gtsummary"))
 }

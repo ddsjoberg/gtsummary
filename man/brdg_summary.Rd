@@ -61,10 +61,10 @@ Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}
 }}
 }
 \value{
-data frame
+a gtsummary object
 }
 \description{
-Bridge function for converting \code{tbl_summary()} (and similar) cards to table bodies.
+Bridge function for converting \code{tbl_summary()} (and similar) cards to basic gtsummary objects.
 All bridge functions begin with prefix \verb{brdg_*()}.
 
 This file also contains helper functions for constructing the bridge,
