@@ -34,8 +34,8 @@
 # tbl_ard_summary(statistic) argument works
 
     Code
-      as.data.frame(tbl_ard_summary(ard, statistic = list(all_continuous() ~ "{median}",
-      all_categorical() ~ "{n} / {N} (Total {N_obs})")))
+      as.data.frame(tbl_ard_summary(ard, statistic = list(all_continuous() ~
+        "{median}", all_categorical() ~ "{n} / {N} (Total {N_obs})")))
     Output
         **Characteristic**           **N = 254**
       1 Pooled Age Group 1                  <NA>
