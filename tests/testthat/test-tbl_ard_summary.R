@@ -11,7 +11,7 @@ test_that("tbl_ard_summary() works", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary() |>
+      tbl_ard_summary(by = ARM) |>
       as.data.frame()
   )
 
@@ -42,7 +42,7 @@ test_that("tbl_ard_summary(cards)", {
       .attributes = FALSE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary() |>
+      tbl_ard_summary(by = ARM) |>
       getElement("table_body") |>
       getElement("var_label") |>
       unique(),
@@ -58,7 +58,7 @@ test_that("tbl_ard_summary(cards)", {
       .attributes = FALSE,
       .missing = FALSE
     ) |>
-      tbl_ard_summary(missing = "no") |>
+      tbl_ard_summary(by = ARM, missing = "no") |>
       as.data.frame()
   )
 })
@@ -75,7 +75,7 @@ test_that("tbl_ard_summary(cards) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary()
+      tbl_ard_summary(by = ARM)
   )
 
   # we get an error when missing ARDs are not present and missing values requested
@@ -88,7 +88,7 @@ test_that("tbl_ard_summary(cards) error messages", {
       .attributes = FALSE,
       .missing = FALSE
     ) |>
-      tbl_ard_summary(missing = "ifany")
+      tbl_ard_summary(by = ARM, missing = "ifany")
   )
 })
 
@@ -135,7 +135,7 @@ test_that("tbl_ard_summary(type) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary(type = list(AGE = "categorical"))
+      tbl_ard_summary(by = ARM, type = list(AGE = "categorical"))
   )
 
   expect_snapshot(
@@ -147,7 +147,7 @@ test_that("tbl_ard_summary(type) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary(type = list(AGEGR1 = "continuous"))
+      tbl_ard_summary(by = ARM, type = list(AGEGR1 = "continuous"))
   )
 })
 
@@ -163,7 +163,7 @@ test_that("tbl_ard_summary(statistic) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary(statistic = list(AGE = "{not_a_valid_summary_statistic}"))
+      tbl_ard_summary(by = ARM, statistic = list(AGE = "{not_a_valid_summary_statistic}"))
   )
 
   expect_snapshot(
@@ -175,6 +175,6 @@ test_that("tbl_ard_summary(statistic) error messages", {
       .attributes = TRUE,
       .missing = TRUE
     ) |>
-      tbl_ard_summary(statistic = list(AGE = c("{mean}", "{median}")))
+      tbl_ard_summary(by = ARM, statistic = list(AGE = c("{mean}", "{median}")))
   )
 })
