@@ -92,6 +92,30 @@ test_that("tbl_ard_summary(cards) error messages", {
   )
 })
 
+test_that("tbl_ard_summary(by) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    cards::bind_ard(
+      cards::ard_continuous(trial, by = trt, variables = age),
+      cards::ard_continuous(trial, by = grade, variables = age)
+    ) |>
+      tbl_ard_summary(by = trt)
+  )
+
+    # when ARD is stratified, but `by` arg not specified
+  expect_snapshot(
+    error = TRUE,
+    cards::ard_stack(
+      data = cards::ADSL,
+      .by = ARM,
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = TRUE,
+      .missing = TRUE
+    ) |>
+      tbl_ard_summary()
+  )
+})
+
 test_that("tbl_ard_summary(statistic) argument works", {
   withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
 

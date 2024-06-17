@@ -64,6 +64,25 @@
       ! Argument `missing = "ifany"` requires results from `cards::ard_missing()`, but they are missing for variable "AGE".
       i Set `missing = "no"` to avoid printing missing counts.
 
+# tbl_ard_summary(by) messaging
+
+    Code
+      tbl_ard_summary(cards::bind_ard(cards::ard_continuous(trial, by = trt,
+        variables = age), cards::ard_continuous(trial, by = grade, variables = age)),
+      by = trt)
+    Condition
+      Error in `tbl_ard_summary()`:
+      ! For `by = "trt"`, columns "group1" and "group1_level" must be present in `cards` and "group1" must be equal to "trt".
+
+---
+
+    Code
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE))
+    Condition
+      Error in `tbl_ard_summary()`:
+      ! The `cards` object may not have group columns when the `by` is empty.
+
 # tbl_ard_summary(statistic) argument works
 
     Code
