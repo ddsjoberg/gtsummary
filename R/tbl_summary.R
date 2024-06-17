@@ -395,19 +395,6 @@ tbl_summary <- function(data,
 
   # adding styling -------------------------------------------------------------
   x <- x |>
-    # add header to label column and add default indentation
-    modify_table_styling(
-      columns = "label",
-      label = glue("**{translate_string('Characteristic')}**"),
-      rows = .data$row_type %in% c("level", "missing"),
-      indent = 4L
-    ) |>
-    # adding the statistic footnote
-    modify_table_styling(
-      columns = all_stat_cols(),
-      footnote =
-        .construct_summary_footnote(x$cards[["tbl_summary"]], x$inputs$include, x$inputs$statistic, x$inputs$type)
-    ) |>
     # updating the headers for the stats columns
     modify_header(
       all_stat_cols() ~

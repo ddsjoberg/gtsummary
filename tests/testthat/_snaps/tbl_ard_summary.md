@@ -31,6 +31,38 @@
       4                >80        77 (30.3%)
       5                Age 77.0 (70.0, 81.0)
 
+# tbl_ard_summary(cards)
+
+    Code
+      as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM,
+      cards::ard_continuous(variables = "AGE"), .attributes = FALSE, .missing = FALSE),
+      missing = "no"))
+    Output
+        **Characteristic** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
+      1                AGE     76.0 (69.0, 82.0)                  76.0 (70.5, 80.0)
+        **Xanomeline Low Dose**  \nN = 84
+      1                 77.5 (71.0, 82.0)
+
+# tbl_ard_summary(cards) error messages
+
+    Code
+      tbl_ard_summary(ard_stack(data = ADSL, .by = c(ARM, AGEGR1), ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE))
+    Condition
+      Error in `tbl_ard_summary()`:
+      ! The `cards` object may only contain a single stratifying variable.
+      i But contains "group2" and "group2_level".
+
+---
+
+    Code
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+        variables = "AGE"), .attributes = FALSE, .missing = FALSE), missing = "ifany")
+    Condition
+      Error in `FUN()`:
+      ! Argument `missing = "ifany"` requires results from `cards::ard_missing()`, but they are missing for variable "AGE".
+      i Set `missing = "no"` to avoid printing missing counts.
+
 # tbl_ard_summary(statistic) argument works
 
     Code
@@ -58,26 +90,6 @@
       5                Age        <NA>
       6             Median        77.0
       7               Mean        75.1
-
-# tbl_ard_summary(cards) error messages
-
-    Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = c(ARM, AGEGR1), ard_continuous(
-        variables = "AGE"), .attributes = TRUE, .missing = TRUE))
-    Condition
-      Error in `tbl_ard_summary()`:
-      ! The `cards` object may only contain a single stratifying variable.
-      i But contains "group2" and "group2_level".
-
----
-
-    Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
-      .attributes = FALSE, .missing = TRUE))
-    Condition
-      Error in `tbl_ard_summary()`:
-      ! "AGE" does not have associated missing or attributes ARD results.
-      i Use `cards::ard_missing()`, `cards::ard_attributes()`, or `cards::ard_stack(.missing=TRUE, .attributes=TRUE)` to calculate needed results.
 
 # tbl_ard_summary(type) error messages
 
