@@ -6,6 +6,7 @@
 \usage{
 tbl_ard_summary(
   cards,
+  by = NULL,
   statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~
     "{n} ({p}\%)"),
   type = NULL,
@@ -18,6 +19,10 @@ tbl_ard_summary(
 \arguments{
 \item{cards}{(\code{card})\cr
 An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()} functions.}
+
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to specify the summary statistics for each variable.
@@ -71,5 +76,5 @@ ard_stack(
   .attributes = TRUE,
   .missing = TRUE
 ) |>
-  tbl_ard_summary()
+  tbl_ard_summary(by = ARM)
 }

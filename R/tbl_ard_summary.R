@@ -6,6 +6,9 @@
 #'
 #' @param cards (`card`)\cr
 #'   An ARD object of class `"card"` typically created with `cards::ard_*()` functions.
+#' @param by ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   A single column from `data`. Summary statistics will be stratified by this variable.
+#'   Default is `NULL`
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Used to specify the summary statistics for each variable.
 #'   Each of the statistics must be present in `card` as no new statistics are calculated
@@ -49,8 +52,9 @@
 #'   .attributes = TRUE,
 #'   .missing = TRUE
 #' ) |>
-#'   tbl_ard_summary()
+#'   tbl_ard_summary(by = ARM)
 tbl_ard_summary <- function(cards,
+                            by = NULL,
                             statistic = list(
                               all_continuous() ~ "{median} ({p25}, {p75})",
                               all_categorical() ~ "{n} ({p}%)"
@@ -66,14 +70,27 @@ tbl_ard_summary <- function(cards,
   check_class(cards, "card")
   missing <- arg_match(missing)
 
+  # define a data frame based on the context of `card` -------------------------
+  data <- bootstrap_df_from_cards(cards)
+
   if (missing(missing_text)) {
-    missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
+    missing_text <-
+      get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
   }
   check_string(missing_text)
 
+  cards::process_selectors(data, include = {{ include }}, by = {{ by }})
+  include <- setdiff(include, by) # remove by variable from list vars included
+  check_scalar(by, allow_empty = TRUE)
+
   # check structure of ARD input -----------------------------------------------
-  # TODO: What other checks should we add?
-  if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
+  if (is_empty(by) && !is_empty(names(dplyr::select(cards, cards::all_ard_groups())))) {
+    cli::cli_abort(
+      "The {.arg cards} object may not have group columns when the {.arg by} is empty.",
+      call = get_cli_abort_call()
+    )
+  }
+  else if (!is_empty(names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c("group1", "group1_level")))) {
     cli::cli_abort(
       c("The {.arg cards} object may only contain a single stratifying variable.",
         i = "But contains {.val {names(dplyr::select(cards, cards::all_ard_groups())) |> setdiff(c('group1', 'group1_level'))}}."
@@ -81,17 +98,15 @@ tbl_ard_summary <- function(cards,
       call = get_cli_abort_call()
     )
   }
-
-  # define a data frame based on the context of `card` -------------------------
-  data <- bootstrap_df_from_cards(cards)
-
-  if ("group1" %in% names(cards)) {
-    by <- stats::na.omit(cards$group1)[1] |> unclass()
-  } else {
-    by <- character(0L)
+  if (!is_empty(by) &&
+      (!all(c("group1", "group1_level") %in% names(cards)) ||
+       !all(stats::na.omit(cards$group1) %in% by))) {
+    cli::cli_abort(
+      "For {.code by = {.val {by}}}, columns {.val {c('group1', 'group1_level')}}
+       must be present in {.arg cards} and {.val {'group1'}} must be equal to {.val {by}}.",
+      call = get_cli_abort_call()
+    )
   }
-  cards::process_selectors(data, include = {{ include }})
-  include <- setdiff(include, by) # remove by variable from list vars included
 
   # check the missing stats are available
   if (missing != "no") {
