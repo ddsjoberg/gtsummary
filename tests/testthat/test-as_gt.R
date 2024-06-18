@@ -3,22 +3,23 @@ skip_on_cran()
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
   tbl_summary()
-my_tbl_cross <- tbl_cross(trial, trt, grade)
 my_tbl_regression <- lm(marker ~ age, trial) |> tbl_regression()
-my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
 my_spanning_tbl <- trial |>
   tbl_summary(by = grade, include = age) |>
   modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**")
 
-expect_silent(gt_tbl_summary <- my_tbl_summary |> as_gt())
-expect_silent(gt_tbl_cross <- my_tbl_cross |> as_gt())
-expect_silent(gt_tbl_regression <- my_tbl_regression |> as_gt())
-expect_silent(gt_tbl_uvregression <- my_tbl_uvregression |> as_gt())
-expect_silent(gt_spanning_tbl <- my_spanning_tbl |> as_gt())
+gt_tbl_summary <- my_tbl_summary |> as_gt()
+gt_tbl_regression <- my_tbl_regression |> as_gt()
+gt_spanning_tbl <- my_spanning_tbl |> as_gt()
 
 test_that("as_gt works with standard use", {
+  # return_calls argument does not produce warnings
   expect_silent(my_tbl_summary |> as_gt(return_calls = TRUE))
+
+  # return_calls argument does not produce warnings
   expect_silent(my_tbl_summary |> as_gt(include = gt))
+
+  # correct elements are returned
   expect_equal(
     names(gt_tbl_summary),
     c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
@@ -35,6 +36,8 @@ test_that("as_gt passes table body correctly", {
   )
 
   # tbl_cross
+  my_tbl_cross <- tbl_cross(trial, trt, grade)
+  expect_silent(gt_tbl_cross <- my_tbl_cross |> as_gt())
   expect_equal(
     my_tbl_cross$table_body,
     gt_tbl_cross$`_data`
@@ -49,6 +52,8 @@ test_that("as_gt passes table body correctly", {
   )
 
   # tbl_uvregression
+  my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
+  expect_silent(gt_tbl_uvregression <- my_tbl_uvregression |> as_gt())
   expect_equal(
     my_tbl_uvregression$table_body |>
       dplyr::select(-conf.low),
