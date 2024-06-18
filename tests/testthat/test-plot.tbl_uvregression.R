@@ -1,18 +1,31 @@
 skip_if_not(broom.helpers::.assert_package("ggstats", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("plot.tbl_regression() works", {
-  expect_silent(
-    tbl1 <- tbl_uvregression(
-      trial,
-      x = trt,
-      include = c(marker, age),
-      show_single_row = trt,
-      method = lm
-    )
+  plot_obj <- trial %>%
+    tbl_uvregression(method = lm, y = marker, include = c("grade")) %>%
+    plot()
+
+  expect_equal(
+    plot_obj$data$reference_row,
+    c(TRUE, FALSE, FALSE)
   )
-  expect_error(
-    tbl1 %>%
-      plot(remove_reference_rows = TRUE),
-    NA
+
+  plot_obj1 <- trial %>%
+    tbl_uvregression(method = lm, y = marker, include = c("grade")) %>%
+    plot(remove_reference_rows = TRUE)
+
+  expect_equal(
+    plot_obj1$data$reference_row,
+    c(FALSE, FALSE)
+  )
+
+  plot_obj2 <- trial %>%
+    tbl_uvregression(method = lm, y = marker, include = c("grade")) %>%
+    plot(remove_header_rows = FALSE)
+
+  expect_equal(
+    plot_obj2$data$header_row,
+    c(TRUE, FALSE, FALSE, FALSE)
   )
 })
+
