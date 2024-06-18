@@ -51,8 +51,9 @@ Default is \code{NULL}. See \link{tests} for methods that utilize the \code{grou
 Add p-values
 }
 \examples{
-gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
   tbl_continuous(variable = age, by = trt, include = grade) |>
   add_p()
+\dontshow{\}) # examplesIf}
 }
