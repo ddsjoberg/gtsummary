@@ -172,9 +172,6 @@ test_that("as_gt passes table text interpreters correctly", {
   tbl <- my_spanning_tbl |>
     modify_table_styling(columns = "stat_1", label = "Stat I", spanning_header = "MyTest", text_interpret = "html")
   gt_tbl <- tbl |> as_gt()
-  if ("html" %in% names(attributes(gt_tbl$`_spanners`$spanner_label[[1]]))) {
-    attr(gt_tbl$`_spanners`$spanner_label[[1]], "html") <- c("html", "character")
-  }
 
   # header
   expect_equal(
@@ -186,16 +183,7 @@ test_that("as_gt passes table text interpreters correctly", {
   )
 
   # spanning header
-  expect_equal(
-    sapply(
-      tbl$table_styling$header |>
-        dplyr::filter(!is.na(spanning_header)) |>
-        dplyr::pull(interpret_spanning_header),
-      \(x) do.call(eval(parse(text = x)), list("")) |> class()
-    ),
-    attributes(gt_tbl$`_spanners`$spanner_label[[1]]),
-    ignore_attr = "names"
-  )
+  expect_true(attr(gt_tbl$`_spanners`$spanner_label[[1]], "html"))
 })
 
 test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
