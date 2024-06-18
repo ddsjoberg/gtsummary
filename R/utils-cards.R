@@ -15,6 +15,10 @@ bootstrap_df_from_cards <- function(x) {
     dplyr::bind_rows() |>
     dplyr::filter(!is.na(.data$name))
 
+  if (!"level" %in% df_long) {
+    df_long$level <- list(NA)
+  }
+
   df_long |>
     dplyr::arrange(.data$name, .data$level) |>
     dplyr::slice(1L, .by = "name") |>
