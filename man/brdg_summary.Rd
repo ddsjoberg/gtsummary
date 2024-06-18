@@ -7,7 +7,7 @@
 \alias{pier_summary_continuous2}
 \alias{pier_summary_continuous}
 \alias{pier_summary_missing_row}
-\title{Summary Table Bridges}
+\title{Summary table bridge}
 \usage{
 brdg_summary(
   cards,

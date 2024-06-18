@@ -1,4 +1,4 @@
-#' Summary Table Bridges
+#' Summary table bridge
 #'
 #' @description
 #' Bridge function for converting `tbl_summary()` (and similar) cards to basic gtsummary objects.
