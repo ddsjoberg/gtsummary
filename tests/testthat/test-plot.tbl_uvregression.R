@@ -28,4 +28,3 @@ test_that("plot.tbl_regression() works", {
     c(TRUE, FALSE, FALSE, FALSE)
   )
 })
-
