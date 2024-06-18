@@ -187,17 +187,21 @@ test_that("as_gt passes table text interpreters correctly", {
 })
 
 test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
+  tbl_fn <- my_tbl_summary |>
+    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+  gt_tbl_fn <- tbl_fn |> as_gt()
+
   # footnote
   expect_equal(
-    my_tbl_summary$table_styling$footnote$column,
-    gt_tbl_summary$`_footnotes`$colname |> unique()
+    tbl_fn$table_styling$footnote$column,
+    gt_tbl_fn$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    my_tbl_summary$table_styling$footnote$footnote,
-    gt_tbl_summary$`_footnotes`$footnotes |> unlist() |> unique()
+    tbl_fn$table_styling$footnote$footnote,
+    gt_tbl_fn$`_footnotes`$footnotes |> unlist() |> unique()
   )
 
-  tbl_fa <- my_tbl_summary |>
+  tbl_fa <- tbl_fn |>
     modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
   gt_tbl_fa <- tbl_fa |> as_gt()
 
