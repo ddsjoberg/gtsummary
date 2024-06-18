@@ -39,14 +39,17 @@ test_that("as_gt passes table body correctly", {
   my_tbl_cross <- tbl_cross(trial, trt, grade)
   expect_silent(gt_tbl_cross <- my_tbl_cross |> as_gt())
   expect_equal(
-    my_tbl_cross$table_body,
+    my_tbl_cross$table_body |> as_tibble(),
     gt_tbl_cross$`_data`
   )
 
   # tbl_regression
+  my_tbl_regression$table_body$conf.low <- my_tbl_regression |>
+    as_tibble(col_labels = FALSE) |>
+    dplyr::pull(conf.low)
+
   expect_equal(
-    my_tbl_regression$table_body |>
-      dplyr::mutate(conf.low = paste0(round(conf.low, digits = 2), ", ", round(conf.high, digits = 2))),
+    my_tbl_regression$table_body,
     gt_tbl_regression$`_data`,
     ignore_attr = "class"
   )
@@ -54,11 +57,13 @@ test_that("as_gt passes table body correctly", {
   # tbl_uvregression
   my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
   expect_silent(gt_tbl_uvregression <- my_tbl_uvregression |> as_gt())
+  my_tbl_uvregression$table_body$conf.low <- my_tbl_uvregression |>
+    as_tibble(col_labels = FALSE) |>
+    dplyr::pull(conf.low)
+
   expect_equal(
-    my_tbl_uvregression$table_body |>
-      dplyr::select(-conf.low),
-    gt_tbl_uvregression$`_data` |>
-      dplyr::select(-conf.low),
+    my_tbl_uvregression$table_body,
+    gt_tbl_uvregression$`_data`,
     ignore_attr = "class"
   )
 
@@ -235,30 +240,20 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
   gt_tbl_fa <- tbl_fa |> as_gt()
 
   # footnote_abbrev
-  vis_cols <- tbl_fa$table_styling$header |>
-    dplyr::filter(hide == FALSE) |>
-    dplyr::select(column) |>
-    unlist()
-  footnotes_vis <- rbind(
-    tbl_fa$table_styling$footnote,
-    tbl_fa$table_styling$footnote_abbrev
-  ) |>
-    dplyr::filter(column %in% vis_cols) |>
-    dplyr::arrange(rows)
   expect_equal(
-    footnotes_vis$column,
     gt_tbl_fa$`_footnotes` |>
       dplyr::distinct(pick(!any_of("rownum"))) |>
       dplyr::arrange(locnum) |>
-      dplyr::pull(colname)
+      dplyr::pull(colname),
+    c("stat_0", "stat_0", "label")
   )
   expect_equal(
-    footnotes_vis$footnote |> unname(),
     gt_tbl_fa$`_footnotes` |>
       dplyr::distinct(pick(!any_of("rownum"))) |>
       dplyr::arrange(locnum) |>
       dplyr::pull(footnotes) |>
-      unlist()
+      unlist(),
+    c("n (%); Median (Q1, Q3)", "N = number of observations", "test footnote")
   )
 
   # customized footnotes
@@ -270,12 +265,12 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
   gt_tbl <- tbl |> as_gt()
 
   expect_equal(
-    tbl$table_styling$footnote$column,
-    gt_tbl$`_footnotes`$colname
+    gt_tbl$`_footnotes`$colname,
+    c("stat_0", "label")
   )
   expect_equal(
-    tbl$table_styling$footnote$footnote,
-    gt_tbl$`_footnotes`$footnotes |> unlist()
+    gt_tbl$`_footnotes`$footnotes |> unlist(),
+    c("replace old footnote", "another new footnote")
   )
 })
 
@@ -337,18 +332,16 @@ test_that("as_gt passes captions correctly", {
 })
 
 test_that("as_gt passes missing symbols correctly", {
-  # missing symbol defined
+  # specify missing symbol
   tbl <- my_tbl_summary |>
     modify_table_body(~ .x |> mutate(stat_0 = NA_character_)) |>
     modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
   gt_tbl <- tbl |> as_gt()
 
-  # apply fmt_missing to table_body
-  tbl$table_body$stat_0[eval_tidy(tbl$table_styling$fmt_missing$rows[[1]], data = tbl$table_body)] <-
-    tbl$table_styling$fmt_missing$symbol
-
   expect_equal(
-    tbl$table_body$stat_0,
+    tbl |>
+      as_tibble.gtsummary(col_labels = FALSE, fmt_missing = TRUE) |>
+      dplyr::pull(stat_0),
     gt_tbl$`_substitutions`[[2]]$func$default(gt_tbl$`_data`$stat_0)
   )
 })
@@ -361,33 +354,19 @@ test_that("column merging", {
     )
   gt_tbl <- tbl |> as_gt()
 
-  # apply fmt_funs to statistics
-  tbl$table_body[tbl$table_styling$fmt_fun$column] <-
-    tbl$table_body |>
-    dplyr::select(tbl$table_styling$fmt_fun$column) |>
-    apply(1, \(x) {
-      sapply(
-        seq_along(x),
-        \(i) tbl$table_styling$fmt_fun$fmt_fun[[i]](x[[i]])
-      )
-    }) |>
-    as.list()
-
   # conf.low (default column merging)
   expect_equal(
-    glue::glue(
-      tbl$table_styling$cols_merge$pattern[1],
-      .envir = tbl$table_body
-    ),
+    tbl |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(conf.low),
     gt_tbl$`_data`$conf.low
   )
 
   # estimate (custom column merging)
   expect_equal(
-    glue::glue(
-      tbl$table_styling$cols_merge$pattern[3],
-      .envir = tbl$table_body
-    ),
+    tbl |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(estimate),
     gt_tbl$`_data`$estimate
   )
 })
