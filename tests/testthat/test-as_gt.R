@@ -69,6 +69,30 @@ test_that("as_gt passes table body correctly", {
   )
 })
 
+test_that("as_gt works with bold/italics", {
+  tbl <- my_tbl_summary |>
+    bold_labels() |>
+    italicize_levels()
+  gt_tbl <- tbl |> as_gt()
+
+  gt_styles <- gt_tbl$`_styles` |>
+    dplyr::arrange(rownum) |>
+    dplyr::pull(styles) |>
+    unlist(use.names = FALSE)
+
+  # labels correctly bolded
+  expect_equal(
+    eval_tidy(tbl$table_styling$text_format$rows[[1]], data = tbl$table_body),
+    gt_styles == "bold"
+  )
+
+  # labels correctly italicized
+  expect_equal(
+    eval_tidy(tbl$table_styling$text_format$rows[[2]], data = tbl$table_body),
+    gt_styles == "italic"
+  )
+})
+
 test_that("as_gt passes table header labels correctly", {
   # tbl_summary
   expect_equal(
