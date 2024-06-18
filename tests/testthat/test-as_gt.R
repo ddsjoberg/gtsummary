@@ -335,3 +335,20 @@ test_that("as_gt passes captions correctly", {
     ignore_attr = "class"
   )
 })
+
+test_that("as_gt passes missing symbols correctly", {
+  # missing symbol defined
+  tbl <- my_tbl_summary |>
+    modify_table_body(~ .x |> mutate(stat_0 = NA_character_)) |>
+    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
+  gt_tbl <- tbl |> as_gt()
+
+  # apply fmt_missing to table_body
+  tbl$table_body$stat_0[eval_tidy(tbl$table_styling$fmt_missing$rows[[1]], data = tbl$table_body)] <-
+    tbl$table_styling$fmt_missing$symbol
+
+  expect_equal(
+    tbl$table_body$stat_0,
+    gt_tbl$`_substitutions`[[2]]$func$default(gt_tbl$`_data`$stat_0)
+  )
+})
