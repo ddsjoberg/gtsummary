@@ -356,6 +356,63 @@ test_that("as_gt passes missing symbols correctly", {
   )
 })
 
+test_that("as_gt applies formatting functions correctly", {
+  tbl <- glm(response ~ age + grade, trial, family = binomial(link = "logit")) |>
+    tbl_regression(exponentiate = TRUE) |>
+    modify_fmt_fun(
+      p.value ~ function(x) style_pvalue(x, digits = 3),
+      rows = variable == "grade"
+    ) |>
+    modify_fmt_fun(
+      estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
+    )
+  gt_tbl <- tbl |> as_gt()
+
+  # formatted cells
+  expect_equal(
+    gt_tbl$`_formats`[[12]]$func$default(gt_tbl$`_data`$p.value),
+    c("0.096", NA, NA, "0.688", "0.972")
+  )
+
+  # formatted column
+  expect_equal(
+    gt_tbl$`_formats`[[13]]$func$default(gt_tbl$`_data`$estimate),
+    c("1,0191", NA, NA, "0,8535", "1,0136")
+  )
+
+  tbl2 <- tbl_uvregression(
+    trial |> dplyr::select(response, age, grade),
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) |>
+    modify_fmt_fun(
+      stat_n ~ function(x) style_number(x, digits = 2),
+      rows = variable == "age"
+    ) |>
+    modify_fmt_fun(
+      stat_n ~ label_style_number(digits = 4),
+      rows = variable == "grade"
+    ) |>
+    modify_fmt_fun(
+      c(conf.low, conf.high) ~ label_style_sigfig(digits = 3)
+    )
+  gt_tbl2 <- tbl2 |> as_gt()
+
+  # formatted cell
+  expect_equal(
+    gt_tbl2$`_formats`[[22]]$func$default(gt_tbl2$`_data`$stat_n),
+    c("183.0000", "193.0000", NA, NA, NA)
+  )
+
+  # formatted column
+  expect_equal(
+    gt_tbl2$`_data`$conf.low,
+    c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
+  )
+})
+
 test_that("as_gt passes column merging correctly", {
   tbl <- my_tbl_regression |>
     modify_column_merge(
