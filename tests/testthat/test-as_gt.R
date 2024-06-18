@@ -332,12 +332,22 @@ test_that("as_gt passes captions correctly", {
 })
 
 test_that("as_gt passes missing symbols correctly", {
-  # specify missing symbol
   tbl <- my_tbl_summary |>
-    modify_table_body(~ .x |> mutate(stat_0 = NA_character_)) |>
+    modify_table_body(~ .x |> mutate(stat_0 = NA_character_))
+  gt_tbl <- tbl |> as_gt()
+
+  # no substitution for missing values
+  expect_equal(
+    length(gt_tbl$`_substitutions`),
+    1
+  )
+
+  # specify missing symbol
+  tbl <- tbl |>
     modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
   gt_tbl <- tbl |> as_gt()
 
+  # correct substitution for missing values
   expect_equal(
     tbl |>
       as_tibble.gtsummary(col_labels = FALSE, fmt_missing = TRUE) |>
@@ -346,7 +356,7 @@ test_that("as_gt passes missing symbols correctly", {
   )
 })
 
-test_that("column merging", {
+test_that("as_gt passes column merging correctly", {
   tbl <- my_tbl_regression |>
     modify_column_merge(
       pattern = "{estimate} (pval {p.value})",
@@ -362,7 +372,7 @@ test_that("column merging", {
     gt_tbl$`_data`$conf.low
   )
 
-  # estimate (custom column merging)
+  # estimate (added custom column merging)
   expect_equal(
     tbl |>
       as_tibble(col_labels = FALSE) |>
