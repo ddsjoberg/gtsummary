@@ -59,6 +59,7 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   check_not_missing(cards)
   check_not_missing(variable)
   check_not_missing(include)
+  check_class(cards, "card")
 
   # define a data frame based on the context of `card` -------------------------
   data <- bootstrap_df_from_cards(cards)
@@ -74,6 +75,37 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
     )
   )
 
+  # check the structure of the cards object ------------------------------------
+  # check that the continuous variable appears somewhere in `cards$variable`
+  if (!"variable" %in% names(cards) || !variable %in% cards$variable) {
+    cli::cli_abort(
+      "The continuous variable specified in argument {.arg variable} must
+       appear in the column {.code cards$variable}.",
+      call = get_cli_abort_call()
+    )
+  }
+  if (!is_empty(by) && (!"group2" %in% names(cards) || !all(include %in% cards$group2))) {
+    cli::cli_abort(
+      "All variables specified in argument {.arg include} must
+       appear in the column {.code cards$group2}.",
+      call = get_cli_abort_call()
+    )
+  }
+  if (is_empty(by) && (!"group1" %in% names(cards) || !all(include %in% cards$group1))) {
+    cli::cli_abort(
+      "All variables specified in argument {.arg include} must
+       appear in the column {.code cards$group1}.",
+      call = get_cli_abort_call()
+    )
+  }
+  if (!is_empty(by) && (!"group1" %in% names(cards) || !by %in% cards$group1)) {
+    cli::cli_abort(
+      "The variables specified in argument {.arg by} must
+       appear in the column {.code cards$group1}.",
+      call = get_cli_abort_call()
+    )
+  }
+
   cards::process_formula_selectors(
     data[include],
     statistic = statistic,
@@ -81,6 +113,11 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   )
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
+  cards::check_list_elements(
+    x = statistic,
+    predicate = \(x) is_string(x),
+    error_msg = "Elements of the {.arg statistic} argument must be strings."
+  )
 
   # save processed function inputs ---------------------------------------------
   tbl_ard_continuous_inputs <- as.list(environment())
@@ -89,10 +126,10 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
 
   # adding attributes if not already present
   missing_ard_attributes <-
-    dplyr::filter(cards, .data$variable %in% .env$include, .data$context %in% "attributes") |>
+    dplyr::filter(cards, .data$variable %in% c(.env$include, .env$variable, .env$by), .data$context %in% "attributes") |>
     dplyr::pull("variable") |>
     unique() %>%
-    {setdiff(include, .)}
+    {setdiff(c(include, variable, by), .)}
   if (!is_empty(missing_ard_attributes)) {
     cards <- cards |>
       cards::bind_ard(
