@@ -2,8 +2,7 @@ skip_on_cran()
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
-  tbl_summary() |>
-  modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+  tbl_summary()
 my_tbl_cross <- tbl_cross(trial, trt, grade)
 my_tbl_regression <- lm(marker ~ age, trial) |> tbl_regression()
 my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
@@ -240,12 +239,39 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
       dplyr::pull(footnotes) |>
       unlist()
   )
+
+  # customized footnotes
+  tbl <- my_tbl_summary |>
+    modify_footnote(
+      all_stat_cols() ~ "replace old footnote",
+      label = "another new footnote"
+    )
+  gt_tbl <- tbl |> as_gt()
+
+  expect_equal(
+    tbl$table_styling$footnote$column,
+    gt_tbl$`_footnotes`$colname
+  )
+  expect_equal(
+    tbl$table_styling$footnote$footnote,
+    gt_tbl$`_footnotes`$footnotes |> unlist()
+  )
 })
 
 test_that("as_gt passes table indentation correctly", {
   expect_equal(
     my_tbl_summary$table_styling$indent$n_spaces[2],
     gt_tbl_summary$`_transforms`[[1]]$fn("") |> nchar()
+  )
+
+  # indentation removed
+  tbl <- my_tbl_summary |>
+    modify_column_indent(columns = label, indent = 0)
+  gt_tbl <- tbl |> as_gt()
+
+  expect_equal(
+    gt_tbl$`_transforms` |> length(),
+    0
   )
 })
 
