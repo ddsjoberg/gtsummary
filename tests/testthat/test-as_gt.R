@@ -352,3 +352,42 @@ test_that("as_gt passes missing symbols correctly", {
     gt_tbl$`_substitutions`[[2]]$func$default(gt_tbl$`_data`$stat_0)
   )
 })
+
+test_that("column merging", {
+  tbl <- my_tbl_regression |>
+    modify_column_merge(
+      pattern = "{estimate} (pval {p.value})",
+      rows = !is.na(estimate)
+    )
+  gt_tbl <- tbl |> as_gt()
+
+  # apply fmt_funs to statistics
+  tbl$table_body[tbl$table_styling$fmt_fun$column] <-
+    tbl$table_body |>
+    dplyr::select(tbl$table_styling$fmt_fun$column) |>
+    apply(1, \(x) {
+      sapply(
+        seq_along(x),
+        \(i) tbl$table_styling$fmt_fun$fmt_fun[[i]](x[[i]])
+      )
+    }) |>
+    as.list()
+
+  # conf.low (default column merging)
+  expect_equal(
+    glue::glue(
+      tbl$table_styling$cols_merge$pattern[1],
+      .envir = tbl$table_body
+    ),
+    gt_tbl$`_data`$conf.low
+  )
+
+  # estimate (custom column merging)
+  expect_equal(
+    glue::glue(
+      tbl$table_styling$cols_merge$pattern[3],
+      .envir = tbl$table_body
+    ),
+    gt_tbl$`_data`$estimate
+  )
+})
