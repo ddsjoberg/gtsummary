@@ -13,7 +13,6 @@ tbl_wide_summary(
   type = NULL,
   value = NULL,
   sort = all_categorical(FALSE) ~ "alphanumeric",
-  percent = c("column", "row", "cell"),
   include = everything()
 )
 }
@@ -51,10 +50,6 @@ with this argument. Default is \code{NULL}. See below for details.}
 Specifies sorting to perform for categorical variables.
 Values must be one of \code{c("alphanumeric", "frequency")}.
 Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
-
-\item{percent}{(\code{string})\cr
-Indicates the type of percentage to return.
-Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}}
