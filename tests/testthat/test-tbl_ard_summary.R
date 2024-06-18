@@ -1,13 +1,11 @@
 # adding a few basic tests here to ensure we don't break the function with other updates
 test_that("tbl_ard_summary() works", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
   expect_snapshot(
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = ARM,
-      ard_categorical(variables = "AGEGR1"),
-      ard_continuous(variables = "AGE"),
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -16,10 +14,10 @@ test_that("tbl_ard_summary() works", {
   )
 
   expect_snapshot(
-    ard_stack(
-      data = ADSL,
-      ard_categorical(variables = "AGEGR1"),
-      ard_continuous(variables = "AGE"),
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -64,14 +62,12 @@ test_that("tbl_ard_summary(cards)", {
 })
 
 test_that("tbl_ard_summary(cards) error messages", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
   expect_snapshot(
     error = TRUE,
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = c(ARM, AGEGR1),
-      ard_continuous(variables = "AGE"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -117,13 +113,11 @@ test_that("tbl_ard_summary(by) messaging", {
 })
 
 test_that("tbl_ard_summary(statistic) argument works", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
   ard <-
-    ard_stack(
-      data = ADSL,
-      ard_categorical(variables = "AGEGR1"),
-      ard_continuous(variables = "AGE"),
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     )
@@ -148,14 +142,12 @@ test_that("tbl_ard_summary(statistic) argument works", {
 
 
 test_that("tbl_ard_summary(type) error messages", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
   expect_snapshot(
     error = TRUE,
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = ARM,
-      ard_continuous(variables = "AGE"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -164,10 +156,10 @@ test_that("tbl_ard_summary(type) error messages", {
 
   expect_snapshot(
     error = TRUE,
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = ARM,
-      ard_categorical(variables = "AGEGR1"),
+      cards::ard_categorical(variables = "AGEGR1"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -176,14 +168,12 @@ test_that("tbl_ard_summary(type) error messages", {
 })
 
 test_that("tbl_ard_summary(statistic) error messages", {
-  withr::local_package(package = "cards") # TODO: We can delete this after ard_stack() works when cards not loaded
-
   expect_snapshot(
     error = TRUE,
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = ARM,
-      ard_continuous(variables = "AGE"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -192,10 +182,10 @@ test_that("tbl_ard_summary(statistic) error messages", {
 
   expect_snapshot(
     error = TRUE,
-    ard_stack(
-      data = ADSL,
+    cards::ard_stack(
+      data = cards::ADSL,
       .by = ARM,
-      ard_continuous(variables = "AGE"),
+      cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>

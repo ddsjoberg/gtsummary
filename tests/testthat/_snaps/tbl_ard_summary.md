@@ -1,9 +1,9 @@
 # tbl_ard_summary() works
 
     Code
-      as.data.frame(tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_categorical(
-        variables = "AGEGR1"), ard_continuous(variables = "AGE"), .attributes = TRUE,
-      .missing = TRUE), by = ARM))
+      as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM,
+      cards::ard_categorical(variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"),
+      .attributes = TRUE, .missing = TRUE), by = ARM))
     Output
         **Characteristic** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
       1 Pooled Age Group 1                  <NA>                               <NA>
@@ -21,8 +21,9 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_summary(ard_stack(data = ADSL, ard_categorical(variables = "AGEGR1"),
-      ard_continuous(variables = "AGE"), .attributes = TRUE, .missing = TRUE)))
+      as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
+        variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"), .attributes = TRUE,
+      .missing = TRUE)))
     Output
         **Characteristic**       **N = 254**
       1 Pooled Age Group 1              <NA>
@@ -46,8 +47,9 @@
 # tbl_ard_summary(cards) error messages
 
     Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = c(ARM, AGEGR1), ard_continuous(
-        variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM)
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = c(ARM, AGEGR1),
+      cards::ard_continuous(variables = "AGE"), .attributes = TRUE, .missing = TRUE),
+      by = ARM)
     Condition
       Error in `tbl_ard_summary()`:
       ! The `cards` object may only contain a single stratifying variable.
@@ -114,8 +116,9 @@
 # tbl_ard_summary(type) error messages
 
     Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
-      .attributes = TRUE, .missing = TRUE), by = ARM, type = list(AGE = "categorical"))
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM, type = list(
+        AGE = "categorical"))
     Condition
       Error in `tbl_ard_summary()`:
       ! Summary type for variable "AGE" must be one of "continuous" and "continuous2", not "categorical".
@@ -123,8 +126,9 @@
 ---
 
     Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_categorical(variables = "AGEGR1"),
-      .attributes = TRUE, .missing = TRUE), by = ARM, type = list(AGEGR1 = "continuous"))
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_categorical(
+        variables = "AGEGR1"), .attributes = TRUE, .missing = TRUE), by = ARM, type = list(
+        AGEGR1 = "continuous"))
     Condition
       Error in `tbl_ard_summary()`:
       ! Summary type for variable "AGEGR1" must be "categorical", not "continuous".
@@ -132,8 +136,9 @@
 # tbl_ard_summary(statistic) error messages
 
     Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
-      .attributes = TRUE, .missing = TRUE), by = ARM, statistic = list(AGE = "{not_a_valid_summary_statistic}"))
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM,
+      statistic = list(AGE = "{not_a_valid_summary_statistic}"))
     Condition
       Error in `tbl_ard_summary()`:
       ! Statistic "not_a_valid_summary_statistic" is not available for variable "AGE".
@@ -142,9 +147,9 @@
 ---
 
     Code
-      tbl_ard_summary(ard_stack(data = ADSL, .by = ARM, ard_continuous(variables = "AGE"),
-      .attributes = TRUE, .missing = TRUE), by = ARM, statistic = list(AGE = c(
-        "{mean}", "{median}")))
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+        variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM,
+      statistic = list(AGE = c("{mean}", "{median}")))
     Condition
       Error in `tbl_ard_summary()`:
       ! Variable "AGE" is type `continuous` and `statistic` argument value must be a string of length one.
