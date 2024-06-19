@@ -13,46 +13,6 @@ ft_tbl_summary <- my_tbl_summary |> as_flex_table()
 ft_tbl_regression <- my_tbl_regression |> as_flex_table()
 ft_spanning_tbl <- my_spanning_tbl |> as_flex_table()
 
-
-
-test_that("tbl_merge/tbl_stack", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
-
-  t1 <-
-    glm(response ~ trt + grade + age, trial, family = binomial) |>
-    tbl_regression(exponentiate = TRUE)
-  t2 <-
-    survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) |>
-    tbl_regression(exponentiate = TRUE)
-
-  tbl_merge_ex1 <-
-    tbl_merge(
-      tbls = list(t1, t2),
-      tab_spanner = c("**Tumor Response**", "**Time to Death**")
-    )
-
-  tbl <- as_flex_table(tbl_merge_ex1)
-
-  tbl_stack_ex1 <-
-    tbl_stack(
-      tbls = list(t1, t2),
-      group_header = c("**Tumor Response**", "**Time to Death**")
-    )
-
-  tbl <- as_flex_table(tbl_merge_ex1)
-})
-
-test_that("source notes", {
-  # this is a bad test, because it does not actually test that the footnote/source note is accurate
-  expect_snapshot(
-    mtcars |>
-      tbl_cross(row = vs, col = am,
-                margin = "column") |>
-      add_p(source_note = TRUE) |>
-      as_flex_table()
-  )
-})
-
 test_that("as_flex_table works with standard use", {
   # return_calls argument does not produce warnings
   expect_silent(my_tbl_summary |> as_flex_table(return_calls = TRUE))
@@ -64,6 +24,52 @@ test_that("as_flex_table works with standard use", {
   expect_equal(
     names(ft_tbl_summary),
     c("header", "body", "footer", "col_keys", "caption", "blanks", "properties")
+  )
+})
+
+test_that("as_flex_table works with tbl_survfit", {
+  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
+  tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
+
+  expect_silent(ft_tbl <- tbl |> as_flex_table())
+
+  # check for correct table contents
+  expect_equal(
+    tbl |> as_tibble(col_labels = FALSE),
+    ft_tbl$body$dataset |> as_tibble(),
+    ignore_attr = "names"
+  )
+})
+
+test_that("as_flex_table works with tbl_merge", {
+  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+
+  t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
+    tbl_regression(exponentiate = TRUE)
+  t2 <- survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) |>
+    tbl_regression(exponentiate = TRUE)
+
+  tbl <- tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+  ft_tbl <- tbl |> as_flex_table()
+
+  # header labels span correct columns
+  expect_equal(
+    ft_tbl$header$spans$rows[1, ],
+    c(1, 3, 0, 0, 3, 0, 0)
+  )
+  expect_equal(
+    ft_tbl$header$spans$rows[2, ],
+    rep(1, 7)
+  )
+
+  # spanning header labels are correct
+  expect_equal(
+    ft_tbl$header$dataset[1, ] |> unlist(use.names = FALSE),
+    c(" ", rep("**Tumor Response**", 3), rep("**Time to Death**", 3))
   )
 })
 
@@ -108,21 +114,6 @@ test_that("as_flex_table passes table contents correctly", {
   expect_equal(
     my_spanning_tbl |> as_tibble(col_labels = FALSE),
     ft_spanning_tbl$body$dataset |> as_tibble()
-  )
-})
-
-test_that("as_flex_table works with tbl_survfit", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
-  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
-  tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
-
-  expect_silent(ft_tbl <- tbl |> as_flex_table())
-
-  # check for correct table contents
-  expect_equal(
-    tbl |> as_tibble(col_labels = FALSE),
-    ft_tbl$body$dataset |> as_tibble(),
-    ignore_attr = "names"
   )
 })
 
@@ -413,4 +404,3 @@ test_that("as_flex_table passes column merging correctly", {
     ft_tbl$body$dataset$estimate
   )
 })
-
