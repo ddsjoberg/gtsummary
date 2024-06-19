@@ -356,13 +356,13 @@ test_that("as_flex_table applies formatting functions correctly", {
 
   # formatted cells
   expect_equal(
-    ft_tbl$`_formats`[[12]]$func$default(ft_tbl$`_data`$p.value),
-    c("0.096", NA, NA, "0.688", "0.972")
+    ft_tbl$body$dataset$p.value,
+    c("0.10", NA, NA, "0.688", "0.972")
   )
 
   # formatted column
   expect_equal(
-    ft_tbl$`_formats`[[13]]$func$default(ft_tbl$`_data`$estimate),
+    ft_tbl$body$dataset$estimate,
     c("1,0191", NA, NA, "0,8535", "1,0136")
   )
 
@@ -388,13 +388,13 @@ test_that("as_flex_table applies formatting functions correctly", {
 
   # formatted cell
   expect_equal(
-    ft_tbl2$`_formats`[[22]]$func$default(ft_tbl2$`_data`$stat_n),
-    c("183.0000", "193.0000", NA, NA, NA)
+    ft_tbl2$body$dataset$stat_n,
+    c("183.00", "193.0000", NA, NA, NA)
   )
 
   # formatted column
   expect_equal(
-    ft_tbl2$`_data`$conf.low,
+    ft_tbl2$body$dataset$conf.low,
     c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
   )
 })
