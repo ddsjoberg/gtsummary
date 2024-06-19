@@ -7,7 +7,8 @@
 inline_text(x, ...)
 }
 \arguments{
-\item{x}{Object created from a gtsummary function}
+\item{x}{(\code{gtsummary})\cr
+Object created from a gtsummary function}
 
 \item{...}{Additional arguments passed to other methods.}
 }
@@ -16,6 +17,11 @@ A string reporting results from a gtsummary table
 }
 \description{
 Report statistics from gtsummary tables inline
+}
+\seealso{
+\link{inline_text.tbl_summary}, \link{inline_text.tbl_svysummary},
+\link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression},
+\link{inline_text.tbl_survfit}, \link{inline_text.tbl_cross}, \link{inline_text.gtsummary}
 }
 \author{
 Daniel D. Sjoberg

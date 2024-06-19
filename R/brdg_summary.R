@@ -110,38 +110,6 @@ brdg_summary <- function(cards,
                          missing_text = "Unknown") {
   set_cli_abort_call()
 
-  # add gts info to the cards table --------------------------------------------
-  # adding the name of the column the stats will populate
-  if (is_empty(by)) {
-    cards$gts_column <-
-      ifelse(
-        !cards$context %in% "attributes",
-        "stat_0",
-        NA_character_
-      )
-  } else {
-    cards <-
-      cards %>%
-      {
-        dplyr::left_join(
-          .,
-          dplyr::filter(
-            .,
-            .data$variable %in% .env$variables,
-            !cards$context %in% "attributes",
-          ) |>
-            dplyr::select(cards::all_ard_groups(), "variable", "context") |>
-            dplyr::distinct() |>
-            dplyr::mutate(
-              .by = cards::all_ard_groups(),
-              gts_column = paste0("stat_", dplyr::cur_group_id())
-            ),
-          by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
-        )
-      }
-  }
-
-
   # build the table body pieces with bridge functions and stack them -----------
   x <- list()
   x$table_body <-
