@@ -284,26 +284,16 @@ test_that("as_flex_table passes appended glance statistics correctly", {
     add_glance_table(c("r.squared", "BIC"))
   ft_tbl <- tbl |> as_flex_table()
 
-  loc_hline <- tbl$table_body |>
-    tibble::rownames_to_column() |>
-    dplyr::filter(!!tbl$table_styling$horizontal_line_above) |>
-    dplyr::pull(rowname) |>
-    as.numeric()
-
   expect_equal(
-    tbl$table_body |> dplyr::select(-conf.low),
-    ft_tbl$`_data` |> dplyr::select(-conf.low),
-    ignore_attr = "class"
+    tbl |> as_tibble(col_labels = FALSE),
+    ft_tbl$body$dataset |> as_tibble(),
+    ignore_attr = c("class", "names")
   )
   expect_equal(
-    tbl$table_styling$source_note,
-    ft_tbl$`_source_notes`[[1]],
-    ignore_attr = "class"
+    tbl$table_styling$source_note[1],
+    ft_tbl$footer$content$data[2, ]$label$txt
   )
-  expect_equal(
-    loc_hline,
-    ft_tbl$`_styles`$rownum |> unique()
-  )
+  expect_equal(length(ft_tbl$body$hrule), 3)
 })
 
 test_that("as_flex_table passes captions correctly", {
@@ -412,7 +402,7 @@ test_that("as_flex_table passes column merging correctly", {
     tbl |>
       as_tibble(col_labels = FALSE) |>
       dplyr::pull(conf.low),
-    ft_tbl$`_data`$conf.low
+    ft_tbl$body$dataset$conf.low
   )
 
   # estimate (added custom column merging)
@@ -420,7 +410,7 @@ test_that("as_flex_table passes column merging correctly", {
     tbl |>
       as_tibble(col_labels = FALSE) |>
       dplyr::pull(estimate),
-    ft_tbl$`_data`$estimate
+    ft_tbl$body$dataset$estimate
   )
 })
 
