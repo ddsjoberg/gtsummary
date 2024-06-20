@@ -109,12 +109,6 @@ test_that("as_flex_table passes table contents correctly", {
     ft_tbl_uvregression$body$dataset |> as_tibble(),
     ignore_attr = c("class", "names")
   )
-
-  # spanning_tbl
-  expect_equal(
-    my_spanning_tbl |> as_tibble(col_labels = FALSE),
-    ft_spanning_tbl$body$dataset |> as_tibble()
-  )
 })
 
 test_that("as_flex_table works with bold/italics", {
@@ -134,6 +128,33 @@ test_that("as_flex_table works with bold/italics", {
     eval_tidy(tbl$table_styling$text_format$rows[[2]], data = tbl$table_body),
     ft_tbl$body$styles$text$italic$data[, 1]
   )
+
+  # markdown syntax for bold/italics in headers & spanning headers works
+  tbl <- my_spanning_tbl |>
+    modify_spanning_header(
+      stat_1 ~ "_Test_ **1**",
+      stat_3 ~ "_Test_ **2**"
+    ) |>
+    modify_header(
+      all_stat_cols() ~ "**Level**: _{level}_"
+    )
+  ft_tbl <- tbl |> as_flex_table()
+
+  # formatting kept in header$dataset
+  expect_equal(
+    ft_tbl$header$dataset[1, ] |> unlist(use.names = FALSE),
+    c(" ", "_Test_ **1**", " ", "_Test_ **2**")
+  )
+  # formatting removed in header$content$data & applied correctly to text (spanning header)
+  expect_equal(
+    ft_tbl$header$content$data[1, ]$stat_1[c("txt", "italic", "bold")],
+    data.frame(txt = c("Test", " ", "1"), italic = c(TRUE, NA, NA), bold = c(NA, NA, TRUE))
+  )
+  # formatting removed in header$content$data & applied correctly to text (non-spanning header)
+  expect_equal(
+    ft_tbl$header$content$data[2, ]$stat_2[c("txt", "italic", "bold")],
+    data.frame(txt = c("Level", ": ", "II", "1"), italic = c(NA, NA, TRUE, NA), bold = c(TRUE, NA, NA, NA))
+  )
 })
 
 test_that("as_flex_table passes table header labels correctly", {
@@ -144,7 +165,7 @@ test_that("as_flex_table passes table header labels correctly", {
     ft_tbl_summary$header$col_keys
   )
   expect_equal(
-    gsub("[**|__]", "", my_tbl_summary$table_styling$header$label[vis_cols]),
+    gsub("[**|_]", "", my_tbl_summary$table_styling$header$label[vis_cols]),
     apply(ft_tbl_summary$header$content$data, 2, \(x) x[[1]]$txt[1]) |> unname()
   )
 
