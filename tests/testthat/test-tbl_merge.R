@@ -166,8 +166,9 @@ test_that("tbl_merge works with more complex merge", {
 })
 
 test_that("tbl_merge returns expected message when nonunique columns present", {
-  expect_snapshot(
-    tbl_merge(list(tbl_stack(list(t1, t1))))
+  expect_message(
+    tbl_merge(list(tbl_stack(list(t1, t1)))),
+    "not unique and the merge may fail or result in a malformed table"
   )
 })
 

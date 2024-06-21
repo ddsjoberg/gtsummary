@@ -15,13 +15,6 @@
       3       0.003
       4        <NA>
 
-# tbl_merge returns expected message when nonunique columns present
-
-    Code
-      tbl_merge(list(tbl_stack(list(t1, t1))))
-    Message
-      The merging columns (variable name, variable label, row type, and label column) are not unique and the merge may fail or result in a malformed table. If you previously called `tbl_stack()` on your tables, then merging with `tbl_merge()` before calling `tbl_stack` may resolve the issue.
-
 # tbl_merge throws expected errors
 
     Code
