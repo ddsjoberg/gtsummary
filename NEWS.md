@@ -6,6 +6,8 @@
 
 #### User-facing Updates
 
+* The function `tbl_wide_summary()` function has been added.
+
 * The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
 
 * The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()`.
