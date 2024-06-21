@@ -19,9 +19,9 @@ A string reporting results from a gtsummary table
 Report statistics from gtsummary tables inline
 }
 \seealso{
-\link{inline_text.tbl_summary}, \link{inline_text.tbl_svysummary},
-\link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression},
-\link{inline_text.tbl_survfit}, \link{inline_text.tbl_cross}, \link{inline_text.gtsummary}
+\code{\link[=inline_text.tbl_summary]{inline_text.tbl_summary()}}, \code{\link[=inline_text.tbl_svysummary]{inline_text.tbl_svysummary()}},
+\code{\link[=inline_text.tbl_regression]{inline_text.tbl_regression()}}, \code{\link[=inline_text.tbl_uvregression]{inline_text.tbl_uvregression()}},
+\code{\link[=inline_text.tbl_survfit]{inline_text.tbl_survfit()}}, \code{\link[=inline_text.tbl_cross]{inline_text.tbl_cross()}}, \code{\link[=inline_text.gtsummary]{inline_text.gtsummary()}}
 }
 \author{
 Daniel D. Sjoberg
