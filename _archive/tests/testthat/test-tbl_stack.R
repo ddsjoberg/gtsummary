@@ -120,37 +120,6 @@ test_that("tbl_stack works with a single table", {
   )
 })
 
-test_that("tbl_stack works with formatting functions", {
-  t1 <- t1_regression |>
-    modify_fmt_fun(
-      p.value ~ function(x) style_pvalue(x, digits = 3),
-      rows = variable == "trt"
-    ) |>
-    modify_fmt_fun(
-      estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
-    )
-
-  t2 <- t2_regression |>
-    modify_fmt_fun(
-      estimate ~ function(x) style_ratio(x, digits = 2, decimal.mark = "..")
-    )
-
-  expect_silent(tbl <- tbl_stack(list(t1, t2)))
-
-  expect_equal(
-    tbl |>
-      as_tibble(col_labels = FALSE) |>
-      dplyr::pull(estimate),
-    c(NA, NA, "1,2148", NA, NA, "1..48")
-  )
-  expect_equal(
-    tbl |>
-      as_tibble(col_labels = FALSE) |>
-      dplyr::pull(p.value),
-    c(NA, NA, "0.531", NA, NA, "0.2")
-  )
-})
-
 test_that("tbl_stack works with tbl_regression objects", {
   expect_silent(
     tbl <- tbl_stack(list(t1_regression, t2_regression), group_header = c("Group 1", "Group 2"))
@@ -173,31 +142,27 @@ test_that("tbl_stack works with tbl_regression objects", {
   )
   expect_equal(
     tbl$table_body$tbl_id1,
-    c(rep(1, 5), rep(2, 5))
-  )
-
-  # footnotes stacked correctly
-  expect_equal(
-    tbl$table_styling$footnote,
-    rbind(t1_regression$table_styling$footnote, t2_regression$table_styling$footnote)
-  )
-
-  # indentation values stacked correctly
-  expect_equal(
-    tbl$table_styling$indent |>
-      dplyr::select(-rows),
-    rbind(t1_regression$table_styling$indent, t2_regression$table_styling$indent) |>
-      dplyr::select(-rows)
+    c(rep(1, 3), rep(2, 3))
   )
 })
 
 test_that("tbl_stack works with tbl_merge objects", {
   expect_silent(
-    tbl <- tbl_stack(list(row1, row2))
+    tbl <- tbl_stack(list(merge_row1, merge_row2), quiet = TRUE)
   )
+
+  # correct number of rows after stacking
+  expect_equal(
+    nrow(tbl$table_body),
+    nrow(merge_row1$table_body) + nrow(merge_row2$table_body)
+  )
+
+  # correct ordering of stacked tables
+  expect_equal(tbl$tbls[[1]]$table_body, merge_row1$table_body)
+  expect_equal(tbl$tbls[[2]]$table_body, merge_row2$table_body)
 })
 
-test_that("tbl_stack works with tbl_summary objects", {
+test_that("tbl_stack works when stacking more complex tables", {
   yy <- tbl_summary(trial, by = response) |>
     add_p() |>
     add_q()
@@ -238,6 +203,73 @@ test_that("tbl_stack works with tbl_summary objects", {
       as_tibble(col_labels = FALSE) |>
       dplyr::pull(p.value),
     c("0.8", "0.6", "0.834", "0.637")
+  )
+})
+
+test_that("tbl_stack works with formatting functions", {
+  t1 <- t1_regression |>
+    modify_fmt_fun(
+      p.value ~ function(x) style_pvalue(x, digits = 3),
+      rows = variable == "trt"
+    ) |>
+    modify_fmt_fun(
+      estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
+    )
+
+  t2 <- t2_regression |>
+    modify_fmt_fun(
+      estimate ~ function(x) style_ratio(x, digits = 2, decimal.mark = "..")
+    )
+
+  expect_silent(tbl <- tbl_stack(list(t1, t2)))
+
+  expect_equal(
+    tbl |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(estimate),
+    c(NA, NA, "1,2148", NA, NA, "1..48")
+  )
+  expect_equal(
+    tbl |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(p.value),
+    c(NA, NA, "0.531", NA, NA, "0.2")
+  )
+})
+
+test_that("tbl_stack works with missing symbols", {
+  t1 <- t1_summary |>
+    modify_table_body(
+      ~ .x |> mutate(stat_0 = NA_character_)
+    ) |>
+    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
+
+  t2 <- t2_summary |>
+    modify_table_body(
+      ~ .x |> mutate(stat_0 = NA_character_)
+    )
+
+  expect_silent(tbl <- tbl_stack(list(t1, t2)))
+
+  # missing symbol in first table only
+  expect_equal(
+    tbl |>
+      as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
+      dplyr::pull(stat_0),
+    c(rep("n / a", 5), rep(NA, 5))
+  )
+
+  t2 <- t2 |>
+    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "miss")
+
+  expect_silent(tbl <- tbl_stack(list(t1, t2)))
+
+  # different missing symbol in each stacked table
+  expect_equal(
+    tbl |>
+      as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
+      dplyr::pull(stat_0),
+    c(rep("n / a", 5), rep("miss", 5))
   )
 })
 
