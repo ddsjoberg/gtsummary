@@ -1,10 +1,10 @@
 test_that("add_n.tbl_survfit() works", {
   tbl <- trial |>
     tbl_survfit(
-    include = trt,
-    y = "Surv(ttdeath, death)",
-    times = 12
-  )
+      include = trt,
+      y = "Surv(ttdeath, death)",
+      times = 12
+    )
 
   # total N added to table is accurate
   expect_silent(
@@ -13,12 +13,12 @@ test_that("add_n.tbl_survfit() works", {
 
   expect_equal(
     as.data.frame(res, col_label = FALSE)$N,
-    c('200', NA, NA)
+    c("200", NA, NA)
   )
 
   # stacked survfits works
-  fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-  fit2 <- survfit(Surv(ttdeath, death) ~ grade, trial)
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
+  fit2 <- survival::survfit(survival::Surv(ttdeath, death) ~ grade, trial)
 
   expect_silent(
     res1 <- list(fit1, fit2) |>
@@ -27,7 +27,7 @@ test_that("add_n.tbl_survfit() works", {
   )
   expect_equal(
     as.data.frame(res1, col_label = FALSE)$N,
-    c('200', '200', NA, NA, NA)
+    c("200", "200", NA, NA, NA)
   )
 
 

@@ -6,19 +6,19 @@ test_that("add_n.tbl_survfit() works", {
       times = 12
     )
 
-  # total N added to table is accurate
+  # total N events added to table is accurate
   expect_silent(
     res <- tbl |> add_nevent()
   )
 
   expect_equal(
     as.data.frame(res, col_label = FALSE)$nevent,
-    c('112', NA, NA)
+    c("112", NA, NA)
   )
 
   # stacked survfits works
-  fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-  fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
+  fit2 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
 
   expect_silent(
     res1 <- list(fit1, fit2) |>
@@ -27,7 +27,7 @@ test_that("add_n.tbl_survfit() works", {
   )
   expect_equal(
     as.data.frame(res1, col_label = FALSE)$nevent,
-    c('112', '112', NA, NA)
+    c("112", "112", NA, NA)
   )
 
 
@@ -38,8 +38,8 @@ test_that("add_n.tbl_survfit() works", {
   )
 
   # mess with the tbl_survfit object to trigger error
-  res3 <- list(fit1, fit2)  |>
-      tbl_survfit(times = c(12, 24))
+  res3 <- list(fit1, fit2) |>
+    tbl_survfit(times = c(12, 24))
   class(res3$inputs$x[[1]]) <- NULL
   expect_error(
     res3 |> add_nevent(),
