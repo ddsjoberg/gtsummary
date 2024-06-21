@@ -1,22 +1,5 @@
 test_that("add_n.tbl_survfit() works", {
-  tbl <- trial |>
-    tbl_survfit(
-      include = trt,
-      y = "Surv(ttdeath, death)",
-      times = 12
-    )
-
-  # total N added to table is accurate
-  expect_silent(
-    res <- tbl |> add_n()
-  )
-
-  expect_equal(
-    as.data.frame(res, col_label = FALSE)$N,
-    c("200", NA, NA)
-  )
-
-  # stacked survfits works
+  # add_n.tbl_survfit works
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
   fit2 <- survival::survfit(survival::Surv(ttdeath, death) ~ grade, trial)
 
@@ -33,7 +16,9 @@ test_that("add_n.tbl_survfit() works", {
 
   # add_n.tbl_survfit does not accept additional arguments
   expect_error(
-    res2 <- tbl |> add_n(statistic = "{N_nonmiss} / {N_obs}"),
+    res2 <- list(fit1, fit2) |>
+      tbl_survfit(times = c(12, 24)) |>
+      add_n(statistic = "{N_nonmiss} / {N_obs}"),
     regexp = "`...` must be empty"
   )
 

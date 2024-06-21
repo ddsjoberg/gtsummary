@@ -16,7 +16,7 @@ test_that("add_n.tbl_survfit() works", {
     c("112", NA, NA)
   )
 
-  # stacked survfits works
+  # stacked fits work
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
   fit2 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
 
