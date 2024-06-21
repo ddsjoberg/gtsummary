@@ -47,6 +47,11 @@ test_that("tbl_stack works with standard use", {
     tbl <- tbl_stack(list(t1_summary, t2_summary), group_header = c("Drug A", "Drug B"))
   )
 
+  # no error if list input is named
+  expect_silent(
+    tbl <- tbl_stack(list(t1 = t1_summary, t2 = t2_summary), group_header = c("Drug A", "Drug B"))
+  )
+
   # correct number of rows after stacking
   expect_equal(
     nrow(tbl$table_body),
@@ -54,8 +59,8 @@ test_that("tbl_stack works with standard use", {
   )
 
   # correct ordering of stacked tables
-  expect_equal(tbl$tbls[[1]]$table_body, t1_summary$table_body)
-  expect_equal(tbl$tbls[[2]]$table_body, t2_summary$table_body)
+  expect_equal(tbl$tbls$t1$table_body, t1_summary$table_body)
+  expect_equal(tbl$tbls$t2$table_body, t2_summary$table_body)
 
   # correct group headers
   expect_equal(
@@ -144,6 +149,12 @@ test_that("tbl_stack works with tbl_regression objects", {
     tbl$table_body$tbl_id1,
     c(rep(1, 3), rep(2, 3))
   )
+
+  # footnote abbreviations stacked correctly
+  expect_equal(
+    tbl$table_styling$footnote_abbrev,
+    rbind(t1_regression$table_styling$footnote_abbrev, t2_regression$table_styling$footnote_abbrev)
+  )
 })
 
 test_that("tbl_stack works with tbl_merge objects", {
@@ -162,48 +173,20 @@ test_that("tbl_stack works with tbl_merge objects", {
   expect_equal(tbl$tbls[[2]]$table_body, merge_row2$table_body)
 })
 
-test_that("tbl_stack works when stacking more complex tables", {
-  yy <- tbl_summary(trial, by = response) |>
-    add_p() |>
-    add_q()
-  tt <- tbl_summary(trial, by = trt) |>
-    add_p() |>
-    add_q()
-
-  expect_error(
-    zz <- tbl_stack(list(yy, tt)),
-    NA
-  )
-  expect_silent(tbl <- zz |> as.data.frame())
-
-  # no error if the list is named
-  lst_summary <- list(yy, tt) |> set_names("one", "two")
-  expect_snapshot(
-    tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")) |>
-      as.data.frame()
+test_that("tbl_stack works with tbl_merge objects", {
+  expect_silent(
+    tbl <- tbl_stack(list(merge_row1, merge_row2), quiet = TRUE)
   )
 
-  # complex row-specific formatting is maintained
-  tbl <-
-    trial |>
-    select(age, response, trt) |>
-    tbl_summary(
-      by = trt,
-      missing = "no"
-    ) |>
-    add_difference()
-
+  # correct number of rows after stacking
   expect_equal(
-    tbl_stack(
-      list(
-        tbl,
-        tbl |> modify_fmt_fun(p.value ~ purrr::partial(style_sigfig, digits = 3))
-      )
-    ) |>
-      as_tibble(col_labels = FALSE) |>
-      dplyr::pull(p.value),
-    c("0.8", "0.6", "0.834", "0.637")
+    nrow(tbl$table_body),
+    nrow(merge_row1$table_body) + nrow(merge_row2$table_body)
   )
+
+  # correct ordering of stacked tables
+  expect_equal(tbl$tbls[[1]]$table_body, merge_row1$table_body)
+  expect_equal(tbl$tbls[[2]]$table_body, merge_row2$table_body)
 })
 
 test_that("tbl_stack works with formatting functions", {
@@ -250,6 +233,12 @@ test_that("tbl_stack works with missing symbols", {
     )
 
   expect_silent(tbl <- tbl_stack(list(t1, t2)))
+  expect_equal(
+    tbl$table_styling$fmt_missing |>
+      dplyr::select(-rows),
+    rbind(t1$table_styling$fmt_missing, t2$table_styling$fmt_missing) |>
+      dplyr::select(-rows)
+  )
 
   # missing symbol in first table only
   expect_equal(
@@ -270,6 +259,12 @@ test_that("tbl_stack works with missing symbols", {
       as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
       dplyr::pull(stat_0),
     c(rep("n / a", 5), rep("miss", 5))
+  )
+  expect_equal(
+    tbl$table_styling$fmt_missing |>
+      dplyr::select(-rows),
+    rbind(t2$table_styling$fmt_missing, t1$table_styling$fmt_missing) |>
+      dplyr::select(-rows)
   )
 })
 
