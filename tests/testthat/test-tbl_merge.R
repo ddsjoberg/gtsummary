@@ -165,6 +165,12 @@ test_that("tbl_merge works with more complex merge", {
   reset_gtsummary_theme()
 })
 
+test_that("tbl_merge returns expected message when nonunique columns present", {
+  expect_snapshot(
+    tbl_merge(list(tbl_stack(list(t1, t1))))
+  )
+})
+
 test_that("tbl_merge throws expected errors", {
   # input must be a list
   expect_snapshot(
@@ -175,6 +181,12 @@ test_that("tbl_merge throws expected errors", {
   # tables must be gtsummary tables
   expect_snapshot(
     tbl_merge(list(mtcars)),
+    error = TRUE
+  )
+
+  # correct spanning header type
+  expect_snapshot(
+    tbl_merge(tbls = list(t0, t1), tab_spanner = 1),
     error = TRUE
   )
 
