@@ -6,7 +6,7 @@
 
 #### User-facing Updates
 
-* The function `tbl_wide_summary()` function has been added.
+* Added functions `tbl_wide_summary()` and `tbl_ard_wide_summary()` for simple summaries across multiple columns.
 
 * The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
 
