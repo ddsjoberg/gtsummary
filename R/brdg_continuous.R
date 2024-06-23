@@ -36,7 +36,21 @@ brdg_continuous <- function(cards, by = NULL, statistic, include, variable) {
   set_cli_abort_call()
 
   # prepare the cards object for `brdg_summary()` ------------------------------
-  cards <- cards |>
+  cards <- .cards_continuous_to_summary(cards, by)
+
+  # Create table via `brdg_summary()` ------------------------------------------
+  brdg_summary(
+    cards = cards,
+    statistic = statistic,
+    by = by,
+    type = rep_named(include, list("categorical")),
+    variables = include,
+    missing = "no"
+  )
+}
+
+.cards_continuous_to_summary <- function(cards, by) {
+  cards |>
     dplyr::group_by(.data$context) |>
     dplyr::group_map(
       \(.x, .y) {
@@ -61,14 +75,4 @@ brdg_continuous <- function(cards, by = NULL, statistic, include, variable) {
     # dropping group2 and group2_level since they are all NA or NULL
     dplyr::select(-c(\(x) all(is.na(x)), \(x) is.null(unlist(x)))) |>
     structure(class = class(cards))
-
-  # Create table via `brdg_summary()` ------------------------------------------
-  brdg_summary(
-    cards = cards,
-    statistic = statistic,
-    by = by,
-    type = rep_named(include, list("categorical")),
-    variables = include,
-    missing = "no"
-  )
 }

@@ -31,6 +31,7 @@ inline_text.tbl_cross <- function(x,
                                   ...) {
   set_cli_abort_call()
   check_dots_empty()
+  check_not_missing(col_level)
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
@@ -44,8 +45,8 @@ inline_text.tbl_cross <- function(x,
 
   # row_level ----------------------------------------------------------------
   # converting row_level to a string
-  cards::process_selectors(vec_to_df(x$table_body$label), row_level = {{ row_level }})
-  check_scalar(row_level, allow_empty = TRUE)
+  row_level <-
+    .select_levels(lvl = {{ row_level }}, possible_lvls = x$table_body$label, lvl_argname =  "row_level", allow_empty = TRUE)
   if (is_empty(row_level)) variable <- x$inputs$row
   else {
     variable <-
@@ -61,12 +62,15 @@ inline_text.tbl_cross <- function(x,
                   .data$stat_name == "levels") |>
     dplyr::pull("stat") |>
     unlist()
-  cards::process_selectors(
-    data = col_var_lvls |>
-      c(intersect(c("stat_0", "p.value"), names(x$table_body))) |>
-      vec_to_df(),
-    col_level = {{ col_level }}
-  )
+  col_level <-
+    .select_levels(
+      lvl = {{ col_level }},
+      possible_lvls =
+        col_var_lvls |>
+        c(intersect(c("stat_0", "p.value"), names(x$table_body))),
+      lvl_argname =  "col_level",
+      allow_empty = FALSE
+    )
   if (col_level %in% col_var_lvls) {
     column <- paste0("stat_", which(col_var_lvls %in% col_level))
   } else {

@@ -77,16 +77,6 @@ inline_text.gtsummary <- function(x,
   }
 
   level <- enquo(level)
-  level <-
-    case_switch(
-      # if level is NULL/empty, return NULL
-      is_quo_empty(level) ~ NULL,
-      # if level is character, return as it is
-      tryCatch(is.character(eval_tidy(level)), error = \(e) FALSE) ~ eval_tidy(level),
-      # otherwise, convert expression to character
-      .default = expr_deparse(quo_get_expr(level))
-    )
-
 
   # adding raw stats if user will use them -------------------------------------
   if (!is_empty(pattern) && !is_empty(column)) {
@@ -96,7 +86,7 @@ inline_text.gtsummary <- function(x,
     # check structure of the cards object
     if (is_empty(cards) || !inherits(cards, "card") ||
         !"gts_column" %in% names(cards) || !column %in% cards$gts_column || !variable %in% cards$variable ||
-        (!is_empty(level) && !"variable_level" %in% names(cards))) {
+        (!is_quo_empty(level) && !"variable_level" %in% names(cards))) {
       cli::cli_abort(
         "The structure of this table does not support use of the {.arg pattern} and {.arg column} argument both being specified.",
         call = get_cli_abort_call()
@@ -112,7 +102,14 @@ inline_text.gtsummary <- function(x,
       )
 
     # filter on variable level
-    if (!is_empty(level)) {
+    if (!is_quo_empty(level)) {
+      level <-
+        .select_levels(
+          lvl = !!level,
+          possible_lvls = map(unique(cards$variable_level), as.character) |> unlist(),
+          lvl_argname =  "level",
+          allow_empty = FALSE
+        )
       cards <- cards |>
         dplyr::filter(map_lgl(.data$variable_level, ~ !is_empty(.x) && .x %in% level))
     }
@@ -150,7 +147,7 @@ inline_text.gtsummary <- function(x,
 
   # level selection ------------------------------------------------------------
   # if level not provided, keep the first row
-  if (is_empty(level)) {
+  if (is_quo_empty(level)) {
     df_gtsummary <- dplyr::filter(df_gtsummary, dplyr::row_number() == 1)
   } # if there is a level, drop first label row, keeping the levels only
   else {
@@ -162,6 +159,8 @@ inline_text.gtsummary <- function(x,
     }
     df_gtsummary <-
       dplyr::filter(df_gtsummary, !(.data$row_type %in% "label" & dplyr::row_number() == 1))
+    level <-
+      .select_levels(lvl = !!level, possible_lvls = df_gtsummary$label, lvl_argname =  "level", allow_empty = FALSE)
     df_gtsummary <- dplyr::filter(df_gtsummary, .data$label %in% .env$level)
   }
 
@@ -182,4 +181,50 @@ inline_text.gtsummary <- function(x,
   }
 }
 
+# after this deprecation cycle, we can replace this with arg_match()
+.select_levels <- function(data, lvl, possible_lvls, lvl_argname =  caller_arg(lvl), allow_empty = TRUE) {
+  lvl <- enquo(lvl)
 
+  # if we allow empty and it's empty, return it
+  if (allow_empty && is_quo_empty(lvl)) {
+    lvl <- eval_tidy(lvl)
+  }
+  # if lvl is already character, use it as it is
+  else if (tryCatch(is.character(eval_tidy(lvl)), error = \(x) FALSE)) {
+    lvl <- eval_tidy(lvl)
+  }
+  else {
+    lvl <- cards::cards_select(expr = !!lvl, data = vec_to_df(possible_lvls))
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = glue("gtsummary::inline_text({lvl_argname} = 'must now be a string')"),
+      details = glue("Use `{lvl_argname} = '{lvl}'` instead.")
+    )
+  }
+
+  if (allow_empty && is_empty(lvl)) return(lvl) # styler: off
+  arg_match(lvl, values = possible_lvls, error_call = get_cli_abort_call(), error_arg = lvl_argname)
+}
+
+
+.update_fmt_fn <- function(cards, fmt_fn) {
+  fmt_fn <- fmt_fn |> enframe("stat_name", "fmt_fn")
+  cards <- cards |>
+    map(
+      function(x) {
+        if (inherits(x, "card")) {
+          return(
+            dplyr::rows_update(
+              x,
+              fmt_fn,
+              by = "stat_name",
+              unmatched = "ignore"
+            ) |>
+              cards::apply_fmt_fn()
+          )
+        } else {
+          return(x)
+        }
+      }
+    )
+}
