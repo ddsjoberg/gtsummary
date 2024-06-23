@@ -51,7 +51,7 @@
 #'
 #' @return A `tbl_uvregression` object
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
 #' tbl_uvregression(
 #'   trial,
@@ -414,7 +414,7 @@ check_uvregression_formula <- function(formula) {
     error = function(e) {
       tryCatch(
         # lastly, convert quosure to a string
-        rlang::expr_deparse(quo_get_expr(x)),
+        expr_deparse(quo_get_expr(x)),
         error = function(e) {
           cli::cli_abort(
             "There was a problem processing argument {.arg {arg_name}}.",

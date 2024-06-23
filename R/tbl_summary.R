@@ -183,7 +183,7 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
@@ -318,16 +318,16 @@ tbl_summary <- function(data,
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-        variables = all_of(include),
-        by = all_of(by),
-        fmt_fn = digits,
-        stat_label = ~ default_stat_labels()
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
         cards::ard_categorical(data,
-          variables = all_of(by),
-          stat_label = ~ default_stat_labels()
+                               variables = all_of(by),
+                               stat_label = ~ default_stat_labels()
         )
       },
       # tabulate categorical summaries
@@ -373,6 +373,9 @@ tbl_summary <- function(data,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_summary(
@@ -415,6 +418,40 @@ tbl_summary <- function(data,
     do.call(list(x))
 
   x
+}
+
+.add_gts_column_to_cards_summary <- function(cards, variables, by) {
+  # adding the name of the column the stats will populate
+  if (is_empty(by)) {
+    cards$gts_column <-
+      ifelse(
+        !cards$context %in% "attributes",
+        "stat_0",
+        NA_character_
+      )
+  } else {
+    # styler: off
+    cards <-
+      cards %>%
+      {dplyr::left_join(
+        .,
+        dplyr::filter(
+          .,
+          .data$variable %in% .env$variables,
+          !cards$context %in% "attributes",
+        ) |>
+          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+          dplyr::distinct() |>
+          dplyr::mutate(
+            .by = cards::all_ard_groups(),
+            gts_column = paste0("stat_", dplyr::cur_group_id())
+          ),
+        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+      )}
+    #styler: on
+  }
+
+  cards
 }
 
 .drop_missing_by_obs <- function(data, by) {

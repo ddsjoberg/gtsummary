@@ -146,6 +146,10 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_continuous(cards, include, by)
+  tbl_ard_continuous_inputs$cards <- cards # saving the version of cards that has gts_colname
+
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
 

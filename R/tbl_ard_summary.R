@@ -214,6 +214,10 @@ tbl_ard_summary <- function(cards,
       }
     }
   )
+
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+
   # save inputs
   tbl_ard_summary_inputs <- as.list(environment())[names(formals(tbl_ard_summary))]
   call <- match.call()
