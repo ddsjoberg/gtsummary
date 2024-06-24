@@ -37,6 +37,7 @@ tbl_continuous <- function(data,
                            variable,
                            include = everything(),
                            digits = NULL,
+                           type = NULL,
                            by = NULL,
                            statistic = everything() ~ "{median} ({p25}, {p75})",
                            label = NULL) {
@@ -94,6 +95,7 @@ tbl_continuous <- function(data,
     digits = digits
   )
 
+  type <- assign_summary_type(data, variables = include, value = NULL)
 
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
