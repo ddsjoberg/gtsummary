@@ -85,7 +85,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         return(
           rep_named(
             statistic[[variable]],
-            list(.guess_continuous_summary_digits(data[[variable]]))
+            list(.guess_continuous_summary_digits(data, variable))
           ) |>
             utils::modifyList(lst_all_fmt_fns) |>
             utils::modifyList(digits[[variable]] %||% list())
@@ -137,8 +137,8 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
     var_spread <-
       case_switch(
         inherits(data, "data.frame") ~
-          stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
-          stats::quantile(x, probs = c(0.05), na.rm = TRUE),
+          stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
+          stats::quantile(data[[variable]], probs = c(0.05), na.rm = TRUE),
         inherits(data, "survey.design") ~
           cardx::ard_continuous(data, variables = all_of(variable), statistic = ~ c("p5", "p95")) |>
           dplyr::pull("stat") |>

@@ -7,8 +7,7 @@
 #'   A survey object created with created with `survey::svydesign()`
 #' @inheritParams tbl_summary
 #'
-#' @inheritSection tbl_summary type argument
-#' @inheritSection tbl_summary select helpers
+#' @inheritSection tbl_summary type and value arguments
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
@@ -44,7 +43,7 @@
 #'   \item `{sum}` sum
 #' }
 #'
-#' Unlike [tbl_summary()], it is not possible to pass a custom function.
+#' Unlike [`tbl_summary()`], it is not possible to pass a custom function.
 #'
 #' For both categorical and continuous variables, statistics on the number of
 #' missing and non-missing observations and their proportions are available to
@@ -65,8 +64,8 @@
 #' Note that for categorical variables, `{N_obs}`, `{N_miss}` and `{N_nonmiss}` refer
 #' to the total number, number missing and number non missing observations
 #' in the denominator, not at each level of the categorical variable.
-#' @export
 #'
+#' @export
 #' @return A `'tbl_svysummary'` object
 #'
 #' @author Joseph Larmarange
@@ -255,5 +254,162 @@ tbl_svysummary <- function(data,
     utils::modifyList(list(default_types = NULL))
   call <- match.call()
 
+  # construct cards ------------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      # attributes for summary columns
+      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      # tabulate missing information
+      cards::ard_missing(data,
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()),
+      # tabulate unweighted missing information
+      cards::ard_missing(data$variable,
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()) |>
+        dplyr::mutate(
+          stat_name = paste0(.data$stat_name, "_unweighted"),
+          stat_label = paste(.data$stat_label, "(unweighted)")
+        ),
+      # tabulate by variable for header stats
+      if (!is_empty(by)) {
+        cards::ard_categorical(data,
+                               variables = all_of(by),
+                               stat_label = ~ default_stat_labels())
+      },
+      if (!is_empty(by)) {
+        cards::ard_categorical(data$variables,
+                               variables = all_of(by),
+                               stat_label = ~ default_stat_labels()) |>
+          dplyr::mutate(
+            stat_name = paste0(.data$stat_name, "_unweighted"),
+            stat_label = paste(.data$stat_label, "(unweighted)")
+          )
+      },
+      # tabulate categorical summaries
+      cards::ard_categorical(
+        data,
+        by = all_of(by),
+        variables = all_categorical(FALSE),
+        fmt_fn = digits,
+        denominator = percent,
+        stat_label = ~ default_stat_labels()
+      ),
+      cards::ard_categorical(
+        data$variables,
+        by = all_of(by),
+        variables = all_categorical(FALSE),
+        fmt_fn = digits,
+        denominator = percent,
+        stat_label = ~ default_stat_labels()
+      ) %>%
+        {case_switch(
+          is_empty(.) ~ .,
+          .default =
+            dplyr::mutate(
+              .,
+              stat_name = paste0(.data$stat_name, "_unweighted"),
+              stat_label = paste(.data$stat_label, "(unweighted)")
+            )
+        )},
+      # tabulate dichotomous summaries
+      cards::ard_dichotomous(
+        data,
+        by = all_of(by),
+        variables = all_dichotomous(),
+        fmt_fn = digits,
+        denominator = percent,
+        value = value,
+        stat_label = ~ default_stat_labels()
+      ),
+      cards::ard_dichotomous(
+        data$variables,
+        by = all_of(by),
+        variables = all_categorical(FALSE),
+        fmt_fn = digits,
+        denominator = percent,
+        stat_label = ~ default_stat_labels()
+      ) %>%
+        {case_switch(
+          is_empty(.) ~ .,
+          .default =
+            dplyr::mutate(
+              .,
+              stat_name = paste0(.data$stat_name, "_unweighted"),
+              stat_label = paste(.data$stat_label, "(unweighted)")
+            )
+        )},
+      # calculate continuous summaries
+      cards::ard_continuous(
+        select_prep(.list2tb(type, "var_type"), data),
+        by = all_of(by),
+        variables = all_continuous(),
+        statistic =
+          .continuous_statistics_chr_to_fun(
+            statistic[select(select_prep(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
+          ),
+        fmt_fn = digits,
+        stat_label = ~ default_stat_labels()
+      )
+    ) |>
+    cards::replace_null_statistic()
 
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
+
+  # check the requested stats are present in ARD data frame
+  .check_stats_available(cards = cards, statistic = statistic)
+
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+
+  # construct initial tbl_summary object ---------------------------------------
+  x <-
+    brdg_summary(
+      cards = cards,
+      by = by,
+      variables = include,
+      statistic = statistic,
+      type = type,
+      missing = missing,
+      missing_stat = missing_stat,
+      missing_text = missing_text
+    ) |>
+    append(
+      list(
+        cards = list(tbl_svysummary = cards),
+        inputs = tbl_svysummary_inputs
+      )
+    ) |>
+    structure(class = c("tbl_svysummary", "gtsummary"))
+
+  # adding styling -------------------------------------------------------------
+  x <- x |>
+    # updating the headers for the stats columns
+    modify_header(
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          get_theme_element("tbl_svysummary-str:header-noby",
+                            default = "**N = {style_number(N)}**"),
+          get_theme_element("tbl_svysummary-str:header-withby",
+                            default = "**{level}**  \nN = {style_number(n)}")
+        )
+    )
+
+  # return tbl_summary table ---------------------------------------------------
+  x$call_list <- list(tbl_summary = call)
+  # running any additional mods
+  x <-
+    get_theme_element("tbl_svysummary-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
+
+  x
 }
