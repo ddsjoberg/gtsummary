@@ -147,7 +147,9 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
   df_new_stat <-
     dplyr::tibble(variable = names(fns)) |>
     dplyr::mutate(
-      summary_type = map_chr(.data$variable, ~ x$inputs$type[[.x]]), # tbl_continuous objects generally don't have a "$inputs$type" object nested inside
+      summary_type = map_chr(.data$variable, ~ x$inputs$type[[.x]]),
+      # tbl_continuous objects generally didn't have a "$inputs$type" object nested inside
+      # added it back to tbl_continuous
       row_type = map_chr(.data$variable, ~ location[[.x]]),
       label = map2(
         .data$variable, .data$row_type,
@@ -231,6 +233,7 @@ eval_fn_safe <- function(variable, tbl, fn) {
         data = tbl$inputs$data,
         variable = variable,
         by = tbl$inputs$by,
+        include = tbl$inputs$include,
         tbl = tbl
       )
     )
