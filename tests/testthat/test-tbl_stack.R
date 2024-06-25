@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::is_pkg_installed(c("cardx", "survival"), reference_pkg = "gtsummary")
+skip_if_not(is_pkg_installed(c("cardx", "survival"), reference_pkg = "gtsummary"))
 
 t1_summary <- trial |>
   dplyr::filter(trt == "Drug A") |>
