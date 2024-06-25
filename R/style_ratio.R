@@ -24,7 +24,7 @@
 #'   style_ratio()
 style_ratio <- function(x,
                         digits = 2,
-                        big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                        big.mark = ifelse(decimal.mark == ",", " ", ","),
                         decimal.mark = getOption("OutDec"),
                         ...) {
   set_cli_abort_call()
@@ -36,7 +36,7 @@ style_ratio <- function(x,
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark", default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
   x_fmt <-

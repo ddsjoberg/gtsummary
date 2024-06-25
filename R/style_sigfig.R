@@ -34,7 +34,7 @@
 style_sigfig <- function(x,
                          digits = 2,
                          scale = 1,
-                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
                          ...) {
   set_cli_abort_call()
@@ -46,7 +46,7 @@ style_sigfig <- function(x,
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark", default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
   # calculating the number of digits to round number
