@@ -20,39 +20,20 @@ test_that("as_kable works with standard use", {
       "fmt_missing", "cols_hide", "remove_line_breaks", "kable")
   )
 
-  expect_silent(kbl <- my_tbl_summary |> as_kable())
+  # no errors replacing default kable argument value
+  expect_silent(my_tbl_summary |> as_kable(col.names = NULL))
+
+  expect_silent(kbl_summary <- my_tbl_summary |> as_kable())
 
   # correct number of rows
-  expect_equal(length(kbl), 8)
+  expect_equal(length(kbl_summary), 8)
 
   # test snapshot
-  expect_snapshot(kbl)
+  expect_snapshot(kbl_summary)
 })
 
 test_that("as_kable produces column header labels correctly", {
   expect_silent(kbl <- my_tbl_regression |> as_kable())
-
-  expect_equal(
-    kbl[1],
-    "|**Characteristic** | **Beta** | **95% CI**  | **p-value** |"
-  )
-
-  tbl <- my_tbl_regression |>
-    modify_column_hide(p.value)
-  kbl <- tbl |> as_kable()
-
-  expect_equal(
-    kbl[1],
-    "|**Characteristic** | **Beta** | **95% CI**  |"
-  )
-})
-
-test_that("as_kable removes line breaks from table", {
-  tbl <- trial |>
-    select(trt, age, death) |>
-    tbl_summary(label = list(age = "Pt \nAge")) |>
-    modify_header(label = "_Test \n Columns_")
-  expect_silent(kbl <- tbl |> as_kable())
 
   expect_equal(
     kbl[1],
@@ -106,6 +87,86 @@ test_that("as_kable works with bold/italics", {
   )
 })
 
+test_that("as_kable removes line breaks from table", {
+  tbl <- trial |>
+    select(trt, age, death) |>
+    tbl_summary(label = list(age = "Pt \nAge")) |>
+    modify_header(label = "_Test \n Columns_")
+  kbl <- tbl |> as_kable()
+
+  expect_equal(
+    kbl[1],
+    "|_Test Columns_         | **N = 200** |"
+  )
+  expect_equal(
+    kbl[6],
+    "|Pt Age                 | 47 (38, 57) |"
+  )
+})
+
+test_that("as_kable works with tbl_cross", {
+  tbl <- tbl_cross(trial, grade, trt)
+
+  expect_silent(kbl_cross <- tbl |> as_kable())
+  expect_snapshot(kbl_cross)
+})
+
+test_that("as_kable works with tbl_uvregression", {
+  tbl <- trial |> tbl_uvregression(method = lm, y = age)
+
+  expect_silent(kbl_uvregression <- tbl |> as_kable())
+  expect_snapshot(kbl_uvregression)
+})
+
+test_that("as_kable works with tbl_survfit", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
+  tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
+
+  expect_silent(kbl_survfit <- tbl |> as_kable())
+  expect_snapshot(kbl_survfit)
+})
+
+test_that("as_kable works with tbl_merge", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+
+  t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
+    tbl_regression(exponentiate = TRUE)
+  t2 <- survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) |>
+    tbl_regression(exponentiate = TRUE)
+
+  tbl_merge_ex1 <- tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+
+  expect_silent(kbl_merge <- tbl_merge_ex1 |> as_kable())
+  expect_snapshot(kbl_merge)
+})
+
+test_that("as_kable works with tbl_stack", {
+  t1 <- trial |>
+    dplyr::filter(trt == "Drug A") |>
+    select(age, response, death) |>
+    tbl_summary() |>
+    modify_header(stat_0 ~ "**Statistic**")
+
+  t2 <- trial |>
+    dplyr::filter(trt == "Drug B") |>
+    select(age, response, death) |>
+    tbl_summary()
+
+  tbl_stack_ex1 <- tbl_stack(
+    tbls = list(t1, t2),
+    group_header = c("Drug A", "Drug B"),
+    quiet = TRUE
+  )
+
+  expect_silent(kbl_stack <- tbl_stack_ex1 |> as_kable())
+  expect_snapshot(kbl_stack)
+})
+
 test_that("as_kable passes missing symbols correctly", {
   tbl <- my_tbl_summary |>
     modify_table_body(~ .x |> mutate(stat_0 = NA_character_)) |>
@@ -133,28 +194,7 @@ test_that("as_kable passes table column alignment correctly", {
   expect_true("c(\"l\", \"r\", \"c\", \"c\")" %in% as.character(kbl$kable))
 })
 
-test_that("tbl_cross", {
-  expect_error(tbl <- tbl_cross(trial, grade, trt) |> as_kable(format = "pipe"), NA)
-  expect_warning(tbl_summary(trial) |> as_kable(), NA)
-  expect_snapshot(tbl)
-})
-
-test_that("tbl_regression", {
-  expect_error(tbl <- lm(marker ~ age, trial) |> tbl_regression() |> as_kable(format = "pipe"), NA)
-  expect_warning(lm(marker ~ age, trial) |> tbl_regression() |> as_kable(), NA)
-  expect_snapshot(tbl)
-
-  expect_snapshot(
-    with_gtsummary_theme(
-      x = theme_gtsummary_journal("qjecon"),
-      lm(age ~ marker + response, data = trial) |>
-        tbl_regression() |>
-        as_kable()
-    )
-  )
-})
-
-test_that("as_gt applies formatting functions correctly", {
+test_that("as_kable applies formatting functions correctly", {
   tbl <- glm(response ~ age + grade, trial, family = binomial(link = "logit")) |>
     tbl_regression(exponentiate = TRUE) |>
     modify_fmt_fun(
@@ -164,18 +204,16 @@ test_that("as_gt applies formatting functions correctly", {
     modify_fmt_fun(
       estimate ~ function(x) style_ratio(x, digits = 4, decimal.mark = ",")
     )
-  gt_tbl <- tbl |> as_gt()
+  kbl <- tbl |> as_kable()
 
-  # formatted cells
+  # formatted cells/columns
   expect_equal(
-    gt_tbl$`_formats`[[12]]$func$default(gt_tbl$`_data`$p.value),
-    c("0.096", NA, NA, "0.688", "0.972")
+    kbl[3],
+    "|Age                | 1,0191 | 1.00, 1.04 |    0.10     |"
   )
-
-  # formatted column
   expect_equal(
-    gt_tbl$`_formats`[[13]]$func$default(gt_tbl$`_data`$estimate),
-    c("1,0191", NA, NA, "0,8535", "1,0136")
+    kbl[7],
+    "|III                | 1,0136 | 0.47, 2.16 |    0.972    |"
   )
 
   tbl2 <- tbl_uvregression(
@@ -196,76 +234,33 @@ test_that("as_gt applies formatting functions correctly", {
     modify_fmt_fun(
       c(conf.low, conf.high) ~ label_style_sigfig(digits = 3)
     )
-  gt_tbl2 <- tbl2 |> as_gt()
+  kbl2 <- tbl2 |> as_kable()
 
-  # formatted cell
+  # formatted cells/columns
   expect_equal(
-    gt_tbl2$`_formats`[[22]]$func$default(gt_tbl2$`_data`$stat_n),
-    c("183.0000", "193.0000", NA, NA, NA)
+    kbl2[3],
+    "|Age                |  183.00  |  1.02  | 0.997, 1.04 |    0.10     |"
   )
-
-  # formatted column
   expect_equal(
-    gt_tbl2$`_data`$conf.low,
-    c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
+    kbl2[4],
+    "|Grade              | 193.0000 |        |             |             |"
+  )
+  expect_equal(
+    kbl2[7],
+    "|III                |          |  1.10  | 0.524, 2.29 |     0.8     |"
   )
 })
 
-test_that("tbl_uvregression", {
-  expect_error(tbl <- trial |> tbl_uvregression(method = lm, y = age) |> as_kable(format = "pipe"), NA)
-  expect_warning(trial |> tbl_uvregression(method = lm, y = age) |> as_kable(), NA)
-  expect_snapshot(tbl)
-})
-
-test_that("tbl_survfit", {
-  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
-
-  expect_error(tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") |> as_kable(format = "pipe"), NA)
-  expect_warning(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") |> as_kable(), NA)
-  expect_snapshot(tbl)
-})
-
-
-test_that("tbl_merge/tbl_stack", {
-  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-
-  t1 <-
-    glm(response ~ trt + grade + age, trial, family = binomial) |>
-    tbl_regression(exponentiate = TRUE)
-  t2 <-
-    survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) |>
-    tbl_regression(exponentiate = TRUE)
-  tbl_merge_ex1 <-
-    tbl_merge(
-      tbls = list(t1, t2),
-      tab_spanner = c("**Tumor Response**", "**Time to Death**")
+test_that("as_kable passes column merging correctly", {
+  tbl <- my_tbl_regression |>
+    modify_column_merge(
+      pattern = "{estimate} (pval {p.value})",
+      rows = !is.na(estimate)
     )
+  kbl <- tbl |> as_kable()
 
-  tbl_stack_ex1 <-
-    tbl_stack(
-      tbls = list(t1, t2),
-      group_header = c("**Tumor Response**", "**Time to Death**")
-    )
-
-  expect_error(tbl <- tbl_merge_ex1 |> as_kable(format = "pipe"), NA)
-  expect_warning(tbl_merge_ex1 |> as_kable(), NA)
-  expect_snapshot(tbl)
-
-  expect_error(tbl <- tbl_stack_ex1 |> as_kable(format = "pipe"), NA)
-  expect_warning(tbl_stack_ex1 |> as_kable(), NA)
-  expect_snapshot(tbl)
-})
-
-test_that("No errors replacing default arg values", {
-  expect_error(
-    trial |>
-      tbl_summary(
-        by = trt,
-        include = c(age, grade),
-        missing = "no"
-      ) |>
-      as_kable(col.names = NULL),
-    NA
+  expect_equal(
+    kbl[3],
+    "|Age                | 0.00 (pval >0.9) | -0.01, 0.01 |"
   )
 })
