@@ -7,7 +7,7 @@
 style_number(
   x,
   digits = 0,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   scale = 1,
   ...

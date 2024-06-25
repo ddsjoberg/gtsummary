@@ -8,7 +8,7 @@ style_percent(
   x,
   symbol = FALSE,
   digits = 0,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )
