@@ -26,7 +26,7 @@ will be separated after each of these variables)}
 \code{tbl_split} object
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{experimental}\cr
 The \code{tbl_split} function splits a single gtsummary table into multiple tables.
 Updates to the print method are expected.
 }
