@@ -8,21 +8,49 @@ test_that("add_stat for tbl_continuous() works", {
     )
 
   add_stat_test1 <- function(data, variable, by, ...) {
-    tibble::tibble(test_col = "Ugh")
+    tibble::tibble(addtl = "Data from elsewhere")
   }
+
+  expect_equal(
+    tt %>%
+      add_stat(fns = everything() ~ add_stat_test1) %>%
+      as_tibble() %>%
+      dplyr::pull(addtl),
+    c("Data from elsewhere", NA, NA, NA)
+  )
+})
+
+
+test_that("add_stat for tbl_continuous() works", {
+  tt <-
+    trial %>%
+    tbl_continuous(
+      age,
+      include = grade,
+      by = trt
+    )
+
+  p_vals <- lapply(
+    dplyr::group_split(trial, grade),
+    function(x) t.test(x$age ~ x$trt)$p.value
+  ) %>%
+    unlist %>%
+    round(3) %>%
+    as.character
 
   add_stat_test2 <- function(data, variable, by, ...) {
-    tibble::tibble(test_col = rep_len("Ugh", 3))
+    lapply(
+      dplyr::group_split(trial, grade),
+      function(x) t.test(x$age ~ x$trt)$p.value
+    ) %>%
+      unlist
   }
 
-  expect_error(
+  expect_equal(
     tt %>%
-      add_stat(fns = everything() ~ add_stat_test1),
-    NA
-  )
-  expect_error(
-    tt %>%
-      add_stat(fns = everything() ~ add_stat_test2, location = everything() ~ "level"),
-    NA
+      add_stat(fns = everything() ~ add_stat_test2, location = everything() ~ "level") %>%
+      as_tibble() %>%
+      dplyr::pull(add_stat_1),
+    c(NA, p_vals)
   )
 })
