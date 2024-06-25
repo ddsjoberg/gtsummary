@@ -38,12 +38,13 @@ test_that("add_stat for tbl_continuous() works", {
     round(3) %>%
     as.character
 
-  add_stat_test2 <- function(data, variable, by, ...) {
-    lapply(
-      dplyr::group_split(trial, grade),
-      function(x) t.test(x$age ~ x$trt)$p.value
-    ) %>%
-      unlist
+  add_stat_test2 <- function(data, variable, by, tbl, ...) {
+    col_name <- tbl$inputs$include
+    col_sym <- sym(col_name)
+
+    strat <- dplyr::group_split(data, !!col_sym)
+
+    lapply(strat, function(x) t.test(x$age ~ x$trt)$p.value) %>% unlist
   }
 
   expect_equal(
