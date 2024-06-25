@@ -94,8 +94,6 @@ tbl_continuous <- function(data,
     digits = digits
   )
 
-  type <- rlang::rep_named(include, list("categorical"))
-
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
   call <- match.call()
@@ -190,6 +188,7 @@ tbl_continuous <- function(data,
   # add other information to the returned object
   x$cards <- list(tbl_continuous = cards)
   x$inputs <- tbl_continuous_inputs
+  x$inputs$type <- rlang::rep_named(include, list("categorical"))
   x$call_list <- list(tbl_continuous = call)
 
   x |>
