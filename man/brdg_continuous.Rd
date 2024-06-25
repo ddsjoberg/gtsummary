@@ -40,6 +40,11 @@ bind_ard(
   ard_missing(trial, by = grade, variables = age),
   ard_attributes(trial, variables = c(grade, age))
 ) |>
+  # adding the column name
+  dplyr::mutate(
+    gts_column =
+      ifelse(!context \%in\% "attributes", "stat_0", NA_character_)
+  ) |>
   brdg_continuous(
     variable = "age",
     include = "grade",

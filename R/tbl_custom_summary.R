@@ -426,6 +426,9 @@ tbl_custom_summary <- function(data,
   # check the requested stats are present in ARD data frame
   .check_stats_available(cards = cards, statistic = statistic)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_summary(

@@ -129,6 +129,13 @@ all_stat_cols <- function(stat_0 = TRUE) {
 #' @return a data frame
 #' @keywords internal
 select_prep <- function(table_body, data = NULL) {
+  if (!"variable" %in% names(table_body)) {
+    cli::cli_abort(
+      "The {.code .$table_body} data frame does not have the required {.val variable} column.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # if data not passed, use table_body to construct one
   if (is_empty(data)) {
     data <- dplyr::tibble(!!!rep_named(unique(table_body$variable), logical(0L)))

@@ -28,7 +28,7 @@ tbl_strata2(
   .combine_args = NULL,
   .header = ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
   .stack_group_header = NULL,
-  .quiet = NULL
+  .quiet = TRUE
 )
 }
 \arguments{

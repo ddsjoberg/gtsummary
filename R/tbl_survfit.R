@@ -255,6 +255,11 @@ tbl_survfit.list <- function(x,
                   else if (stat_name %in% c("estimate", "conf.low", "conf.high") && is.na(stat)) return(\(x, ...) missing)
                   else return(fmt_fn)
                 }
+              ),
+            gts_column =
+              case_switch(
+                !is_empty(times) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(times)), times)),
+                !is_empty(probs) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(probs)), probs))
               )
           )
       }
@@ -283,15 +288,14 @@ brdg_survfit <- function(cards,
   # grab information for the headers -------------------------------------------
   df_header_survfit <- cards[[1]] |>
     dplyr::filter(!.data$context %in% "attributes") |>
-    dplyr::distinct(.data$variable, .data$variable_level) |>
-    dplyr::mutate(gts_column = paste0("stat_", dplyr::row_number()))
+    dplyr::distinct(.data$variable, .data$variable_level, .data$gts_column)
 
   # assign a variable name to the cards list -----------------------------------
   univariate_survift_count <- 0L
   cards_names <- vector(mode = "list", length = length(cards))
   for (i in seq_along(cards)) {
     # extract stratifying variable names as vector
-    cards_names[[i]] <- cards[[i]] |> dplyr::select(cards::all_ard_groups("names")) |> dplyr::slice(1L) |> unlist()
+    cards_names[i] <- cards[[i]] |> dplyr::select(cards::all_ard_groups("names")) |> dplyr::slice(1L) |> unlist() |> list()
     # if univariate, assign variable Overall
     if (is_empty(cards_names[[i]])) {
       univariate_survift_count <- univariate_survift_count + 1L
@@ -350,13 +354,8 @@ brdg_survfit <- function(cards,
     cards,
     function(x, variable) {
       # merge in gts_column
-      x <- x %>%
-        dplyr::left_join(
-          df_header_survfit,
-          by = c("variable", "variable_level")
-        ) |>
+      x <- x |>
         dplyr::mutate(variable = .env$variable)
-
 
       # no stratifying variable, process as a continuous tbl_summary() variable
       if (dplyr::select(x, cards::all_ard_groups()) |> names() |> is_empty()) {

@@ -154,6 +154,9 @@ tbl_continuous <- function(data,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_continuous(cards, include, by)
+
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
 
@@ -193,4 +196,36 @@ tbl_continuous <- function(data,
 }
 
 
+.add_gts_column_to_cards_continuous <- function(cards, variables, by) {
+  # adding the name of the column the stats will populate
+  if (is_empty(by)) {
+    cards$gts_column <-
+      ifelse(
+        !cards$context %in% "attributes",
+        "stat_0",
+        NA_character_
+      )
+  } else {
+    # styler: off
+    cards <-
+      cards %>%
+      {dplyr::left_join(
+        .,
+        dplyr::filter(
+          .,
+          .data$group2 %in% .env$variables,
+          !cards$context %in% "attributes",
+        ) |>
+          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+          dplyr::distinct() |>
+          dplyr::mutate(
+            .by = c("group1", "group1_level"),
+            gts_column = paste0("stat_", dplyr::cur_group_id())
+          ),
+        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+      )}
+    #styler: on
+  }
 
+  cards
+}
