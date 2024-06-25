@@ -20,6 +20,6 @@ test_that("style_sigfig() works", {
   vec2 <- c(one = 0.99, two = 0.0005)
   expect_equal(
     attributes(vec2),
-    style_sigfig(vec2) %>% attributes()
+    style_sigfig(vec2) |> attributes()
   )
 })

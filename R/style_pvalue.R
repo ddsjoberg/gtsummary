@@ -24,7 +24,7 @@
 style_pvalue <- function(x,
                          digits = 1,
                          prepend_p = FALSE,
-                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
                          ...) {
   set_cli_abort_call()
@@ -36,7 +36,7 @@ style_pvalue <- function(x,
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark", default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
   # rounding large p-values to 1 digits
