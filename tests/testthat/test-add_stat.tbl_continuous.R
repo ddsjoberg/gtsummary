@@ -21,7 +21,7 @@ test_that("add_stat for tbl_continuous() works", {
 })
 
 
-test_that("add_stat for tbl_continuous() works", {
+test_that("add_stat for tbl_continuous() works using location", {
   tt <-
     trial %>%
     tbl_continuous(
