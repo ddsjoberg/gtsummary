@@ -1,12 +1,11 @@
 url: https://www.danieldsjoberg.com/gtsummary/
 
 template:
+  bootstrap: 5
   params:
-    docsearch:
-      api_key: fd7c21cad87500b8877c475ed3a4cece
-      index_name: gtsummary
     ganalytics: UA-145876596-1
     bootswatch: flatly
+
 development:
   mode: auto
   version_label: default
@@ -22,7 +21,9 @@ authors:
     href: "https://joseph.larmarange.net/"
 
 navbar:
-  type: default
+  structure:
+    left:  [intro, reference, tutorials, news]
+    right: [search, github]
   left:
   - icon: fa-home
     href: index.html
@@ -48,9 +49,6 @@ navbar:
     #   href: articles/gallery.html
   - text: News
     href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/gtsummary
 
 reference:
   - title: Data Summary Tables
@@ -66,6 +64,9 @@ reference:
       - add_stat_label
       - add_stat
       - separate_p_footnotes
+  - subtitle: Wide Summary Tables
+  - contents:
+      - tbl_wide_summary
   - subtitle: Cross Tables
   - contents:
       - tbl_cross
@@ -76,13 +77,13 @@ reference:
       - add_overall
       - add_p.tbl_continuous
       - add_stat
-   # - subtitle: Time-to-event Summary Tables
-   # - contents:
-  #     - tbl_survfit
-  #     - add_p.tbl_survfit
-  #     - add_n.tbl_survfit
-  #     - add_nevent.tbl_survfit
-      # - add_q
+  - subtitle: Time-to-event Summary Tables
+  - contents:
+      - tbl_survfit
+      - add_p.tbl_survfit
+      - add_n.tbl_survfit
+      - add_nevent.tbl_survfit
+      - add_q
   - subtitle: Survey Design Summary Tables
   - contents:
   #     - tbl_svysummary
@@ -116,14 +117,15 @@ reference:
       - add_vif
       - plot
 
-  # - title: Inline Reporting
-  # - contents:
-  #     - inline_text.tbl_summary
-  #     - inline_text.tbl_regression
-  #     - inline_text.tbl_uvregression
-  #     - inline_text.tbl_cross
-  #     - inline_text.tbl_survfit
-  #     - inline_text.gtsummary
+  - title: Inline Reporting
+  - contents:
+      - inline_text.tbl_summary
+      - inline_text.tbl_regression
+      - inline_text.tbl_uvregression
+      - inline_text.tbl_survfit
+      - inline_text.tbl_cross
+      - inline_text.tbl_continuous
+      - inline_text.gtsummary
 
   - title: Output Types
   - contents:
@@ -139,8 +141,8 @@ reference:
   - contents:
       - tbl_merge
       - tbl_stack
-  #     - tbl_strata
-  #     - tbl_split
+      - tbl_strata
+      - tbl_split
       - tbl_butcher
   - subtitle: Style Summary Tables
   - contents:
@@ -157,7 +159,7 @@ reference:
       - style_sigfig
       - style_ratio
       - style_number
-      - styfn
+      - label_style
   - subtitle: Themes
   - contents:
       - set_gtsummary_theme
@@ -179,7 +181,7 @@ reference:
       - custom_tidiers
   - subtitle: ARD Constructors
   - contents:
-      - starts_with("card_")
+      - starts_with("tbl_ard_")
 
   - subtitle: Construction Helpers
   - contents:

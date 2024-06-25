@@ -51,7 +51,7 @@
 #'
 #' @return A `tbl_uvregression` object
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
 #' tbl_uvregression(
 #'   trial,
@@ -72,7 +72,7 @@
 #'   y = Surv(ttdeath, death),
 #'   exponentiate = TRUE,
 #'   include = c("age", "grade", "response"),
-#'   pvalue_fun = styfn_pvalue(digits = 2)
+#'   pvalue_fun = label_style_pvalue(digits = 2)
 #' )
 NULL
 
@@ -97,8 +97,8 @@ tbl_uvregression.data.frame <- function(data,
                                         hide_n = FALSE,
                                         show_single_row = NULL,
                                         conf.level = 0.95,
-                                        estimate_fun = ifelse(exponentiate, styfn_ratio(), styfn_sigfig()),
-                                        pvalue_fun = styfn_pvalue(digits = 1),
+                                        estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+                                        pvalue_fun = label_style_pvalue(digits = 1),
                                         formula = "{y} ~ {x}",
                                         add_estimate_to_reference_rows = FALSE,
                                         conf.int = TRUE, ...) {
@@ -414,7 +414,7 @@ check_uvregression_formula <- function(formula) {
     error = function(e) {
       tryCatch(
         # lastly, convert quosure to a string
-        rlang::expr_deparse(quo_squash(x)),
+        expr_deparse(quo_get_expr(x)),
         error = function(e) {
           cli::cli_abort(
             "There was a problem processing argument {.arg {arg_name}}.",

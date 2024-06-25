@@ -1,7 +1,7 @@
 test_that("add_q() works after add_p()", {
   table1 <- trial %>%
     tbl_summary(by = trt) %>%
-    add_p(pvalue_fun = styfn_pvalue(digits = 3))
+    add_p(pvalue_fun = label_style_pvalue(digits = 3))
 
   # check the adjusted pvalues are correct
   expect_equal(

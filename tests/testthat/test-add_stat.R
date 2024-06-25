@@ -92,7 +92,7 @@ test_that("add_stat() works with fns that returns a tibble", {
       return_two_by_two_10s(),
       dplyr::tibble(one = NA, two = NA)
     ) |>
-      dplyr::mutate(across(everything(), styfn_sigfig(digits = 3)))
+      dplyr::mutate(across(everything(), label_style_sigfig(digits = 3)))
   )
 
   return_one_by_two_10s <- function(...) dplyr::tibble(one = rep_len(10, 1), two = rep_len(10, 1))
@@ -114,7 +114,7 @@ test_that("add_stat() works with fns that returns a tibble", {
       dplyr::tibble(one = c(NA, NA, NA), two = c(NA, NA, NA)),
       return_one_by_two_10s(),
     ) |>
-      dplyr::mutate(across(everything(), styfn_sigfig(digits = 3)))
+      dplyr::mutate(across(everything(), label_style_sigfig(digits = 3)))
   )
 })
 
@@ -170,4 +170,57 @@ test_that("add_stat(x) messaging", {
 
 # TODO: Add `tbl_svysummary()` tests
 
-# TODO: Add `tbl_continuous()` tests
+# `tbl_continuous()` tests
+test_that("add_stat() for 'tbl_continuous'", {
+  tt <-
+    trial |>
+    tbl_continuous(
+      age,
+      include = grade,
+      by = trt
+    )
+
+  add_stat_test1 <- function(data, variable, by, ...) {
+    tibble::tibble(addtl = "Data from elsewhere")
+  }
+
+  expect_equal(
+    tt |>
+      add_stat(fns = everything() ~ add_stat_test1) |>
+      as_tibble() |>
+      dplyr::pull(addtl),
+    c("Data from elsewhere", NA, NA, NA)
+  )
+})
+
+
+test_that("add_stat(location) for 'tbl_continuous'", {
+  tt <-
+    trial |>
+    tbl_continuous(
+      age,
+      include = grade,
+      by = trt
+    )
+
+  p_vals <- trial |>
+    dplyr::group_split(grade) |>
+    map_dbl(~ t.test(.x[["age"]] ~ .x[["trt"]])$p.value)|>
+    round(3) |>
+    as.character()
+
+  add_stat_test2 <- function(data, variable, by, tbl, ...) {
+    data |>
+      dplyr::group_split(!!sym(tbl$inputs$include)) |>
+      map_dbl(~ t.test(.x[[tbl$inputs$variable]] ~ .x[[by]])$p.value)
+  }
+
+  expect_equal(
+    tt |>
+      add_stat(fns = everything() ~ add_stat_test2, location = everything() ~ "level") |>
+      as_tibble() |>
+      dplyr::pull(add_stat_1),
+    c(NA, p_vals)
+  )
+})
+

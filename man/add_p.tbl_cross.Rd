@@ -7,8 +7,8 @@
 \method{add_p}{tbl_cross}(
   x,
   test = NULL,
-  pvalue_fun = ifelse(source_note, styfn_pvalue(digits = 1, prepend_p = TRUE),
-    styfn_pvalue(digits = 1)),
+  pvalue_fun = ifelse(source_note, label_style_pvalue(digits = 1, prepend_p = TRUE),
+    label_style_pvalue(digits = 1)),
   source_note = FALSE,
   test.args = NULL,
   ...
@@ -25,8 +25,8 @@ expected cell counts <5.}
 
 \item{pvalue_fun}{(\code{function})\cr
 Function to round and format p-value.
-Default is \code{styfn_pvalue(digits = 1)}, except when \code{source_note = TRUE} when the
-default is \code{styfn_pvalue(digits = 1, prepend_p = TRUE)}}
+Default is \code{label_style_pvalue(digits = 1)}, except when \code{source_note = TRUE} when the
+default is \code{label_style_pvalue(digits = 1, prepend_p = TRUE)}}
 
 \item{source_note}{(scalar \code{logical})\cr
 Logical value indicating whether to show p-value

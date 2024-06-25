@@ -140,7 +140,7 @@ table_styling_to_gt_calls <- function(x, ...) {
           columns = !!x$table_styling$indent$column[[.x]],
           rows = !!x$table_styling$indent$row_numbers[[.x]]
         ),
-        fn = function(x) paste0(!!paste(rep_len("\U00A0", x$table_styling$indent$n_spaces[[.x]]), collapse = ""), x)
+        fn = function(x) paste0(!!strrep("\U00A0", times = x$table_styling$indent$n_spaces[[.x]]), x)
       ))
     )
 

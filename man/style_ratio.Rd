@@ -7,7 +7,7 @@
 style_ratio(
   x,
   digits = 2,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )

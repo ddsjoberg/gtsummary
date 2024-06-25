@@ -8,7 +8,7 @@ style_pvalue(
   x,
   digits = 1,
   prepend_p = FALSE,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )

@@ -90,10 +90,10 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
       }
       # if an integer is passed for a percentage, process stat with style_percent()
       if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted")) {
-        return(styfn_percent(digits = value))
+        return(label_style_percent(digits = value))
       }
       # otherwise, use style_number() to style number
-      return(styfn_number(digits = value))
+      return(label_style_number(digits = value))
     }
   )
 }
@@ -101,12 +101,12 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 .guess_continuous_summary_digits <- function(x) {
   # if all missing, return 0
   if (all(is.na(x))) {
-    return(styfn_number(digits = 0L))
+    return(label_style_number(digits = 0L))
   }
 
   # if class is integer, then round everything to nearest integer
   if (inherits(x, "integer")) {
-    return(styfn_number(digits = 0L))
+    return(label_style_number(digits = 0L))
   }
 
   # if it's a date or time, then convert the result to character
@@ -122,7 +122,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         stats::quantile(x, probs = c(0.95), na.rm = TRUE) -
         stats::quantile(x, probs = c(0.05), na.rm = TRUE)
 
-      styfn_number(
+      label_style_number(
         digits =
           dplyr::case_when(
             var_spread < 0.01 ~ 4L,
@@ -147,10 +147,10 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
       c(
         c("n", "N", "N_obs", "N_miss", "N_nonmiss", "n_unweighted", "N_unweighted") |>
           intersect(statistics) |>
-          rep_named(list(styfn_number())),
+          rep_named(list(label_style_number())),
         c("p", "p_miss", "p_nonmiss", "p_unweighted") |>
           intersect(statistics) |>
-          rep_named(list(styfn_percent()))
+          rep_named(list(label_style_percent()))
       )
 
     lst_defaults

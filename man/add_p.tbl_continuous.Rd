@@ -7,7 +7,7 @@
 \method{add_p}{tbl_continuous}(
   x,
   test = NULL,
-  pvalue_fun = styfn_pvalue(digits = 1),
+  pvalue_fun = label_style_pvalue(digits = 1),
   include = everything(),
   test.args = NULL,
   group = NULL,
@@ -25,9 +25,9 @@ as \code{add_p.tbl_continuous()} when \code{by = NULL}.
 See \link{tests} for details, more tests, and instruction for implementing a custom test.}
 
 \item{pvalue_fun}{(\code{function})\cr
-Function to round and format p-values. Default is \code{styfn_pvalue()}.
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
 The function must have a numeric vector input, and return a string that is
-the rounded/formatted p-value (e.g. \code{pvalue_fun = styfn_pvalue(digits = 2)}).}
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in output. Default is \code{everything()}.}
@@ -51,8 +51,9 @@ Default is \code{NULL}. See \link{tests} for methods that utilize the \code{grou
 Add p-values
 }
 \examples{
-gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
   tbl_continuous(variable = age, by = trt, include = grade) |>
   add_p()
+\dontshow{\}) # examplesIf}
 }

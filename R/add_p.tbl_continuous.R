@@ -11,13 +11,13 @@
 #' @export
 #' @return 'tbl_continuous' object
 #'
-#' @examples gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")
 #' trial |>
 #'   tbl_continuous(variable = age, by = trt, include = grade) |>
 #'   add_p()
 add_p.tbl_continuous <- function(x,
                                  test = NULL,
-                                 pvalue_fun = styfn_pvalue(digits = 1),
+                                 pvalue_fun = label_style_pvalue(digits = 1),
                                  include = everything(),
                                  test.args = NULL,
                                  group = NULL, ...) {

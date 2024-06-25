@@ -29,9 +29,9 @@ add_p <- function(x, ...) {
 #'   See below for details on default tests and [?tests][tests] for details on available
 #'   tests and creating custom tests.
 #' @param pvalue_fun (`function`)\cr
-#'   Function to round and format p-values. Default is `styfn_pvalue()`.
+#'   Function to round and format p-values. Default is `label_style_pvalue()`.
 #'   The function must have a numeric vector input, and return a string that is
-#'   the rounded/formatted p-value (e.g. `pvalue_fun = styfn_pvalue(digits = 2)`).
+#'   the rounded/formatted p-value (e.g. `pvalue_fun = label_style_pvalue(digits = 2)`).
 #' @param group ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variable name of an ID or grouping variable. The column can be used to
 #'   calculate p-values with correlated data.
@@ -98,7 +98,7 @@ add_p <- function(x, ...) {
 #'   )
 add_p.tbl_summary <- function(x,
                               test = NULL,
-                              pvalue_fun = styfn_pvalue(digits = 1),
+                              pvalue_fun = label_style_pvalue(digits = 1),
                               group = NULL,
                               include = everything(),
                               test.args = NULL,
@@ -222,7 +222,7 @@ add_p.tbl_summary <- function(x,
   x
 }
 
-calculate_and_add_test_results <- function(x, include, group, test.args, adj.vars = NULL,
+calculate_and_add_test_results <- function(x, include, group = NULL, test.args, adj.vars = NULL,
                                            df_test_meta_data, pvalue_fun = NULL,
                                            estimate_fun = NULL, conf.level = 0.95,
                                            calling_fun, continuous_variable = NULL) {
@@ -241,7 +241,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
                   dplyr::pull("fun_to_run") %>%
                   getElement(1),
               args = list(
-                data = x$inputs$data,
+                data = x$inputs[[1]], # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
                 variable = variable,
                 by = x$inputs$by,
                 group = group,
@@ -414,7 +414,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
       columns = any_of(intersect("p.value", new_columns)),
       label = glue("**{translate_string('p-value')}**"),
       hide = FALSE,
-      fmt_fun = pvalue_fun %||% styfn_pvalue(),
+      fmt_fun = pvalue_fun %||% label_style_pvalue(),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -431,7 +431,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("std.error", new_columns),
       hide = TRUE,
       label = glue("**{translate_string('SE')}**"),
-      fmt_fun = styfn_sigfig(digits = 3),
+      fmt_fun = label_style_sigfig(digits = 3),
       footnote_abbrev = glue("**{translate_string('SE = Standard Error')}**"),
       footnote = footnote
     ) |>
@@ -440,7 +440,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("parameter", new_columns),
       hide = TRUE,
       label = glue("**{translate_string('Parameter')}**"),
-      fmt_fun = styfn_sigfig(digits = 3),
+      fmt_fun = label_style_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -448,7 +448,7 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
         intersect("statistic", new_columns),
       hide = TRUE,
       label = glue("**{translate_string('Statistic')}**"),
-      fmt_fun = styfn_sigfig(digits = 3),
+      fmt_fun = label_style_sigfig(digits = 3),
       footnote = footnote
     ) |>
     modify_table_styling(
@@ -477,14 +477,14 @@ calculate_and_add_test_results <- function(x, include, group, test.args, adj.var
           x,
           columns = any_of(c("estimate", "conf.low", "conf.high")),
           rows = .data$variable %in% !!names(estimate_fun[i]),
-          fmt_fun = !!(estimate_fun[[i]] %||% styfn_sigfig())
+          fmt_fun = !!(estimate_fun[[i]] %||% label_style_sigfig())
         )
       )
   }
 
   # extending modify_stat_N to new columns
   x$table_styling$header <- x$table_styling$header |>
-    tidyr::fill("modify_stat_N", .direction = "downup")
+    tidyr::fill(any_of("modify_stat_N"), .direction = "downup")
 
   # add raw results to `.$card`
   x$cards[[calling_fun]] <- lst_results

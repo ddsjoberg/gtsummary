@@ -97,11 +97,11 @@
 #' function, or a list of functions. If a single integer or function is passed,
 #' it is recycled to the length of the number of statistics presented.
 #' For example, if the statistic is `"{mean} ({sd})"`, it is equivalent to
-#' pass `1`, `c(1, 1)`, `styfn_number(digits=1)`, and
-#' `list(styfn_number(digits=1), styfn_number(digits=1))`.
+#' pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
+#' `list(label_style_number(digits=1), label_style_number(digits=1))`.
 #'
 #' Named lists are also accepted to change the default formatting for a single
-#' statistic, e.g. `list(sd = styfn_number(digits=1))`.
+#' statistic, e.g. `list(sd = label_style_number(digits=1))`.
 #'
 #' @section type and value arguments:
 #' There are four summary types. Use the `type` argument to change the default summary types.
@@ -183,7 +183,7 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
@@ -318,16 +318,16 @@ tbl_summary <- function(data,
     cards::bind_ard(
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-        variables = all_of(include),
-        by = all_of(by),
-        fmt_fn = digits,
-        stat_label = ~ default_stat_labels()
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()
       ),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
         cards::ard_categorical(data,
-          variables = all_of(by),
-          stat_label = ~ default_stat_labels()
+                               variables = all_of(by),
+                               stat_label = ~ default_stat_labels()
         )
       },
       # tabulate categorical summaries
@@ -373,6 +373,9 @@ tbl_summary <- function(data,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_summary(
@@ -395,19 +398,6 @@ tbl_summary <- function(data,
 
   # adding styling -------------------------------------------------------------
   x <- x |>
-    # add header to label column and add default indentation
-    modify_table_styling(
-      columns = "label",
-      label = glue("**{translate_string('Characteristic')}**"),
-      rows = .data$row_type %in% c("level", "missing"),
-      indent = 4L
-    ) |>
-    # adding the statistic footnote
-    modify_table_styling(
-      columns = all_stat_cols(),
-      footnote =
-        .construct_summary_footnote(x$cards[["tbl_summary"]], x$inputs$include, x$inputs$statistic, x$inputs$type)
-    ) |>
     # updating the headers for the stats columns
     modify_header(
       all_stat_cols() ~
@@ -428,6 +418,40 @@ tbl_summary <- function(data,
     do.call(list(x))
 
   x
+}
+
+.add_gts_column_to_cards_summary <- function(cards, variables, by) {
+  # adding the name of the column the stats will populate
+  if (is_empty(by)) {
+    cards$gts_column <-
+      ifelse(
+        !cards$context %in% "attributes",
+        "stat_0",
+        NA_character_
+      )
+  } else {
+    # styler: off
+    cards <-
+      cards %>%
+      {dplyr::left_join(
+        .,
+        dplyr::filter(
+          .,
+          .data$variable %in% .env$variables,
+          !cards$context %in% "attributes",
+        ) |>
+          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+          dplyr::distinct() |>
+          dplyr::mutate(
+            .by = cards::all_ard_groups(),
+            gts_column = paste0("stat_", dplyr::cur_group_id())
+          ),
+        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+      )}
+    #styler: on
+  }
+
+  cards
 }
 
 .drop_missing_by_obs <- function(data, by) {

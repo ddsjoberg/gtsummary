@@ -1,6 +1,9 @@
 #' Add column with N
 #'
 #' - [`add_n.tbl_summary()`]
+#' - [`add_n.tbl_regression()`]
+#' - [`add_n.tbl_uvregression()`]
+#' - [`add_n.tbl_survfit()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
@@ -95,8 +98,8 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         variables = x$inputs$include,
         by = character(0L),
         fmt_fn = ~ list(
-          starts_with("N_") ~ styfn_number(),
-          starts_with("p_") ~ styfn_percent()
+          starts_with("N_") ~ label_style_number(),
+          starts_with("p_") ~ label_style_percent()
         )
       ) |>
       cards::apply_fmt_fn()

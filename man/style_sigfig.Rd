@@ -8,7 +8,7 @@ style_sigfig(
   x,
   digits = 2,
   scale = 1,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )
@@ -64,7 +64,7 @@ c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) \%>\%
 }
 \seealso{
 Other style tools: 
-\code{\link{styfn}}
+\code{\link{label_style}}
 }
 \author{
 Daniel D. Sjoberg

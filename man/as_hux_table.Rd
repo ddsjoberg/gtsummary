@@ -26,12 +26,12 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{DEPRECATED}
+\item{strip_md_bold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{file}{File path for the output.}
 
-\item{bold_header_rows}{logical indicating whether to bold header rows.
-Default is \code{TRUE}}
+\item{bold_header_rows}{(scalar \code{logical})\cr
+logical indicating whether to bold header rows. Default is \code{TRUE}}
 }
 \value{
 A \{huxtable\} object
@@ -52,8 +52,7 @@ The file is saved using \code{huxtable::quick_xlsx()}.
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
-  dplyr::select(trt, age, grade) |>
-  tbl_summary(by = trt) |>
+  tbl_summary(by = trt, include = c(age, grade)) |>
   add_p() |>
   as_hux_table()
 \dontshow{\}) # examplesIf}

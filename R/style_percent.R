@@ -19,7 +19,7 @@
 style_percent <- function(x,
                           symbol = FALSE,
                           digits = 0,
-                          big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                          big.mark = ifelse(decimal.mark == ",", " ", ","),
                           decimal.mark = getOption("OutDec"),
                           ...) {
   set_cli_abort_call()
@@ -31,7 +31,7 @@ style_percent <- function(x,
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark", default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
   y <- dplyr::case_when(

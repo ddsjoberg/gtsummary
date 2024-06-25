@@ -12,10 +12,10 @@
   test.args = NULL,
   conf.level = 0.95,
   include = everything(),
-  pvalue_fun = styfn_pvalue(digits = 1),
-  estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(),
+  pvalue_fun = label_style_pvalue(digits = 1),
+  estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
     all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_,
-    paste0(style_sigfig(x, scale = 100), "\%")), all_tests("smd") ~ styfn_sigfig()),
+    paste0(style_sigfig(x, scale = 100), "\%")), all_tests("smd") ~ label_style_sigfig()),
   ...
 )
 }
@@ -51,15 +51,15 @@ a scalar in \verb{⁠(0, 1})⁠ indicating the confidence level. Default is 0.95
 Variables to include in output. Default is \code{everything()}.}
 
 \item{pvalue_fun}{(\code{function})\cr
-Function to round and format p-values. Default is \code{styfn_pvalue()}.
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
 The function must have a numeric vector input, and return a string that is
-the rounded/formatted p-value (e.g. \code{pvalue_fun = styfn_pvalue(digits = 2)}).}
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
 
 \item{estimate_fun}{(\code{\link[=syntax]{formula-list-selector}})\cr
 List of formulas specifying the functions
 to round and format differences and confidence limits.
 Default is
-\verb{list(c(all_continuous(), all_categorical(FALSE)) ~ styfn_sigfig(), all_categorical() ~ \\(x) paste0(style_sigfig(x, scale = 100), "\%"))}}
+\verb{list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \\(x) paste0(style_sigfig(x, scale = 100), "\%"))}}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }

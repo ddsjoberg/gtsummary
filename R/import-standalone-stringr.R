@@ -23,51 +23,51 @@ str_trim <- function(string, side = c("both", "left", "right")) {
   trimws(x = string, which = side, whitespace = "[ \t\r\n]")
 }
 
-str_squish <- function(string, fixed = FALSE) {
-  string <- gsub("\\s+", " ", string)  # Replace multiple white spaces with a single white space
-  string <- gsub("^\\s+|\\s+$", "", string)  # Trim leading and trailing white spaces
+str_squish <- function(string, fixed = FALSE, perl = !fixed) {
+  string <- gsub("\\s+", " ", string, perl = perl)  # Replace multiple white spaces with a single white space
+  string <- gsub("^\\s+|\\s+$", "", string, perl = perl)  # Trim leading and trailing white spaces
   return(string)
 }
 
-str_remove <- function (string, pattern, fixed = FALSE) {
-  sub (x = string, pattern = pattern, replacement = "", fixed = fixed)
+str_remove <- function (string, pattern, fixed = FALSE, perl = !fixed) {
+  sub (x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
 }
 
-str_remove_all <- function(string, pattern, fixed = FALSE) {
-  gsub(x = string, pattern = pattern, replacement = "", fixed = fixed)
+str_remove_all <- function(string, pattern, fixed = FALSE, perl = !fixed) {
+  gsub(x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
 }
 
-str_extract <- function(string, pattern, fixed = FALSE) {
+str_extract <- function(string, pattern, fixed = FALSE, perl = !fixed) {
   res <- rep(NA_character_, length.out = length(string))
   res[str_detect(string, pattern, fixed = fixed)] <-
-    regmatches(x = string, m = regexpr(pattern = pattern, text = string, fixed = fixed))
+    regmatches(x = string, m = regexpr(pattern = pattern, text = string, fixed = fixed, perl = perl))
 
   res
 }
 
-str_extract_all <- function(string, pattern, fixed = FALSE) {
-  regmatches(x = string, m = gregexpr(pattern = pattern, text = string, fixed = fixed))
+str_extract_all <- function(string, pattern, fixed = FALSE, perl = !fixed) {
+  regmatches(x = string, m = gregexpr(pattern = pattern, text = string, fixed = fixed, perl = perl))
 }
 
-str_detect <- function(string, pattern, fixed = FALSE) {
-  grepl(pattern = pattern, x = string, fixed = fixed)
+str_detect <- function(string, pattern, fixed = FALSE, perl = !fixed) {
+  grepl(pattern = pattern, x = string, fixed = fixed, perl = perl)
 }
 
-str_replace <- function(string, pattern, replacement, fixed = FALSE){
-  sub(x = string, pattern = pattern, replacement = replacement, fixed = fixed)
+str_replace <- function(string, pattern, replacement, fixed = FALSE, perl = !fixed) {
+  sub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
-str_replace_all <- function (string, pattern, replacement, fixed = FALSE){
-  gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed)
+str_replace_all <- function (string, pattern, replacement, fixed = FALSE, perl = !fixed){
+  gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
-word <- function(string, start, end = start, sep = " ", fixed = TRUE) {
+word <- function(string, start, end = start, sep = " ", fixed = TRUE, perl = !fixed) {
   # Handle vectorized string input
   if (length(string) > 1) {
     return(sapply(string, word, start, end, sep, fixed, USE.NAMES = FALSE))
   }
 
-  words <- unlist(strsplit(string, split = sep, fixed = fixed))
+  words <- unlist(strsplit(string, split = sep, fixed = fixed, perl = perl))
   words <- words[words != ""]  # Remove empty strings
 
   # Adjust negative indices
@@ -122,6 +122,20 @@ str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ",
   }
 
   return(padded_string)
+}
+
+str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
+  if (n == Inf) {
+    return(strsplit(string, split = pattern, fixed = fixed, perl = perl))
+  } else {
+    parts <- strsplit(string, split = pattern, fixed = fixed, perl = perl)
+    lapply(parts, function(x) {
+      if (length(x) > n) {
+        x <- c(x[1:(n-1)], paste(x[n:length(x)], collapse = pattern))
+      }
+      return(x)
+    })
+  }
 }
 
 # nocov end

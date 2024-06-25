@@ -1,7 +1,7 @@
-#' Summary Table Bridges
+#' Summary table bridge
 #'
 #' @description
-#' Bridge function for converting `tbl_summary()` (and similar) cards to table bodies.
+#' Bridge function for converting `tbl_summary()` (and similar) cards to basic gtsummary objects.
 #' All bridge functions begin with prefix `brdg_*()`.
 #'
 #' This file also contains helper functions for constructing the bridge,
@@ -34,7 +34,7 @@
 #'   named list of summary statistic names
 #' @inheritParams tbl_summary
 #'
-#' @return data frame
+#' @return a gtsummary object
 #' @name brdg_summary
 #'
 #' @examples
@@ -110,39 +110,6 @@ brdg_summary <- function(cards,
                          missing_text = "Unknown") {
   set_cli_abort_call()
 
-  # add gts info to the cards table --------------------------------------------
-  # adding the name of the column the stats will populate
-  if (is_empty(by)) {
-    cards$gts_column <-
-      ifelse(
-        !cards$context %in% "attributes",
-        # cards$context %in% c("continuous", "categorical", "dichotomous", "missing"),
-        "stat_0",
-        NA_character_
-      )
-  } else {
-    cards <-
-      cards %>%
-      {
-        dplyr::left_join(
-          .,
-          dplyr::filter(
-            .,
-            .data$variable %in% .env$variables,
-            !cards$context %in% "attributes",
-          ) |>
-            dplyr::select(cards::all_ard_groups(), "variable", "context") |>
-            dplyr::distinct() |>
-            dplyr::mutate(
-              .by = cards::all_ard_groups(),
-              gts_column = paste0("stat_", dplyr::cur_group_id())
-            ),
-          by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
-        )
-      }
-  }
-
-
   # build the table body pieces with bridge functions and stack them -----------
   x <- list()
   x$table_body <-
@@ -188,6 +155,22 @@ brdg_summary <- function(cards,
 
   # add info to x$table_styling$header for dynamic headers ---------------------
   x <- .add_table_styling_stats(x, cards = cards, by = by)
+
+  # adding styling -------------------------------------------------------------
+  x <- x |>
+    # add header to label column and add default indentation
+    modify_table_styling(
+      columns = "label",
+      label = glue("**{translate_string('Characteristic')}**"),
+      rows = .data$row_type %in% c("level", "missing"),
+      indent = 4L
+    ) |>
+    # adding the statistic footnote
+    modify_table_styling(
+      columns = all_stat_cols(),
+      footnote =
+        .construct_summary_footnote(cards, variables, statistic, type)
+    )
 
   x |>
     structure(class = "gtsummary") |>
@@ -248,31 +231,31 @@ pier_summary_categorical <- function(cards,
           .data = df_groups_and_variable,
           df_stats =
             dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
-              dplyr::group_by(.data$variable_level) |>
-              dplyr::group_map(
-                function(df_variable_level_stats, df_variable_levels) {
-                  dplyr::mutate(
-                    .data = df_variable_levels,
-                    stat =
-                      map(
-                        str_statistic_pre_glue,
-                        function(str_to_glue) {
-                          stat <-
-                            glue::glue(
-                              str_to_glue,
-                              .envir =
-                                cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
-                                  c(lst_variable_stats)
-                            ) |>
-                            as.character()
-                        }
-                      ),
-                    label = unlist(.data$variable_level) |> as.character()
-                  )
-                }
-              ) |>
-              dplyr::bind_rows() |>
-              list()
+            dplyr::group_by(.data$variable_level) |>
+            dplyr::group_map(
+              function(df_variable_level_stats, df_variable_levels) {
+                dplyr::mutate(
+                  .data = df_variable_levels,
+                  stat =
+                    map(
+                      str_statistic_pre_glue,
+                      function(str_to_glue) {
+                        stat <-
+                          glue::glue(
+                            str_to_glue,
+                            .envir =
+                              cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
+                              c(lst_variable_stats)
+                          ) |>
+                          as.character()
+                      }
+                    ),
+                  label = unlist(.data$variable_level) |> as.character()
+                )
+              }
+            ) |>
+            dplyr::bind_rows() |>
+            list()
         )
       }
     ) |>
@@ -365,7 +348,7 @@ pier_summary_continuous2 <- function(cards,
                   as.character()
               }
             ) |>
-              list(),
+            list(),
           label =
             map(
               statistic[[.y$variable[1]]],
@@ -378,7 +361,7 @@ pier_summary_continuous2 <- function(cards,
                   as.character()
               }
             ) |>
-              list()
+            list()
         )
       }
     ) |>
@@ -464,7 +447,7 @@ pier_summary_continuous <- function(cards,
               statistic[[.data$variable[1]]],
               .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
             ) |>
-              as.character()
+            as.character()
         )
       }
     ) |>
@@ -548,10 +531,10 @@ pier_summary_missing_row <- function(cards,
       dplyr::mutate(
         modify_stat_N =
           cards |>
-            dplyr::filter(.data$stat_name %in% "N_obs") |>
-            dplyr::pull("stat") |>
-            unlist() |>
-            getElement(1),
+          dplyr::filter(.data$stat_name %in% "N_obs") |>
+          dplyr::pull("stat") |>
+          unlist() |>
+          getElement(1) %||% NA_integer_,
         modify_stat_n = .data$modify_stat_N,
         modify_stat_p = 1,
         modify_stat_level = "Overall"
@@ -560,7 +543,14 @@ pier_summary_missing_row <- function(cards,
     df_by_stats <- cards |>
       dplyr::filter(.data$variable %in% .env$by & .data$stat_name %in% c("N", "n", "p"))
 
-    # get a data frame with the by variable stats
+    if (nrow(df_by_stats) == 0L) {
+      cli::cli_abort(
+        c("The needed counts for the {.arg by} variable were not found.",
+          i = "The statistics can be added to the ARD with {.code cards::ard_categorical(data, variables = {.val {by}})}."),
+        call = get_cli_abort_call()
+      )
+    }
+
     df_by_stats_wide <-
       df_by_stats |>
       dplyr::filter(.data$stat_name %in% c("n", "p")) |>
@@ -593,10 +583,10 @@ pier_summary_missing_row <- function(cards,
       dplyr::mutate(
         modify_stat_N =
           df_by_stats |>
-            dplyr::filter(.data$stat_name %in% "N") |>
-            dplyr::pull("stat") |>
-            unlist() |>
-            getElement(1L)
+          dplyr::filter(.data$stat_name %in% "N") |>
+          dplyr::pull("stat") |>
+          unlist() |>
+          getElement(1L)
       ) |>
       dplyr::left_join(
         df_by_stats_wide,
