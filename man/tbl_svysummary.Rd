@@ -163,13 +163,13 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # A simple weighted dataset
-survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
+survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
 
 # Example 2 ----------------------------------
 # A dataset with a complex design
 data(api, package = "survey")
-survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
+survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
   tbl_svysummary(by = "both", include = c(api00, stype))
 \dontshow{\}) # examplesIf}
 }

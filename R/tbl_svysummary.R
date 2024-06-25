@@ -71,13 +71,13 @@
 #' @author Joseph Larmarange
 #' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary")
 #' # A simple weighted dataset
-#' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
+#' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
 #'   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
 #'
 #' # Example 2 ----------------------------------
 #' # A dataset with a complex design
 #' data(api, package = "survey")
-#' survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
+#' survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
 #'   tbl_svysummary(by = "both", include = c(api00, stype))
 tbl_svysummary <- function(data,
                            by = NULL,
@@ -255,6 +255,11 @@ tbl_svysummary <- function(data,
   call <- match.call()
 
   # construct cards ------------------------------------------------------------
+  browser()
+  variables_continuous <- type |> keep(~.x %in% c("continuous", "continuous2")) |> names()
+  variables_categorical <- type |> keep(~.x %in% "categorical") |> names()
+  variables_dichotomous <- type |> keep(~.x %in% "dichotomous") |> names()
+
   cards <-
     cards::bind_ard(
       # attributes for summary columns
@@ -265,94 +270,38 @@ tbl_svysummary <- function(data,
                          by = all_of(by),
                          fmt_fn = digits,
                          stat_label = ~ default_stat_labels()),
-      # tabulate unweighted missing information
-      cards::ard_missing(data$variable,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fn = digits,
-                         stat_label = ~ default_stat_labels()) |>
-        dplyr::mutate(
-          stat_name = paste0(.data$stat_name, "_unweighted"),
-          stat_label = paste(.data$stat_label, "(unweighted)")
-        ),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
         cards::ard_categorical(data,
                                variables = all_of(by),
                                stat_label = ~ default_stat_labels())
       },
-      if (!is_empty(by)) {
-        cards::ard_categorical(data$variables,
-                               variables = all_of(by),
-                               stat_label = ~ default_stat_labels()) |>
-          dplyr::mutate(
-            stat_name = paste0(.data$stat_name, "_unweighted"),
-            stat_label = paste(.data$stat_label, "(unweighted)")
-          )
-      },
       # tabulate categorical summaries
       cards::ard_categorical(
         data,
         by = all_of(by),
-        variables = all_categorical(FALSE),
-        fmt_fn = digits,
+        variables = all_of(variables_categorical),
+        fmt_fn = digits[variables_categorical],
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
-      cards::ard_categorical(
-        data$variables,
-        by = all_of(by),
-        variables = all_categorical(FALSE),
-        fmt_fn = digits,
-        denominator = percent,
-        stat_label = ~ default_stat_labels()
-      ) %>%
-        {case_switch(
-          is_empty(.) ~ .,
-          .default =
-            dplyr::mutate(
-              .,
-              stat_name = paste0(.data$stat_name, "_unweighted"),
-              stat_label = paste(.data$stat_label, "(unweighted)")
-            )
-        )},
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
         data,
         by = all_of(by),
-        variables = all_dichotomous(),
-        fmt_fn = digits,
+        variables = all_of(variables_dichotomous),
+        fmt_fn = digits[variables_dichotomous],
         denominator = percent,
         value = value,
         stat_label = ~ default_stat_labels()
       ),
-      cards::ard_dichotomous(
-        data$variables,
-        by = all_of(by),
-        variables = all_categorical(FALSE),
-        fmt_fn = digits,
-        denominator = percent,
-        stat_label = ~ default_stat_labels()
-      ) %>%
-        {case_switch(
-          is_empty(.) ~ .,
-          .default =
-            dplyr::mutate(
-              .,
-              stat_name = paste0(.data$stat_name, "_unweighted"),
-              stat_label = paste(.data$stat_label, "(unweighted)")
-            )
-        )},
       # calculate continuous summaries
       cards::ard_continuous(
-        select_prep(.list2tb(type, "var_type"), data),
+        data,
         by = all_of(by),
-        variables = all_continuous(),
-        statistic =
-          .continuous_statistics_chr_to_fun(
-            statistic[select(select_prep(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
-          ),
-        fmt_fn = digits,
+        variables = all_of(variables_continuous),
+        statistic = statistic[variables_continuous] |> lapply(.extract_glue_elements),
+        fmt_fn = digits[variables_continuous],
         stat_label = ~ default_stat_labels()
       )
     ) |>
@@ -405,7 +354,7 @@ tbl_svysummary <- function(data,
     )
 
   # return tbl_summary table ---------------------------------------------------
-  x$call_list <- list(tbl_summary = call)
+  x$call_list <- list(tbl_svysummary = call)
   # running any additional mods
   x <-
     get_theme_element("tbl_svysummary-fn:addnl-fn-to-run", default = identity) |>
