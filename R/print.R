@@ -27,10 +27,10 @@ print.gtsummary <- function(x,
   res <- switch(
     print_engine,
     "gt" = as_gt(x),
-    # "kable" = as_kable(x),
-    # "flextable" = as_flex_table(x),
-    # "kable_extra" = as_kable_extra(x),
-    # "huxtable" = as_hux_table(x),
+    "kable" = as_kable(x),
+    "flextable" = as_flex_table(x),
+    "kable_extra" = as_kable_extra(x),
+    "huxtable" = as_hux_table(x),
     "tibble" = as_tibble(x)
   )
 
@@ -55,10 +55,10 @@ knit_print.gtsummary <- function(x,
   res <- switch(
     print_engine,
     "gt" = as_gt(x),
-    # "kable" = as_kable(x),
-    # "flextable" = as_flex_table(x),
-    # "kable_extra" = as_kable_extra(x),
-    # "huxtable" = as_hux_table(x),
+    "kable" = as_kable(x),
+    "flextable" = as_flex_table(x),
+    "kable_extra" = as_kable_extra(x),
+    "huxtable" = as_hux_table(x),
     "tibble" = as_tibble(x)
   )
 
