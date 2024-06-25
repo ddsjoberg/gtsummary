@@ -1,6 +1,6 @@
-test_that("add_stat for tbl_continuous() works", {
+test_that("add_stat() for 'tbl_continuous'", {
   tt <-
-    trial %>%
+    trial |>
     tbl_continuous(
       age,
       include = grade,
@@ -12,7 +12,7 @@ test_that("add_stat for tbl_continuous() works", {
   }
 
   expect_equal(
-    tt %>%
+    tt |>
       add_stat(fns = everything() ~ add_stat_test1) %>%
       as_tibble() %>%
       dplyr::pull(addtl),
@@ -21,7 +21,7 @@ test_that("add_stat for tbl_continuous() works", {
 })
 
 
-test_that("add_stat for tbl_continuous() works using location", {
+test_that("add_stat(location) for 'tbl_continuous'", {
   tt <-
     trial %>%
     tbl_continuous(

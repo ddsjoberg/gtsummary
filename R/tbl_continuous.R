@@ -188,7 +188,6 @@ tbl_continuous <- function(data,
   # add other information to the returned object
   x$cards <- list(tbl_continuous = cards)
   x$inputs <- tbl_continuous_inputs
-  x$inputs$type <- rlang::rep_named(include, list("categorical"))
   x$call_list <- list(tbl_continuous = call)
 
   x |>

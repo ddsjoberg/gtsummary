@@ -114,6 +114,11 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
   check_not_missing(fns)
   check_class(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous"))
 
+  # adding type if `tbl_continuous`...this is used later on
+  if (inherits(x, "tbl_continuous")) {
+    x$inputs$type <- rep_named(x$inputs$include, list("categorical"))
+  }
+
   # convert to named lists -----------------------------------------------------
   cards::process_formula_selectors(
     select_prep(x$table_body),
@@ -233,7 +238,6 @@ eval_fn_safe <- function(variable, tbl, fn) {
         data = tbl$inputs$data,
         variable = variable,
         by = tbl$inputs$by,
-        include = tbl$inputs$include,
         tbl = tbl
       )
     )
