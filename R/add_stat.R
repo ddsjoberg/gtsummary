@@ -153,8 +153,6 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
     dplyr::tibble(variable = names(fns)) |>
     dplyr::mutate(
       summary_type = map_chr(.data$variable, ~ x$inputs$type[[.x]]),
-      # tbl_continuous objects generally didn't have a "$inputs$type" object nested inside
-      # added it back to tbl_continuous
       row_type = map_chr(.data$variable, ~ location[[.x]]),
       label = map2(
         .data$variable, .data$row_type,

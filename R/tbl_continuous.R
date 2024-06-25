@@ -94,6 +94,7 @@ tbl_continuous <- function(data,
     digits = digits
   )
 
+
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
   call <- match.call()
