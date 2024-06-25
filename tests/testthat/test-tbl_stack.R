@@ -281,7 +281,7 @@ test_that("tbl_stack returns expected message when unique column names are prese
   )
 })
 
-test_that("tbl_stack does not throw mismatched number of columns error", {
+test_that("tbl_stack() can stack tbl that have been previosly stacked", {
   t1 <- trial |> tbl_summary(include = age, missing = "no")
   t2 <- tbl_stack(list(t1, t1))
 
@@ -292,7 +292,7 @@ test_that("tbl_stack does not throw mismatched number of columns error", {
   t5 <- survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
     tbl_regression(exponentiate = TRUE)
 
-  expect_silent(t6 <- tbl_stack(tbls = list(t4, t5)))
+  expect_error(t6 <- tbl_stack(tbls = list(t4, t5)), NA)
 })
 
 test_that("tbl_stack throws expected errors", {

@@ -94,7 +94,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
         table_body |> dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), everything())
       }
     ) %>%
-    {inject(rbind(!!!.))} # styler: off
+      dplyr::bind_rows()
 
   # creating table styling -----------------------------------------------------
   # print message if column headers, footnotes, etc. are different among tbls
