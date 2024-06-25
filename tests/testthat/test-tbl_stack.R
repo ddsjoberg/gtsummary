@@ -281,6 +281,20 @@ test_that("tbl_stack returns expected message when unique column names are prese
   )
 })
 
+test_that("tbl_stack does not throw mismatched number of columns error", {
+  t1 <- trial |> tbl_summary(include = age, missing = "no")
+  t2 <- tbl_stack(list(t1, t1))
+
+  expect_silent(t3 <- tbl_stack(list(t1, t2)))
+
+  t4 <- glm(response ~ trt + grade + age, trial, family = binomial) %>%
+    tbl_regression(exponentiate = TRUE)
+  t5 <- survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+    tbl_regression(exponentiate = TRUE)
+
+  expect_silent(t6 <- tbl_stack(tbls = list(t4, t5)))
+})
+
 test_that("tbl_stack throws expected errors", {
   # input must be a list
   expect_snapshot(
