@@ -1,5 +1,6 @@
 #' Summarize continuous variable
 #'
+#' `r lifecycle::badge("experimental")`\cr
 #' Summarize a continuous variable by one or more categorical variables
 #'
 #' @param variable (`string`)\cr

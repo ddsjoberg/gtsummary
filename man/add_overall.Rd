@@ -3,12 +3,22 @@
 \name{add_overall}
 \alias{add_overall}
 \alias{add_overall.tbl_continuous}
+\alias{add_overall.tbl_svysummary}
 \alias{add_overall.tbl_custom_summary}
 \title{Add overall column}
 \usage{
 add_overall(x, ...)
 
 \method{add_overall}{tbl_continuous}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {N}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+\method{add_overall}{tbl_svysummary}(
   x,
   last = FALSE,
   col_label = "**Overall**  \\nN = {N}",
