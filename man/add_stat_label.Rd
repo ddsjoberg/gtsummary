@@ -3,11 +3,14 @@
 \name{add_stat_label}
 \alias{add_stat_label}
 \alias{add_stat_label.tbl_summary}
+\alias{add_stat_label.tbl_svysummary}
 \title{Add statistic labels}
 \usage{
 add_stat_label(x, ...)
 
 \method{add_stat_label}{tbl_summary}(x, location = c("row", "column"), label = NULL, ...)
+
+\method{add_stat_label}{tbl_svysummary}(x, location = c("row", "column"), label = NULL, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_summary})\cr

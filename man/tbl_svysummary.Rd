@@ -170,7 +170,8 @@ survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
 # A dataset with a complex design
 data(api, package = "survey")
 survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
-  tbl_svysummary(by = "both", include = c(api00, stype))
+  tbl_svysummary(by = "both", include = c(api00, stype)) |>
+  modify_spanning_header(all_stat_cols() ~ "**Survived**")
 \dontshow{\}) # examplesIf}
 }
 \author{

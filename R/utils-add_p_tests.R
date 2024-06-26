@@ -292,7 +292,7 @@ add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
           stat_label = "method",
           stat =
             dplyr::case_when(
-              is.null(adj.vars) ~ list("One-way ANOVA"),
+              is_empty(adj.vars) ~ list("One-way ANOVA"),
               TRUE ~ list("ANCOVA")
             ),
           fmt_fun = list(NULL)
@@ -394,7 +394,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_empty(c("test.args"), ...)
 
-  if (!is.null(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
+  if (!is_empty(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", reference_pkg = "cardx")
 
   # checking inputs
@@ -407,14 +407,14 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   if (type %in% "dichotomous" && dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
     cli::cli_abort("Variable {.val {variable}} must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (inherits(data, "survey.design") && !is.null(group)) {
+  if (inherits(data, "survey.design") && !is_empty(group)) {
     cli::cli_abort("Cannot use {.arg group} argument with {.val emmeans} and survey data.", call = get_cli_abort_call())
   }
 
   # assembling formula
   # styler: off
   termlabels <-
-    if (is.null(group)) cardx::bt(c(by, adj.vars))
+    if (is_empty(group)) cardx::bt(c(by, adj.vars))
   else c(cardx::bt(by), cardx::bt(adj.vars), glue::glue("(1 | {cardx::bt(group)})"))
   response <-
     if (type == "dichotomous") glue::glue("as.factor({cardx::bt(variable)})")
@@ -502,7 +502,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
           stat_label = "method",
           stat =
             dplyr::case_when(
-              is.null(adj.vars) ~ list("One-way ANOVA with random intercept"),
+              is_empty(adj.vars) ~ list("One-way ANOVA with random intercept"),
               TRUE ~ list("ANCOVA with random intercept")
             ),
           fmt_fun = list(NULL)

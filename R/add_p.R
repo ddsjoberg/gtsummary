@@ -1,6 +1,10 @@
 #' Add p-values
 #'
 #' - [`add_p.tbl_summary()`]
+#' - [`add_p.tbl_svysummary()`]
+#' - [`add_p.tbl_continuous()`]
+#' - [`add_p.tbl_cross()`]
+#' - [`add_p.tbl_survfit()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
