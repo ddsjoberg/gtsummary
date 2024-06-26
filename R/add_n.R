@@ -60,6 +60,11 @@ add_n <- function(x, ...) {
 #' trial |>
 #'   tbl_summary(by = trt, include = c(trt, age, grade, response)) |>
 #'   add_n()
+#'
+#' # Example 2 ----------------------------------
+#' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+#'   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age)) |>
+#'   add_n()
 NULL
 
 #' @name add_n_summary
