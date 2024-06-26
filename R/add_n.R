@@ -1,6 +1,7 @@
 #' Add column with N
 #'
 #' - [`add_n.tbl_summary()`]
+#' - [`add_n.tbl_svysummary()`]
 #' - [`add_n.tbl_regression()`]
 #' - [`add_n.tbl_uvregression()`]
 #' - [`add_n.tbl_survfit()`]
@@ -51,7 +52,7 @@ add_n <- function(x, ...) {
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @author Daniel D. Sjoberg
-#' @export
+#' @name add_n_summary
 #'
 #' @return A table of class `c('tbl_summary', 'gtsummary')`
 #' @examples
@@ -59,6 +60,10 @@ add_n <- function(x, ...) {
 #' trial |>
 #'   tbl_summary(by = trt, include = c(trt, age, grade, response)) |>
 #'   add_n()
+NULL
+
+#' @name add_n_summary
+#' @export
 add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
   set_cli_abort_call()
@@ -106,7 +111,6 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
 
     x$cards$add_n$stat_label <- translate_vector(x$cards$add_n$stat_label)
   }
-
 
   # check statistic argument ---------------------------------------------------
   if (is_empty(.extract_glue_elements(statistic))) {
@@ -209,3 +213,7 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
   x$call_list <- updated_call_list
   x
 }
+
+#' @name add_n_summary
+#' @export
+add_n.tbl_svysummary <- add_n.tbl_summary
