@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_p.R
 \name{add_p.tbl_summary}
 \alias{add_p.tbl_summary}
-\title{Add p-values to summary table}
+\title{Add p-values}
 \usage{
 \method{add_p}{tbl_summary}(
   x,

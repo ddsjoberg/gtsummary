@@ -59,16 +59,14 @@ trial |>
     digits = ~ c(1, 0)
   )
 
-# TODO: Add this example after `tbl_continuous()`
-# # Example 3 ----------------------------------
-# tbl_overall_ex3 <-
-#   trial \%>\%
-#   tbl_continuous(
-#     variable = age,
-#     by = trt,
-#     include = grade
-#   ) \%>\%
-#   add_overall(last = TRUE)
+# Example 3 ----------------------------------
+trial |>
+  tbl_continuous(
+    variable = age,
+    by = trt,
+    include = grade
+  ) |>
+  add_overall(last = TRUE)
 }
 \author{
 Daniel D. Sjoberg

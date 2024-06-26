@@ -52,6 +52,7 @@ Variables to include in the summary table. Default is \code{everything()}}
 a gtsummary table of class \code{"tbl_ard_summary"}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 The \code{tbl_ard_summary()} function tables descriptive statistics for
 continuous, categorical, and dichotomous variables.
 The functions accepts an ARD object.

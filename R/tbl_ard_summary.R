@@ -1,5 +1,6 @@
 #' ARD summary table
 #'
+#' `r lifecycle::badge("experimental")`\cr
 #' The `tbl_ard_summary()` function tables descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' The functions accepts an ARD object.

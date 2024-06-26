@@ -57,16 +57,14 @@ add_overall <- function(x, ...) {
 #'     digits = ~ c(1, 0)
 #'   )
 #'
-#' # TODO: Add this example after `tbl_continuous()`
-#' # # Example 3 ----------------------------------
-#' # tbl_overall_ex3 <-
-#' #   trial %>%
-#' #   tbl_continuous(
-#' #     variable = age,
-#' #     by = trt,
-#' #     include = grade
-#' #   ) %>%
-#' #   add_overall(last = TRUE)
+#' # Example 3 ----------------------------------
+#' trial |>
+#'   tbl_continuous(
+#'     variable = age,
+#'     by = trt,
+#'     include = grade
+#'   ) |>
+#'   add_overall(last = TRUE)
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \nN = {N}",
                                     statistic = NULL, digits = NULL, ...) {
   set_cli_abort_call()
@@ -92,6 +90,9 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 #' @export
 add_overall.tbl_continuous <- add_overall.tbl_summary
 
+#' @rdname add_overall
+#' @export
+add_overall.tbl_svysummary <- add_overall.tbl_summary
 
 #' @rdname add_overall
 #' @export
