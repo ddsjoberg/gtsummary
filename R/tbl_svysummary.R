@@ -70,7 +70,7 @@
 #'
 #' @author Joseph Larmarange
 #' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary")
-#' # A simple weighted dataset
+#' # Example 1 ----------------------------------
 #' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
 #'   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
 #'
