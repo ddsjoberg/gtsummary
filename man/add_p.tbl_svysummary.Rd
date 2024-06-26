@@ -24,6 +24,19 @@ Default is \code{list(all_continuous() ~ "svy.wilcox.test", all_categorical() ~ 
 See below for details on default tests and \link[=tests]{?tests} for details on available
 tests and creating custom tests.}
 
+\item{pvalue_fun}{(\code{function})\cr
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
+The function must have a numeric vector input, and return a string that is
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
+
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in output. Default is \code{everything()}.}
+
+\item{test.args}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Containing additional arguments to pass to tests that accept arguments.
+For example, add an argument for all t-tests, use
+\code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
+
 \item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
@@ -50,7 +63,7 @@ tbl_svysummary(d_clust, by = both, include = c(api00, api99)) |>
 
 # Example 3 ----------------------------------
 # change tests to svy t-test and Wald test
-tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99)) |>
+tbl_svysummary(d_clust, by = both, include = c(api00, api99, stype)) |>
   add_p(
     test = list(
       all_continuous() ~ "svy.t.test",

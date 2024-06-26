@@ -516,6 +516,54 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
     )
 }
 
+# tbl_svysummary ---------------------------------------------------------------
+add_p_test_svy.t.test <- function(data, variable, by, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+
+  cardx::ard_survey_svyttest(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    conf.level = conf.level
+  )
+}
+
+add_p_test_svy.svyranktest <- function(data,
+                                       variable,
+                                       by,
+                                       test = c("wilcoxon", "vanderWaerden", "median", "KruskalWallis"), ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  test <- arg_match(test)
+
+
+  cardx::ard_survey_svyranktest(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    test = test
+  )
+}
+
+add_p_test_svychisq.test <- function(data,
+                                      variable,
+                                      by,
+                                      statistic = c("F", "Chisq", "Wald", "adjWald", "lincom",
+                                                    "saddlepoint", "wls-score"), ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  statistic <- arg_match(statistic)
+
+
+  cardx::ard_survey_svychisq(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    statistic = statistic
+  )
+}
+
 # add_p.tbl_continuous ---------------------------------------------------------
 # TODO: Do we need an ARD for storing glance() results? This is not a cards object.
 add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {

@@ -119,6 +119,16 @@ assign_tests.tbl_svysummary <- function(x,
   lapply(
     include,
     function(variable) {
+      if (is.null(test[[variable]])) {
+        cli::cli_abort(
+          c(
+            "There is no default test set for column {.val {variable}}.",
+            i = "Set a value in the {.arg test} argument for column {.val {variable}} or exclude with {.code include = -{variable}}."
+          ),
+          call = get_cli_abort_call()
+        )
+      }
+
       test[[variable]] <-
         .process_test_argument_value(
           test = test[[variable]],

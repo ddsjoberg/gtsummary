@@ -10,7 +10,7 @@
 #'
 #'   See below for details on default tests and [?tests][tests] for details on available
 #'   tests and creating custom tests.
-#' @inheritParams add_p.tbl_svysummary
+#' @inheritParams add_p.tbl_summary
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @return a gtsummary table of class `"tbl_svysummary"`
@@ -33,7 +33,7 @@
 #'
 #' # Example 3 ----------------------------------
 #' # change tests to svy t-test and Wald test
-#' tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99)) |>
+#' tbl_svysummary(d_clust, by = both, include = c(api00, api99, stype)) |>
 #'   add_p(
 #'     test = list(
 #'       all_continuous() ~ "svy.t.test",
@@ -64,8 +64,6 @@ add_p.tbl_svysummary <- function(x,
     select_prep(x$table_body, as.data.frame(x$inputs$data)[x$inputs$include]),
     include = {{ include }}
   )
-  cards::process_selectors(as.data.frame(x$inputs$data), group = {{ group }}, adj.vars = {{ adj.vars }})
-  check_scalar(group, allow_empty = TRUE)
 
   cards::process_formula_selectors(
     select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
@@ -102,7 +100,6 @@ add_p.tbl_svysummary <- function(x,
   }
   pvalue_fun <- as_function(pvalue_fun)
 
-  browser()
   # select test ----------------------------------------------------------------
   test <-
     assign_tests(
