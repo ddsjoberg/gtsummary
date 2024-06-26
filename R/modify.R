@@ -230,24 +230,24 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking input -------------------------------------------------------------
-  .assert_class(x, "gtsummary")
+  check_class(x, "gtsummary")
 
   df_cols <-
     x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("column", "label")
+    dplyr::filter(.data$hide == FALSE) %>%
+    dplyr::select("column", "label")
 
   if (identical(quiet, FALSE) && isTRUE(include_example)) {
     cat("\n")
-    cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
-    block <- mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
-      pull("formula") %>%
+    cli::cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
+    block <- dplyr::mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
+      dplyr::pull("formula") %>%
       paste0("", collapse = ",\n") %>%
       {
         glue("modify_header(\n{.}\n)")
       }
 
-    cli_code(block)
+    cli::cli_code(block)
   }
   if (identical(quiet, FALSE)) {
     knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
