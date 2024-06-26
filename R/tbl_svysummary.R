@@ -255,7 +255,6 @@ tbl_svysummary <- function(data,
   call <- match.call()
 
   # construct cards ------------------------------------------------------------
-  browser()
   variables_continuous <- type |> keep(~.x %in% c("continuous", "continuous2")) |> names()
   variables_categorical <- type |> keep(~.x %in% "categorical") |> names()
   variables_dichotomous <- type |> keep(~.x %in% "dichotomous") |> names()
