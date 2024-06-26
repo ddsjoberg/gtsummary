@@ -5,6 +5,7 @@
 \alias{modify_header}
 \alias{modify_footnote}
 \alias{modify_spanning_header}
+\alias{show_header_names}
 \title{Modify column headers, footnotes, and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
@@ -19,6 +20,8 @@ modify_footnote(
 )
 
 modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
+
+show_header_names(x = NULL, include_example = TRUE, quiet = NULL)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -33,7 +36,6 @@ formula will invoke tidyselect, e.g. \code{modify_*(all_stat_cols() ~ "**{level}
 The dynamic dots allow syntax like \code{modify_header(x, !!!list(label = "Variable"))}.
 See examples below.
 
-TODO: Add link when the function below is added.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
 \item{text_interpret}{(\code{string})\cr
@@ -44,6 +46,8 @@ String indicates whether text will be interpreted with
 
 \item{abbreviation}{(scalar \code{logical})\cr
 Logical indicating if an abbreviation is being updated.}
+
+\item{include_example}{(scalar \code{logical})\cr}
 }
 \value{
 Updated gtsummary object
@@ -86,8 +90,7 @@ tbl <- trial |>
   add_p()
 
 # print the column names that can be modified
-# TODO: Add this back in after function is added
-# show_header_names(tbl)
+show_header_names(tbl)
 
 # Example 1 ----------------------------------
 # updating column headers and footnote

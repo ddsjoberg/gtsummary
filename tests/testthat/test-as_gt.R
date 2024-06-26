@@ -16,7 +16,7 @@ test_that("as_gt works with standard use", {
   # return_calls argument does not produce warnings
   expect_silent(my_tbl_summary |> as_gt(return_calls = TRUE))
 
-  # return_calls argument does not produce warnings
+  # include argument does not produce warnings
   expect_silent(my_tbl_summary |> as_gt(include = gt))
 
   # correct elements are returned
@@ -350,7 +350,7 @@ test_that("as_gt passes missing symbols correctly", {
   # correct substitution for missing values
   expect_equal(
     tbl |>
-      as_tibble.gtsummary(col_labels = FALSE, fmt_missing = TRUE) |>
+      as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
       dplyr::pull(stat_0),
     gt_tbl$`_substitutions`[[2]]$func$default(gt_tbl$`_data`$stat_0)
   )

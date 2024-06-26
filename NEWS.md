@@ -40,6 +40,8 @@
 
 * Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
 
+* The design-based t-test has been added as possible methods for `add_difference.tbl_svysummary()` and is now the default for continuous variables.
+
 * The `inline_text(level)` argument now expects a character value.
 
 #### Internal Updates

@@ -229,6 +229,10 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   x
 }
 
+#' @export
+#' @rdname add_stat_label
+add_stat_label.tbl_svysummary <- add_stat_label.tbl_summary
+
 .add_stat_label_default_label_arg <- function(x, statistic) {
   statistic |>
     imap(

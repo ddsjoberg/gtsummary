@@ -1,12 +1,11 @@
 url: https://www.danieldsjoberg.com/gtsummary/
 
 template:
+  bootstrap: 5
   params:
-    docsearch:
-      api_key: fd7c21cad87500b8877c475ed3a4cece
-      index_name: gtsummary
     ganalytics: UA-145876596-1
     bootswatch: flatly
+
 development:
   mode: auto
   version_label: default
@@ -22,7 +21,9 @@ authors:
     href: "https://joseph.larmarange.net/"
 
 navbar:
-  type: default
+  structure:
+    left:  [intro, reference, tutorials, news]
+    right: [search, github]
   left:
   - icon: fa-home
     href: index.html
@@ -48,9 +49,6 @@ navbar:
     #   href: articles/gallery.html
   - text: News
     href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/gtsummary
 
 reference:
   - title: Data Summary Tables
@@ -76,7 +74,7 @@ reference:
   - subtitle: Continuous Variable Summary
   - contents:
       - tbl_continuous
-      - add_overall
+      - add_overall.tbl_continuous
       - add_p.tbl_continuous
       - add_stat
   - subtitle: Time-to-event Summary Tables
@@ -88,16 +86,16 @@ reference:
       - add_q
   - subtitle: Survey Design Summary Tables
   - contents:
-  #     - tbl_svysummary
-  #     - add_p.tbl_svysummary
-  #     - add_q
-  #     - add_overall.tbl_svysummary
-  #     - add_difference
-  #     - add_ci
+      - tbl_svysummary
+      - add_p.tbl_svysummary
+      - add_q
+      - add_overall.tbl_svysummary
+      - add_difference.tbl_svysummary
+  #     - add_ci.tbl_svysummary
   #     - add_n.tbl_svysummary
-  #     - add_stat_label
+      - add_stat_label
       - add_stat
-  #     - separate_p_footnotes
+      - separate_p_footnotes
   - subtitle: Custom Summary Tables
   - contents:
       - tbl_custom_summary

@@ -99,7 +99,8 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{tbl_svysummary() \%>\% add_difference()}{
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
-   \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)} \tab  \cr
+   \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = variable, g = by, w = weights(data),  std.error = TRUE)} \tab  \cr
+   \code{'svy.t.test'} \tab t-test adapted to complex survey samples \tab  \tab \code{survey::svyttest(~variable + by, data)} \tab  \cr
    \code{'emmeans'} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. \cr
 }
 }

@@ -33,6 +33,7 @@ Specifies summary statistics to display for each variable.  The default is
 a gtsummary table of class \code{"tbl_ard_summary"}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Summarize a continuous variable by one or more categorical variables
 }
 \examples{

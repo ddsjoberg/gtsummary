@@ -1,6 +1,10 @@
 #' Add p-values
 #'
 #' - [`add_p.tbl_summary()`]
+#' - [`add_p.tbl_svysummary()`]
+#' - [`add_p.tbl_continuous()`]
+#' - [`add_p.tbl_cross()`]
+#' - [`add_p.tbl_survfit()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
@@ -16,7 +20,7 @@ add_p <- function(x, ...) {
   UseMethod("add_p")
 }
 
-#' Add p-values to summary table
+#' Add p-values
 #'
 #' Adds p-values to tables created by [`tbl_summary()`] by comparing values across groups.
 #'
