@@ -9,13 +9,6 @@ test_that("as_kable works with standard use", {
   # include argument does not produce warnings
   expect_silent(my_tbl_summary |> as_kable(include = tibble))
 
-  # correct elements are returned
-  expect_equal(
-    names(kbl),
-    c("tibble", "fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
-      "fmt_missing", "cols_hide", "remove_line_breaks", "kable")
-  )
-
   # no errors replacing default kable argument value
   expect_silent(my_tbl_summary |> as_kable(col.names = NULL))
 
@@ -30,7 +23,14 @@ test_that("as_kable works with standard use", {
 
 test_that("as_kable(return_calls) works as expected", {
   # no warnings produced
-  expect_silent(my_tbl_summary |> as_kable(return_calls = TRUE))
+  expect_silent(kbl <- my_tbl_summary |> as_kable(return_calls = TRUE))
+
+  # correct elements are returned
+  expect_equal(
+    names(kbl),
+    c("tibble", "fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
+      "fmt_missing", "cols_hide", "remove_line_breaks", "kable")
+  )
 })
 
 test_that("as_kable produces column header labels correctly", {
