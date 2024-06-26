@@ -1,4 +1,3 @@
-skip_on_cran()
 skip_if_not(is_pkg_installed("knitr", reference_pkg = "gtsummary"))
 
 my_tbl_summary <- trial |>
@@ -7,9 +6,6 @@ my_tbl_summary <- trial |>
 my_tbl_regression <- lm(marker ~ age, trial) |> tbl_regression()
 
 test_that("as_kable works with standard use", {
-  # return_calls argument does not produce warnings
-  expect_silent(kbl <- my_tbl_summary |> as_kable(return_calls = TRUE))
-
   # include argument does not produce warnings
   expect_silent(my_tbl_summary |> as_kable(include = tibble))
 
@@ -30,6 +26,11 @@ test_that("as_kable works with standard use", {
 
   # test snapshot
   expect_snapshot(kbl_summary)
+})
+
+test_that("as_kable(return_calls) works as expected", {
+  # no warnings produced
+  expect_silent(my_tbl_summary |> as_kable(return_calls = TRUE))
 })
 
 test_that("as_kable produces column header labels correctly", {
@@ -119,7 +120,7 @@ test_that("as_kable works with tbl_uvregression", {
 })
 
 test_that("as_kable works with tbl_survfit", {
-  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
 
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
   tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
@@ -129,7 +130,7 @@ test_that("as_kable works with tbl_survfit", {
 })
 
 test_that("as_kable works with tbl_merge", {
-  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)
