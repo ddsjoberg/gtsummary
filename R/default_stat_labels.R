@@ -11,7 +11,6 @@ default_stat_labels <- function() {
     median = "Median",
     min = "Min",
     max = "Max",
-    var = "Variance",
     sum = "Sum",
     n = "n",
     N = "N",

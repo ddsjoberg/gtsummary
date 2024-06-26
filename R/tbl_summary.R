@@ -190,8 +190,10 @@ tbl_summary <- function(data,
   include <- setdiff(include, by) # remove by variable from list vars included
 
 
-  if (missing(missing))
+  if (missing(missing)) {
     missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
+  }
+
   missing <- arg_match(missing, values = c("ifany", "no", "always"))
 
   if (missing(missing_text)) {
@@ -460,7 +462,7 @@ tbl_summary <- function(data,
   }
 
   obs_to_drop <- is.na(data[[by]])
-  cli::cli_inform("{.val {sum(obs_to_drop)}} missing observations in the {.val {by}} column have been removed.")
+  cli::cli_inform("{.val {sum(obs_to_drop)}} missing rows in the {.val {by}} column have been removed.")
   data[!obs_to_drop, ]
 }
 
