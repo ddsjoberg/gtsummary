@@ -11,7 +11,7 @@
 \usage{
 label_style_number(
   digits = 0,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   scale = 1,
   ...
@@ -20,7 +20,7 @@ label_style_number(
 label_style_sigfig(
   digits = 2,
   scale = 1,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )
@@ -28,14 +28,14 @@ label_style_sigfig(
 label_style_pvalue(
   digits = 1,
   prepend_p = FALSE,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )
 
 label_style_ratio(
   digits = 2,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )
@@ -43,7 +43,7 @@ label_style_ratio(
 label_style_percent(
   symbol = FALSE,
   digits = 0,
-  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   ...
 )

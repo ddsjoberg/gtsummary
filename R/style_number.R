@@ -25,7 +25,7 @@
 #' c(0.111, 12.3) |> style_number(digits = c(1, 0))
 style_number <- function(x,
                          digits = 0,
-                         big.mark = ifelse(decimal.mark == ",", "\U2009", ","),
+                         big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
                          scale = 1, ...) {
   set_cli_abort_call()
@@ -37,7 +37,7 @@ style_number <- function(x,
   }
   if (missing(big.mark)) {
     big.mark <-
-      get_theme_element("style_number-arg:big.mark", default = big.mark)
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
   digits <- rep(digits, length.out = length(x))

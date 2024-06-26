@@ -1,12 +1,11 @@
 url: https://www.danieldsjoberg.com/gtsummary/
 
 template:
+  bootstrap: 5
   params:
-    docsearch:
-      api_key: fd7c21cad87500b8877c475ed3a4cece
-      index_name: gtsummary
     ganalytics: UA-145876596-1
     bootswatch: flatly
+
 development:
   mode: auto
   version_label: default
@@ -22,7 +21,9 @@ authors:
     href: "https://joseph.larmarange.net/"
 
 navbar:
-  type: default
+  structure:
+    left:  [intro, reference, tutorials, news]
+    right: [search, github]
   left:
   - icon: fa-home
     href: index.html
@@ -48,9 +49,6 @@ navbar:
     #   href: articles/gallery.html
   - text: News
     href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/gtsummary
 
 reference:
   - title: Data Summary Tables

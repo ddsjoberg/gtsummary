@@ -35,7 +35,7 @@
 #'     - `N` Overall N
 #'
 #'   The evaluated value of `.header` is also available within `tbl_strata2(.tbl_fun)`
-#' @param .stack_group_header DEPRECATED.
+#' @param .stack_group_header `r lifecycle::badge("deprecated")`
 #' @param .quiet `r lifecycle::badge("deprecated")`
 #'
 #' @section Tips:
@@ -110,7 +110,8 @@ tbl_strata <- function(data,
   if (!missing(.quiet)) {
     lifecycle::deprecate_warn(
       when = "2.0.0",
-      what = "gtsummary::tbl_strata(.quiet)"
+      what = "gtsummary::tbl_strata(.quiet)",
+      details = "Argument has been ignored."
     )
   }
 
@@ -129,7 +130,6 @@ tbl_strata <- function(data,
     .combine_args = .combine_args,
     .header = .header,
     .stack_group_header = .stack_group_header,
-    .quiet = .quiet,
     .parent_fun = "tbl_strata"
   )
 }
@@ -146,14 +146,15 @@ tbl_strata2 <- function(data,
                         .header =
                           ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
                         .stack_group_header = NULL,
-                        .quiet = NULL) {
+                        .quiet = TRUE) {
   set_cli_abort_call()
 
   # deprecations ---------------------------------------------------------------
   if (!missing(.quiet)) {
     lifecycle::deprecate_warn(
       when = "2.0.0",
-      what = "gtsummary::tbl_strata(.quiet)"
+      what = "gtsummary::tbl_strata(.quiet)",
+      details = "Argument has been ignored."
     )
   }
 
@@ -172,7 +173,6 @@ tbl_strata2 <- function(data,
     .combine_args = .combine_args,
     .header = .header,
     .stack_group_header = .stack_group_header,
-    .quiet = .quiet,
     .parent_fun = "tbl_strata2"
   )
 }
@@ -186,7 +186,6 @@ tbl_strata_internal <- function(data,
                                 .combine_args = NULL,
                                 .header = NULL,
                                 .stack_group_header = NULL,
-                                .quiet = NULL,
                                 .parent_fun) {
   check_string(.header)
 
@@ -267,7 +266,7 @@ tbl_strata_internal <- function(data,
     # default arguments
     switch(.combine_with,
            "tbl_merge" = list(tab_spanner = df_tbls$header),
-           "tbl_stack" = list(group_header = df_tbls$header, quiet = .quiet)
+           "tbl_stack" = list(group_header = df_tbls$header)
     ) %>%
     # update with user-passed arguments
     utils::modifyList(val = .combine_args %||% list())

@@ -28,7 +28,7 @@ tbl_strata2(
   .combine_args = NULL,
   .header = ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
   .stack_group_header = NULL,
-  .quiet = NULL
+  .quiet = TRUE
 )
 }
 \arguments{
@@ -67,7 +67,7 @@ curly brackets will be evaluated according to \code{glue::glue()} syntax.
 
 The evaluated value of \code{.header} is also available within \code{tbl_strata2(.tbl_fun)}}
 
-\item{.stack_group_header}{DEPRECATED.}
+\item{.stack_group_header}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }

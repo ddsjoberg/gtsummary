@@ -21,15 +21,13 @@
 #'   The dynamic dots allow syntax like `modify_header(x, !!!list(label = "Variable"))`.
 #'   See examples below.
 #'
-#'   TODO: Add link when the function below is added.
 #'   Use the `show_header_names()` to see the column names that can be modified.
 #' @param abbreviation (scalar `logical`)\cr
 #'   Logical indicating if an abbreviation is being updated.
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
-# TODO: add this back when show function is added
-# @param include_example (scalar `logical`)\cr
+#' @param include_example (scalar `logical`)\cr
 #   Logical whether to include print of `modify_header()` example
 #' @param update,quiet `r lifecycle::badge("deprecated")`
 #'
@@ -60,8 +58,7 @@
 #'   add_p()
 #'
 #' # print the column names that can be modified
-#' # TODO: Add this back in after function is added
-#' # show_header_names(tbl)
+#' show_header_names(tbl)
 #'
 #' # Example 1 ----------------------------------
 #' # updating column headers and footnote
@@ -224,6 +221,40 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
   # return object
   x$call_list <- updated_call_list
   x
+}
+
+#' @name modify
+#' @export
+show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
+  # checking input -------------------------------------------------------------
+  check_class(x, "gtsummary")
+
+  df_cols <-
+    x$table_styling$header %>%
+    dplyr::filter(.data$hide == FALSE) %>%
+    dplyr::select("column", "label")
+
+  if (identical(quiet, FALSE) && isTRUE(include_example)) {
+    cat("\n")
+    cli::cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
+    block <- dplyr::mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
+      dplyr::pull("formula") %>%
+      paste0("", collapse = ",\n") %>%
+      {
+        glue("modify_header(\n{.}\n)")
+      }
+
+    cli::cli_code(block)
+  }
+  if (identical(quiet, FALSE)) {
+    knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
+      print()
+  }
+
+  return(invisible(df_cols))
 }
 
 .evaluate_string_with_glue <- function(x, dots) {
