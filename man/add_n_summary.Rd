@@ -64,6 +64,7 @@ For each variable in a \code{tbl_summary} table, the \code{add_n} function adds 
 total number of non-missing (or missing) observations
 }
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed(c("survey", "cardx"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   tbl_summary(by = trt, include = c(trt, age, grade, response)) |>
@@ -73,6 +74,7 @@ trial |>
 survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age)) |>
   add_n()
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg
