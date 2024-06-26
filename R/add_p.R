@@ -16,7 +16,7 @@ add_p <- function(x, ...) {
   UseMethod("add_p")
 }
 
-#' Add p-values to summary table
+#' Add p-values
 #'
 #' Adds p-values to tables created by [`tbl_summary()`] by comparing values across groups.
 #'

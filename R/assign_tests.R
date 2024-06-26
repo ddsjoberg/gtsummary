@@ -105,6 +105,33 @@ assign_tests.tbl_summary <- function(x,
 
 #' @rdname assign_tests
 #' @export
+assign_tests.tbl_svysummary <- function(x,
+                                        include,
+                                        by = x$inputs$by,
+                                        test = NULL,
+                                        summary_type = x$inputs$type,
+                                        calling_fun = c("add_p", "add_difference"), ...) {
+  set_cli_abort_call()
+  # processing inputs ----------------------------------------------------------
+  calling_fun <- arg_match(calling_fun)
+
+  # all variables should already have a test assigned. This looks up the tests and converts to the function
+  lapply(
+    include,
+    function(variable) {
+      test[[variable]] <-
+        .process_test_argument_value(
+          test = test[[variable]],
+          class = "tbl_svysummary",
+          calling_fun = calling_fun
+        )
+    }
+  ) |>
+    stats::setNames(include)
+}
+
+#' @rdname assign_tests
+#' @export
 assign_tests.tbl_continuous <- function(x,
                                         include,
                                         by,

@@ -3,6 +3,7 @@
 \name{assign_tests}
 \alias{assign_tests}
 \alias{assign_tests.tbl_summary}
+\alias{assign_tests.tbl_svysummary}
 \alias{assign_tests.tbl_continuous}
 \alias{assign_tests.tbl_survfit}
 \title{Assign Test}
@@ -16,6 +17,16 @@ assign_tests(x, ...)
   test = NULL,
   group = NULL,
   adj.vars = NULL,
+  summary_type = x$inputs$type,
+  calling_fun = c("add_p", "add_difference"),
+  ...
+)
+
+\method{assign_tests}{tbl_svysummary}(
+  x,
+  include,
+  by = x$inputs$by,
+  test = NULL,
   summary_type = x$inputs$type,
   calling_fun = c("add_p", "add_difference"),
   ...
