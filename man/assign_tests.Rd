@@ -27,6 +27,8 @@ assign_tests(x, ...)
   include,
   by = x$inputs$by,
   test = NULL,
+  group = NULL,
+  adj.vars = NULL,
   summary_type = x$inputs$type,
   calling_fun = c("add_p", "add_difference"),
   ...

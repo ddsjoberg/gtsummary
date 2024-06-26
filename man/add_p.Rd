@@ -15,6 +15,10 @@ Object with class 'gtsummary'}
 \description{
 \itemize{
 \item \code{\link[=add_p.tbl_summary]{add_p.tbl_summary()}}
+\item \code{\link[=add_p.tbl_svysummary]{add_p.tbl_svysummary()}}
+\item \code{\link[=add_p.tbl_continuous]{add_p.tbl_continuous()}}
+\item \code{\link[=add_p.tbl_cross]{add_p.tbl_cross()}}
+\item \code{\link[=add_p.tbl_survfit]{add_p.tbl_survfit()}}
 }
 }
 \seealso{

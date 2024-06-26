@@ -1,6 +1,7 @@
 #' Add differences
 #'
 #' - [`add_difference.tbl_summary()`]
+#' - [`add_difference.tbl_svysummary()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'
@@ -108,7 +109,7 @@ add_difference.tbl_summary <- function(x,
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
   if (missing(pvalue_fun)) {
     pvalue_fun <-
-      get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
+      get_deprecated_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
       get_theme_element("pkgwide-fn:pvalue_fun") %||%
       pvalue_fun
   }
