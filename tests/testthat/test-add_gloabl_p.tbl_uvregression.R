@@ -1,5 +1,6 @@
 test_that("add_global_p.tbl_uvregression(x)", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   expect_silent(
     res <- tbl |> add_global_p()
@@ -18,11 +19,11 @@ test_that("add_global_p.tbl_uvregression(x)", {
   #   res$table_body$p.value[1:2],
   #   (car::Anova(lm(marker ~ age + grade, trial)))$`Pr(>F)`
   # )
-
 })
 
 test_that("add_global_p.tbl_uvregression(include)", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   res1 <- tbl |> add_global_p(include = age)
 
@@ -34,7 +35,8 @@ test_that("add_global_p.tbl_uvregression(include)", {
 })
 
 test_that("add_global_p.tbl_uvregression(type)", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   res2 <- tbl |> add_global_p(type = "II")
 
@@ -46,7 +48,8 @@ test_that("add_global_p.tbl_uvregression(type)", {
 })
 
 test_that("add_global_p.tbl_uvregression(keep)", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   res3 <- tbl |> add_global_p(keep = TRUE)
 
@@ -58,7 +61,8 @@ test_that("add_global_p.tbl_uvregression(keep)", {
 })
 
 test_that("add_global_p.tbl_uvregression(anova_fun)", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   res4 <- tbl |> add_global_p(anova_fun = cardx::ard_aod_wald_test)
 
@@ -80,7 +84,8 @@ test_that("add_global_p.tbl_uvregression(anova_fun)", {
 })
 
 test_that("add_global_p.tbl_uvregression(anova_fun) inappropriate anova function", {
-  tbl <- trial |> tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
+  tbl <- trial |>
+    tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
 
   broken_anova <- function(x) {
     x + 1
@@ -100,11 +105,15 @@ test_that("geeglm model for add_global_p.tbl_uvregression()", {
         method = geepack::geeglm,
         y = Weight,
         include = c("Cu", "Time"),
-        method.args = list(family = poisson("identity"), id = Pig, corstr = "ar1"),
+        method.args = list(
+          family = poisson("identity"),
+          id = Pig,
+          corstr = "ar1"
+        ),
       ) |>
       add_global_p()
   )
-  expect_snapshot(res5 %>% as.data.frame)
+  expect_snapshot(res5 %>% as.data.frame())
 })
 
 test_that("modify tidy_fun to not show p-values", {
@@ -118,5 +127,5 @@ test_that("modify tidy_fun to not show p-values", {
       ) |>
       add_global_p()
   )
-  expect_snapshot(res6 %>% as.data.frame)
+  expect_snapshot(res6 %>% as.data.frame())
 })
