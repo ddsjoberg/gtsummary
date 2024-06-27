@@ -14,11 +14,14 @@ test_that("add_global_p.tbl_uvregression(x)", {
     2
   )
 
-  # strangely not equal
-  # expect_equal(
-  #   res$table_body$p.value[1:2],
-  #   (car::Anova(lm(marker ~ age + grade, trial)))$`Pr(>F)`
-  # )
+  # test p-values are properly being calculated
+  expect_equal(
+    res$table_body$p.value[1:2],
+    c(
+      (car::Anova(lm(marker ~ age, trial)))$`Pr(>F)`[1],
+      (car::Anova(lm(marker ~ grade, trial)))$`Pr(>F)`[1]
+    )
+  )
 })
 
 test_that("add_global_p.tbl_uvregression(include)", {
@@ -73,14 +76,21 @@ test_that("add_global_p.tbl_uvregression(anova_fun)", {
   )
 
   # strangely not equal
-  # expect_equal(
-  #   res4$table_body$p.value[1:2],
-  #   lm(marker ~ age + grade, trial) |>
-  #     cardx::ard_aod_wald_test() |>
-  #     dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
-  #     dplyr::pull(stat) %>%
-  #     unlist
-  # )
+  expect_equal(
+    res4$table_body$p.value[1:2],
+    c(
+      lm(marker ~ age, trial) |>
+        cardx::ard_aod_wald_test() |>
+        dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
+        dplyr::pull(stat) %>%
+        unlist(),
+      lm(marker ~ grade, trial) |>
+        cardx::ard_aod_wald_test() |>
+        dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
+        dplyr::pull(stat) %>%
+        unlist()
+    )
+  )
 })
 
 test_that("add_global_p.tbl_uvregression(anova_fun) inappropriate anova function", {
