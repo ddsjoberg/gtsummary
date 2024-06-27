@@ -34,15 +34,13 @@ test_that("as_kable_extra(return_calls) works as expected", {
 test_that("as_kable_extra(format) works as expected", {
   # html (default)
   expect_silent(kbl_html <- my_tbl_summary |> as_kable_extra())
-  expect_snapshot(
-    kbl_html[1] |> strsplit("* </?tr>\n *")
-  )
+  kbl_html <- kbl_html[1] |> strsplit("* </?tr>\n *")
+  expect_snapshot(kbl_html)
 
   # latex
   expect_silent(kbl_latex <- my_tbl_summary |> as_kable_extra(format = "latex"))
-  expect_snapshot(
-    kbl_latex[1] |> strsplit("\n")
-  )
+  kbl_latex <- kbl_latex[1] |> strsplit("\n")
+  expect_snapshot(kbl_latex)
 
   # simple (warnings generated since formatting is removed)
   expect_warning(expect_warning(

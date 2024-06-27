@@ -1,7 +1,7 @@
 # as_kable_extra(format) works as expected
 
     Code
-      strsplit(kbl_html[1], "* </?tr>\n *")
+      kbl_html
     Output
       [[1]]
        [1] "<table style=\"NAborder-bottom: 0;\">\n <thead>\n "                                                                                                
@@ -19,7 +19,7 @@
 ---
 
     Code
-      strsplit(kbl_latex[1], "\n")
+      kbl_latex
     Output
       [[1]]
        [1] ""                                                                                      
