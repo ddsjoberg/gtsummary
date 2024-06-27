@@ -15,6 +15,7 @@ Object with class 'gtsummary'}
 \description{
 \itemize{
 \item \code{\link[=add_n.tbl_summary]{add_n.tbl_summary()}}
+\item \code{\link[=add_n.tbl_svysummary]{add_n.tbl_svysummary()}}
 \item \code{\link[=add_n.tbl_regression]{add_n.tbl_regression()}}
 \item \code{\link[=add_n.tbl_uvregression]{add_n.tbl_uvregression()}}
 \item \code{\link[=add_n.tbl_survfit]{add_n.tbl_survfit()}}
