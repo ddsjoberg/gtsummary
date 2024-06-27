@@ -13,7 +13,7 @@
 # geeglm model for add_global_p.tbl_uvregression()
 
     Code
-      res5 %>% as.data.frame
+      res5 %>% as.data.frame()
     Output
         **Characteristic** **N** **Beta** **95% CI** **p-value**
       1                 Cu   861     <NA>       <NA>         0.5
@@ -25,7 +25,7 @@
 # modify tidy_fun to not show p-values
 
     Code
-      res6 %>% as.data.frame
+      res6 %>% as.data.frame()
     Output
         **Characteristic** **N** **Beta**  **95% CI** **p-value**
       1                Age   183     0.00  0.00, 0.01       0.092
