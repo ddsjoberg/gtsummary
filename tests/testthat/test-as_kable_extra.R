@@ -68,6 +68,23 @@ test_that("as_kable_extra(escape) works as expected", {
   expect_true(grepl("Pt Age", kbl[1]))
 })
 
+test_that("as_kable_extra(addtl_fmt) works as expected", {
+  tbl_line_brks <- trial |>
+    select(trt, age, death) |>
+    tbl_summary(label = list(age = "Pt\n Age")) |>
+    modify_header(label = "Test\n Columns")
+
+  # addtl_fmt = TRUE (default)
+  kbl <- tbl_line_brks |> as_kable_extra()
+  expect_true(grepl("Test<br>Columns", kbl[1]))
+  expect_true(grepl("Pt Age", kbl[1]))
+
+  # addtl_fmt = FALSE
+  kbl <- tbl_line_brks |> as_kable_extra(addtl_fmt = FALSE)
+  expect_true(grepl("TestColumns", kbl[1]))
+  expect_true(grepl("Pt Age", kbl[1]))
+})
+
 test_that("as_kable_extra works with tbl_merge", {
   skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
 
