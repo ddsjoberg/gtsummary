@@ -10,18 +10,6 @@
       4                 II  <NA>    -0.39 -0.68, -0.09        <NA>
       5                III  <NA>    -0.07  -0.37, 0.23        <NA>
 
-# geeglm model for add_global_p.tbl_uvregression()
-
-    Code
-      res5 %>% as.data.frame()
-    Output
-        **Characteristic** **N** **Beta** **95% CI** **p-value**
-      1                 Cu   861     <NA>       <NA>         0.5
-      2              Cu000  <NA>     <NA>       <NA>        <NA>
-      3              Cu035  <NA>    -0.49  -3.5, 2.5        <NA>
-      4              Cu175  <NA>      1.8  -1.9, 5.5        <NA>
-      5               Time   861      6.5   6.4, 6.7      <0.001
-
 # modify tidy_fun to not show p-values
 
     Code
