@@ -1,0 +1,338 @@
+---
+title: "Definition of a gtsummary Object"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Definition of a gtsummary Object}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  comment = "#>"
+)
+```
+
+This vignette is meant for those who wish to contribute to {gtsummary}, or users who wish to gain an understanding of the inner-workings of a {gtsummary} object so they may more easily modify them to suit your own needs.
+If this does not describe you, please refer to the [{gtsummary} website](https://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
+
+## Introduction
+
+Every {gtsummary} table has a few characteristics common among all tables created with the package.
+Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.
+
+```{r setup, message=FALSE}
+library(gtsummary)
+
+tbl_regression_ex <-
+  lm(age ~ grade + marker, trial) %>%
+  tbl_regression() %>%
+  bold_p(t = 0.5)
+
+tbl_summary_ex <-
+  trial %>%
+  select(trt, age, grade, response) %>%
+  tbl_summary(by = trt)
+```
+
+## Structure of a {gtsummary} object
+
+Every {gtsummary} object is a list comprising of, at minimum, these elements:
+
+```r
+.$table_body    .$table_styling         
+```
+
+#### table_body
+
+The `.$table_body` object is the data frame that will ultimately be printed as the output.
+The table must include columns `"label"`, `"row_type"`, and `"variable"`.
+The `"label"` column is printed, and the other two are hidden from the final output.
+
+```{r}
+tbl_summary_ex$table_body
+```
+
+#### table_styling
+
+The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
+The list contains the following data frames `header`, `footnote`, `footnote_abbrev`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `source_note`, `caption`, `horizontal_line_above`.
+
+**`header`**
+
+The `header` table has the following columns and is one row per column found in `.$table_body`.
+The table contains styling information that applies to entire column or the columns headers.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "hide", "Logical indicating whether the column is hidden in the output. This column is also scoped in `modify_header()` (and friends) to be used in a selecting environment",
+  "align", "Specifies the alignment/justification of the column, e.g. 'center' or 'left'",
+  "label", "Label that will be displayed (if column is displayed in output)",
+  "interpret_label", "the {gt} function that is used to interpret the column label, `gt::md()` or `gt::html()`",
+  "spanning_header", "Includes text printed above columns as spanning headers.",
+  "interpret_spanning_header", "the {gt} function that is used to interpret the column spanning headers, `gt::md()` or `gt::html()`",
+  "modify_stat_{*}", "any column beginning with `modify_stat_` is a statistic available to report in `modify_header()` (and others)",
+  "modify_selector_{*}", "any column beginning with `modify_selector_` is a column that is scoped in `modify_header()` (and friends) to be used in a selecting environment"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+```
+
+**`footnote` & `footnote_abbrev`**
+
+Each {gtsummary} table may contain a single footnote per header and cell within the table.
+Footnotes and footnote abbreviations are handled separately. 
+Updates/changes to footnote are appended to the bottom of the tibble.
+A footnote of `NA_character_` deletes an existing footnote.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
+  "footnote", "string containing footnote to add to column/row"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`fmt_fun`**
+
+Numeric columns/rows are styled with the functions stored in `fmt_fun`.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`",
+  "fmt_fun", "list of formatting/styling functions"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`text_format`**
+
+Columns/rows are styled with bold, italic, or indenting stored in `text_format`.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`",
+  "format_type", "one of `c('bold', 'italic', 'indent')`",
+  "undo_text_format", "logical indicating where the formatting indicated should be undone/removed."
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`fmt_missing`**
+
+By default, all `NA` values are shown blanks.
+Missing values in columns/rows are replaced with the `symbol`.
+For example, reference rows in `tbl_regression()` are shown with an em-dash.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`",
+  "symbol", "string to replace missing values with, e.g. an em-dash"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`cols_merge`**
+
+This object is _experimental_ and may change in the future.
+This tibble gives instructions for merging columns into a single column.
+The implementation in `as_gt()` will be updated after `gt::cols_label()` gains a `rows=` argument.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`",
+  "pattern", "glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in 'column'."
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`source_note`**
+
+String that is made a table source note.
+The attribute `"text_interpret"` is either `c("md", "html")`.
+
+**`caption`**
+
+String that is made into the table caption.
+The attribute `"text_interpret"` is either `c("md", "html")`.
+
+**`horizontal_line_above`**
+
+Expression identifying a row where a horizontal line is placed above in the table.
+
+Example from `tbl_regression()`
+
+```{r} 
+tbl_regression_ex$table_styling
+```
+
+## Constructing a {gtsummary} object
+
+#### table_body
+
+When constructing a {gtsummary} object, the author will begin with the `.$table_body` object.
+Recall the `.$table_body` data frame must include columns `"label"`, `"row_type"`, and `"variable"`.
+Of these columns, only the `"label"` column will be printed with the final results.
+The `"row_type"` column typically will control whether or not the label column is indented.
+The `"variable"` column is often used in the `inline_text()` family of functions, and merging {gtsummary} tables with `tbl_merge()`.
+
+```{r}
+tbl_regression_ex %>%
+  purrr::pluck("table_body") %>%
+  select(variable, row_type, label)
+```
+
+The other columns in `.$table_body` are created by the user and are likely printed in the output.
+Formatting and printing instructions for these columns is stored in `.$table_styling`.
+
+### table_styling
+
+There are a few internal {gtsummary} functions to assist in constructing and modifying a `.$table_header` data frame.
+
+1. `.create_gtsummary_object(table_body)` After a user creates a `table_body`, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full `table_styling` list of tables).
+
+1. `.update_table_styling()` After columns are added or removed from `table_body`, run this function to update `.$table_styling` to include or remove styling instructions for the columns. FYI the default styling for each new column is to hide it.
+
+1. `modify_table_styling()` This exported function modifies the printing instructions for a single column or groups of columns.
+
+1. `modify_table_body()` This exported function helps users make changes to `.$table_body`. The function runs `.update_table_styling()` internally to maintain internal validity with the printing instructions.
+
+## Printing a {gtsummary} object
+
+All {gtsummary} objects are printed with `print.gtsummary()`.
+Before a {gtsummary} object is printed, it is converted to a {gt} object using `as_gt()`.
+This function takes the {gtsummary} object as its input, and uses the information in `.$table_styling` to construct a list of {gt} calls that will be executed on `.$table_body`.
+After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.
+
+In some cases, the package defaults to printing with other engines, such as flextable (`as_flex_table()`), huxtable (`as_hux_table()`), kableExtra (`as_kable_extra()`),  and kable (`as_kable()`).
+The default print engine is set with the theme element `"pkgwide-str:print_engine"`
+
+While the actual print function is slightly more involved, it is basically this:
+
+```{r, eval = FALSE}
+print.gtsummary <- function(x) {
+  get_theme_element("pkgwide-str:print_engine") %>%
+    switch(
+      "gt" = as_gt(x),
+      "flextable" = as_flex_table(x),
+      "huxtable" = as_hux_table(x),
+      "kable_extra" = as_kable_extra(x),
+      "kable" = as_kable(x)
+    ) %>%
+    print()
+}
+```
+
+## The `.$meta_data$df_stats` tibble
+
+Some {gtsummary} tables contain an internal object called `.$meta_data` containing a list column called `"df_stats"`.
+The column is a list of tibbles with each tibble containing the summary statistics presented in the final gtsummary table.
+While the statistics contained in each `"df_stats"` tibble can vary within a single gtsummary object, all the tibbles have a few common characteristics.
+
+Each tibble contain the following columns 
+```{r, echo = FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "`variable`", "String of the variable name",
+  "`label`", "String matching the variable's values in `.$table_body$label`",
+  "`col_name`", "The column name the statistics appear under in `.$table_body`, e.g. `'stat_0'`, `'stat_1'`",
+  "`variable_levels`", "This column appears if and only if the variable being summarized has multiple levels. The column is equal to the variable's levels.",
+  "`<statistics>`", "Primarily, the tibble stores the summary statistics for each variable. For example, when the mean is requested in `tbl_summary()`, there will be a column called `'mean'`."
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+```
+
+The statistics columns each have an attribute called `"fmt_fun"` containing the formatting function that will be applied before the statistic is placed in `.$table_body`.
+
+
+
+
+

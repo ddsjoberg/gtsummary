@@ -1,0 +1,285 @@
+---
+title: "gtsummary + Quarto/R Markdown"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gtsummary + Quarto/R Markdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  comment = "#>"
+)
+library(gt)
+```
+
+The **{gtsummary}** package was written to be a companion to the **{gt}** package from RStudio.
+But not all output types are supported by the **{gt}** package.
+Therefore, we have made it possible to print **{gtsummary}** tables with various engines.
+
+## Output Types
+
+Here's a summary of the various Quarto and R Markdown output types and the print engines that support them.
+
+<!-- Printing table of output types. -->
+```{r, echo=FALSE, warning=FALSE}
+
+# list of all the icons used in table
+path_figure <- list(
+  "img/icons8-smiling-100.png",
+  "img/icons8-neutral-100.png",
+  "img/icons8-disappointed-100.png",
+  "img/icons8-no-entry-100.png",
+  "img/icons8-under-construction-100.png"
+)
+
+# first make the key to go in the footnote
+gt_markdown_key <-
+  tibble::tibble(
+    figure = 1:5,
+    desc = c(
+      "Output fully supported",
+      "Missing indentation, footnotes, spanning headers",
+      "No formatted output",
+      "Output not supported",
+      "Under development, missing indentation"
+    )
+  ) %>%
+  gt() %>%
+  cols_label(figure = md("**Key**"), desc = "") %>%
+  data_color(
+    columns = c(figure),
+    colors = scales::col_factor(
+      palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
+      domain = NULL,
+      reverse = TRUE
+    ),
+    alpha = 0.8
+  ) %>%
+  text_transform(
+    locations = cells_body(columns = c(figure)),
+    fn = function(x) {
+      dplyr::case_when(
+        x == 1 ~ local_image(filename = path_figure[[1]], height = 20),
+        x == 2 ~ local_image(filename = path_figure[[2]], height = 20),
+        x == 3 ~ local_image(filename = path_figure[[3]], height = 20),
+        x == 4 ~ local_image(filename = path_figure[[4]], height = 20),
+        x == 5 ~ local_image(filename = path_figure[[5]], height = 20)
+      )
+    }
+  ) %>%
+  tab_options(
+    table.font.size = "x-small",
+    data_row.padding = px(3),
+    column_labels.hidden = TRUE
+  ) %>%
+  opt_table_lines(extent = "none") %>%
+  tab_options(table.align = "left")
+
+# making table with gt
+list(
+  printer = c("gt", "flextable", "huxtable", "kableExtra", "kable", "tibble"),
+  output = c("HTML", "PDF", "RTF", "Word")
+) %>%
+  purrr::cross_df() %>%
+  dplyr::mutate(
+    rating = dplyr::case_when(
+      printer == "gt" & output %in% c("HTML", "Word", "PDF") ~ 1, # good output
+      printer == "gt" & output %in% c("RTF") ~ 5, # under construction
+      printer == "kable" ~ 2, # ok output
+      printer == "flextable" & output != "RTF" ~ 1, # good output
+      printer == "flextable" & output == "RTF" ~ 4, # not supported
+      printer == "kableExtra" & output %in% c("PDF", "HTML") ~ 1, # good output
+      printer == "kableExtra" & output %in% c("RTF", "Word") ~ 4, # not supported
+      printer == "huxtable" ~ 1, # good output
+      printer == "tibble" ~ 3 # not great
+    ) %>%
+      factor()
+  ) %>%
+  tidyr::pivot_wider(id_cols = printer, names_from = output, values_from = rating) %>%
+  dplyr::mutate(
+    link = dplyr::case_when(
+      printer == "gt" ~
+        "[gt](https://gt.rstudio.com/index.html)",
+      printer == "kable" ~
+        "[kable](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html)",
+      printer == "flextable" ~
+        "[flextable](https://davidgohel.github.io/flextable/articles/overview.html)",
+      printer == "kableExtra" ~
+        "[kableExtra](http://haozhu233.github.io/kableExtra/)",
+      printer == "huxtable" ~
+        "[huxtable](https://hughjonesd.github.io/huxtable/)",
+      printer == "tibble" ~
+        "[tibble](https://tibble.tidyverse.org/)"
+    ),
+    fns = dplyr::case_when(
+      printer == "gt" ~ "`as_gt()`",
+      printer == "kable" ~ "`as_kable()`",
+      printer == "flextable" ~ "`as_flex_table()`",
+      printer == "kableExtra" ~ "`as_kable_extra()`",
+      printer == "huxtable" ~ "`as_hux_table()`",
+      printer == "tibble" ~ "`as_tibble()`"
+    )
+  ) %>%
+  gt() %>%
+  cols_move_to_start(columns = c(link, fns, HTML, Word, PDF, RTF)) %>%
+  cols_hide(columns = c(printer)) %>%
+  cols_label(
+    link = md("**Print Engine**"),
+    fns = md("**Function**"),
+    HTML = md("**HTML**"), PDF = md("**PDF**"),
+    RTF = md("**RTF**"), Word = md("**Word**")
+  ) %>%
+  fmt_markdown(columns = c(fns, link)) %>%
+  data_color(
+    columns = c(HTML, PDF, RTF, Word),
+    colors = scales::col_factor(
+      palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
+      domain = NULL,
+      reverse = TRUE
+    ),
+    alpha = 0.8
+  ) %>%
+  text_transform(
+    locations = cells_body(columns = c(HTML, PDF, RTF, Word)),
+    fn = function(x) {
+      dplyr::case_when(
+        x == 1 ~ local_image(filename = path_figure[[1]]),
+        x == 2 ~ local_image(filename = path_figure[[2]]),
+        x == 3 ~ local_image(filename = path_figure[[3]]),
+        x == 4 ~ local_image(filename = path_figure[[4]]),
+        x == 5 ~ local_image(filename = path_figure[[5]])
+      )
+    }
+  ) %>%
+  cols_width(
+    c(HTML, PDF, RTF, Word) ~ px(60),
+    c(link) ~ px(110),
+    c(link, fns) ~ px(140)
+  ) %>%
+  gt::tab_source_note(
+    source_note = gt_markdown_key %>% as_raw_html() %>% html()
+  ) %>%
+  tab_options(
+    table.border.bottom.width = 0
+  )
+```
+
+Any **{gtsummary}** table can be converted to one of the types in the table above. 
+For example, the code below prints a **{gtsummary}** table as a **{flextable}** table, instead of the default **{gt}** table.
+
+```{r, eval=FALSE}
+tbl_summary(trial) %>%
+  as_flex_table()
+```
+
+## Default Printer
+
+Tables printed with **{gtsummary}** can be seamlessly integrated into R markdown documents.
+Currently, **{gt}** supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
+The table below summarizes the default print engine utilized for **{gtsummary}** tables for various R Markdown output formats.
+
+```{r, echo = FALSE}
+tibble::tibble(
+  output = c("**HTML**", "**PDF**", "**RTF**", "**Word**"),
+  default_printer = c("**{gt}**", "**kable**", "**kable**", "**flextable**"),
+  desc = c(
+    "**{gt}** output is fully supported with **HTML** output.",
+    paste(
+      "You may force printing with **{gt}** by converting a **{gtsummary}**",
+      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
+      "**PDF** output is under development in the **{gt}** package.",
+      "You may get a gorgeous table, but you may also get an error or a malformed table."
+    ),
+    paste(
+      "You may force printing with **{gt}** by converting a **{gtsummary}**",
+      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
+      "**RTF** output is under development in the **{gt}** package.",
+      "You may get a gorgeous table, but you may also get an error or a malformed table."
+    ),
+    paste(
+      "**{flextable}** is the default print engine for **Word** output,",
+      "as **{gt}** does not support **Word**. If **{flextable}** is not installed,",
+      "**kable** is used."
+    )
+  )
+) %>%
+  gt() %>%
+  fmt_markdown(columns = everything()) %>%
+  cols_label(
+    output = md("**Output Type**"),
+    default_printer = md("**Default Engine**"),
+    desc = md("**Details**")
+  ) %>%
+  tab_options(table.font.size = "small")
+```
+
+When a table is printed with `knitr::kable()` the resulting table is less full featured compared to a table printed with **{gt}**.
+For example, the table will not contain footnotes, spanning headers, or row indentation.
+
+## Example R Markdown Report
+
+An example R markdown report using **{gtsummary}** has been included with the package.
+To open the example file, run the following command in the R console.
+
+```{r, eval = FALSE}
+library(gtsummary)
+system.file(package = "gtsummary") %>%
+  file.path("rmarkdown_example/gtsummary_rmarkdown_html.Rmd") %>%
+  file.edit()
+```
+
+## LaTeX
+
+To print {gtsummary} tables using LaTeX, utilize one of the supporting print engines.
+
+```{r, eval = FALSE}
+# build gtsummary table
+tbl <- tbl_summary(trial)
+
+# using the {gt} package
+as_gt(tbl) %>% gt::as_latex()
+
+# using the {huxtable} package
+as_hux_table(tbl) %>% huxtable::to_latex()
+
+# using the {kableExtra} package
+as_kable_extra(tbl, format = "latex")
+
+# using the knitr::kable function
+as_kable(tbl, format = "latex")
+```
+
+## Images
+
+Use the {gt} package's `gt::gtsave()` function to save images of {gtsummary} tables. 
+
+```{r, eval = FALSE}
+tbl_summary(trial) %>% # build gtsummary table
+  as_gt() %>% # convert to gt table
+  gt::gtsave( # save table as image
+    filename = "my_table_image.png"
+  )
+```
+
+## Tips
+
+When printing {gt} or {gtsummary} tables in a loop, use `print()` and `results = 'asis'` in the R markdown chunk.
+
+````r
+`r ''````{r loop_print, results = 'asis'}
+for (i in 1) {
+  tbl <- tbl_summary(trial)   # build gtsummary table
+  print(tbl)                  # print table
+}
+```
+````
+
+If `print(tbl)` does not work for you, try either `knitr::knit_print(tbl)` or `cat(knitr::knit_print(tbl))`.
+
+<font size="1" color="grey"> Icons from [icons8](https://icons8.com/)</font> 
