@@ -1,14 +1,19 @@
 #' Report statistics from gtsummary tables inline
 #'
+#' - [`inline_text.tbl_summary()`]
+#' - [`inline_text.tbl_svysummary()`]
+#' - [`inline_text.tbl_regression()`]
+#' - [`inline_text.tbl_uvregression()`]
+#' - [`inline_text.tbl_survfit()`]
+#' - [`inline_text.tbl_cross()`]
+#' - [`inline_text.gtsummary()`]
+#'
 #' @param x (`gtsummary`)\cr
 #'   Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @return A string reporting results from a gtsummary table
 #' @keywords internal
 #' @author Daniel D. Sjoberg
-#' @seealso [`inline_text.tbl_summary()`], [`inline_text.tbl_svysummary()`],
-#' [`inline_text.tbl_regression()`], [`inline_text.tbl_uvregression()`],
-#' [`inline_text.tbl_survfit()`], [`inline_text.tbl_cross()`], [`inline_text.gtsummary()`]
 #'
 #' @export
 inline_text <- function(x, ...) {
