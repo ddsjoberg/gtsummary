@@ -48,6 +48,14 @@ test_that("add_global_p.tbl_uvregression(type)", {
     sum(!is.na(res2$table_body$p.value)),
     2
   )
+
+  expect_equal(
+    res2$table_body$p.value[1:2],
+    c(
+      (car::Anova(lm(marker ~ age, trial), type = "II"))$`Pr(>F)`[1],
+      (car::Anova(lm(marker ~ grade, trial), type = "II"))$`Pr(>F)`[1]
+    )
+  )
 })
 
 test_that("add_global_p.tbl_uvregression(keep)", {
@@ -108,36 +116,52 @@ test_that("add_global_p.tbl_uvregression(anova_fun) inappropriate anova function
 })
 
 test_that("geeglm model for add_global_p.tbl_uvregression()", {
-  res5 <- respiratory |>
-      tbl_uvregression(
-        method = geepack::geeglm,
-        y = outcome,
-        include = c("treat", "baseline"),
-        method.args = list(
-          family = binomial,
-          id = id,
-          corstr = "exchangeable"
-        ),
-      ) |>
-      add_global_p()
+  res5 <- geepack::respiratory |>
+    tbl_uvregression(
+      method = geepack::geeglm,
+      y = outcome,
+      include = c("treat", "baseline"),
+      method.args = list(
+        family = binomial,
+        id = id,
+        corstr = "exchangeable"
+      ),
+    ) |>
+    add_global_p()
 
-  gee_model <- geeglm(
-    outcome ~ treat + baseline,
-    id = id,
-    data = respiratory,
-    family = binomial,
-    corstr = "exchangeable"
-  )
-  coef <- coef(gee_model)
-  vcov_matrix <- vcov(gee_model)
-
-
-  # not equal
   expect_equal(
-    res5$table_body$p.value[c(1,4)],
-    c((aod::wald.test(Sigma = vcov_matrix, b = coef, Terms = 2))$result[[1]][3],
-      (aod::wald.test(Sigma = vcov_matrix, b = coef, Terms = 3))$result[[1]][3]
-    ) |> as.numeric()
+    res5$table_body |>
+      dplyr::filter(variable == "treat") |>
+      dplyr::pull("p.value") |>
+      getElement(1L),
+    geepack::geeglm(
+      outcome ~ treat,
+      geepack::respiratory,
+      family = binomial,
+      id = id,
+      corstr = "exchangeable"
+    ) |>
+      cardx::ard_aod_wald_test() |> # calculate Wald p-value
+      dplyr::filter(variable == "treat", stat_name == "p.value") |>
+      dplyr::pull("stat") |>
+      unlist()
+  )
+
+  expect_equal(
+    res5$table_body |>
+      dplyr::filter(variable == "baseline") |>
+      dplyr::pull("p.value") |>
+      getElement(1L),
+    geepack::geeglm(
+      outcome ~ baseline, geepack::respiratory,
+      family = binomial,
+      id = id,
+      corstr = "exchangeable"
+    ) |>
+      cardx::ard_aod_wald_test() |> # calculate Wald p-value
+      dplyr::filter(variable == "baseline", stat_name == "p.value") |>
+      dplyr::pull("stat") |>
+      unlist()
   )
 })
 
