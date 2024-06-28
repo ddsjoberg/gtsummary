@@ -91,20 +91,6 @@ add_ci.tbl_summary <- function(x,
   # check inputs ---------------------------------------------------------------
   check_scalar_range(conf.level, range = c(0, 1))
   check_string(pattern, allow_empty = TRUE)
-  if (!is_empty(pattern)) {
-    if (!rlang::is_empty(.extract_glue_elements(pattern) |> setdiff(c("stat", "ci")))) {
-      cli::cli_abort(
-        "The {.arg pattern} argument allows only for elements {.val {c('stat', 'ci')}} to be included in curly brackets.",
-        call = get_cli_abort_call()
-      )
-    }
-    if (!setequal(.extract_glue_elements(pattern), c("stat", "ci"))) {
-      cli::cli_abort(
-        "The {.arg pattern} argument must include references to both {.val {c('{stat}', '{ci}')}}",
-        call = get_cli_abort_call()
-      )
-    }
-  }
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(
@@ -184,9 +170,35 @@ add_ci.tbl_summary <- function(x,
 
   # calculate ARD CIs ----------------------------------------------------------
   x$cards$add_ci <-
-    .calculate_add_ci_cards(data = x$inputs$data, include = include, by = x$inputs$by,
-                            method = method, style_fun = style_fun, conf.level = conf.level,
-                            overall= "add_overall" %in% names(x$call_list))
+    .calculate_add_ci_cards_summary(data = x$inputs$data, include = include, by = x$inputs$by,
+                                    method = method, style_fun = style_fun, conf.level = conf.level,
+                                    overall= "add_overall" %in% names(x$call_list))
+
+
+
+  # finalize styling of the table ----------------------------------------------
+  brdg_add_ci(x, pattern = pattern, statistic = statistic, include = include,
+              conf.level = conf.level, updated_call_list = updated_call_list)
+}
+
+
+
+brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call_list) {
+  # check pattern argument -----------------------------------------------------
+  if (!is_empty(pattern)) {
+    if (!rlang::is_empty(.extract_glue_elements(pattern) |> setdiff(c("stat", "ci")))) {
+      cli::cli_abort(
+        "The {.arg pattern} argument allows only for elements {.val {c('stat', 'ci')}} to be included in curly brackets.",
+        call = get_cli_abort_call()
+      )
+    }
+    if (!setequal(.extract_glue_elements(pattern), c("stat", "ci"))) {
+      cli::cli_abort(
+        "The {.arg pattern} argument must include references to both {.val {c('{stat}', '{ci}')}}",
+        call = get_cli_abort_call()
+      )
+    }
+  }
 
   # evaluate glue string on the statistics -------------------------------------
   df_glued <-
@@ -211,13 +223,13 @@ add_ci.tbl_summary <- function(x,
     dplyr::mutate(
       gts_colname =
         if (is_empty(x$inputs$by)) "ci_stat_0"
-        else {
-          ifelse(
-            !is.na(.data[["group1"]]),
-            paste0("ci_stat_", dplyr::cur_group_id()),
-            "ci_stat_0" # this accounts for overall stats if run after `add_overall()`
-          )
-        }
+      else {
+        ifelse(
+          !is.na(.data[["group1"]]),
+          paste0("ci_stat_", dplyr::cur_group_id()),
+          "ci_stat_0" # this accounts for overall stats if run after `add_overall()`
+        )
+      }
     ) |>
     tidyr::pivot_wider(
       id_cols = cards::all_ard_variables(),
@@ -331,11 +343,11 @@ add_ci.tbl_summary <- function(x,
   x
 }
 
-.calculate_add_ci_cards <- function(data, include, by, method, style_fun, conf.level, overall= FALSE) {
+.calculate_add_ci_cards_summary <- function(data, include, by, method, style_fun, conf.level, overall= FALSE) {
   lst_cards <-
     lapply(
       include,
-      FUN = \(v) .calculate_one_ci_ard(data = data, variable = v, by = by, method = method, conf.level = conf.level)
+      FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = by, method = method, conf.level = conf.level)
     ) |>
     set_names(include)
 
@@ -344,7 +356,7 @@ add_ci.tbl_summary <- function(x,
     lst_cards <-
       lapply(
         include,
-        FUN = \(v) .calculate_one_ci_ard(data = data, variable = v, by = NULL, method = method, conf.level = conf.level)
+        FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level)
       ) |>
       set_names(include) |>
       append(lst_cards)
@@ -366,7 +378,7 @@ add_ci.tbl_summary <- function(x,
     cards::tidy_ard_column_order()
 }
 
-.calculate_one_ci_ard <- function(data, variable, by, method, conf.level) {
+.calculate_one_ci_ard_summary <- function(data, variable, by, method, conf.level) {
   switch(
     method[[variable]],
     "t.test" = cardx::ard_stats_t_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level),
