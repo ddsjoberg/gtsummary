@@ -75,7 +75,7 @@ test_that("add_global_p.tbl_uvregression(anova_fun)", {
     2
   )
 
-  # strangely not equal
+  # p-values match when using aod_wald_test
   expect_equal(
     res4$table_body$p.value[1:2],
     c(
@@ -108,22 +108,37 @@ test_that("add_global_p.tbl_uvregression(anova_fun) inappropriate anova function
 })
 
 test_that("geeglm model for add_global_p.tbl_uvregression()", {
-  suppressMessages(
-    res5 <- geepack::dietox |>
-      dplyr::mutate(Cu = as.factor(Cu)) |>
+  res5 <- respiratory |>
       tbl_uvregression(
         method = geepack::geeglm,
-        y = Weight,
-        include = c("Cu", "Time"),
+        y = outcome,
+        include = c("treat", "baseline"),
         method.args = list(
-          family = poisson("identity"),
-          id = Pig,
-          corstr = "ar1"
+          family = binomial,
+          id = id,
+          corstr = "exchangeable"
         ),
       ) |>
       add_global_p()
+
+  gee_model <- geeglm(
+    outcome ~ treat + baseline,
+    id = id,
+    data = respiratory,
+    family = binomial,
+    corstr = "exchangeable"
   )
-  expect_snapshot(res5 %>% as.data.frame())
+  coef <- coef(gee_model)
+  vcov_matrix <- vcov(gee_model)
+
+
+  # not equal
+  expect_equal(
+    res5$table_body$p.value[c(1,4)],
+    c((aod::wald.test(Sigma = vcov_matrix, b = coef, Terms = 2))$result[[1]][3],
+      (aod::wald.test(Sigma = vcov_matrix, b = coef, Terms = 3))$result[[1]][3]
+    ) |> as.numeric()
+  )
 })
 
 test_that("modify tidy_fun to not show p-values", {
