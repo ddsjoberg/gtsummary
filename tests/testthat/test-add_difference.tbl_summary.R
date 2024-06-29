@@ -589,17 +589,16 @@ test_that("add_difference.tbl_summary() with emmeans()", {
     NA
   )
 
-  # TODO: Add this after `tbl_svysummary()` added to pkg
-  # expect_error(
-  #   survey::svydesign(ids = ~1, data = trial, weights = ~1) %>%
-  #     tbl_svysummary(
-  #       by = trt,
-  #       include = c(age, response),
-  #       missing = "no"
-  #     ) %>%
-  #     add_difference(test = everything() ~ "emmeans", adj.vars = "marker"),
-  #   NA
-  # )
+  expect_error(
+    survey::svydesign(ids = ~1, data = trial, weights = ~1) %>%
+      tbl_svysummary(
+        by = trt,
+        include = c(age, response),
+        missing = "no"
+      ) %>%
+      add_difference(test = everything() ~ "emmeans", adj.vars = "marker"),
+    NA
+  )
 })
 
 test_that("ordering in add_difference.tbl_summary() with paired tests", {

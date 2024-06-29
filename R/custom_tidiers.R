@@ -68,17 +68,15 @@
 #' tbl_stnd <- tbl_regression(mod, tidy_fun = tidy_standardize)
 #' tbl <- tbl_regression(mod)
 #'
-#' # TODO: Add this after `tbl_merge()` is migrated
-#' # tidy_standardize_ex1 <-
-#' #   tbl_merge(
-#' #     list(tbl_stnd, tbl),
-#' #     tab_spanner = c("**Standardized Model**", "**Original Model**")
-#' #   )
+#' tidy_standardize_ex1 <-
+#'   tbl_merge(
+#'     list(tbl_stnd, tbl),
+#'     tab_spanner = c("**Standardized Model**", "**Original Model**")
+#'   )
 #'
 #' # Example 2 ----------------------------------
 #' # use "posthoc" method for coef calculation
-#' tidy_standardize_ex2 <-
-#'   tbl_regression(mod, tidy_fun = \(x, ...) tidy_standardize(x, method = "posthoc", ...))
+#' tbl_regression(mod, tidy_fun = \(x, ...) tidy_standardize(x, method = "posthoc", ...))
 #'
 #' # Example 3 ----------------------------------
 #' # Multiple Imputation using the mice package

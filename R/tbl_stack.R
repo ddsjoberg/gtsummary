@@ -54,12 +54,11 @@
 #'     label = list(trt ~ "Treatment (adjusted)")
 #'   )
 #'
-#' # TODO: Re-add after `tbl_merge` migrated
-#' # # first merging, then stacking
-#' # row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
-#' # row2 <- tbl_merge(list(t2, t4))
-#' #
-#' # tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+#' # first merging, then stacking
+#' row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
+#' row2 <- tbl_merge(list(t2, t4))
+#'
+#' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
 tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
   set_cli_abort_call()
 

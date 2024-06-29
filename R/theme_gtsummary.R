@@ -271,11 +271,10 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             paste(collapse = ", ")
 
           x |>
-            # TODO: Re-add after add_significance_stars() is added
-            # add_significance_stars(
-            #   pattern = "{estimate}{stars}  \n({std.error})",
-            #   hide_se = TRUE
-            # ) |>
+            add_significance_stars(
+              pattern = "{estimate}{stars}  \n({std.error})",
+              hide_se = TRUE
+            ) |>
             # update column header
             modify_header(estimate = new_header_text) |>
             # add SE abbreviation footnote
