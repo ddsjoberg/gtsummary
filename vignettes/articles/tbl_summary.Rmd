@@ -1,16 +1,12 @@
 ---
 title: "Tutorial: tbl_summary"
-date: "Last Updated: September 13, 2020"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{Tutorial: tbl_summary}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
+# sourcing the purrr shims from rlang
+library(rlang)
+source("https://raw.githubusercontent.com/r-lib/rlang/main/R/standalone-purrr.R")
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
@@ -27,20 +23,6 @@ gt_compact_fun <- function(x) {
     source_notes.padding = gt::px(1),
     row_group.padding = gt::px(1)
   )
-}
-```
-
-```{r, echo = FALSE, results = 'asis'}
-# we do NOT want the vignette to build on CRAN...it's taking too long
-if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
-  !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
-  msg <-
-    paste(
-      "View this vignette on the",
-      "[package website](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)."
-    )
-  cat(msg)
-  knitr::knit_exit()
 }
 ```
 
@@ -71,18 +53,19 @@ These labels are displayed in the {gtsummary} output table by default.
 Using {gtsummary} on a data frame without labels will simply print variable names in place of variable labels; there is also an option to add labels later.  
 
 ```{r, echo = FALSE}
-trial %>%
-  purrr::imap_dfr(
-    ~ tibble::tibble(
+trial |> 
+  imap(
+    ~ dplyr::tibble(
       Variable = glue::glue("`{.y}`"),
       Class = class(.x),
       Label = attr(.x, "label")
     )
-  ) %>%
-  gt::gt() %>%
-  gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") %>%
-  gt::fmt_markdown(columns = Variable) %>%
-  gt::cols_align("left") %>%
+  ) |> 
+  dplyr::bind_rows() |> 
+  gt::gt() |>
+  gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") |>
+  gt::fmt_markdown(columns = Variable) |>
+  gt::cols_align("left") |>
   gt_compact_fun()
 ```
 
@@ -93,7 +76,7 @@ head(trial)
 For brevity, in this tutorial we'll use a subset of the variables from the trial data set.
 
 ```{r}
-trial2 <- trial %>% select(trt, age, grade)
+trial2 <- trial |> select(trt, age, grade)
 ```
 
 ## Basic Usage
@@ -105,7 +88,7 @@ The `tbl_summary()` function can take, at minimum, a data frame as the only inpu
 
 
 ```{r, message=FALSE}
-trial2 %>% tbl_summary()
+trial2 |> tbl_summary()
 ```
 
 Note the sensible defaults with this basic usage; each of the defaults may be customized.
@@ -122,8 +105,8 @@ For this study data the summary statistics should be **split by treatment group*
 To compare two or more groups, include [`add_p()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate statistical test.
 
 ```{r}
-trial2 %>%
-  tbl_summary(by = trt) %>%
+trial2 |>
+  tbl_summary(by = trt) |>
   add_p()
 ```
 
@@ -141,7 +124,7 @@ There are four primary ways to customize the output of the summary table.
 The `tbl_summary()` function includes many input options for modifying the appearance.
 
 ```{r echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Argument, ~Description,
   "`label=`", "specify the variable labels printed in table",
   "`type=`", "specify the variable type (e.g. continuous, categorical, etc.)",
@@ -152,16 +135,16 @@ tibble::tribble(
   "`sort=`", "change the sorting of categorical levels by frequency",
   "`percent=`", "print column, row, or cell percentages",
   "`include=`", "list of variables to include in summary table"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = Argument) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = Argument) |>
   gt_compact_fun()
 ```
 
 Example modifying `tbl_summary()` arguments.
 
 ```{r, eval = TRUE}
-trial2 %>%
+trial2 |>
   tbl_summary(
     by = trt,
     statistic = list(
@@ -179,21 +162,21 @@ The following table shows equivalent ways to specify the mean statistic for cont
 Any {gtsummary} function argument that accepts formulas will accept each of these variations.
 
 ```{r, echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~`select_helper`, ~`varname`, ~`named_list`,
   '`all_continuous() ~ "{mean}"`', '`c("age", "marker") ~ "{mean}"`', '`list(age = "{mean}", marker = "{mean}")`',
   '`list(all_continuous() ~ "{mean}")`', '`c(age, marker) ~ "{mean}"`', NA_character_,
   NA_character_, '`list(c(age, marker) ~ "{mean}")`', NA_character_
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(everything()) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(everything()) |>
   gt::cols_label(
     select_helper = gt::md("**Select with Helpers**"),
     varname = gt::md("**Select by Variable Name**"),
     named_list = gt::md("**Select with Named List**")
-  ) %>%
-  gt::sub_missing(columns = everything(), missing_text = "---") %>%
-  gt::tab_options(table.font.size = "85%") %>%
+  ) |>
+  gt::sub_missing(columns = everything(), missing_text = "---") |>
+  gt::tab_options(table.font.size = "85%") |>
   gt::cols_width(everything() ~ gt::px(390))
 ```
 
@@ -209,7 +192,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
 The {gtsummary} package has functions to adding information or statistics to `tbl_summary()` tables.
 
 ```{r echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Function,             ~Description,
   "`add_p()`",           "add p-values to the output comparing values across groups",
   "`add_overall()`",     "add a column with overall summary statistics",
@@ -218,9 +201,9 @@ tibble::tribble(
   "`add_stat_label()`",  "add label for the summary statistics shown in each row",
   "`add_stat()`",        "generic function to add a column with user-defined values",
   "`add_q()`",           "add a column of q values to control for multiple comparisons"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = Function) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = Function) |>
   gt_compact_fun()
 ```
 
@@ -228,7 +211,7 @@ tibble::tribble(
 
 The {gtsummary} package comes with functions specifically made to modify and format summary tables.  
 ```{r echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Function,                     ~Description,
   "`modify_header()`",           "update column headers",
   "`modify_footnote()`",         "update column footnote",
@@ -239,26 +222,26 @@ tibble::tribble(
   "`italicize_labels()`",        "italicize variable labels",
   "`italicize_levels()`",        "italicize variable levels",
   "`bold_p()`",                  "bold significant p-values"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = Function) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = Function) |>
   gt_compact_fun()
 ```
 
 Example adding `tbl_summary()`-family functions
 
 ```{r, eval = TRUE}
-trial2 %>%
-  tbl_summary(by = trt) %>%
-  add_p(pvalue_fun = ~ style_pvalue(.x, digits = 2)) %>%
-  add_overall() %>%
-  add_n() %>%
-  modify_header(label ~ "**Variable**") %>%
-  modify_spanning_header(c("stat_1", "stat_2") ~ "**Treatment Received**") %>%
+trial2 |>
+  tbl_summary(by = trt) |>
+  add_p(pvalue_fun = label_style_pvalue(digits = 2)) |>
+  add_overall() |>
+  add_n() |>
+  modify_header(label ~ "**Variable**") |>
+  modify_spanning_header(c("stat_1", "stat_2") ~ "**Treatment Received**") |>
   modify_footnote(
     all_stat_cols() ~ "Median (IQR) or Frequency (%)"
-  ) %>%
-  modify_caption("**Table 1. Patient Characteristics**") %>%
+  ) |>
+  modify_caption("**Table 1. Patient Characteristics**") |>
   bold_labels()
 ```
 
@@ -271,10 +254,10 @@ To use the {gt} package functions with {gtsummary} tables, the summary table mus
 To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
 
 ```{r}
-trial2 %>%
-  tbl_summary(by = trt, missing = "no") %>%
-  add_n() %>%
-  as_gt() %>%
+trial2 |>
+  tbl_summary(by = trt, missing = "no") |>
+  add_n() |>
+  as_gt() |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
 ```
 
@@ -294,8 +277,8 @@ Going beyond typing out specific variables in your data set, you can use:
     + **Summary type** There are two primary ways to select variables by their summary type. This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
       ```{r, eval=FALSE}
-all_continuous()
-all_categorical()
+      all_continuous()
+      all_categorical()
       ```
     Dichotomous variables are, by default, included with `all_categorical()`. 
 
@@ -306,8 +289,8 @@ Continuous variables may also be summarized on multiple lines---a common format 
 To update the continuous variables to summarize on multiple lines, update the summary type to `"continuous2"` (for summaries on two or more lines).
 
 ```{r}
-trial2 %>%
-  select(age, trt) %>%
+trial2 |>
+  select(age, trt) |>
   tbl_summary(
     by = trt,
     type = all_continuous() ~ "continuous2",
@@ -317,8 +300,8 @@ trial2 %>%
       "{min}, {max}"
     ),
     missing = "no"
-  ) %>%
-  add_p(pvalue_fun = ~ style_pvalue(.x, digits = 2))
+  ) |>
+  add_p(pvalue_fun = label_style_pvalue(digits = 2))
 ```
 
 ## Advanced Customization {#advanced}
@@ -328,13 +311,13 @@ trial2 %>%
 The {gtsummary} table has two important internal objects:
 
 ```{r, echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~`Internal Object`, ~Description,
   "`.$table_body`", "data frame that is printed as the gtsummary output table",
   "`.$table_styling`", "contains instructions for styling `.$table_body` when printed"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = everything()) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = everything()) |>
   gt_compact_fun()
 ```
 
@@ -343,8 +326,8 @@ The default printer converts the {gtsummary} object to a {gt} object with `as_gt
 Here's an example of the first few calls saved with `tbl_summary()`:
 
 ```{r}
-tbl_summary(trial2) %>%
-  as_gt(return_calls = TRUE) %>%
+tbl_summary(trial2) |>
+  as_gt(return_calls = TRUE) |>
   head(n = 4)
 ```
 
@@ -357,8 +340,8 @@ After the `as_gt()` function is run, additional formatting may be added to the t
 In the example below, a source note is added to the table.
 
 ```{r as_gt2}
-tbl_summary(trial2, by = trt) %>%
-  as_gt(include = -cols_align) %>%
+tbl_summary(trial2, by = trt) |>
+  as_gt(include = -cols_align) |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
 ```
 
@@ -406,20 +389,18 @@ It is not possible to pass custom functions to the `statistic=` argument of `tbl
 You must use one of the [pre-defined summary statistic functions](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate weighted statistics.  
 
 ```{r}
-svy_apiclus1 %>%
+svy_apiclus1 |>
   tbl_svysummary(
     # stratify summary statistics by the "both" column
     by = both,
     # summarize a subset of the columns
     include = c(api00, api99, both),
     # adding labels to table
-    label = list(
-      api00 ~ "API in 2000",
-      api99 ~ "API in 1999"
-    )
-  ) %>%
-  add_p() %>% # comparing values by "both" column
-  add_overall() %>%
+    label = list(api00 = "API in 2000",
+                 api99 = "API in 1999")
+  ) |>
+  add_p() |> # comparing values by "both" column
+  add_overall() |>
   # adding spanning header
   modify_spanning_header(c("stat_1", "stat_2") ~ "**Met Both Targets**")
 ```
@@ -427,9 +408,9 @@ svy_apiclus1 %>%
 `tbl_svysummary()` can also handle weighted survey data where each row represents several individuals: 
 
 ```{r}
-Titanic %>%
-  as_tibble() %>%
-  survey::svydesign(data = ., ids = ~1, weights = ~n) %>%
+Titanic |>
+  as_tibble() |>
+  survey::svydesign(data = _, ids = ~1, weights = ~n) |>
   tbl_svysummary(include = c(Age, Survived))
 ```
 
@@ -445,11 +426,11 @@ Use `tbl_cross()` to compare two categorical variables in your data.
 
 
 ```{r}
-trial %>%
+trial |>
   tbl_cross(
     row = stage,
     col = trt,
     percent = "cell"
-  ) %>%
+  ) |>
   add_p()
 ```

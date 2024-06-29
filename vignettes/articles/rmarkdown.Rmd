@@ -1,12 +1,5 @@
 ---
-title: "gtsummary + Quarto/R Markdown"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{gtsummary + Quarto/R Markdown}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
+title: "rmarkdown"
 ---
 
 ```{r, include = FALSE}
@@ -40,7 +33,7 @@ path_figure <- list(
 
 # first make the key to go in the footnote
 gt_markdown_key <-
-  tibble::tibble(
+  dplyr::tibble(
     figure = 1:5,
     desc = c(
       "Output fully supported",
@@ -82,11 +75,10 @@ gt_markdown_key <-
   tab_options(table.align = "left")
 
 # making table with gt
-list(
+tidyr::expand_grid(
   printer = c("gt", "flextable", "huxtable", "kableExtra", "kable", "tibble"),
   output = c("HTML", "PDF", "RTF", "Word")
-) %>%
-  purrr::cross_df() %>%
+) |> 
   dplyr::mutate(
     rating = dplyr::case_when(
       printer == "gt" & output %in% c("HTML", "Word", "PDF") ~ 1, # good output
@@ -178,50 +170,6 @@ tbl_summary(trial) %>%
   as_flex_table()
 ```
 
-## Default Printer
-
-Tables printed with **{gtsummary}** can be seamlessly integrated into R markdown documents.
-Currently, **{gt}** supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
-The table below summarizes the default print engine utilized for **{gtsummary}** tables for various R Markdown output formats.
-
-```{r, echo = FALSE}
-tibble::tibble(
-  output = c("**HTML**", "**PDF**", "**RTF**", "**Word**"),
-  default_printer = c("**{gt}**", "**kable**", "**kable**", "**flextable**"),
-  desc = c(
-    "**{gt}** output is fully supported with **HTML** output.",
-    paste(
-      "You may force printing with **{gt}** by converting a **{gtsummary}**",
-      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
-      "**PDF** output is under development in the **{gt}** package.",
-      "You may get a gorgeous table, but you may also get an error or a malformed table."
-    ),
-    paste(
-      "You may force printing with **{gt}** by converting a **{gtsummary}**",
-      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
-      "**RTF** output is under development in the **{gt}** package.",
-      "You may get a gorgeous table, but you may also get an error or a malformed table."
-    ),
-    paste(
-      "**{flextable}** is the default print engine for **Word** output,",
-      "as **{gt}** does not support **Word**. If **{flextable}** is not installed,",
-      "**kable** is used."
-    )
-  )
-) %>%
-  gt() %>%
-  fmt_markdown(columns = everything()) %>%
-  cols_label(
-    output = md("**Output Type**"),
-    default_printer = md("**Default Engine**"),
-    desc = md("**Details**")
-  ) %>%
-  tab_options(table.font.size = "small")
-```
-
-When a table is printed with `knitr::kable()` the resulting table is less full featured compared to a table printed with **{gt}**.
-For example, the table will not contain footnotes, spanning headers, or row indentation.
-
 ## Example R Markdown Report
 
 An example R markdown report using **{gtsummary}** has been included with the package.
@@ -260,8 +208,8 @@ as_kable(tbl, format = "latex")
 Use the {gt} package's `gt::gtsave()` function to save images of {gtsummary} tables. 
 
 ```{r, eval = FALSE}
-tbl_summary(trial) %>% # build gtsummary table
-  as_gt() %>% # convert to gt table
+tbl_summary(trial) |>  # build gtsummary table
+  as_gt() |>  # convert to gt table
   gt::gtsave( # save table as image
     filename = "my_table_image.png"
   )

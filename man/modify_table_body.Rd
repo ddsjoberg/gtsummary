@@ -52,5 +52,5 @@ To show a column, add a column header with \code{modify_header()} or call
 #  ) \%>\%
 #  # assigning header labels
 #  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
-#  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
+#  modify_fmt_fun(c(N_event, N_nonevent) ~ label_style_number())
 }

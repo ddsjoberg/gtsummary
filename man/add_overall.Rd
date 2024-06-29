@@ -2,6 +2,7 @@
 % Please edit documentation in R/add_overall.R
 \name{add_overall}
 \alias{add_overall}
+\alias{add_overall.tbl_summary}
 \alias{add_overall.tbl_continuous}
 \alias{add_overall.tbl_svysummary}
 \alias{add_overall.tbl_custom_summary}
@@ -9,10 +10,19 @@
 \usage{
 add_overall(x, ...)
 
+\method{add_overall}{tbl_summary}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
 \method{add_overall}{tbl_continuous}(
   x,
   last = FALSE,
-  col_label = "**Overall**  \\nN = {N}",
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
@@ -21,7 +31,7 @@ add_overall(x, ...)
 \method{add_overall}{tbl_svysummary}(
   x,
   last = FALSE,
-  col_label = "**Overall**  \\nN = {N}",
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
@@ -30,27 +40,71 @@ add_overall(x, ...)
 \method{add_overall}{tbl_custom_summary}(
   x,
   last = FALSE,
-  col_label = "**Overall**  \\nN = {N}",
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{(\code{gtsummary})\cr
-Object with class 'gtsummary'}
+\item{x}{(\code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous}, \code{tbl_custom_summary})\cr
+A stratified 'gtsummary' table}
 
-\item{...}{Passed to other methods.}
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{last}{(scalar \code{logical})\cr
+Logical indicator to display overall column last in table.
+Default is \code{FALSE}, which will display overall column first.}
+
+\item{col_label}{(\code{string})\cr
+String indicating the column label. Default is \code{"**Overall**  \\nN = {style_number(N)}"}}
+
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Override the statistic argument in initial \verb{tbl_*} function
+call. Default is \code{NULL}.}
+
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Override the digits argument in initial \verb{tbl_*} function
+call. Default is \code{NULL}.}
+}
+\value{
+A \code{gtsummary} of same class as \code{x}
 }
 \description{
-\itemize{
-\item \code{\link[=add_overall.tbl_summary]{add_overall.tbl_summary()}}
+Adds a column with overall summary statistics to tables
+created by \code{tbl_summary()}, \code{tbl_svysummary()}, \code{tbl_continuous()} or
+\code{tbl_custom_summary()}.
 }
-}
-\seealso{
-\code{\link[=add_overall.tbl_summary]{add_overall.tbl_summary()}}
+\examples{
+# Example 1 ----------------------------------
+trial |>
+  tbl_summary(include = c(age, grade), by = trt) |>
+  add_overall()
+
+# Example 2 ----------------------------------
+trial |>
+  tbl_summary(
+    include = grade,
+    by = trt,
+    percent = "row",
+    statistic = ~"{p}\%",
+    digits = ~1
+  ) |>
+  add_overall(
+    last = TRUE,
+    statistic = ~"{p}\% (n={n})",
+    digits = ~ c(1, 0)
+  )
+
+# Example 3 ----------------------------------
+trial |>
+  tbl_continuous(
+    variable = age,
+    by = trt,
+    include = grade
+  ) |>
+  add_overall(last = TRUE)
 }
 \author{
 Daniel D. Sjoberg
 }
-\keyword{internal}

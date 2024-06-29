@@ -1,17 +1,12 @@
 ---
-title: "Tutorial: tbl_regression"
-date: "Last Updated: September 13, 2020"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{Tutorial: tbl_regression}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
+title: "tbl_regression"
 ---
 
-
 ```{r setup, include = FALSE}
+# sourcing the purrr shims from rlang
+library(rlang)
+source("https://raw.githubusercontent.com/r-lib/rlang/main/R/standalone-purrr.R")
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   warning = FALSE,
@@ -32,20 +27,6 @@ gt_compact_fun <- function(x) {
 
 # exit if car package not installed (added to pass Cmd Checks on old R versions)
 if (!requireNamespace("car")) knitr::knit_exit()
-```
-
-```{r, echo = FALSE, results = 'asis'}
-# we do NOT want the vignette to build on CRAN...it's taking too long
-if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
-  !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
-  msg <-
-    paste(
-      "View this vignette on the",
-      "[package website](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)."
-    )
-  cat(msg)
-  knitr::knit_exit()
-}
 ```
 
 ## Introduction
@@ -81,18 +62,19 @@ In this vignette we'll be using the [**`trial`**](https://www.danieldsjoberg.com
 * Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.
 
 ```{r, echo = FALSE}
-trial %>%
-  purrr::imap_dfr(
-    ~ tibble::tibble(
+trial |>
+  imap(
+    ~ dplyr::tibble(
       Variable = glue::glue("`{.y}`"),
       Class = class(.x),
       Label = attr(.x, "label")
     )
-  ) %>%
-  gt::gt() %>%
-  gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") %>%
-  gt::fmt_markdown(columns = c(Variable)) %>%
-  gt::cols_align("left") %>%
+  ) |>
+  dplyr::bind_rows() |> 
+  gt::gt() |>
+  gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") |>
+  gt::fmt_markdown(columns = c(Variable)) |>
+  gt::cols_align("left") |>
   gt_compact_fun()
 ```
 
@@ -141,7 +123,7 @@ There are four primary ways to customize the output of the regression model tabl
 The `tbl_regression()` function includes many arguments for modifying the appearance.
 
 ```{r, echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Argument, ~Description,
   "`label=`", "modify variable labels in table",
   "`exponentiate=`", "exponentiate model coefficients",
@@ -152,9 +134,9 @@ tibble::tribble(
   "`estimate_fun=`", "function to round and format coefficient estimates",
   "`pvalue_fun=`", "function to round and format p-values",
   "`tidy_fun=`", "function to specify/customize tidier function"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = c(Argument)) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Argument)) |>
   gt_compact_fun()
 ```
 
@@ -164,15 +146,15 @@ The {gtsummary} package has built-in functions for adding to results from `tbl_r
 The following functions add columns and/or information to the regression table.
 
 ```{r echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Function, ~Description,
   "`add_global_p()`", "adds the global p-value for a categorical variables",
   "`add_glance_source_note()`", "adds statistics from `broom::glance()` as source note",
   "`add_vif()`", "adds column of the variance inflation factors (VIF)",
   "`add_q()`", "add a column of q values to control for multiple comparisons"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = c(Function)) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Function)) |>
   gt_compact_fun()
 ```
 
@@ -180,7 +162,7 @@ tibble::tribble(
 
 The {gtsummary} package comes with functions specifically made to modify and format summary tables.  
 ```{r echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Function,                     ~Description,
   "`modify_header()`",           "update column headers",
   "`modify_footnote()`",         "update column footnote",
@@ -191,9 +173,9 @@ tibble::tribble(
   "`italicize_labels()`",        "italicize variable labels",
   "`italicize_levels()`",        "italicize variable levels",
   "`bold_p()`",                  "bold significant p-values"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = c(Function)) %>%
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Function)) |>
   gt_compact_fun()
 ```
 
@@ -206,9 +188,9 @@ To use the {gt} package functions with {gtsummary} tables, the regression table 
 To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
 
 ```{r}
-m1 %>%
-  tbl_regression(exponentiate = TRUE) %>%
-  as_gt() %>%
+m1 |>
+  tbl_regression(exponentiate = TRUE) |>
+  as_gt() |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
 ```
 
@@ -225,14 +207,14 @@ In the example below,
 
 ```{r, eval=TRUE}
 # format results into data frame with global p-values
-m1 %>%
+m1 |>
   tbl_regression(
     exponentiate = TRUE,
-    pvalue_fun = ~ style_pvalue(.x, digits = 2),
-  ) %>%
-  add_global_p() %>%
-  bold_p(t = 0.10) %>%
-  bold_labels() %>%
+    pvalue_fun = label_style_pvalue(digits = 2),
+  ) |>
+  add_global_p() |>
+  bold_p(t = 0.10) |>
+  bold_labels() |>
   italicize_levels()
 ```
 
@@ -243,20 +225,20 @@ The function is a wrapper for `tbl_regression()`, and as a result, accepts nearl
 The function's results can be modified in similar ways to `tbl_regression()`. 
 
 ```{r tbl_uvregression}
-trial %>%
-  select(response, age, grade) %>%
+trial |>
   tbl_uvregression(
     method = glm,
     y = response,
+    include = c(age, grade),
     method.args = list(family = binomial),
     exponentiate = TRUE,
-    pvalue_fun = ~ style_pvalue(.x, digits = 2)
-  ) %>%
-  add_global_p() %>% # add global p-value
-  add_nevent() %>% # add number of events of the outcome
-  add_q() %>% # adjusts global p-values for multiple testing
-  bold_p() %>% # bold p-values under a given threshold (default 0.05)
-  bold_p(t = 0.10, q = TRUE) %>% # now bold q-values under the threshold of 0.10
+    pvalue_fun = label_style_pvalue(digits = 2)
+  ) |>
+  add_global_p() |> # add global p-value
+  add_nevent() |> # add number of events of the outcome
+  add_q() |> # adjusts global p-values for multiple testing
+  bold_p() |> # bold p-values under a given threshold (default 0.05)
+  bold_p(t = 0.10, q = TRUE) |> # now bold q-values under the threshold of 0.10
   bold_labels()
 ```
 
@@ -275,10 +257,10 @@ Below is a listing of known and tested models supported by `tbl_regression()`.
 If a model follows a standard format and has a tidier, it's likely to be supported as well, even if not listed below.
 
 ```{r supported_models, echo = FALSE}
-broom.helpers::supported_models %>%
-  gt::gt() %>%
-  gt::cols_label(model = gt::md("Model"), notes = gt::md("Details")) %>%
-  gt::fmt_markdown(columns = everything()) %>%
+broom.helpers::supported_models |>
+  gt::gt() |>
+  gt::cols_label(model = gt::md("Model"), notes = gt::md("Details")) |>
+  gt::fmt_markdown(columns = everything()) |>
   gt::tab_options(
     table.font.size = 11, data_row.padding = gt::px(1),
     summary_row.padding = gt::px(1), grand_summary_row.padding = gt::px(1),
