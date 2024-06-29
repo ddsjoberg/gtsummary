@@ -1,64 +1,38 @@
-# checks for rows arg
+# modify_table_styling(cols_merge_pattern) messaging
 
     Code
-      tbl_summary(trial[c("trt", "age")]) %>% modify_table_styling(columns = label,
-        footnote = "test footnote", rows = variable == "age") %>% as.data.frame()
-    Output
-            **Characteristic** **N = 200**
-      1 Chemotherapy Treatment        <NA>
-      2                 Drug A    98 (49%)
-      3                 Drug B   102 (51%)
-      4                    Age 47 (38, 57)
-      5                Unknown          11
+      modify_table_styling(tbl_regression(lm(mpg ~ factor(am), mtcars)), columns = "label",
+      rows = !is.na(conf.low), cols_merge_pattern = "{conf.low}:::{conf.high}")
+    Condition
+      Error in `modify_table_styling()`:
+      ! A single column must be specified in the `columns` argument when using `cols_merge_pattern`, and that column must be the first to appear in the pattern argument.
+      i For example, `modify_table_styling(columns="conf.low", cols_merge_pattern="{conf.low}:::{conf.high}")`
 
 ---
 
     Code
-      tbl_summary(trial[c("trt", "age")]) %>% modify_table_styling(columns = label,
-        footnote = "test footnote", rows = variable == footnote_variable) %>%
-        as.data.frame()
-    Output
-            **Characteristic** **N = 200**
-      1 Chemotherapy Treatment        <NA>
-      2                 Drug A    98 (49%)
-      3                 Drug B   102 (51%)
-      4                    Age 47 (38, 57)
-      5                Unknown          11
+      modify_table_styling(tbl_regression(lm(mpg ~ factor(am), mtcars)), columns = "conf.low",
+      rows = !is.na(conf.low), cols_merge_pattern = "{conf.low}:::{not_in_table}")
+    Condition
+      Error in `modify_table_styling()`:
+      ! All columns specified in `cols_merge_pattern` argument must be present in `x$table_body`
+      i The following columns are not present: "not_in_table"
 
----
+# modify_table_styling(indent) messaging
 
     Code
-      tbl_summary(trial[c("trt", "age")]) %>% modify_table_styling(columns = label,
-        footnote = "test footnote", rows = null_value) %>% as.data.frame()
-    Output
-            **Characteristic** **N = 200**
-      1 Chemotherapy Treatment        <NA>
-      2                 Drug A    98 (49%)
-      3                 Drug B   102 (51%)
-      4                    Age 47 (38, 57)
-      5                Unknown          11
+      modify_table_styling(tbl_summary(trial, include = grade), columns = "label",
+      rows = !row_type %in% "label", indent = "not an integer")
+    Condition
+      Error in `modify_table_styling()`:
+      ! The `indent` argument must be a non-negative scalar integer.
 
----
+# modify_table_styling(rows) messaging
 
     Code
-      tbl1 %>% as.data.frame()
-    Output
-        **Characteristic**            **Drug A**, N = 98 **Difference** **95% CI**
-      1                Age 46 (37, 59)  ---  48 (39, 56)          -0.44  -4.6, 3.7
-      2     Tumor Response       28 (29%)  ---  33 (34%)          -4.2% -18%, 9.9%
-        **p-value**
-      1         0.8
-      2         0.6
-
----
-
-    Code
-      tbl2 %>% as.data.frame()
-    Output
-        **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102 **Difference**
-      1                Age        46 (37, 59)         48 (39, 56)          -0.44
-      2     Tumor Response           28 (29%)            33 (34%)          -4.2%
-        **95% CI** **p-value**
-      1  -4.6, 3.7         0.8
-      2 -18%, 9.9%         0.6
+      modify_table_styling(tbl_summary(trial, include = grade), columns = "label",
+      rows = "not_a_predicate", indent = 8L)
+    Condition
+      Error in `modify_table_styling()`:
+      ! The `rows` argument must be an expression that evaluates to a logical vector in `x$table_body`.
 

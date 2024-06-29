@@ -8,81 +8,79 @@ tbl_svysummary(
   data,
   by = NULL,
   label = NULL,
-  statistic = NULL,
+  statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~
+    "{n} ({p}\%)"),
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = NULL,
-  missing_text = NULL,
-  sort = NULL,
-  percent = NULL,
+  missing = c("ifany", "no", "always"),
+  missing_text = "Unknown",
+  missing_stat = "{N_miss}",
+  sort = all_categorical(FALSE) ~ "alphanumeric",
+  percent = c("column", "row", "cell"),
   include = everything()
 )
 }
 \arguments{
-\item{data}{A survey object created with created with \code{survey::svydesign()}}
+\item{data}{(\code{survey.design})\cr
+A survey object created with created with \code{survey::svydesign()}}
 
-\item{by}{A column name (quoted or unquoted) in \code{data}.
-Summary statistics will be calculated separately for each level of the \code{by}
-variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations. To stratify a table by two or more
-variables, use \code{tbl_strata()}}
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
-\item{statistic}{List of formulas specifying types of summary statistics to
-display for each variable.  The default is
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies summary statistics to display for each variable.  The default is
 \code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
 See below for details.}
 
-\item{digits}{List of formulas specifying the number of decimal
-places to round summary statistics. If not specified,
-\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
-When multiple statistics are displayed for a single variable, supply a vector
-rather than an integer.  For example, if the
-statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}. User
-may also pass a styling function: \code{digits = age ~ style_sigfig}}
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}. See below for details.}
 
-\item{type}{List of formulas specifying variable types. Accepted values
-are \code{c("continuous", "continuous2", "categorical", "dichotomous")},
-e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
-If type not specified for a variable, the function
-will default to an appropriate summary type. See below for details.}
+\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the summary type. Accepted value are
+\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
+If not specified, default type is assigned via
+\code{assign_summary_type()}. See below for details.}
 
-\item{value}{List of formulas specifying the value to display for dichotomous
-variables. gtsummary selectors, e.g. \code{all_dichotomous()}, cannot be used
-with this argument. See below for details.}
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the level of a variable to display on a single row.
+The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
+with this argument. Default is \code{NULL}. See below for details.}
 
-\item{missing}{Indicates whether to include counts of \code{NA} values in the table.
-Allowed values are \code{"no"} (never display NA values),
-\code{"ifany"} (only display if any NA values), and \code{"always"}
-(includes NA count row for all variables). Default is \code{"ifany"}.}
+\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
+\itemize{
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+}}
 
-\item{missing_text}{String to display for count of missing observations.
-Default is \code{"Unknown"}.}
+\item{sort}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies sorting to perform for categorical variables.
+Values must be one of \code{c("alphanumeric", "frequency")}.
+Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
 
-\item{sort}{List of formulas specifying the type of sorting to perform for
-categorical data. Options are \code{frequency} where results are sorted in
-descending order of frequency and \code{alphanumeric},
-e.g. \code{sort = list(everything() ~ "frequency")}}
+\item{percent}{(\code{string})\cr
+Indicates the type of percentage to return.
+Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
-\item{percent}{Indicates the type of percentage to return. Must be one of
-\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
-
-\item{include}{variables to include in the summary table. Default is \code{everything()}}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in the summary table. Default is \code{everything()}}
 }
 \value{
-A \code{tbl_svysummary} object
+A \code{'tbl_svysummary'} object
 }
 \description{
-The \code{tbl_svysummary} function calculates descriptive statistics for
+The \code{tbl_svysummary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
-It is similar to \code{\link[=tbl_summary]{tbl_summary()}}.
 }
 \section{statistic argument}{
 
@@ -92,7 +90,7 @@ input is a list of formulas that specify the statistics to report. For example,
 standard deviation for age; \code{statistic = list(all_continuous() ~ "{mean} ({sd})")}
 would report the mean and standard deviation for all continuous variables.
 A statistic name that appears between curly brackets
-will be replaced with the numeric statistic (see \link[glue:glue]{glue::glue}).
+will be replaced with the numeric statistic (see \code{\link[glue:glue]{glue::glue()}}).
 
 For categorical variables the following statistics are available to display.
 \itemize{
@@ -142,24 +140,9 @@ to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
 }
 
-\section{Example Output}{
+\section{type and value arguments}{
 
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_svysummary_ex1.png" alt="image of rendered example table" style="width:31\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_svysummary_ex2.png" alt="image of rendered example table" style="width:36\%;">
-}}
-}
-
-\section{type argument}{
-
-The \code{tbl_summary()} function has four summary types:
+There are four summary types. Use the \code{type} argument to change the default summary types.
 \itemize{
 \item \code{"continuous"} summaries are shown on a \emph{single row}. Most numeric
 variables default to summary type continuous.
@@ -177,58 +160,20 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 }
 
-\section{select helpers}{
-
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
-from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
-modify default behavior for groups of variables.
-For example, by default continuous variables are reported with the median
-and IQR.  To change all continuous variables to mean and standard deviation use
-\code{statistic = list(all_continuous() ~ "{mean} ({sd})")}.
-
-All columns with class logical are displayed as dichotomous variables showing
-the proportion of events that are \code{TRUE} on a single row. To show both rows
-(i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
-\code{type = list(where(is.logical) ~ "categorical")}.
-
-The select helpers are available for use in any argument that accepts a list
-of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
-
-Read more on the \link{syntax} used through the package.
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# A simple weighted dataset
-tbl_svysummary_ex1 <-
-  survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Example 1 ----------------------------------
+survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
 
 # Example 2 ----------------------------------
 # A dataset with a complex design
 data(api, package = "survey")
-tbl_svysummary_ex2 <-
-  survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
-  tbl_svysummary(by = "both", include = c(api00, stype))
+survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
+  tbl_svysummary(by = "both", include = c(api00, stype)) |>
+  modify_spanning_header(all_stat_cols() ~ "**Survived**")
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
 }
 \author{
 Joseph Larmarange
 }
-\concept{tbl_svysummary tools}

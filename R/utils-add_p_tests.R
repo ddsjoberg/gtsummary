@@ -1,613 +1,626 @@
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  .superfluous_args(variable, ...)
-  expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-    data = !!data, conf.level = !!conf.level, !!!test.args
-  )) %>%
-    eval() %>%
-    broom::tidy()
-}
-
-add_p_test_aov <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-
-  rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
-    eval() %>%
-    broom::tidy() %>%
-    dplyr::mutate(method = "One-way ANOVA") %>%
-    select(-"term") %>%
-    dplyr::slice(1)
-}
-
-add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
-  .superfluous_args(variable, ...)
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
-    stats::oneway.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = data, !!!test.args)
-  ) %>%
-    broom::tidy()
+    cardx::ard_stats_t_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.level = conf.level,
+      !!!test.args
+    )
+  )
 }
 
-add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
-  .superfluous_args(variable, ...)
+add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
-    stats::mood.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = data, !!!test.args)
-  ) %>%
-    broom::tidy()
-}
-
-add_p_test_kruskal.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  stats::kruskal.test(data[[variable]], as.factor(data[[by]])) %>%
-    broom::tidy()
-}
-
-add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
-  .superfluous_args(variable, ...)
-  expr(stats::wilcox.test(as.numeric(!!rlang::sym(variable)) ~ as.factor(!!rlang::sym(by)),
-    data = !!data, !!!test.args
-  )) %>%
-    eval() %>%
-    broom::tidy() %>%
-    mutate(
-      method = case_when(
-        .data$method == "Wilcoxon rank sum test with continuity correction" ~ "Wilcoxon rank sum test",
-        TRUE ~ .data$method
+    cardx::ard_stats_wilcox_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.int = TRUE,
+      conf.level = conf.level,
+      !!!test.args
+    )
+  ) |>
+    dplyr::mutate(
+      stat = dplyr::case_when(
+        .data$stat_name %in% "method" &
+          .data$stat %in% "Wilcoxon rank sum test with continuity correction" ~ list("Wilcoxon rank sum test"),
+        .default = .data$stat
       )
     )
+}
+
+
+add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("adj.vars"), ...)
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
+
+  rlang::inject(
+    cardx::ard_stats_mcnemar_test_long(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_mcnemar_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      !!!test.args
+    )
+  )
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
-  .superfluous_args(variable, ...)
-  expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)) %>%
-    eval() %>%
-    broom::tidy() %>%
-    mutate(
-      method = case_when(
-        .data$method == "Pearson's Chi-squared test with Yates' continuity correction" ~ "Pearson's Chi-squared test",
-        TRUE ~ .data$method
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_chisq_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      !!!test.args
+    )
+  ) |>
+    dplyr::mutate(
+      stat = dplyr::case_when(
+        .data$stat_name %in% "method" &
+          .data$stat %in% "Pearson's Chi-squared test with Yates' continuity correction" ~ list("Pearson's Chi-squared test"),
+        .default = .data$stat
       )
     )
 }
 
-add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  add_p_test_chisq.test(data = data, variable = variable, by = by, test.args = list(correct = FALSE))
+add_p_test_chisq.test.no.correct <- function(data, variable, by, test.args, ...) {
+  add_p_test_chisq.test(
+    data = data, variable = variable, by = by,
+    test.args = c(list(correct = FALSE), test.args), ...
+  )
+}
+
+add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_mood_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      !!!test.args
+    )
+  )
+}
+
+
+add_p_test_kruskal.test <- function(data, variable, by, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars", "test.args"), ...)
+
+  cardx::ard_stats_kruskal_test(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by)
+  )
 }
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  .superfluous_args(variable, ...)
-  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), conf.level = !!conf.level, !!!test.args)) %>%
-    eval() %>%
-    broom::tidy() %>%
-    mutate(
-      method = case_when(
-        .data$method == "Fisher's Exact Test for Count Data" ~ "Fisher's exact test",
-        TRUE ~ .data$method
-      )
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_fisher_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.level = conf.level,
+      !!!test.args
     )
-}
-
-add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
-  .superfluous_args(variable, ...)
-  assert_package("lme4", "add_p(test = variable ~ 'lme4')")
-  if (is.null(group)) {
-    glue(
-      "Error in 'lme4' test for variable '{variable}'. ",
-      "`add_p(group=)` cannot by NULL"
-    ) %>%
-      stop(call. = FALSE)
-  }
-
-  data <-
-    select(data, all_of(c(variable, by, group))) %>%
-    filter(stats::complete.cases(.))
-
-  # creating formulas for base model (without variable) and full model
-  formula0 <- paste0("as.factor(`", by, "`) ~ 1 + (1 | `", group, "`)")
-  if (type %in% c("continuous", "continuous2")) {
-    formula1 <- paste0("as.factor(`", by, "`) ~ `", variable, "` + (1 | `", group, "`)")
-  } else {
-    formula1 <- paste0("as.factor(`", by, "`) ~ as.factor(`", variable, "`) + (1 | `", group, "`)")
-  }
-
-  # building base and full models
-  mod0 <- lme4::glmer(stats::as.formula(formula0),
-    data = data, family = stats::binomial
-  )
-  mod1 <- lme4::glmer(stats::as.formula(formula1),
-    data = data, family = stats::binomial
-  )
-
-  # returning p-value
-  p.value <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
-  tibble::tibble(p.value = p.value, method = "random intercept logistic regression")
-}
-
-add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
-                                            test.args = NULL, conf.level = 0.95, ...) {
-  quiet <- FALSE # need to add support for quiet later
-  if (missing(group) || is.null(group)) stop("Paired tests require the `group=` argument.", call. = FALSE)
-  .superfluous_args(variable, ...)
-  # checking inputs
-  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
-    stop("`by=` must have exactly 2 levels", call. = FALSE)
-  }
-  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-    pull("..n..") %>% max(na.rm = TRUE) > 1) {
-    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
-  }
-
-  # reshaping data
-  data_wide <-
-    tidyr::pivot_wider(dplyr::arrange(data, .data[[by]]),
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
-    )
-
-  # message about missing data
-  if (!quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
-    glue(
-      "Note for variable '{variable}': Some observations included in the ",
-      "calculation of summary statistics ",
-      "were omitted from the p-value calculation due to unbalanced missingness ",
-      "within group."
-    ) %>%
-      rlang::inform()
-  }
-
-
-  # calculate p-value
-  expr(stats::t.test(data_wide[[2]], data_wide[[3]],
-    paired = TRUE,
-    conf.level = !!conf.level, !!!test.args
-  )) %>%
-    eval() %>%
-    broom::tidy()
-}
-
-
-add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
-                                    test.args = NULL, ...) {
-  quiet <- FALSE # need to add support for quiet later
-  .superfluous_args(variable, ...)
-
-  # note about deprecated method without a `group=` argument
-  if (is.null(group)) {
-    lifecycle::deprecate_stop(
-      when = "1.5.0",
-      what = "gtsummary::add_p(group='cannot be NULL with `mcnemar.test()`')",
-      details =
-        paste(
-          "Follow the link for an example of the updated syntax",
-          "or update the test to `test = varname ~ 'mcnemar.test.wide'`.",
-          "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test"
-        )
-    )
-  }
-
-  # checking inputs
-  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
-    stop("`by=` must have exactly 2 levels", call. = FALSE)
-  }
-  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-    pull("..n..") %>% max(na.rm = TRUE) > 1) {
-    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
-  }
-
-  # reshaping data
-  data_wide <-
-    tidyr::pivot_wider(data,
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
-    )
-
-  # message about missing data
-  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
-    glue(
-      "Note for variable '{variable}': Some observations included in the ",
-      "calculation of summary statistics ",
-      "were omitted from the p-value calculation due to unbalanced missingness ",
-      "within group."
-    ) %>%
-      rlang::inform()
-  }
-
-  # calculate p-value
-  rlang::expr(stats::mcnemar.test(data_wide[[2]], data_wide[[3]], !!!test.args)) %>%
-    eval() %>%
-    broom::tidy()
-}
-
-add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args = NULL, ...) {
-  .superfluous_args(variable, ...)
-  rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
-    eval() %>%
-    broom::tidy()
-}
-
-add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
-                                                 test.args = NULL, conf.level = 0.95,
-                                                 quiet = FALSE, ...) {
-  .superfluous_args(variable, ...)
-  if (missing(group) || is.null(group)) stop("Paired tests require the `group=` argument.", call. = FALSE)
-  # checking inputs
-  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
-    stop("`by=` must have exactly 2 levels", call. = FALSE)
-  }
-  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-    pull("..n..") %>% max(na.rm = TRUE) > 1) {
-    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
-  }
-
-  # reshaping data
-  data_wide <-
-    tidyr::pivot_wider(dplyr::arrange(data, .data[[by]]),
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
-    )
-
-  # message about missing data
-  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
-    glue(
-      "Note for variable '{variable}': Some observations included in the ",
-      "calculation of summary statistics ",
-      "were omitted from the p-value calculation due to unbalanced missingness ",
-      "within group."
-    ) %>%
-      rlang::inform()
-  }
-
-  # calculate p-value
-  expr(stats::wilcox.test(as.numeric(data_wide[[2]]), as.numeric(data_wide[[3]]),
-    paired = TRUE, !!!test.args
-  )) %>%
-    eval() %>%
-    broom::tidy()
-}
-
-add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0.95, ...) {
-  .superfluous_args(variable, ...)
-  df_counts <-
-    tbl$meta_data %>%
-    filter(variable == .env$variable) %>%
-    purrr::pluck("df_stats", 1)
-
-  expr(stats::prop.test(df_counts$n, df_counts$N, conf.level = !!conf.level, !!!test.args)) %>%
-    eval() %>%
-    broom::tidy() %>%
-    mutate(estimate = .data$estimate1 - .data$estimate2) %>%
-    mutate(
-      method = case_when(
-        .data$method == "2-sample test for equality of proportions with continuity correction" ~
-          "Two sample test for equality of proportions",
-        TRUE ~ .data$method
-      )
-    )
-}
-
-add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL, ...) {
-  .superfluous_args(variable, ...)
-  # reverse coding the 'by' variable
-  data[[by]] <-
-    switch(!is.factor(data[[by]]),
-      forcats::fct_rev(factor(data[[by]]))
-    ) %||%
-    forcats::fct_rev(data[[by]])
-
-  # assembling formula
-  rhs <- c(by, adj.vars) %>%
-    chr_w_backtick() %>%
-    paste(collapse = " + ")
-  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
-
-  # building model
-  stats::lm(formula = f, data = data) %>%
-    broom.helpers::tidy_and_attach(conf.int = TRUE, conf.level = conf.level) %>%
-    broom.helpers::tidy_remove_intercept() %>%
-    dplyr::filter(.data$variable %in% .env$by) %>%
-    select(
-      "estimate", "std.error", "statistic",
-      "conf.low", "conf.high", "p.value"
-    ) %>%
+  ) |>
     dplyr::mutate(
-      method = case_when(
-        is.null(adj.vars) ~ "One-way ANOVA",
-        TRUE ~ "ANCOVA"
+      stat = dplyr::case_when(
+        .data$stat_name %in% "method" &
+          .data$stat %in% "Fisher's Exact Test for Count Data" ~ list("Fisher's exact test"),
+        .default = .data$stat
       )
     )
 }
 
-add_p_test_emmeans <- function(data, variable, by, type,
-                               group = NULL,
-                               conf.level = 0.95, adj.vars = NULL, ...) {
-  .superfluous_args(variable, ...)
+add_p_test_aov <- function(data, variable, by, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  cli::cli_warn(c(
+    "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
+    i = "The same functionality is covered with {.val oneway.test}. Use the following code instead:",
+    i = "{.code add_p(test = list({variable} = 'oneway.test'), test.args = list({variable} = list(var.equal = TRUE)))}."
+  ))
 
-  assert_package("emmeans")
-  if (!is.null(group)) assert_package("lme4")
-  if (is_survey(data)) assert_package("survey")
-  data_frame <-
-    .extract_data_frame(data)
+  add_p_test_oneway.test(data = data, variable = variable, by = by, test.args = list(var.equal = TRUE))
+}
+
+add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_oneway_test(
+      formula = cardx::reformulate2(termlabels = by, response = variable),
+      data = data,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_mood.test <- function(data, variable, by, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars", "test.args"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_mood_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by)
+    )
+  )
+}
+
+add_p_test_lme4 <- function(data, variable, by, group, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_pkg_installed("lme4", reference_pkg = "cardx")
+  check_empty(c("test.args", "adj.vars"), ...)
+
+  if (is_empty(group)) {
+    cli::cli_abort("The {.arg group} argument cannot be missing for {.val lme4} tests.")
+  }
+  check_length(group, 1L)
+
+  cardx::ard_stats_anova(
+    x = data |> tidyr::drop_na(any_of(c(variable, by, group))),
+    formulas = list(
+      glue::glue("as.factor({cardx::bt(by)}) ~ 1 + (1 | {cardx::bt(group)})") |> stats::as.formula(),
+      glue::glue("as.factor({cardx::bt(by)}) ~ {cardx::bt(variable)} + (1 | {cardx::bt(group)})") |> stats::as.formula()
+    ),
+    method = "glmer",
+    method.args = list(family = stats::binomial),
+    package = "lme4",
+    method_text = "random intercept logistic regression"
+  ) |>
+    # keep results associated with 2nd model
+    dplyr::filter(.data$variable %in% dplyr::last(.data$variable)) |>
+    dplyr::mutate(
+      variable = .env$variable,
+      warning = list(NULL)
+    )
+}
+
+
+add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
+  check_empty(c("adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_paired_t_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      conf.level = conf.level,
+      !!!test.args
+    )
+  )
+}
+
+add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("adj.vars"), ...)
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
+
+  rlang::inject(
+    cardx::ard_stats_paired_wilcox_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      conf.level = conf.level,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("adj.vars", "group"), ...)
+
+  rlang::inject(
+    cardx::ard_stats_prop_test(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.level = conf.level,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "test.args"), ...)
+  check_n_levels(data[[by]], 2L, message = "The {.arg by} column must have {.val {length}} levels.")
+
+  # reverse coding the 'by' variable
+  data[[by]] <- fct_rev(factor(data[[by]]))
+
+  cardx::ard_regression_basic(
+    x =
+      cardx::construct_model(
+        data = data,
+        formula = cardx::reformulate2(c(by, adj.vars), response = variable),
+        method = "lm"
+      )
+  ) |>
+    dplyr::filter(
+      .data$variable %in% .env$by,
+      .data$stat_name %in% c("estimate", "p.value", "statistic", "std.error", "conf.low", "conf.high")
+    ) %>%
+    dplyr::bind_rows(
+      .,
+      dplyr::filter(., dplyr::row_number() == 1L) |>
+        dplyr::mutate(
+          stat = "method",
+          stat_name = "method",
+          stat_label = "method",
+          stat =
+            dplyr::case_when(
+              is_empty(adj.vars) ~ list("One-way ANOVA"),
+              TRUE ~ list("ANCOVA")
+            ),
+          fmt_fun = list(NULL)
+        )
+    ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
+    dplyr::mutate(
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
+    )
+}
+
+
+add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_effectsize_cohens_d(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.level = conf.level,
+      verbose = FALSE,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("adj.vars"), ...)
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
+
+  rlang::inject(
+    cardx::ard_effectsize_paired_cohens_d(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      conf.level = conf.level,
+      verbose = FALSE,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars"), ...)
+
+  rlang::inject(
+    cardx::ard_effectsize_hedges_g(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      conf.level = conf.level,
+      verbose = FALSE,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("adj.vars"), ...)
+  check_length(group, 1L)
+  warn_unbalanced_pairs(data, by, variable, group)
+
+  rlang::inject(
+    cardx::ard_effectsize_paired_hedges_g(
+      data = data,
+      variable = all_of(variable),
+      by = all_of(by),
+      id = all_of(group),
+      conf.level = conf.level,
+      verbose = FALSE,
+      !!!test.args
+    )
+  )
+}
+
+add_p_test_smd <- function(data, variable, by, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("group", "adj.vars", "test.args"), ...)
+
+  cardx::ard_smd_smd(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    std.error = TRUE
+  )
+}
+
+add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
+                               type, group = NULL, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+
+  if (!is_empty(group)) check_pkg_installed("lme4", reference_pkg = "cardx")
+  if (inherits(data, "survey.design")) check_pkg_installed("survey", reference_pkg = "cardx")
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
-    stop("Variable must be summary type 'continuous' or 'dichotomous'", call. = FALSE)
+    cli::cli_abort("Variable {.val {variable}} must be summary type 'continuous' or 'dichotomous'", call = get_cli_abort_call())
   }
-  if (length(data_frame[[by]] %>% stats::na.omit() %>% unique()) != 2) {
-    stop("`by=` must have exactly 2 levels", call. = FALSE)
+  if (dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
+    cli::cli_abort("The {.arg by} argument must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (type %in% "dichotomous" &&
-    length(data_frame[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
-    stop("`variable=` must have exactly 2 levels", call. = FALSE)
+  if (type %in% "dichotomous" && dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
+    cli::cli_abort("Variable {.val {variable}} must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (is_survey(data) && !is.null(group)) {
-    stop("Cannot use `group=` argument with 'emmeans' and survey data.", call. = FALSE)
+  if (inherits(data, "survey.design") && !is_empty(group)) {
+    cli::cli_abort("Cannot use {.arg group} argument with {.val emmeans} and survey data.", call = get_cli_abort_call())
   }
 
   # assembling formula
-  rhs <- c(by, adj.vars) %>%
-    chr_w_backtick() %>%
-    paste(collapse = " + ")
-  if (!is.null(group)) {
-    rhs <- paste0(rhs, "+ (1 | ", chr_w_backtick(group), ")")
+  # styler: off
+  termlabels <-
+    if (is_empty(group)) cardx::bt(c(by, adj.vars))
+  else c(cardx::bt(by), cardx::bt(adj.vars), glue::glue("(1 | {cardx::bt(group)})"))
+  response <-
+    if (type == "dichotomous") glue::glue("as.factor({cardx::bt(variable)})")
+  else cardx::bt(variable)
+  formula <- stats::reformulate(termlabels, response)
+  # styler: on
+
+  # set regression function and any additional arguments
+  # styler: off
+  method.args <- list()
+  package <- "base"
+  if (is.data.frame(data) && is_empty(group) && type %in% c("continuous", "continuous2")) {
+    method <- "lm"
   }
-  f <-
-    ifelse(
-      type == "dichotomous",
-      stringr::str_glue("as.factor({chr_w_backtick(variable)}) ~ {rhs}"),
-      stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}")
-    ) %>%
-    as.formula()
-  f_by <- rlang::inject(~ !!rlang::sym(chr_w_backtick(by)))
+  else if (is.data.frame(data) && is_empty(group) && type %in% "dichotomous") {
+    method <- "glm"
+    method.args <- list(family = stats::binomial())
+  }
+  else if (inherits(data, "survey.design")) {
+    package <- "survey"
+    method <- "svyglm"
+    if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
+  }
+  else if (is.data.frame(data) && !is_empty(group)) {
+    package <- "lme4"
+    if (type %in% "dichotomous") {
+      method <- "glmer"
+      method.args <- list(family = stats::binomial())
+    }
+    else method <- "lmer"
+  }
+  # styler: on
 
-  type2 <-
-    dplyr::case_when(
-      is.data.frame(data) && is.null(group) ~ type,
-      is_survey(data) && is.null(group) && type == "dichotomous" ~ "dichotomous_svy",
-      is_survey(data) && is.null(group) && type == "continuous" ~ "continuous_svy",
-      is.data.frame(data) && type == "dichotomous" ~ "dichotomous_mixed",
-      is.data.frame(data) && type == "continuous" ~ "continuous_mixed",
-    )
-
-  model_fun <-
-    switch(type2,
-      "dichotomous" =
-        purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
-      "continuous" =
-        purrr::partial(stats::lm, formula = f, data = data),
-      "dichotomous_svy" =
-        purrr::partial(survey::svyglm, formula = f, design = data, family = stats::binomial),
-      "continuous_svy" =
-        purrr::partial(survey::svyglm, formula = f, design = data),
-      "dichotomous_mixed" =
-        purrr::partial(lme4::glmer, formula = f, data = data, family = stats::binomial),
-      "continuous_mixed" =
-        purrr::partial(lme4::lmer, formula = f, data = data)
-    )
-
-  emmeans_fun <-
-    switch(type,
-      "dichotomous" =
-        purrr::partial(emmeans::emmeans, specs = f_by, regrid = "response"),
-      "continuous" =
-        purrr::partial(emmeans::emmeans, specs = f_by)
-    )
-
-  # building model
-  model_fun() %>%
-    emmeans_fun() %>%
-    emmeans::contrast(method = "pairwise") %>%
-    summary(infer = TRUE, level = conf.level) %>%
-    tibble::as_tibble() %>%
-    dplyr::rename(
-      conf.low = any_of("asymp.LCL"),
-      conf.high = any_of("asymp.UCL"),
-      conf.low = any_of("lower.CL"),
-      conf.high = any_of("upper.CL")
-    ) %>%
-    dplyr::select(
-      "estimate",
-      std.error = "SE",
-      "conf.low", "conf.high",
-      "p.value"
-    ) %>%
+  cardx::ard_emmeans_mean_difference(
+    data = data,
+    formula = formula,
+    method = method,
+    method.args = method.args,
+    package = package,
+    response_type = type,
+    conf.level = conf.level,
+    primary_covariate = by
+  ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
     dplyr::mutate(
-      method =
-        ifelse(
-          is.null(.env$adj.vars),
-          "Regression least-squares mean difference",
-          "Regression least-squares adjusted mean difference"
-        )
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
     )
 }
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
-  assert_package("lme4")
-  assert_package("broom.mixed")
-  .superfluous_args(variable, ...)
-  # reverse coding the 'by' variable
-  data[[by]] <-
-    switch(!is.factor(data[[by]]),
-      forcats::fct_rev(factor(data[[by]]))
-    ) %||%
-    forcats::fct_rev(data[[by]])
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  check_length(group, 1L)
 
-  # assembling formula
-  rhs <- c(by, adj.vars) %>%
-    chr_w_backtick() %>%
-    paste(collapse = " + ")
-  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs} + (1|{chr_w_backtick(group)})") %>% as.formula()
+  # reverse coding the 'by' variable
+  data[[by]] <- fct_rev(factor(data[[by]]))
 
   # building model
-  lme4::lmer(formula = f, data = data) %>%
-    broom.helpers::tidy_and_attach(
-      conf.int = TRUE,
-      conf.level = conf.level,
-      tidy_fun = broom.mixed::tidy
+  cardx::ard_regression_basic(
+    x =
+      cardx::construct_model(
+        data = data,
+        formula =
+          stats::reformulate(
+            termlabels = c(cardx::bt(c(by, adj.vars)), glue("(1 | {cardx::bt(group)})")),
+            response = cardx::bt(variable)
+          ),
+        method = "lmer",
+        package = "lme4"
+      ),
+    effects = "fixed"
+  ) |>
+    dplyr::filter(
+      .data$variable %in% .env$by,
+      .data$stat_name %in% c("estimate", "std.error", "statistic", "conf.low", "conf.high", "p.value")
     ) %>%
-    broom.helpers::tidy_remove_intercept() %>%
-    dplyr::filter(.data$variable %in% .env$by) %>%
-    select(any_of(c("estimate", "std.error", "statistic", "conf.low", "conf.high", "p.value"))) %>%
+    dplyr::bind_rows(
+      .,
+      dplyr::filter(., dplyr::row_number() == 1L) |>
+        dplyr::mutate(
+          stat = "method",
+          stat_name = "method",
+          stat_label = "method",
+          stat =
+            dplyr::case_when(
+              is_empty(adj.vars) ~ list("One-way ANOVA with random intercept"),
+              TRUE ~ list("ANCOVA with random intercept")
+            ),
+          fmt_fun = list(NULL)
+        )
+    ) |>
+    dplyr::select(-cards::all_ard_variables("levels")) |>
     dplyr::mutate(
-      method = case_when(
-        is.null(adj.vars) ~ "One-way ANOVA with random intercept",
-        TRUE ~ "ANCOVA with random intercept"
-      )
+      group1 = .env$by,
+      variable = .env$variable,
+      .before = 1L
     )
 }
 
-add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args = NULL, ...) {
-  assert_package("effectsize")
-  .superfluous_args(variable, ...)
-  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {chr_w_backtick(by)}") %>% as.formula()
+# tbl_svysummary ---------------------------------------------------------------
+add_p_test_svy.t.test <- function(data, variable, by, conf.level = 0.95, ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
 
-  rlang::expr(effectsize::cohens_d(x = !!f, data = !!data, ci = !!conf.level, !!!test.args)) %>%
-    eval() %>%
-    tibble::as_tibble() %>%
-    select(estimate = "Cohens_d", conf.low = "CI_low", conf.high = "CI_high") %>%
-    dplyr::mutate(method = "Cohen's D")
+  cardx::ard_survey_svyttest(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    conf.level = conf.level
+  )
 }
 
-add_p_test_smd <- function(data, variable, by, tbl, type,
-                           conf.level = 0.95, ...) {
-  # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
-  assert_package("smd")
-  if (is_survey(data)) assert_package("survey")
+add_p_test_svy.svyranktest <- function(data,
+                                       variable,
+                                       by,
+                                       test = c("wilcoxon", "vanderWaerden", "median", "KruskalWallis"), ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  test <- arg_match(test)
 
-  if (.extract_data_frame(data)[[by]] %>% stats::na.omit() %>% unique() %>% length() != 2L) {
-    stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
+
+  cardx::ard_survey_svyranktest(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    test = test
+  )
+}
+
+add_p_test_svychisq.test <- function(data,
+                                      variable,
+                                      by,
+                                      statistic = c("F", "Chisq", "Wald", "adjWald", "lincom",
+                                                    "saddlepoint", "wls-score"), ...) {
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_empty(c("test.args"), ...)
+  statistic <- arg_match(statistic)
+
+
+  cardx::ard_survey_svychisq(
+    data = data,
+    variable = all_of(variable),
+    by = all_of(by),
+    statistic = statistic
+  )
+}
+
+# add_p.tbl_continuous ---------------------------------------------------------
+# TODO: Do we need an ARD for storing glance() results? This is not a cards object.
+add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
+  stats::lm(
+    formula = cardx::reformulate2(c(variable, by), response = continuous_variable),
+    data = data |> dplyr::mutate(across(all_of(c(variable, by)), factor))
+  ) |>
+    broom::glance() |>
+    dplyr::select("statistic", "p.value") |>
+    mutate(method = "Two-way ANOVA")
+}
+
+add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continuous_variable, test.args = NULL, group = NULL,
+                                                     test_name, ...) {
+  if (!is_empty(by)) {
+    cli::cli_abort(
+      "The {.val {test_name}} cannot be used when the {.arg by} argument is specified.",
+      call = get_cli_abort_call()
+    )
   }
 
-  smd_args <-
-    list(
-      x = .extract_data_frame(data)[[variable]],
-      g = .extract_data_frame(data)[[by]],
-      std.error = TRUE,
-      na.rm = TRUE
-    )
-
-  if (is_survey(data)) {
-    smd_args <- c(smd_args, list(w = stats::weights(data)))
-  }
-
-  rlang::inject(smd::smd(!!!smd_args)) %>%
-    select("estimate", "std.error") %>%
-    mutate(
-      conf.low = .data$estimate + stats::qnorm((1 - .env$conf.level) / 2) * .data$std.error,
-      conf.high = .data$estimate - stats::qnorm((1 - .env$conf.level) / 2) * .data$std.error,
-      method = "Standardized Mean Difference"
-    )
+  switch(test_name,
+         "t.test" = add_p_test_t.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "aov" = add_p_test_aov(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "kruskal.test" = add_p_test_kruskal.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "wilcox.test" = add_p_test_wilcox.test(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "lme4" = add_p_test_lme4(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, group = group, ...
+         ),
+         "ancova" = add_p_test_ancova(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "ancova_lme4" = add_p_test_ancova_lme4(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args,
+           group = group, ...
+         )
+  ) %||%
+    stop("No test selected", call. = FALSE) %>%
+    dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))
 }
 
-# add_p.tbl_svysummary ---------------------------------------------------------
-add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "chi-squared test with Rao & Scott's second-order correction")
-}
-
-add_p_test_svy.adj.chisq.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "chi-squared test adjusted by a design effect estimate")
-}
-
-add_p_test_svy.wald.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "Wald test of independence for complex survey samples") %>%
-    dplyr::mutate(dplyr::across(where(is.matrix), c))
-}
-
-add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    dplyr::mutate_at(vars("statistic", "p.value"), as.numeric) %>%
-    # default saves these cols as a matrix
-    mutate(method = "adjusted Wald test of independence for complex survey samples") %>%
-    dplyr::mutate(dplyr::across(where(is.matrix), c))
-}
-
-add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "test of independence using the exact asymptotic distribution for complex survey samples")
-}
-
-add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "test of independence using a saddlepoint approximation for complex survey samples")
-}
-
-add_p_test_svy.t.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svyttest(c_form(variable, by), data) %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "t-test adapted to complex survey samples")
-}
-
-add_p_test_svy.wilcox.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svyranktest(c_form(variable, by), data, test = "wilcoxon") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "Wilcoxon rank-sum test for complex survey samples")
-}
-
-add_p_test_svy.kruskal.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "Kruskal-Wallis rank-sum test for complex survey samples")
-}
-
-add_p_test_svy.vanderwaerden.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "van der Waerden's normal-scores test for complex survey samples")
-}
-
-add_p_test_svy.median.test <- function(data, variable, by, ...) {
-  .superfluous_args(variable, ...)
-  survey::svyranktest(c_form(variable, by), data, test = "median") %>%
-    {
-      suppressMessages(broom::tidy(.))
-    } %>%
-    mutate(method = "Mood's test for the median for complex survey samples")
-}
-
-# add_p.tbl_survfit ------------------------------------------------------------
+# tbl_survfit ------------------------------------------------------------------
 # returns a list of the formula and data arg calls
 extract_formula_data_call <- function(x) {
   # extracting survfit call
@@ -619,134 +632,100 @@ extract_formula_data_call <- function(x) {
 }
 
 add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
-  .superfluous_args(variable, ...)
+  check_pkg_installed(c("cardx", "survival"), reference_pkg = "gtsummary")
+
   # formula and data calls
-  formula_data_call <- extract_formula_data_call(data)
+  formula_data_call <-
+    extract_formula_data_call(data[[variable]]) |>
+    imap(~safe_survfit_eval(.x))
 
-  # converting call into a survdiff call
-  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!formula_data_call, !!!test.args)
-
-  # evaluating `survdiff()`
-  survdiff_result <- rlang::eval_tidy(survdiff_call)
-
-  # returning p-value
-  broom::glance(survdiff_result) %>%
-    dplyr::mutate(
-      method =
-        .purrr_when(
-          is.null(test.args$rho) || test.args$rho == 0 ~ "Log-rank test",
-          test.args$rho == 1 ~ "Peto & Peto modification of Gehan-Wilcoxon test",
-          test.args$rho == 1.5 ~ "Tarone-Ware test",
-          TRUE ~ stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
-        )
-    )
+  # calculate results
+  inject(cardx::ard_survival_survdiff(!!!formula_data_call, !!!test.args))
 }
 
 add_p_tbl_survfit_logrank <- function(data, variable, ...) {
-  .superfluous_args(variable, ...)
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0))
-}
-
-add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
-  .superfluous_args(variable, ...)
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1))
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 0))
 }
 
 add_p_tbl_survfit_tarone <- function(data, variable, ...) {
-  .superfluous_args(variable, ...)
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1.5))
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 1.5))
 }
 
-add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
-  .superfluous_args(variable, ...)
+add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
+  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 1))
+}
+
+add_p_tbl_survfit_coxph <- function(data, variable, test_type = c("log", "sc", "wald"), test.args, ...) {
+  check_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary")
+  test_type <- arg_match(test_type)
+
   # formula and data calls
-  formula_data_call <- extract_formula_data_call(data)
+  formula_data_call <-
+    extract_formula_data_call(data[[variable]]) |>
+    imap(~safe_survfit_eval(.x))
 
-  # converting call into a survdiff call
-  coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, !!!test.args)
+  inject(survival::coxph(!!!formula_data_call, !!!test.args)) |>
+    broom::glance() |>
+    dplyr::select(ends_with(paste0(".", test_type))) |>
+    dplyr::rename_with(.fn = ~str_remove(.x, pattern = paste0(".", test_type, "$"))) |>
+    dplyr::mutate(
+      method =
+        switch(
+          test_type,
+          "log" = "Cox regression (LRT)",
+          "wald" = "Cox regression (Wald)",
+          "sc" = "Cox regression (Score)"
+        )
+    )
 
-  # evaluating `coxph()`
-  coxph_result <- rlang::eval_tidy(coxph_call)
+}
 
-  # returning p-value
-  method <- switch(test_type,
-    "log" = "Cox regression (LRT)",
-    "wald" = "Cox regression (Wald)",
-    "sc" = "Cox regression (Score)"
+# UTILITY FUNCTIONS ------------------------------------------------------------
+.extract_data_frame <- function(x) {
+  if (is.data.frame(x)) {
+    return(x)
+  }
+  x$variables # return survey object data frame
+}
+
+warn_unbalanced_pairs <- function(data, by, variable, group) {
+  balanced_pairs <-
+    data[c(group, by, variable)] |>
+    tidyr::drop_na() |>
+    tidyr::pivot_wider(
+      id_cols = all_of(group),
+      names_from = all_of(by),
+      values_from = all_of(variable)
+    ) |>
+    dplyr::select(-all_of(group)) |>
+    dplyr::mutate(across(everything(), is.na)) |>
+    apply(MARGIN = 1, FUN = sum) |>
+    keep(~ . == 1L) |>
+    is_empty()
+
+  if (!balanced_pairs) {
+    cli::cli_warn(
+      "Some observations included in the stratified summary statistics were omitted
+       from the comparison due to unbalanced missingness within group."
+    )
+  }
+  invisible()
+}
+
+check_empty <- function(x, variable = get("variable", envir = caller_env()),
+                        call = get_cli_abort_call(), ...) {
+  dots <- dots_list(...)
+  walk(
+    x,
+    \(.x) {
+      if (!is_empty(dots[[.x]])) {
+        cli::cli_abort(
+          message = "The {.arg {.x}} argument is not used for the test selected for of variable {.val {variable}}.",
+          call = call
+        )
+      }
+    }
   )
-  broom::glance(coxph_result) %>%
-    select(all_of(paste0(c("statistic.", "p.value."), test_type))) %>%
-    set_names(c("statistic", "p.value")) %>%
-    mutate(method = method)
-}
 
-# add_p.tbl_continuous ---------------------------------------------------------
-add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
-  rlang::inject(
-    stats::lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
-      data = data
-    )
-  ) %>%
-    broom::glance() %>%
-    dplyr::select("statistic", "p.value") %>%
-    mutate(method = "Two-way ANOVA")
-}
-
-add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continuous_variable, test.args = NULL, group = NULL,
-                                                     test_name, ...) {
-  if (!is.null(by)) {
-    stop("This test cannot be used with `by=` variable specified.", call. = FALSE)
-  }
-
-  switch(test_name,
-    "t.test" = add_p_test_t.test(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, ...
-    ),
-    "aov" = add_p_test_aov(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, ...
-    ),
-    "kruskal.test" = add_p_test_kruskal.test(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, ...
-    ),
-    "wilcox.test" = add_p_test_wilcox.test(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, ...
-    ),
-    "lme4" = add_p_test_lme4(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, group = group, ...
-    ),
-    "ancova" = add_p_test_ancova(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args, ...
-    ),
-    "ancova_lme4" = add_p_test_ancova_lme4(
-      data = data, variable = continuous_variable,
-      by = variable, test.args = test.args,
-      group = group, ...
-    )
-  ) %||%
-    stop("No test selected", call. = FALSE) %>%
-    dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))
-}
-
-
-# checks if test.args was passed incorrectly
-.superfluous_args <- function(variable, ...) {
-  superfluous_args <- list(...) %>%
-    purrr::discard(is.null) %>%
-    names() %>%
-    intersect("test.args")
-  if (!rlang::is_empty(superfluous_args)) {
-    glue::glue(
-      "Note for variable '{variable}': Argument(s) {quoted_list(superfluous_args)} ",
-      "do not apply and were ignored. ",
-      "See `?tests` for details."
-    ) %>%
-      stringr::str_wrap() %>%
-      rlang::inform()
-  }
+  invisible()
 }

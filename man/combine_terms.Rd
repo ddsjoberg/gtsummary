@@ -2,23 +2,25 @@
 % Please edit documentation in R/combine_terms.R
 \name{combine_terms}
 \alias{combine_terms}
-\title{Combine terms in a regression model}
+\title{Combine terms}
 \usage{
-combine_terms(x, formula_update, label = NULL, quiet = NULL, ...)
+combine_terms(x, formula_update, label = NULL, quiet, ...)
 }
 \arguments{
-\item{x}{a \code{tbl_regression} object}
+\item{x}{(\code{tbl_regression})\cr
+A \code{tbl_regression} object}
 
-\item{formula_update}{formula update passed to the \link[stats:update]{stats::update}.
+\item{formula_update}{(\code{formula})\cr
+formula update passed to the \code{\link[stats:update]{stats::update()}}.
 This updated formula is used to construct a reduced model, and is
 subsequently passed to \code{\link[stats:anova]{stats::anova()}} to calculate the p-value for the
-group of removed terms.  See the \link[stats:update]{stats::update} help file for proper syntax.
+group of removed terms.  See the \code{\link[stats:update]{stats::update()}} help file for proper syntax.
 function's \verb{formula.=} argument}
 
-\item{label}{Option string argument labeling the combined rows}
+\item{label}{(\code{string})\cr
+Option string argument labeling the combined rows}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{...}{Additional arguments passed to \link[stats:anova]{stats::anova}}
 }
@@ -30,52 +32,22 @@ The function combines terms from a regression model, and replaces the terms
 with a single row in the output table.  The p-value is calculated using
 \code{\link[stats:anova]{stats::anova()}}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/combine_terms_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c('cardx', 'broom.helpers'))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
-combine_terms_ex1 <-
-  glm(
-    response ~ marker + I(marker^2) + grade,
-    trial[c("response", "marker", "grade")] \%>\% na.omit(), # keep complete cases only!
-    family = binomial
-  ) \%>\%
-  tbl_regression(label = grade ~ "Grade", exponentiate = TRUE) \%>\%
+glm(response ~ marker + I(marker^2) + grade,
+    trial[c("response", "marker", "grade")] |> na.omit(), # keep complete cases only!
+    family = binomial) |>
+  tbl_regression(label = grade ~ "Grade", exponentiate = TRUE) |>
   # collapse non-linear terms to a single row in output using anova
   combine_terms(
     formula_update = . ~ . - marker - I(marker^2),
     label = "Marker (non-linear terms)",
     test = "LRT"
   )
-}
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}

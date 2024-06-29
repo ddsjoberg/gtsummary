@@ -2,28 +2,30 @@
 % Please edit documentation in R/add_stat.R
 \name{add_stat}
 \alias{add_stat}
-\title{Add a custom statistic column}
+\title{Add a custom statistic}
 \usage{
-add_stat(x, fns, location = NULL, ...)
+add_stat(x, fns, location = everything() ~ "label")
 }
 \arguments{
-\item{x}{\code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_continuous} object}
+\item{x}{(\code{tbl_summary}/\code{tbl_svysummary}/\code{tbl_continuous})\cr
+A gtsummary table of class \code{'tbl_summary'}, \code{'tbl_svysummary'}, or \code{'tbl_continuous'}.}
 
-\item{fns}{list of formulas indicating the functions that create the statistic.
-See details below.}
+\item{fns}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Indicates the functions that create the statistic. See details below.}
 
-\item{location}{list of formulas indicating the location the new statistics
-are placed. The RHS of the formula must be one of \code{c("label", "level", "missing")}.
+\item{location}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Indicates the location the new statistics are placed.
+The values must be one of \code{c("label", "level", "missing")}.
 When \code{"label"}, a single statistic
 is placed on the variable label row. When \code{"level"} the statistics are placed
 on the variable level rows. The length of the vector of statistics returned from the
 \code{fns} function must match the dimension of levels. Default is to place the
 new statistics on the label row.}
-
-\item{...}{DEPRECATED}
+}
+\value{
+A 'gtsummary' of the same class as the input
 }
 \description{
-\lifecycle{maturing}
 The function allows a user to add a new column (or columns) of statistics to an
 existing \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_continuous} object.
 }
@@ -36,8 +38,8 @@ specified format. Each of these function will execute on a single variable.
 \item Each function must return a tibble or a vector. If a vector is returned,
 it will be converted to a tibble with one column and number of rows equal
 to the length of the vector.
-\item When \code{location = "label"}, the returned statistic from the custom function
-must be a tibble with one row. When \code{location = "level"} the tibble must have
+\item When \code{location='label'}, the returned statistic from the custom function
+must be a tibble with one row. When \code{location='level'} the tibble must have
 the same number of rows as there are levels in the variable (excluding the
 row for unknown values).
 \item Each function may take the following arguments: \code{foo(data, variable, by, tbl, ...)}
@@ -49,7 +51,7 @@ row for unknown values).
 }
 }
 
-The user-defined does not need to utilize each of these inputs. It's
+The user-defined function does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
@@ -62,71 +64,43 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 If you return a tibble with column names \code{p.value} or \code{q.value}, default
 p-value formatting will be applied, and you may take advantage of subsequent
 p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
-
-To access the continuous variable in a \code{tbl_continuous()} table, use
-\code{tbl$inputs$variable}.
-}
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex2.png" alt="image of rendered example table" style="width:60\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex3.png" alt="image of rendered example table" style="width:60\%;">
-}}
 }
 
 \examples{
-\donttest{
-library(dplyr, warn.conflicts = FALSE)
-library(stringr)
 # Example 1 ----------------------------------
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
 }
 
-add_stat_ex1 <-
-  trial \%>\%
-  select(trt, age, marker) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(fns = everything() ~ my_ttest) \%>\%
-  modify_header(
-    list(
-      add_stat_1 ~ "**p-value**",
-      all_stat_cols() ~ "**{level}**"
-    )
-  )
+trial |>
+  tbl_summary(
+    by = trt,
+    include = c(trt, age, marker),
+    missing = "no"
+  ) |>
+  add_stat(fns = everything() ~ my_ttest) |>
+  modify_header(add_stat_1 = "**p-value**", all_stat_cols() ~ "**{level}**")
 
 # Example 2 ----------------------------------
 # fn returns t-test test statistic and pvalue
 my_ttest2 <- function(data, variable, by, ...) {
-  t.test(data[[variable]] ~ as.factor(data[[by]])) \%>\%
+  t.test(data[[variable]] ~ as.factor(data[[by]])) |>
     broom::tidy() \%>\%
-    mutate(
-      stat = str_glue("t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}")
+    dplyr::mutate(
+      stat = glue::glue("t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}")
     ) \%>\%
-    pull(stat)
+    dplyr::pull(stat)
 }
 
-add_stat_ex2 <-
-  trial \%>\%
-  select(trt, age, marker) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(fns = everything() ~ my_ttest2) \%>\%
-  modify_header(add_stat_1 ~ "**Treatment Comparison**")
+trial |>
+  tbl_summary(
+    by = trt,
+    include = c(trt, age, marker),
+    missing = "no"
+  ) |>
+  add_stat(fns = everything() ~ my_ttest2) |>
+  modify_header(add_stat_1 = "**Treatment Comparison**")
 
 # Example 3 ----------------------------------
 # return test statistic and p-value is separate columns
@@ -136,25 +110,13 @@ my_ttest3 <- function(data, variable, by, ...) {
     select(statistic, p.value)
 }
 
-add_stat_ex3 <-
-  trial \%>\%
-  select(trt, age, marker) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(fns = everything() ~ my_ttest3) \%>\%
-  modify_header(
-    list(
-      statistic ~ "**t-statistic**",
-      p.value ~ "**p-value**"
-    )
-  ) \%>\%
-  modify_fmt_fun(
-    list(
-      statistic ~ style_sigfig,
-      p.value ~ style_pvalue
-    )
-  )
-}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+trial |>
+  tbl_summary(
+    by = trt,
+    include = c(trt, age, marker),
+    missing = "no"
+  ) |>
+  add_stat(fns = everything() ~ my_ttest3) |>
+  modify_header(statistic = "**t-statistic**", p.value = "**p-value**") |>
+  modify_fmt_fun(statistic = label_style_sigfig(), p.value = label_style_pvalue(digits = 2))
 }

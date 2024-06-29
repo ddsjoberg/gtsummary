@@ -8,28 +8,33 @@ style_pvalue(
   x,
   digits = 1,
   prepend_p = FALSE,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 }
 \arguments{
-\item{x}{Numeric vector of p-values.}
+\item{x}{(\code{numeric})\cr
+Numeric vector of p-values.}
 
-\item{digits}{Number of digits large p-values are rounded. Must be 1, 2, or 3.
+\item{digits}{(\code{integer})\cr
+Number of digits large p-values are rounded. Must be 1, 2, or 3.
 Default is 1.}
 
-\item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
+\item{prepend_p}{(scalar \code{logical})\cr
+Logical. Should 'p=' be prepended to formatted p-value.
 Default is \code{FALSE}}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{...}{Other arguments passed on to \code{base::format()}}
+\item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled p-values
@@ -45,16 +50,6 @@ pvals <- c(
 style_pvalue(pvals)
 style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
-\seealso{
-See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
-
-Other style tools: 
-\code{\link{style_number}()},
-\code{\link{style_percent}()},
-\code{\link{style_ratio}()},
-\code{\link{style_sigfig}()}
-}
 \author{
 Daniel D. Sjoberg
 }
-\concept{style tools}

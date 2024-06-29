@@ -2,57 +2,45 @@
 % Please edit documentation in R/tbl_merge.R
 \name{tbl_merge}
 \alias{tbl_merge}
-\title{Merge two or more gtsummary objects}
+\title{Merge tables}
 \usage{
 tbl_merge(tbls, tab_spanner = NULL)
 }
 \arguments{
-\item{tbls}{List of gtsummary objects to merge}
+\item{tbls}{(\code{list})\cr
+List of gtsummary objects to merge}
 
-\item{tab_spanner}{Character vector specifying the spanning headers.
+\item{tab_spanner}{(\code{character})\cr
+Character vector specifying the spanning headers.
 Must be the same length as \code{tbls}. The
 strings are interpreted with \code{gt::md}.
 Must be same length as \code{tbls} argument. Default is \code{NULL}, and places
 a default spanning header. If \code{FALSE}, no header will be placed.}
 }
 \value{
-A \code{tbl_merge} object
+A \code{'tbl_merge'} object
 }
 \description{
-Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
-\code{tbl_summary}, or \code{tbl_svysummary} objects and adds appropriate spanning headers.
+Merge gtsummary tables, e.g. \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
+\code{tbl_summary}, \code{tbl_svysummary}, etc.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex1.png" alt="image of rendered example table" style="width:70\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex2.png" alt="image of rendered example table" style="width:65\%;">
-}}
-}
-
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed('survival', reference_pkg = 'gtsummary')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Side-by-side Regression Models
 library(survival)
+
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) \%>\%
   tbl_regression(exponentiate = TRUE)
-tbl_merge_ex1 <-
-  tbl_merge(
-    tbls = list(t1, t2),
-    tab_spanner = c("**Tumor Response**", "**Time to Death**")
-  )
+
+tbl_merge(
+  tbls = list(t1, t2),
+  tab_spanner = c("**Tumor Response**", "**Time to Death**")
+)
 
 # Example 2 ----------------------------------
 # Descriptive statistics alongside univariate regression, with no spanning header
@@ -70,82 +58,10 @@ t4 <-
     hide_n = TRUE
   )
 
-tbl_merge_ex2 <-
-  tbl_merge(tbls = list(t3, t4)) \%>\%
+tbl_merge(tbls = list(t3, t4)) \%>\%
   modify_spanning_header(everything() ~ NA_character_)
-}
-}
-\seealso{
-\link{tbl_stack}
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_uvregression}()}
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_survfit tools: 
-\code{\link{add_n.tbl_survfit}()},
-\code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_survfit}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
-\concept{tbl_summary tools}
-\concept{tbl_survfit tools}
-\concept{tbl_svysummary tools}
-\concept{tbl_uvregression tools}

@@ -10,28 +10,33 @@ proportion_summary(
   weights = NULL,
   na.rm = TRUE,
   conf.level = 0.95,
-  method = c("wilson", "wilson.no.correct", "exact", "asymptotic")
+  method = c("wilson", "wilson.no.correct", "wald", "wald.no.correct", "exact",
+    "agresti.coull", "jeffreys")
 )
 }
 \arguments{
-\item{variable}{String indicating the name of the variable from which the
-proportion will be computed.}
+\item{variable}{(\code{string})\cr
+String indicating the name of the variable from which the proportion will be computed.}
 
-\item{value}{Value (or list of values) of \code{variable} to be taken into account
-in the numerator.}
+\item{value}{(\code{scalar})\cr
+Value (or list of values) of \code{variable} to be taken into account in the numerator.}
 
-\item{weights}{Optional string indicating the name of a weighting variable.
+\item{weights}{(\code{string})\cr
+Optional string indicating the name of a frequency weighting variable.
 If \code{NULL}, all observations will be assumed to have a weight equal to \code{1}.}
 
-\item{na.rm}{Should missing values be removed before computing the
-proportion? (default is \code{TRUE})}
+\item{na.rm}{(scalar \code{logical})\cr
+Should missing values be removed before computing the proportion? (default is \code{TRUE})}
 
-\item{conf.level}{Confidence level for the returned confidence interval.
+\item{conf.level}{(scalar \code{numeric})\cr
+Confidence level for the returned confidence interval.
 Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 
-\item{method}{Confidence interval method. Must be one of
-\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")}. See details below.}
+\item{method}{(\code{string})\cr
+Confidence interval method. Must be one of
+\code{c("wilson", "wilson.no.correct", "wald", "wald.no.correct", "exact", "agresti.coull", "jeffreys")}.
+See \code{add_ci()} for details.}
 }
 \description{
 \lifecycle{experimental}
@@ -41,8 +46,8 @@ computing a proportion and its confidence interval.
 \details{
 Computed statistics:
 \itemize{
-\item \code{{n}} numerator, (weighted) number of observations equal to \code{values}
-\item \code{{N}} denominator, (weighted) number of observations
+\item \code{{n}} numerator, number of observations equal to \code{values}
+\item \code{{N}} denominator, number of observations
 \item \code{{prop}} proportion, i.e. \code{n/N}
 \item \code{{conf.low}} lower confidence interval
 \item \code{{conf.high}} upper confidence interval
@@ -54,47 +59,23 @@ Methods \code{c("wilson", "wilson.no.correct")} are calculated with
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf()}
 and the corresponding method.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/proportion_summary_ex1.png" alt="image of rendered example table" style="width:31\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
-proportion_summary_ex1 <-
-  Titanic \%>\%
-  as.data.frame() \%>\%
+Titanic |>
+  as.data.frame() |>
   tbl_custom_summary(
     include = c("Age", "Class"),
     by = "Sex",
     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
     statistic = ~"{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
-    digits = ~ list(
-      function(x) {
-        style_percent(x, digits = 1)
-      },
-      0, 0, style_percent, style_percent
-    ),
+    digits =
+      ~list(label_style_percent(digits=1), 0, 0, label_style_percent(), label_style_percent()),
     overall_row = TRUE,
     overall_row_last = TRUE
-  ) \%>\%
-  bold_labels() \%>\%
-  modify_footnote(
-    update = all_stat_cols() ~ "Proportion (\%) of survivors (n/N) [95\% CI]"
-  )
-}
-\seealso{
-Other tbl_custom_summary tools: 
-\code{\link{add_overall}()},
-\code{\link{continuous_summary}()},
-\code{\link{ratio_summary}()},
-\code{\link{tbl_custom_summary}()}
+  ) |>
+  bold_labels() |>
+  modify_footnote(all_stat_cols() ~ "Proportion (\%) of survivors (n/N) [95\% CI]")
 }
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}

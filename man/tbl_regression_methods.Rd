@@ -25,7 +25,7 @@
 
 \method{tbl_regression}{survreg}(
   x,
-  tidy_fun = function(x, ...) broom::tidy(x, ...) \%>\% dplyr::filter(.data$term !=
+  tidy_fun = function(x, ...) dplyr::filter(broom::tidy(x, ...), .data$term !=
     "Log(scale)"),
   ...
 )
@@ -79,17 +79,18 @@
 \method{tbl_regression}{multinom}(x, ...)
 }
 \arguments{
-\item{x}{Regression model object}
+\item{x}{(regression model)\cr
+Regression model object}
 
-\item{...}{arguments passed to \code{tbl_regression.default()}}
+\item{...}{arguments passed to \code{tbl_regression()}}
 
-\item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy()}, but if an error occurs
-then tidying of the model is attempted with \code{parameters::model_parameters()},
-if installed.}
+\item{tidy_fun}{(\code{function})\cr
+Tidier function for the model. Default is to use \code{broom::tidy()}.
+If an error occurs, the tidying of the model is attempted with
+\code{parameters::model_parameters()}, if installed.}
 }
 \description{
-Most regression models are handled by \code{\link[=tbl_regression.default]{tbl_regression.default()}},
+Most regression models are handled by \code{\link[=tbl_regression]{tbl_regression()}},
 which uses \code{\link[broom:reexports]{broom::tidy()}} to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.
@@ -109,7 +110,6 @@ fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
-\item \code{"tidycrr"}: Uses the tidier \code{tidycmprsk::tidy()} to print the model terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.

@@ -11,7 +11,7 @@ passed to them using \code{add_p(test.args=)}. For example, to
 calculate a p-value from \code{t.test()} assuming equal variance, use
 \code{tbl_summary(trial, by = trt) \%>\% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))}
 }
-\section{tbl_summary() \%>\% add_p()}{
+\section{\code{tbl_summary() \%>\% add_p()}}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
@@ -19,7 +19,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{'mood.test'} \tab Mood two-sample test of scale \tab \code{mood.test(variable ~ as.factor(by), data = data, ...)} \tab Not to be confused with the Brown-Mood test of medians \cr
    \code{'oneway.test'} \tab One-way ANOVA \tab \code{oneway.test(variable ~ as.factor(by), data = data, ...)} \tab  \cr
    \code{'kruskal.test'} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \tab  \cr
-   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)} \tab  \cr
+   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, conf.int = TRUE, conf.level = conf.level,  ...)} \tab  \cr
    \code{'chisq.test'} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \tab  \cr
    \code{'chisq.test.no.correct'} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \tab  \cr
    \code{'fisher.test'} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \tab  \cr
@@ -34,7 +34,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_svysummary() \%>\% add_p()}{
+\section{\code{tbl_svysummary() \%>\% add_p()}}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'svy.t.test'} \tab t-test adapted to complex survey samples \tab \code{survey::svyttest(~variable + by, data)} \tab  \cr
@@ -52,7 +52,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_survfit() \%>\% add_p()}{
+\section{\code{tbl_survfit() \%>\% add_p()}}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{'logrank'} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 0)} \cr
@@ -65,7 +65,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_continuous() \%>\% add_p()}{
+\section{\code{tbl_continuous() \%>\% add_p()}}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{'anova_2way'} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
@@ -82,11 +82,15 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
+   \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab  \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, conf.int = TRUE, conf.level = conf.level,  ...)} \tab  \cr
    \code{'paired.t.test'} \tab Paired t-test \tab mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \tab  \cr
    \code{'prop.test'} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \tab  \cr
    \code{'ancova'} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \tab  \cr
    \code{'ancova_lme4'} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \tab  \cr
-   \code{'cohens_d'} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \tab  \cr
+   \code{'cohens_d'} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, verbose = FALSE, ...)} \tab  \cr
+   \code{'hedges_g'} \tab Hedge's G \tab standardized mean difference \tab \code{effectsize::hedges_g(variable ~ by, data, ci = conf.level, verbose = FALSE, ...)} \tab  \cr
+   \code{'paired_cohens_d'} \tab Paired Cohen's D \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::cohens_d(by_1, by_2, paired = TRUE, conf.level = 0.95, verbose = FALSE, ...)} \tab  \cr
+   \code{'paired_hedges_g'} \tab Paired Hedge's G \tab standardized mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); effectsize::hedges_g(by_1, by_2, paired = TRUE, conf.level = 0.95, verbose = FALSE, ...)} \tab  \cr
    \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)} \tab  \cr
    \code{'emmeans'} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
 }
@@ -95,7 +99,8 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{tbl_svysummary() \%>\% add_difference()}{
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
-   \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)} \tab  \cr
+   \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = variable, g = by, w = weights(data),  std.error = TRUE)} \tab  \cr
+   \code{'svy.t.test'} \tab t-test adapted to complex survey samples \tab  \tab \code{survey::svyttest(~variable + by, data)} \tab  \cr
    \code{'emmeans'} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. \cr
 }
 }
@@ -106,9 +111,13 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 To report a p-value (or difference) for a test not available in gtsummary, you can create a
 custom function. The output is a data frame that is one line long. The
 structure is similar to the output of \code{broom::tidy()} of a typical
-statistical test. The \code{add_p()} and \code{add_comparison()} functions will look for columns called
-\code{"p.value"}, \code{"estimate"}, \code{"conf.low"}, \code{"conf.high"}, and \code{"method"} for the
-p-value, difference, confidence interval, and the test name used in the footnote.
+statistical test. The \code{add_p()} and \code{add_difference()} functions will look for columns called
+\code{"p.value"}, \code{"estimate"}, \code{"statistic"}, \code{"std.error"}, \code{"parameter"},
+\code{"conf.low"}, \code{"conf.high"}, and \code{"method"}.
+
+You can also pass an Analysis Results Dataset (ARD) object with the results
+for your custom result. These objects follow the structures outlined
+by the \{cards\} and \{cardx\} packages.
 
 Example calculating a p-value from a t-test assuming a common variance
 between groups.

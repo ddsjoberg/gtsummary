@@ -2,51 +2,47 @@
 % Please edit documentation in R/modify_column_indent.R
 \name{modify_column_indent}
 \alias{modify_column_indent}
-\title{Add/Remove Indentation}
+\title{Modify column indentation}
 \usage{
-modify_column_indent(
-  x,
-  columns,
-  rows = NULL,
-  double_indent = FALSE,
-  undo = FALSE
-)
+modify_column_indent(x, columns, rows = NULL, indent = 4L, double_indent, undo)
 }
 \arguments{
-\item{x}{a gtsummary table}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{columns}{columns to add indentation to}
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 
-\item{rows}{predicate expression to select rows to indent. Default is \code{NULL},
-indicating all rows}
+\item{rows}{(predicate \code{expression})\cr
+Predicate expression to select rows in \code{x$table_body}.
+Can be used to style footnote, formatting functions, missing symbols,
+and text formatting. Default is \code{NULL}. See details below.}
 
-\item{double_indent}{logical indicating whether to double indent the cells.
-Default is \code{FALSE} for a single indentation}
+\item{indent}{(\code{integer})\cr
+An integer indicating how many space to indent text}
 
-\item{undo}{logical indicating whether an indentation should be removed/undone.
-Default is \code{FALSE}}
+\item{double_indent, undo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
 a gtsummary table
 }
 \description{
-Add/Remove Indentation
+Add, increase, or reduce indentation for columns.
 }
 \examples{
 # remove indentation from `tbl_summary()`
-modify_column_indent_ex1 <-
-  trial \%>\%
-  select(grade) \%>\%
-  tbl_summary() \%>\%
-  modify_column_indent(columns = label, undo = TRUE)
+trial |>
+  tbl_summary(include = grade) |>
+  modify_column_indent(columns = label, indent = 0L)
+
+# increase indentation in `tbl_summary`
+trial |>
+  tbl_summary(include = grade) |>
+  modify_column_indent(columns = label, rows = !row_type \%in\% 'label', indent = 8L)
 }
 \seealso{
 Other Advanced modifiers: 
-\code{\link{modify_column_alignment}()},
-\code{\link{modify_column_hide}()},
 \code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

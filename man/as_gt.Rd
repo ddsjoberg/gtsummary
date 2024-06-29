@@ -2,13 +2,13 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Convert gtsummary object to a gt object}
+\title{Convert gtsummary object to gt}
 \usage{
 as_gt(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
-(e.g. \link{tbl_summary} or \link{tbl_regression})}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -18,7 +18,7 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{...}{Arguments passed on to \link[gt:gt]{gt::gt}}
+\item{...}{Arguments passed on to \code{gt::gt(...)}}
 }
 \value{
 A \code{gt_tbl} object
@@ -29,39 +29,13 @@ that is, a table created with \code{gt::gt()}.
 Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
-
-Review the
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
-or
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
-for detailed examples in the 'Advanced Customization' section.
 }
-\section{Example Output}{
-
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_gt_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
-as_gt_ex1 <-
-  trial[c("trt", "age", "response", "grade")] \%>\%
-  tbl_summary(by = trt) \%>\%
+trial |>
+  tbl_summary(by = trt, include = c(age, grade, response)) |>
   as_gt()
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_flex_table}()},
-\code{\link{as_hux_table}()},
-\code{\link{as_kable_extra}()},
-\code{\link{as_kable}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

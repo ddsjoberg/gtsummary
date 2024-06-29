@@ -7,67 +7,21 @@
 separate_p_footnotes(x)
 }
 \arguments{
-\item{x}{object with class \code{"tbl_summary"} or \code{"tbl_svysummary"}}
+\item{x}{(\code{tbl_summary}, \code{tbl_svysummary})\cr
+Object with class \code{"tbl_summary"} or \code{"tbl_svysummary"}}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{questioning}\cr
 The usual presentation of footnotes for p-values on a gtsummary table is
 to have a single footnote that lists all statistical tests that were used to
 compute p-values on a given table. The \code{separate_p_footnotes()} function
 separates aggregated p-value footnotes to individual footnotes that denote
 the specific test used for each of the p-values.
 }
-\section{Example Output}{
-
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/separate_p_footnotes_ex1.png" alt="image of rendered example table" style="width:80\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
-separate_p_footnotes_ex1 <-
-  trial \%>\%
-  select(trt, age, grade) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
+trial |>
+  tbl_summary(by = trt, include = c(age, grade)) |>
+  add_p() |>
   separate_p_footnotes()
 }
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
-}
-\concept{tbl_summary tools}
-\concept{tbl_svysummary tools}

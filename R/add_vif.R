@@ -12,69 +12,56 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "car"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
-#' add_vif_ex1 <-
-#'   lm(age ~ grade + marker, trial) %>%
-#'   tbl_regression() %>%
+#' lm(age ~ grade + marker, trial) |>
+#'   tbl_regression() |>
 #'   add_vif()
 #'
 #' # Example 2 ----------------------------------
-#' add_vif_ex2 <-
-#'   lm(age ~ grade + marker, trial) %>%
-#'   tbl_regression() %>%
+#' lm(age ~ grade + marker, trial) |>
+#'   tbl_regression() |>
 #'   add_vif(c("aGVIF", "df"))
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_vif_ex1.png", width = "45")`
-#' }}
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_vif_ex2.png", width = "45")`
-#' }}
-#'
-add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
+add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2)) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_vif = match.call()))
-  # checking inputs ------------------------------------------------------------
-  .assert_class(x, "tbl_regression")
 
-  assert_package("car", "add_vif()")
-  estimate_fun <- estimate_fun %||% style_sigfig %>% gts_mapper("add_vif(estimate_fun=)")
+  # check inputs ---------------------------------------------------------------
+  check_not_missing(x)
+  check_class(x, "tbl_regression")
+  estimate_fun <- as_function(estimate_fun)
 
   # calculating VIF ------------------------------------------------------------
-  df_vif <- .vif_to_tibble(x$model_obj)
+  ard_vif <-
+    cards::eval_capture_conditions(
+      cardx::ard_car_vif(x$inputs$x)
+    )
+  if (!is_empty(ard_vif[["error"]])) {
+    cli::cli_abort(ard_vif[["error"]], call = get_cli_abort_call())
+  }
+  x$cards$vif <- ard_vif[["result"]]
 
   # assigning statistic to print -----------------------------------------------
-  statistic <-
-    statistic %||%
-    switch("VIF" %in% names(df_vif),
-      "VIF"
-    ) %||%
-    switch("GVIF" %in% names(df_vif),
-      c("GVIF", "aGVIF")
-    ) %>%
-    match.arg(choices = c("VIF", "GVIF", "aGVIF", "df"), several.ok = TRUE)
-  if (any(!statistic %in% names(df_vif))) {
-    glue(
-      "Statistic '{statistic}' not available for this model. ",
-      "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF', 'df')))}."
-    ) %>%
-      stop(call. = FALSE)
+  vif_values <- ard_vif[["result"]]$stat_name |> unique()
+  if (is_empty(statistic)) {
+    statistic <- vif_values |> intersect(c("VIF", "GVIF", "aGVIF"))
   }
+  statistic <- arg_match(statistic, values = vif_values, multiple = TRUE)
 
-  # merging VIF with gtsummary table -------------------------------------------
-  # merge in VIF stats
-  x <- x %>%
+  # add the stats to the tbl ---------------------------------------------------
+  ard_vif_wide <- ard_vif[["result"]] |>
+    dplyr::filter(.data$stat_name %in% .env$statistic) |>
+    tidyr::pivot_wider(
+      id_cols = "variable",
+      values_from = "stat",
+      names_from = "stat_name",
+      values_fn = unlist
+    ) |>
+    dplyr::mutate(row_type = "label")
+
+  x <- x |>
     modify_table_body(
-      dplyr::left_join,
-      df_vif %>%
-        select(any_of(c("variable", "row_type", statistic))),
-      by = c("variable", "row_type")
+      ~ dplyr::left_join(.x, ard_vif_wide, by = c("variable", "row_type"))
     )
 
   # add column header
@@ -83,23 +70,19 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       modify_table_styling(
         all_of(s),
         label = switch(s,
-          "VIF" = "**VIF**",
-          "GVIF" = "**GVIF**",
-          "aGVIF" = "**Adjusted GVIF**",
-          "df" = "**df**"
+                       "VIF" = "**VIF**",
+                       "GVIF" = "**GVIF**",
+                       "aGVIF" = "**Adjusted GVIF**",
+                       "df" = "**df**"
         ),
-        footnote = switch(s,
-          "aGVIF" = "GVIF^[1/(2*df)]"
-        ),
+        footnote = switch(s, "aGVIF" = "GVIF^[1/(2*df)]"),
         footnote_abbrev = switch(s,
-          "VIF" = "VIF = Variance Inflation Factor",
-          "GVIF" = "GVIF = Generalized Variance Inflation Factor",
-          "aGVIF" = "GVIF = Generalized Variance Inflation Factor",
-          "df" = "df = degrees of freedom"
+                                 "VIF" = "VIF = Variance Inflation Factor",
+                                 "GVIF" = "GVIF = Generalized Variance Inflation Factor",
+                                 "aGVIF" = "GVIF = Generalized Variance Inflation Factor",
+                                 "df" = "df = degrees of freedom"
         ),
-        fmt_fun = switch(s,
-          "df" = style_number
-        ) %||% estimate_fun,
+        fmt_fun = switch(s, "df" = style_number) %||% estimate_fun,
         hide = FALSE
       )
   }
@@ -109,46 +92,4 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   # add call list and return x
   x$call_list <- updated_call_list
   x
-}
-
-# put VIF results in data frame
-.vif_to_tibble <- function(x) {
-  vif <- tryCatch(
-    car::vif(x),
-    error = function(e) {
-      paste(
-        "The {.code add_vif()} uses {.code car::vif()} to",
-        "calculate the VIF, and the function returned an error (see below)."
-      ) %>%
-        stringr::str_wrap() %>%
-        cli_alert_danger()
-      stop(e)
-    }
-  )
-
-  # if VIF is returned
-  if (!is.matrix(vif)) {
-    result <-
-      vif %>%
-      tibble::enframe("variable", "VIF")
-  } # if Generalized VIF is returned
-  else {
-    result <-
-      vif %>%
-      as.data.frame() %>%
-      tibble::rownames_to_column(var = "variable") %>%
-      tibble::as_tibble() %>%
-      dplyr::rename(
-        aGVIF = "GVIF^(1/(2*Df))",
-        df = "Df"
-      )
-  }
-
-  result <-
-    result %>%
-    mutate(
-      variable = broom.helpers::.clean_backticks(.data$variable),
-      row_type = "label"
-    )
-  return(result)
 }

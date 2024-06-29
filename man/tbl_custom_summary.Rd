@@ -13,82 +13,81 @@ tbl_custom_summary(
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = NULL,
-  missing_text = NULL,
+  missing = c("ifany", "no", "always"),
+  missing_text = "Unknown",
+  missing_stat = "{N_miss}",
   include = everything(),
   overall_row = FALSE,
   overall_row_last = FALSE,
-  overall_row_label = NULL
+  overall_row_label = "Overall"
 )
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{(\code{data.frame})\cr A data frame}
 
-\item{by}{A column name (quoted or unquoted) in \code{data}.
-Summary statistics will be calculated separately for each level of the \code{by}
-variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations. To stratify a table by two or more
-variables, use \code{tbl_strata()}}
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
-\item{stat_fns}{Formula or list of formulas specifying the function to be
-used to compute the statistics (see below for details and examples). You can
-also use dedicated helpers such as \code{\link[=continuous_summary]{continuous_summary()}}, \code{\link[=ratio_summary]{ratio_summary()}}
+\item{stat_fns}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the function to be used to compute the statistics
+(see below for details and examples).
+You can also use dedicated helpers such as \code{\link[=continuous_summary]{continuous_summary()}}, \code{\link[=ratio_summary]{ratio_summary()}}
 or \code{\link[=proportion_summary]{proportion_summary()}}.}
 
-\item{statistic}{List of formulas specifying the \code{\link[glue:glue]{glue::glue()}} pattern to
-display the statistics for each variable. The statistics should be returned
-by the functions specified in \code{stat_fns} (see below for details and
-examples).}
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies summary statistics to display for each variable.  The default is
+\code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
+See below for details.}
 
-\item{digits}{List of formulas specifying the number of decimal
-places to round summary statistics. If not specified,
-\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
-When multiple statistics are displayed for a single variable, supply a vector
-rather than an integer.  For example, if the
-statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}. User
-may also pass a styling function: \code{digits = age ~ style_sigfig}}
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}. See below for details.}
 
-\item{type}{List of formulas specifying variable types. Accepted values
-are \code{c("continuous", "continuous2", "categorical", "dichotomous")},
-e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
-If type not specified for a variable, the function
-will default to an appropriate summary type. See below for details.}
+\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the summary type. Accepted value are
+\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
+If not specified, default type is assigned via
+\code{assign_summary_type()}. See below for details.}
 
-\item{value}{List of formulas specifying the value to display for dichotomous
-variables. gtsummary selectors, e.g. \code{all_dichotomous()}, cannot be used
-with this argument. See below for details.}
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the level of a variable to display on a single row.
+The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
+with this argument. Default is \code{NULL}. See below for details.}
 
-\item{missing}{Indicates whether to include counts of \code{NA} values in the table.
-Allowed values are \code{"no"} (never display NA values),
-\code{"ifany"} (only display if any NA values), and \code{"always"}
-(includes NA count row for all variables). Default is \code{"ifany"}.}
+\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
+\itemize{
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+}}
 
-\item{missing_text}{String to display for count of missing observations.
-Default is \code{"Unknown"}.}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in the summary table. Default is \code{everything()}}
 
-\item{include}{variables to include in the summary table. Default is \code{everything()}}
-
-\item{overall_row}{Logical indicator to display an overall row. Default is
+\item{overall_row}{(scalar \code{logical})\cr
+Logical indicator to display an overall row. Default is
 \code{FALSE}. Use \code{\link[=add_overall]{add_overall()}} to add an overall column.}
 
-\item{overall_row_last}{Logical indicator to display overall row last in
+\item{overall_row_last}{(scalar \code{logical})\cr
+Logical indicator to display overall row last in
 table. Default is \code{FALSE}, which will display overall row first.}
 
-\item{overall_row_label}{String indicating the overall row label. Default is
-\code{"Overall"}.}
+\item{overall_row_label}{(\code{string})\cr
+String indicating the overall row label. Default is \code{"Overall"}.}
 }
 \value{
-A \code{tbl_custom_summary} and \code{tbl_summary} object
+A \code{tbl_custom_summary} object
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{experimental}\cr
 The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide
@@ -178,29 +177,7 @@ according to the \code{by} groups, which may be incorrect if the displayed
 statistics refer to a third variable.
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex2.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex3.png" alt="image of rendered example table" style="width:35\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
 my_stats <- function(data, ...) {
   marker_sum <- sum(data$marker, na.rm = TRUE)
@@ -213,8 +190,7 @@ my_stats <- function(data, ...) {
 
 my_stats(trial)
 
-tbl_custom_summary_ex1 <-
-  trial \%>\%
+trial |>
   tbl_custom_summary(
     include = c("stage", "grade"),
     by = "trt",
@@ -223,11 +199,11 @@ tbl_custom_summary_ex1 <-
     digits = everything() ~ c(1, 0),
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
-  ) \%>\%
-  add_overall(last = TRUE) \%>\%
+  ) |>
+  add_overall(last = TRUE) |>
   modify_footnote(
-    update = all_stat_cols() ~ "A: mean age - S: sum of marker"
-  ) \%>\%
+    all_stat_cols() ~ "A: mean age - S: sum of marker"
+  ) |>
   bold_labels()
 
 # Example 2 ----------------------------------
@@ -241,17 +217,16 @@ mean_ci <- function(data, variable, ...) {
   )
 }
 
-tbl_custom_summary_ex2 <-
-  trial \%>\%
+trial |>
   tbl_custom_summary(
     include = c("marker", "ttdeath"),
     by = "trt",
     stat_fns = ~mean_ci,
     statistic = ~"{mean} [{conf.low}; {conf.high}]"
-  ) \%>\%
-  add_overall(last = TRUE) \%>\%
+  ) |>
+  add_overall(last = TRUE) |>
   modify_footnote(
-    update = all_stat_cols() ~ "mean [95\% CI]"
+    all_stat_cols() ~ "mean [95\% CI]"
   )
 
 # Example 3 ----------------------------------
@@ -269,46 +244,17 @@ diff_to_great_mean <- function(data, full_data, ...) {
   )
 }
 
-tbl_custom_summary_ex3 <-
-  trial \%>\%
+trial |>
   tbl_custom_summary(
     include = c("grade", "stage"),
     by = "trt",
     stat_fns = ~diff_to_great_mean,
     statistic = ~"{mean} ({level}, diff: {diff})",
+    digits = ~list(level = as.character),
     overall_row = TRUE
-  ) \%>\%
+  ) |>
   bold_labels()
-}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_custom_summary tools: 
-\code{\link{add_overall}()},
-\code{\link{continuous_summary}()},
-\code{\link{proportion_summary}()},
-\code{\link{ratio_summary}()}
 }
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}
-\concept{tbl_summary tools}

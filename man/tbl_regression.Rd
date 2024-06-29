@@ -3,7 +3,7 @@
 \name{tbl_regression}
 \alias{tbl_regression}
 \alias{tbl_regression.default}
-\title{Display regression model results in table}
+\title{Regression model summary}
 \usage{
 tbl_regression(x, ...)
 
@@ -13,73 +13,72 @@ tbl_regression(x, ...)
   exponentiate = FALSE,
   include = everything(),
   show_single_row = NULL,
-  conf.level = NULL,
+  conf.level = 0.95,
   intercept = FALSE,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
-  tidy_fun = NULL,
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
+  tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
   add_estimate_to_reference_rows = FALSE,
-  conf.int = NULL,
+  conf.int = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{Regression model object}
+\item{x}{(regression model)\cr
+Regression model object}
 
-\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.
-See \code{?tidy_plus_plus_dots} for details.}
+\item{...}{Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to change variables labels, e.g. \code{list(age = "Age", stage = "Path T Stage")}}
 
-\item{exponentiate}{Logical indicating whether to exponentiate the
-coefficient estimates. Default is \code{FALSE}.}
+\item{exponentiate}{(scalar \code{logical})\cr
+Logical indicating whether to exponentiate the coefficient estimates.
+Default is \code{FALSE}.}
 
-\item{include}{Variables to include in output. Input may be a vector of
-quoted variable names, unquoted variable names, or tidyselect select helper
-functions. Default is \code{everything()}.}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in output. Default is \code{everything()}.}
 
-\item{show_single_row}{By default categorical variables are printed on
-multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
-the regression coefficient on a single row, include the variable name(s)
-here--quoted and unquoted variable name accepted.}
+\item{show_single_row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+By default categorical variables are printed on multiple rows.
+If a variable is dichotomous (e.g. Yes/No) and you wish to print the
+regression coefficient on a single row, include the variable name(s) here.}
 
-\item{conf.level}{Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+\item{conf.level}{(scalar \code{real})\cr
+Confidence level for confidence interval/credible interval. Defaults to \code{0.95}.}
 
-\item{intercept}{Logical argument indicating whether to include the intercept
-in the output.  Default is \code{FALSE}}
+\item{intercept}{(scalar \code{logical})\cr
+Indicates whether to include the intercept in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{Function to round and format coefficient estimates.
-Default is \link{style_sigfig} when the coefficients are not transformed, and
-\link{style_ratio} when the coefficients have been exponentiated.}
+\item{estimate_fun}{(\code{function})\cr
+Function to round and format coefficient estimates.
+Default is \code{\link[=label_style_sigfig]{label_style_sigfig()}} when the coefficients are not transformed, and
+\code{\link[=label_style_ratio]{label_style_ratio()}} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{Function to round and format p-values.
-Default is \link{style_pvalue}.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\item{pvalue_fun}{(\code{function})\cr
+Function to round and format p-values. Default is \code{\link[=label_style_pvalue]{label_style_pvalue()}}.}
 
-\item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy()}, but if an error occurs
-then tidying of the model is attempted with \code{parameters::model_parameters()},
-if installed.}
+\item{tidy_fun}{(\code{function})\cr
+Tidier function for the model. Default is to use \code{broom::tidy()}.
+If an error occurs, the tidying of the model is attempted with
+\code{parameters::model_parameters()}, if installed.}
 
-\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
+\item{add_estimate_to_reference_rows}{(scalar \code{logical})\cr
+Add a reference value. Default is \code{FALSE}.}
 
-\item{conf.int}{Logical indicating whether or not to include a confidence
-interval in the output. Defaults to \code{TRUE}.}
+\item{conf.int}{(scalar \code{logical})\cr
+Logical indicating whether or not to include a confidence
+interval in the output. Default is \code{TRUE}.}
 }
 \value{
 A \code{tbl_regression} object
 }
 \description{
 This function takes a regression model object and returns a formatted table
-that is publication-ready. The function is highly customizable
-allowing the user to obtain a bespoke summary table of the
-regression model results. Review the
-\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+that is publication-ready. The function is customizable
+allowing the user to create bespoke regression model summary tables.
+Review the
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{\code{tbl_regression()} vignette}
 for detailed examples.
 }
 \section{Methods}{
@@ -97,73 +96,19 @@ fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
-\item \code{"tidycrr"}: Uses the tidier \code{tidycmprsk::tidy()} to print the model terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
 }
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex1.png" alt="image of rendered example table" style="width:64\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex2.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex3.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-library(survival)
-tbl_regression_ex1 <-
-  coxph(Surv(ttdeath, death) ~ age + marker, trial) \%>\%
+glm(response ~ age + grade, trial, family = binomial()) \%>\%
   tbl_regression(exponentiate = TRUE)
-
-# Example 2 ----------------------------------
-tbl_regression_ex2 <-
-  glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
-  tbl_regression(exponentiate = TRUE)
-
-# Example 3 ----------------------------------
-# round all estimates to 3 decimal places
-suppressMessages(library(lme4))
-tbl_regression_ex3 <-
-  lmer(hp ~ am + (1 | gear), data = mtcars) \%>\%
-  tbl_regression(estimate_fun = function(x) style_number(x, digits = 3))
-}
-}
-\seealso{
-See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
-
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}

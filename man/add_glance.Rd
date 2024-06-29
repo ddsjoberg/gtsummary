@@ -4,39 +4,45 @@
 \alias{add_glance}
 \alias{add_glance_table}
 \alias{add_glance_source_note}
-\title{Add Model Statistics}
+\title{Add model statistics}
 \usage{
 add_glance_table(
   x,
   include = everything(),
   label = NULL,
-  fmt_fun = NULL,
-  glance_fun = NULL
+  fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
+    label_style_pvalue(digits = 1), where(is.integer) ~ label_style_number()),
+  glance_fun = broom::glance
 )
 
 add_glance_source_note(
   x,
   include = everything(),
   label = NULL,
-  fmt_fun = NULL,
-  glance_fun = NULL,
+  fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
+    label_style_pvalue(digits = 1), where(is.integer) ~ label_style_number()),
+  glance_fun = broom::glance,
   text_interpret = c("md", "html"),
   sep1 = " = ",
   sep2 = "; "
 )
 }
 \arguments{
-\item{x}{'tbl_regression' object}
+\item{x}{(\code{tbl_regression})\cr
+a \code{'tbl_regression'} object}
 
-\item{include}{list of statistics to include in output. Must be column
-names of the tibble returned by \code{broom::glance()}. The include argument
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+names of statistics to include in output. Must be column
+names of the tibble returned by \code{broom::glance()} or from the \code{glance_fun}
+argument. The include argument
 can also be used to specify the order the statistics appear in the table.}
 
-\item{label}{List of formulas specifying statistic labels,
-e.g. \code{list(r.squared ~ "R2", p.value ~ "P")}}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+specifies statistic labels, e.g. \code{list(r.squared = "R2", p.value = "P")}}
 
-\item{fmt_fun}{List of formulas where the LHS is a statistic and the RHS
-is a function to format/round the statistics. The default is to round
+\item{fmt_fun}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the the functions used to format/round the glance statistics.
+The default is to round
 the number of observations and degrees of freedom to the nearest integer,
 p-values are styled with \code{style_pvalue()} and the remaining statistics
 are styled with \code{style_sigfig(x, digits = 3)}}
@@ -63,28 +69,6 @@ Add model statistics returned from \code{broom::glance()}. Statistics can either
 be appended to the table (\code{add_glance_table()}), or added as a
 table source note (\code{add_glance_source_note()}).
 }
-\section{Default Labels}{
-
-The following statistics have set default labels when printed.
-When there is no default, the column name from \code{broom::glance()} is printed.\tabular{ll}{
-   Statistic Name \tab Default Label \cr
-   r.squared \tab R² \cr
-   adj.r.squared \tab Adjusted R² \cr
-   p.value \tab p-value \cr
-   logLik \tab Log-likelihood \cr
-   statistic \tab Statistic \cr
-   df.residual \tab Residual df \cr
-   null.deviance \tab Null deviance \cr
-   df.null \tab Null df \cr
-   nevent \tab N events \cr
-   concordance \tab c-index \cr
-   std.error.concordance \tab c-index SE \cr
-   nobs \tab No. Obs. \cr
-   deviance \tab Deviance \cr
-   sigma \tab Sigma \cr
-}
-}
-
 \section{Tips}{
 
 When combining \code{add_glance_table()} with \code{tbl_merge()}, the
@@ -96,42 +80,20 @@ To re-order the rows with glance statistics on bottom, use the script below:
 }\if{html}{\out{</div>}}
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex1.png" alt="image of rendered example table" style="width:35\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex2.png" alt="image of rendered example table" style="width:35\%;">
-}}
-}
-
 \examples{
-\donttest{
-mod <- lm(age ~ marker + grade, trial) \%>\% tbl_regression()
+mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 
 # Example 1 ----------------------------------
-add_glance_ex1 <-
-  mod \%>\%
+mod |>
   add_glance_table(
-    label = list(sigma ~ "\U03C3"),
+    label = list(sigma = "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
 
 # Example 2 ----------------------------------
-add_glance_ex2 <-
-  mod \%>\%
+mod |>
   add_glance_source_note(
-    label = list(sigma ~ "\U03C3"),
+    label = list(sigma = "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
-}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 }

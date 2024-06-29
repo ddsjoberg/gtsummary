@@ -1,73 +1,32 @@
-skip_on_cran()
+test_that("bold_p() works", {
+  expect_equal(
+    trial |>
+      tbl_summary(by = trt, include = c(response, marker, trt), missing = "no") |>
+      add_p() |>
+      bold_p(t = 0.1) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(p.value),
+    c("0.5", "__0.085__")
+  )
 
-test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
-  tbl_summary_comp <- tbl_summary(mtcars, by = am) %>%
-    add_p()
-
-  expect_snapshot(bold_p(tbl_summary_comp) %>% as.data.frame())
-  expect_warning(bold_p(tbl_summary_comp), NA)
+  expect_equal(
+    trial |>
+      tbl_summary(by = trt, include = c(response, marker, trt), missing = "no") |>
+      add_p() |>
+      add_q() |>
+      bold_p(t = 0.25, q = TRUE) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(q.value),
+    c("0.5", "__0.2__")
+  )
 })
 
 
-test_that("expect error with use in tbl_summary() but NO add_p()", {
-  table1_without_comp <-
-    tbl_summary(mtcars, by = am)
-
-  expect_error(bold_p(table1_without_comp))
-})
-
-
-
-test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
-  table1_comp_with_q <-
-    tbl_summary(mtcars, by = am) %>%
-    add_p() %>%
-    add_q()
-
-  expect_error(bold_p(table1_comp_with_q, q = TRUE), NA)
-  expect_warning(bold_p(table1_comp_with_q, q = TRUE), NA)
-})
-
-
-test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
-  table1_comp_without_q <-
-    tbl_summary(mtcars, by = am) %>%
-    add_p()
-
-  expect_error(bold_p(table1_comp_without_q, q = TRUE), NULL)
-})
-
-
-test_that("no errors/warnings with standard use in tbl_regression()", {
-  fmt_reg <- lm(mpg ~ hp + am, mtcars) %>%
-    tbl_regression()
-
-  expect_error(bold_p(fmt_reg), NA)
-  expect_warning(bold_p(fmt_reg), NA)
-})
-
-
-test_that("no errors/warnings with standard use in tbl_uvregression()", {
-  fmt_uni_reg <- trial %>%
-    tbl_uvregression(
-      method = lm,
-      y = age
-    )
-
-  expect_error(bold_p(fmt_uni_reg, t = 0.3), NA)
-  expect_warning(bold_p(fmt_uni_reg, t = 0.3), NA)
-})
-
-
-test_that("no errors/warnings with use in tbl_uvregression() with add_global_p()", {
-  skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
-  fmt_uni_reg_global_p <- trial %>%
-    tbl_uvregression(
-      method = lm,
-      y = age
-    ) %>%
-    add_global_p()
-
-  expect_error(bold_p(fmt_uni_reg_global_p, t = 0.3), NA)
-  expect_warning(bold_p(fmt_uni_reg_global_p, t = 0.3), NA)
+test_that("bold_p() messaging", {
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(by = trt, include = c(response, marker, trt), missing = "no") |>
+      bold_p()
+  )
 })

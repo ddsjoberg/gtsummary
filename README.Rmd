@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
+[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
@@ -50,11 +50,7 @@ You can install {gtsummary} with the following code.
 install.packages("gtsummary")
 ```
 
-Install the development version of {gtsummary} with:
-
-``` r
-remotes::install_github("ddsjoberg/gtsummary")
-```
+Install the development version with `pak::pak("ddsjoberg/gtsummary")`
 
 ## Examples
 
@@ -70,8 +66,8 @@ Example basic table:
 library(gtsummary)
 
 # summarize the data with our package
-table1 <- 
-  trial %>%
+table1 <-
+  trial |> 
   tbl_summary(include = c(age, grade, response))
 ```
 
@@ -94,10 +90,10 @@ table2 <-
     include = c(age, grade, response),
     by = trt, # split table by group
     missing = "no" # don't list missing data separately
-  ) %>%
-  add_n() %>% # add column with total number of non-missing observations
-  add_p() %>% # test for a difference between groups
-  modify_header(label = "**Variable**") %>% # update the column header
+  ) |> 
+  add_n() |> # add column with total number of non-missing observations
+  add_p() |> # test for a difference between groups
+  modify_header(label = "**Variable**") |> # update the column header
   bold_labels()
 ```
 
@@ -138,7 +134,7 @@ library(survival)
 
 # build survival model table
 t2 <-
-  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) |> 
   tbl_regression(exponentiate = TRUE)
 
 # merge tables
@@ -179,8 +175,8 @@ knitr::include_graphics("man/figures/gt_output_formats.PNG")
 {gtsummary} tables can also be saved directly to file as an image, HTML, Word, RTF, and LaTeX file.
 
 ```r
-tbl %>%
-  as_gt() %>%
+tbl |> 
+  as_gt() |> 
   gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
 ```
 

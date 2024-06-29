@@ -2,128 +2,50 @@
 % Please edit documentation in R/add_q.R
 \name{add_q}
 \alias{add_q}
-\title{Add a column of q-values to account for
-multiple comparisons}
+\title{Add multiple comparison adjustment}
 \usage{
 add_q(x, method = "fdr", pvalue_fun = NULL, quiet = NULL)
 }
 \arguments{
-\item{x}{a \code{gtsummary} object}
+\item{x}{(\code{gtsummary})\cr
+a \code{gtsummary} object with a column named \code{"p.value"}}
 
-\item{method}{String indicating method to be used for p-value
-adjustment. Methods from
-\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = "fdr"}.}
+\item{method}{(\code{string})\cr
+String indicating method to be used for p-value adjustment. Methods from
+\code{\link[stats:p.adjust]{stats::p.adjust()}} are accepted.  Default is \code{method='fdr'}.
+Must be one of 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr', 'none'}
 
-\item{pvalue_fun}{Function to round and format p-values.
-Default is \link{style_pvalue}.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\item{pvalue_fun}{(\code{function})\cr
+Function to round and format q-values. Default is the function specified
+to round the existing \code{'p.value'} column.}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.
+Adjustments to p-values are performed with \code{\link[stats:p.adjust]{stats::p.adjust()}}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_q_ex1.png" alt="image of rendered example table" style="width:65\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_q_ex2.png" alt="image of rendered example table" style="width:60\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 add_q_ex1 <-
-  trial[c("trt", "age", "grade", "response")] \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
+  trial |>
+  tbl_summary(by = trt, include = c(trt, age, grade, response)) |>
+  add_p() |>
   add_q()
 
 # Example 2 ----------------------------------
-add_q_ex2 <-
-  trial[c("trt", "age", "grade", "response")] \%>\%
+trial |>
   tbl_uvregression(
     y = response,
+    include = c("trt", "age", "grade"),
     method = glm,
     method.args = list(family = binomial),
     exponentiate = TRUE
-  ) \%>\%
-  add_global_p() \%>\%
+  ) |>
+  add_global_p() |>
   add_q()
-}
 \dontshow{\}) # examplesIf}
 }
-\seealso{
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_uvregression}()}
-}
 \author{
-Esther Drill, Daniel D. Sjoberg
+Daniel D. Sjoberg, Esther Drill
 }
-\concept{tbl_regression tools}
-\concept{tbl_summary tools}
-\concept{tbl_svysummary tools}
-\concept{tbl_uvregression tools}

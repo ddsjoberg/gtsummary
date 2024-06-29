@@ -8,7 +8,7 @@
 \alias{pool_and_tidy_mice}
 \alias{tidy_gam}
 \alias{tidy_wald_test}
-\title{Collection of custom tidiers}
+\title{Custom tidiers}
 \usage{
 tidy_standardize(
   x,
@@ -60,7 +60,8 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to \code{FALSE}.}
 
-\item{...}{arguments passed to method;
+\item{...}{\cr
+arguments passed to method;
 \itemize{
 \item \code{pool_and_tidy_mice()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{parameters::standardize_parameters(x, ...)}
@@ -68,20 +69,20 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item \code{tidy_robust()}: \code{parameters::model_parameters(x, ...)}
 }}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{vcov, vcov_args}{arguments passed to
-\code{parameters::model_parameters()}. At least one of these arguments \strong{must}
-be specified.}
+\item{vcov, vcov_args}{\cr
+arguments passed to \code{parameters::model_parameters()}.
+At least one of these arguments \strong{must} be specified.}
 
-\item{pool.args}{named list of arguments passed to \code{mice::pool()} in
+\item{pool.args}{(named \code{list})\cr
+named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
 
-\item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy()}, but if an error occurs
-then tidying of the model is attempted with \code{parameters::model_parameters()},
-if installed.}
+\item{tidy_fun}{(\code{function})\cr
+Tidier function for the model. Default is to use \code{broom::tidy()}.
+If an error occurs, the tidying of the model is attempted with
+\code{parameters::model_parameters()}, if installed.}
 }
 \description{
 \lifecycle{maturing}
@@ -107,8 +108,7 @@ package includes a wonderful function to calculate robust standard errors, confi
 The tidier uses the output from \code{parameters::model_parameters()}, and
 merely takes the result and puts it in \code{broom::tidy()} format. To use this
 function with \code{tbl_regression()}, pass a function with the arguments for
-\code{tidy_robust()} populated. This is easily done using \code{purrr::partial()} e.g.
-\code{tbl_regression(tidy_fun = partial(tidy_robust, vcov = "CL"))}
+\code{tidy_robust()} populated.
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.
@@ -123,30 +123,8 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 }
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex1.png" alt="image of rendered example table" style="width:65\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex2.png" alt="image of rendered example table" style="width:47\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/pool_and_tidy_mice_ex3.png" alt="image of rendered example table" style="width:47\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)
 
@@ -161,16 +139,14 @@ tidy_standardize_ex1 <-
 
 # Example 2 ----------------------------------
 # use "posthoc" method for coef calculation
-tidy_standardize_ex2 <-
-  tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+tbl_regression(mod, tidy_fun = \(x, ...) tidy_standardize(x, method = "posthoc", ...))
 
 # Example 3 ----------------------------------
 # Multiple Imputation using the mice package
 set.seed(1123)
 pool_and_tidy_mice_ex3 <-
-  suppressWarnings(mice::mice(trial, m = 2)) \%>\%
-  with(lm(age ~ marker + grade)) \%>\%
+  suppressWarnings(mice::mice(trial, m = 2)) |>
+  with(lm(age ~ marker + grade)) |>
   tbl_regression()
-}
 \dontshow{\}) # examplesIf}
 }

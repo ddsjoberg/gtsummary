@@ -1,37 +1,23 @@
-# tbl_summary
+# as_kable works with standard use
 
     Code
-      tbl
+      kbl_summary
     Output
       
       
-      |**Characteristic**     |    **N = 200**    |
-      |:----------------------|:-----------------:|
-      |Chemotherapy Treatment |                   |
-      |Drug A                 |     98 (49%)      |
-      |Drug B                 |     102 (51%)     |
-      |Age                    |    47 (38, 57)    |
-      |Unknown                |        11         |
-      |Marker Level (ng/mL)   | 0.64 (0.22, 1.39) |
-      |Unknown                |        10         |
-      |T Stage                |                   |
-      |T1                     |     53 (27%)      |
-      |T2                     |     54 (27%)      |
-      |T3                     |     43 (22%)      |
-      |T4                     |     50 (25%)      |
-      |Grade                  |                   |
-      |I                      |     68 (34%)      |
-      |II                     |     68 (34%)      |
-      |III                    |     64 (32%)      |
-      |Tumor Response         |     61 (32%)      |
-      |Unknown                |         7         |
-      |Patient Died           |     112 (56%)     |
-      |Months to Death/Censor | 22.4 (16.0, 24.0) |
+      |**Characteristic**     | **N = 200** |
+      |:----------------------|:-----------:|
+      |Chemotherapy Treatment |             |
+      |Drug A                 |  98 (49%)   |
+      |Drug B                 |  102 (51%)  |
+      |Age                    | 47 (38, 57) |
+      |Unknown                |     11      |
+      |Patient Died           |  112 (56%)  |
 
-# tbl_cross
+# as_kable works with tbl_cross
 
     Code
-      tbl
+      kbl_cross
     Output
       
       
@@ -43,34 +29,10 @@
       |III   |   31   |   33   |  64   |
       |Total |   98   |  102   |  200  |
 
-# tbl_regression
+# as_kable works with tbl_uvregression
 
     Code
-      tbl
-    Output
-      
-      
-      |**Characteristic** | **Beta** | **95% CI**  | **p-value** |
-      |:------------------|:--------:|:-----------:|:-----------:|
-      |Age                |   0.00   | -0.01, 0.01 |    >0.9     |
-
----
-
-    Code
-      with_gtsummary_theme(x = theme_gtsummary_journal("qjecon"), lm(age ~ marker +
-        response, data = trial) %>% tbl_regression() %>% as_kable(format = "pipe"))
-    Output
-      
-      
-      |**Characteristic**   | **Beta**  **(SE)** |
-      |:--------------------|:------------------:|
-      |Marker Level (ng/mL) |    0.03  (1.29)    |
-      |Tumor Response       |    3.9  (2.40)     |
-
-# tbl_uvregression
-
-    Code
-      tbl
+      kbl_uvregression
     Output
       
       
@@ -93,10 +55,10 @@
       |Patient Died           |  189  |   2.2    |  -2.0, 6.3  |     0.3     |
       |Months to Death/Censor |  189  |  -0.14   | -0.54, 0.26 |     0.5     |
 
-# tbl_survfit
+# as_kable works with tbl_survfit
 
     Code
-      tbl
+      kbl_survfit
     Output
       
       
@@ -106,10 +68,10 @@
       |Drug A                 | 91% (85%, 97%) | 47% (38%, 58%) |
       |Drug B                 | 86% (80%, 93%) | 41% (33%, 52%) |
 
-# tbl_merge/tbl_stack
+# as_kable works with tbl_merge
 
     Code
-      tbl
+      kbl_merge
     Output
       
       
@@ -124,29 +86,23 @@
       |III                    |  1.01  | 0.47, 2.15 |    >0.9     |  1.79  | 1.12, 2.86 |    0.014    |
       |Age                    |  1.02  | 1.00, 1.04 |    0.10     |  1.01  | 0.99, 1.02 |     0.3     |
 
----
+# as_kable works with tbl_stack
 
     Code
-      tbl
+      kbl_stack
     Output
       
       
-      |**Group**          |**Characteristic**     | **OR** | **95% CI** | **p-value** |
-      |:------------------|:----------------------|:------:|:----------:|:-----------:|
-      |**Tumor Response** |Chemotherapy Treatment |        |            |             |
-      |                   |Drug A                 |   —    |     —      |             |
-      |                   |Drug B                 |  1.13  | 0.60, 2.13 |     0.7     |
-      |                   |Grade                  |        |            |             |
-      |                   |I                      |   —    |     —      |             |
-      |                   |II                     |  0.85  | 0.39, 1.85 |     0.7     |
-      |                   |III                    |  1.01  | 0.47, 2.15 |    >0.9     |
-      |                   |Age                    |  1.02  | 1.00, 1.04 |    0.10     |
-      |**Time to Death**  |Chemotherapy Treatment |        |            |             |
-      |                   |Drug A                 |   —    |     —      |             |
-      |                   |Drug B                 |  1.30  | 0.88, 1.92 |     0.2     |
-      |                   |Grade                  |        |            |             |
-      |                   |I                      |   —    |     —      |             |
-      |                   |II                     |  1.21  | 0.73, 1.99 |     0.5     |
-      |                   |III                    |  1.79  | 1.12, 2.86 |    0.014    |
-      |                   |Age                    |  1.01  | 0.99, 1.02 |     0.3     |
+      |**Group** |**Characteristic** | **Statistic** |
+      |:---------|:------------------|:-------------:|
+      |Drug A    |Age                |  46 (37, 60)  |
+      |          |Unknown            |       7       |
+      |          |Tumor Response     |   28 (29%)    |
+      |          |Unknown            |       3       |
+      |          |Patient Died       |   52 (53%)    |
+      |Drug B    |Age                |  48 (39, 56)  |
+      |          |Unknown            |       4       |
+      |          |Tumor Response     |   33 (34%)    |
+      |          |Unknown            |       4       |
+      |          |Patient Died       |   60 (59%)    |
 

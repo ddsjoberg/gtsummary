@@ -9,7 +9,7 @@
 #'
 #' @name tests
 #' @keywords internal
-#' @section tbl_summary() %>% add_p():
+#' @section `tbl_summary() %>% add_p()`:
 #'
 #' ```{r, echo = FALSE}
 #' options(knitr.kable.NA = '')
@@ -20,7 +20,7 @@
 #'
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_p == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -29,12 +29,12 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_svysummary() %>% add_p():
+#' @section `tbl_svysummary() %>% add_p()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_p == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -43,12 +43,12 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_survfit() %>% add_p():
+#' @section `tbl_survfit() %>% add_p()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_survfit", add_p == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -57,12 +57,12 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_continuous() %>% add_p():
+#' @section `tbl_continuous() %>% add_p()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_continuous", add_p == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -76,7 +76,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_difference == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
@@ -91,7 +91,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_difference == TRUE) %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
@@ -106,9 +106,13 @@
 #' To report a p-value (or difference) for a test not available in gtsummary, you can create a
 #' custom function. The output is a data frame that is one line long. The
 #' structure is similar to the output of `broom::tidy()` of a typical
-#' statistical test. The `add_p()` and `add_comparison()` functions will look for columns called
-#' `"p.value"`, `"estimate"`, `"conf.low"`, `"conf.high"`, and `"method"` for the
-#' p-value, difference, confidence interval, and the test name used in the footnote.
+#' statistical test. The `add_p()` and `add_difference()` functions will look for columns called
+#' `"p.value"`, `"estimate"`, `"statistic"`, `"std.error"`, `"parameter"`,
+#' `"conf.low"`, `"conf.high"`, and `"method"`.
+#'
+#' You can also pass an Analysis Results Dataset (ARD) object with the results
+#' for your custom result. These objects follow the structures outlined
+#' by the \{cards\} and \{cardx\} packages.
 #'
 #' Example calculating a p-value from a t-test assuming a common variance
 #' between groups.

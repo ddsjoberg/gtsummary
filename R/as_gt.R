@@ -1,4 +1,4 @@
-#' Convert gtsummary object to a gt object
+#' Convert gtsummary object to gt
 #'
 #' @description Function converts a gtsummary object to a `"gt_tbl"` object,
 #' that is, a table created with `gt::gt()`.
@@ -6,41 +6,28 @@
 #' A user can use this function if they wish to add customized formatting
 #' available via the [gt package](https://gt.rstudio.com/index.html).
 #'
-#' @description Review the
-#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
-#' or
-#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
-#' for detailed examples in the 'Advanced Customization' section.
-#'
-#' @param x Object created by a function from the gtsummary package
-#' (e.g. [tbl_summary] or [tbl_regression])
+#' @param x (`gtsummary`)\cr
+#'   An object of class `"gtsummary"
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
 #' Default is `everything()`.
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
-#' @param ... Arguments passed on to [gt::gt]
+#' @param ... Arguments passed on to `gt::gt(...)`
 #' @return A `gt_tbl` object
-#' @family gtsummary output types
+#'
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' # Example 1 ----------------------------------
-#' as_gt_ex1 <-
-#'   trial[c("trt", "age", "response", "grade")] %>%
-#'   tbl_summary(by = trt) %>%
+#' trial |>
+#'   tbl_summary(by = trt, include = c(age, grade, response)) |>
 #'   as_gt()
-#' @section Example Output:
-#'
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_gt_ex1.png", width = "50")`
-#' }}
-
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
-  .assert_class(x, "gtsummary")
+  set_cli_abort_call()
+  check_class(x, "gtsummary")
+  check_scalar_logical(return_calls)
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -58,7 +45,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
   gt_calls <-
-    purrr::reduce(
+    reduce(
       .x = seq_along(insert_expr_after),
       .f = function(x, y) {
         add_expr_after(
@@ -72,15 +59,10 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
     )
 
   # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(gt_calls),
-      arg_name = "include"
-    )
-
-  # user cannot omit the first 'gt' command
-  include <- "gt" %>% union(include)
+  cards::process_selectors(
+    data = vec_to_df(names(gt_calls)),
+    include = {{ include }}
+  )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) {
@@ -88,9 +70,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   }
 
   # taking each gt function call, concatenating them with %>% separating them
-  gt_calls[include] %>%
-    c(parse_expr(.get_deprecated_option("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
-    .eval_list_of_exprs()
+  .eval_list_of_exprs(gt_calls[include])
 }
 
 # creating gt calls from table_styling -----------------------------------------
@@ -105,8 +85,9 @@ table_styling_to_gt_calls <- function(x, ...) {
   caption <-
     switch(!is.null(x$table_styling$caption),
       rlang::call2(
-        attr(x$table_styling$caption, "text_interpret"),
-        x$table_styling$caption
+        .fn = attr(x$table_styling$caption, "text_interpret"),
+        x$table_styling$caption,
+        .ns = "gt"
       )
     )
   gt_calls[["gt"]] <-
@@ -121,7 +102,7 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls[["fmt_missing"]] <-
     expr(
       gt::sub_missing(columns = gt::everything(), missing_text = "")
-    ) %>%
+    ) |>
     c(
       map(
         seq_len(nrow(x$table_styling$fmt_missing)),
@@ -135,11 +116,11 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # cols_align -----------------------------------------------------------------
   df_cols_align <-
-    x$table_styling$header %>%
-    select("column", "align") %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    mutate(cols = map(.data$data, ~ pull(.x, column)))
+    x$table_styling$header |>
+    select("column", "align") |>
+    dplyr::group_by(.data$align) |>
+    tidyr::nest() %>%
+    dplyr::mutate(cols = map(.data$data, ~ dplyr::pull(.x, column)))
 
   gt_calls[["cols_align"]] <-
     map(
@@ -151,30 +132,15 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # indent ---------------------------------------------------------------------
-  df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
   gt_calls[["indent"]] <-
     map(
-      seq_len(nrow(df_indent)),
+      seq_len(nrow(x$table_styling$indent)),
       ~ expr(gt::text_transform(
         locations = gt::cells_body(
-          columns = !!df_indent$column[[.x]],
-          rows = !!df_indent$row_numbers[[.x]]
+          columns = !!x$table_styling$indent$column[[.x]],
+          rows = !!x$table_styling$indent$row_numbers[[.x]]
         ),
-        fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0", x)
-      ))
-    )
-
-  # indent2 --------------------------------------------------------------------
-  df_indent2 <- x$table_styling$text_format %>% filter(.data$format_type == "indent2")
-  gt_calls[["indent2"]] <-
-    map(
-      seq_len(nrow(df_indent2)),
-      ~ expr(gt::text_transform(
-        locations = gt::cells_body(
-          columns = !!df_indent2$column[[.x]],
-          rows = !!df_indent2$row_numbers[[.x]]
-        ),
-        fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0", x)
+        fn = function(x) paste0(!!strrep("\U00A0", times = x$table_styling$indent$n_spaces[[.x]]), x)
       ))
     )
 
@@ -190,7 +156,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
+  df_bold <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "bold")
   gt_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
@@ -204,7 +170,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_italic -----------------------------------------------------------
-  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
+  df_italic <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "italic")
   gt_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
@@ -225,9 +191,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       ~ call2(parse_expr(.x), .y)
     ) %>%
     set_names(x$table_styling$header$column) %>%
-    {
-      call2(expr(gt::cols_label), !!!.)
-    }
+    {call2(expr(gt::cols_label), !!!.)} # styler: off
 
   # tab_footnote ---------------------------------------------------------------
   if (nrow(x$table_styling$footnote) == 0 &&
@@ -235,17 +199,17 @@ table_styling_to_gt_calls <- function(x, ...) {
     gt_calls[["tab_footnote"]] <- list()
   } else {
     df_footnotes <-
-      bind_rows(
+      dplyr::bind_rows(
         x$table_styling$footnote,
         x$table_styling$footnote_abbrev
-      ) %>%
-      nest(data = c("column", "row_numbers")) %>%
-      rowwise() %>%
-      mutate(
-        columns = .data$data %>% pull("column") %>% unique() %>% list(),
-        rows = .data$data %>% pull("row_numbers") %>% unique() %>% list()
-      ) %>%
-      ungroup()
+      ) |>
+      tidyr::nest(data = c("column", "row_numbers")) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
+        columns = .data$data %>% dplyr::pull("column") %>% unique() %>% list(),
+        rows = .data$data %>% dplyr::pull("row_numbers") %>% unique() %>% list()
+      ) |>
+      dplyr::ungroup()
     df_footnotes$footnote_exp <-
       map2(
         df_footnotes$text_interpret,
@@ -283,18 +247,18 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
-    x$table_styling$header %>%
-    select("column", "interpret_spanning_header", "spanning_header") %>%
-    filter(!is.na(.data$spanning_header)) %>%
-    nest(cols = "column") %>%
-    mutate(
+    x$table_styling$header |>
+    dplyr::select("column", "interpret_spanning_header", "spanning_header") |>
+    dplyr::filter(!is.na(.data$spanning_header)) |>
+    tidyr::nest(cols = "column") |>
+    dplyr::mutate(
       spanning_header = map2(
         .data$interpret_spanning_header, .data$spanning_header,
         ~ call2(parse_expr(.x), .y)
       ),
-      cols = map(.data$cols, ~ pull(.x))
-    ) %>%
-    select("spanning_header", "cols")
+      cols = map(.data$cols, ~ dplyr::pull(.x))
+    ) |>
+    dplyr::select("spanning_header", "cols")
 
   gt_calls[["tab_spanner"]] <-
     map(
@@ -321,7 +285,10 @@ table_styling_to_gt_calls <- function(x, ...) {
   # adding other calls from x$table_styling$source_note
   if (!is.null(x$table_styling$source_note)) {
     source_note <-
-      rlang::call2(attr(x$table_styling$source_note, "text_interpret"), x$table_styling$source_note)
+      rlang::call2(
+        get(attr(x$table_styling$source_note, "text_interpret"), envir = asNamespace("gt")),
+        x$table_styling$source_note
+      )
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!source_note))
   }
 
@@ -329,12 +296,10 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls[["cols_hide"]] <-
     names(x$table_body) %>%
     setdiff(.cols_to_show(x)) %>%
-    {
-      .purrr_when(
-        rlang::is_empty(.) ~ NULL,
-        TRUE ~ expr(gt::cols_hide(columns = !!.))
-      )
-    }
+    {case_switch(
+      rlang::is_empty(.) ~ NULL,
+      .default = expr(gt::cols_hide(columns = !!.))
+    )}
 
   # return list of gt expressions
   gt_calls

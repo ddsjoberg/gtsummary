@@ -1,56 +1,30 @@
 #' Summarize a continuous variable
 #'
-#' \lifecycle{experimental}
-#' This helper, to be used with [tbl_custom_summary()], creates a function
+#' \lifecycle{deprecated}
+#' This helper, to be used with [`tbl_custom_summary()`], creates a function
 #' summarizing a continuous variable.
 #'
-#' @param variable String indicating the name of the variable to be summarized. This
-#' variable should be continuous.
+#' @param variable (`string`)\cr
+#'   String indicating the name of the variable to be summarized. This
+#'   variable should be continuous.
 #'
 #' @details
-#' When using `continuous_summary`, you can specify in the `statistic=` argument
-#' of [tbl_custom_summary()] the same continuous statistics than in
-#' [tbl_summary()]. See the *statistic argument* section of the help file of
-#' [tbl_summary()].
+#' When using `continuous_summary()`, you can specify in the `statistic=` argument
+#' of [`tbl_custom_summary()`] the same continuous statistics than in
+#' [`tbl_summary()`]. See the *statistic argument* section of the help file of
+#' [`tbl_summary()`].
 #'
 #' @export
-#' @family tbl_custom_summary tools
-#' @author Joseph Larmarange
-#' @examples
-#' \donttest{
-#' # Example 1 ----------------------------------
-#' continuous_summary_ex1 <-
-#'   trial %>%
-#'   tbl_custom_summary(
-#'     include = c("stage", "grade"),
-#'     by = "trt",
-#'     stat_fns = ~ continuous_summary("age"),
-#'     statistic = ~"{median} [{p25}-{p75}]",
-#'     overall_row = TRUE,
-#'     overall_row_label = "All stages & grades"
-#'   ) %>%
-#'   modify_footnote(
-#'     update = all_stat_cols() ~ "Median age (IQR)"
-#'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
+#' @return NULL
+#' @keywords internal
 #'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "continuous_summary_ex1.png", width = "31")`
-#' }}
+#' @author Joseph Larmarange
 continuous_summary <- function(variable) {
-  variable_to_summarize <- variable
-  function(data, stat_display, ...) {
-    summarize_continuous(
-      data = data,
-      variable = variable_to_summarize,
-      by = NULL,
-      stat_display = stat_display,
-      summary_type = "continuous"
-    ) %>%
-      dplyr::select(-"variable", -"stat_display")
-  }
+  lifecycle::deprecate_stop(
+    when = "2.0.0",
+    what = "gtsummary::continuous_summary()",
+    details = I("Please use `tbl_continuous()` instead, which can be a drop-in replacement in most cases.")
+  )
 }
 
 
@@ -60,15 +34,18 @@ continuous_summary <- function(variable) {
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing the ratio of two continuous variables and its confidence interval.
 #'
-#' @param numerator String indicating the name of the variable to be summed
-#' for computing the numerator.
-#' @param denominator String indicating the name of the variable to be summed
-#' for computing the denominator.
-#' @param na.rm Should missing values be removed before summing the numerator
-#' and the denominator? (default is `TRUE`)
-#' @param conf.level Confidence level for the returned confidence interval.
-#' Must be strictly greater than 0 and less than 1. Default to 0.95, which
-#' corresponds to a 95 percent confidence interval.
+#' @param numerator (`string`)\cr
+#'   String indicating the name of the variable to be summed for computing the numerator.
+#' @param denominator (`string`)\cr
+#'   String indicating the name of the variable to be summed
+#'   for computing the denominator.
+#' @param na.rm (scalar `logical`)\cr
+#'   Should missing values be removed before summing the numerator
+#'   and the denominator? (default is `TRUE`)
+#' @param conf.level (scalar `numeric`)\cr
+#'   Confidence level for the returned confidence interval.
+#'   Must be strictly greater than 0 and less than 1. Default to 0.95, which
+#'   corresponds to a 95 percent confidence interval.
 #'
 #' @details
 #' Computed statistics:
@@ -84,12 +61,11 @@ continuous_summary <- function(variable) {
 #' `num` is an integer.
 #'
 #' @export
-#' @family tbl_custom_summary tools
+#'
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
-#' ratio_summary_ex1 <-
-#'   trial %>%
+#' trial |>
 #'   tbl_custom_summary(
 #'     include = c("stage", "grade"),
 #'     by = "trt",
@@ -98,17 +74,9 @@ continuous_summary <- function(variable) {
 #'     digits = ~ c(3, 2, 2, 0, 0),
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
-#'   ) %>%
-#'   bold_labels() %>%
-#'   modify_footnote(
-#'     update = all_stat_cols() ~ "Ratio [95% CI] (n/N)"
-#'   )
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "ratio_summary_ex1.png", width = "31")`
-#' }}
+#'   ) |>
+#'   bold_labels() |>
+#'   modify_footnote(all_stat_cols() ~ "Ratio [95% CI] (n/N)")
 ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.95) {
   function(data, ...) {
     num <- sum(data[[numerator]], na.rm = na.rm)
@@ -138,25 +106,29 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing a proportion and its confidence interval.
 #'
-#' @param variable String indicating the name of the variable from which the
-#' proportion will be computed.
-#' @param value Value (or list of values) of `variable` to be taken into account
-#' in the numerator.
-#' @param weights Optional string indicating the name of a weighting variable.
-#' If `NULL`, all observations will be assumed to have a weight equal to `1`.
-#' @param na.rm Should missing values be removed before computing the
-#' proportion? (default is `TRUE`)
-#' @param conf.level Confidence level for the returned confidence interval.
-#' Must be strictly greater than 0 and less than 1. Default to 0.95, which
-#' corresponds to a 95 percent confidence interval.
-#' @param method Confidence interval method. Must be one of
-#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. See details below.
+#' @param variable (`string`)\cr
+#'   String indicating the name of the variable from which the proportion will be computed.
+#' @param value (`scalar`)\cr
+#'   Value (or list of values) of `variable` to be taken into account in the numerator.
+#' @param weights (`string`)\cr
+#'   Optional string indicating the name of a frequency weighting variable.
+#'   If `NULL`, all observations will be assumed to have a weight equal to `1`.
+#' @param na.rm (scalar `logical`)\cr
+#'   Should missing values be removed before computing the proportion? (default is `TRUE`)
+#' @param conf.level (scalar `numeric`)\cr
+#'   Confidence level for the returned confidence interval.
+#'   Must be strictly greater than 0 and less than 1. Default to 0.95, which
+#'   corresponds to a 95 percent confidence interval.
+#' @param method (`string`)\cr
+#'   Confidence interval method. Must be one of
+#'   `c("wilson", "wilson.no.correct", "wald", "wald.no.correct", "exact", "agresti.coull", "jeffreys")`.
+#'   See `add_ci()` for details.
 #'
 #' @details
 #' Computed statistics:
 #' \itemize{
-#'   \item `{n}` numerator, (weighted) number of observations equal to `values`
-#'   \item `{N}` denominator, (weighted) number of observations
+#'   \item `{n}` numerator, number of observations equal to `values`
+#'   \item `{N}` denominator, number of observations
 #'   \item `{prop}` proportion, i.e. `n/N`
 #'   \item `{conf.low}` lower confidence interval
 #'   \item `{conf.high}` upper confidence interval
@@ -169,74 +141,59 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' and the corresponding method.
 #'
 #' @export
-#' @family tbl_custom_summary tools
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
-#' proportion_summary_ex1 <-
-#'   Titanic %>%
-#'   as.data.frame() %>%
+#' Titanic |>
+#'   as.data.frame() |>
 #'   tbl_custom_summary(
 #'     include = c("Age", "Class"),
 #'     by = "Sex",
 #'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
 #'     statistic = ~"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-#'     digits = ~ list(
-#'       function(x) {
-#'         style_percent(x, digits = 1)
-#'       },
-#'       0, 0, style_percent, style_percent
-#'     ),
+#'     digits =
+#'       ~list(label_style_percent(digits=1), 0, 0, label_style_percent(), label_style_percent()),
 #'     overall_row = TRUE,
 #'     overall_row_last = TRUE
-#'   ) %>%
-#'   bold_labels() %>%
-#'   modify_footnote(
-#'     update = all_stat_cols() ~ "Proportion (%) of survivors (n/N) [95% CI]"
-#'   )
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "proportion_summary_ex1.png", width = "31")`
-#' }}
-proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE,
-                               conf.level = 0.95,
-                               method = c("wilson", "wilson.no.correct", "exact", "asymptotic")) {
-  method <- match.arg(method)
-  variable_to_summarize <- variable
+#'   ) |>
+#'   bold_labels() |>
+#'   modify_footnote(all_stat_cols() ~ "Proportion (%) of survivors (n/N) [95% CI]")
+proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE, conf.level = 0.95,
+                               method = c("wilson", "wilson.no.correct", "wald", "wald.no.correct", "exact", "agresti.coull", "jeffreys")) {
+  # process arguments ----------------------------------------------------------
+  if (identical(method, "asymptotic")) method <- "wald.no.correct" # Documentation of "asymptotic" was removed in v2.0.0
+  else method <- arg_match(method)
+
+  check_scalar_range(conf.level, range = c(0, 1))
+  check_scalar_logical(na.rm)
+  check_not_missing(variable)
+  check_string(variable)
+  check_string(weights, allow_empty = TRUE)
+
+
   function(data, ...) {
-    if (is.null(weights)) {
-      n <- sum(data[[variable_to_summarize]] %in% value, na.rm = na.rm)
-      N <- sum(!is.na(data[[variable_to_summarize]]), na.rm = na.rm)
-    } else {
-      n <- sum((data[[variable_to_summarize]] %in% value) * data[[weights]], na.rm = na.rm)
-      N <- sum((!is.na(data[[variable_to_summarize]])) * data[[weights]], na.rm = na.rm)
+    # create lgl vector of variable to calculate CI
+    if (!is_empty(weights)) {
+      data <- data[c(variable, weights)] |> tidyr::uncount(weights = !!sym(weights))
     }
-    if (anyNA(n, N)) {
-      ci <- c(NA, NA)
-    } else {
-      if (method %in% c("wilson", "wilson.no.correct")) {
-        ci <-
-          stats::prop.test(n, N,
-            conf.level = conf.level,
-            correct = isTRUE(method == "wilson")
-          ) %>%
-          purrr::pluck("conf.int")
-      } else if (method %in% c("exact", "asymptotic")) {
-        assert_package("Hmisc", fn = 'proportion_summary(method = c("exact", "asymptotic"))')
-        ci <-
-          Hmisc::binconf(n, N,
-            method = method, alpha = 1 - conf.level
-          )[2:3]
-      }
-    }
-    dplyr::tibble(
-      n = n,
-      N = N,
-      prop = n / N,
-      conf.low = ci[1],
-      conf.high = ci[2]
-    )
+    if (na.rm) data <- tidyr::drop_na(data, all_of(variable))
+    x <- data[[variable]] %in% value
+
+    switch(
+      method,
+      "wilson" = cardx::proportion_ci_wilson(x = x, conf.level = conf.level, correct = TRUE),
+      "wilson.no.correct" = cardx::proportion_ci_wilson(x = x, conf.level = conf.level, correct = FALSE),
+      "wald" = cardx::proportion_ci_wald(x = x, conf.level = conf.level, correct = TRUE),
+      "wald.no.correct" = cardx::proportion_ci_wald(x = x, conf.level = conf.level, correct = FALSE),
+      "exact" = cardx::proportion_ci_clopper_pearson(x = x, conf.level = conf.level),
+      "agresti.coull" = cardx::proportion_ci_agresti_coull(x = x, conf.level = conf.level),
+      "jeffreys" = cardx::proportion_ci_jeffreys(x = x, conf.level = conf.level),
+      # Documentation of 'asymptotic' was removed in v2.0
+      "asymptotic" = cardx::proportion_ci_wilson(x = x, conf.level = conf.level, correct = FALSE)
+    ) %>%
+      {dplyr::tibble(!!!.)} |>
+      dplyr::select(any_of(c("N", "estimate", "conf.low", "conf.high"))) |>
+      dplyr::rename(prop = "estimate") |>
+      dplyr::mutate(n = .data$N * .data$prop, .before = 0L)
   }
 }

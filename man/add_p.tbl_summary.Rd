@@ -2,119 +2,115 @@
 % Please edit documentation in R/add_p.R
 \name{add_p.tbl_summary}
 \alias{add_p.tbl_summary}
-\title{Adds p-values to summary tables}
+\title{Add p-values}
 \usage{
 \method{add_p}{tbl_summary}(
   x,
   test = NULL,
-  pvalue_fun = NULL,
+  pvalue_fun = label_style_pvalue(digits = 1),
   group = NULL,
   include = everything(),
   test.args = NULL,
+  adj.vars = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{(\code{tbl_summary})\cr
+table created with \code{tbl_summary()}}
 
-\item{test}{List of formulas specifying statistical tests to perform for each
-variable,
-e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
-Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
-\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{tests}
-for details, more tests, and instruction for implementing a custom test.
+\item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the statistical tests to perform for each variable, e.g.
+\code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 
-Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
-when "\code{by}" variable has two levels), \code{"chisq.test.no.correct"} for
-categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
-for categorical variables with any expected cell count <5.}
+See below for details on default tests and \link[=tests]{?tests} for details on available
+tests and creating custom tests.}
 
-\item{pvalue_fun}{Function to round and format p-values.
-Default is \link{style_pvalue}.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\item{pvalue_fun}{(\code{function})\cr
+Function to round and format p-values. Default is \code{label_style_pvalue()}.
+The function must have a numeric vector input, and return a string that is
+the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits = 2)}).}
 
-\item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data.
-Default is \code{NULL}. See \link{tests} for methods that utilize the \verb{group=} argument.}
+\item{group}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variable name of an ID or grouping variable. The column can be used to
+calculate p-values with correlated data.
+Default is \code{NULL}. See \link{tests} for methods that utilize the \code{group} argument.}
 
-\item{include}{Variables to include in output. Input may be a vector of
-quoted variable names, unquoted variable names, or tidyselect select helper
-functions. Default is \code{everything()}.}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in output. Default is \code{everything()}.}
 
-\item{test.args}{List of formulas containing additional arguments to pass to
-tests that accept arguments. For example, add an argument for all t-tests,
-use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
+\item{test.args}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Containing additional arguments to pass to tests that accept arguments.
+For example, add an argument for all t-tests, use
+\code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
 
-\item{...}{Not used}
+\item{adj.vars}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in adjusted calculations (e.g. in ANCOVA models).
+Default is \code{NULL}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
-A \code{tbl_summary} object
+a gtsummary table of class \code{"tbl_summary"}
 }
 \description{
-Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
+Adds p-values to tables created by \code{\link[=tbl_summary]{tbl_summary()}} by comparing values across groups.
 }
-\section{Example Output}{
+\section{test argument}{
 
-\if{html}{Example 1}
 
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
+See the \link[=tests]{?tests} help file for details on available tests and creating custom tests.
+The \link[=tests]{?tests} help file also includes psuedo-code for each test to be clear
+precisely how the calculation is performed.
 
-\if{html}{Example 2}
+The default test used in \code{add_p()} primarily depends on these factors:
+\itemize{
+\item whether the variable is categorical/dichotomous vs continuous
+\item number of levels in the \code{tbl_summary(by)} variable
+\item whether the \code{add_p(group)} argument is specified
+\item whether the \code{add_p(adj.vars)} argument is specified
+}
+\subsection{Specified neither \code{add_p(group)} nor \code{add_p(adj.vars)}}{
+\itemize{
+\item \code{"wilcox.test"} when \code{by} variable has two levels and variable is continuous.
+\item \code{"krustkal.test"} when \code{by} variable has more than two levels and variable is continuous.
+\item \code{"chisq.test.no.correct"} for categorical variables with all expected cell counts >=5,
+and \code{"fisher.test"} for categorical variables with any expected cell count <5.
+}
+}
 
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex2.png" alt="image of rendered example table" style="width:60\%;">
-}}
+\subsection{Specified \code{add_p(group)} and not \code{add_p(adj.vars)}}{
+\itemize{
+\item \code{"lme4"} when \code{by} variable has two levels for all summary types.
+}
+
+\emph{There is no default for grouped data when \code{by} variable has more than two levels.}
+\emph{Users must create custom tests for this scenario.}
+}
+
+\subsection{Specified \code{add_p(adj.vars)} and not \code{add_p(group)}}{
+\itemize{
+\item \code{"ancova"} when variable is continuous and \code{by} variable has two levels.
+}
+}
 }
 
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_p_ex1 <-
-  trial[c("age", "grade", "trt")] \%>\%
-  tbl_summary(by = trt) \%>\%
+trial |>
+  tbl_summary(by = trt, include = c(age, grade)) |>
   add_p()
 
 # Example 2 ----------------------------------
-add_p_ex2 <-
-  trial \%>\%
-  select(trt, age, marker) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
+trial |>
+  select(trt, age, marker) |>
+  tbl_summary(by = trt, missing = "no") |>
   add_p(
     # perform t-test for all variables
     test = everything() ~ "t.test",
     # assume equal variance in the t-test
     test.args = all_tests("t.test") ~ list(var.equal = TRUE)
   )
+\dontshow{\}) # examplesIf}
 }
-}
-\seealso{
-See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
-
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-}
-\author{
-Daniel D. Sjoberg, Emily C. Zabor
-}
-\concept{tbl_summary tools}

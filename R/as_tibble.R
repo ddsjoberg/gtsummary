@@ -2,35 +2,33 @@
 #'
 #' Function converts a gtsummary object to a tibble.
 #'
-#' @inheritParams as_kable
-#' @param col_labels Logical argument adding column labels to output tibble.
-#' Default is `TRUE`.
-#' @param fmt_missing Logical argument adding the missing value formats.
-#' @param ... Not used
+#' @inheritParams as_gt
+#' @param col_labels (scalar `logical`)\cr
+#'   Logical argument adding column labels to output tibble. Default is `TRUE`.
+#' @param fmt_missing (scalar `logical`)\cr
+#'   Logical argument adding the missing value formats.
+#' @inheritParams rlang::args_dots_empty
+#'
 #' @return a [tibble][tibble::tibble-package]
-#' @family gtsummary output types
+#'
 #' @author Daniel D. Sjoberg
 #' @name as_tibble.gtsummary
 #' @examples
-#' \donttest{
 #' tbl <-
-#'   trial %>%
-#'   select(trt, age, grade, response) %>%
-#'   tbl_summary(by = trt)
+#'   trial |>
+#'   tbl_summary(by = trt, include = c(age, grade, response))
 #'
 #' as_tibble(tbl)
 #'
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
-#' }
 NULL
 
 #' @export
 #' @rdname as_tibble.gtsummary
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, fmt_missing = FALSE, ...) {
-  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
-
+  set_cli_abort_call()
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
@@ -46,12 +44,10 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
 
   # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(tibble_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(tibble_calls)),
+    include = {{ include }}
+  )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
@@ -71,10 +67,12 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 #' @export
 #' @rdname as_tibble.gtsummary
 as.data.frame.gtsummary <- function(...) {
+  set_cli_abort_call()
   res <- as_tibble(...)
 
-  if (inherits(res, "data.frame"))
+  if (inherits(res, "data.frame")) {
     return(as.data.frame(res))
+  }
 
   res
 }
@@ -90,12 +88,12 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   if ("groupname_col" %in% x$table_styling$header$column) {
     tibble_calls[["ungroup"]] <-
       list(
-        expr(group_by(.data$groupname_col)),
-        expr(mutate(groupname_col = ifelse(dplyr::row_number() == 1,
+        expr(dplyr::group_by(.data$groupname_col)),
+        expr(dplyr::mutate(groupname_col = ifelse(dplyr::row_number() == 1,
           as.character(.data$groupname_col),
           NA_character_
         ))),
-        expr(ungroup())
+        expr(dplyr::ungroup())
       )
   }
 
@@ -110,7 +108,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     map(
       seq_len(nrow(x$table_styling$cols_merge)),
       ~ expr(
-        mutate(
+        dplyr::mutate(
           !!x$table_styling$cols_merge$column[.x] :=
             ifelse(
               dplyr::row_number() %in% !!x$table_styling$cols_merge$rows[[.x]],
@@ -122,28 +120,28 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     )
 
   # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
+  df_bold <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "bold")
 
   tibble_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
-      ~ expr(mutate_at(
+      ~ expr(dplyr::mutate_at(
         gt::vars(!!!syms(df_bold$column[[.x]])),
-        ~ ifelse(row_number() %in% !!df_bold$row_numbers[[.x]],
+        ~ ifelse(dplyr::row_number() %in% !!df_bold$row_numbers[[.x]],
           paste0("__", ., "__"), .
         )
       ))
     )
 
   # tab_style_italic -------------------------------------------------------------
-  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
+  df_italic <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "italic")
 
   tibble_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
-      ~ expr(mutate_at(
+      ~ expr(dplyr::mutate_at(
         gt::vars(!!!syms(df_italic$column[[.x]])),
-        ~ ifelse(row_number() %in% !!df_italic$row_numbers[[.x]],
+        ~ ifelse(dplyr::row_number() %in% !!df_italic$row_numbers[[.x]],
           paste0("_", ., "_"), .
         )
       ))
@@ -204,7 +202,8 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   # apply formatting functions
   df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%
-    purrr::map_dfc(~ fmt_fun(.x))
+    map(~ fmt_fun(.x)) |>
+    dplyr::bind_cols()
 
   # convert underlying column to character if updated col is character
   for (v in columns) {
@@ -213,7 +212,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     }
   }
 
-  # udpate data and return
+  # update data and return
   data[row_numbers, columns, drop = FALSE] <- df_updated
 
   data

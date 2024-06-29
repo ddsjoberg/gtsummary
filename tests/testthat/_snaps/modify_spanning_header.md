@@ -1,28 +1,9 @@
-# modify_spanning_header works
+# modify_spanning_header(...) dynamic headers work with `tbl_summary()`
 
     Code
-      tbl1 %>% modify_spanning_header(starts_with("stat_") ~
-        "**Randomization Assignment**") %>% as.data.frame()
-    Output
-        **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102
-      1                Age        46 (37, 59)         48 (39, 56)
-      2            Unknown                  7                   4
-      3              Grade               <NA>                <NA>
-      4                  I           35 (36%)            33 (32%)
-      5                 II           32 (33%)            36 (35%)
-      6                III           31 (32%)            33 (32%)
-
----
-
-    Code
-      tbl1 %>% modify_spanning_header(label = "Variables", starts_with("stat_") ~
-        "**Randomization Assignment**") %>% as.data.frame()
-    Output
-        **Characteristic** **Drug A**, N = 98 **Drug B**, N = 102
-      1                Age        46 (37, 59)         48 (39, 56)
-      2            Unknown                  7                   4
-      3              Grade               <NA>                <NA>
-      4                  I           35 (36%)            33 (32%)
-      5                 II           32 (33%)            36 (35%)
-      6                III           31 (32%)            33 (32%)
+      modify_spanning_header(tbl_summary(trial, include = marker), label = "This is not a valid {element}.")
+    Condition
+      Error in `modify_spanning_header()`:
+      ! There was an error in the `glue::glue()` evaluation of "This is not a valid {element}." for column "label".
+      i Run `gtsummary::show_header_names()` for information on values available for glue interpretation.
 

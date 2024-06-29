@@ -7,8 +7,8 @@
 as_flex_table(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
-(e.g. \link{tbl_summary} or \link{tbl_regression})}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -21,7 +21,7 @@ as a list of expressions.}
 \item{...}{Not used}
 }
 \value{
-A {flextable} object
+A 'flextable' object
 }
 \description{
 Function converts a gtsummary object to a flextable object.
@@ -39,36 +39,15 @@ No other markdown syntax is supported and the double-star and underscore cannot 
 To further style your table, you may convert the table to flextable with
 \code{as_flex_table()}, then utilize any of the flextable functions.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_flex_table_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
-as_flex_table_ex1 <-
-  trial \%>\%
-  select(trt, age, grade) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
+\dontshow{if (gtsummary:::is_pkg_installed("flextable", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+trial |>
+  select(trt, age, grade) |>
+  tbl_summary(by = trt) |>
+  add_p() |>
   as_flex_table()
-}
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_gt}()},
-\code{\link{as_hux_table}()},
-\code{\link{as_kable_extra}()},
-\code{\link{as_kable}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

@@ -1,14 +1,16 @@
-#' Display univariate regression model results in table
+#' Univariable regression model summary
 #'
 #' @description
-#' This function estimates univariate regression models and returns them in
-#' a publication-ready table.  It can create univariate regression models holding
-#' either a covariate or outcome constant.
+#' This function estimates univariable regression models and returns them in
+#' a publication-ready table.
+#' It can create regression models holding
+#' either a covariate or an outcome constant.
 #'
+#' @section `x` and `y` arguments:
 #' For models holding outcome constant, the function takes as arguments a data frame,
 #' the type of regression model, and the outcome variable `y=`. Each column in the
-#' data frame is regressed on the specified outcome. The `tbl_uvregression`
-#' function arguments are similar to the [tbl_regression] arguments. Review the
+#' data frame is regressed on the specified outcome. The `tbl_uvregression()`
+#' function arguments are similar to the [`tbl_regression()`] arguments. Review the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
@@ -22,335 +24,214 @@
 #'
 #' @inheritSection tbl_regression Methods
 #'
-#' @param data Data frame to be used in univariate regression modeling.  Data
-#' frame includes the outcome variable(s) and the independent variables.
-#' Survey design objects are also accepted.
-#' @param method Regression method (e.g. [lm], [glm], [survival::coxph],
-#' `survey::svyglm`, and more).
-#' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`).
-#' All other column in `data` will be regressed on `y`.
-#' Specify one and only one of `y` or `x`
-#' @param x Model covariate (e.g. `x = trt`).
-#' All other columns in `data` will serve as the outcome in a regression model
-#' with `x` as a covariate.  Output table is best when `x` is a continuous or
-#' dichotomous variable displayed on a single row.
-#' Specify one and only one of `y` or `x`
-#' @param formula String of the model formula.
-#' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
-#' is the dependent variable, and `{x}` represents a single covariate. For a
-#' random intercept model, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
-#' @param method.args List of additional arguments passed on to the regression
-#' function defined by `method`.
-#' @param hide_n Hide N column. Default is `FALSE`
+#' @param data (`data.frame`, `survey.design`)\cr
+#'   A data frame or a survey design object.
+#' @param method (`string`/`function`)\cr
+#'   Regression method or function, e.g. [lm], [glm], [survival::coxph], `survey::svyglm`, etc.
+#'   Methods may be passed as functions (`method=lm`) or as strings (`method='lm'`).
+#' @param y,x (`expression`\`string`)\cr
+#'   Model outcome (e.g. `y=recurrence` or `y=Surv(time, recur)`) or
+#'   covariate (e.g. `x=trt`.
+#'   All other column specified in `include` will be regressed against the constant `y` or `x`.
+#'   Specify one and only one of `y` or `x`.
+#' @param formula (`string`)\cr
+#'   String of the model formula.
+#'   Uses [`glue::glue()`] syntax. Default is `"{y} ~ {x}"`, where `{y}`
+#'   is the dependent variable, and `{x}` represents a single covariate. For a
+#'   random intercept model, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
+#' @param method.args (named `list`)\cr
+#'   Named list of arguments assed to `method`.
+#' @param hide_n (scalar `logical`)\cr
+#'   Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @author Daniel D. Sjoberg
+#'
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
-#' @family tbl_uvregression tools
-#' @export
+#' @name tbl_uvregression
+#'
 #' @return A `tbl_uvregression` object
-#' @examples
-#' \donttest{
+#'
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
-#' tbl_uv_ex1 <-
-#'   tbl_uvregression(
-#'     trial[c("response", "age", "grade")],
-#'     method = glm,
-#'     y = response,
-#'     method.args = list(family = binomial),
-#'     exponentiate = TRUE
-#'   )
+#' tbl_uvregression(
+#'   trial,
+#'   method = glm,
+#'   y = response,
+#'   method.args = list(family = binomial),
+#'   exponentiate = TRUE,
+#'   include = c("age", "grade")
+#' )
 #'
 #' # Example 2 ----------------------------------
 #' # rounding pvalues to 2 decimal places
 #' library(survival)
-#' tbl_uv_ex2 <-
-#'   tbl_uvregression(
-#'     trial[c("ttdeath", "death", "age", "grade", "response")],
-#'     method = coxph,
-#'     y = Surv(ttdeath, death),
-#'     exponentiate = TRUE,
-#'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
-#'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
 #'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_uv_ex1.png", width = "50")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_uv_ex2.png", width = "50")`
-#' }}
+#' tbl_uvregression(
+#'   trial,
+#'   method = coxph,
+#'   y = Surv(ttdeath, death),
+#'   exponentiate = TRUE,
+#'   include = c("age", "grade", "response"),
+#'   pvalue_fun = label_style_pvalue(digits = 2)
+#' )
+NULL
 
-tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NULL,
-                             exponentiate = FALSE, label = NULL,
-                             include = everything(), tidy_fun = NULL,
-                             hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-                             estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
-                             add_estimate_to_reference_rows = NULL, conf.int = NULL, ...) {
-  # checking input -------------------------------------------------------------
-  # data is a data frame
-  if (!is.data.frame(data) && !is_survey(data)) {
-    stop("`data` argument must be a data frame or survey object.", call. = FALSE)
+#' @export
+#' @name tbl_uvregression
+tbl_uvregression <- function(data, ...) {
+  check_not_missing(data)
+  UseMethod("tbl_uvregression")
+}
+
+#' @export
+#' @name tbl_uvregression
+tbl_uvregression.data.frame <- function(data,
+                                        y = NULL,
+                                        x = NULL,
+                                        method,
+                                        method.args = list(),
+                                        exponentiate = FALSE,
+                                        label = NULL,
+                                        include = everything(),
+                                        tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
+                                        hide_n = FALSE,
+                                        show_single_row = NULL,
+                                        conf.level = 0.95,
+                                        estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+                                        pvalue_fun = label_style_pvalue(digits = 1),
+                                        formula = "{y} ~ {x}",
+                                        add_estimate_to_reference_rows = FALSE,
+                                        conf.int = TRUE, ...) {
+  set_cli_abort_call()
+  y <- enquo(y)
+  x <- enquo(x)
+  method.args <- enquo(method.args)
+
+  # setting default values -----------------------------------------------------
+  if (missing(pvalue_fun)) {
+    pvalue_fun <-
+      get_deprecated_theme_element("tbl_regression-arg:pvalue_fun") %||%
+      get_theme_element("pkgwide-fn:pvalue_fun", default = pvalue_fun)
   }
-  if (missing(method) || !rlang::is_function(method)) {
-    cli::cli_abort("Argument {.code method} is required and must be a function.")
+  pvalue_fun <- as_function(pvalue_fun, arg = "pvalue_fun")
+
+  check_scalar_logical(exponentiate)
+  if (missing(estimate_fun)) {
+    estimate_fun <-
+      get_theme_element("tbl_regression-arg:estimate_fun", default = estimate_fun)
+  }
+  estimate_fun <- as_function(estimate_fun, arg = "estimate_fun")
+
+  if (missing(conf.int)) {
+    conf.int <- get_theme_element("tbl_regression-arg:conf.int", default = conf.int)
+  }
+  if (missing(conf.level)) {
+    conf.level <- get_theme_element("tbl_regression-arg:conf.level", default = conf.level)
+  }
+  if (missing(add_estimate_to_reference_rows)) {
+    add_estimate_to_reference_rows <-
+      get_theme_element("tbl_regression-arg:add_estimate_to_reference_rows",
+                        default = add_estimate_to_reference_rows)
   }
 
-  # setting defaults -----------------------------------------------------------
-  pvalue_fun <-
-    pvalue_fun %||%
-    get_theme_element("tbl_regression-arg:pvalue_fun") %||%
-    get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
-    gts_mapper("tbl_uvregression(pvalue_fun=)")
-  estimate_fun <-
-    estimate_fun %||%
-    .get_deprecated_option(
-      "gtsummary.tbl_regression.estimate_fun",
-      default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
-    ) %>%
-    gts_mapper("tbl_uvregression(estimate_fun=)")
-  conf.int <-
-    conf.int %||%
-    get_theme_element("tbl_regression-arg:conf.int", default = TRUE)
-  conf.level <-
-    conf.level %||%
-    .get_deprecated_option("gtsummary.conf.level", default = 0.95)
+  # check inputs ---------------------------------------------------------------
+  check_not_missing(method)
+  check_scalar_logical(hide_n)
+  check_scalar_logical(add_estimate_to_reference_rows)
+  check_scalar_logical(conf.int)
+  check_scalar_range(conf.level, range = c(0, 1))
+  check_uvregression_formula(formula)
 
-  # bare to string/enexpr ------------------------------------------------------
-  # updated method and y inputs to be bare, and converting them to strings
-  # to be compatible with the rest of the function that assumes character input
-  method <- rlang::enexpr(method)
-  method.args <- rlang::enexpr(method.args)
-
-  # converting to string, or keeping as NULL.  Using the standard
-  # variable selector, but users may also pass `Surv(ttdeath, death)`,
-  # which is not a column header, rather a function.  In that case,
-  # converting the bare input to a string.
-  x <- rlang::enexpr(x)
-  y <- rlang::enexpr(y)
-  x <-
-    switch(!is.null(x),
-      tryCatch(
-        {
-          .select_to_varnames(
-            select = !!x,
-            data = .extract_data_frame(data),
-            arg_name = "x"
-          ) %>%
-            rlang::sym()
-        },
-        error = function(e) x
-      ) %>%
-        rlang::quo_text()
+  # check that only one of arguments x and y is specified
+  if ((!is_quo_empty(x) && !is_quo_empty(y)) || (is_quo_empty(x) && is_quo_empty(y))) {
+    cli::cli_abort(
+      "Must specify one and only one of arguments {.arg x} and {.arg y}.",
+      call = get_cli_abort_call()
     )
-
-  y <-
-    switch(!is.null(y),
-      tryCatch(
-        {
-          .select_to_varnames(
-            select = !!y,
-            data = .extract_data_frame(data),
-            arg_name = "y"
-          ) %>%
-            rlang::sym()
-        },
-        error = function(e) y
-      ) %>%
-        rlang::quo_text()
-    )
-
-  # checking selections of x and y
-  if (is.null(x) + is.null(y) != 1L) {
-    stop("Specify one, and only one, of `x` and `y`. This function can
-         create univariate regression models holding either a covariate or outcome
-         constant.", call. = FALSE)
-  }
-  if ((!is.null(x) && length(x) != 1) | (!is.null(y) && length(y) != 1)) {
-    stop("Select only a single column in argument `x=` or `y=`.", call. = FALSE)
   }
 
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      data = .extract_data_frame(data),
-      arg_name = "include"
-    )
+  # process inputs -------------------------------------------------------------
+  x <- .process_x_and_y_args_as_string(data, x)
+  y <- .process_x_and_y_args_as_string(data, y)
+  check_scalar(x, allow_empty = TRUE)
+  check_scalar(y, allow_empty = TRUE)
+
+  cards::process_selectors(
+    as.data.frame(data),
+    include = {{ include }},
+    show_single_row = {{ show_single_row }}
+  )
+
+  # styler: off
+  # remove any variables specified in arguments `x`/`y` from include
+  include <- include |>
+    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character()))
+  # remove any variables not in include
   show_single_row <-
-    .select_to_varnames(
-      select = {{ show_single_row }},
-      data = .extract_data_frame(data),
-      arg_name = "show_single_row"
-    )
-  check_haven_labelled(data, include)
+    if (is_empty(x)) intersect(show_single_row, include)
+    else intersect(show_single_row, x)
+  #styler: on
 
-  # checking formula correctly specified ---------------------------------------
-  if (!rlang::is_string(formula)) {
-    stop('`formula` must be passed as a string, e.g. `formula = "{y} ~ {x}"`',
-      call. = FALSE
-    )
-  }
-  # checking that '{x}' appears on RHS of formula
-  if (word(formula, start = 2L, sep = fixed("~")) %>%
-    str_detect(pattern = fixed("{x}")) == FALSE) {
-    stop("'{x}' must appear on RHS of '~' in formula argument", call. = FALSE)
-  }
-  # checking that '{y}' appears on LHS of formula
-  if (word(formula, start = 1L, sep = fixed("~")) %>%
-    str_detect(pattern = fixed("{y}")) == FALSE) {
-    stop("'{y}' must appear on LHS of '~' in formula argument", call. = FALSE)
-  }
+  cards::process_formula_selectors(
+    as.data.frame(data)[include],
+    label = label
+  )
+  cards::check_list_elements(
+    x = label,
+    predicate = \(x) is_string(x),
+    error_msg = "Each value passed in the {.arg label} argument must be a string of length {.val {1}}."
+  )
 
-  # checking estimate_fun and pvalue_fun are functions -------------------------
-  if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
-    stop("Arguments 'estimate_fun' and 'pvalue_fun' must be functions.",
-      call. = FALSE
-    )
-  }
+  .check_haven_labelled(as.data.frame(data)[include])
 
-  # converting tidyselect formula lists to named lists -------------------------
+  # fill in labels
   label <-
-    .formula_list_to_named_list(
-      x = label,
-      data = .extract_data_frame(data),
-      arg_name = "label",
-      type_check = chuck(type_check, "is_string", "fn"),
-      type_check_msg = chuck(type_check, "is_string", "msg")
-    )
-
-  # all specified labels must be a string of length 1
-  if (!every(label, ~ rlang::is_string(.x))) {
-    stop("Each `label` specified must be a string of length 1.", call. = FALSE)
-  }
+    map(include, ~label[[.x]] %||% attr(as.data.frame(data)[[.x]], 'label') %||% .x) |>
+    set_names(include)
 
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
   tbl_uvregression_inputs <- as.list(environment())
-  dots <- rlang::enquos(...)
-  tbl_uvregression_inputs <-
-    tbl_uvregression_inputs[!names(tbl_uvregression_inputs) %in% c("x_name", "y_name")]
 
+  # construct models -----------------------------------------------------------
+  lst_models <-
+    include |>
+    # construct a formula for each model
+    .construct_uvregression_formulas(formula = formula, x = x, y = y) |>
+    # build models
+    .construct_uvregression_models(data = data, method = method, method.args = !!method.args)
 
-  # get all vars not specified -------------------------------------------------
-  all_vars <-
-    names(.extract_data_frame(data)) %>%
-    # removing x or y variable
-    setdiff(paste(c(y, x), "~ 1") %>% stats::as.formula() %>% all.vars()) %>%
-    # removing any other variables listed in the formula
-    setdiff(all.vars(stats::as.formula(formula), unique = FALSE)) %>%
-    # removing {y} and {x}
-    setdiff(c("x", "y"))
-
-  if (!is.null(include)) all_vars <- intersect(all_vars, include)
-  if (length(all_vars) == 0) {
-    stop("There were no covariates selected.", call. = FALSE)
-  }
-
-  # building regression models -------------------------------------------------
-  tbl_reg_args <-
-    c(
-      "exponentiate", "conf.level", "label", "include", "show_single_row",
-      "tidy_fun", "estimate_fun", "pvalue_fun",
-      "add_estimate_to_reference_rows", "conf.int"
+  # summarize each regression model with `tbl_regression()` --------------------
+  lst_tbls <-
+    lst_models |>
+    .construct_uvregression_tbls(
+      label = label, exponentiate = exponentiate, tidy_fun = tidy_fun,
+      show_single_row = show_single_row, conf.level = conf.level,
+      estimate_fun = estimate_fun, pvalue_fun = pvalue_fun,
+      add_estimate_to_reference_rows = add_estimate_to_reference_rows,
+      conf.int = conf.int, x = x, ...
     )
 
-  df_model <-
-    tibble(
-      # quoting the bad names in backticks
-      all_vars = all_vars,
-      y = switch(!is.null(y),
-        rep_len(y, length(all_vars))
-      ) %||%
-        chr_w_backtick(all_vars),
-      x = switch(!is.null(x),
-        rep_len(x, length(all_vars))
-      ) %||%
-        chr_w_backtick(all_vars)
-    ) %>%
-    # building model
-    mutate(
-      type = ifelse(!is.null(.env$y), "x_varies", "y_varies"),
-      formula_chr = glue(formula),
-      model = map(
-        .data$formula_chr,
-        ~ safe_model_construction(.x, method, data, method.args)
-      ),
-      # removing backticks
-      y = switch(is.null(.env$y),
-        all_vars
-      ) %||% y,
-      x = switch(is.null(.env$x),
-        all_vars
-      ) %||% x
-    ) %>%
-    select(all_of(c("y", "x", "type", "model"))) %>%
-    # preparing tbl_regression function arguments
-    mutate(
-      tbl_args = pmap(
-        list(.data$model, .data$y, .data$x, .data$type),
-        function(model, y, x, type) {
-          args <- tbl_uvregression_inputs
-          # removing NULL elements from list
-          args[sapply(args, is.null)] <- NULL
-          args$label <- args$label[names(args$label) %in% x]
-          # keeping args to pass to tbl_regression
-          args <- args[names(args) %in% tbl_reg_args]
-
-          # fixing show_single_row arg for x_varies
-          if (type == "x_varies") {
-            args[["show_single_row"]] <- intersect(x, show_single_row)
-          }
-
-          # only include the one x var of interest
-          args[["include"]] <- x
-
-          if (type == "y_varies") {
-            args[["label"]] <- list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x)
-          }
-
-          # adding model object
-          args[["x"]] <- model
-          args
+  # if the outcome varied, then replace the variable names within tbls
+  if (is_empty(y)) {
+    lst_tbls <- lst_tbls |>
+      imap(
+        function(tbl, variable) {
+          tbl$table_body$variable <- variable
+          tbl$table_body$var_type <- NA_character_
+          tbl
         }
       )
-    )
-
-  # creating tbl_regression object
-  df_model$tbl <- pmap(
-    list(df_model$tbl_args, df_model$type, df_model$y),
-    function(tbl_args, type, y) {
-      # browser()
-      tbl <- call2(tbl_regression, !!!tbl_args, !!!dots) %>% eval()
-      if (type == "y_varies") {
-        tbl$table_body$variable <- y
-        tbl$table_body$var_type <- NA_character_
-      }
-      tbl
-    }
-  )
+  }
 
   # stacking results to return -------------------------------------------------
-  results <- tbl_stack(df_model$tbl)
-  names(results$tbls) <- all_vars
+  results <- tbl_stack(lst_tbls)
   class(results) <- c("tbl_uvregression", "gtsummary")
 
   # update column header if `x=` was used --------------------------------------
-  if (!is.null(x)) {
+  if (!is_empty(x)) {
     results <- modify_table_styling(results, columns = "label", label = "**Outcome**")
   }
-
-  # creating a meta_data table -------------------------------------------------
-  # (this will be used in subsequent functions, eg add_global_p)
-  results$meta_data <-
-    results$table_body %>%
-    filter(.data$row_type == "label") %>%
-    select(any_of(c("variable", "var_type", "label", "N_obs", "N_event")))
 
   # removing modify_stat_* columns ---------------------------------------------
   results$table_styling$header <-
@@ -358,7 +239,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     select(-starts_with("modify_stat_"))
 
   # adding column of N ---------------------------------------------------------
-  if (hide_n == FALSE) results <- add_n(results, location = "label")
+  if (hide_n == FALSE) results <- add_n(results, location = "label") # styler: off
 
   # exporting results ----------------------------------------------------------
   results$inputs <- tbl_uvregression_inputs
@@ -367,36 +248,180 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   results
 }
 
-# function to safely build and evaluate model, with nicer error messaging
-safe_model_construction <- function(formula, method, data, method.args) {
-  # defining formula and data call (or formula and design)
-  call_list <-
-    switch(is.data.frame(data),
-      list(method, formula = as.formula(formula), data = data)
-    ) %||%
-    list(method, formula = as.formula(formula), design = data) %>%
-    c(as.list(method.args)[-1])
+#' @export
+#' @name tbl_uvregression
+tbl_uvregression.survey.design <- tbl_uvregression.data.frame
 
-  # evaluate model
-  tryCatch(
-    as.call(call_list) %>% eval(),
-    error = function(e) {
-      # construct call to show in error message
-      if (is_survey(data)) {
-        call_list$design <- expr(.)
-      } else {
-        call_list$data <- expr(.)
+is_quo_empty <- function(x) {
+  tryCatch(is_empty(eval_tidy(x)), error = \(e) FALSE)
+}
+
+.construct_uvregression_tbls <- function(models, label, exponentiate, tidy_fun,
+                                         show_single_row, conf.level,
+                                         estimate_fun, pvalue_fun,
+                                         add_estimate_to_reference_rows,
+                                         conf.int, x, ...) {
+  imap(
+    models,
+    function(model, variable) {
+      tbl_i <-
+        cards::eval_capture_conditions(
+          tbl_regression(
+            x = model,
+            include = ifelse(is_empty(x), variable, x),
+            label =
+              # styler: off
+              if (is_empty(x)) label[variable]
+              else label[variable] |> set_names(x),
+              # styler: on
+            exponentiate = exponentiate,
+            tidy_fun = tidy_fun,
+            show_single_row =
+              # styler: off
+              if (is_empty(x)) intersect(variable, show_single_row)
+              else intersect(x, show_single_row),
+              # styler: on
+            conf.level = conf.level,
+            estimate_fun = estimate_fun,
+            pvalue_fun = pvalue_fun,
+            add_estimate_to_reference_rows = add_estimate_to_reference_rows,
+            conf.int = conf.int,
+            ...
+          )
+        )
+
+      if (!is_empty(tbl_i[["error"]])) {
+        cli::cli_abort(
+          c("There was an {cli::col_red('error')} running {.fun tbl_regression} for variable {.val {variable}}. See message below.",
+            "x" = tbl_i[["error"]]),
+          call = get_cli_abort_call()
+        )
       }
-      call_chr <- call_list %>%
-        as.call() %>%
-        rlang::expr_text()
+      if (!is_empty(tbl_i[["warning"]])) {
+        cli::cli_inform(
+          c("There was a {cli::col_yellow('warning')} running {.fun tbl_regression} for variable {.val {variable}}. See message below.",
+            "!" = tbl_i[["warning"]])
+        )
+      }
 
-      paste(
-        "There was an error constructing model {.code {call_chr}}",
-        "See error below."
-      ) %>%
-        cli_alert_danger()
-      abort(as.character(e))
+      tbl_i[["result"]]
+    }
+  )
+
+}
+
+.construct_uvregression_models <- function(formulas, data, method, method.args) {
+  method.args <- enquo(method.args)
+  imap(
+    formulas,
+    \(formula, variable) {
+      model_i <- cards::eval_capture_conditions({
+        cardx::construct_model(data, formula = formula, method = method, method.args = !!method.args)
+      })
+      if (!is_empty(model_i[["error"]])) {
+        cli::cli_abort(
+          c("There was an {cli::col_red('error')} constructing the model for variable {.val {variable}}. See message below.",
+            "x" = model_i[["error"]]),
+          call = get_cli_abort_call()
+        )
+      }
+      if (!is_empty(model_i[["warning"]])) {
+        cli::cli_inform(
+          c("There was a {cli::col_yellow('warning')} constructing the model for variable {.val {variable}}. See message below.",
+            "!" = model_i[["warning"]])
+        )
+      }
+
+      model_i[["result"]]
+    }
+  )
+}
+
+
+.construct_uvregression_formulas <- function(include, formula, x, y) {
+  include |>
+    # first, construct formula
+    map(
+      \(variable) {
+        formula_i <-
+          cards::eval_capture_conditions(
+            glue(
+              formula,
+              .envir = list(y = ifelse(is_empty(y), variable, y),
+                            x = ifelse(is_empty(x), variable, x))
+            ) |>
+              stats::as.formula()
+          )
+        if (!is_empty(formula_i[["error"]])) {
+          cli::cli_abort(
+            c("There was an error constructing the formula for variable {.val {variable}}. See message below.",
+              "x" = formula_i[["error"]]),
+            call = get_cli_abort_call()
+          )
+        }
+        formula_i[["result"]]
+      }
+    ) |>
+    set_names(include)
+}
+
+
+check_uvregression_formula <- function(formula) {
+  # first formula must be a string
+  check_string(formula)
+  formula_split <- strsplit(formula, split = "~", fixed = TRUE)[[1]]
+  if (length(formula_split) != 2L) {
+    cli::cli_abort(
+      "The {.arg formula} argument must be have structure of a standard formula, e.g. {.val {{y}} ~ {{x}}}.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # {y} must appear once in the string and on the LHS of the formula
+  if (length(unlist(regmatches(formula, m = gregexpr("{y}", formula, fixed = TRUE)))) != 1L ||
+      length(unlist(regmatches(formula_split[[1]], m = gregexpr("{y}", formula_split[[1]], fixed = TRUE)))) != 1L) {
+    cli::cli_abort(
+      c("Error in argument {.arg formula} structure.",
+        i = "The substring {.val {{y}}} must appear once in the string and it must be on the LHS of the formula."),
+      call = get_cli_abort_call()
+    )
+  }
+
+  # {x} must appear once in the string and on the RHS of the formula
+  if (length(unlist(regmatches(formula, m = gregexpr("{x}", formula, fixed = TRUE)))) != 1L ||
+      length(unlist(regmatches(formula_split[[2]], m = gregexpr("{x}", formula_split[[2]], fixed = TRUE)))) != 1L) {
+    cli::cli_abort(
+      c("Error in argument {.arg formula} structure.",
+        i = "The substring {.val {{x}}} must appear once in the string and it must be on the RHS of the formula."),
+      call = get_cli_abort_call()
+    )
+  }
+
+  invisible(formula)
+}
+
+# convert whatever is passed in `x` and `y` to a string
+.process_x_and_y_args_as_string <- function(data, x, arg_name = rlang::caller_arg(x)) {
+  # if quo is empty, then return NULL
+  if (is_quo_empty(x)) return(NULL) # styler: off
+
+  # if a character was passed, return it as it
+  if (tryCatch(is.character(eval_tidy(x)), error = \(e) FALSE)) return(eval_tidy(x)) # styler: off
+
+  # try tidy evaluation, and if that doesn't work, then return string of input
+  tryCatch(
+    cards::cards_select(data = as.data.frame(data), expr = x) |> cardx::bt(),
+    error = function(e) {
+      tryCatch(
+        # lastly, convert quosure to a string
+        expr_deparse(quo_get_expr(x)),
+        error = function(e) {
+          cli::cli_abort(
+            "There was a problem processing argument {.arg {arg_name}}.",
+            call = get_cli_abort_call()
+          )
+        }
+      )
     }
   )
 }

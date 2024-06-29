@@ -4,43 +4,29 @@
 \alias{sort_filter_p}
 \alias{sort_p}
 \alias{filter_p}
-\title{Sort and filter variables in table by p-values}
+\title{Sort/filter by p-values}
 \usage{
 sort_p(x, q = FALSE)
 
 filter_p(x, q = FALSE, t = 0.05)
 }
 \arguments{
-\item{x}{An object created using gtsummary functions}
+\item{x}{(\code{gtsummary})\cr
+An object created using gtsummary functions}
 
-\item{q}{Logical argument. When \code{TRUE} will the q-value column is used}
+\item{q}{(scalar \code{logical})\cr
+When \code{TRUE} will check the q-value column rather
+than the p-value. Default is \code{FALSE}.}
 
-\item{t}{p-values/q-values less than or equal to this threshold
-will be retained. Default is 0.05}
+\item{t}{(scalar \code{numeric})\cr
+Threshold below which values will be retained. Default is 0.05.}
 }
 \description{
-Sort and filter variables in table by p-values
+Sort/filter by p-values
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/sort_filter_p_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/sort_p_ex2.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-sort_filter_p_ex1 <-
-  trial \%>\%
+trial \%>\%
   select(age, grade, response, trt) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
@@ -48,11 +34,9 @@ sort_filter_p_ex1 <-
   sort_p()
 
 # Example 2 ----------------------------------
-sort_p_ex2 <-
-  glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
+glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   sort_p()
-}
 }
 \author{
 Karissa Whiting, Daniel D. Sjoberg

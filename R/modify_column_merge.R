@@ -1,8 +1,8 @@
 #' Modify Column Merging
 #'
-#' \lifecycle{experimental}
 #' Merge two or more columns in a gtsummary table.
 #' Use `show_header_names()` to print underlying column names.
+#'
 #' @param pattern glue syntax string indicating how to merge columns in
 #' `x$table_body`. For example, to construct a confidence interval
 #' use `"{conf.low}, {conf.high}"`.
@@ -17,13 +17,14 @@
 #' `tbl_stack()`, before assigning merging instructions. Otherwise,
 #' unexpected formatting may occur in the final table.
 #' 3. If this functionality is used in conjunction with `tbl_stack()` (which
-#' includes `tbl_uvregression()`), there is potential issue with printing.
+#' includes `tbl_uvregression()`), there may be potential issues with printing.
 #' When columns are stack AND when the column-merging is
 #' defined with a quosure, you may run into issues due to the loss of the
 #' environment when 2 or more quosures are combined. If the expression
 #' version of the quosure is the same as the quosure (i.e. no evaluated
-#' objects), there should be no issues. Regardless, this argument is used
-#' internally with care, and **it is _not_ recommended for users**.
+#' objects), there should be no issues.
+#'
+#' This function is used internally with care, and **it is _not_ recommended for users**.
 #'
 #' @section Future Updates:
 #' There are planned updates to the implementation of this function
@@ -35,86 +36,64 @@
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
 #'
-#' If this functionality is used in conjunction with `tbl_stack()` (which
-#' includes `tbl_uvregression()`), there is potential issue with printing.
-#' When columns are stack AND when the column-merging is
-#' defined with a quosure, you may run into issues due to the loss of the
-#' environment when 2 or more quosures are combined. If the expression
-#' version of the quosure is the same as the quosure (i.e. no evaluated
-#' objects), there should be no issues. Regardless, this argument is used
-#' internally with care, and it is _not_ recommended for users.
-#'
 #' @return gtsummary table
 #' @export
 #'
 #' @family Advanced modifiers
-#' @examples
-#' \donttest{
+#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
-#' modify_column_merge_ex1 <-
-#'   trial %>%
-#'   select(age, marker, trt) %>%
-#'   tbl_summary(by = trt, missing = "no") %>%
-#'   add_p(all_continuous() ~ "t.test",
-#'     pvalue_fun = ~ style_pvalue(., prepend_p = TRUE)
-#'   ) %>%
-#'   modify_fmt_fun(statistic ~ style_sigfig) %>%
-#'   modify_column_merge(pattern = "t = {statistic}; {p.value}") %>%
-#'   modify_header(statistic ~ "**t-test**")
+#' trial |>
+#'   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
+#'   add_p(all_continuous() ~ "t.test", pvalue_fun = label_style_pvalue(prepend_p = TRUE)) |>
+#'   modify_fmt_fun(statistic ~ label_style_sigfig()) |>
+#'   modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
+#'   modify_header(statistic = "**t-test**")
 #'
 #' # Example 2 ----------------------------------
-#' modify_column_merge_ex2 <-
-#'   lm(marker ~ age + grade, trial) %>%
-#'   tbl_regression() %>%
+#' lm(marker ~ age + grade, trial) |>
+#'   tbl_regression() |>
 #'   modify_column_merge(
-#'     pattern = "{estimate} ({ci})",
+#'     pattern = "{estimate} ({conf.low}, {conf.high})",
 #'     rows = !is.na(estimate)
 #'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "modify_column_merge_ex1.png", width = "65")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "modify_column_merge_ex2.png", width = "41")`
-#' }}
 modify_column_merge <- function(x, pattern, rows = NULL) {
+  set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
-  .assert_class(x, "gtsummary")
-  if (!rlang::is_string(pattern)) abort("`pattern=` must be a string.")
+  check_class(x, "gtsummary")
+  check_string(pattern)
   updated_call_list <- c(x$call_list, list(modify_column_hide = match.call()))
 
   # extract columns from pattern -----------------------------------------------
-  columns <-
-    pattern %>%
-    str_extract_all("\\{.*?\\}") %>%
-    map(~ str_remove_all(.x, pattern = "^\\{|\\}$")) %>%
-    unlist()
-  if (length(columns) == 0L) {
-    cli::cli_alert_danger("No column names found in {.code modify_column_merge(pattern=)}")
-    cli::cli_ul("Wrap all column names in curly brackets.")
-    abort("Error in `pattern=` argument")
+  columns <- .extract_glue_elements(pattern)
+  if (is_empty(columns)) {
+    cli::cli_abort(
+      c("No column names found in {.code modify_column_merge(pattern)} argument.",
+        i = "Wrap column names in curly brackets, e.g {.code modify_column_merge(pattern = '{{conf.low}}, {{conf.high}}')}."
+      ),
+      call = get_cli_abort_call()
+    )
   }
   if (!all(columns %in% names(x$table_body))) {
     problem_cols <- columns %>% setdiff(names(x$table_body))
-    paste(
-      "Some columns specified in {.code modify_column_merge(pattern=)}",
-      "were not found in the table, e.g. {.val {problem_cols}}"
-    ) %>%
-      cli::cli_alert_danger()
-    cli::cli_ul("Select from {.val {names(x$table_body)}}.")
-    abort("Error in `pattern=` argument")
+    cli::cli_abort(
+      c(
+        "Columns specified in the {.code modify_column_merge(pattern)} argument are not present in table.",
+        "Columns {.val {problem_cols}} not found."
+      ),
+      call = get_cli_abort_call()
+    )
   }
 
   # merge columns --------------------------------------------------------------
-  x <-
+  x <- x |>
+    # remove prior merging for the specified columns
     modify_table_styling(
-      x,
+      columns = all_of(columns),
+      rows = {{ rows }},
+      cols_merge_pattern = NA,
+    ) |>
+    # add the newly specified pattern of merging
+    modify_table_styling(
       columns = columns[1],
       rows = {{ rows }},
       hide = FALSE,

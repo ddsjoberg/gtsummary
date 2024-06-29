@@ -12,31 +12,32 @@
 #'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
-#' @param bold_header_rows logical indicating whether to bold header rows.
-#' Default is `TRUE`
-#' @param strip_md_bold DEPRECATED
+#' @param bold_header_rows (scalar `logical`)\cr
+#'   logical indicating whether to bold header rows. Default is `TRUE`
+#' @param strip_md_bold `r lifecycle::badge("deprecated")`
+#'
 #' @name as_hux_table
-#' @return A {huxtable} object
-#' @family gtsummary output types
+#' @return A \{huxtable\} object
+#'
 #' @author David Hugh-Jones, Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
-#' trial %>%
-#'   dplyr::select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
+#' @examplesIf gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")
+#' trial |>
+#'   tbl_summary(by = trt, include = c(age, grade)) |>
+#'   add_p() |>
 #'   as_hux_table()
-#' }
 NULL
 
 #' @export
 #' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
-  .assert_class(x, "gtsummary")
-  assert_package("huxtable", "as_hux_table()")
+  set_cli_abort_call()
+  check_class(x, "gtsummary")
+  check_pkg_installed("huxtable", reference_pkg = "gtsummary")
+  check_scalar_logical(return_calls)
+
   if (!isFALSE(strip_md_bold)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.6.0", "gtsummary::as_hux_table(strip_md_bold=)",
       details = "Markdown syntax is now recognized by the {huxtable} package."
     )
@@ -53,7 +54,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
   huxtable_calls <-
-    purrr::reduce(
+    reduce(
       .x = seq_along(insert_expr_after),
       .f = function(x, y) {
         add_expr_after(
@@ -67,12 +68,10 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     )
 
   # converting to character vector ----------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(huxtable_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(huxtable_calls)),
+    include = {{ include }}
+  )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) {
@@ -85,33 +84,35 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 #' @export
 #' @rdname as_hux_table
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
-  .assert_class(x, "gtsummary")
-  assert_package("openxlsx", fn = "as_hux_xlsx()")
+  set_cli_abort_call()
+  check_class(x, "gtsummary")
+  check_pkg_installed(c("huxtable", "openxlsx"), reference_pkg = "gtsummary")
+  check_scalar_logical(bold_header_rows)
 
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
-    as_hux_table(x = x, include = {{ include }}, return_calls = TRUE) %>%
-    purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
+    as_hux_table(x = x, include = {{ include }}, return_calls = TRUE) |>
+    utils::modifyList(list(set_left_padding = NULL))
 
   # construct calls to manually indent the columns -----------------------------
   # extract the indentation instructions from table_styling
   df_text_format <-
-    gtsummary::.table_styling_expr_to_row_number(x) %>%
-    purrr::pluck("table_styling", "text_format") %>%
-    dplyr::filter(.data$format_type %in% c("indent", "indent2"))
+    .table_styling_expr_to_row_number(x) |>
+    getElement("table_styling") |>
+    getElement("indent")
 
   # create expressions to add indentations to `x$table_body`
   indent_exprs <-
-    purrr::pmap(
-      list(df_text_format$column, df_text_format$row_numbers, df_text_format$format_type),
-      function(column, row_numbers, format_type) {
-        indent_spaces <- ifelse(format_type %in% "indent", "     ", "          ")
+    pmap(
+      list(df_text_format$column, df_text_format$row_numbers, df_text_format$n_spaces),
+      function(column, row_numbers, n_spaces) {
+        indent_spaces <- strrep(" ", times = n_spaces)
         rlang::expr(
           dplyr::mutate(
             dplyr::across(
               dplyr::all_of(!!column),
               ~ ifelse(dplyr::row_number() %in% !!row_numbers,
-                paste0(!!indent_spaces, .), .
+                       paste0(!!indent_spaces, .), .
               )
             )
           )
@@ -143,9 +144,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # adding id number for columns not hidden
   x$table_styling$header <-
     x$table_styling$header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+    dplyr::group_by(.data$hide) %>%
+    dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+    dplyr::ungroup()
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
@@ -167,10 +168,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # padding --------------------------------------------------------------------
   df_padding <-
     x$table_styling$header %>%
-    select("id", "column") %>%
-    inner_join(
-      x$table_styling$text_format %>%
-        filter(.data$format_type == "indent"),
+    dplyr::select("id", "column") %>%
+    dplyr::inner_join(
+      x$table_styling$indent,
       by = "column"
     )
 
@@ -180,34 +180,14 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       ~ expr(huxtable::set_left_padding(
         row = !!df_padding$row_numbers[[.x]],
         col = !!df_padding$id[[.x]],
-        value = 15
-      ))
-    )
-
-  # padding2 -------------------------------------------------------------------
-  df_padding2 <-
-    x$table_styling$header %>%
-    select("id", "column") %>%
-    inner_join(
-      x$table_styling$text_format %>%
-        filter(.data$format_type == "indent2"),
-      by = "column"
-    )
-
-  huxtable_calls[["set_left_padding2"]] <-
-    map(
-      seq_len(nrow(df_padding2)),
-      ~ expr(huxtable::set_left_padding(
-        row = !!df_padding2$row_numbers[[.x]],
-        col = !!df_padding2$id[[.x]],
-        value = 30
+        value = !!(df_padding$n_spaces[[.x]] * 15 / 4)
       ))
     )
 
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     .number_footnotes(x) %>%
-    pull("footnote") %>%
+    dplyr::pull("footnote") %>%
     unique()
   border <- rep_len(0, length(vct_footnote))
   border[1] <- 0.8
@@ -238,13 +218,13 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # bold -----------------------------------------------------------------------
   df_bold <-
     x$table_styling$text_format %>%
-    filter(.data$format_type == "bold") %>%
-    inner_join(
+    dplyr::filter(.data$format_type == "bold") %>%
+    dplyr::inner_join(
       x$table_styling$header %>%
         select("column", column_id = "id"),
       by = "column"
     ) %>%
-    select("format_type", "row_numbers", "column_id")
+    dplyr::select("format_type", "row_numbers", "column_id")
 
   huxtable_calls[["set_bold"]] <-
     map(
@@ -259,13 +239,13 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # italic ---------------------------------------------------------------------
   df_italic <-
     x$table_styling$text_format %>%
-    filter(.data$format_type == "italic") %>%
-    inner_join(
+    dplyr::filter(.data$format_type == "italic") %>%
+    dplyr::inner_join(
       x$table_styling$header %>%
         select("column", column_id = "id"),
       by = "column"
     ) %>%
-    select("format_type", "row_numbers", "column_id")
+    dplyr::select("format_type", "row_numbers", "column_id")
 
   huxtable_calls[["set_italic"]] <-
     map(
@@ -291,15 +271,15 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # set_na_string -------------------------------------------------------
   df_fmt_missing <-
     x$table_styling$fmt_missing %>%
-    inner_join(
+    dplyr::inner_join(
       x$table_styling$header %>%
         select("column", column_id = "id"),
       by = "column"
     ) %>%
-    select("symbol", "row_numbers", "column_id") %>%
-    nest(location_ids = "column_id") %>%
-    mutate(
-      column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
+    dplyr::select("symbol", "row_numbers", "column_id") %>%
+    tidyr::nest(location_ids = "column_id") %>%
+    dplyr::mutate(
+      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") %>% unique())
     )
 
   huxtable_calls[["fmt_missing"]] <-
@@ -318,9 +298,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # we do this last so as to not mess up row indexes before
   col_labels <-
     x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("column", "label") %>%
-    tibble::deframe()
+    dplyr::filter(.data$hide == FALSE) %>%
+    dplyr::select("column", "label") %>%
+    deframe()
 
   huxtable_calls[["insert_row"]] <- list()
 
@@ -364,9 +344,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_markdown ---------------------------------------------------------------
-  header_rows <- switch(any_spanning_header,
-    1:2
-  ) %||% 1L
+  header_rows <- switch(any_spanning_header, 1:2) %||% 1L # styler: off
   huxtable_calls[["set_markdown"]] <-
     list(
       set_markdown =
@@ -381,11 +359,11 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # align ----------------------------------------------------------------------
   df_align <-
     x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("id", "align") %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    ungroup()
+    dplyr::filter(.data$hide == FALSE) %>%
+    dplyr::select("id", "align") %>%
+    dplyr::group_by(.data$align) %>%
+    tidyr::nest() %>%
+    dplyr::ungroup()
 
   huxtable_calls[["align"]] <- map2(
     df_align$align, df_align$data,
@@ -402,3 +380,4 @@ table_styling_to_huxtable_calls <- function(x, ...) {
 
   huxtable_calls
 }
+

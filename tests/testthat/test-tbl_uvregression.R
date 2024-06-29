@@ -1,371 +1,488 @@
-skip_on_cran()
-skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
 
-test_that("lm: no errors/warnings with standard use", {
-  expect_snapshot(
-    mtcars %>%
+test_that("tbl_uvregression(x)", {
+  expect_silent(
+    tbl1 <-
       tbl_uvregression(
-        method = lm,
-        y = mpg
-      ) %>%
-      as.data.frame()
+        trial,
+        x = trt,
+        include = c(marker, age),
+        show_single_row = trt,
+        method = lm
+      )
   )
-  expect_snapshot(
-    mtcars %>%
-      tbl_uvregression(
-        method = lm,
-        y = "mpg"
-      ) %>%
-      as.data.frame()
-  )
-  expect_warning(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg
-    ), NA)
-
-  expect_false(
-    "ci" %in%
-      names(tbl_uvregression(mtcars, method = lm, y = mpg, conf.int = FALSE) %>%
-        as_tibble(col_labels = FALSE))
-  )
-})
-
-test_that("geeglm: no errors/warnings with standard use", {
-  skip_if_not(broom.helpers::.assert_package("geepack", pkg_search = "gtsummary", boolean = TRUE))
-
-  expect_snapshot(
-    tbl_uvregression(
-      na.omit(trial),
-      y = age,
-      method = geepack::geeglm,
-      method.args = list(
-        id = response,
-        corstr = "exchangeable"
-      ),
-      include = -response
-    ) %>%
-      as.data.frame()
-  )
-  expect_warning(
-    tbl_uvregression(
-      na.omit(trial),
-      y = age,
-      method = geepack::geeglm,
-      method.args = list(
-        id = response,
-        corstr = "exchangeable"
-      ),
-      include = -response
-    ), NA
-  )
-})
-
-test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
-  expect_snapshot(
-    mtcars %>%
-      tbl_uvregression(
-        method = lm,
-        y = mpg,
-        tidy_fun = broom::tidy
-      ) %>%
-      as.data.frame()
-  )
-  expect_warning(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg,
-      tidy_fun = broom::tidy
-    ), NA)
-})
-
-test_that("coxph: no errors/warnings with standard use", {
-  expect_error(
-    coxph_uv <-
-      survival::lung %>%
-      tbl_uvregression(
-        method = survival::coxph,
-        y = survival::Surv(time, status)
-      ), NA
-  )
-  expect_snapshot(coxph_uv %>% as.data.frame())
-  expect_warning(
-    survival::lung %>%
-      tbl_uvregression(
-        method = survival::coxph,
-        y = survival::Surv(time, status)
-      ), NA
-  )
-
-  expect_identical(
-    coxph_uv$meta_data$variable,
-    setdiff(names(survival::lung), c("time", "status"))
-  )
-})
-
-
-test_that("glmer: no errors/warnings with standard use", {
-  expect_error(
-    lme4_uv <-
-      mtcars %>%
-      select("am", "gear", "hp", "cyl") %>%
-      tbl_uvregression(
-        method = lme4::glmer,
-        y = am,
-        formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial),
-        label = "cyl" ~ "No. Cylinders",
-        hide_n = TRUE
-      ),
-    NA
-  )
-  expect_snapshot(lme4_uv %>% as.data.frame())
-  expect_warning(
-    mtcars %>%
-      select("am", "gear", "hp", "cyl") %>%
-      tbl_uvregression(
-        method = lme4::glmer,
-        y = am,
-        formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial)
-      ), NA
-  )
-
-  expect_identical(
-    lme4_uv$meta_data$variable,
-    c("hp", "cyl")
-  )
-
-  expect_error(
-    tbl <-
-      mtcars %>%
-      select("am", "gear", "hp", "cyl") %>%
-      tbl_uvregression(
-        method = lme4::glmer,
-        y = am,
-        formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial),
-        label = "cyl" ~ "No. Cylinders",
-        hide_n = TRUE,
-        include = c("am", "gear", "hp", "cyl"),
-      ),
-    NA
-  )
-  expect_snapshot(tbl %>% as.data.frame())
-  expect_warning(
-    mtcars %>%
-      select("am", "gear", "hp", "cyl") %>%
-      tbl_uvregression(
-        method = lme4::glmer,
-        y = am,
-        formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial),
-        include = c("am", "gear", "hp", "cyl"),
-      ), NA
-  )
-})
-
-test_that("tbl_uvregression x= argument tests", {
-  expect_error(
-    ux_x <- tbl_uvregression(
-      data = trial[c("age", "marker", "response")],
-      method = lm,
-      label = list(vars(`age`) ~ "PATIENT AGE"),
-      x = response
-    ),
-    NA
-  )
-  expect_snapshot(ux_x %>% as.data.frame())
-
+  expect_snapshot(as.data.frame(tbl1))
   expect_equal(
-    ux_x %>%
-      as_tibble() %>%
-      names() %>%
-      purrr::pluck(1),
-    "**Outcome**"
-  )
-
-  expect_equal(
-    ux_x$meta_data$label[1] %>% .[[1]],
-    "PATIENT AGE"
-  )
-
-  expect_identical(
-    ux_x$tbls$age$model_obj %>% coef(),
-    lm(age ~ response, trial) %>% coef()
+    tbl1$tbls$age$inputs$x |> broom::tidy(),
+    lm(age ~ trt, trial) |> broom::tidy()
   )
 })
 
-test_that("tbl_uvregression creates errors with bad inputs", {
-  expect_error(
-    tbl_uvregression(
-      data = mtcars,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      pvalue_fun = mtcars
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      estimate_fun = mtcars
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = mtcars,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      tidy_fun = mtcars
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      label = "Labels! YAY"
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      label = list("Age")
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      label = list("age" ~ c("Age", "Two"))
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = list(survival::lung),
-      method = survival::coxph,
-      y = survival::Surv(time, status)
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = survival::coxph,
-      y = survival::Surv(time, status),
-      formula = "y ~ x"
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = lm,
-      y = age,
-      x = marker
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = lm,
-      y = c(age, sex)
-    ),
-    NULL
-  )
-  expect_error(
-    tbl_uvregression(
-      data = survival::lung,
-      method = "lm",
-      y = age,
-      include = c("time", "sex")
-    ),
-    "*required and must be a function*"
-  )
-})
-
-
-test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
-  tbl_fmt <- tbl_uvregression(
-    data = survival::lung %>% select(age, inst),
-    method = lm,
-    y = age,
-    pvalue_fun = ~ style_pvalue(.x, digits = 3),
-    estimate_fun = ~ style_number(.x, digits = 3)
-  )
-
-  expect_equal(
-    tbl_fmt %>% as_tibble(col_labels = FALSE) %>% purrr::map_chr(I) %>% as.vector(),
-    c("inst", "227", "0.001", "-0.143, 0.144", "0.993")
-  )
-})
-
-
-test_that("tbl_uvregression does not throw error with odd variable names in `data=`", {
-  expect_error(
-    tbl <- trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`),
-    NA
-  )
-  expect_snapshot(tbl %>% as.data.frame())
-})
-
-test_that("tbl_uvregression throw error with bad arguments in model function", {
-  expect_error(
-    trial %>%
-      tbl_uvregression(method = glm, y = response, method.args = list(not_an_argument = letters))
-  )
-})
-
-test_that("tbl_uvregression works with survey object", {
-  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
-  svy <- survey::svydesign(ids = ~1, data = trial, weights = ~1)
-
-  expect_error(
-    tbl_uvreg <-
-      svy %>%
+test_that("tbl_uvregression(method)", {
+  # first passing method three way, and checking equality of results
+  expect_silent(
+    tbl1 <-
       tbl_uvregression(
+        trial,
+        y = age,
+        include = c(marker, grade),
+        method = lm
+      )
+  )
+  expect_silent(
+    tbl2 <-
+      tbl_uvregression(
+        trial,
+        y = age,
+        include = c(marker, grade),
+        method = "lm"
+      )
+  )
+  expect_silent(
+    tbl3 <-
+      tbl_uvregression(
+        trial,
+        y = age,
+        include = c(marker, grade),
+        method = stats::lm
+      )
+  )
+  expect_equal(as.data.frame(tbl1), as.data.frame(tbl2))
+  expect_equal(as.data.frame(tbl1), as.data.frame(tbl3))
+  expect_snapshot(as.data.frame(tbl1))
+})
+
+test_that("tbl_uvregression(method.args)", {
+  # testing typical use of the argument
+  expect_silent(
+    tbl1 <-
+      tbl_uvregression(
+        trial,
         y = response,
-        method = survey::svyglm,
+        method = glm,
         method.args = list(family = binomial),
-        hide_n = TRUE,
-        include = c(response, age, marker, grade)
-      ),
-    NA
+        include = c(age, trt)
+      )
   )
-  expect_snapshot(tbl_uvreg %>% as.data.frame())
-
+  # check Ns are correct
   expect_equal(
-    tbl_uvreg$tbls$age$model_obj %>% broom::tidy(),
-    survey::svyglm(response ~ age, design = svy, family = binomial) %>% broom::tidy()
+    tbl1$table_body$stat_n |> na.omit(),
+    c(trial[c("response", "age")] |> na.omit() |> nrow(),
+      trial[c("response", "trt")] |> na.omit() |> nrow()),
+    ignore_attr = TRUE
+  )
+  # check model coefs are correct
+  expect_equal(
+    tbl1$table_body$estimate |> na.omit(),
+    c(glm(response ~ age, trial, family = binomial) |> coef() |> getElement("age"),
+      glm(response ~ trt, trial, family = binomial) |> coef() |> getElement("trtDrug B")),
+    ignore_attr = TRUE
+  )
+
+  # check with NSE argument
+  expect_silent(
+    tbl2 <-
+      tbl_uvregression(
+        trial,
+        y = survival::Surv(ttdeath, death),
+        method = survival::coxph,
+        method.args = list(id = response),
+        include = c(age, trt)
+      )
+  )
+  # check models are the same
+  expect_equal(
+    tbl2$tbls$age$inputs$x |> broom::tidy(),
+    survival::coxph(survival::Surv(ttdeath, death) ~ age, trial, id = response) |>
+      broom::tidy()
+  )
+  expect_equal(
+    tbl2$tbls$trt$inputs$x |> broom::tidy(),
+    survival::coxph(survival::Surv(ttdeath, death) ~ trt, trial, id = response) |>
+      broom::tidy()
+  )
+  expect_snapshot(as.data.frame(tbl2))
+})
+
+test_that("tbl_uvregression(exponentiate)", {
+  expect_silent(
+    tbl1 <-
+      tbl_uvregression(
+        trial,
+        y = response,
+        method = glm,
+        method.args = list(family = binomial),
+        include = c(age, trt),
+        exponentiate = TRUE
+      )
+  )
+  expect_equal(
+    tbl1$table_styling$header |>
+      dplyr::filter(column == "estimate") |>
+      dplyr::pull("label"),
+    "**OR**"
+  )
+  expect_equal(
+    tbl1$table_body$estimate[1],
+    glm(response ~ age, trial, family = binomial) |>
+      broom::tidy(exponentiate = TRUE) |>
+      dplyr::pull("estimate") |>
+      dplyr::last()
   )
 })
 
-test_that("tbl_uvregression() can pass the dots to tidy_plus_plus()", {
-  # create a table with no reference row and no header rows (3 rows long)
-  expect_equal(
-    trial %>%
+test_that("tbl_uvregression(label)", {
+  expect_silent(
+    tbl1 <-
       tbl_uvregression(
+        trial,
+        y = marker,
+        method = lm,
+        include = c(age, trt),
+        label = list(age = "AGE", trt = "TRT")
+      )
+  )
+  expect_equal(
+    tbl1$table_body$label[1:2],
+    c("AGE", "TRT"),
+    ignore_attr = TRUE
+  )
+
+  expect_silent(
+    tbl2 <-
+      tbl_uvregression(
+        trial,
+        x = trt,
+        method = lm,
+        include = c(age, marker),
+        label = list(age = "AGE", marker = "MARKER"),
+        show_single_row = trt
+      )
+  )
+  expect_equal(
+    tbl2$table_body$label[1:2],
+    c("AGE", "MARKER"),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("tbl_uvregression(include)", {
+  # check that trt is removed from include appropriately
+  expect_silent(
+    tbl1 <-
+      trial |>
+      dplyr::select(trt, age, marker) |>
+      tbl_uvregression(
+        x = trt,
+        method = "lm",
+        show_single_row = trt,
+        include = everything()
+      )
+  )
+  expect_equal(tbl1$inputs$include, c("age", "marker"))
+  expect_snapshot(as.data.frame(tbl1))
+
+  # check that ttdeath and death are removed from include
+  expect_silent(
+    tbl2 <-
+      trial |>
+      dplyr::select(ttdeath, death, age, marker) |>
+      tbl_uvregression(
+        y = survival::Surv(ttdeath, death),
+        method = survival::coxph,
+        exponentiate = TRUE,
+        include = everything()
+      )
+  )
+  expect_equal(tbl2$inputs$include, c("age", "marker"))
+  expect_snapshot(as.data.frame(tbl2))
+})
+
+test_that("tbl_uvregression(tidy_fun)", {
+  # check the tidy_fun is respected
+  expect_snapshot(
+    tbl1 <-
+      tbl_uvregression(
+        trial,
         y = age,
         method = lm,
-        include = c(trt, grade),
-        no_reference_row = any_of(c("trt", "grade")),
-        add_header_rows = FALSE
-      ) %>%
-      as_tibble() %>%
-      nrow(),
-    3L
+        include = marker,
+        tidy_fun = function(x, ...) {
+          cat("THIS IS MY CUSTOM MESSAGE!")
+          broom::tidy(x, ...)
+        }
+      )
+  )
+})
+
+test_that("tbl_uvregression(hide_n)", {
+  expect_equal(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = marker,
+      hide_n = TRUE
+    ) |>
+      as.data.frame(),
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = marker
+    ) |>
+      modify_column_hide(stat_n) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_uvregression(conf.level)", {
+  expect_equal(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = marker,
+      conf.level = 0.90
+    ) |>
+      getElement("table_body") |>
+      dplyr::select(conf.low, conf.high) |>
+      as.list(),
+    lm(age ~ marker, trial) |>
+      broom::tidy(conf.level = 0.9, conf.int = TRUE) |>
+      dplyr::filter(term == "marker") |>
+      dplyr::select(conf.low, conf.high) |>
+      as.list(),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("tbl_uvregression(estimate_fun)", {
+  expect_snapshot(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = c(marker, trt),
+      estimate_fun = label_style_sigfig(digits = 4)
+    ) |>
+      as.data.frame(col_label = FALSE)
+  )
+})
+
+test_that("tbl_uvregression(pvalue_fun)", {
+  expect_snapshot(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = c(marker, trt),
+      pvalue_fun = label_style_pvalue(digits = 3)
+    ) |>
+      as.data.frame(col_label = FALSE)
+  )
+})
+
+test_that("tbl_uvregression(formula)", {
+  expect_silent(
+    tbl1 <-
+      tbl_uvregression(
+        trial,
+        y = age,
+        method = lm,
+        include = c(marker, trt),
+        formula = "{y} ~ {x} + grade"
+      )
+  )
+  expect_equal(
+    tbl1$tbls$marker$inputs$x |> broom::tidy(),
+    lm(age ~ marker + grade, trial) |> broom::tidy()
+  )
+})
+
+test_that("tbl_uvregression(add_estimate_to_reference_rows)", {
+  expect_equal(
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(family = binomial),
+      include = trt,
+      add_estimate_to_reference_rows = TRUE,
+      exponentiate = TRUE
+    ) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(estimate),
+    c(NA, "1.00", "1.21")
+  )
+})
+
+test_that("tbl_uvregression(conf.int)", {
+  expect_snapshot(
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(family = binomial),
+      include = trt,
+      conf.int = FALSE
+    ) |>
+      as.data.frame()
+  )
+})
+
+# test the dots are passed on to broom.helpers, and the tidy function
+test_that("tbl_uvregression(...)", {
+  expect_snapshot(
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(family = binomial),
+      include = trt,
+      add_header_rows = FALSE
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_uvregression(x,y) messaging", {
+  # expect error when both or neither x/y specified
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      method = lm,
+      include = trt
+    )
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      x = age, y = marker,
+      method = lm,
+      include = trt
+    )
+  )
+})
+
+test_that("tbl_uvregression(formula) messaging", {
+  # problems with formula argument
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} ~ {y}"
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} ~ {x} + {x}"
+    )
+  )
+
+  # no tilda
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      formula = "{y} {x}"
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial |> dplyr::rename(`Tx Effect` = trt),
+      y = "Tx Effect",
+      method = glm,
+      method.args = list(family = binomial),
+      include = age
+    )
+  )
+})
+
+test_that("tbl_uvregression(method.args) messaging", {
+  # error with an incorrect argument passed
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(not_an_arg = FALSE),
+      include = trt
+    )
+  )
+
+  expect_snapshot(
+    tbl <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      method.args = list(not_an_arg = FALSE),
+      include = trt
+    )
+  )
+})
+
+test_that("tbl_uvregression() messaging", {
+  # introduce an error in the `tbl_regression()` step
+  expect_snapshot(
+    error = TRUE,
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      tidy_fun = \(x, ...) stop("Inducing an error")
+    )
+  )
+
+  expect_snapshot(
+    tbl <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm,
+      include = trt,
+      tidy_fun = \(x, ...) {
+        warning("Inducing an warning")
+        broom::tidy(x, ...)
+      }
+    )
+  )
+})
+
+# check function works with a survey.design object
+test_that("tbl_uvregression() with survey.design", {
+  data(api, package = "survey")
+  dclus2 <- survey::svydesign(id = ~dnum + snum, weights = ~pw, data = apiclus2)
+  survey::svyglm(api00 ~ ell + meals + mobility, design = dclus2)
+
+  expect_silent(
+    tbl1 <- tbl_uvregression(
+      dclus2,
+      y = api00,
+      include = c(ell, meals),
+      method = survey::svyglm
+    )
+  )
+  # check models are the same
+  expect_equal(
+    tbl1$tbls$ell$inputs$x |> broom::tidy(),
+    survey::svyglm(api00 ~ ell, design = dclus2) |> broom::tidy()
   )
 })

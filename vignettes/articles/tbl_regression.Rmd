@@ -1,0 +1,270 @@
+---
+title: "tbl_regression"
+---
+
+```{r setup, include = FALSE}
+# sourcing the purrr shims from rlang
+library(rlang)
+source("https://raw.githubusercontent.com/r-lib/rlang/main/R/standalone-purrr.R")
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  comment = "#>"
+)
+
+gt_compact_fun <- function(x) {
+  gt::tab_options(x,
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+}
+
+# exit if car package not installed (added to pass Cmd Checks on old R versions)
+if (!requireNamespace("car")) knitr::knit_exit()
+```
+
+## Introduction
+
+The [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready.
+It is a simple way to summarize and present your analysis results using **R**!
+Like [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
+
+This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table.
+
+<img src = "https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
+
+*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and others are [supported models](#supported-models) known to work with {gtsummary}).
+It is also possible to specify your own function to tidy the model results if needed.  
+
+## Setup
+
+Before going through the tutorial, install and load {gtsummary}.
+
+```{r message = FALSE, warning=FALSE}
+# install.packages("gtsummary")
+library(gtsummary)
+```
+
+## Example data set
+
+In this vignette we'll be using the [**`trial`**](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set which is included in the {gtsummary} package.
+
+* This data set contains information from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
+
+* The outcomes are tumor response and death.  
+
+* Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.
+
+```{r, echo = FALSE}
+trial |>
+  imap(
+    ~ dplyr::tibble(
+      Variable = glue::glue("`{.y}`"),
+      Class = class(.x),
+      Label = attr(.x, "label")
+    )
+  ) |>
+  dplyr::bind_rows() |> 
+  gt::gt() |>
+  gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") |>
+  gt::fmt_markdown(columns = c(Variable)) |>
+  gt::cols_align("left") |>
+  gt_compact_fun()
+```
+
+## Basic Usage
+
+The default output from `tbl_regression()` is meant to be publication ready.  
+
+* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age and grade from the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
+```{r, message=FALSE}
+# build logistic regression model
+m1 <- glm(response ~ age + stage, trial, family = binomial)
+
+# view raw model results
+summary(m1)$coefficients
+```
+
+* We will then a **regression model table** to summarize and present these results in just one line of code from {gtsummary}. 
+
+```{r, message=FALSE}
+tbl_regression(m1, exponentiate = TRUE)
+```
+
+Note the sensible defaults with this basic usage (that can be customized later):
+
+* The model was recognized as logistic regression with coefficients exponentiated, so the **header displayed "OR"** for odds ratio. 
+
+* **Variable types** are automatically detected and **reference rows** are added for categorical variables.
+
+* **Model estimates** and **confidence intervals** are **rounded** and formatted.
+
+* Because the variables in the data set were [labelled](http://larmarange.github.io/labelled/), the **labels were carried through** into the {gtsummary} output table.  Had the data not been labelled, the default is to display the variable name.
+
+* Variable levels are **indented** and **footnotes** added.
+
+## Customize Output
+
+There are four primary ways to customize the output of the regression model table.
+
+1. Modify `tbl_regression()` function input arguments
+1. Add additional data/information to a summary table with `add_*()` functions
+1. Modify summary table appearance with the {gtsummary} functions
+1. Modify table appearance with {gt} package functions
+
+### Modifying function arguments
+
+The `tbl_regression()` function includes many arguments for modifying the appearance.
+
+```{r, echo = FALSE}
+dplyr::tribble(
+  ~Argument, ~Description,
+  "`label=`", "modify variable labels in table",
+  "`exponentiate=`", "exponentiate model coefficients",
+  "`include=`", "names of variables to include in output. Default is all variables",
+  "`show_single_row=`", "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.",
+  "`conf.level=`", "confidence level of confidence interval",
+  "`intercept=`", "indicates whether to include the intercept",
+  "`estimate_fun=`", "function to round and format coefficient estimates",
+  "`pvalue_fun=`", "function to round and format p-values",
+  "`tidy_fun=`", "function to specify/customize tidier function"
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Argument)) |>
+  gt_compact_fun()
+```
+
+### {gtsummary} functions to add information
+
+The {gtsummary} package has built-in functions for adding to results from `tbl_regression()`.
+The following functions add columns and/or information to the regression table.
+
+```{r echo = FALSE}
+dplyr::tribble(
+  ~Function, ~Description,
+  "`add_global_p()`", "adds the global p-value for a categorical variables",
+  "`add_glance_source_note()`", "adds statistics from `broom::glance()` as source note",
+  "`add_vif()`", "adds column of the variance inflation factors (VIF)",
+  "`add_q()`", "add a column of q values to control for multiple comparisons"
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Function)) |>
+  gt_compact_fun()
+```
+
+### {gtsummary} functions to format table
+
+The {gtsummary} package comes with functions specifically made to modify and format summary tables.  
+```{r echo = FALSE}
+dplyr::tribble(
+  ~Function,                     ~Description,
+  "`modify_header()`",           "update column headers",
+  "`modify_footnote()`",         "update column footnote",
+  "`modify_spanning_header()`",  "update spanning headers",
+  "`modify_caption()`",          "update table caption/title",
+  "`bold_labels()`",             "bold variable labels",
+  "`bold_levels()`",             "bold variable levels",
+  "`italicize_labels()`",        "italicize variable labels",
+  "`italicize_levels()`",        "italicize variable levels",
+  "`bold_p()`",                  "bold significant p-values"
+) |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = c(Function)) |>
+  gt_compact_fun()
+```
+
+### {gt} functions to format table
+
+The [{gt} package](https://gt.rstudio.com/index.html) is packed with many great functions for modifying table output---too many to list here.
+Review the package's website for a full listing.
+
+To use the {gt} package functions with {gtsummary} tables, the regression table must first be converted into a {gt} object.
+To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
+
+```{r}
+m1 |>
+  tbl_regression(exponentiate = TRUE) |>
+  as_gt() |>
+  gt::tab_source_note(gt::md("*This data is simulated*"))
+```
+
+### Example
+
+There are formatting options available, such as adding bold and italics to text.
+In the example below,  
+  - Coefficients are **exponentiated** to give odds ratios  
+  - **Global p-values** for Stage are reported
+  - Large p-values are rounded to **two decimal places**  
+  - P-values less than 0.10 are **bold** 
+  - Variable labels are **bold**  
+  - Variable levels are **italicized**  
+
+```{r, eval=TRUE}
+# format results into data frame with global p-values
+m1 |>
+  tbl_regression(
+    exponentiate = TRUE,
+    pvalue_fun = label_style_pvalue(digits = 2),
+  ) |>
+  add_global_p() |>
+  bold_p(t = 0.10) |>
+  bold_labels() |>
+  italicize_levels()
+```
+
+## Univariate Regression {#tbl_uvregression}
+
+The `tbl_uvregression()` function produces a table of univariate regression models.
+The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.
+The function's results can be modified in similar ways to `tbl_regression()`. 
+
+```{r tbl_uvregression}
+trial |>
+  tbl_uvregression(
+    method = glm,
+    y = response,
+    include = c(age, grade),
+    method.args = list(family = binomial),
+    exponentiate = TRUE,
+    pvalue_fun = label_style_pvalue(digits = 2)
+  ) |>
+  add_global_p() |> # add global p-value
+  add_nevent() |> # add number of events of the outcome
+  add_q() |> # adjusts global p-values for multiple testing
+  bold_p() |> # bold p-values under a given threshold (default 0.05)
+  bold_p(t = 0.10, q = TRUE) |> # now bold q-values under the threshold of 0.10
+  bold_labels()
+```
+
+## Setting Default Options {#options}
+
+The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.
+If you, however, would like to change the defaults there are a few options.
+The default options can be changed using the {gtsummary} themes function `set_gtsummary_theme()`.
+The package includes pre-specified themes, and you can also create your own.
+Themes can control baseline behavior, for example, how p-values are rounded, coefficients are rounded, default headers, confidence levels, etc.
+For details on creating a theme and setting personal defaults, visit the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html).
+
+## Supported Models {#supported-models}
+
+Below is a listing of known and tested models supported by `tbl_regression()`.
+If a model follows a standard format and has a tidier, it's likely to be supported as well, even if not listed below.
+
+```{r supported_models, echo = FALSE}
+broom.helpers::supported_models |>
+  gt::gt() |>
+  gt::cols_label(model = gt::md("Model"), notes = gt::md("Details")) |>
+  gt::fmt_markdown(columns = everything()) |>
+  gt::tab_options(
+    table.font.size = 11, data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1), grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1), source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+```

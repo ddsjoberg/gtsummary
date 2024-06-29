@@ -7,29 +7,34 @@
 style_number(
   x,
   digits = 0,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   scale = 1,
   ...
 )
 }
 \arguments{
-\item{x}{Numeric vector}
+\item{x}{(\code{numeric})\cr
+Numeric vector}
 
-\item{digits}{Integer or vector of integers specifying the number of decimals
-to round \verb{x=}. When vector is passed, each integer is mapped 1:1 to the
+\item{digits}{(non-negative \code{integer})\cr
+Integer or vector of integers specifying the number of decimals
+to round \code{x}. When vector is passed, each integer is mapped 1:1 to the
 numeric values in \code{x}}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{scale}{A scaling factor: x will be multiplied by scale before formatting.}
+\item{scale}{(scalar \code{numeric})\cr
+A scaling factor: \code{x} will be multiplied by scale before formatting.}
 
-\item{...}{Other arguments passed on to \code{base::format()}}
+\item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
 formatted character vector
@@ -38,14 +43,6 @@ formatted character vector
 Style numbers
 }
 \examples{
-c(0.111, 12.3) \%>\% style_number(digits = 1)
-c(0.111, 12.3) \%>\% style_number(digits = c(1, 0))
+c(0.111, 12.3) |> style_number(digits = 1)
+c(0.111, 12.3) |> style_number(digits = c(1, 0))
 }
-\seealso{
-Other style tools: 
-\code{\link{style_percent}()},
-\code{\link{style_pvalue}()},
-\code{\link{style_ratio}()},
-\code{\link{style_sigfig}()}
-}
-\concept{style tools}

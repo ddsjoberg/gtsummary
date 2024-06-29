@@ -1,12 +1,11 @@
 url: https://www.danieldsjoberg.com/gtsummary/
 
 template:
+  bootstrap: 5
   params:
-    docsearch:
-      api_key: fd7c21cad87500b8877c475ed3a4cece
-      index_name: gtsummary
     ganalytics: UA-145876596-1
     bootswatch: flatly
+
 development:
   mode: auto
   version_label: default
@@ -22,7 +21,9 @@ authors:
     href: "https://joseph.larmarange.net/"
 
 navbar:
-  type: default
+  structure:
+    left:  [intro, reference, tutorials, news]
+    right: [search, github]
   left:
   - icon: fa-home
     href: index.html
@@ -48,9 +49,6 @@ navbar:
       href: articles/gallery.html
   - text: News
     href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/gtsummary
 
 reference:
   - title: Data Summary Tables
@@ -60,12 +58,15 @@ reference:
       - add_p.tbl_summary
       - add_q
       - add_overall.tbl_summary
-      - add_difference
+      - add_difference.tbl_summary
       - add_n.tbl_summary
       - add_ci
       - add_stat_label
       - add_stat
       - separate_p_footnotes
+  - subtitle: Wide Summary Tables
+  - contents:
+      - tbl_wide_summary
   - subtitle: Cross Tables
   - contents:
       - tbl_cross
@@ -73,8 +74,9 @@ reference:
   - subtitle: Continuous Variable Summary
   - contents:
       - tbl_continuous
-      - add_overall
+      - add_overall.tbl_continuous
       - add_p.tbl_continuous
+      - add_stat
   - subtitle: Time-to-event Summary Tables
   - contents:
       - tbl_survfit
@@ -88,8 +90,8 @@ reference:
       - add_p.tbl_svysummary
       - add_q
       - add_overall.tbl_svysummary
-      - add_difference
-      - add_ci
+      - add_difference.tbl_svysummary
+      - add_ci.tbl_svysummary
       - add_n.tbl_svysummary
       - add_stat_label
       - add_stat
@@ -98,7 +100,6 @@ reference:
   - contents:
       - tbl_custom_summary
       - add_overall
-      - continuous_summary
       - proportion_summary
       - ratio_summary
 
@@ -121,8 +122,9 @@ reference:
       - inline_text.tbl_summary
       - inline_text.tbl_regression
       - inline_text.tbl_uvregression
-      - inline_text.tbl_cross
       - inline_text.tbl_survfit
+      - inline_text.tbl_cross
+      - inline_text.tbl_continuous
       - inline_text.gtsummary
 
   - title: Output Types
@@ -145,6 +147,7 @@ reference:
   - subtitle: Style Summary Tables
   - contents:
       - modify
+      - modify_caption
       - bold_italicize_labels_levels
       - bold_p
       - sort_filter_p
@@ -156,6 +159,7 @@ reference:
       - style_sigfig
       - style_ratio
       - style_number
+      - label_style
   - subtitle: Themes
   - contents:
       - set_gtsummary_theme
@@ -175,6 +179,15 @@ reference:
   - subtitle: Custom Tidiers
   - contents:
       - custom_tidiers
+  - subtitle: ARD Constructors
+  - contents:
+      - starts_with("tbl_ard_")
+
+  - subtitle: Construction Helpers
+  - contents:
+      - starts_with("brdg_")
+      - starts_with("assign_")
+
   - subtitle: Data
   - contents:
       - trial

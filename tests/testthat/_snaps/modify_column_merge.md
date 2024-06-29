@@ -1,12 +1,10 @@
-# modify_column_merge() works
+# modify_column_merge() messaging
 
     Code
-      tbl %>% as.data.frame()
-    Output
-        **Characteristic**             **Beta** **p-value**
-      1                Age   0.00 (-0.01, 0.01)        >0.9
-      2              Grade                 <NA>        <NA>
-      3                  I                 <NA>        <NA>
-      4                 II -0.38 (-0.69, -0.07)       0.015
-      5                III  -0.12 (-0.43, 0.19)         0.5
+      modify_column_merge(mod, pattern = "{not_a_column} ({conf.low}, {conf.high})",
+        rows = !is.na(estimate))
+    Condition
+      Error in `modify_column_merge()`:
+      ! Columns specified in the `modify_column_merge(pattern)` argument are not present in table.
+      Columns "not_a_column" not found.
 

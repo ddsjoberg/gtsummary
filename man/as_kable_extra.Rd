@@ -15,7 +15,8 @@ as_kable_extra(
 )
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
+\item{x}{(\code{gtsummary})\cr
+Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
 \item{format, escape, ...}{arguments passed to \code{knitr::kable()}. Default is
@@ -34,12 +35,12 @@ convert markdown to LaTeX, and remove line breaks from the footnote.}
 as a list of expressions.}
 }
 \value{
-A {kableExtra} table
+A \{kableExtra\} table
 }
 \description{
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
 This allows the customized formatting available via \code{knitr::kable()}
-and {kableExtra}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
+and \{kableExtra\}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
 \code{as_kable_extra()} output via gtsummary supports
 bold and italic cells for table bodies. Users
 are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html
@@ -86,65 +87,38 @@ and footnote will be escaped with \code{.escape_html()}
 To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALSE)}
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1 (PDF)}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex1_pdf.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 2 (PDF)}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex2_pdf.png" alt="image of rendered example table" style="width:65\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # basic gtsummary tbl to build upon
 as_kable_extra_base <-
-  trial \%>\%
-  select(trt, age, stage) \%>\%
-  tbl_summary(by = trt) \%>\%
+  trial |>
+  tbl_summary(by = trt, include = c(age, stage)) |>
   bold_labels()
 
 # Example 1 (PDF via LaTeX) ---------------------
 # add linebreak in table header with '\n'
 as_kable_extra_ex1_pdf <-
-  as_kable_extra_base \%>\%
-  modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
+  as_kable_extra_base |>
+  modify_header(all_stat_cols() ~ "**{level}**  \n*N = {n}*") |>
   as_kable_extra()
 
 # Example 2 (PDF via LaTeX) ---------------------
 # additional styling in `knitr::kable()` and with
 #   call to `kableExtra::kable_styling()`
 as_kable_extra_ex2_pdf <-
-  as_kable_extra_base \%>\%
+  as_kable_extra_base |>
   as_kable_extra(
     booktabs = TRUE,
     longtable = TRUE,
     linesep = ""
-  ) \%>\%
+  ) |>
   kableExtra::kable_styling(
     position = "left",
     latex_options = c("striped", "repeat_header"),
     stripe_color = "gray!15"
   )
-}
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_flex_table}()},
-\code{\link{as_gt}()},
-\code{\link{as_hux_table}()},
-\code{\link{as_kable}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

@@ -11,12 +11,15 @@
 \method{plot}{tbl_uvregression}(x, remove_header_rows = TRUE, remove_reference_rows = FALSE, ...)
 }
 \arguments{
-\item{x}{'tbl_regression' or 'tbl_uvregression' object}
+\item{x}{(\code{tbl_regression}, \code{tbl_uvregression})\cr
+A 'tbl_regression' or 'tbl_uvregression' object}
 
-\item{remove_header_rows}{logical indicating whether to remove header rows
+\item{remove_header_rows}{(scalar \code{logical})\cr
+logical indicating whether to remove header rows
 for categorical variables. Default is \code{TRUE}}
 
-\item{remove_reference_rows}{logical indicating whether to remove reference rows
+\item{remove_reference_rows}{(scalar \code{logical})\cr
+logical indicating whether to remove reference rows
 for categorical variables. Default is \code{FALSE}.}
 
 \item{...}{arguments passed to \code{ggstats::ggcoef_plot(...)}}
@@ -26,18 +29,18 @@ a ggplot
 }
 \description{
 The \code{plot()} function extracts \code{x$table_body} and passes the it to
-\code{ggstats::ggcoef_plot()} along with a formatting options.
+\code{ggstats::ggcoef_plot()} along with formatting options.
 }
 \details{
 \lifecycle{experimental}
 }
 \examples{
-\dontshow{if (broom.helpers::.assert_package("ggstats", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-glm(response ~ marker + grade, trial, family = binomial) \%>\%
+\dontshow{if (gtsummary:::is_pkg_installed("ggstats", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+glm(response ~ marker + grade, trial, family = binomial) |>
   tbl_regression(
     add_estimate_to_reference_rows = TRUE,
     exponentiate = TRUE
-  ) \%>\%
+  ) |>
   plot()
 \dontshow{\}) # examplesIf}
 }

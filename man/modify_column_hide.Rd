@@ -3,50 +3,34 @@
 \name{modify_column_hide}
 \alias{modify_column_hide}
 \alias{modify_column_unhide}
-\title{Modify Hidden Columns}
+\title{Modify hidden columns}
 \usage{
 modify_column_hide(x, columns)
 
 modify_column_unhide(x, columns)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{columns}{vector or selector of columns in \code{x$table_body}}
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 }
 \description{
-\lifecycle{maturing}
 Use these functions to hide or unhide columns in a gtsummary table.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_hide_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
+\section{TODO: Ensure this is accurate after we update \code{show_header_names()}}{
+Use \code{show_header_names(show_hidden=TRUE)} to print available columns to update.
 }
 
 \examples{
-\donttest{
 # Example 1 ----------------------------------
 # hide 95\% CI, and replace with standard error
-modify_column_hide_ex1 <-
-  lm(age ~ marker + grade, trial) \%>\%
-  tbl_regression() \%>\%
-  modify_column_hide(columns = ci) \%>\%
+lm(age ~ marker + grade, trial) |>
+  tbl_regression() |>
+  modify_column_hide(conf.low) |>
   modify_column_unhide(columns = std.error)
 }
+\author{
+Daniel D. Sjoberg
 }
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other Advanced modifiers: 
-\code{\link{modify_column_alignment}()},
-\code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
-\code{\link{modify_table_styling}()}
-}
-\concept{Advanced modifiers}

@@ -7,19 +7,27 @@
 \method{inline_text}{gtsummary}(x, variable, level = NULL, column = NULL, pattern = NULL, ...)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{variable}{Variable name of statistic to present}
+\item{variable}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single variable name of statistic to present}
 
-\item{level}{Level of the variable to display for categorical variables.
+\item{level}{(\code{string})\cr
+Level of the variable to display for categorical variables.
 Default is \code{NULL}}
 
-\item{column}{Column name to return from \code{x$table_body}.}
+\item{column}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Column name to return from \code{x$table_body}.}
 
-\item{pattern}{String indicating the statistics to return.
-Uses \link[glue:glue]{glue::glue} formatting. Default is \code{NULL}}
+\item{pattern}{(\code{string})\cr
+String indicating the statistics to return.
+Uses \code{\link[glue:glue]{glue::glue()}} formatting. Default is \code{NULL}}
 
-\item{...}{Not used}
+\item{...}{These dots are for future extensions and must be empty.}
+}
+\value{
+A string
 }
 \description{
 Report statistics from summary tables inline
@@ -34,6 +42,6 @@ by using both the \verb{column=} and \verb{pattern=} arguments. When both of the
 arguments are specified, the column argument selects the column to report
 statistics from, and the pattern argument specifies which statistics to report,
 e.g. \code{inline_text(x, column = "stat_1", pattern = "{mean}")} reports just the
-mean from a \code{tbl_summary()}.
+mean from a \code{tbl_summary()}. \emph{This is not supported for all tables.}
 }
 

@@ -2,21 +2,27 @@
 % Please edit documentation in R/add_n.R
 \name{add_n}
 \alias{add_n}
-\title{Adds column with N to gtsummary table}
+\title{Add column with N}
 \usage{
 add_n(x, ...)
 }
 \arguments{
-\item{x}{Object created from a gtsummary function}
+\item{x}{(\code{gtsummary})\cr
+Object with class 'gtsummary'}
 
-\item{...}{Additional arguments passed to other methods.}
+\item{...}{Passed to other methods.}
 }
 \description{
-Adds column with N to gtsummary table
+\itemize{
+\item \code{\link[=add_n.tbl_summary]{add_n.tbl_summary()}}
+\item \code{\link[=add_n.tbl_svysummary]{add_n.tbl_svysummary()}}
+\item \code{\link[=add_n.tbl_regression]{add_n.tbl_regression()}}
+\item \code{\link[=add_n.tbl_uvregression]{add_n.tbl_uvregression()}}
+\item \code{\link[=add_n.tbl_survfit]{add_n.tbl_survfit()}}
+}
 }
 \seealso{
-\code{\link[=add_n.tbl_summary]{add_n.tbl_summary()}}, \code{\link[=add_n.tbl_svysummary]{add_n.tbl_svysummary()}}, \code{\link[=add_n.tbl_survfit]{add_n.tbl_survfit()}},
-\link{add_n.tbl_regression}, \link{add_n.tbl_uvregression}
+\code{\link[=add_n.tbl_summary]{add_n.tbl_summary()}}
 }
 \author{
 Daniel D. Sjoberg

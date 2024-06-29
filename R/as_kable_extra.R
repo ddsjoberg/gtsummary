@@ -2,7 +2,7 @@
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' This allows the customized formatting available via `knitr::kable()`
-#' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
+#' and \{kableExtra\}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies. Users
 #' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
@@ -49,55 +49,38 @@
 #' Default is `TRUE`. This is primarily used to escape special characters,
 #' convert markdown to LaTeX, and remove line breaks from the footnote.
 #' @export
-#' @return A {kableExtra} table
-#' @family gtsummary output types
+#' @return A \{kableExtra\} table
+#'
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
+#' @examplesIf gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")
 #' # basic gtsummary tbl to build upon
 #' as_kable_extra_base <-
-#'   trial %>%
-#'   select(trt, age, stage) %>%
-#'   tbl_summary(by = trt) %>%
+#'   trial |>
+#'   tbl_summary(by = trt, include = c(age, stage)) |>
 #'   bold_labels()
 #'
 #' # Example 1 (PDF via LaTeX) ---------------------
 #' # add linebreak in table header with '\n'
 #' as_kable_extra_ex1_pdf <-
-#'   as_kable_extra_base %>%
-#'   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") %>%
+#'   as_kable_extra_base |>
+#'   modify_header(all_stat_cols() ~ "**{level}**  \n*N = {n}*") |>
 #'   as_kable_extra()
 #'
 #' # Example 2 (PDF via LaTeX) ---------------------
 #' # additional styling in `knitr::kable()` and with
 #' #   call to `kableExtra::kable_styling()`
 #' as_kable_extra_ex2_pdf <-
-#'   as_kable_extra_base %>%
+#'   as_kable_extra_base |>
 #'   as_kable_extra(
 #'     booktabs = TRUE,
 #'     longtable = TRUE,
 #'     linesep = ""
-#'   ) %>%
+#'   ) |>
 #'   kableExtra::kable_styling(
 #'     position = "left",
 #'     latex_options = c("striped", "repeat_header"),
 #'     stripe_color = "gray!15"
 #'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1 (PDF)}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_kable_extra_ex1_pdf.png", width = "45")`
-#' }}
-#'
-#' \if{html}{Example 2 (PDF)}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_kable_extra_ex2_pdf.png", width = "65")`
-#' }}
-
-
 as_kable_extra <- function(x,
                            escape = FALSE,
                            format = NULL,
@@ -105,9 +88,14 @@ as_kable_extra <- function(x,
                            include = everything(),
                            addtl_fmt = TRUE,
                            return_calls = FALSE) {
-  # must have kableExtra package installed to use this function ----------------
-  .assert_class(x, "gtsummary")
-  assert_package("kableExtra", "as_kable_extra()")
+  set_cli_abort_call()
+  check_pkg_installed(c("kableExtra", "knitr"), reference_pkg = "gtsummary")
+
+  # process inputs -------------------------------------------------------------
+  check_class(x, "gtsummary")
+  check_scalar_logical(escape)
+  check_scalar_logical(addtl_fmt)
+  check_scalar_logical(return_calls)
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -128,7 +116,7 @@ as_kable_extra <- function(x,
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
   kable_extra_calls <-
-    purrr::reduce(
+    reduce(
       .x = seq_along(insert_expr_after),
       .f = function(x, y) {
         add_expr_after(
@@ -142,27 +130,28 @@ as_kable_extra <- function(x,
     )
 
   # converting to charcter vector ----------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(kable_extra_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(kable_extra_calls)),
+    include = {{ include }}
+  )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
-  include <- names(kable_extra_calls) %>% intersect(include)
+  include <- names(kable_extra_calls) |> intersect(include)
   # user cannot exclude the first 'kable' command
   include <- "tibble" %>% union(include)
 
   # return calls, if requested -------------------------------------------------
-  if (return_calls == TRUE) {
+  if (isTRUE(return_calls)) {
     return(kable_extra_calls)
   }
 
   # taking each kable function call, concatenating them with %>% separating them
   .eval_list_of_exprs(kable_extra_calls[include])
 }
+
+
+
 
 table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...) {
   dots <- rlang::dots_list(...)
@@ -172,14 +161,12 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       when = "1.6.0",
       what = "gtsummary::as_kable_extra(strip_md_bold=)"
     )
-    dots <- purrr::list_modify(strip_md_bold = NULL) %>% purrr::compact()
   }
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "1.6.0",
       what = "gtsummary::as_kable_extra(fmt_missing=)"
     )
-    dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
@@ -196,7 +183,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   else {
     x$table_styling$header <-
       x$table_styling$header %>%
-      mutate(
+      dplyr::mutate(
         label = .strip_markdown(.data$label),
         spanning_header = .strip_markdown(.data$spanning_header)
       )
@@ -212,36 +199,36 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # adding id number for columns not hidden
   x$table_styling$header <-
-    x$table_styling$header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+    x$table_styling$header |>
+    dplyr::group_by(.data$hide) |>
+    dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) |>
+    dplyr::ungroup()
 
   # kableExtra doesn't support markdown bold/italics, will replace in next section
   kable_extra_calls <-
-    kable_extra_calls %>%
-    purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
+    kable_extra_calls |>
+    utils::modifyList(val = list(tab_style_bold = NULL, tab_style_italic = NULL))
 
   # escaping special characters in table_body ----------------------------------
   kable_call_index <- which(names(kable_extra_calls) %in% "kable")
   cols_to_escape <-
-    filter(x$table_styling$header, !.data$hide) %>% dplyr::pull("column")
+    dplyr::filter(x$table_styling$header, !.data$hide) |> dplyr::pull("column")
   kable_extra_calls <-
     append(kable_extra_calls,
-      values = list(escape_table_body = NULL),
-      after = kable_call_index - 1L
+           values = list(escape_table_body = NULL),
+           after = kable_call_index - 1L
     )
 
   if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "latex") {
     # getting all unique column/rows where cell will be bold or italic
     df_text_format_collapsed <-
-      x$table_styling$text_format %>%
-      filter(.data$format_type %in% c("bold", "italic")) %>%
-      select("column", "row_numbers") %>%
-      tidyr::unnest("row_numbers") %>%
-      dplyr::distinct() %>%
-      tidyr::nest(row_numbers = "row_numbers") %>%
-      mutate(row_numbers = map(.data$row_numbers, ~ unlist(.) %>% unname()))
+      x$table_styling$text_format |>
+      dplyr::filter(.data$format_type %in% c("bold", "italic")) |>
+      dplyr::select("column", "row_numbers") |>
+      tidyr::unnest("row_numbers") |>
+      dplyr::distinct() |>
+      tidyr::nest(row_numbers = "row_numbers") |>
+      dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.) |> unname()))
 
     # expression identify the bold/italic cells. will be used in the `across()` below
     if (nrow(df_text_format_collapsed) > 0) {
@@ -252,8 +239,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
           function(.x, .y) {
             expr((dplyr::cur_column() %in% !!.x & dplyr::row_number() %in% !!.y))
           }
-        ) %>%
-        purrr::reduce(~ expr(!!.x | !!.y))
+        ) |>
+        reduce(function(.x, .y) expr(!!.x | !!.y))
     } else {
       expr_no_escape <- expr(!!rep_len(FALSE, nrow(x$table_body)))
     } # no cells will be skipped if no bold/italic formatting
@@ -261,11 +248,11 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
     # collapse header into fewer rows by align status
     df_header_by_align <-
-      x$table_styling$header %>%
-      filter(!.data$hide) %>%
-      select("column", "align") %>%
-      tidyr::nest(column = "column") %>%
-      mutate(column = map(.data$column, ~ unlist(.) %>% unname()))
+      x$table_styling$header |>
+      dplyr::filter(!.data$hide) |>
+      dplyr::select("column", "align") |>
+      tidyr::nest(column = "column") |>
+      dplyr::mutate(column = map(.data$column, ~ unlist(.) |> unname()))
 
     # create one call per alignment type found in table
     kable_extra_calls[["escape_table_body"]] <-
@@ -286,8 +273,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
             )
           )
         }
-      ) %>%
-      purrr::compact()
+      ) |>
+      compact()
   } else if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "html") {
     kable_extra_calls[["escape_table_body"]] <-
       rlang::expr(
@@ -302,33 +289,29 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
-    x$table_styling$text_format %>%
-    filter(.data$format_type == "indent", .data$column == "label")
+    x$table_styling$indent |>
+    dplyr::filter(.data$column == "label")
 
   if (nrow(df_indent) > 0) {
     kable_extra_calls[["add_indent"]] <-
-      expr(kableExtra::add_indent(!!df_indent$row_numbers[[1]]))
-  }
-
-  # add_indent2 -----------------------------------------------------------------
-  df_indent2 <-
-    x$table_styling$text_format %>%
-    filter(.data$format_type == "indent2", .data$column == "label")
-
-  if (nrow(df_indent2) > 0) {
-    kable_extra_calls[["add_indent2"]] <-
-      expr(kableExtra::add_indent(!!df_indent2$row_numbers[[1]], level_of_indent = 2))
+      map(
+        seq_along(nrow(df_indent)),
+        ~expr(
+          kableExtra::add_indent(!!df_indent$row_numbers[[.x]],
+                                 level_of_indent = !!(df_indent$n_spaces[[.x]] / 4L))
+        )
+      )
   }
 
   # add_header_above -----------------------------------------------------------
   if (any(!is.na(x$table_styling$header$spanning_header))) {
     df_header0 <-
-      x$table_styling$header %>%
-      filter(.data$hide == FALSE) %>%
-      select("spanning_header") %>%
-      mutate(
+      x$table_styling$header |>
+      dplyr::filter(.data$hide == FALSE) |>
+      dplyr::select("spanning_header") |>
+      dplyr::mutate(
         spanning_header = ifelse(is.na(.data$spanning_header),
-          " ", .data$spanning_header
+                                 " ", .data$spanning_header
         ),
         spanning_header_id = dplyr::row_number()
       )
@@ -340,13 +323,13 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     }
 
     df_header <-
-      df_header0 %>%
-      group_by(.data$spanning_header_id) %>%
-      mutate(width = n()) %>%
-      distinct() %>%
-      ungroup()
+      df_header0 |>
+      dplyr::group_by(.data$spanning_header_id) %>%
+      dplyr::mutate(width = dplyr::n()) %>%
+      dplyr::distinct() %>%
+      dplyr::ungroup()
 
-    header <- df_header$width %>% set_names(df_header$spanning_header)
+    header <- df_header$width |> set_names(df_header$spanning_header)
 
     kable_extra_calls[["add_header_above"]] <-
       expr(kableExtra::add_header_above(header = !!header, escape = !!escape))
@@ -366,8 +349,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # footnote -------------------------------------------------------------------
   vct_footnote <-
-    .number_footnotes(x) %>%
-    pull("footnote") %>%
+    .number_footnotes(x) |>
+    dplyr::pull("footnote") |>
     unique()
 
   if (length(vct_footnote > 0)) {
@@ -384,16 +367,16 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # use `column_spec()` if `kable(escape = TRUE)` (the default) ----------------
   if (isTRUE(escape)) {
     df_bold_italic <-
-      x$table_styling$text_format %>%
-      dplyr::filter(.data$format_type %in% c("bold", "italic")) %>%
-      mutate(index = map(.data$row_numbers, ~ seq_len(nrow(x$table_body)) %in% .x)) %>%
+      x$table_styling$text_format |>
+      dplyr::filter(.data$format_type %in% c("bold", "italic")) |>
+      dplyr::mutate(index = map(.data$row_numbers, ~ seq_len(nrow(x$table_body)) %in% .x)) |>
       dplyr::left_join(
         x$table_styling$header %>% select("column", "id"),
         by = "column"
       )
 
-    df_bold <- df_bold_italic %>% filter(.data$format_type %in% "bold")
-    df_italic <- df_bold_italic %>% filter(.data$format_type %in% "italic")
+    df_bold <- df_bold_italic |> dplyr::filter(.data$format_type %in% "bold")
+    df_italic <- df_bold_italic |> dplyr::filter(.data$format_type %in% "italic")
 
     kable_extra_calls[["bold_italic"]] <-
       c(
@@ -427,8 +410,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # combine bold/italic instructions into single df
   df_bold_italic <-
-    x$table_styling$text_format %>%
-    dplyr::filter(.data$format_type %in% c("bold", "italic")) %>%
+    x$table_styling$text_format |>
+    dplyr::filter(.data$format_type %in% c("bold", "italic")) |>
     tidyr::unnest("row_numbers") %>%
     {
       dplyr::full_join(
@@ -440,13 +423,13 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
           dplyr::select("column", "row_numbers", "italic"),
         by = c("column", "row_numbers")
       )
-    } %>%
+    } |>
     dplyr::mutate(
       dplyr::across(all_of(c("bold", "italic")), ~ tidyr::replace_na(., FALSE))
-    ) %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
+    ) |>
+    tidyr::nest(row_numbers = "row_numbers") |>
     dplyr::mutate(
-      row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())
+      row_numbers = map(.data$row_numbers, ~ unlist(.x) |> unname())
     )
 
   # construct call to bold/italicize cells
@@ -476,7 +459,6 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   return(kable_extra_calls)
 }
 
-
 # This function calls `kableExtra::linebreak()` on gtsummary headers and spanning headers.
 # Note that `escape = FALSE` and `format = "latex"` are required.
 #  - the default `align=` argument for columns is taken from the gtsummary object
@@ -489,7 +471,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # set align argument ---------------------------------------------------------
   align <-
     align %||%
-    stringr::str_sub(x$table_styling$header$align, 1, 1)
+    str_sub(x$table_styling$header$align, 1, 1)
 
   # linebreak the headers ------------------------------------------------------
   x$table_styling$header$label <-
@@ -560,27 +542,27 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 .markdown_to_latex <- function(x) {
   x %>%
     # convert bold ** to \textbf{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\*\\*(.*?)\\*\\*",
       replacement = "\\\\textbf{\\1}"
     ) %>%
     # convert bold __ to \textbf{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\_\\_(.*?)\\_\\_",
       replacement = "\\\\textbf{\\1}"
     ) %>%
     # convert italic * to \textit{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\*(.*?)\\*",
       replacement = "\\\\textit{\\1}"
     ) %>%
     # convert italic _ to \textit{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\_(.*?)\\_",
       replacement = "\\\\textit{\\1}"
     ) %>%
     # convert underline ~~ to \underline{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\~\\~(.*?)\\~\\~",
       replacement = "\\\\underline{\\1}"
     )
@@ -590,27 +572,27 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 .markdown_to_latex2 <- function(x) {
   x %>%
     # convert bold ** to \textbf{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\*\\*(.*?)\\*\\*",
       replacement = "\\\\\\\\textbf{\\1}"
     ) %>%
     # convert bold __ to \textbf{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\_\\_(.*?)\\_\\_",
       replacement = "\\\\\\\\textbf{\\1}"
     ) %>%
     # convert italic * to \textit{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\*(.*?)\\*",
       replacement = "\\\\\\\\textit{\\1}"
     ) %>%
     # convert italic _ to \textit{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\_(.*?)\\_",
       replacement = "\\\\\\\\textit{\\1}"
     ) %>%
     # convert underline ~~ to \underline{}
-    stringr::str_replace_all(
+    str_replace_all(
       pattern = "\\~\\~(.*?)\\~\\~",
       replacement = "\\\\\\\\underline{\\1}"
     )
@@ -618,7 +600,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
 .strip_markdown <- function(x) {
   # strip bold **
-  stringr::str_replace_all(
+  str_replace_all(
     string = x,
     pattern = "\\*\\*(.*?)\\*\\*",
     replacement = "\\1"

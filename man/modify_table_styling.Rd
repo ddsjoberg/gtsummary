@@ -17,50 +17,62 @@ modify_table_styling(
   missing_symbol = NULL,
   fmt_fun = NULL,
   text_format = NULL,
-  undo_text_format = FALSE,
+  undo_text_format = NULL,
+  indent = NULL,
   text_interpret = c("md", "html"),
   cols_merge_pattern = NULL
 )
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{columns}{vector or selector of columns in \code{x$table_body}}
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 
-\item{rows}{predicate expression to select rows in \code{x$table_body}.
+\item{rows}{(predicate \code{expression})\cr
+Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
 
-\item{label}{string of column label(s)}
+\item{label}{(\code{character})\cr
+Character vector of column label(s). Must be the same length as \code{columns}.}
 
-\item{spanning_header}{string with text for spanning header}
+\item{spanning_header}{(\code{string})\cr
+string with text for spanning header}
 
-\item{hide}{logical indicating whether to hide column from output}
+\item{hide}{(scalar \code{logical})
+Logical indicating whether to hide column from output}
 
-\item{footnote}{string with text for footnote}
+\item{footnote}{(\code{string})\cr
+string with text for footnote}
 
-\item{footnote_abbrev}{string with abbreviation definition, e.g.
-\code{"CI = Confidence Interval"}}
+\item{footnote_abbrev}{(\code{string})\cr
+string with abbreviation definition, e.g. \code{"CI = Confidence Interval"}}
 
-\item{align}{string indicating alignment of column, must be one of
-\code{c("left", "right", "center")}}
+\item{align}{(\code{string})
+String indicating alignment of column, must be one of \code{c("left", "right", "center")}}
 
-\item{missing_symbol}{string indicating how missing values are formatted.}
+\item{missing_symbol}{(\code{string})\cr
+string indicating how missing values are formatted.}
 
-\item{fmt_fun}{function that formats the statistics in the
-columns/rows in \verb{columns=} and \verb{rows=}}
+\item{fmt_fun}{(\code{function})\cr
+function that formats the statistics in the columns/rows in \code{columns} and \code{rows}}
 
-\item{text_format}{string indicated which type of text formatting to apply to the rows and columns.
-Must be one of \code{c("bold", "italic", "indent", "indent2")}. Do not assign
-both \code{"indent"} and \code{"indent2"} to the same cell.}
+\item{text_format, undo_text_format}{(\code{string})\cr
+String indicated which type of text formatting to apply/remove to the rows and columns.
+Must be one of \code{c("bold", "italic")}.}
 
-\item{undo_text_format}{rarely used. Logical that undoes the indent, bold,
-and italic styling when \code{TRUE}}
+\item{indent}{(\code{integer})\cr
+An integer indicating how many space to indent text}
 
-\item{text_interpret}{string, must be one of \code{"md"} or \code{"html"}}
+\item{text_interpret}{(\code{string})\cr
+Must be one of \code{"md"} or \code{"html"} and indicates the processing function
+as \code{gt::md()} or \code{gt::html()}. Use this in conjunction with arguments for
+header and footnotes.}
 
-\item{cols_merge_pattern}{\lifecycle{experimental} glue-syntax string
-indicating how to merge
+\item{cols_merge_pattern}{(\code{string}) \lifecycle{experimental}\cr
+glue-syntax string indicating how to merge
 columns in \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}. The first column listed in the pattern
 string must match the single column name passed in \verb{columns=}.}
@@ -68,7 +80,9 @@ string must match the single column name passed in \verb{columns=}.}
 \description{
 This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
-gtsummary table by directly modifying \code{.$table_styling}
+gtsummary table by directly modifying \code{.$table_styling}.
+\emph{This function is primarily used in the development of other gtsummary
+functions, and very little checking of the passed arguments is performed.}
 }
 \details{
 Review the
@@ -82,7 +96,7 @@ rows to apply formatting. The expression must evaluate to a logical when
 evaluated in \code{x$table_body}. For example, to apply formatting to the age rows
 pass \code{rows = variable == "age"}. A vector of row numbers is NOT acceptable.
 
-A couple of things to note when using the \verb{rows=} argument.
+A couple of things to note when using the \code{rows} argument.
 \enumerate{
 \item You can use saved objects to create the predicate argument, e.g.
 \code{rows = variable == letters[1]}.
@@ -116,18 +130,10 @@ internally with care, and it is \emph{not} recommended for users.
 }
 
 \seealso{
-\code{modify_table_body()}
-
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
 Other Advanced modifiers: 
-\code{\link{modify_column_alignment}()},
-\code{\link{modify_column_hide}()},
 \code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()}
+\code{\link{modify_column_merge}()}
 }
 \concept{Advanced modifiers}

@@ -5,83 +5,67 @@
 \alias{modify_header}
 \alias{modify_footnote}
 \alias{modify_spanning_header}
-\alias{modify_caption}
 \alias{show_header_names}
-\title{Modify column headers, footnotes, spanning headers, and table captions}
+\title{Modify column headers, footnotes, and spanning headers}
 \usage{
-modify_header(
-  x,
-  update = NULL,
-  ...,
-  text_interpret = c("md", "html"),
-  quiet = NULL,
-  stat_by = NULL
-)
+modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
 modify_footnote(
   x,
-  update = NULL,
   ...,
   abbreviation = FALSE,
   text_interpret = c("md", "html"),
-  quiet = NULL
+  update,
+  quiet
 )
 
-modify_spanning_header(
-  x,
-  update = NULL,
-  ...,
-  text_interpret = c("md", "html"),
-  quiet = NULL
-)
-
-modify_caption(x, caption, text_interpret = c("md", "html"))
+modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
 show_header_names(x = NULL, include_example = TRUE, quiet = NULL)
 }
 \arguments{
-\item{x}{a gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+A gtsummary object}
 
-\item{update, ...}{use these arguments to assign updates to headers,
-spanning headers, and footnotes. See examples below.
-\itemize{
-\item \code{update} expects a list of assignments, with the variable name or selector
-on the LHS of the formula, and the updated string on the RHS. Also accepts
-a named list.
-\item \code{...} pass individual updates outside of a list, e.g,
-\code{modify_header(p.value = "**P**", all_stat_cols() ~ "**{level}**")}
-}
+\item{...}{\code{\link[rlang:dyn-dots]{dynamic-dots}}\cr
+Used to assign updates to headers,
+spanning headers, and footnotes.
+
+Use \code{modify_*(colname='new header/footnote')} to update a single column. Using a
+formula will invoke tidyselect, e.g. \code{modify_*(all_stat_cols() ~ "**{level}**")}.
+The dynamic dots allow syntax like \code{modify_header(x, !!!list(label = "Variable"))}.
+See examples below.
 
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
-\item{text_interpret}{String indicates whether text will be interpreted with
+\item{text_interpret}{(\code{string})\cr
+String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{update, quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
+\item{abbreviation}{(scalar \code{logical})\cr
+Logical indicating if an abbreviation is being updated.}
 
-\item{abbreviation}{Logical indicating if an abbreviation is being updated.}
-
-\item{caption}{a string of the table caption/title}
-
-\item{include_example}{logical whether to include print of \code{modify_header()} example}
+\item{include_example}{(scalar \code{logical})\cr}
 }
 \value{
 Updated gtsummary object
 }
 \description{
-These functions assist with updating or adding column headers
-(\code{modify_header()}), footnotes (\code{modify_footnote()}), spanning
-headers (\code{modify_spanning_header()}), and table captions
-(\code{modify_caption()}). Use \code{show_header_names()} to learn
-the column names.
+These functions assist with modifying the aesthetics/style of a table.
+\itemize{
+\item \code{modify_header()} update column headers
+\item \code{modify_footnote()} update/add table footnotes
+\item \code{modify_spanning_header()} update/add spanning headers
 }
-\section{tbl_summary(), tbl_svysummary(), and tbl_cross()}{
 
-When assigning column headers, footnotes, spanning headers, and captions
-for these gtsummary tables,
+The functions often require users to know the underlying column names.
+Run \code{show_header_names()} to print the column names to the console.
+}
+\section{\code{tbl_summary()}, \code{tbl_svysummary()}, and \code{tbl_cross()}}{
+
+When assigning column headers, footnotes, and spanning headers,
 you may use \code{{N}} to insert the number of observations.
 \code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
 
@@ -99,140 +83,34 @@ you may use \code{{N}} to insert the number of observations, and \code{{N_event}
 for the number of events (when applicable).
 }
 
-\section{captions}{
-
-Captions are assigned based on output type.
-\itemize{
-\item \code{gt::gt(caption=)}
-\item \code{flextable::set_caption(caption=)}
-\item \code{huxtable::set_caption(value=)}
-\item \code{knitr::kable(caption=)}
-}
-}
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex2.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex3.png" alt="image of rendered example table" style="width:35\%;">
-}}
-}
-
 \examples{
-\donttest{
 # create summary table
-tbl <- trial[c("age", "grade", "trt")] \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
+tbl <- trial |>
+  tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
   add_p()
 
 # print the column names that can be modified
 show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers, footnote, and table caption
-modify_ex1 <- tbl \%>\%
-  modify_header(label = "**Variable**", p.value = "**P**") \%>\%
-  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade") \%>\%
-  modify_caption("**Patient Characteristics** (N = {N})")
+# updating column headers and footnote
+tbl |>
+  modify_header(label = "**Variable**", p.value = "**P**") |>
+  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade")
 
 # Example 2 ----------------------------------
 # updating headers, remove all footnotes, add spanning header
-modify_ex2 <- tbl \%>\%
-  modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
-  # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
-  modify_footnote(update = everything() ~ NA) \%>\%
+tbl |>
+  modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") |>
+  modify_footnote(everything() ~ NA) |>
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
 
 # Example 3 ----------------------------------
 # updating an abbreviation in table footnote
-modify_ex3 <-
-  glm(response ~ age + grade, trial, family = binomial) \%>\%
-  tbl_regression(exponentiate = TRUE) \%>\%
-  modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
-}
-}
-\seealso{
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_uvregression}()}
-
-Other tbl_survfit tools: 
-\code{\link{add_n.tbl_survfit}()},
-\code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_survfit}()}
+glm(response ~ age + grade, trial, family = binomial) |>
+  tbl_regression(exponentiate = TRUE) |>
+  modify_footnote(conf.low = "CI = Credible Interval", abbreviation = TRUE)
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
-\concept{tbl_summary tools}
-\concept{tbl_survfit tools}
-\concept{tbl_svysummary tools}
-\concept{tbl_uvregression tools}

@@ -7,55 +7,22 @@
 continuous_summary(variable)
 }
 \arguments{
-\item{variable}{String indicating the name of the variable to be summarized. This
+\item{variable}{(\code{string})\cr
+String indicating the name of the variable to be summarized. This
 variable should be continuous.}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{deprecated}
 This helper, to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}}, creates a function
 summarizing a continuous variable.
 }
 \details{
-When using \code{continuous_summary}, you can specify in the \verb{statistic=} argument
+When using \code{continuous_summary()}, you can specify in the \verb{statistic=} argument
 of \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} the same continuous statistics than in
 \code{\link[=tbl_summary]{tbl_summary()}}. See the \emph{statistic argument} section of the help file of
 \code{\link[=tbl_summary]{tbl_summary()}}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/continuous_summary_ex1.png" alt="image of rendered example table" style="width:31\%;">
-}}
-}
-
-\examples{
-\donttest{
-# Example 1 ----------------------------------
-continuous_summary_ex1 <-
-  trial \%>\%
-  tbl_custom_summary(
-    include = c("stage", "grade"),
-    by = "trt",
-    stat_fns = ~ continuous_summary("age"),
-    statistic = ~"{median} [{p25}-{p75}]",
-    overall_row = TRUE,
-    overall_row_label = "All stages & grades"
-  ) \%>\%
-  modify_footnote(
-    update = all_stat_cols() ~ "Median age (IQR)"
-  )
-}
-}
-\seealso{
-Other tbl_custom_summary tools: 
-\code{\link{add_overall}()},
-\code{\link{proportion_summary}()},
-\code{\link{ratio_summary}()},
-\code{\link{tbl_custom_summary}()}
-}
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}
+\keyword{internal}

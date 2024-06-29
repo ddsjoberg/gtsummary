@@ -2,14 +2,14 @@
 % Please edit documentation in R/tbl_cross.R
 \name{tbl_cross}
 \alias{tbl_cross}
-\title{Create a cross table of summary statistics}
+\title{Cross table}
 \usage{
 tbl_cross(
   data,
-  row = NULL,
-  col = NULL,
+  row = 1L,
+  col = 2L,
   label = NULL,
-  statistic = NULL,
+  statistic = ifelse(percent == "none", "{n}", "{n} ({p}\%)"),
   digits = NULL,
   percent = c("none", "column", "row", "cell"),
   margin = c("column", "row"),
@@ -19,25 +19,33 @@ tbl_cross(
 )
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{(\code{data.frame})\cr
+A data frame}
 
-\item{row}{A column name in \verb{data=} to be used for the rows of cross table.}
+\item{row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Column name in \code{data} to be used for the rows of cross table.
+Default is the first column in \code{data}.}
 
-\item{col}{A column name in \verb{data=} to be used for the columns of cross table.}
+\item{col}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Column name in \code{data} to be used for the columns of cross table.
+Default is the second column in \code{data}.}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
-\item{statistic}{A string with the statistic name in curly brackets to
+\item{statistic}{(\code{string})\cr
+A string with the statistic name in curly brackets to
 be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
 default is \code{"{n} ({p}\%)"}.}
 
-\item{digits}{Specifies the number of decimal
-places to round the summary statistics. By default integers are shown
+\item{digits}{(\code{numeric}/\code{list}/\code{function})\cr
+Specifies the number of decimal
+places to round the summary statistics.
+This argument is passed to \code{tbl_summary(digits = ~digits)}.
+By default integers are shown
 to the zero decimal places, and percentages are formatted with \code{style_percent()}.
 If you would like to modify either of these, pass a vector of integers
 indicating the number of decimal places to round the statistics.
@@ -46,69 +54,43 @@ statistic being calculated is \code{"{n} ({p}\%)"} and you want the percent roun
 to 2 decimal places use \code{digits = c(0, 2)}. User
 may also pass a styling function: \code{digits = style_sigfig}}
 
-\item{percent}{Indicates the type of percentage to return.
+\item{percent}{(\code{string})\cr
+Indicates the type of percentage to return.
 Must be one of "none", "column", "row", or "cell". Default is "cell" when
 \code{{N}} or \code{{p}} is used in statistic.}
 
-\item{margin}{Indicates which margins to add to the table.
+\item{margin}{(\code{character})\cr
+Indicates which margins to add to the table.
 Default is \code{c("row", "column")}. Use \code{margin  = NULL} to suppress both
 row and column margins.}
 
-\item{missing}{Indicates whether to include counts of \code{NA} values in the table.
-Allowed values are \code{"no"} (never display NA values),
-\code{"ifany"} (only display if any NA values), and \code{"always"}
-(includes NA count row for all variables). Default is \code{"ifany"}.}
+\item{missing}{(\code{string})\cr
+Must be one of \code{c("ifany", "no", "always")}.}
 
-\item{missing_text}{String to display for count of missing observations.
-Default is \code{"Unknown"}.}
+\item{missing_text}{(\code{string})\cr
+String indicating text shown on missing row. Default is \code{"Unknown"}}
 
-\item{margin_text}{Text to display for margin totals. Default is \code{"Total"}}
+\item{margin_text}{(\code{string})\cr
+Text to display for margin totals. Default is \code{"Total"}}
 }
 \value{
 A \code{tbl_cross} object
 }
 \description{
-The function creates a cross table of two categorical variables.
+The function creates a cross table of categorical variables.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_cross_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_cross_ex2.png" alt="image of rendered example table" style="width:60\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-tbl_cross_ex1 <-
-  trial \%>\%
-  tbl_cross(row = trt, col = response) \%>\%
+trial |>
+  tbl_cross(row = trt, col = response) |>
   bold_labels()
 
 # Example 2 ----------------------------------
-tbl_cross_ex2 <-
-  trial \%>\%
-  tbl_cross(row = stage, col = trt, percent = "cell") \%>\%
-  add_p() \%>\%
+trial |>
+  tbl_cross(row = stage, col = trt, percent = "cell") |>
+  add_p() |>
   bold_labels()
-}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_cross tools: 
-\code{\link{add_p.tbl_cross}()},
-\code{\link{inline_text.tbl_cross}()}
 }
 \author{
 Karissa Whiting, Daniel D. Sjoberg
 }
-\concept{tbl_cross tools}

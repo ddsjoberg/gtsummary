@@ -2,58 +2,51 @@
 % Please edit documentation in R/add_nevent.R
 \name{add_nevent_regression}
 \alias{add_nevent_regression}
+\alias{add_nevent}
 \alias{add_nevent.tbl_regression}
 \alias{add_nevent.tbl_uvregression}
-\title{Add event N to regression table}
+\title{Add event N}
 \usage{
-\method{add_nevent}{tbl_regression}(x, location = NULL, ...)
+add_nevent(x, ...)
 
-\method{add_nevent}{tbl_uvregression}(x, location = NULL, ...)
+\method{add_nevent}{tbl_regression}(x, location = "label", ...)
+
+\method{add_nevent}{tbl_uvregression}(x, location = "label", ...)
 }
 \arguments{
-\item{x}{a \code{tbl_regression} or \code{tbl_uvregression} table}
+\item{x}{(\code{tbl_regression}, \code{tbl_uvregression})\cr
+a \code{tbl_regression} or \code{tbl_uvregression} table}
 
-\item{location}{location to place Ns. When \code{"label"} total Ns are placed
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{location}{(\code{character})\cr
+location to place Ns. Select one or more of \code{c('label', 'level')}.
+Default is \code{'label'}.
+
+When \code{"label"} total Ns are placed
 on each variable's label row. When \code{"level"} level counts are placed on the
 variable level for categorical variables, and total N on the variable's label
 row for continuous.}
-
-\item{...}{Not used}
 }
 \description{
-Add event N to regression table
+Add event N
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex1.png" alt="image of rendered example table" style="width:64\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex2.png" alt="image of rendered example table" style="width:64\%;">
-}}
-}
-
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_nevent.tbl_regression_ex1 <-
-  trial \%>\%
-  select(response, trt, grade) \%>\%
+trial |>
+  select(response, trt, grade) |>
   tbl_uvregression(
     y = response,
+    exponentiate = TRUE,
     method = glm,
     method.args = list(family = binomial),
-  ) \%>\%
+  ) |>
   add_nevent()
+
 # Example 2 ----------------------------------
-add_nevent.tbl_regression_ex2 <-
-  glm(response ~ age + grade, trial, family = binomial) \%>\%
-  tbl_regression(exponentiate = TRUE) \%>\%
+glm(response ~ age + grade, trial, family = binomial) |>
+  tbl_regression(exponentiate = TRUE) |>
   add_nevent(location = "level")
-}
+\dontshow{\}) # examplesIf}
 }

@@ -2,52 +2,36 @@
 % Please edit documentation in R/bold_p.R
 \name{bold_p}
 \alias{bold_p}
-\title{Bold significant p-values or q-values}
+\title{Bold significant p-values}
 \usage{
 bold_p(x, t = 0.05, q = FALSE)
 }
 \arguments{
-\item{x}{Object created using gtsummary functions}
+\item{x}{(\code{gtsummary})\cr
+Object created using gtsummary functions}
 
-\item{t}{Threshold below which values will be bold. Default is 0.05.}
+\item{t}{(scalar \code{numeric})\cr
+Threshold below which values will be bold. Default is 0.05.}
 
-\item{q}{Logical argument. When TRUE will bold the q-value column rather
-than the p-values. Default is \code{FALSE}.}
+\item{q}{(scalar \code{logical})\cr
+When \code{TRUE} will bold the q-value column rather
+than the p-value. Default is \code{FALSE}.}
 }
 \description{
 Bold values below a chosen threshold (e.g. <0.05)
 in a gtsummary tables.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/bold_p_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/bold_p_ex2.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-bold_p_ex1 <-
-  trial[c("age", "grade", "response", "trt")] \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
-  bold_p(t = 0.65)
+trial |>
+  tbl_summary(by = trt, include = c(response, marker, trt), missing = "no") |>
+  add_p() |>
+  bold_p(t = 0.1)
 
 # Example 2 ----------------------------------
-bold_p_ex2 <-
-  glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
-  tbl_regression(exponentiate = TRUE) \%>\%
+glm(response ~ trt + grade, trial, family = binomial(link = "logit")) |>
+  tbl_regression(exponentiate = TRUE) |>
   bold_p(t = 0.65)
-}
 }
 \author{
 Daniel D. Sjoberg, Esther Drill

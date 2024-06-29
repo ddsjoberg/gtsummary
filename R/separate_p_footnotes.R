@@ -1,67 +1,91 @@
 #' Create footnotes for individual p-values
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{questioning}\cr
 #' The usual presentation of footnotes for p-values on a gtsummary table is
 #' to have a single footnote that lists all statistical tests that were used to
 #' compute p-values on a given table. The `separate_p_footnotes()` function
 #' separates aggregated p-value footnotes to individual footnotes that denote
 #' the specific test used for each of the p-values.
 #'
-#' @param x object with class `"tbl_summary"` or `"tbl_svysummary"`
+#' @param x (`tbl_summary`, `tbl_svysummary`)\cr
+#'   Object with class `"tbl_summary"` or `"tbl_svysummary"`
 #'
 #' @export
-#' @family tbl_summary tools
-#' @family tbl_svysummary tools
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#'
 #' @examples
 #' # Example 1 ----------------------------------
-#' separate_p_footnotes_ex1 <-
-#'   trial %>%
-#'   select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
+#' trial |>
+#'   tbl_summary(by = trt, include = c(age, grade)) |>
+#'   add_p() |>
 #'   separate_p_footnotes()
-#' @section Example Output:
-#'
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "separate_p_footnotes_ex1.png", width = "80")`
-#' }}
-
 separate_p_footnotes <- function(x) {
-  # check inputs ---------------------------------------------------------------
-  .assert_class(x, "gtsummary")
-  if (!"p.value" %in% names(x$table_body)) {
-    stop("`x=` must be a gtsummary table with a p-value column.", call. = FALSE)
-  }
-  if (!"stat_test_lbl" %in% names(x$meta_data)) {
-    stop("The `x$meta_data` data frame must have a column called 'stat_test_lbl'.")
-  }
+  set_cli_abort_call()
 
+  # check inputs ---------------------------------------------------------------
+  check_class(x, cls = c("tbl_summary", "tbl_svysummary"))
+
+  # check that `add_p` or `add_difference` has been run (but not both)
+  if (!any(c("add_p", "add_difference") %in% names(x$call_list)) ||
+      all(c("add_p", "add_difference") %in% names(x$call_list))) {
+    cli::cli_abort(
+      "One (and only one) of {.fun add_p} and {.fun add_difference} needs to be run before {.fun separate_p_footnotes}.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # remove p-value column footnote ---------------------------------------------
-  x <- gtsummary::modify_footnote(x, p.value ~ NA_character_)
+  x <- modify_footnote(x, any_of(c("p.value", "estimate", "conf.low", "conf.high")) ~ NA_character_)
 
-  # add footnotes to the body of the table -------------------------------------
-  footnote_calls <-
-    x$meta_data %>%
-    dplyr::select("variable", "stat_test_lbl") %>%
-    tibble::deframe() %>%
-    map(translate_text) %>%
-    purrr::imap(
-      ~ rlang::expr(
-        gtsummary::modify_table_styling(
-          columns = "p.value",
-          rows = .data$variable %in% !!.y & !is.na(.data$p.value),
-          footnote = !!.x
-        )
-      )
-    )
+  # extract footnote next for each variable ------------------------------------
+  calling_fun <- names(x$call_list) |> intersect(c("add_p", "add_difference"))
+  lst_footnotes <-
+    unique(x$table_body$variable) |>
+    map(
+      function(variable) {
+        # if an ARD object, then return the method row
+        if (inherits(x$cards[[calling_fun]][[variable]], "card")) {
+          footnote_i <-
+            x$cards[[calling_fun]][[variable]] |>
+            dplyr::filter(.data$stat_name %in% "method") |>
+            dplyr::pull("stat") |>
+            unlist()
+          return(footnote_i)
+        }
+        # otherwise, return the method column (broom::tidy-style results)
+        x$cards[[calling_fun]][[variable]][["method"]]
+      }
+    ) |>
+    set_names(unique(x$table_body$variable)) |>
+    compact()
 
-  # concatenating expressions with %>% between each of them
-  footnote_calls %>%
-    purrr::reduce(function(x, y) rlang::expr(!!x %>% !!y), .init = rlang::expr(!!x)) %>%
-    # evaluating expressions
-    eval()
+
+  # adding footnotes to cells in table -----------------------------------------
+  not_hidden_columns <-
+    x$table_styling$header |>
+    dplyr::filter(.data$hide == FALSE) |>
+    dplyr::pull("column") |>
+    intersect(c("p.value", "estimate", "conf.low", "conf.high"))
+
+  for (variable in names(lst_footnotes)) {
+    for (column in not_hidden_columns) {
+      # only add footnote to non-NA cells
+      footnote_cell <-
+        x$table_body |>
+        dplyr::filter(.data$variable %in% .env$variable & .data$row_type %in% "label") |>
+        dplyr::pull(.data[[column]])
+
+      if (!is.na(footnote_cell)) {
+        x <-
+          modify_table_styling(
+            x,
+            columns = any_of(column),
+            rows = !!expr(.data$variable %in% !!variable & .data$row_type %in% "label"),
+            footnote = lst_footnotes[[variable]]
+          )
+      }
+    }
+  }
+
+  # return final object --------------------------------------------------------
+  x
 }
