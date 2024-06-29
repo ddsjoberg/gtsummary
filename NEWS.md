@@ -27,7 +27,7 @@
 
 ### Documentation
 
-* The "FAQ+Gallery", `tbl_summary()` Tutorial, `tbl_regression()`, and Quarto+R Markdown vignettes have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation utilizing more tools that don't need to be bundled with the package.  
+* The "FAQ+Gallery", `tbl_summary()` Tutorial, `tbl_regression()` Tutorial, and the Quarto+R Markdown vignettes have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation, utilizing more tools that don't need to be included in the package.  
 
 ### Minor Improvements
 
