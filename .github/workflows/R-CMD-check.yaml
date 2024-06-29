@@ -1,16 +1,14 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
-#
-# NOTE: This workflow is overkill for most R packages and
-# check-standard.yaml is likely a better choice.
-# usethis::use_github_action("check-standard") will install it.
 on:
   push:
     branches: [main, master]
   pull_request:
-    # branches: [main, master]
+    branches: [main, master]
 
 name: R-CMD-check
+
+permissions: read-all
 
 jobs:
   R-CMD-check:
@@ -23,24 +21,19 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,   r: 'release'}
-
           - {os: windows-latest, r: 'release'}
-          # use 4.1 to check with rtools40's older compiler
-          # - {os: windows-latest, r: '4.1'}
-
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
           # - {os: ubuntu-latest,   r: 'oldrel-2'}
           # - {os: ubuntu-latest,   r: 'oldrel-3'}
           # - {os: ubuntu-latest,   r: 'oldrel-4'}
-
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -55,15 +48,7 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      # this is hopefully a transitory issue and we can delete in the future (2024-05-02)
-      # https://github.com/lme4/lme4/issues/763
-      - name: Install Matrix and lme4 from CRAN
-        run: utils::install.packages(c("Matrix", "lme4"), repos = c(CRAN = "https://cloud.r-project.org"))
-        shell: Rscript {0}
-
-
-      # not using the default '--as-cran' arg, because it sets up private libs (see https://github.com/r-lib/devtools/issues/2044#issuecomment-526209877)
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: 'c("--no-manual")'
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
