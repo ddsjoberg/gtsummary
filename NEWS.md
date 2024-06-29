@@ -6,14 +6,16 @@
 
 * The {gt} package is now the default printer for all Quarto and R markdown output formats.
   - Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. These output types are still supported.
-  
+
+* New functions `tbl_ard_summary()` and `tbl_ard_continuous()` have been added. These provide general tools for creating bespoke summary tables. Rather than accepting a data frame, these functions accept an ARD object (Analysis Results Dataset often created with the {cards} or {cardx} packages). The ARD objects align with the emerging [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard). ARDs are now used throughout the package. See below under the "Internal Storage" heading.
+
 * The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()` as these regression model types are not supported by `car::Anova()`.
 
 * The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
 
 * Added a family of function `label_style_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
 
-* New functions `tbl_ard_summary()` and `tbl_ard_continuous()` have been added. These provide general tools for creating bespoke summary tables. Rather than accepting a data frame, these functions accept an ARD object (Analysis Results Dataset often created with the {cards} or {cardx} packages). The ARD objects align with the emerging [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard). ARDs are now used throughout the package. See below under the "Internal Storage" heading.
+* Functions `tbl_summary()` and `tbl_svysummary()` have gained the `missing_stat` argument, which gives users great control over the statistics presented in the missing row of a summary table.
 
 ### Internal Storage
 
