@@ -1,143 +1,231 @@
-#' Summarize a continuous variable
+#' Summarize continuous variable
 #'
-#' \lifecycle{experimental}
 #' Summarize a continuous variable by one or more categorical variables
 #'
-#' @param variable Variable name of the continuous column to be summarized
-#' @param digits List of formulas specifying the number of decimal places
-#' to round continuous summary statistics. If not specified, an appropriate
-#' number of decimals to round statistics will be guessed based on the
-#' the variable's distribution.
-#' @param statistic List of formulas specifying types of summary statistics
-#' to display for each variable. The default is
-#' `everything() ~ {median} ({p25}, {p75})`
+#' @param variable ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   A single column from `data`. Variable name of the continuous column to be summarized.
+#' @param digits  ([`formula-list-selector`][syntax])\cr
+#'   Specifies how summary statistics are rounded. Values may be either integer(s)
+#'   or function(s). If not specified, default formatting is assigned
+#'   via `assign_summary_digits()`. See below for details.
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Specifies summary statistics to display for each variable.  The default is
+#'   `everything() ~ "{median} ({p25}, {p75})"`.
 #' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
-#' @family tbl_continuous tools
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' # Example 1 ----------------------------------
-#' tbl_continuous_ex1 <-
-#'   tbl_continuous(
-#'     data = trial,
-#'     variable = age,
-#'     by = trt,
-#'     include = grade
-#'   )
+#' tbl_continuous(
+#'   data = trial,
+#'   variable = age,
+#'   by = trt,
+#'   include = grade
+#' )
 #'
 #' # Example 2 ----------------------------------
-#' tbl_continuous_ex2 <-
-#'   tbl_continuous(
-#'     data = trial,
-#'     variable = age,
-#'     include = c(trt, grade)
-#'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_continuous_ex1.png", width = "38")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_continuous_ex2.png", width = "35")`
-#' }}
-
+#' tbl_continuous(
+#'   data = trial,
+#'   variable = age,
+#'   statistic = ~"{mean} ({sd})",
+#'   by = trt,
+#'   include = c(stage, grade)
+#' )
 tbl_continuous <- function(data,
                            variable,
                            include = everything(),
                            digits = NULL,
                            by = NULL,
-                           statistic = NULL,
+                           statistic = everything() ~ "{median} ({p25}, {p75})",
                            label = NULL) {
-  # evaluate inputs ------------------------------------------------------------
-  variable <- .select_to_varnames(
-    data = data, select = {{ variable }},
-    select_single = TRUE, arg_name = "variable"
+  set_cli_abort_call()
+
+  # data argument checks -------------------------------------------------------
+  check_not_missing(data)
+  check_data_frame(data)
+  .data_dim_checks(data)
+
+  # process arguments ----------------------------------------------------------
+  cards::process_selectors(data, by = {{ by }}, include = {{ include }}, variable = {{ variable }})
+  check_scalar(variable)
+  check_scalar(
+    by,
+    allow_empty = TRUE,
+    message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
+                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+    )
   )
-  by <- .select_to_varnames(
-    data = data, select = {{ by }},
-    select_single = TRUE, arg_name = "by"
+  data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
+  include <- setdiff(include, c(by, variable)) # remove by and variable columns from list vars included
+  data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
+
+  # processed arguments are saved into this env
+  cards::process_formula_selectors(
+    data = select_prep(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    statistic =
+      case_switch(
+        missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
+        .default = statistic
+      ),
+    include_env = TRUE
   )
-  include <-
-    .select_to_varnames(
-      data = data, select = {{ include }},
-      select_single = FALSE, arg_name = "include"
-    ) %>%
-    setdiff(c(variable, by))
+  # add the calling env to the statistics
+  statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
-  digits <-
-    rep_len(
-      list(continuous_digits_guess(data, variable, "continuous")),
-      length.out = length(include)
-    ) %>%
-    rlang::set_names(include) %>%
-    purrr::list_modify(
-      !!!.formula_list_to_named_list(
-        digits,
-        data = data, arg_name = "digits",
-        type_check = chuck(type_check, "digits", "fn"),
-        type_check_msg = chuck(type_check, "digits", "msg")
-      )
-    )
-  statistic <-
-    rep_len(list("{median} ({p25}, {p75})"), length.out = length(include)) %>%
-    rlang::set_names(include) %>%
-    purrr::list_modify(
-      !!!.formula_list_to_named_list(statistic,
-        data = data,
-        arg_name = "statistic",
-        type_check = chuck(type_check, "is_string", "fn"),
-        type_check_msg = chuck(type_check, "is_string", "msg")
-      )
-    )
+  cards::check_list_elements(
+    statistic,
+    predicate = \(x) is_string(x) && !is_empty(.extract_glue_elements(x)),
+    error_msg =
+      c("Elements of the {.arg statistic} argument must be a string with {.arg glue} elements referring to functions.",
+        i = "For example {.code statistic = list(colname = '{{mean}} ({{sd}})')}, to report the {.field mean} and {.field standard deviation}.")
+  )
 
-  label <-
-    .formula_list_to_named_list(
-      label,
-      data = data,
-      arg_name = "label",
-      type_check = chuck(type_check, "is_string", "fn"),
-      type_check_msg = chuck(type_check, "is_string", "msg")
-    )
+  cards::check_list_elements(
+    label,
+    predicate = \(x) is_string(x),
+    error_msg =
+      c("Elements of the {.arg label} argument must be strings.")
+  )
 
-  # saving function inputs
+  cards::process_formula_selectors(
+    data = select_prep(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    digits = digits
+  )
+
+
+  # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
+  call <- match.call()
 
-  # calculate tbl_continuous tables --------------------------------------------
-  variable_label <-
-    label[[variable]] %||% attr(data[[variable]], "label") %||% variable
-  statistic_footnote <-
-    stat_label_match(statistic) %>%
-    unlist() %>%
-    unique() %>%
-    paste(collapse = "; ")
-  result <-
-    tbl_custom_summary(
-      data, data,
-      by = all_of(by),
-      stat_fns = everything() ~ continuous_summary(variable),
-      statistic = statistic,
-      digits = digits,
-      label = label,
-      include = all_of(include),
-      type = all_of(include %>% setdiff(c(variable, by))) ~ "categorical"
-    ) %>%
-    modify_footnote(
-      all_stat_cols() ~ glue("{variable_label}: {statistic_footnote}")
+
+  # prepare the ARD data frame -------------------------------------------------
+  cards <-
+    map(
+      include,
+      \(cat_variable) {
+        # convert digits input into the named lists expected by the {cards} functions
+        variable_digits <-
+          assign_summary_digits(
+            data = data,
+            statistic = statistic[cat_variable] |> set_names(variable),
+            type = list("continuous") |> set_names(variable),
+            digits = digits[cat_variable] |> set_names(variable)
+          )
+
+        # calculate the continuous summary stats
+        cards::ard_continuous(
+          data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
+          variables = all_of(variable),
+          by = any_of(c(by, cat_variable)),
+          statistic = .continuous_statistics_chr_to_fun(statistic)[cat_variable] |> set_names(variable),
+          fmt_fn = variable_digits,
+          stat_label = ~ default_stat_labels()
+        ) |>
+          # add the missingness information
+          cards::bind_ard(
+            cards::ard_missing(
+              data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
+              variables = all_of(variable),
+              by = any_of(c(by, cat_variable)),
+              fmt_fn = variable_digits,
+              stat_label = ~ default_stat_labels()
+            )
+          )
+      }
+    ) |>
+    dplyr::bind_rows()
+
+  # add attributes and missing information
+  cards <-
+    dplyr::bind_rows(
+      cards,
+      cards::ard_attributes(data, variables = all_of(c(variable, by, include)), label = label),
+      cards::ard_categorical(data, variables = any_of(by), stat_label = ~ default_stat_labels())
     )
 
-  result[["inputs"]] <- tbl_continuous_inputs
-  result[["call_list"]] <- list(tbl_continuous = match.call())
+  # fill NULL stats with NA
+  cards <- cards::replace_null_statistic(cards)
 
-  # return result --------------------------------------------------------------
-  class(result) <- c("tbl_continuous", "gtsummary")
-  result
+  # print all warnings and errors that occurred while calculating requested stats
+  cards::print_ard_conditions(cards)
+
+  # translate statistic labels -------------------------------------------------
+  cards$stat_label <- translate_vector(cards$stat_label)
+
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_continuous(cards, include, by)
+
+  # prepare the base table via `brdg_continuous()` -----------------------------
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+
+  # adding styling -------------------------------------------------------------
+  x <- x |>
+    # updating the headers for the stats columns
+    modify_header(
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          "**N = {style_number(N)}**",
+          "**{level}**  \nN = {style_number(n)}"
+        )
+    )
+
+  # prepend the footnote with information about the variable -------------------
+  x$table_styling$footnote$footnote <-
+    paste0(
+      cards |>
+        dplyr::filter(.data$context == "attributes", .data$variable == .env$variable, .data$stat_name == "label") |>
+        dplyr::pull("stat") |>
+        unlist(),
+      ": ",
+      x$table_styling$footnote$footnote
+    )
+
+  x |>
+    structure(class = c("tbl_continuous", "gtsummary"))
+
+  # add other information to the returned object
+  x$cards <- list(tbl_continuous = cards)
+  x$inputs <- tbl_continuous_inputs
+  x$call_list <- list(tbl_continuous = call)
+
+  x |>
+    structure(class = c("tbl_continuous", "gtsummary"))
+}
+
+
+.add_gts_column_to_cards_continuous <- function(cards, variables, by) {
+  # adding the name of the column the stats will populate
+  if (is_empty(by)) {
+    cards$gts_column <-
+      ifelse(
+        !cards$context %in% "attributes",
+        "stat_0",
+        NA_character_
+      )
+  } else {
+    # styler: off
+    cards <-
+      cards %>%
+      {dplyr::left_join(
+        .,
+        dplyr::filter(
+          .,
+          .data$group2 %in% .env$variables,
+          !cards$context %in% "attributes",
+        ) |>
+          dplyr::select(cards::all_ard_groups(), "variable", "context") |>
+          dplyr::distinct() |>
+          dplyr::mutate(
+            .by = c("group1", "group1_level"),
+            gts_column = paste0("stat_", dplyr::cur_group_id())
+          ),
+        by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
+      )}
+    #styler: on
+  }
+
+  cards
 }

@@ -1,0 +1,208 @@
+# Standalone file: do not edit by hand
+# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-check_pkg_installed.R>
+# ----------------------------------------------------------------------
+#
+# ---
+# repo: ddsjoberg/standalone
+# file: standalone-check_pkg_installed.R
+# last-updated: 2024-04-19
+# license: https://unlicense.org
+# dependencies: standalone-cli_call_env.R
+# imports: [rlang, dplyr, tidyr]
+# ---
+#
+# This file provides functions to check package installation.
+#
+# ## Changelog
+# nocov start
+# styler: off
+
+#' Check Package Installation
+#'
+#' @description
+#' - `check_pkg_installed()`: checks whether a package is installed and
+#'   returns an error if not available, or interactively asks user to install
+#'   missing dependency. If a package search is provided,
+#'   the function will check whether a minimum version of a package is required and installed.
+#'
+#' - `is_pkg_installed()`: checks whether a package is installed and
+#'   returns `TRUE` or `FALSE` depending on availability. If a package search is provided,
+#'   the function will check whether a minimum version of a package is required and installed.
+#'
+#' - `get_pkg_dependencies()` returns a tibble with all
+#'   dependencies of a specific package.
+#'
+#' - `get_min_version_required()` will return, if any, the minimum version
+#'   of `pkg` required by `reference_pkg`.
+#'
+#' @param pkg (`character`)\cr
+#'   vector of package names to check.
+#' @param call (`environment`)\cr
+#'   frame for error messaging. Default is [get_cli_abort_call()].
+#' @param reference_pkg (`string`)\cr
+#'   name of the package the function will search for a minimum required version from.
+#' @param lib.loc (`path`)\cr
+#'   location of `R` library trees to search through, see [utils::packageDescription()].
+#'
+#' @return `is_pkg_installed()` and `check_pkg_installed()` returns a logical or error,
+#' `get_min_version_required()` returns a data frame with the minimum version required,
+#' `get_pkg_dependencies()` returns a tibble.
+#'
+#' @examples
+#' check_pkg_installed("dplyr")
+#'
+#' is_pkg_installed("dplyr")
+#'
+#' get_pkg_dependencies()
+#'
+#' get_min_version_required("dplyr")
+#'
+#' @name check_pkg_installed
+#' @noRd
+NULL
+
+#' @inheritParams check_pkg_installed
+#' @keywords internal
+#' @noRd
+check_pkg_installed <- function(pkg,
+                                reference_pkg = "cards",
+                                call = get_cli_abort_call()) {
+  # check inputs ---------------------------------------------------------------
+  check_not_missing(pkg)
+  check_class(pkg, cls = "character")
+  check_string(reference_pkg, allow_empty = TRUE)
+
+  # get min version data -------------------------------------------------------
+  df_pkg_min_version <-
+    get_min_version_required(pkg = pkg, reference_pkg = reference_pkg, call = call)
+
+  # prompt user to install package ---------------------------------------------
+  rlang::check_installed(
+    pkg = df_pkg_min_version$pkg,
+    version = df_pkg_min_version$version,
+    compare = df_pkg_min_version$compare,
+    call = call
+  ) |>
+    # this can be removed after this issue is resolved https://github.com/r-lib/rlang/issues/1694
+    suppressWarnings()
+}
+
+#' @inheritParams check_pkg_installed
+#' @keywords internal
+#' @noRd
+is_pkg_installed <- function(pkg,
+                             reference_pkg = "cards",
+                             call = get_cli_abort_call()) {
+  # check inputs ---------------------------------------------------------------
+  check_not_missing(pkg)
+  check_class(pkg, cls = "character")
+  check_string(reference_pkg, allow_empty = TRUE)
+
+  # get min version data -------------------------------------------------------
+  df_pkg_min_version <-
+    get_min_version_required(pkg = pkg, reference_pkg = reference_pkg, call = call)
+
+  # check installation TRUE/FALSE ----------------------------------------------
+  rlang::is_installed(
+    pkg = df_pkg_min_version$pkg,
+    version = df_pkg_min_version$version,
+    compare = df_pkg_min_version$compare
+  ) |>
+    # this can be removed after this issue is resolved https://github.com/r-lib/rlang/issues/1694
+    suppressWarnings()
+}
+
+#' @inheritParams check_pkg_installed
+#' @keywords internal
+#' @noRd
+get_pkg_dependencies <- function(reference_pkg = "cards", lib.loc = NULL, call = get_cli_abort_call()) {
+  check_string(reference_pkg, allow_empty = TRUE, call = call)
+
+  if (rlang::is_empty(reference_pkg)) {
+    return(.empty_pkg_deps_df())
+  }
+
+  description <- utils::packageDescription(reference_pkg, lib.loc = lib.loc) |> suppressWarnings()
+  if (identical(description, NA)) {
+    return(.empty_pkg_deps_df())
+  }
+  description |>
+    unclass() |>
+    dplyr::as_tibble() |>
+    dplyr::select(
+      dplyr::any_of(c(
+        "Package", "Version", "Imports", "Depends",
+        "Suggests", "Enhances", "LinkingTo"
+      ))
+    ) |>
+    dplyr::rename(
+      reference_pkg = "Package",
+      reference_pkg_version = "Version"
+    ) |>
+    tidyr::pivot_longer(
+      -dplyr::all_of(c("reference_pkg", "reference_pkg_version")),
+      values_to = "pkg",
+      names_to = "dependency_type",
+    ) |>
+    tidyr::separate_rows("pkg", sep = ",") |>
+    dplyr::mutate(
+      pkg = trimws(
+        x = gsub(x = .data$pkg, pattern = "\\s+", replacement = " "),
+        which = "both", whitespace = "[ \t\r\n]"
+      )
+    ) |>
+    dplyr::filter(!is.na(.data$pkg)) |>
+    tidyr::separate(
+      .data$pkg,
+      into = c("pkg", "version"),
+      sep = " ", extra = "merge", fill = "right"
+    ) |>
+    dplyr::mutate(
+      compare = .data$version |> str_extract(pattern = "[>=<]+"),
+      version = .data$version |> str_remove_all(pattern = "[\\(\\) >=<]")
+    )
+}
+
+.empty_pkg_deps_df <- function() {
+  dplyr::tibble(
+    reference_pkg = character(0L), reference_pkg_version = character(0L),
+    dependency_type = character(0L), pkg = character(0L),
+    version = character(0L), compare = character(0L)
+  )
+}
+
+#' @inheritParams check_pkg_installed
+#' @keywords internal
+#' @noRd
+get_min_version_required <- function(pkg, reference_pkg = "cards",
+                                     lib.loc = NULL, call = get_cli_abort_call()) {
+  check_not_missing(pkg, call = call)
+  check_class(pkg, cls = "character", call = call)
+  check_string(reference_pkg, allow_empty = TRUE, call = call)
+
+  # if no package reference, return a df with just the pkg names
+  if (rlang::is_empty(reference_pkg)) {
+    return(
+      .empty_pkg_deps_df() |>
+        dplyr::full_join(
+          dplyr::tibble(pkg = pkg),
+          by = "pkg"
+        )
+    )
+  }
+
+  # get the package_ref deps and subset on requested pkgs, also supplement df with pkgs
+  # that may not be proper deps of the reference package (these pkgs don't have min versions)
+  res <-
+    get_pkg_dependencies(reference_pkg, lib.loc = lib.loc) |>
+    dplyr::filter(.data$pkg %in% .env$pkg) |>
+    dplyr::full_join(
+      dplyr::tibble(pkg = pkg),
+      by = "pkg"
+    )
+
+  res
+}
+
+# nocov end
+# styler: on

@@ -7,13 +7,15 @@
 modify_column_merge(x, pattern, rows = NULL)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
 \item{pattern}{glue syntax string indicating how to merge columns in
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
-\item{rows}{predicate expression to select rows in \code{x$table_body}.
+\item{rows}{(predicate \code{expression})\cr
+Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
 }
@@ -21,7 +23,6 @@ and text formatting. Default is \code{NULL}. See details below.}
 gtsummary table
 }
 \description{
-\lifecycle{experimental}
 Merge two or more columns in a gtsummary table.
 Use \code{show_header_names()} to print underlying column names.
 }
@@ -36,14 +37,15 @@ major modifications to the table, such as those with \code{tbl_merge()} and
 \code{tbl_stack()}, before assigning merging instructions. Otherwise,
 unexpected formatting may occur in the final table.
 \item If this functionality is used in conjunction with \code{tbl_stack()} (which
-includes \code{tbl_uvregression()}), there is potential issue with printing.
+includes \code{tbl_uvregression()}), there may be potential issues with printing.
 When columns are stack AND when the column-merging is
 defined with a quosure, you may run into issues due to the loss of the
 environment when 2 or more quosures are combined. If the expression
 version of the quosure is the same as the quosure (i.e. no evaluated
-objects), there should be no issues. Regardless, this argument is used
-internally with care, and \strong{it is \emph{not} recommended for users}.
+objects), there should be no issues.
 }
+
+This function is used internally with care, and \strong{it is \emph{not} recommended for users}.
 }
 
 \section{Future Updates}{
@@ -56,63 +58,30 @@ Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
 implementation will be updated to use it, which will keep
 numeric columns numeric. For the \emph{vast majority} of users,
 \emph{the planned change will be go unnoticed}.
-
-If this functionality is used in conjunction with \code{tbl_stack()} (which
-includes \code{tbl_uvregression()}), there is potential issue with printing.
-When columns are stack AND when the column-merging is
-defined with a quosure, you may run into issues due to the loss of the
-environment when 2 or more quosures are combined. If the expression
-version of the quosure is the same as the quosure (i.e. no evaluated
-objects), there should be no issues. Regardless, this argument is used
-internally with care, and it is \emph{not} recommended for users.
-}
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex1.png" alt="image of rendered example table" style="width:65\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex2.png" alt="image of rendered example table" style="width:41\%;">
-}}
 }
 
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-modify_column_merge_ex1 <-
-  trial \%>\%
-  select(age, marker, trt) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
-  add_p(all_continuous() ~ "t.test",
-    pvalue_fun = ~ style_pvalue(., prepend_p = TRUE)
-  ) \%>\%
-  modify_fmt_fun(statistic ~ style_sigfig) \%>\%
-  modify_column_merge(pattern = "t = {statistic}; {p.value}") \%>\%
-  modify_header(statistic ~ "**t-test**")
+trial |>
+  tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
+  add_p(all_continuous() ~ "t.test", pvalue_fun = label_style_pvalue(prepend_p = TRUE)) |>
+  modify_fmt_fun(statistic ~ label_style_sigfig()) |>
+  modify_column_merge(pattern = "t = {statistic}; {p.value}") |>
+  modify_header(statistic = "**t-test**")
 
 # Example 2 ----------------------------------
-modify_column_merge_ex2 <-
-  lm(marker ~ age + grade, trial) \%>\%
-  tbl_regression() \%>\%
+lm(marker ~ age + grade, trial) |>
+  tbl_regression() |>
   modify_column_merge(
-    pattern = "{estimate} ({ci})",
+    pattern = "{estimate} ({conf.low}, {conf.high})",
     rows = !is.na(estimate)
   )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other Advanced modifiers: 
-\code{\link{modify_column_alignment}()},
-\code{\link{modify_column_hide}()},
 \code{\link{modify_column_indent}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
 }
 \concept{Advanced modifiers}

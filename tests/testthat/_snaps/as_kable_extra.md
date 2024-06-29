@@ -1,696 +1,123 @@
-# tbl_summary
+# as_kable_extra(format) works as expected
 
     Code
-      tbl
+      kbl_html
     Output
+      [[1]]
+       [1] "<table style=\"NAborder-bottom: 0;\">\n <thead>\n "                                                                                                
+       [2] "<th style=\"text-align:left;\"> Characteristic </th>\n   <th style=\"text-align:center;\"> N = 200 </th>\n "                                       
+       [3] "</thead>\n<tbody>\n "                                                                                                                              
+       [4] "<td style=\"text-align:left;\"> Chemotherapy Treatment </td>\n   <td style=\"text-align:center;\">  </td>\n "                                      
+       [5] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> Drug A </td>\n   <td style=\"text-align:center;\"> 98 (49%) </td>\n " 
+       [6] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> Drug B </td>\n   <td style=\"text-align:center;\"> 102 (51%) </td>\n "
+       [7] "<tr>\n   <td style=\"text-align:left;\"> Age </td>\n   <td style=\"text-align:center;\"> 47 (38, 57) </td>\n "                                     
+       [8] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> Unknown </td>\n   <td style=\"text-align:center;\"> 11 </td>\n "      
+       [9] "<tr>\n   <td style=\"text-align:left;\"> Patient Died </td>\n   <td style=\"text-align:center;\"> 112 (56%) </td>\n "                              
+      [10] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> n (%); Median (Q1, Q3)</td></tr></tfoot>\n</table>"                
       
-      \begin{tabular}{l|c}
-      \hline
-      \textbf{Characteristic} & \textbf{N = 200}\\
-      \hline
-      Chemotherapy Treatment & \\
-      \hline
-      \hspace{1em}Drug A & 98 (49\%)\\
-      \hline
-      \hspace{1em}Drug B & 102 (51\%)\\
-      \hline
-      Age & 47 (38, 57)\\
-      \hline
-      \hspace{1em}Unknown & 11\\
-      \hline
-      Marker Level (ng/mL) & 0.64 (0.22, 1.39)\\
-      \hline
-      \hspace{1em}Unknown & 10\\
-      \hline
-      T Stage & \\
-      \hline
-      \hspace{1em}T1 & 53 (27\%)\\
-      \hline
-      \hspace{1em}T2 & 54 (27\%)\\
-      \hline
-      \hspace{1em}T3 & 43 (22\%)\\
-      \hline
-      \hspace{1em}T4 & 50 (25\%)\\
-      \hline
-      Grade & \\
-      \hline
-      \hspace{1em}I & 68 (34\%)\\
-      \hline
-      \hspace{1em}II & 68 (34\%)\\
-      \hline
-      \hspace{1em}III & 64 (32\%)\\
-      \hline
-      Tumor Response & 61 (32\%)\\
-      \hline
-      \hspace{1em}Unknown & 7\\
-      \hline
-      Patient Died & 112 (56\%)\\
-      \hline
-      Months to Death/Censor & 22.4 (16.0, 24.0)\\
-      \hline
-      \multicolumn{2}{l}{\rule{0pt}{1em}\textsuperscript{1} n (\%); Median (IQR)}\\
-      \end{tabular}
 
 ---
 
     Code
-      tbl
+      kbl_latex
     Output
+      [[1]]
+       [1] ""                                                                                      
+       [2] "\\begin{tabular}{l|c}"                                                                 
+       [3] "\\hline"                                                                               
+       [4] "\\textbf{Characteristic} & \\textbf{N = 200}\\\\"                                      
+       [5] "\\hline"                                                                               
+       [6] "Chemotherapy Treatment & \\\\"                                                         
+       [7] "\\hline"                                                                               
+       [8] "\\hspace{1em}Drug A & 98 (49\\%)\\\\"                                                  
+       [9] "\\hline"                                                                               
+      [10] "\\hspace{1em}Drug B & 102 (51\\%)\\\\"                                                 
+      [11] "\\hline"                                                                               
+      [12] "Age & 47 (38, 57)\\\\"                                                                 
+      [13] "\\hline"                                                                               
+      [14] "\\hspace{1em}Unknown & 11\\\\"                                                         
+      [15] "\\hline"                                                                               
+      [16] "Patient Died & 112 (56\\%)\\\\"                                                        
+      [17] "\\hline"                                                                               
+      [18] "\\multicolumn{2}{l}{\\rule{0pt}{1em}\\textsuperscript{1} n (\\%); Median (Q1, Q3)}\\\\"
+      [19] "\\end{tabular}"                                                                        
       
-      \begin{tabular}{l|c}
-      \hline
-      \textbf{Characteristic} & \textbf{N = 200}\\
-      \hline
-      Chemotherapy Treatment & \\
-      \hline
-      \hspace{1em}Drug A & 98 (49\%)\\
-      \hline
-      \hspace{1em}Drug B & 102 (51\%)\\
-      \hline
-      Age & 47 (38, 57)\\
-      \hline
-      \hspace{1em}Unknown & 11\\
-      \hline
-      \multicolumn{2}{l}{\rule{0pt}{1em}\textsuperscript{1} n (\%); Median (IQR)}\\
-      \multicolumn{2}{l}{\rule{0pt}{1em}\textsuperscript{2} test footnote}\\
-      \end{tabular}
-
-# tbl_cross
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c|c|c|c}
-      \hline
-      \multicolumn{1}{c|}{ } & \multicolumn{3}{c|}{Grade} & \multicolumn{1}{c}{ } \\
-      \cline{2-4}
-       & I & II & III & Total\\
-      \hline
-      Chemotherapy Treatment &  &  &  & \\
-      \hline
-      \hspace{1em}Drug A & 35 & 32 & 31 & 98\\
-      \hline
-      \hspace{1em}Drug B & 33 & 36 & 33 & 102\\
-      \hline
-      Total & 68 & 68 & 64 & 200\\
-      \hline
-      \end{tabular}
-
-# tbl_regression
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c|c|c}
-      \hline
-      \textbf{Characteristic} & \textbf{Beta} & \textbf{95\% CI} & \textbf{p-value}\\
-      \hline
-      Age & 0.00 & -0.01, 0.01 & >0.9\\
-      \hline
-      \multicolumn{4}{l}{\rule{0pt}{1em}\textsuperscript{1} CI = Confidence Interval}\\
-      \end{tabular}
-
-# tbl_uvregression
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c|c|c|c}
-      \hline
-      \textbf{Characteristic} & \textbf{N} & \textbf{Beta} & \textbf{95\% CI} & \textbf{p-value}\\
-      \hline
-      Chemotherapy Treatment & 189 &  &  & \\
-      \hline
-      \hspace{1em}Drug A &  & — & — & \\
-      \hline
-      \hspace{1em}Drug B &  & 0.44 & -3.7, 4.6 & 0.8\\
-      \hline
-      Marker Level (ng/mL) & 179 & -0.05 & -2.5, 2.4 & >0.9\\
-      \hline
-      T Stage & 189 &  &  & \\
-      \hline
-      \hspace{1em}T1 &  & — & — & \\
-      \hline
-      \hspace{1em}T2 &  & 1.3 & -4.2, 6.9 & 0.6\\
-      \hline
-      \hspace{1em}T3 &  & 2.6 & -3.3, 8.6 & 0.4\\
-      \hline
-      \hspace{1em}T4 &  & -2.0 & -7.8, 3.8 & 0.5\\
-      \hline
-      Grade & 189 &  &  & \\
-      \hline
-      \hspace{1em}I &  & — & — & \\
-      \hline
-      \hspace{1em}II &  & 1.4 & -3.6, 6.4 & 0.6\\
-      \hline
-      \hspace{1em}III &  & 2.0 & -3.1, 7.0 & 0.4\\
-      \hline
-      Tumor Response & 183 & 3.8 & -0.66, 8.3 & 0.094\\
-      \hline
-      Patient Died & 189 & 2.2 & -2.0, 6.3 & 0.3\\
-      \hline
-      Months to Death/Censor & 189 & -0.14 & -0.54, 0.26 & 0.5\\
-      \hline
-      \multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} CI = Confidence Interval}\\
-      \end{tabular}
-
-# tbl_survfit
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c|c}
-      \hline
-      \textbf{Characteristic} & 12 Months & 24 Months\\
-      \hline
-      Chemotherapy Treatment &  & \\
-      \hline
-      \hspace{1em}Drug A & 91\% (85\%, 97\%) & 47\% (38\%, 58\%)\\
-      \hline
-      \hspace{1em}Drug B & 86\% (80\%, 93\%) & 41\% (33\%, 52\%)\\
-      \hline
-      \end{tabular}
-
-# tbl_merge/tbl_stack
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c|c|c|c|c|c}
-      \hline
-      \multicolumn{1}{c|}{ } & \multicolumn{3}{c|}{\textbf{Tumor Response}} & \multicolumn{3}{c}{\textbf{Time to Death}} \\
-      \cline{2-4} \cline{5-7}
-      \textbf{Characteristic} & \textbf{OR} & \textbf{95\% CI} & \textbf{p-value} & \textbf{HR} & \textbf{95\% CI} & \textbf{p-value}\\
-      \hline
-      Chemotherapy Treatment &  &  &  &  &  & \\
-      \hline
-      \hspace{1em}Drug A & — & — &  & — & — & \\
-      \hline
-      \hspace{1em}Drug B & 1.13 & 0.60, 2.13 & 0.7 & 1.30 & 0.88, 1.92 & 0.2\\
-      \hline
-      Grade &  &  &  &  &  & \\
-      \hline
-      \hspace{1em}I & — & — &  & — & — & \\
-      \hline
-      \hspace{1em}II & 0.85 & 0.39, 1.85 & 0.7 & 1.21 & 0.73, 1.99 & 0.5\\
-      \hline
-      \hspace{1em}III & 1.01 & 0.47, 2.15 & >0.9 & 1.79 & 1.12, 2.86 & 0.014\\
-      \hline
-      Age & 1.02 & 1.00, 1.04 & 0.10 & 1.01 & 0.99, 1.02 & 0.3\\
-      \hline
-      \multicolumn{7}{l}{\rule{0pt}{1em}\textsuperscript{1} OR = Odds Ratio, CI = Confidence Interval, HR = Hazard Ratio}\\
-      \end{tabular}
 
 ---
 
     Code
-      tbl
+      kbl_simple
     Output
       
-      \begin{tabular}{l|l|c|c|c}
-      \hline
-      \textbf{Group} & \textbf{Characteristic} & \textbf{OR} & \textbf{95\% CI} & \textbf{p-value}\\
-      \hline
-      **Tumor Response** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & Drug B & 1.13 & 0.60, 2.13 & 0.7\\
-      \hline
-       & Grade &  &  \vphantom{1} & \\
-      \hline
-      \hspace{1em} & I & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & II & 0.85 & 0.39, 1.85 & 0.7\\
-      \hline
-      \hspace{1em} & III & 1.01 & 0.47, 2.15 & >0.9\\
-      \hline
-       & Age & 1.02 & 1.00, 1.04 & 0.10\\
-      \hline
-      **Time to Death** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — & \\
-      \hline
-      \hspace{1em} & Drug B & 1.30 & 0.88, 1.92 & 0.2\\
-      \hline
-       & Grade &  &  & \\
-      \hline
-      \hspace{1em} & I & — & — & \\
-      \hline
-      \hspace{1em} & II & 1.21 & 0.73, 1.99 & 0.5\\
-      \hline
-      \hspace{1em} & III & 1.79 & 1.12, 2.86 & 0.014\\
-      \hline
-       & Age & 1.01 & 0.99, 1.02 & 0.3\\
-      \hline
-      \multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} OR = Odds Ratio, CI = Confidence Interval}\\
-      \end{tabular}
+      
+      Characteristic              N = 200   
+      -----------------------  -------------
+      Chemotherapy Treatment                
+      Drug A                     98 (49%)   
+      Drug B                     102 (51%)  
+      Age                       47 (38, 57) 
+      Unknown                       11      
+      Patient Died               112 (56%)  
+
+# as_kable_extra works with tbl_merge
+
+    Code
+      kbl_merge
+    Output
+       [1] "<table style=\"NAborder-bottom: 0;\">\n <thead>\n<tr>\n<th style=\"empty-cells: hide;border-bottom:hidden;\" colspan=\"1\"></th>\n<th style=\"border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; \" colspan=\"3\"><div style=\"border-bottom: 1px solid #ddd; padding-bottom: 5px; \">Tumor Response</div></th>\n<th style=\"border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; \" colspan=\"3\"><div style=\"border-bottom: 1px solid #ddd; padding-bottom: 5px; \">Time to Death</div></th>\n</tr>\n "
+       [2] "<th style=\"text-align:left;\"> Characteristic </th>\n   <th style=\"text-align:center;\"> OR </th>\n   <th style=\"text-align:center;\"> 95% CI </th>\n   <th style=\"text-align:center;\"> p-value </th>\n   <th style=\"text-align:center;\"> HR </th>\n   <th style=\"text-align:center;\"> 95% CI </th>\n   <th style=\"text-align:center;\"> p-value </th>\n "                                                                                                                                                                                                                          
+       [3] "</thead>\n<tbody>\n "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+       [4] "<td style=\"text-align:left;\"> Chemotherapy Treatment </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n "                                                                                                                                                                                                                                                
+       [5] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> Drug A </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\">  </td>\n "                                                                                                                                                                                                               
+       [6] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> Drug B </td>\n   <td style=\"text-align:center;\"> 1.13 </td>\n   <td style=\"text-align:center;\"> 0.60, 2.13 </td>\n   <td style=\"text-align:center;\"> 0.7 </td>\n   <td style=\"text-align:center;\"> 1.30 </td>\n   <td style=\"text-align:center;\"> 0.88, 1.92 </td>\n   <td style=\"text-align:center;\"> 0.2 </td>\n "                                                                                                                                                                                 
+       [7] "<tr>\n   <td style=\"text-align:left;\"> Grade </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\">  </td>\n "                                                                                                                                                                                                                                                        
+       [8] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> I </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\">  </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\"> — </td>\n   <td style=\"text-align:center;\">  </td>\n "                                                                                                                                                                                                                    
+       [9] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> II </td>\n   <td style=\"text-align:center;\"> 0.85 </td>\n   <td style=\"text-align:center;\"> 0.39, 1.85 </td>\n   <td style=\"text-align:center;\"> 0.7 </td>\n   <td style=\"text-align:center;\"> 1.21 </td>\n   <td style=\"text-align:center;\"> 0.73, 1.99 </td>\n   <td style=\"text-align:center;\"> 0.5 </td>\n "                                                                                                                                                                                     
+      [10] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> III </td>\n   <td style=\"text-align:center;\"> 1.01 </td>\n   <td style=\"text-align:center;\"> 0.47, 2.15 </td>\n   <td style=\"text-align:center;\"> &gt;0.9 </td>\n   <td style=\"text-align:center;\"> 1.79 </td>\n   <td style=\"text-align:center;\"> 1.12, 2.86 </td>\n   <td style=\"text-align:center;\"> 0.014 </td>\n "                                                                                                                                                                              
+      [11] "<tr>\n   <td style=\"text-align:left;\"> Age </td>\n   <td style=\"text-align:center;\"> 1.02 </td>\n   <td style=\"text-align:center;\"> 1.00, 1.04 </td>\n   <td style=\"text-align:center;\"> 0.10 </td>\n   <td style=\"text-align:center;\"> 1.01 </td>\n   <td style=\"text-align:center;\"> 0.99, 1.02 </td>\n   <td style=\"text-align:center;\"> 0.3 </td>\n "                                                                                                                                                                                                                       
+      [12] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> OR = Odds Ratio, CI = Confidence Interval, HR = Hazard Ratio</td></tr></tfoot>\n</table>"                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+# as_kable_extra works with tbl_stack
+
+    Code
+      kbl_stack
+    Output
+       [1] "<table style=\"NAborder-bottom: 0;\">\n <thead>\n "                                                                                                                                    
+       [2] "<th style=\"text-align:left;\"> Group </th>\n   <th style=\"text-align:left;\"> Characteristic </th>\n   <th style=\"text-align:center;\"> Statistic </th>\n "                         
+       [3] "</thead>\n<tbody>\n "                                                                                                                                                                  
+       [4] "<td style=\"text-align:left;\"> Drug A </td>\n   <td style=\"text-align:left;\"> Age </td>\n   <td style=\"text-align:center;\"> 46 (37, 60) </td>\n "                                 
+       [5] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\">  </td>\n   <td style=\"text-align:left;\"> Unknown </td>\n   <td style=\"text-align:center;\"> 7 </td>\n "
+       [6] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Tumor Response </td>\n   <td style=\"text-align:center;\"> 28 (29%) </td>\n "                      
+       [7] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\">  </td>\n   <td style=\"text-align:left;\"> Unknown </td>\n   <td style=\"text-align:center;\"> 3 </td>\n "
+       [8] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Patient Died </td>\n   <td style=\"text-align:center;\"> 52 (53%) </td>\n "                        
+       [9] "<tr>\n   <td style=\"text-align:left;\"> Drug B </td>\n   <td style=\"text-align:left;\"> Age </td>\n   <td style=\"text-align:center;\"> 48 (39, 56) </td>\n "                        
+      [10] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\">  </td>\n   <td style=\"text-align:left;\"> Unknown </td>\n   <td style=\"text-align:center;\"> 4 </td>\n "
+      [11] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Tumor Response </td>\n   <td style=\"text-align:center;\"> 33 (34%) </td>\n "                      
+      [12] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\">  </td>\n   <td style=\"text-align:left;\"> Unknown </td>\n   <td style=\"text-align:center;\"> 4 </td>\n "
+      [13] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Patient Died </td>\n   <td style=\"text-align:center;\"> 60 (59%) </td>\n "                        
+      [14] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> Median (Q1, Q3); n (%)</td></tr></tfoot>\n</table>"                                                    
+
+# as_kable_extra passes table footnotes & footnote abbreviations correctly
+
+    "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
 
 ---
 
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|l|c|c|c}
-      \hline
-      \textbf{Group} & \textbf{Characteristic} & \textbf{OR} & \textbf{95\% CI} & \textbf{p-value}\\
-      \hline
-      **Tumor Response** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & Drug B & 1.13 & 0.60, 2.13 & 0.7\\
-      \hline
-       & Grade &  &  \vphantom{1} & \\
-      \hline
-      \hspace{1em} & I & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & II & 0.85 & 0.39, 1.85 & 0.7\\
-      \hline
-      \hspace{1em} & III & 1.01 & 0.47, 2.15 & >0.9\\
-      \hline
-       & Age & 1.02 & 1.00, 1.04 & 0.10\\
-      \hline
-      **Time to Death** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — & \\
-      \hline
-      \hspace{1em} & Drug B & 1.30 & 0.88, 1.92 & 0.2\\
-      \hline
-       & Grade &  &  & \\
-      \hline
-      \hspace{1em} & I & — & — & \\
-      \hline
-      \hspace{1em} & II & 1.21 & 0.73, 1.99 & 0.5\\
-      \hline
-      \hspace{1em} & III & 1.79 & 1.12, 2.86 & 0.014\\
-      \hline
-       & Age & 1.01 & 0.99, 1.02 & 0.3\\
-      \hline
-      \multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} OR = Odds Ratio, CI = Confidence Interval}\\
-      \end{tabular}
+    "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> N = number of observations<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>3<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
 
 ---
 
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{>{}l|l|c|c|c}
-      \hline
-      Group & Characteristic & OR & 95\% CI & p-value\\
-      \hline
-      \textbf{**Tumor Response**} & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & Drug B & 1.13 & 0.60, 2.13 & 0.7\\
-      \hline
-      \textbf{} & Grade &  &  \vphantom{1} & \\
-      \hline
-      \hspace{1em} & I & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & II & 0.85 & 0.39, 1.85 & 0.7\\
-      \hline
-      \hspace{1em} & III & 1.01 & 0.47, 2.15 & >0.9\\
-      \hline
-      \textbf{} & Age & 1.02 & 1.00, 1.04 & 0.10\\
-      \hline
-      \textbf{**Time to Death**} & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — & \\
-      \hline
-      \hspace{1em} & Drug B & 1.30 & 0.88, 1.92 & 0.2\\
-      \hline
-      \textbf{} & Grade &  &  & \\
-      \hline
-      \hspace{1em} & I & — & — & \\
-      \hline
-      \hspace{1em} & II & 1.21 & 0.73, 1.99 & 0.5\\
-      \hline
-      \hspace{1em} & III & 1.79 & 1.12, 2.86 & 0.014\\
-      \hline
-      \textbf{} & Age & 1.01 & 0.99, 1.02 & 0.3\\
-      \hline
-      \multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} OR = Odds Ratio, CI = Confidence Interval}\\
-      \end{tabular}
+    "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> another new footnote<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> replace old footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
+
+# as_kable_extra passes appended glance statistics correctly
+
+    "<tr>\n   <td style=\"text-align:left;\"> R² <\/td>\n   <td style=\"text-align:center;\"> 0.000 <\/td>\n   <td style=\"text-align:center;\">  <\/td>\n   <td style=\"text-align:center;\">  <\/td>\n "
 
 ---
 
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|l|c|c|c}
-      \hline
-      Group & Characteristic & OR & 95\% CI & p-value\\
-      \hline
-      **Tumor Response** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & Drug B & 1.13 & 0.60, 2.13 & 0.7\\
-      \hline
-       & Grade &  &  \vphantom{1} & \\
-      \hline
-      \hspace{1em} & I & — & — \vphantom{1} & \\
-      \hline
-      \hspace{1em} & II & 0.85 & 0.39, 1.85 & 0.7\\
-      \hline
-      \hspace{1em} & III & 1.01 & 0.47, 2.15 & >0.9\\
-      \hline
-       & Age & 1.02 & 1.00, 1.04 & 0.10\\
-      \hline
-      **Time to Death** & Chemotherapy Treatment &  &  & \\
-      \hline
-      \hspace{1em} & Drug A & — & — & \\
-      \hline
-      \hspace{1em} & Drug B & 1.30 & 0.88, 1.92 & 0.2\\
-      \hline
-       & Grade &  &  & \\
-      \hline
-      \hspace{1em} & I & — & — & \\
-      \hline
-      \hspace{1em} & II & 1.21 & 0.73, 1.99 & 0.5\\
-      \hline
-      \hspace{1em} & III & 1.79 & 1.12, 2.86 & 0.014\\
-      \hline
-       & Age & 1.01 & 0.99, 1.02 & 0.3\\
-      \hline
-      \multicolumn{5}{l}{\rule{0pt}{1em}\textsuperscript{1} OR = Odds Ratio, CI = Confidence Interval}\\
-      \end{tabular}
+    "<tr>\n   <td style=\"text-align:left;\"> BIC <\/td>\n   <td style=\"text-align:center;\"> 471 <\/td>\n   <td style=\"text-align:center;\">  <\/td>\n   <td style=\"text-align:center;\">  <\/td>\n "
 
----
+# as_kable_extra passes captions correctly
 
-    Code
-      tbl
-    Output
-      <table style="NAborder-bottom: 0;">
-       <thead>
-        <tr>
-         <th style="text-align:left;"> Group </th>
-         <th style="text-align:left;"> Characteristic </th>
-         <th style="text-align:center;"> OR </th>
-         <th style="text-align:center;"> 95% CI </th>
-         <th style="text-align:center;"> p-value </th>
-        </tr>
-       </thead>
-      <tbody>
-        <tr>
-         <td style="text-align:left;"> **Tumor Response** </td>
-         <td style="text-align:left;"> Chemotherapy Treatment </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug A </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug B </td>
-         <td style="text-align:center;"> 1.13 </td>
-         <td style="text-align:center;"> 0.60, 2.13 </td>
-         <td style="text-align:center;"> 0.7 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;">  </td>
-         <td style="text-align:left;"> Grade </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> I </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> II </td>
-         <td style="text-align:center;"> 0.85 </td>
-         <td style="text-align:center;"> 0.39, 1.85 </td>
-         <td style="text-align:center;"> 0.7 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> III </td>
-         <td style="text-align:center;"> 1.01 </td>
-         <td style="text-align:center;"> 0.47, 2.15 </td>
-         <td style="text-align:center;"> &gt;0.9 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;">  </td>
-         <td style="text-align:left;"> Age </td>
-         <td style="text-align:center;"> 1.02 </td>
-         <td style="text-align:center;"> 1.00, 1.04 </td>
-         <td style="text-align:center;"> 0.10 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;"> **Time to Death** </td>
-         <td style="text-align:left;"> Chemotherapy Treatment </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug A </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug B </td>
-         <td style="text-align:center;"> 1.30 </td>
-         <td style="text-align:center;"> 0.88, 1.92 </td>
-         <td style="text-align:center;"> 0.2 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;">  </td>
-         <td style="text-align:left;"> Grade </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> I </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> II </td>
-         <td style="text-align:center;"> 1.21 </td>
-         <td style="text-align:center;"> 0.73, 1.99 </td>
-         <td style="text-align:center;"> 0.5 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> III </td>
-         <td style="text-align:center;"> 1.79 </td>
-         <td style="text-align:center;"> 1.12, 2.86 </td>
-         <td style="text-align:center;"> 0.014 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;">  </td>
-         <td style="text-align:left;"> Age </td>
-         <td style="text-align:center;"> 1.01 </td>
-         <td style="text-align:center;"> 0.99, 1.02 </td>
-         <td style="text-align:center;"> 0.3 </td>
-        </tr>
-      </tbody>
-      <tfoot><tr><td style="padding: 0; " colspan="100%">
-      <sup>1</sup> OR = Odds Ratio, CI = Confidence Interval</td></tr></tfoot>
-      </table>
-
----
-
-    Code
-      tbl
-    Output
-      <table style="NAborder-bottom: 0;">
-       <thead>
-        <tr>
-         <th style="text-align:left;"> Group </th>
-         <th style="text-align:left;"> Characteristic </th>
-         <th style="text-align:center;"> OR </th>
-         <th style="text-align:center;"> 95% CI </th>
-         <th style="text-align:center;"> p-value </th>
-        </tr>
-       </thead>
-      <tbody>
-        <tr>
-         <td style="text-align:left;font-weight: bold;"> **Tumor Response** </td>
-         <td style="text-align:left;"> Chemotherapy Treatment </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug A </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug B </td>
-         <td style="text-align:center;"> 1.13 </td>
-         <td style="text-align:center;"> 0.60, 2.13 </td>
-         <td style="text-align:center;"> 0.7 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;font-weight: bold;">  </td>
-         <td style="text-align:left;"> Grade </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> I </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> II </td>
-         <td style="text-align:center;"> 0.85 </td>
-         <td style="text-align:center;"> 0.39, 1.85 </td>
-         <td style="text-align:center;"> 0.7 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> III </td>
-         <td style="text-align:center;"> 1.01 </td>
-         <td style="text-align:center;"> 0.47, 2.15 </td>
-         <td style="text-align:center;"> &gt;0.9 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;font-weight: bold;">  </td>
-         <td style="text-align:left;"> Age </td>
-         <td style="text-align:center;"> 1.02 </td>
-         <td style="text-align:center;"> 1.00, 1.04 </td>
-         <td style="text-align:center;"> 0.10 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;font-weight: bold;"> **Time to Death** </td>
-         <td style="text-align:left;"> Chemotherapy Treatment </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug A </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> Drug B </td>
-         <td style="text-align:center;"> 1.30 </td>
-         <td style="text-align:center;"> 0.88, 1.92 </td>
-         <td style="text-align:center;"> 0.2 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;font-weight: bold;">  </td>
-         <td style="text-align:left;"> Grade </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> I </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;"> — </td>
-         <td style="text-align:center;">  </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> II </td>
-         <td style="text-align:center;"> 1.21 </td>
-         <td style="text-align:center;"> 0.73, 1.99 </td>
-         <td style="text-align:center;"> 0.5 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;padding-left: 2em;" indentlevel="1">  </td>
-         <td style="text-align:left;"> III </td>
-         <td style="text-align:center;"> 1.79 </td>
-         <td style="text-align:center;"> 1.12, 2.86 </td>
-         <td style="text-align:center;"> 0.014 </td>
-        </tr>
-        <tr>
-         <td style="text-align:left;font-weight: bold;">  </td>
-         <td style="text-align:left;"> Age </td>
-         <td style="text-align:center;"> 1.01 </td>
-         <td style="text-align:center;"> 0.99, 1.02 </td>
-         <td style="text-align:center;"> 0.3 </td>
-        </tr>
-      </tbody>
-      <tfoot><tr><td style="padding: 0; " colspan="100%">
-      <sup>1</sup> OR = Odds Ratio, CI = Confidence Interval</td></tr></tfoot>
-      </table>
-
-# indent2
-
-    Code
-      tbl
-    Output
-      
-      \begin{tabular}{l|c}
-      \hline
-      \textbf{Characteristic} & \textbf{N = 200}\\
-      \hline
-      Age & 47 (38, 57)\\
-      \hline
-      \hspace{2em}\hspace{1em}Unknown & 11\\
-      \hline
-      \multicolumn{2}{l}{\rule{0pt}{1em}\textsuperscript{1} Median (IQR)}\\
-      \end{tabular}
-
-# latex-column-alignment
-
-    Code
-      tstack
-    Output
-      
-      \begin{tabular}{l|c|c}
-      \hline
-      \textbf{Characteristic} & \makecell[c]{\textbf{Drug A}\\N = 98} & \makecell[c]{\textbf{Drug B}\\N = 102}\\
-      \hline
-      Age & 46 (37, 59) & 48 (39, 56)\\
-      \hline
-      \hspace{1em}Unknown & 7 & 4\\
-      \hline
-      Grade &  & \\
-      \hline
-      \hspace{1em}I & 35 (36\%) & 33 (32\%)\\
-      \hline
-      \hspace{1em}II & 32 (33\%) & 36 (35\%)\\
-      \hline
-      \hspace{1em}III & 31 (32\%) & 33 (32\%)\\
-      \hline
-      \multicolumn{3}{l}{\rule{0pt}{1em}\textsuperscript{1} Median (IQR)}\\
-      \end{tabular}
+    "<table style=\"NAborder-bottom: 0;\">\n<caption>My table caption<\/caption>\n <thead>\n "
 

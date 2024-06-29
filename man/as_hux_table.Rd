@@ -15,8 +15,8 @@ as_hux_table(
 as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
-(e.g. \link{tbl_summary} or \link{tbl_regression})}
+\item{x}{(\code{gtsummary})\cr
+An object of class `"gtsummary"}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -26,15 +26,15 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{DEPRECATED}
+\item{strip_md_bold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{file}{File path for the output.}
 
-\item{bold_header_rows}{logical indicating whether to bold header rows.
-Default is \code{TRUE}}
+\item{bold_header_rows}{(scalar \code{logical})\cr
+logical indicating whether to bold header rows. Default is \code{TRUE}}
 }
 \value{
-A {huxtable} object
+A \{huxtable\} object
 }
 \description{
 Function converts a gtsummary object to a huxtable object.
@@ -50,25 +50,13 @@ The file is saved using \code{huxtable::quick_xlsx()}.
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
-trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
+\dontshow{if (gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+trial |>
+  tbl_summary(by = trt, include = c(age, grade)) |>
+  add_p() |>
   as_hux_table()
-}
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_flex_table}()},
-\code{\link{as_gt}()},
-\code{\link{as_kable_extra}()},
-\code{\link{as_kable}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 David Hugh-Jones, Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

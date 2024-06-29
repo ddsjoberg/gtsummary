@@ -256,7 +256,7 @@ The `"variable"` column is often used in the `inline_text()` family of functions
 
 ```{r}
 tbl_regression_ex %>%
-  purrr::pluck("table_body") %>%
+  getElement("table_body") %>%
   select(variable, row_type, label)
 ```
 

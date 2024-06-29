@@ -1,8 +1,6 @@
-skip_on_cran()
-
-test_that("correct rounding near thresholds", {
+test_that("style_sigfig() works", {
   expect_equal(
-    c(1.0001, 1, 0.9999, 0.90000) %>% style_sigfig(digits = 1),
+    c(1.0001, 1, 0.9999, 0.90000) |> style_sigfig(digits = 1),
     c("1", "1", "1", "0.9")
   )
 
@@ -22,6 +20,6 @@ test_that("correct rounding near thresholds", {
   vec2 <- c(one = 0.99, two = 0.0005)
   expect_equal(
     attributes(vec2),
-    style_sigfig(vec2) %>% attributes()
+    style_sigfig(vec2) |> attributes()
   )
 })

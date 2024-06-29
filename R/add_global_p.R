@@ -1,316 +1,266 @@
 #' Add the global p-values
 #'
-#' This function uses `car::Anova()` to calculate global p-values
+#' This function uses `car::Anova()` (by default) to calculate global p-values
 #' for model covariates.
 #' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
-#' @param x Object with class `'tbl_regression'` or `'tbl_uvregression'`
-#' @param keep Logical argument indicating whether to also retain the individual
-#' p-values in the table output for each level of the categorical variable.
-#' Default is `FALSE`.
-#' @param anova_fun Function that will be used in place of `car::Anova()`
-#' when specified to calculate the global p-values.
-#' - function must return a tibble matching the output of
-#' `car::Anova() %>% broom::tidy()` including a columns called `"term"` and `"p.values"`
-#' - function must accept arguments `anova_fun(x, ...)`, where `x` is a model object
-#' - arguments passed in `...` will be passed to `anova_fun(...)`
-#' - the `add_global_p(type=)` argument is _ignored_ in `anova_fun=`
-#' - a common function used here is `tidy_wald_test()`, a wrapper for `aod::wald.test()`
-#' @param include Variables to calculate global p-value for. Input may be a vector of
-#' quoted or unquoted variable names. Default is `everything()`
-#' @param quiet Logical indicating whether to print messages in console. Default is
-#' `FALSE`
-#' @param type Type argument passed to `car::Anova(type=)`. Default is `"III"`
+#' @param x (`tbl_regression`, `tbl_uvregression`)\cr
+#'   Object with class `'tbl_regression'` or `'tbl_uvregression'`
+#' @param keep (scalar `logical`)\cr
+#'   Logical argument indicating whether to also retain the individual
+#'   p-values in the table output for each level of the categorical variable.
+#'   Default is `FALSE`.
+#' @param anova_fun (`function`)\cr
+#'   Function used to calculate global p-values.
+#'   Default is generic [`global_pvalue_fun()`], which wraps `car::Anova()` for
+#'   most models. The `type` argument is passed to this function. See help file for details.
+#'
+#'   To pass a custom function, it must accept as its first argument is a model.
+#'   Note that anything passed in `...` will be passed to this function.
+#'   The function must return an object of class `'cards'` (see `cardx::ard_car_anova()` as an example),
+#'   or a tibble with columns `'term'` and `'p.value'` (e.g. `\(x, type, ...) car::Anova(x, type, ...) |> broom::tidy()`).
+#' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Variables to calculate global p-value for. Default is `everything()`
+#' @param quiet `r lifecycle::badge("deprecated")`
+#' @param type Type argument passed to `anova_fun`. Default is `"III"`
 #' @param ... Additional arguments to be passed to `car::Anova`,
 #' `aod::wald.test()` or `anova_fun` (if specified)
-#' @author Daniel D. Sjoberg
-#' @export
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
-#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
+#' @author Daniel D. Sjoberg
+#' @name add_global_p
+#'
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
-#' tbl_lm_global_ex1 <-
-#'   lm(marker ~ age + grade, trial) %>%
-#'   tbl_regression() %>%
+#' lm(marker ~ age + grade, trial) |>
+#'   tbl_regression() |>
 #'   add_global_p()
 #'
 #' # Example 2 ----------------------------------
-#' tbl_uv_global_ex2 <-
-#'   trial[c("response", "trt", "age", "grade")] %>%
+#' trial[c("response", "age", "trt", "grade")] |>
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
-#'   ) %>%
+#'   ) |>
 #'   add_global_p()
-#' }
-#' @family tbl_uvregression tools
-#' @family tbl_regression tools
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_lm_global_ex1.png", width = "45")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "tbl_uv_global_ex2.png", width = "50")`
-#' }}
+NULL
 
+#' @rdname add_global_p
+#' @export
 add_global_p <- function(x, ...) {
-  # must have car package installed to use this function
-  assert_package("car", "add_global_p()")
+  check_class(x, "gtsummary")
   UseMethod("add_global_p")
 }
 
-#' @name add_global_p
+#' @rdname add_global_p
 #' @export
 add_global_p.tbl_regression <- function(x,
                                         include = everything(),
-                                        type = NULL,
                                         keep = FALSE,
-                                        anova_fun = NULL,
-                                        quiet = NULL,
+                                        anova_fun = global_pvalue_fun,
+                                        type = "III",
+                                        quiet,
                                         ...) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
 
-  # setting defaults -----------------------------------------------------------
-  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
-  type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
-
-  # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = x$table_body,
-      arg_name = "include"
+  # deprecation ----------------------------------------------------------------
+  if (!missing(quiet)) {
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = "gtsummary::add_global_p(quiet)"
     )
-
-  # if no terms are provided, stop and return x
-  if (length(include) == 0) {
-    if (quiet == FALSE) {
-      inform("No terms were selected, and no global p-values were added to the table.")
-    }
-    return(x)
   }
+  if (inherits(x, "tbl_uvregression") && !is_empty(x$inputs$x)) {
+    cli::cli_abort(
+      "The {.fun add_global_p} does not support {.code tbl_uvregression(x=)} objects.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # process inputs -------------------------------------------------------------
+  check_scalar_logical(keep)
+  check_class(anova_fun, cls = "function")
+  if (missing(type)) {
+    type <- get_theme_element("add_global_p-str:type", default = type)
+  }
+  cards::process_selectors(
+    data = select_prep(x$table_body),
+    include = {{ include }}
+  )
+  if (is_empty(include)) return(x) # styler: off
 
   # calculating global p-values ------------------------------------------------
-  car_Anova <- .run_anova(x = x$model_obj, type = type, anova_fun = anova_fun, ...)
+  global_p_results <- .calculate_anova_fun(x, include, anova_fun, type, ...)
+  x$cards$add_global_p <- global_p_results
 
-  # cleaning up data frame with global p-values before merging -----------------
-  global_p <-
-    car_Anova %>%
-    mutate(
-      variable = broom.helpers::.clean_backticks(.data$term),
-      row_type = "label"
-    ) %>%
-    filter(.data$variable %in% .env$include) %>%
-    select(any_of(c("variable", "row_type", "p.value"))) %>%
-    set_names(c("variable", "row_type", "p.value_global"))
+  # process results ------------------------------------------------------------
+  global_p_results <-
+    .process_global_p_results(
+      global_p_results,
+      include = include,
+      class = intersect(class(x), c("tbl_regression", "tbl_uvregression"))
+    )
 
+  # merging in global p-value --------------------------------------------------
+  x <- .merge_global_p_results(x, global_p_results = global_p_results, keep = keep)
 
-  # merging in global pvalue ---------------------------------------------------
-  # adding p-value column, if it is not already there
-  if (!"p.value" %in% names(x$table_body)) {
-    # adding p.value to table_body
-    x$table_body <- mutate(x$table_body, p.value = NA_real_)
-    x <-
-      modify_table_styling(
-        x,
-        columns = "p.value",
-        label = "**p-value**",
-        hide = FALSE,
-        fmt_fun = x$inputs$pvalue_fun %||% .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue)
-      )
-  }
-  # adding global p-values
-  x$table_body <-
-    x$table_body %>%
-    left_join(
-      global_p,
-      by = c("row_type", "variable")
-    ) %>%
-    mutate(
-      p.value = coalesce(.data$p.value_global, .data$p.value)
-    ) %>%
-    select(-c("p.value_global"))
-
-  # if keep == FALSE, then deleting variable-level p-values
-  if (keep == FALSE) {
-    x$table_body <-
-      x$table_body %>%
-      mutate(
-        p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
-          NA_real_, .data$p.value
-        )
-      )
-  }
-
+  # return results -------------------------------------------------------------
   x$call_list <- updated_call_list
   x
 }
 
-#' @name add_global_p
+#' @rdname add_global_p
 #' @export
-add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything(),
-                                          keep = FALSE, anova_fun = NULL,
-                                          quiet = NULL, ...) {
-  updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
-  # setting defaults -----------------------------------------------------------
-  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
-  type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
+add_global_p.tbl_uvregression <- add_global_p.tbl_regression
 
-  # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = x$table_body,
-      arg_name = "include"
-    )
-
-  # calculating global pvalues
-  global_p <-
-    imap_dfr(
-      x$tbls[include],
-      function(tbl, tbl_name) {
-        # return empty tibble if variable not included
-        if (!tbl_name %in% include) {
-          return(tibble(
-            variable = character(0L),
-            row_type = character(0L),
-            p.value_global = numeric(0L)
-          ))
-        }
-        car_Anova <-
-          .run_anova(
-            x = tbl[["model_obj"]], type = type,
-            anova_fun = anova_fun, variable = tbl_name, ...
-          )
-
-        car_Anova %>%
-          mutate(
-            variable = broom.helpers::.clean_backticks(.data$term),
-            row_type = "label"
-          ) %>%
-          filter(
-            (!is.null(x$inputs$y) & .data$variable %in% .env$tbl_name) |
-              (!is.null(x$inputs$x) & .data$variable %in% x$inputs$x)
-          ) %>%
-          mutate(variable = .env$tbl_name) %>% # required when using `tbl_uvregression(x=)`
-          select(any_of(c("variable", "row_type", "p.value"))) %>%
-          set_names(c("variable", "row_type", "p.value_global"))
-      }
-    ) %>%
-    select(c("variable", "p.value_global"))
-
-  # adding global p-value to meta_data object
-  x$meta_data <-
-    x$meta_data %>%
-    left_join(
-      global_p,
-      by = "variable"
-    )
-
-  # merging in global pvalue ---------------------------------------------------
-  # adding p-value column, if it is not already there
-  if (!"p.value" %in% names(x$table_body)) {
-    # adding p.value to table_body
-    x$table_body <- mutate(x$table_body, p.value = NA_real_)
-    x <-
-      modify_table_styling(
-        x,
-        columns = "p.value",
-        label = "**p-value**",
-        hide = FALSE,
-        fmt_fun = x$inputs$pvalue_fun %||% .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue)
-      )
-  }
-  # adding global p-values
-  x$table_body <-
-    x$table_body %>%
-    left_join(
-      global_p %>% mutate(row_type = "label"),
-      by = c("row_type", "variable")
-    ) %>%
-    mutate(
-      p.value = coalesce(.data$p.value_global, .data$p.value)
-    ) %>%
-    select(-c("p.value_global"))
-
-  # if keep == FALSE, then deleting variable-level p-values
-  if (keep == FALSE) {
-    x$table_body <-
-      x$table_body %>%
-      mutate(
-        p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
-          NA_real_, .data$p.value
+.calculate_anova_fun <- function(x, include, anova_fun, type, ...) {
+  if (inherits(x, "tbl_regression")) {
+    global_p_results <-
+      cards::eval_capture_conditions(
+        case_switch(
+          identical(anova_fun, global_pvalue_fun) ~ do.call(anova_fun, list(x$inputs$x, type = type, ...)),
+          .default = do.call(anova_fun, list(x$inputs$x, ...))
         )
       )
-  }
-
-  x$call_list <- updated_call_list
-  x
-}
-
-tidy_car_anova <- function(x, type, tbl, ...) {
-  car::Anova(mod = x, type = type, ...) %>%
-    {
-      suppressWarnings(broom::tidy(.))
+    if (!is_empty(global_p_results[["error"]])) {
+      cli::cli_abort(
+        c("There was an error running {.code anova_fun}. See message below.",
+          "x" = global_p_results[["error"]]),
+        call = get_cli_abort_call()
+      )
     }
-}
 
-# this function runs anova_fun if specified.
-# if anova_fun is NULL, then we use car::Anova,
-.run_anova <- function(x, type, anova_fun, variable = NULL, ...) {
-  dots <- rlang::dots_list(...)
-
-  # running custom function passed by user
-  if (!is.null(anova_fun)) {
-    result <-
-      tryCatch(
-        do.call(anova_fun, args = c(list(x = x), dots)),
-        error = function(e) {
-          ifelse(
-            !is.null(variable),
-            "There was an error running {.code anova_fun()} for {.val {variable}}",
-            "There was an error running {.code anova_fun()}"
-          ) %>%
-            cli::cli_alert_danger()
-          stop(e)
-        }
-      )
-    return(result)
+    return(global_p_results[["result"]])
   }
 
-  # running car::Anova()
-  tryCatch(
-    tidy_car_anova(x = x, type = type, ...),
+  # calculate results for `tbl_uvregression` tables
+  imap(
+    x$tbls[include],
+    function(tbl, variable) {
+      global_p_results <-
+        cards::eval_capture_conditions(
+          case_switch(
+            identical(anova_fun, global_pvalue_fun) ~ do.call(anova_fun, list(tbl$inputs$x, type = type, ...)),
+            .default = do.call(anova_fun, list(tbl$inputs$x, ...))
+          )
+        )
 
-    # trying `add_global_p(anova_fun = gtsummary::tidy_wald_test)` if `car::Anova()` fails
-    error = function(e) {
-      ifelse(
-        !is.null(variable),
-        "There was an error running {.code car::Anova()} for {.val {variable}}, ",
-        "There was an error running {.code car::Anova()}, "
-      ) %>%
-        paste0(
-          "likely due to this model type not being supported. ",
-          "The results displayed are based on {.code add_global_p(anova_fun = gtsummary::tidy_wald_test)}"
-        ) %>%
-        cli::cli_alert_danger()
+      if (!is_empty(global_p_results[["error"]])) {
+        cli::cli_abort(
+          c("There was an error running {.code anova_fun} for variable {.val {variable}}. See message below.",
+            "x" = global_p_results[["error"]]),
+          call = get_cli_abort_call()
+        )
+      }
 
-      tryCatch(
-        do.call(tidy_wald_test, args = c(list(x = x), dots)),
-        error = function(e) {
-          paste0("{.code add_global_p(anova_fun = gtsummary::tidy_wald_test)} failed...") %>%
-            cli::cli_alert_danger()
-          stop(e, call. = FALSE)
-        }
-      )
+      global_p_results[["result"]]
     }
   )
 }
+
+
+.merge_global_p_results <- function(x, global_p_results, keep) {
+  # adding p-value column, if it is not already there
+  if (!"p.value" %in% names(x$table_body)) {
+    x <- x |>
+      modify_table_body(~dplyr::mutate(.x, p.value = NA_real_)) |>
+      modify_table_styling(
+        columns = "p.value",
+        label = "**p-value**",
+        hide = FALSE,
+        fmt_fun = x$inputs$pvalue_fun
+      )
+  }
+
+  # adding global p-values
+  x <- x |>
+    modify_table_body(
+      ~ dplyr::left_join(
+        .x,
+        global_p_results,
+        by = c("row_type", "variable")
+      ) |>
+        dplyr::mutate(
+          p.value = dplyr::coalesce(.data$p.value_global, .data$p.value)
+        ) |>
+        dplyr::select(-c("p.value_global"))
+    )
+
+  # if keep == FALSE, then deleting variable-level p-values
+  if (isFALSE(keep)) {
+    x$table_body <-
+      x$table_body %>%
+      dplyr::mutate(
+        p.value = ifelse(.data$row_type == "level", NA_real_, .data$p.value)
+      )
+  }
+  x
+}
+
+.process_global_p_results <- function(x, include, class) {
+  if (class == "tbl_regression") {
+    if (inherits(x, "card")) {
+      x <- x |>
+        dplyr::filter(.data$stat_name %in% "p.value") |>
+        tidyr::pivot_wider(
+          id_cols = "variable",
+          names_from = "stat_name",
+          values_from = "stat",
+          values_fn = unlist
+        )
+    }
+    else if (is.data.frame(x) && all(c("term", "p.value") %in% names(x))) {
+      x <- x |>
+        dplyr::select(variable = "term", "p.value")
+    } else {
+      cli::cli_abort(
+        c("The returned result from {.code anova_fun} is not the expected structure.",
+          i = "See {.help add_global_p} for details.")
+      )
+    }
+    # final processing
+    return(
+      x  |>
+        dplyr::filter(.data$variable %in% .env$include) |>
+        dplyr::mutate(row_type = "label") |>
+        dplyr::rename(p.value_global = "p.value")
+    )
+  }
+
+
+  # now do the same for tbl_uvregression models
+  imap(
+    x,
+    function(x, variable) {
+      if (inherits(x, "card")) {
+        x <- x |>
+          dplyr::filter(.data$stat_name %in% "p.value") |>
+          tidyr::pivot_wider(
+            id_cols = "variable",
+            names_from = "stat_name",
+            values_from = "stat",
+            values_fn = unlist
+          )
+      }
+      else if (is.data.frame(x) && all(c("term", "p.value") %in% names(x))) {
+        x <- x |>
+          dplyr::select(variable = "term", "p.value")
+      } else {
+        cli::cli_abort(
+          c("The returned result from {.code anova_fun} is not the expected structure.",
+            i = "See {.help add_global_p} for details.")
+        )
+      }
+
+      # final processing
+      x  |>
+        dplyr::filter(.data$variable %in% .env$variable) |>
+        dplyr::mutate(row_type = "label") |>
+        dplyr::rename(p.value_global = "p.value")
+    }
+  ) |>
+    dplyr::bind_rows()
+}
+

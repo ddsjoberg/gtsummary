@@ -6,7 +6,8 @@
 \usage{
 add_significance_stars(
   x,
-  pattern = NULL,
+  pattern = ifelse(inherits(x, c("tbl_regression", "tbl_uvregression")),
+    "{estimate}{stars}", "{p.value}{stars}"),
   thresholds = c(0.001, 0.01, 0.05),
   hide_ci = TRUE,
   hide_p = inherits(x, c("tbl_regression", "tbl_uvregression")),
@@ -14,119 +15,77 @@ add_significance_stars(
 )
 }
 \arguments{
-\item{x}{a \code{'gtsummary'} object with a \code{'p.value'} column}
+\item{x}{(\code{gtsummary})\cr
+A \code{'gtsummary'} object with a \code{'p.value'} column}
 
-\item{pattern}{glue-syntax string indicating what to display in formatted column.
+\item{pattern}{(\code{string})\cr
+glue-syntax string indicating what to display in formatted column.
 Default is \code{"{estimate}{stars}"} for regression summaries and \code{"{p.value}{stars}"} otherwise.
 A footnote is placed on the first column listed in the pattern.
 Other common patterns are
 \code{"{estimate}{stars} ({conf.low}, {conf.high})"} and
 \code{"{estimate} ({conf.low} to {conf.high}){stars}"}}
 
-\item{thresholds}{thresholds for significance stars. Default is \code{c(0.001, 0.01, 0.05)}}
+\item{thresholds}{(\code{numeric})\cr
+Thresholds for significance stars. Default is \code{c(0.001, 0.01, 0.05)}}
 
-\item{hide_ci}{logical whether to hide confidence interval. Default is \code{TRUE}}
+\item{hide_ci}{(scalar \code{logical})\cr
+logical whether to hide confidence interval. Default is \code{TRUE}}
 
-\item{hide_p}{logical whether to hide p-value. Default is \code{TRUE} for regression summaries, and \code{FALSE} otherwise.}
+\item{hide_p}{(scalar \code{logical})\cr
+logical whether to hide p-value. Default is \code{TRUE} for regression summaries, and \code{FALSE} otherwise.}
 
-\item{hide_se}{logical whether to hide standard error. Default is \code{FALSE}}
+\item{hide_se}{(scalar \code{logical})\cr
+logical whether to hide standard error. Default is \code{FALSE}}
+}
+\value{
+a 'gtsummary' table
 }
 \description{
-\lifecycle{experimental}
 Add significance stars to estimates with small p-values
 }
-\section{Future Updates}{
-
-There are planned updates to the implementation of this function
-with respect to the \verb{pattern=} argument.
-Currently, this function replaces the numeric estimate column, with a
-formatted character column following \verb{pattern=}.
-Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
-implementation will be updated to use it, which will keep
-numeric columns numeric. For the \emph{vast majority} of users,
-\emph{the planned change will be go unnoticed}.
-}
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex2.png" alt="image of rendered example table" style="width:35\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex3.png" alt="image of rendered example table" style="width:30\%;">
-}}
-
-\if{html}{Example 4}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex4.png" alt="image of rendered example table" style="width:30\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("car", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <-
-  lm(time ~ ph.ecog + sex, survival::lung) \%>\%
+  lm(time ~ ph.ecog + sex, survival::lung) |>
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
 
 # Example 1 ----------------------------------
-add_significance_stars_ex1 <-
-  tbl \%>\%
+tbl |>
   add_significance_stars(hide_ci = FALSE, hide_p = FALSE)
 
 # Example 2 ----------------------------------
-add_significance_stars_ex2 <-
-  tbl \%>\%
+tbl |>
   add_significance_stars(
     pattern = "{estimate} ({conf.low}, {conf.high}){stars}",
     hide_ci = TRUE, hide_se = TRUE
-  ) \%>\%
-  modify_header(estimate ~ "**Beta (95\% CI)**") \%>\%
-  modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+  ) |>
+  modify_header(estimate = "**Beta (95\% CI)**") |>
+  modify_footnote(estimate = "CI = Confidence Interval", abbreviation = TRUE)
 
 # Example 3 ----------------------------------
 # Use '  \n' to put a line break between beta and SE
-add_significance_stars_ex3 <-
-  tbl \%>\%
+tbl |>
   add_significance_stars(
     hide_se = TRUE,
     pattern = "{estimate}{stars}  \n({std.error})"
-  ) \%>\%
-  modify_header(estimate ~ "**Beta  \n(SE)**") \%>\%
-  modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE) \%>\%
-  as_gt() \%>\%
-  gt::fmt_markdown(columns = everything()) \%>\%
+  ) |>
+  modify_header(estimate = "**Beta  \n(SE)**") |>
+  modify_footnote(estimate = "SE = Standard Error", abbreviation = TRUE) |>
+  as_gt() |>
+  gt::fmt_markdown(columns = everything()) |>
   gt::tab_style(
     style = "vertical-align:top",
     locations = gt::cells_body(columns = label)
   )
 
 # Example 4 ----------------------------------
-add_significance_stars_ex4 <-
-  lm(marker ~ stage + grade, data = trial) \%>\%
-  tbl_regression() \%>\%
-  add_global_p() \%>\%
+lm(marker ~ stage + grade, data = trial) |>
+  tbl_regression() |>
+  add_global_p() |>
   add_significance_stars(
     hide_p = FALSE,
     pattern = "{p.value}{stars}"
-  ) \%>\%
-  as_gt() \%>\%
-  gt::tab_style(
-    style = "vertical-align:top",
-    locations = gt::cells_body(columns = label)
   )
-}
 \dontshow{\}) # examplesIf}
 }

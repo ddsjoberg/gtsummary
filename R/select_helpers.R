@@ -1,6 +1,6 @@
 #' Select helper functions
 #'
-#' @description Set of functions to supplement the {tidyselect} set of
+#' @description Set of functions to supplement the \{tidyselect\} set of
 #' functions for selecting columns of data frames (and other items as well).
 #' - `all_continuous()` selects continuous variables
 #' - `all_continuous2()` selects only type `"continuous2"`
@@ -11,81 +11,85 @@
 #' - `all_interaction()` selects interaction terms from a regression model
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
-#' @param tests string indicating the test type of the variables to select, e.g.
-#' select all variables being compared with `"t.test"`
-#' @param stat_0 When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
-#' @param continuous2 Logical indicating whether to include continuous2 variables. Default is `TRUE`
-#' @param dichotomous Logical indicating whether to include dichotomous variables.
-#' Default is `TRUE`
-#' @param contrasts_type type of contrast to select. When `NULL`, all variables with a
-#' contrast will be selected. Default is `NULL`.  Select among contrast types
-#' `c("treatment", "sum", "poly", "helmert", "other")`
+#'
+#' @param stat_0 (scalar `logical`)\cr
+#'   When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
+#' @param continuous2 (scalar `logical`)\cr
+#'   Logical indicating whether to include continuous2 variables. Default is `TRUE`
+#' @param dichotomous (scalar `logical`)\cr
+#'   Logical indicating whether to include dichotomous variables. Default is `TRUE`
+#' @param tests (`character`)\cr
+#'   character vector indicating the test type of the variables to select, e.g.
+#'   select all variables being compared with `"t.test"`.
+#' @param contrasts_type (`character`)\cr
+#'   type of contrast to select. Select among contrast types `c("treatment", "sum", "poly", "helmert", "other")`.
+#'   Default is all contrast types.
 #' @name select_helpers
 #' @return A character vector of column names selected
+#'
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @examples
 #' select_ex1 <-
-#'   trial %>%
-#'   select(age, response, grade) %>%
+#'   trial |>
+#'   select(age, response, grade) |>
 #'   tbl_summary(
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "select_ex1.png", width = "55")`
-#' }}
 NULL
 
 #' @rdname select_helpers
 #' @export
 all_continuous <- function(continuous2 = TRUE) {
-  if (continuous2 == TRUE) {
-    return(broom.helpers::all_continuous())
-  } else {
-    return(
-      .generic_selector("variable", "var_type",
-        .data$var_type %in% "continuous",
-        fun_name = "all_continuous"
-      )
-    )
-  }
+  types <- if (continuous2) c("continuous", "continuous2") else "continuous"
+
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% types))
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  .generic_selector("variable", "var_type",
-    .data$var_type %in% "continuous2",
-    fun_name = "all_continuous"
-  )
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "continuous2"))
 }
 
 #' @rdname select_helpers
 #' @export
-all_categorical <- broom.helpers::all_categorical
+all_categorical <- function(dichotomous = TRUE) {
+  types <- if (dichotomous) c("categorical", "dichotomous") else "categorical"
+
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% types))
+}
 
 #' @rdname select_helpers
 #' @export
-all_dichotomous <- broom.helpers::all_dichotomous
+all_dichotomous <- function() {
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "dichotomous"))
+}
 
 #' @rdname select_helpers
 #' @export
-all_tests <- function(tests = NULL) {
-  if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
-    paste(
-      "The `tests=` argument must be one or more of the following:",
-      paste(shQuote(df_add_p_tests$test_name), collapse = ", ")
-    ) %>%
-      stop(call. = FALSE)
-  }
+all_tests <- function(tests) {
+  check_class(tests, "character")
+  where(function(x) isTRUE(attr(x, "gtsummary.test_name") %in% tests))
+}
 
-  .generic_selector("variable", "test_name",
-    .data$test_name %in% .env$tests,
-    fun_name = "all_tests"
-  )
+#' @rdname select_helpers
+#' @export
+all_intercepts <- function() {
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "intercept"))
+}
+
+#' @rdname select_helpers
+#' @export
+all_interaction <- function() {
+  where(function(x) isTRUE(attr(x, "gtsummary.var_type") %in% "interaction"))
+}
+
+#' @rdname select_helpers
+#' @export
+all_contrasts <- function(contrasts_type = c("treatment", "sum", "poly", "helmert", "other")) {
+  contrasts_type <- arg_match(contrasts_type, multiple = TRUE)
+  where(function(x) isTRUE(attr(x, "gtsummary.contrasts_type") %in% contrasts_type))
 }
 
 #' @rdname select_helpers
@@ -111,14 +115,84 @@ all_stat_cols <- function(stat_0 = TRUE) {
   }
 }
 
-#' @rdname select_helpers
-#' @export
-all_interaction <- broom.helpers::all_interaction
 
-#' @rdname select_helpers
-#' @export
-all_intercepts <- broom.helpers::all_intercepts
+#' Table Body Select Prep
+#'
+#' This function uses the information in `.$table_body` and adds them
+#' as attributes to `data` (if passed). Once they've been assigned as
+#' proper gtsummary attributes, gtsummary selectors like `all_continuous()`
+#' will work properly.
+#'
+#' @param table_body a data frame from `.$table_body`
+#' @param data an optional data frame the attributes will be added to
+#'
+#' @return a data frame
+#' @keywords internal
+select_prep <- function(table_body, data = NULL) {
+  if (!"variable" %in% names(table_body)) {
+    cli::cli_abort(
+      "The {.code .$table_body} data frame does not have the required {.val variable} column.",
+      call = get_cli_abort_call()
+    )
+  }
 
-#' @rdname select_helpers
-#' @export
-all_contrasts <- broom.helpers::all_contrasts
+  # if data not passed, use table_body to construct one
+  if (is_empty(data)) {
+    data <- dplyr::tibble(!!!rep_named(unique(table_body$variable), logical(0L)))
+  }
+
+  # only keeping rows that have corresponding column names in data
+  table_body <- table_body |> dplyr::filter(.data$variable %in% names(data))
+
+  # if table_body passed, add columns as attr to data
+  if (!is.null(table_body)) {
+    attr_cols <- intersect(names(table_body), c("var_type", "test_name", "contrasts_type"))
+    for (v in attr_cols) {
+      df_attr <- table_body[c("variable", v)] |>
+        unique() |>
+        tidyr::drop_na()
+      for (i in seq_len(nrow(df_attr))) {
+        attr(data[[df_attr$variable[i]]], paste0("gtsummary.", v)) <- df_attr[[v]][i]
+      }
+    }
+  }
+
+  data
+}
+
+
+#' Convert character vector to data frame
+#'
+#' This is used in some of the selecting we allow for, for example in
+#' `as_gt(include=)` you can use tidyselect to select among the call
+#' names to include.
+#'
+#' @param x character vector
+#'
+#' @return data frame
+#' @keywords internal
+vec_to_df <- function(x) {
+  matrix(ncol = length(x), nrow = 0) |>
+    data.frame() |>
+    stats::setNames(x)
+}
+
+
+# converts a named list to a table_body format.
+# the result of this fn will often be passed to `select_prep()`
+#' Convert Named List to Table Body
+#'
+#' Many arguments in 'gtsummary' accept named lists. This function converts
+#' a named list to the `.$table_body` format expected in `select_prep()`
+#'
+#' @param x named list
+#' @param colname string of column name to assign. Default is `caller_arg(x)`
+#'
+#' @return `.$table_body` data frame
+#' @keywords internal
+#' @examples
+#' type <- list(age = "continuous", response = "dichotomous")
+#' gtsummary:::.list2tb(type, "var_type")
+.list2tb <- function(x, colname = caller_arg(x)) {
+  enframe(unlist(x), "variable", colname)
+}

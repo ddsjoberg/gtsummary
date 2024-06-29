@@ -1,66 +1,49 @@
-#' Bold significant p-values or q-values
+#' Bold significant p-values
 #'
 #' Bold values below a chosen threshold (e.g. <0.05)
 #' in a gtsummary tables.
 #'
-#' @param x Object created using gtsummary functions
-#' @param t Threshold below which values will be bold. Default is 0.05.
-#' @param q Logical argument. When TRUE will bold the q-value column rather
-#' than the p-values. Default is `FALSE`.
+#' @param x (`gtsummary`)\cr
+#'   Object created using gtsummary functions
+#' @param t (scalar `numeric`)\cr
+#'   Threshold below which values will be bold. Default is 0.05.
+#' @param q (scalar `logical`)\cr
+#'   When `TRUE` will bold the q-value column rather
+#'   than the p-value. Default is `FALSE`.
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
 #' @examples
-#' \donttest{
 #' # Example 1 ----------------------------------
-#' bold_p_ex1 <-
-#'   trial[c("age", "grade", "response", "trt")] %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   bold_p(t = 0.65)
+#' trial |>
+#'   tbl_summary(by = trt, include = c(response, marker, trt), missing = "no") |>
+#'   add_p() |>
+#'   bold_p(t = 0.1)
 #'
 #' # Example 2 ----------------------------------
-#' bold_p_ex2 <-
-#'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
-#'   tbl_regression(exponentiate = TRUE) %>%
+#' glm(response ~ trt + grade, trial, family = binomial(link = "logit")) |>
+#'   tbl_regression(exponentiate = TRUE) |>
 #'   bold_p(t = 0.65)
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "bold_p_ex1.png", width = "60")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "bold_p_ex2.png", width = "50")`
-#' }}
-
 bold_p <- function(x, t = 0.05, q = FALSE) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(bold_p = match.call()))
+
   # checking inputs ------------------------------------------------------------
-  .assert_class(x, "gtsummary")
+  check_class(x, "gtsummary")
+  check_scalar_range(t, range = c(0, 1), include_bounds = c(TRUE, TRUE))
+  check_scalar_logical(q)
 
-  # checking input table has a p.value column
-  if (q == FALSE && !"p.value" %in% names(x$table_body)) {
-    stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-      call. = FALSE
-    )
-  }
-
-  # checking input table has a q.value column
-  if (q == TRUE && !"q.value" %in% names(x$table_body)) {
-    stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-      call. = FALSE
-    )
-  }
-
-
-  # update table_styling -------------------------------------------------------
   # storing column name to bold
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
 
+  # checking input table has a p.value/q.value column
+  if (!col_name %in% names(x$table_body)) {
+    cli::cli_abort(
+      "There is no column named {.val {col_name}} in {.code x$table_body}.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # update table_styling -------------------------------------------------------
   # modifying table_styling with bold threshold
   x <-
     modify_table_styling(

@@ -6,9 +6,9 @@
 \alias{get_gtsummary_theme}
 \alias{with_gtsummary_theme}
 \alias{check_gtsummary_theme}
-\title{Set a gtsummary theme}
+\title{Set gtsummary theme}
 \usage{
-set_gtsummary_theme(x, quiet = NULL)
+set_gtsummary_theme(x, quiet)
 
 reset_gtsummary_theme()
 
@@ -24,21 +24,23 @@ with_gtsummary_theme(
 check_gtsummary_theme(x)
 }
 \arguments{
-\item{x}{A named list defining a gtsummary theme.}
+\item{x}{(named \code{list})\cr
+A named list defining a gtsummary theme.}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{expr}{Expression to be evaluated with the theme specified in \verb{x=} loaded}
+\item{expr}{(\code{expression})\cr
+Expression to be evaluated with the theme specified in \verb{x=} loaded}
 
-\item{env}{The environment in which to evaluate \verb{expr=}}
+\item{env}{(\code{environment})\cr
+The environment in which to evaluate \verb{expr=}}
 
-\item{msg_ignored_elements}{Default is NULL with no message printed. Pass a string
+\item{msg_ignored_elements}{(\code{string})\cr
+Default is \code{NULL} with no message printed. Pass a string
 that will be printed with \code{cli::cli_alert_info()}. The \code{"{elements}"}
 object contains vector of theme elements that will be overwritten and ignored.}
 }
 \description{
-\lifecycle{maturing}
 Functions to \strong{set}, \strong{reset}, \strong{get}, and evaluate \strong{with} gtsummary themes.
 \itemize{
 \item \code{set_gtsummary_theme()} set a theme
@@ -58,32 +60,20 @@ the default reporting style to match another journal, or your own
 personal style.
 }
 
-\section{Example Output}{
-
-\if{html}{Example}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/set_gtsummary_theme_ex1.png" alt="image of rendered example table" style="width:70\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Setting JAMA theme for gtsummary
 set_gtsummary_theme(theme_gtsummary_journal("jama"))
 # Themes can be combined by including more than one
 set_gtsummary_theme(theme_gtsummary_compact())
 
 set_gtsummary_theme_ex1 <-
-  trial \%>\%
-  dplyr::select(age, grade, trt) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_stat_label() \%>\%
+  trial |>
+  tbl_summary(by = trt, include = c(age, grade, trt)) |>
+  add_stat_label() |>
   as_gt()
 
 # reset gtsummary theme
 reset_gtsummary_theme()
-}
 }
 \seealso{
 \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}

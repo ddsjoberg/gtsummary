@@ -2,40 +2,26 @@
 % Please edit documentation in R/modify_column_alignment.R
 \name{modify_column_alignment}
 \alias{modify_column_alignment}
-\title{Modify Column Alignment}
+\title{Modify column alignment}
 \usage{
 modify_column_alignment(x, columns, align = c("left", "right", "center"))
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+gtsummary object}
 
-\item{columns}{vector or selector of columns in \code{x$table_body}}
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 
-\item{align}{string indicating alignment of column, must be one of
-\code{c("left", "right", "center")}}
+\item{align}{(\code{string})
+String indicating alignment of column, must be one of \code{c("left", "right", "center")}}
 }
 \description{
-\lifecycle{maturing}
 Update column alignment/justification in a gtsummary table.
 }
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-tbl <-
-  lm(age ~ marker + grade, trial) \%>\%
+lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
   modify_column_alignment(columns = everything(), align = "left")
 }
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other Advanced modifiers: 
-\code{\link{modify_column_hide}()},
-\code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_body}()},
-\code{\link{modify_table_styling}()}
-}
-\concept{Advanced modifiers}

@@ -1,88 +1,47 @@
-skip_on_cran()
-
-test_that("no errors/warnings with standard use", {
-  tbl_sum <- trial %>%
-    select(trt, age, grade, stage) %>%
-    tbl_summary(by = trt)
-  tbl_reg <- lm(age ~ grade + stage, trial) %>% tbl_regression()
-
-  expect_error(tbl1 <- remove_row_type(tbl_sum, type = "header"), NA)
-  expect_warning(remove_row_type(tbl_sum, type = "header"), NA)
-  expect_snapshot(tbl1 %>% as.data.frame())
+test_that("remove_row_type(type) works", {
+  tbl1 <- tbl_summary(trial, include = c(response, age, grade))
+  tbl2 <- lm(age ~ grade + response, trial) |> tbl_regression()
 
   expect_equal(
-    tbl1$table_body$label,
-    c("Age", "Unknown", "I", "II", "III", "T1", "T2", "T3", "T4")
-  )
-
-  expect_error(tbl2 <- remove_row_type(tbl_sum, type = "missing"), NA)
-
-  expect_equal(
-    tbl2$table_body$label,
-    c("Age", "Grade", "I", "II", "III", "T Stage", "T1", "T2", "T3", "T4")
-  )
-
-  expect_error(tbl3 <- remove_row_type(tbl_reg, type = "reference"), NA)
-  expect_snapshot(tbl3 %>% as.data.frame())
-  expect_equal(
-    as.vector(tbl3$table_body$label),
-    c("Grade", "II", "III", "T Stage", "T2", "T3", "T4")
-  )
-
-  expect_error(remove_row_type(tbl_sum, type = "reference"))
-
-
-  expect_equal(
-    trial %>%
-      tbl_summary(include = c(age, grade)) %>%
-      remove_row_type(variable = grade, type = "all") %>%
-      purrr::pluck("table_body"),
-    trial %>%
-      tbl_summary(include = age) %>%
-      remove_row_type(variable = grade, type = "all") %>%
-      purrr::pluck("table_body")
+    remove_row_type(tbl1, type = "header", variables = c("grade", "age")) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull("label"),
+    c("Tumor Response", "Unknown", "Age", "Unknown", "I", "II", "III")
   )
 
   expect_equal(
-    trial %>%
-      tbl_summary(include = grade) %>%
-      remove_row_type(variable = grade, type = "level", level_value = "I") %>%
-      purrr::pluck("table_body", "label"),
-    c("Grade", "II", "III")
+    remove_row_type(tbl1, type = "missing", variables = c("grade", "age")) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull("label"),
+    c("Tumor Response", "Unknown", "Age", "Grade", "I", "II", "III")
   )
 
   expect_equal(
-    trial %>%
-      tbl_summary(include = grade) %>%
-      remove_row_type(variable = grade, type = "level") %>%
-      purrr::pluck("table_body", "label"),
-    "Grade"
+    remove_row_type(tbl1, type = "level", variables = c("grade", "age"), level_value = "III") |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull("label"),
+    c("Tumor Response", "Unknown", "Age", "Unknown", "Grade", "I", "II")
   )
 
-  expect_error(
-    trial %>%
-      tbl_summary(include = grade) %>%
-      remove_row_type(variable = grade, type = "level", level_value = 5)
+  expect_equal(
+    remove_row_type(tbl1, type = "all", variables = c("grade", "age")) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull("label"),
+    c("Tumor Response", "Unknown")
   )
 
-  expect_message(
-    trial %>%
-      tbl_summary(include = grade) %>%
-      remove_row_type(variable = grade, type = "header", level_value = "I")
+  expect_equal(
+    remove_row_type(tbl2, type = "reference", variables = c("grade", "response")) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull("label"),
+    c("Grade", "II", "III", "Tumor Response")
   )
+})
 
-  # previously there was a bug where header rows for cont2 variables was not removed
+test_that("remove_row_type(type) messaging", {
   expect_snapshot(
-    data.frame(x = 1:100, y = c(rep("A", 50), rep("B", 50))) %>%
-      tbl_summary(
-        by = y,
-        type = x ~ "continuous2",
-        statistic = x ~ c("{mean}", "{min}", "{max}")
-      ) %>%
-      remove_row_type(
-        x,
-        type = "header"
-      ) %>%
-      as.data.frame()
+    error = TRUE,
+    tbl_summary(trial, include = c(response, age, grade)) |>
+      remove_row_type(type = "reference")
   )
 })

@@ -7,10 +7,11 @@
 as_kable(x, ..., include = everything(), return_calls = FALSE)
 }
 \arguments{
-\item{x}{Object created by a function from the gtsummary package
+\item{x}{(\code{gtsummary})\cr
+Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
+\item{...}{Additional arguments passed to \code{\link[knitr:kable]{knitr::kable()}}}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -24,7 +25,7 @@ as a list of expressions.}
 A \code{knitr_kable} object
 }
 \description{
-Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
+Output from \code{\link[knitr:kable]{knitr::kable()}} is less full featured compared to
 summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.
 For example, kable summary tables do not include indentation, footnotes,
 or spanning header rows.
@@ -36,22 +37,11 @@ Tip: To better distinguish variable labels and level labels when
 indenting is not supported, try \code{\link[=bold_labels]{bold_labels()}} or \code{\link[=italicize_levels]{italicize_levels()}}.
 }
 \examples{
-\donttest{
-trial \%>\%
-  tbl_summary(by = trt) \%>\%
-  bold_labels() \%>\%
+trial |>
+  tbl_summary(by = trt) |>
+  bold_labels() |>
   as_kable()
-}
-}
-\seealso{
-Other gtsummary output types: 
-\code{\link{as_flex_table}()},
-\code{\link{as_gt}()},
-\code{\link{as_hux_table}()},
-\code{\link{as_kable_extra}()},
-\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{gtsummary output types}

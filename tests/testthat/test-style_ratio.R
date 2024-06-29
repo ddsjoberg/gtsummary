@@ -1,6 +1,4 @@
-skip_on_cran()
-
-test_that("correct rounding near one", {
+test_that("style_ratio() works", {
   vec <- c(0.99, 0.999, 1.1)
   expect_equal(
     style_ratio(vec),
@@ -8,11 +6,11 @@ test_that("correct rounding near one", {
   )
 
   expect_equal(
-    seq(0.999, 1.001, by = 0.0005) %>% style_ratio(digits = 3),
+    seq(0.999, 1.001, by = 0.0005) |> style_ratio(digits = 3),
     c("0.999", "1.000", "1.000", "1.001", "1.001")
   )
   expect_equal(
-    -seq(0.999, 1.001, by = 0.0005) %>% style_ratio(digits = 3),
+    -seq(0.999, 1.001, by = 0.0005) |> style_ratio(digits = 3),
     c("-0.999", "-1.000", "-1.000", "-1.001", "-1.001")
   )
 

@@ -1,15 +1,18 @@
 #' Style p-values
 #'
-#' @param x Numeric vector of p-values.
-#' @param digits Number of digits large p-values are rounded. Must be 1, 2, or 3.
-#' Default is 1.
-#' @param prepend_p Logical. Should 'p=' be prepended to formatted p-value.
-#' Default is `FALSE`
+#' @param x (`numeric`)\cr
+#'   Numeric vector of p-values.
+#' @param digits (`integer`)\cr
+#'   Number of digits large p-values are rounded. Must be 1, 2, or 3.
+#'   Default is 1.
+#' @param prepend_p (scalar `logical`)\cr
+#'   Logical. Should 'p=' be prepended to formatted p-value.
+#'   Default is `FALSE`
 #' @inheritParams style_number
+#'
 #' @export
 #' @return A character vector of styled p-values
-#' @family style tools
-#' @seealso See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+#'
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
@@ -18,12 +21,28 @@
 #' )
 #' style_pvalue(pvals)
 #' style_pvalue(pvals, digits = 2, prepend_p = TRUE)
-style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
-                         big.mark = NULL, decimal.mark = NULL, ...) {
+style_pvalue <- function(x,
+                         digits = 1,
+                         prepend_p = FALSE,
+                         big.mark = ifelse(decimal.mark == ",", " ", ","),
+                         decimal.mark = getOption("OutDec"),
+                         ...) {
+  set_cli_abort_call()
+
+  # setting defaults -----------------------------------------------------------
+  if (missing(decimal.mark)) {
+    decimal.mark <-
+      get_theme_element("style_number-arg:decimal.mark", default = decimal.mark)
+  }
+  if (missing(big.mark)) {
+    big.mark <-
+      get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
+  }
+
   # rounding large p-values to 1 digits
   if (digits == 1) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         # allowing some leeway for numeric storage errors
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
@@ -31,17 +50,17 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           x = 0.9, digits = 1, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         )),
-        round2(x, 1) >= 0.2 ~ style_number(x,
-          digits = 1, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+        cards::round5(x, 1) >= 0.2 ~ style_number(x,
+                                                  digits = 1, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
-        round2(x, 2) >= 0.1 ~ style_number(x,
-          digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+        cards::round5(x, 2) >= 0.1 ~ style_number(x,
+                                                  digits = 2, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -52,20 +71,20 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   # rounding large p-values to 2 digits
   else if (digits == 2) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.99 ~ paste0(">", style_number(
           x = 0.99, digits = 2, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
         )),
-        round2(x, 2) >= 0.1 ~ style_number(x,
-          digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+        cards::round5(x, 2) >= 0.1 ~ style_number(x,
+                                                  digits = 2, big.mark = big.mark,
+                                                  decimal.mark = decimal.mark, ...
         ),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -77,7 +96,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   # rounding large pvalues to 3 digit
   else if (digits == 3) {
     p_fmt <-
-      case_when(
+      dplyr::case_when(
         x > 1 + 1e-15 ~ NA_character_,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.999 ~ paste0(">", style_number(
@@ -85,8 +104,8 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           decimal.mark = decimal.mark, ...
         )),
         x >= 0.001 ~ style_number(x,
-          digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+                                  digits = 3, big.mark = big.mark,
+                                  decimal.mark = decimal.mark, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
@@ -94,14 +113,17 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
         ))
       )
   } else {
-    stop("The `digits=` argument must be 1, 2, or 3.")
+    cli::cli_abort(
+      "The {.arg digits} argument must be one of {.val {1:3}}.",
+      call = get_cli_abort_call()
+    )
   }
 
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
-    p_fmt <- case_when(
+    p_fmt <- dplyr::case_when(
       is.na(p_fmt) ~ NA_character_,
-      stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+      grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)
     )
   }

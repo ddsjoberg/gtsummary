@@ -28,48 +28,51 @@ tbl_strata2(
   .combine_args = NULL,
   .header = ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
   .stack_group_header = NULL,
-  .quiet = NULL
+  .quiet = TRUE
 )
 }
 \arguments{
-\item{data}{a data frame or survey object}
+\item{data}{(\code{data.frame}, \code{survey.design})\cr
+a data frame or survey object}
 
-\item{strata}{character vector or tidy-selector of columns in data to stratify results by}
+\item{strata}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+character vector or tidy-selector of columns in data to stratify results by}
 
-\item{.tbl_fun}{A function or formula. If a \emph{function}, it is used as is.
+\item{.tbl_fun}{(\code{function})
+A function or formula. If a \emph{function}, it is used as is.
 If a formula, e.g. \code{~ .x \%>\% tbl_summary() \%>\% add_p()}, it is converted to a function.
 The stratified data frame is passed to this function.}
 
 \item{...}{Additional arguments passed on to the \code{.tbl_fun} function.}
 
-\item{.sep}{when more than one stratifying variable is passed, this string is
+\item{.sep}{(\code{string})\cr
+when more than one stratifying variable is passed, this string is
 used to separate the levels in the spanning header. Default is \code{", "}}
 
-\item{.combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
+\item{.combine_with}{(\code{string})\cr
+One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}
 
-\item{.combine_args}{named list of arguments that are passed to function
-specified in \verb{.combine_with=}}
+\item{.combine_args}{(named \code{list})\cr
+named list of arguments that are passed to function specified in \code{.combine_with}}
 
-\item{.header}{String indicating the headers that will be placed.
+\item{.header}{(\code{string})\cr
+String indicating the headers that will be placed.
 Default is \code{"**{strata}**"} when \code{.combine_with = "tbl_merge"} and
 \code{"{strata}"} when \code{.combine_with = "tbl_stack"}. Items placed in
 curly brackets will be evaluated according to \code{glue::glue()} syntax.
-\itemize{
-\item \code{strata} stratum levels
-\item \code{n} N within stratum
-\item \code{N} Overall N
-}
+- \code{strata} stratum levels
+- \code{n} N within stratum
+- \code{N} Overall N
 
-The evaluated value of \verb{.header=} is also available within \code{tbl_strata2(.tbl_fun=)}}
+The evaluated value of \code{.header} is also available within \code{tbl_strata2(.tbl_fun)}}
 
-\item{.stack_group_header}{DEPRECATED.}
+\item{.stack_group_header}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{.quiet}{Logical indicating whether to print messages in console.
-Default is \code{FALSE}}
+\item{.quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-\lifecycle{maturing}
+\lifecycle{maturing}\cr
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 \itemize{
@@ -95,43 +98,24 @@ each stratum's summary table.
 }
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex1.png" alt="image of rendered example table" style="width:84\%;">
-}}
-
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex2.png" alt="image of rendered example table" style="width:30\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-tbl_strata_ex1 <-
-  trial \%>\%
-  select(age, grade, stage, trt) \%>\%
-  mutate(grade = paste("Grade", grade)) \%>\%
+trial |>
+  select(age, grade, stage, trt) |>
+  mutate(grade = paste("Grade", grade)) |>
   tbl_strata(
     strata = grade,
     .tbl_fun =
-      ~ .x \%>\%
-        tbl_summary(by = trt, missing = "no") \%>\%
+      ~ .x |>
+        tbl_summary(by = trt, missing = "no") |>
         add_n(),
     .header = "**{strata}**, N = {n}"
   )
 
 # Example 2 ----------------------------------
-tbl_strata_ex2 <-
-  trial \%>\%
-  select(grade, response) \%>\%
-  mutate(grade = paste("Grade", grade)) \%>\%
+trial |>
+  select(grade, response) |>
+  mutate(grade = paste("Grade", grade)) |>
   tbl_strata2(
     strata = grade,
     .tbl_fun =
@@ -140,86 +124,16 @@ tbl_strata_ex2 <-
           label = list(response = .y),
           missing = "no",
           statistic = response ~ "{p}\%"
-        ) \%>\%
-        add_ci(pattern = "{stat} ({ci})") \%>\%
-        modify_header(stat_0 = "**Rate (95\% CI)**") \%>\%
+        ) |>
+        add_ci(pattern = "{stat} ({ci})") |>
+        modify_header(stat_0 = "**Rate (95\% CI)**") |>
         modify_footnote(stat_0 = NA),
     .combine_with = "tbl_stack",
     .combine_args = list(group_header = NULL),
     .quiet = TRUE
-  ) \%>\%
+  ) |>
   modify_caption("**Response Rate by Grade**")
-}
-}
-\seealso{
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()}
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_uvregression}()}
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_survfit tools: 
-\code{\link{add_n.tbl_survfit}()},
-\code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_survfit}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_svysummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
-\concept{tbl_summary tools}
-\concept{tbl_survfit tools}
-\concept{tbl_svysummary tools}
-\concept{tbl_uvregression tools}

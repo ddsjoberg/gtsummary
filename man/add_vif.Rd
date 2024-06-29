@@ -4,7 +4,7 @@
 \alias{add_vif}
 \title{Add Variance Inflation Factor}
 \usage{
-add_vif(x, statistic = NULL, estimate_fun = NULL)
+add_vif(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2))
 }
 \arguments{
 \item{x}{\code{'tbl_regression'} object}
@@ -20,35 +20,17 @@ Add the variance inflation factor (VIF) or
 generalized VIF (GVIF) to the regression table.
 Function uses \code{car::vif()} to calculate the VIF.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_vif_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_vif_ex2.png" alt="image of rendered example table" style="width:45\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "car"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_vif_ex1 <-
-  lm(age ~ grade + marker, trial) \%>\%
-  tbl_regression() \%>\%
+lm(age ~ grade + marker, trial) |>
+  tbl_regression() |>
   add_vif()
 
 # Example 2 ----------------------------------
-add_vif_ex2 <-
-  lm(age ~ grade + marker, trial) \%>\%
-  tbl_regression() \%>\%
+lm(age ~ grade + marker, trial) |>
+  tbl_regression() |>
   add_vif(c("aGVIF", "df"))
-}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

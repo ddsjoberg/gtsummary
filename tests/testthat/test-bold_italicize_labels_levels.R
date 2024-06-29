@@ -1,86 +1,53 @@
-skip_on_cran()
+tbl <- tbl_summary(trial, include = age)
 
-tbl <- trial %>%
-  tbl_summary(by = trt) %>%
-  add_p() %>%
-  add_q()
-
-
-tbl_cross_ex <- trial %>%
-  tbl_cross(row = trt, col = response)
-
-tbl_uv_ex1 <-
-  tbl_uvregression(
-    trial[c("response", "age", "grade")],
-    method = glm,
-    y = response,
-    method.args = list(family = binomial),
-    exponentiate = TRUE
-  )
-
-
-test_that("tab_style: bold and italicize", {
-  expect_snapshot(
-    tbl %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      bold_p() %>%
-      bold_p(q = TRUE, t = 0.2) %>%
-      as.data.frame()
-  )
-
-  expect_snapshot(
-    tbl_cross_ex %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      as.data.frame()
-  )
-
-  expect_snapshot(
-    tbl_uv_ex1 %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      as.data.frame()
-  )
-
-  expect_warning(
-    tbl %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      bold_p() %>%
-      bold_p(q = TRUE, t = 0.2),
-    NA
+test_that("bold_labels() works", {
+  expect_equal(
+    bold_labels(tbl) |>
+      getElement("table_styling") |>
+      getElement("text_format") |>
+      dplyr::filter(format_type == "bold") |>
+      getElement("rows") |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(.data$row_type == "label")
   )
 })
 
+test_that("bold_levels() works", {
+  expect_equal(
+    bold_levels(tbl) |>
+      getElement("table_styling") |>
+      getElement("text_format") |>
+      dplyr::filter(format_type == "bold") |>
+      getElement("rows") |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(.data$row_type != "label")
+  )
+})
 
-test_that("error when non-gtsummary object passed", {
-  expect_error(
-    mtcars %>%
-      bold_labels(),
-    NULL
+test_that("italicize_labels() works", {
+  expect_equal(
+    italicize_labels(tbl) |>
+      getElement("table_styling") |>
+      getElement("text_format") |>
+      dplyr::filter(format_type == "italic") |>
+      getElement("rows") |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(.data$row_type == "label")
   )
-  expect_error(
-    mtcars %>%
-      bold_levels(),
-    NULL
-  )
-  expect_error(
-    mtcars %>%
-      italicize_labels(),
-    NULL
-  )
-  expect_error(
-    mtcars %>%
-      italicize_levels(),
-    NULL
+})
+
+test_that("italicize_levels() works", {
+  expect_equal(
+    italicize_levels(tbl) |>
+      getElement("table_styling") |>
+      getElement("text_format") |>
+      dplyr::filter(format_type == "italic") |>
+      getElement("rows") |>
+      getElement(1L) |>
+      quo_get_expr(),
+    expr(.data$row_type != "label")
   )
 })

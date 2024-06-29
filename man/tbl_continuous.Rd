@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_continuous.R
 \name{tbl_continuous}
 \alias{tbl_continuous}
-\title{Summarize a continuous variable}
+\title{Summarize continuous variable}
 \usage{
 tbl_continuous(
   data,
@@ -10,85 +10,58 @@ tbl_continuous(
   include = everything(),
   digits = NULL,
   by = NULL,
-  statistic = NULL,
+  statistic = everything() ~ "{median} ({p25}, {p75})",
   label = NULL
 )
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{(\code{data.frame})\cr A data frame}
 
-\item{variable}{Variable name of the continuous column to be summarized}
+\item{variable}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Variable name of the continuous column to be summarized.}
 
-\item{include}{variables to include in the summary table. Default is \code{everything()}}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in the summary table. Default is \code{everything()}}
 
-\item{digits}{List of formulas specifying the number of decimal places
-to round continuous summary statistics. If not specified, an appropriate
-number of decimals to round statistics will be guessed based on the
-the variable's distribution.}
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}. See below for details.}
 
-\item{by}{A column name (quoted or unquoted) in \code{data}.
-Summary statistics will be calculated separately for each level of the \code{by}
-variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations. To stratify a table by two or more
-variables, use \code{tbl_strata()}}
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}}
 
-\item{statistic}{List of formulas specifying types of summary statistics
-to display for each variable. The default is
-\code{everything() ~ {median} ({p25}, {p75})}}
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies summary statistics to display for each variable.  The default is
+\code{everything() ~ "{median} ({p25}, {p75})"}.}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 }
 \value{
 a gtsummary table
 }
 \description{
-\lifecycle{experimental}
 Summarize a continuous variable by one or more categorical variables
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_continuous_ex1.png" alt="image of rendered example table" style="width:38\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_continuous_ex2.png" alt="image of rendered example table" style="width:35\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-tbl_continuous_ex1 <-
-  tbl_continuous(
-    data = trial,
-    variable = age,
-    by = trt,
-    include = grade
-  )
+tbl_continuous(
+  data = trial,
+  variable = age,
+  by = trt,
+  include = grade
+)
 
 # Example 2 ----------------------------------
-tbl_continuous_ex2 <-
-  tbl_continuous(
-    data = trial,
-    variable = age,
-    include = c(trt, grade)
-  )
+tbl_continuous(
+  data = trial,
+  variable = age,
+  statistic = ~"{mean} ({sd})",
+  by = trt,
+  include = c(stage, grade)
+)
 }
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_continuous tools: 
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_continuous}()}
-}
-\concept{tbl_continuous tools}

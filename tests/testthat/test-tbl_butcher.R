@@ -1,10 +1,13 @@
-test_that("tbl_butcher() works", {
-  tbl_big <-
-    trial %>%
-    tbl_summary(include = c(marker, trt))
+test_that("tbl_butcher()", {
+  tbl <- trial |>
+    tbl_uvregression(y = age, method = lm)
 
-  expect_error(tbl_sml <- tbl_butcher(tbl_big), NA)
-  expect_snapshot(tbl_sml %>% as.data.frame())
-  expect_equal(tbl_sml, tbl_big[c("table_body", "table_styling")], ignore_attr = TRUE)
-  expect_true(inherits(tbl_sml, "gtsummary"))
+  expect_true(
+    object.size(tbl) > object.size(tbl_butcher(tbl))
+  )
+
+  expect_equal(
+    tbl_butcher(tbl, "inputs") |> names(),
+    c("table_body", "table_styling", "inputs")
+  )
 })

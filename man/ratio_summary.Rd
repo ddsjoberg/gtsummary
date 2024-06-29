@@ -7,16 +7,19 @@
 ratio_summary(numerator, denominator, na.rm = TRUE, conf.level = 0.95)
 }
 \arguments{
-\item{numerator}{String indicating the name of the variable to be summed
-for computing the numerator.}
+\item{numerator}{(\code{string})\cr
+String indicating the name of the variable to be summed for computing the numerator.}
 
-\item{denominator}{String indicating the name of the variable to be summed
+\item{denominator}{(\code{string})\cr
+String indicating the name of the variable to be summed
 for computing the denominator.}
 
-\item{na.rm}{Should missing values be removed before summing the numerator
+\item{na.rm}{(scalar \code{logical})\cr
+Should missing values be removed before summing the numerator
 and the denominator? (default is \code{TRUE})}
 
-\item{conf.level}{Confidence level for the returned confidence interval.
+\item{conf.level}{(scalar \code{numeric})\cr
+Confidence level for the returned confidence interval.
 Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 }
@@ -38,19 +41,9 @@ Computed statistics:
 Confidence interval is computed with \code{\link[stats:poisson.test]{stats::poisson.test()}}, if and only if
 \code{num} is an integer.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/ratio_summary_ex1.png" alt="image of rendered example table" style="width:31\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
-ratio_summary_ex1 <-
-  trial \%>\%
+trial |>
   tbl_custom_summary(
     include = c("stage", "grade"),
     by = "trt",
@@ -59,20 +52,10 @@ ratio_summary_ex1 <-
     digits = ~ c(3, 2, 2, 0, 0),
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
-  ) \%>\%
-  bold_labels() \%>\%
-  modify_footnote(
-    update = all_stat_cols() ~ "Ratio [95\% CI] (n/N)"
-  )
-}
-\seealso{
-Other tbl_custom_summary tools: 
-\code{\link{add_overall}()},
-\code{\link{continuous_summary}()},
-\code{\link{proportion_summary}()},
-\code{\link{tbl_custom_summary}()}
+  ) |>
+  bold_labels() |>
+  modify_footnote(all_stat_cols() ~ "Ratio [95\% CI] (n/N)")
 }
 \author{
 Joseph Larmarange
 }
-\concept{tbl_custom_summary tools}

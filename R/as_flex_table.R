@@ -19,35 +19,27 @@
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
 #' @export
-#' @return A {flextable} object
-#' @family gtsummary output types
-#' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
-#' as_flex_table_ex1 <-
-#'   trial %>%
-#'   select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   as_flex_table()
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
+#' @return A 'flextable' object
 #'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_flex_table_ex1.png", width = "60")`
-#' }}
+#' @author Daniel D. Sjoberg
+#' @examplesIf gtsummary:::is_pkg_installed("flextable", reference_pkg = "gtsummary")
+#' trial |>
+#'   select(trt, age, grade) |>
+#'   tbl_summary(by = trt) |>
+#'   add_p() |>
+#'   as_flex_table()
 as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) {
+  set_cli_abort_call()
+  check_pkg_installed("flextable", reference_pkg = "gtsummary")
+
   # deprecated arguments -------------------------------------------------------
   dots <- rlang::dots_list(...)
   if (!is.null(dots$strip_md_bold)) {
-    lifecycle::deprecate_warn("1.6.0", "gtsummary::as_flex_table(strip_md_bold=)")
-    dots <- utils::modifyList(dots, val = list(strip_md_bold = NULL), keep.null = FALSE)
+    lifecycle::deprecate_stop("1.6.0", "gtsummary::as_flex_table(strip_md_bold=)")
   }
 
-  .assert_class(x, "gtsummary")
-  # checking flextable installation --------------------------------------------
-  assert_package("flextable", "as_flex_table()")
+  # process inputs -------------------------------------------------------------
+  check_class(x, "gtsummary")
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -61,7 +53,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
   flextable_calls <-
-    purrr::reduce(
+    reduce(
       .x = seq_along(insert_expr_after),
       .f = function(x, y) {
         add_expr_after(
@@ -75,12 +67,10 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
     )
 
   # converting to character vector ---------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = names(flextable_calls),
-      arg_name = "include"
-    )
+  cards::process_selectors(
+    data = vec_to_df(names(flextable_calls)),
+    include = {{ include }}
+  )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) {
@@ -95,10 +85,10 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
 table_styling_to_flextable_calls <- function(x, ...) {
   # adding id number for columns not hidden
   x$table_styling$header <-
-    x$table_styling$header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+    x$table_styling$header |>
+    dplyr::group_by(.data$hide) |>
+    dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) |>
+    dplyr::ungroup()
 
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
@@ -113,8 +103,8 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # compose_header -------------------------------------------------------------
   col_labels <-
-    x$table_styling$header %>%
-    filter(.data$hide == FALSE)
+    x$table_styling$header |>
+    dplyr::filter(.data$hide == FALSE)
 
   flextable_calls[["compose_header"]] <-
     .chr_with_md_to_ft_compose(x = col_labels$label, j = col_labels$column)
@@ -133,12 +123,12 @@ table_styling_to_flextable_calls <- function(x, ...) {
     flextable_calls[["add_header_row"]] <- list()
   } else {
     df_header0 <-
-      x$table_styling$header %>%
-      filter(.data$hide == FALSE) %>%
-      select("spanning_header") %>%
-      mutate(
+      x$table_styling$header |>
+      dplyr::filter(.data$hide == FALSE) |>
+      dplyr::select("spanning_header") |>
+      dplyr::mutate(
         spanning_header = ifelse(is.na(.data$spanning_header),
-          " ", .data$spanning_header
+                                 " ", .data$spanning_header
         ),
         spanning_header_id = dplyr::row_number()
       )
@@ -150,13 +140,13 @@ table_styling_to_flextable_calls <- function(x, ...) {
     }
 
     df_header <-
-      df_header0 %>%
-      group_by(.data$spanning_header_id) %>%
-      mutate(width = n()) %>%
-      distinct() %>%
-      ungroup() %>%
-      mutate(
-        column_id = purrr::map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
+      df_header0 |>
+      dplyr::group_by(.data$spanning_header_id) |>
+      dplyr::mutate(width = dplyr::n()) |>
+      dplyr::distinct() |>
+      dplyr::ungroup() |>
+      dplyr::mutate(
+        column_id = map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
       )
 
     flextable_calls[["add_header_row"]] <- list(
@@ -178,12 +168,12 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("id", "align") %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    ungroup()
+    x$table_styling$header |>
+    dplyr::filter(.data$hide == FALSE) |>
+    dplyr::select("id", "align") |>
+    dplyr::group_by(.data$align) |>
+    tidyr::nest() |>
+    dplyr::ungroup()
 
   flextable_calls[["align"]] <- map2(
     df_align$align, df_align$data,
@@ -192,11 +182,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # padding --------------------------------------------------------------------
   df_padding <-
-    x$table_styling$header %>%
-    select("id", "column") %>%
-    inner_join(
-      x$table_styling$text_format %>%
-        filter(.data$format_type == "indent"),
+    x$table_styling$header |>
+    dplyr::select("id", "column") |>
+    dplyr::inner_join(
+      x$table_styling$indent,
       by = "column"
     )
 
@@ -205,26 +194,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     ~ expr(flextable::padding(
       i = !!df_padding$row_numbers[[.x]],
       j = !!df_padding$id[[.x]],
-      padding.left = 15
-    ))
-  )
-
-  # padding2 -------------------------------------------------------------------
-  df_padding2 <-
-    x$table_styling$header %>%
-    select("id", "column") %>%
-    inner_join(
-      x$table_styling$text_format %>%
-        filter(.data$format_type == "indent2"),
-      by = "column"
-    )
-
-  flextable_calls[["padding2"]] <- map(
-    seq_len(nrow(df_padding2)),
-    ~ expr(flextable::padding(
-      i = !!df_padding2$row_numbers[[.x]],
-      j = !!df_padding2$id[[.x]],
-      padding.left = 30
+      padding.left = !!(df_padding$n_spaces[[.x]] * 15 / 4)
     ))
   )
 
@@ -240,27 +210,27 @@ table_styling_to_flextable_calls <- function(x, ...) {
   header_i_index <- ifelse(any_spanning_header == TRUE, 2L, 1L)
 
   df_footnote <-
-    .number_footnotes(x) %>%
-    inner_join(
-      x$table_styling$header %>%
-        select("column", column_id = "id"),
+    .number_footnotes(x) |>
+    dplyr::inner_join(
+      x$table_styling$header |>
+        dplyr::select("column", column_id = "id"),
       by = "column"
-    ) %>%
-    mutate(
+    ) |>
+    dplyr::mutate(
       row_numbers =
         ifelse(.data$tab_location == "header",
-          header_i_index,
-          .data$row_numbers
+               header_i_index,
+               .data$row_numbers
         )
-    ) %>%
-    select(
+    ) |>
+    dplyr::select(
       "footnote_id", "footnote", "tab_location",
       "row_numbers", "column_id"
-    ) %>%
-    nest(location_ids = c("row_numbers", "column_id")) %>%
-    mutate(
-      row_numbers = map(.data$location_ids, ~ pluck(.x, "row_numbers") %>% unique()),
-      column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
+    ) |>
+    tidyr::nest(location_ids = c("row_numbers", "column_id")) %>%
+    dplyr::mutate(
+      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers") |> unique()),
+      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") |> unique())
     )
 
   flextable_calls[["footnote"]] <-
@@ -279,16 +249,16 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # fmt_missing ----------------------------------------------------------------
   df_fmt_missing <-
-    x$table_styling$fmt_missing %>%
-    inner_join(
-      x$table_styling$header %>%
-        select("column", column_id = "id"),
+    x$table_styling$fmt_missing |>
+    dplyr::inner_join(
+      x$table_styling$header |>
+        dplyr::select("column", column_id = "id"),
       by = "column"
-    ) %>%
-    select("symbol", "row_numbers", "column_id") %>%
-    nest(location_ids = "column_id") %>%
-    mutate(
-      column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
+    ) |>
+    dplyr::select("symbol", "row_numbers", "column_id") %>%
+    tidyr::nest(location_ids = "column_id") %>%
+    dplyr::mutate(
+      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") |> unique())
     )
 
   flextable_calls[["fmt_missing"]] <-
@@ -305,14 +275,14 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # bold -----------------------------------------------------------------------
   df_bold <-
-    x$table_styling$text_format %>%
-    filter(.data$format_type == "bold") %>%
-    inner_join(
-      x$table_styling$header %>%
-        select("column", column_id = "id"),
+    x$table_styling$text_format |>
+    dplyr::filter(.data$format_type == "bold") |>
+    dplyr::inner_join(
+      x$table_styling$header |>
+        dplyr::select("column", column_id = "id"),
       by = "column"
-    ) %>%
-    select("format_type", "row_numbers", "column_id")
+    ) |>
+    dplyr::select("format_type", "row_numbers", "column_id")
 
   flextable_calls[["bold"]] <-
     map(
@@ -326,14 +296,14 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # italic ---------------------------------------------------------------------
   df_italic <-
-    x$table_styling$text_format %>%
-    filter(.data$format_type == "italic") %>%
-    inner_join(
-      x$table_styling$header %>%
-        select("column", column_id = "id"),
+    x$table_styling$text_format |>
+    dplyr::filter(.data$format_type == "italic") |>
+    dplyr::inner_join(
+      x$table_styling$header |>
+        dplyr::select("column", column_id = "id"),
       by = "column"
-    ) %>%
-    select("format_type", "row_numbers", "column_id")
+    ) |>
+    dplyr::select("format_type", "row_numbers", "column_id")
 
   flextable_calls[["italic"]] <-
     map(
@@ -378,7 +348,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # horizontal_line_above ------------------------------------------------------
   if (!is.null(x$table_styling$horizontal_line_above)) {
     row_number <-
-      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
+      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) |>
       which()
     flextable_calls[["horizontal_line"]] <-
       expr(
@@ -414,56 +384,44 @@ table_styling_to_flextable_calls <- function(x, ...) {
 }
 
 
-
-
 .chr_with_md_to_ft_compose <- function(x, j, i = 1L, part = "header", break_chr = "@@@@@@@@@@@&@@@@@@@@@") {
-  purrr::map2(
+  map2(
     .x = x, .y = j,
     .f = function(x, j) {
       x <-
-        stringr::str_replace_all(
+        str_replace_all(
           x,
           pattern = "\\*\\*(.*?)\\*\\*",
           replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
         )
 
       x <-
-        stringr::str_replace_all(
+        str_replace_all(
           x,
           pattern = "\\_(.*?)\\_",
           replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
         )
 
-      stringr::str_split(x, pattern = break_chr) %>%
+      str_split(x, pattern = break_chr) %>%
         unlist() %>%
-        purrr::discard(~ . == "") %>%
-        purrr::map(
+        discard(~ . == "") %>%
+        map(
           function(.x) {
             if (startsWith(.x, "**") && endsWith(.x, "**")) {
               .x <-
-                stringr::str_replace_all(.x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
-                {
-                  rlang::expr(flextable::as_b(!!.))
-                }
+                str_replace_all(.x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
+                {expr(flextable::as_b(!!.))} # styler: off
             } else if (startsWith(.x, "_") && endsWith(.x, "_")) {
               .x <-
-                stringr::str_replace_all(.x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
-                {
-                  rlang::expr(flextable::as_i(!!.))
-                }
+                str_replace_all(.x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
+                {expr(flextable::as_i(!!.))} # styler: off
             }
 
             return(.x)
           }
         ) %>%
-        {
-          switch(!rlang::is_empty(.),
-            .
-          ) %||% ""
-        } %>%
-        {
-          rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))
-        }
+        {switch(!rlang::is_empty(.), .) %||% ""} %>% # styler: off
+        {expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))} # styler: off
     }
   )
 }

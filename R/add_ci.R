@@ -2,282 +2,248 @@
 #'
 #' Add a new column with the confidence intervals for proportions, means, etc.
 #'
-#' @param x A `tbl_summary` or a `tbl_svysummary` object
-#' @param statistic Formula indicating how the confidence interval will be displayed.
-#' Default is `list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")`
-#' @param method Confidence interval method. Default is
-#' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")` for `tbl_summary` objects
-#' and `list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean")` for `tbl_svysummary`
-#' objects.
-#' See details below.
-#' @param conf.level Confidence level. Default is `0.95`
-#' @param style_fun Function to style upper and lower bound of confidence
-#' interval. Default is
-#' `list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)`.
-#' @param pattern string indicating the pattern to use to merge the CI with
-#' the statistics cell. The default is NULL, where no columns are merged.
-#' The two columns that will be merged are the statistics column,
-#' represented by `"{stat}"` and the CI column represented by `"{ci}"`,
-#' e.g. `pattern = "{stat} ({ci})"` will merge the two columns with the CI
-#' in parentheses.
-#' @param df For `tbl_svysummary()`, the number of degrees of freedom used
-#' to estimate confidence intervals. By default, will use `survey::degf()`.
-#' @param ... Not used
+#' @param x (`tbl_summary`)\cr
+#'   a summary table of class `'tblsummary'`
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Indicates how the confidence interval will be displayed.
+#'   Default is `list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~ "{conf.low}%, {conf.high}%")`
+#' @param method ([`formula-list-selector`][syntax])\cr
+#'   Confidence interval method. Default is
+#'   `list(all_continuous() ~ "t.test", all_categorical() ~ "wilson")`.
+#'   See details below.
+#' @param conf.level (scalar `real`)\cr
+#'   Confidence level. Default is `0.95`
+#' @param style_fun (`function`)\cr
+#'   Function to style upper and lower bound of confidence interval. Default is
+#'   `list(all_continuous() ~ label_style_sigfig(), all_categorical() ~ label_style_sigfig(scale =  100))`.
+#' @param pattern (`string`)\cr
+#'   Indicates the pattern to use to merge the CI with
+#'   the statistics cell. The default is NULL, where no columns are merged.
+#'   The two columns that will be merged are the statistics column,
+#'   represented by `"{stat}"` and the CI column represented by `"{ci}"`,
+#'   e.g. `pattern = "{stat} ({ci})"` will merge the two columns with the CI
+#'   in parentheses. Default is `NULL`, and no merging is performed.
+#' @inheritParams rlang::args_dots_empty
 #' @inheritParams tbl_summary
 #'
 #' @section method argument:
 #'
-#' **for `tbl_summary` tables**
-#'
 #' Must be one of
-#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
-#' variables, and `c("t.test", "wilcox.test")` for continuous variables.
-#'
-#' Methods `c("wilson", "wilson.no.correct")` are calculated with
-#' `prop.test(correct = c(TRUE, FALSE))`.
-#' The default method, `"wilson"`, includes the Yates continuity correction.
-#' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
-#'
-#' Confidence intervals for means are calculated using `t.test()` and
-#' `wilcox.test()` for pseudo-medians.
-#'
-#' **for `tbl_svysummary` tables**
-#'
-#' Must be one of
-#' `c("svyprop", "svyprop.logit", "svyprop.likelihood", "svyprop.asin", "svyprop.beta", "svyprop.mean", "svyprop.xlogit")`
-#' for categorical variables, and
-#' `c("svymean", "svymedian", "svymedian.mean", "svymedian.beta", "svymedian.xlogit", "svymedian.asin", "svymedian.score")`
-#' for continuous variables.
-#'
-#' Confidence intervals for proportions are computed with `survey::svyciprop()`.
-#' See the help file of this function for details on the different methods
-#' available to compute CIs. The default method `"svyprop"` is equivalent
-#' to `"svyprop.logit"`, corresponding to a call to `survey::svyciprop()` with
-#' `method = "logit"`.
-#'
-#' Confidence intervals for means (method `"svymean"`) are computed using
-#' `confint(svymean())`.
-#'
-#' Confidence intervals for medians are computed with `survey::svyquantile()`.
-#' See the help file of this function for details on the different methods
-#' available to compute CIs. The default method `"svymedian"` is equivalent
-#' to `"svymedian.mean"`, corresponding to a call to `surevy::svyquantile()`
-#' with `method = "mean"`.
+#' - `"wilson"`, `"wilson.no.correct"` calculated via `prop.test(correct = c(TRUE, FALSE))` for **categorical** variables
+#' - `"exact"` calculated via `stats::binom.test()` for **categorical** variables
+#' - `"wald"`, `"wald.no.correct"` calculated via `cardx::proportion_ci_wald(correct = c(TRUE, FALSE)` for **categorical** variables
+#' - `"agresti.coull"` calculated via `cardx::proportion_ci_agresti_coull()` for **categorical** variables
+#' - `"jeffreys"` calculated via `cardx::proportion_ci_jeffreys()` for **categorical** variables
+#' - `"t.test"` calculated via `stats::t.test()` for **continuous** variables
+#' - `"wilcox.test"` calculated via `stats::wilcox.test()` for **continuous** variables
 #'
 #' @return gtsummary table
-#' @rdname add_ci
-#' @export
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#' @name add_ci
 #'
-#' @family tbl_summary tbl_svysummary tools
-#' @examples
-#' \donttest{
+#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
-#' add_ci_ex1 <-
-#'   trial %>%
-#'   select(marker, response, trt) %>%
+#' trial |>
 #'   tbl_summary(
 #'     missing = "no",
-#'     statistic = all_continuous() ~ "{mean} ({sd})"
-#'   ) %>%
+#'     statistic = all_continuous() ~ "{mean} ({sd})",
+#'     include = c(marker, response, trt)
+#'   ) |>
 #'   add_ci()
 #'
 #' # Example 2 ----------------------------------
-#' add_ci_ex2 <-
-#'   trial %>%
+#' trial |>
 #'   select(response, grade) %>%
 #'   tbl_summary(
 #'     statistic = all_categorical() ~ "{p}%",
-#'     missing = "no"
-#'   ) %>%
-#'   add_ci(pattern = "{stat} ({ci})") %>%
+#'     missing = "no",
+#'     include = c(response, grade)
+#'   ) |>
+#'   add_ci(pattern = "{stat} ({ci})") |>
 #'   modify_footnote(everything() ~ NA)
-#'
-#' # Example 3 ----------------------------------
-#' data(api, package = "survey")
-#' add_ci_ex3 <-
-#'   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
-#'   tbl_svysummary(
-#'     include = c(api00, hsg, stype),
-#'     statistic = hsg ~ "{mean} ({sd})"
-#'   ) %>%
-#'   add_ci(
-#'     method = api00 ~ "svymedian"
-#'   )
-#' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_ci_ex1.png", width = "50")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_ci_ex2.png", width = "45")`
-#' }}
-#'
-#' \if{html}{Example 3}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_ci_ex3.png", width = "45")`
-#' }}
+NULL
+
+#' @rdname add_ci
+#' @export
 add_ci <- function(x, ...) {
+  check_not_missing(x)
+  check_class(x, "gtsummary")
   UseMethod("add_ci")
 }
 
 #' @rdname add_ci
 #' @export
 add_ci.tbl_summary <- function(x,
-                               method = NULL,
+                               method = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"),
                                include = everything(),
-                               statistic = NULL,
+                               statistic =
+                                 list(all_continuous() ~ "{conf.low}, {conf.high}",
+                                      all_categorical() ~ "{conf.low}%, {conf.high}%"),
                                conf.level = 0.95,
-                               style_fun = NULL,
+                               style_fun =
+                                 list(all_continuous() ~ label_style_sigfig(),
+                                      all_categorical() ~ label_style_sigfig(scale =  100)),
                                pattern = NULL,
-                               df = NULL,
                                ...) {
-  rlang::check_dots_used()
-
-  # resolving arguments --------------------------------------------------------
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      var_info = x$table_body,
-      arg_name = "include"
-    )
-  summary_type <-
-    x$meta_data %>%
-    filter(.data$variable %in% .env$include) %>%
-    select("variable", "summary_type") %>%
-    tibble::deframe()
-
-  if (inherits(x, "tbl_summary")) {
-    default_method <- list(
-      all_categorical() ~ "wilson",
-      all_continuous() ~ "t.test"
-    )
-  }
-  if (inherits(x, "tbl_svysummary")) {
-    default_method <- list(
-      all_categorical() ~ "svyprop",
-      all_continuous() ~ "svymean"
-    )
-  }
-
-  if (inherits(x, "tbl_svysummary") && is.null(df)) {
-    df <- survey::degf(x$inputs$data)
-  }
-  if (inherits(x, "tbl_summary") && !is.null(df)) {
-    cli::cli_alert_danger("{.arg df} is not used for `tbl_summary` objects.")
-  }
-
-  method <-
-    .formula_list_to_named_list(
-      x = default_method,
-      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-      arg_name = "method"
-    ) %>%
-    utils::modifyList(
-      val =
-        .formula_list_to_named_list(
-          x = method,
-          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-          arg_name = "method",
-          type_check = chuck(type_check, "is_string", "fn"),
-          type_check_msg = chuck(type_check, "is_string", "msg")
-        ) %||%
-          list()
-    )
-
-  style_fun <-
-    .formula_list_to_named_list(
-      x = list(
-        all_categorical() ~ function(x) style_sigfig(x, scale = 100),
-        all_continuous() ~ style_sigfig
-      ),
-      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-      arg_name = "style_fun"
-    ) %>%
-    utils::modifyList(
-      val =
-        .formula_list_to_named_list(
-          x = style_fun,
-          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-          arg_name = "style_fun",
-          type_check = chuck(type_check, "is_function", "fn"),
-          type_check_msg = chuck(type_check, "is_function", "msg")
-        ) %||%
-          list()
-    )
-
-  statistic <-
-    .formula_list_to_named_list(
-      x = list(
-        all_categorical() ~ "{conf.low}%, {conf.high}%",
-        all_continuous() ~ "{conf.low}, {conf.high}"
-      ),
-      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-      arg_name = "statistic"
-    ) %>%
-    utils::modifyList(
-      val =
-        .formula_list_to_named_list(
-          x = statistic,
-          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include, ]),
-          arg_name = "statistic",
-          type_check = chuck(type_check, "is_character", "fn"),
-          type_check_msg = chuck(type_check, "is_character", "msg")
-        ) %||%
-          list()
-    )
-
+  set_cli_abort_call()
+  check_dots_used()
   updated_call_list <- c(x$call_list, list(add_ci = match.call()))
 
   # check inputs ---------------------------------------------------------------
-  if (!is.null(pattern)) {
-    if (!rlang::is_string(pattern)) {
-      stop("The `pattern=` argument must be a string.", call. = FALSE)
+  check_scalar_range(conf.level, range = c(0, 1))
+  check_string(pattern, allow_empty = TRUE)
+
+  # process inputs -------------------------------------------------------------
+  cards::process_selectors(
+    data = select_prep(x$table_body),
+    include = {{ include }}
+  )
+
+  cards::process_formula_selectors(
+    data = select_prep(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
+    method = method,
+    statistic = statistic,
+    style_fun = style_fun
+  )
+  cards::fill_formula_selectors(
+    data = select_prep(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
+    method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["method"]]),
+    statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["statistic"]]),
+    style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["style_fun"]])
+  )
+
+  # check statistic and style_fun arg ------------------------------------------
+  cards::check_list_elements(
+    x = statistic,
+    predicate = \(x) {
+      is_string(x) && # must be a string
+        !is_empty(.extract_glue_elements(x)) && # must contain at least one glue element
+        is_empty(setdiff(.extract_glue_elements(x), c("conf.low", "conf.high"))) # glue elements must be conf.low and conf.high only
+    },
+    error_msg = c(
+      "There was an error in the values passed for the {.arg statistic} argument.",
+      i = "The value must be a string of length {.val {1}}.",
+      i = "The value must contain glue-style elements and only {.val {{conf.low}}} and {.val {{conf.high}}} may be included."
+    )
+  )
+  cards::check_list_elements(
+    x = style_fun,
+    predicate = \(x) is.function(x),
+    error_msg = "The values passed in the {.arg style_fun} argument must be functions."
+  )
+
+  # check the method values match the summary types ----------------------------
+  walk(
+    include,
+    \(variable) {
+      if (x$input$type[[variable]] %in% c("continuous", "continuous2") &&
+          !method[[variable]] %in% c("t.test", "wilcox.test")) {
+        cli::cli_abort(
+          "The value of the {.arg method} argument for continuous variable
+           {.val {variable}} must be one of {.val {c('t.test', 'wilcox.test')}}",
+          call = get_cli_abort_call()
+        )
+      }
+      else if (x$input$type[[variable]] %in% c("categorical", "dichotomous") &&
+               !method[[variable]] %in% c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti.coull", "jeffreys", "asymptotic")) {
+        cli::cli_abort(
+          'The value of the {.arg method} argument for categorical variable
+           {.val {variable}} must be one of {.val {c("wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti.coull", "jeffreys")}}',
+          call = get_cli_abort_call()
+        )
+      }
     }
-    pattern_elements <-
-      stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
-      map(stringr::str_remove_all, pattern = fixed("}")) %>%
-      map(stringr::str_remove_all, pattern = fixed("{")) %>%
-      unlist() %>%
-      unique()
-    if (!rlang::is_empty(pattern_elements %>% setdiff(c("stat", "ci")))) {
-      stop("All `pattern=` elements in curly brackets must be 'stat' and 'ci'", call. = FALSE)
+  )
+
+  # check if mean CI selected for summary without a mean -----------------------
+  variables_with_mean_ci <- keep(method, ~.x == "t.test") |> names()
+  walk(
+    variables_with_mean_ci,
+    function(variable) {
+      if (!"mean" %in% .extract_glue_elements(x[["inputs"]][["statistic"]][[variable]])) {
+        cli::cli_inform(
+          "A confidence interval for the mean in variable {.val {variable}} was
+           requested; however, the primary table does not contain a mean."
+        )
+      }
     }
-    if (!setequal(pattern_elements, c("stat", "ci"))) {
-      paste(
-        "The `pattern=` argument should",
-        "include reference to both '{stat}' and '{ci}'"
-      ) %>%
-        stop(call. = FALSE)
+  )
+
+  # calculate ARD CIs ----------------------------------------------------------
+  x$cards$add_ci <-
+    .calculate_add_ci_cards_summary(data = x$inputs$data, include = include, by = x$inputs$by,
+                                    method = method, style_fun = style_fun, conf.level = conf.level,
+                                    overall= "add_overall" %in% names(x$call_list))
+
+
+
+  # finalize styling of the table ----------------------------------------------
+  brdg_add_ci(x, pattern = pattern, statistic = statistic, include = include,
+              conf.level = conf.level, updated_call_list = updated_call_list)
+}
+
+
+
+brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call_list) {
+  # check pattern argument -----------------------------------------------------
+  if (!is_empty(pattern)) {
+    if (!rlang::is_empty(.extract_glue_elements(pattern) |> setdiff(c("stat", "ci")))) {
+      cli::cli_abort(
+        "The {.arg pattern} argument allows only for elements {.val {c('stat', 'ci')}} to be included in curly brackets.",
+        call = get_cli_abort_call()
+      )
+    }
+    if (!setequal(.extract_glue_elements(pattern), c("stat", "ci"))) {
+      cli::cli_abort(
+        "The {.arg pattern} argument must include references to both {.val {c('{stat}', '{ci}')}}",
+        call = get_cli_abort_call()
+      )
     }
   }
 
-  # adding new column with CI --------------------------------------------------
-  if (inherits(x, "tbl_summary")) {
-    single_ci_fn <- single_ci
-  }
-  else if (inherits(x, "tbl_svysummary")) {
-    single_ci_fn <- single_ci_svy
-  }
-  x <-
-    x %>%
+  # evaluate glue string on the statistics -------------------------------------
+  df_glued <-
+    x$cards$add_ci |>
+    dplyr::group_by(dplyr::pick(c(cards::all_ard_groups(), cards::all_ard_variables()))) |>
+    dplyr::group_map(
+      \(.x, .y) {
+        .y$glued_statistic <-
+          eval_tidy(
+            expr = expr(glue(!!statistic[[.y$variable]])),
+            data = cards::get_ard_statistics(.x, .column = "stat_fmt")
+          )
+        .y
+      }
+    ) |>
+    dplyr::bind_rows()
+
+  # format results to merge into primary table ---------------------------------
+  df_prepped_for_merge <-
+    df_glued |>
+    dplyr::group_by(dplyr::pick(cards::all_ard_groups())) %>%
+    dplyr::mutate(
+      gts_colname =
+        if (is_empty(x$inputs$by)) "ci_stat_0"
+      else {
+        ifelse(
+          !is.na(.data[["group1"]]),
+          paste0("ci_stat_", dplyr::cur_group_id()),
+          "ci_stat_0" # this accounts for overall stats if run after `add_overall()`
+        )
+      }
+    ) |>
+    tidyr::pivot_wider(
+      id_cols = cards::all_ard_variables(),
+      names_from = "gts_colname",
+      values_from = "glued_statistic"
+    )
+
+  # add CI stats to primary table ----------------------------------------------
+  x <- x |>
     add_stat(
-      fns = all_of(include) ~ purrr::partial(single_ci_fn,
-                                             method = method,
-                                             conf.level = conf.level,
-                                             statistic = statistic,
-                                             style_fun = style_fun,
-                                             summary_type = summary_type,
-                                             df = df
-      ),
-      location = list(all_of(include) ~ "label", all_categorical(FALSE) ~ "level")
-    ) %>%
+      fns =
+        all_of(include) ~ \(variable, ...) dplyr::filter(df_prepped_for_merge, .data$variable %in% .env$variable) |> dplyr::select(matches("^ci_stat_\\d+$")),
+      location = list(everything() ~ "label", all_categorical(FALSE) ~ "level")
+    ) |>
     # moving the CI cols to after the original stat cols (when `by=` variable present)
     # also renaming CI columns
     modify_table_body(
@@ -288,83 +254,87 @@ add_ci.tbl_summary <- function(x,
           dplyr::rename_with(
             .fn = ~ vec_paste0(
               "ci_",
-              stringr::str_replace(., pattern = "_ci$", replacement = "")
+              sub(x = ., pattern = "_ci$", replacement = "")
             ),
             .cols = matches("^stat_\\d+_ci$")
           )
 
         # reorder the columns
         stat_cols_in_order <-
-          .x %>%
-          select(all_stat_cols()) %>%
-          names() %>%
-          lapply(function(x) c(x, paste0("ci_", x))) %>%
+          .x |>
+          select(all_stat_cols()) |>
+          names() |>
+          lapply(\(x) c(x, paste0("ci_", x))) |>
           unlist()
 
-        .x %>%
+        .x |>
           dplyr::relocate(all_of(stat_cols_in_order), .after = all_of(stat_cols_in_order[1]))
       }
     )
 
+  # if we are not merging the CIs with other cells, assign headers
   if (is.null(pattern)) {
-    x <-
-      x %>%
+    x <- x |>
       # updating CI column headers and footnotes
-      modify_header(matches("^ci_stat_\\d+$") ~ paste0("**", conf.level * 100, "% CI**")) %>%
+      modify_header(
+        matches("^ci_stat_\\d+$") ~ paste0("**", conf.level * 100, "% ", translate_string("CI"), "**")
+      ) |>
       modify_footnote(
-        update = matches("^ci_stat_\\d+$") ~ translate_text("CI = Confidence Interval"),
+        matches("^ci_stat_\\d+$") ~ translate_string("CI = Confidence Interval"),
         abbreviation = TRUE
       )
-  } else {
+  }
+  else {
     # get the stat column index numbers, eg get the 1 and 2 from stat_1 and stat_2
     stat_column_names <-
-      x$table_body %>%
-      select(all_stat_cols()) %>%
+      x$table_body |>
+      select(all_stat_cols()) |>
       names()
-    chr_index <- stringr::str_replace(stat_column_names, pattern = "^stat_", "")
+    chr_index <- gsub(x = stat_column_names, pattern = "^stat_", replacement = "")
 
     # create list of column merging expressions
     cols_merge_expr <-
-      chr_index %>%
+      chr_index |>
       map(
-        ~ expr(modify_table_styling(
-          columns = !!glue("stat_{.x}"),
-          rows = !is.na(!!sym(paste0("ci_stat_", .x))),
-          cols_merge_pattern =
-            !!glue::glue_data(
-              .x = list(stat = paste0("{stat_", .x, "}"), ci = paste0("{ci_stat_", .x, "}")),
-              pattern
-            )
-        ))
+        ~ expr(
+          modify_table_styling(
+            columns = !!glue("stat_{.x}"),
+            rows = !is.na(!!sym(paste0("ci_stat_", .x))),
+            cols_merge_pattern =
+              !!glue::glue_data(
+                .x = list(stat = paste0("{stat_", .x, "}"), ci = paste0("{ci_stat_", .x, "}")),
+                pattern
+              )
+          )
+        )
       )
 
     # merge columns
     x <-
-      cols_merge_expr %>%
-      purrr::reduce(~ rlang::inject(!!.x %>% !!.y), .init = x) %>%
+      cols_merge_expr |>
+      reduce(\(.x, .y) inject(!!.x %>% !!.y), .init = x) |>
       modify_footnote(
-        update = all_stat_cols() ~ translate_text("CI = Confidence Interval"),
+        all_stat_cols() ~ translate_string("CI = Confidence Interval"),
         abbreviation = TRUE
       )
 
     # updating header using `pattern=` argument
     x$table_styling$header <-
-      x$table_styling$header %>%
-      rowwise() %>%
-      mutate(
+      x$table_styling$header |>
+      dplyr::rowwise() %>%
+      dplyr::mutate(
         label =
           ifelse(
-            .data$column %in% stat_column_names,
+            .data$column %in% .env$stat_column_names,
             glue::glue_data(
-              .x = list(stat = .data$label, ci = paste0("**", conf.level * 100, "% CI**")),
+              .x = list(stat = .data$label, ci = paste0("**", .env$conf.level * 100, "% CI**")),
               pattern
             ),
             .data$label
           )
-      ) %>%
-      ungroup()
+      ) |>
+      dplyr::ungroup()
   }
-
 
   # return gtsummary table -----------------------------------------------------
   # fill in the Ns in the header table modify_stat_* columns
@@ -373,377 +343,54 @@ add_ci.tbl_summary <- function(x,
   x
 }
 
-# function to add CI for one variable (tbl_summary)
-single_ci <- function(variable, by, tbl, method, conf.level,
-                      style_fun, statistic, summary_type, ...) {
-  if (method[[variable]] %in% c(
-    "wilson", "wilson.no.correct",
-    "exact", "asymptotic"
-  ) &&
-    summary_type[[variable]] %in% c("categorical", "dichotomous")) {
-    df_single_ci <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1) %>%
-      dplyr::rowwise() %>%
-      mutate(
-        ci =
-          calculate_prop_ci(
-            x = .data$n, n = .data$N,
-            statistic = statistic[[variable]],
-            method = method[[variable]],
-            conf.level = conf.level,
-            style_fun = style_fun[[variable]]
-          )
-      )
-  } else if (method[[variable]] %in% c("t.test", "wilcox.test") &&
-    summary_type[[variable]] %in% c("continuous", "continuous2")) {
-    df_single_ci <-
-      tbl$inputs$data %>%
-      dplyr::group_by_at(tbl$by) %>%
-      tidyr::nest(data = -all_of(tbl$by)) %>%
-      dplyr::rowwise() %>%
-      mutate(
-        ci =
-          calculate_mean_ci(
-            data = .data$data,
-            variable = variable,
-            statistic = statistic[[variable]],
-            method = method[[variable]],
-            conf.level = conf.level,
-            style_fun = style_fun[[variable]],
-            tbl = tbl
-          )
-      )
-    if (is.null(tbl$by)) {
-      df_single_ci <-
-        df_single_ci %>%
-        mutate(col_name = "stat_0") %>%
-        select(any_of(c("col_name", "variable_levels", "ci")))
-    } else {
-      df_single_ci <-
-        df_single_ci %>%
-        dplyr::rename(by = all_of(tbl$by)) %>%
-        left_join(
-          tbl$df_by %>% select("by", col_name = "by_col"),
-          by = "by"
-        ) %>%
-        select(any_of(c("by", "col_name", "ci")))
-    }
-  } else {
-    glue(
-      "Error with variable '{variable}'. Method '{method[[variable]]}' ",
-      "cannot be applied to summary type '{summary_type[[variable]]}'."
-    ) %>%
-      stop(call. = FALSE)
+.calculate_add_ci_cards_summary <- function(data, include, by, method, style_fun, conf.level, overall= FALSE) {
+  lst_cards <-
+    lapply(
+      include,
+      FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = by, method = method, conf.level = conf.level)
+    ) |>
+    set_names(include)
+
+  # if we need to add an overall calculation if `add_overall()` has been previously run
+  if (isTRUE(overall)) {
+    lst_cards <-
+      lapply(
+        include,
+        FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level)
+      ) |>
+      set_names(include) |>
+      append(lst_cards)
   }
 
-  df_single_ci %>%
-    tidyr::pivot_wider(
-      id_cols = any_of("variable_levels"),
-      values_from = "ci",
-      names_from = "col_name"
-    ) %>%
-    select(all_stat_cols()) %>%
-    dplyr::rename_with(.fn = ~ vec_paste0(., "_ci"))
+
+  lst_cards |>
+    # update the formatting function and apply the function
+    imap(
+      ~dplyr::mutate(
+        .x,
+        fmt_fn = ifelse(.data$stat_name %in% c("estimate", "conf.low", "conf.high"),
+                        list(style_fun[[.y]]),
+                        .data$fmt_fn)
+      ) |>
+        cards::apply_fmt_fn()
+    ) |>
+    dplyr::bind_rows() |>
+    cards::tidy_ard_column_order()
 }
 
-calculate_mean_ci <- function(data, variable, statistic,
-                              method, conf.level, style_fun, tbl) {
-  if (method %in% "t.test") {
-    if (!"mean" %in%
-      names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
-      paste(
-        "{.code add_ci()} added mean CI for {.val {variable}};",
-        "however, no mean is shown in the {.code tbl_summary()} table."
-      ) %>%
-        cli::cli_alert_danger()
-    }
-    df_ci <-
-      stats::t.test(data[[variable]], conf.level = conf.level) %>%
-      broom::tidy()
-  } else if (method %in% "wilcox.test") {
-    if (!"median" %in%
-      names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
-      paste(
-        "{.code add_ci()} added pseudo-median CI for {.val {variable}};",
-        "however, no median is shown in the {.code tbl_summary()} table."
-      ) %>%
-        cli::cli_alert_danger()
-    }
-    df_ci <-
-      stats::wilcox.test(data[[variable]], conf.level = conf.level, conf.int = TRUE) %>%
-      broom::tidy()
-  }
-
-  # round and format CI
-  df_ci %>%
-    select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(style_fun) %>%
-    glue::glue_data(statistic) %>%
-    as.character()
-}
-
-calculate_prop_ci <- function(x, n, statistic, method, conf.level, style_fun) {
-  # calculate CI
-  if (method %in% c("wilson", "wilson.no.correct")) {
-    df_ci <-
-      stats::prop.test(
-        x = x, n = n,
-        conf.level = conf.level,
-        correct = isTRUE(method == "wilson")
-      ) %>%
-      broom::tidy()
-  } else if (method %in% c("exact", "asymptotic")) {
-    assert_package("Hmisc", fn = 'add_ci(method = c("exact", "asymptotic"))')
-    df_ci <-
-      Hmisc::binconf(
-        x = x, n = n,
-        method = method, alpha = 1 - conf.level
-      ) %>%
-      as.data.frame() %>%
-      set_names(c("estimate", "conf.low", "conf.high"))
-  }
-
-  # round and format CI
-  df_ci %>%
-    select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(style_fun) %>%
-    glue::glue_data(statistic) %>%
-    as.character()
-}
-
-#' @rdname add_ci
-#' @export
-add_ci.tbl_svysummary <- add_ci.tbl_summary
-
-# function to add CI for one variable (tbl_svysummary)
-single_ci_svy <- function(variable, by, tbl, method, conf.level,
-                          style_fun, statistic, summary_type, df, ...) {
-  assert_package("survey", fn = "add_ci.tbl_svysummary())")
-
-  if (method[[variable]] %in% c("svymean") &&
-    summary_type[[variable]] %in% c("continuous", "continuous2")) {
-    df_single_ci <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1) %>%
-      dplyr::rowwise() %>%
-      mutate(
-        ci = calculate_svymean_ci(
-          variable = .data$variable,
-          by = .env$by,
-          level = .data[["by"]],
-          tbl = .env$tbl,
-          statistic = statistic[[variable]],
-          conf.level = conf.level,
-          style_fun = style_fun[[variable]],
-          df = df
-        )
-      )
-
-    if (!"mean" %in%
-      names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
-      paste(
-        "{.code add_ci()} added mean CI for {.val {variable}};",
-        "however, no mean is shown in the {.code tbl_svysummary()} table."
-      ) %>%
-        cli::cli_alert_danger()
-    }
-  } else if (stringr::str_starts(method[[variable]], "svymedian") &&
-    summary_type[[variable]] %in% c("continuous", "continuous2")) {
-    svymedian_method <- stringr::str_sub(method[[variable]], start = 11L)
-    if (svymedian_method == "") svymedian_method <- "mean"
-    df_single_ci <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1) %>%
-      dplyr::rowwise() %>%
-      mutate(
-        ci = calculate_svymedian_ci(
-          variable = .data$variable,
-          by = .env$by,
-          level = .data[["by"]],
-          tbl = .env$tbl,
-          method = svymedian_method,
-          statistic = statistic[[variable]],
-          conf.level = conf.level,
-          style_fun = style_fun[[variable]],
-          df = df
-        )
-      )
-
-    if (!"median" %in%
-      names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
-      paste(
-        "{.code add_ci()} added median CI for {.val {variable}};",
-        "however, no median is shown in the {.code tbl_svysummary()} table."
-      ) %>%
-        cli::cli_alert_danger()
-    }
-  } else if (stringr::str_starts(method[[variable]], "svyprop") &&
-    summary_type[[variable]] %in% c("categorical", "dichotomous")) {
-    svyprop_method <- stringr::str_sub(method[[variable]], start = 9L)
-    if (svyprop_method == "") svyprop_method <- "logit"
-
-    md <-
-        tbl$meta_data %>%
-        filter(.data$variable %in% .env$variable) %>%
-        purrr::pluck("df_stats", 1)
-    if (!"variable_levels" %in% names(md)) # if dichotomous
-      md <- md %>%
-        dplyr::mutate(variable_levels =
-                        tbl$meta_data %>%
-                        filter(.data$variable %in% .env$variable) %>%
-                        purrr::pluck("dichotomous_value", 1)
-                      )
-
-    df_single_ci <-
-      md %>%
-      dplyr::rowwise() %>%
-      mutate(
-        ci = calculate_svyprop_ci(
-          variable = .data$variable,
-          variable_levels = .data$variable_levels,
-          by = .env$by,
-          level = .data[["by"]],
-          tbl = .env$tbl,
-          method = svyprop_method,
-          statistic = statistic[[variable]],
-          conf.level = conf.level,
-          style_fun = style_fun[[variable]],
-          df = df
-        )
-      )
-  } else {
-    glue(
-      "Error with variable '{variable}'. Method '{method[[variable]]}' ",
-      "cannot be applied to summary type '{summary_type[[variable]]}'."
-    ) %>%
-      stop(call. = FALSE)
-  }
-
-  df_single_ci %>%
-    tidyr::pivot_wider(
-      id_cols = any_of("variable_levels"),
-      values_from = "ci",
-      names_from = "col_name"
-    ) %>%
-    select(all_stat_cols()) %>%
-    dplyr::rename_with(.fn = ~ paste0(., "_ci"))
-}
-
-calculate_svymean_ci <- function(variable, by, level, tbl,
-                                 statistic, conf.level, style_fun, df) {
-  if (is.null(by) || is.na(level)) {
-    design <- tbl$inputs$data
-  } else {
-    design <- subset(
-      tbl$inputs$data,
-      tbl$inputs$data$variables[[by]] == level
-    )
-  }
-
-  df_ci <-
-    survey::svymean(
-      c_form(right = variable),
-      design = design,
-      na.rm = TRUE
-    ) %>%
-    stats::confint(level = conf.level, df = df) %>%
-    dplyr::as_tibble() %>%
-    set_names(c("conf.low", "conf.high"))
-
-  # round and format CI
-  df_ci %>%
-    select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(style_fun) %>%
-    glue::glue_data(statistic) %>%
-    as.character()
-}
-
-calculate_svymedian_ci <- function(variable, by, level, tbl, method,
-                                   statistic, conf.level, style_fun, df) {
-  if (is.null(by) || is.na(level)) {
-    design <- tbl$inputs$data
-  } else {
-    design <- subset(
-      tbl$inputs$data,
-      tbl$inputs$data$variables[[by]] == level
-    )
-  }
-
-  df_ci <-
-    survey::svyquantile(
-      c_form(right = variable),
-      design = design,
-      quantiles = .5,
-      alpha = 1 - conf.level,
-      interval.type = method,
-      ci = TRUE,
-      na.rm = TRUE,
-      df = df
-    ) %>%
-    purrr::pluck(1) %>%
-    dplyr::as_tibble() %>%
-    set_names(c("estimate", "conf.low", "conf.high", "se"))
-
-  # round and format CI
-  df_ci %>%
-    select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(style_fun) %>%
-    glue::glue_data(statistic) %>%
-    as.character()
-}
-
-calculate_svyprop_ci <- function(variable, variable_levels, by, level, tbl,
-                                 method, statistic, conf.level, style_fun, df) {
-  percent <- tbl$inputs$percent
-
-  if (is.null(by) || is.na(level)) {
-    design <- tbl$inputs$data
-    design$variables[["..binary..svyciprop.."]] <-
-      design$variables[[variable]] == variable_levels
-  } else if (percent == "column") {
-    design <- subset(
-      tbl$inputs$data,
-      tbl$inputs$data$variables[[by]] == level
-    )
-    design$variables[["..binary..svyciprop.."]] <-
-      design$variables[[variable]] == variable_levels
-  } else if (percent == "row") {
-    design <- subset(
-      tbl$inputs$data,
-      tbl$inputs$data$variables[[variable]] == variable_levels
-    )
-    design$variables[["..binary..svyciprop.."]] <-
-      design$variables[[by]] == level
-  } else {
-    design <- subset(
-      tbl$inputs$data,
-      !is.na(tbl$inputs$data$variables[[variable]])
-    )
-    design$variables[["..binary..svyciprop.."]] <-
-      design$variables[[by]] == level &
-      design$variables[[variable]] == variable_levels
-  }
-
-  df_ci <-
-    survey::svyciprop(
-      c_form(right = "..binary..svyciprop.."),
-      design = design,
-      method = method,
-      level = conf.level,
-      df = df
-    ) %>%
-    purrr::attr_getter("ci")() %>%
-    tibble::as_tibble_row() %>%
-    set_names(c("conf.low", "conf.high"))
-
-  # round and format CI
-  df_ci %>%
-    select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(style_fun) %>%
-    glue::glue_data(statistic) %>%
-    as.character()
+.calculate_one_ci_ard_summary <- function(data, variable, by, method, conf.level) {
+  switch(
+    method[[variable]],
+    "t.test" = cardx::ard_stats_t_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level),
+    "wilcox.test" = cardx::ard_stats_wilcox_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, conf.int = TRUE),
+    "wald" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "waldcc", conf.level = conf.level),
+    "wald.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level),
+    "exact" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "clopper-pearson", conf.level = conf.level),
+    "wilson" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilsoncc", conf.level = conf.level),
+    "wilson.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilson", conf.level = conf.level),
+    "agresti.coull" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "agresti-coull", conf.level = conf.level),
+    "jeffreys" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "jeffreys", conf.level = conf.level),
+    # Documentation for 'asymptotic' was removed in v2.0.0
+    "asymptotic" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level)
+  )
 }

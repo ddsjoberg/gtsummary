@@ -2,34 +2,38 @@
 % Please edit documentation in R/tbl_survfit.R
 \name{tbl_survfit}
 \alias{tbl_survfit}
-\alias{tbl_survfit.list}
 \alias{tbl_survfit.survfit}
 \alias{tbl_survfit.data.frame}
-\title{Creates table of survival probabilities}
+\alias{tbl_survfit.list}
+\title{Survival table}
 \usage{
 tbl_survfit(x, ...)
+
+\method{tbl_survfit}{survfit}(x, ...)
+
+\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
 
 \method{tbl_survfit}{list}(
   x,
   times = NULL,
   probs = NULL,
-  statistic = NULL,
+  statistic = "{estimate} ({conf.low}, {conf.high})",
   label = NULL,
-  label_header = NULL,
-  estimate_fun = NULL,
-  missing = NULL,
+  label_header = ifelse(!is.null(times), "**Time {time}**",
+    "**{style_sigfig(prob, scale=100)}\% Percentile**"),
+  estimate_fun = ifelse(!is.null(times), label_style_percent(symbol = TRUE),
+    label_style_sigfig()),
+  missing = "--",
   conf.level = 0.95,
+  type = NULL,
   reverse = FALSE,
-  quiet = NULL,
+  quiet = TRUE,
   ...
 )
-
-\method{tbl_survfit}{survfit}(x, ...)
-
-\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
 }
 \arguments{
-\item{x}{a survfit object, list of survfit objects, or a data frame.
+\item{x}{(\code{survfit}, \code{list}, \code{data.frame})\cr
+a survfit object, list of survfit objects, or a data frame.
 If a data frame is passed, a list of survfit objects is constructed using
 each variable as a stratifying variable.}
 
@@ -37,79 +41,66 @@ each variable as a stratifying variable.}
 are passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}. They are not used when \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}
 is called directly.}
 
-\item{times}{numeric vector of times for which to return survival probabilities.}
-
-\item{probs}{numeric vector of probabilities with values in (0,1)
-specifying the survival quantiles to return}
-
-\item{statistic}{string defining the statistics to present in the table.
-Default is \code{"{estimate} ({conf.low}, {conf.high})"}}
-
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}, or a string for a
-single variable table.}
-
-\item{label_header}{string specifying column labels above statistics. Default
-is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"} for n-year
-survival estimates}
-
-\item{estimate_fun}{function to format the Kaplan-Meier estimates. Default
-is \code{\link[=style_percent]{style_percent()}} for survival probabilities and \link{style_sigfig} for
-survival times}
-
-\item{missing}{text to fill when estimate is not estimable. Default is \code{"--"}}
-
-\item{conf.level}{Confidence level for confidence intervals. Default is 0.95}
-
-\item{reverse}{Flip the probability reported, i.e. \code{1 - estimate}.
-Default is \code{FALSE}.  Does not apply to survival quantile requests}
-
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
-
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
 
 \item{include}{Variable to include as stratifying variables.}
+
+\item{times}{(\code{numeric})\cr
+a vector of times for which to return survival probabilities.}
+
+\item{probs}{(\code{numeric})\cr
+a vector of probabilities with values in (0,1) specifying the survival quantiles to return.}
+
+\item{statistic}{(\code{string})\cr
+string defining the statistics to present in the table.
+Default is \code{"{estimate} ({conf.low}, {conf.high})"}}
+
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+List of formulas specifying variables labels,
+e.g. \code{list(age = "Age, yrs", stage = "Path T Stage")}, or a string for a
+single variable table.}
+
+\item{label_header}{(\code{string})\cr
+string specifying column labels above statistics. Default
+is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"} for n-year
+survival estimates}
+
+\item{estimate_fun}{(\code{function})\cr
+function to format the Kaplan-Meier estimates. Default
+is \code{\link[=label_style_percent]{label_style_percent()}} for survival probabilities and \code{\link[=label_style_sigfig]{label_style_sigfig()}} for
+survival times}
+
+\item{missing}{(\code{string})\cr
+text to fill when estimate is not estimable. Default is \code{"--"}}
+
+\item{conf.level}{(scalar \code{numeric})\cr ]
+Confidence level for confidence intervals. Default is \code{0.95}}
+
+\item{type}{(\code{string} or \code{NULL})\cr
+type of statistic to report. Available for Kaplan-Meier time estimates only, otherwise \code{type}
+is ignored. Default is \code{NULL}.
+Must be one of the following:\tabular{ll}{
+   type \tab transformation \cr
+   \code{"survival"} \tab \code{x} \cr
+   \code{"risk"} \tab \code{1 - x} \cr
+   \code{"cumhaz"} \tab \code{-log(x)} \cr
+}}
+
+\item{reverse}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-\lifecycle{maturing}
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary table of the results
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex1.png" alt="image of rendered example table" style="width:55\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex2.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex3.png" alt="image of rendered example table" style="width:55\%;">
-}}
-
-\if{html}{Example 4}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/survfit_cr_ex4.png" alt="image of rendered example table" style="width:55\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------
 # Pass single survfit() object
-tbl_survfit_ex1 <- tbl_survfit(
+tbl_survfit(
   survfit(Surv(ttdeath, death) ~ trt, trial),
   times = c(12, 24),
   label_header = "**{time} Month**"
@@ -117,9 +108,9 @@ tbl_survfit_ex1 <- tbl_survfit(
 
 # Example 2 ----------------------------------
 # Pass a data frame
-tbl_survfit_ex2 <- tbl_survfit(
+tbl_survfit(
   trial,
-  y = Surv(ttdeath, death),
+  y = "Surv(ttdeath, death)",
   include = c(trt, grade),
   probs = 0.5,
   label_header = "**Median Survival**"
@@ -127,45 +118,31 @@ tbl_survfit_ex2 <- tbl_survfit(
 
 # Example 3 ----------------------------------
 # Pass a list of survfit() objects
-tbl_survfit_ex3 <-
-  list(
-    survfit(Surv(ttdeath, death) ~ 1, trial),
-    survfit(Surv(ttdeath, death) ~ trt, trial)
-  ) \%>\%
+list(
+ survfit(Surv(ttdeath, death) ~ 1, trial),
+ survfit(Surv(ttdeath, death) ~ trt, trial)
+) |>
   tbl_survfit(times = c(12, 24))
 
 # Example 4 Competing Events Example ---------
 # adding a competing event for death (cancer vs other causes)
 set.seed(1123)
 library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
-trial2 <- trial \%>\%
-  mutate(
-    death_cr = case_when(
-      death == 0 ~ "censor",
-      runif(n()) < 0.5 ~ "death from cancer",
-      TRUE ~ "death other causes"
-    ) \%>\% factor()
+trial2 <- trial |>
+  dplyr::mutate(
+    death_cr =
+      dplyr::case_when(
+        death == 0 ~ "censor",
+        runif(n()) < 0.5 ~ "death from cancer",
+        TRUE ~ "death other causes"
+      ) |>
+      factor()
   )
 
-survfit_cr_ex4 <-
-  survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%
+survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_survfit tools: 
-\code{\link{add_n.tbl_survfit}()},
-\code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_survfit tools}

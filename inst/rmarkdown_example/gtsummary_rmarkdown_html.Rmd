@@ -16,14 +16,12 @@ library(survival)
 ## gtsummary tables
 
 Tables created with {gtsummary} can be integrated into R markdown documents.
-The {gtsummary} package was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from RStudio, and {gtsummary} tables are printed using {gt} when possible.
-Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
+The {gtsummary} package was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from Posit.
 
 ```{r example}
 patient_characteristics <-
-  trial %>%
-  select(trt, age, grade, response) %>%
-  tbl_summary(by = trt)  
+  trial |> 
+  tbl_summary(by = trt, include = c(age, grade, response))  
 patient_characteristics
 ```
 

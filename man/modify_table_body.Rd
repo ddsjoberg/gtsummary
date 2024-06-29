@@ -7,69 +7,48 @@
 modify_table_body(x, fun, ...)
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+A 'gtsummary' object}
 
-\item{fun}{A function or formula. If a \emph{function}, it is used as is.
-If a \emph{formula}, e.g. \code{fun = ~ .x \%>\% arrange(variable)},
-it is converted to a function. The argument passed to \verb{fun=} is \code{x$table_body}.}
+\item{fun}{(\code{function})\cr
+A function or formula. If a \emph{function}, it is used as is.
+If a \emph{formula}, e.g. \code{fun = ~ .x |> arrange(variable)},
+it is converted to a function. The argument passed to \code{fun} is \code{x$table_body}.}
 
-\item{...}{Additional arguments passed on to the mapped function}
+\item{...}{Additional arguments passed on to the function}
+}
+\value{
+A 'gtsummary' object
 }
 \description{
-\lifecycle{maturing}
 Function is for advanced manipulation of gtsummary tables.
 It allow users to modify the \code{.$table_body} data frame included
 in each gtsummary object.
 
 If a new column is added to the table, default printing instructions will then
 be added to \code{.$table_styling}. By default, columns are hidden.
-To show a column, add a column header with \code{modify_header()}.
+To show a column, add a column header with \code{modify_header()} or call
+\code{modify_column_unhide()}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_table_body_ex1.png" alt="image of rendered example table" style="width:65\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 --------------------------------
 # Add number of cases and controls to regression table
-modify_table_body_ex1 <-
-  trial \%>\%
-  select(response, age, marker) \%>\%
-  tbl_uvregression(
-    y = response,
-    method = glm,
-    method.args = list(family = binomial),
-    exponentiate = TRUE,
-    hide_n = TRUE
-  ) \%>\%
-  # adding number of non-events to table
-  modify_table_body(
-    ~ .x \%>\%
-      dplyr::mutate(N_nonevent = N_obs - N_event) \%>\%
-      dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
-  ) \%>\%
-  # assigning header labels
-  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
-  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
+trial |>
+ tbl_uvregression(
+   y = response,
+   include = c(age, marker),
+   method = glm,
+   method.args = list(family = binomial),
+   exponentiate = TRUE,
+   hide_n = TRUE
+ ) |>
+ # adding number of non-events to table
+ modify_table_body(
+   ~ .x \%>\%
+     dplyr::mutate(N_nonevent = N_obs - N_event) |>
+     dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
+ ) |>
+ # assigning header labels
+ modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") |>
+ modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
 }
-}
-\seealso{
-\code{modify_table_styling()}
-
-See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
-
-Other Advanced modifiers: 
-\code{\link{modify_column_alignment}()},
-\code{\link{modify_column_hide}()},
-\code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()},
-\code{\link{modify_fmt_fun}()},
-\code{\link{modify_table_styling}()}
-}
-\concept{Advanced modifiers}

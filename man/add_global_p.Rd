@@ -11,122 +11,75 @@ add_global_p(x, ...)
 \method{add_global_p}{tbl_regression}(
   x,
   include = everything(),
-  type = NULL,
   keep = FALSE,
-  anova_fun = NULL,
-  quiet = NULL,
+  anova_fun = global_pvalue_fun,
+  type = "III",
+  quiet,
   ...
 )
 
 \method{add_global_p}{tbl_uvregression}(
   x,
-  type = NULL,
   include = everything(),
   keep = FALSE,
-  anova_fun = NULL,
-  quiet = NULL,
+  anova_fun = global_pvalue_fun,
+  type = "III",
+  quiet,
   ...
 )
 }
 \arguments{
-\item{x}{Object with class \code{'tbl_regression'} or \code{'tbl_uvregression'}}
+\item{x}{(\code{tbl_regression}, \code{tbl_uvregression})\cr
+Object with class \code{'tbl_regression'} or \code{'tbl_uvregression'}}
 
 \item{...}{Additional arguments to be passed to \code{car::Anova},
 \code{aod::wald.test()} or \code{anova_fun} (if specified)}
 
-\item{include}{Variables to calculate global p-value for. Input may be a vector of
-quoted or unquoted variable names. Default is \code{everything()}}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to calculate global p-value for. Default is \code{everything()}}
 
-\item{type}{Type argument passed to \code{car::Anova(type=)}. Default is \code{"III"}}
-
-\item{keep}{Logical argument indicating whether to also retain the individual
+\item{keep}{(scalar \code{logical})\cr
+Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}.}
 
-\item{anova_fun}{Function that will be used in place of \code{car::Anova()}
-when specified to calculate the global p-values.
-\itemize{
-\item function must return a tibble matching the output of
-\code{car::Anova() \%>\% broom::tidy()} including a columns called \code{"term"} and \code{"p.values"}
-\item function must accept arguments \code{anova_fun(x, ...)}, where \code{x} is a model object
-\item arguments passed in \code{...} will be passed to \code{anova_fun(...)}
-\item the \code{add_global_p(type=)} argument is \emph{ignored} in \verb{anova_fun=}
-\item a common function used here is \code{tidy_wald_test()}, a wrapper for \code{aod::wald.test()}
-}}
+\item{anova_fun}{(\code{function})\cr
+Function used to calculate global p-values.
+Default is generic \code{\link[=global_pvalue_fun]{global_pvalue_fun()}}, which wraps \code{car::Anova()} for
+most models. The \code{type} argument is passed to this function. See help file for details.
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+To pass a custom function, it must accept as its first argument is a model.
+Note that anything passed in \code{...} will be passed to this function.
+The function must return an object of class \code{'cards'} (see \code{cardx::ard_car_anova()} as an example),
+or a tibble with columns \code{'term'} and \code{'p.value'} (e.g. \verb{\\(x, type, ...) car::Anova(x, type, ...) |> broom::tidy()}).}
+
+\item{type}{Type argument passed to \code{anova_fun}. Default is \code{"III"}}
+
+\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-This function uses \code{car::Anova()} to calculate global p-values
+This function uses \code{car::Anova()} (by default) to calculate global p-values
 for model covariates.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_lm_global_ex1.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_global_ex2.png" alt="image of rendered example table" style="width:50\%;">
-}}
-}
-
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "car"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-tbl_lm_global_ex1 <-
-  lm(marker ~ age + grade, trial) \%>\%
-  tbl_regression() \%>\%
+lm(marker ~ age + grade, trial) |>
+  tbl_regression() |>
   add_global_p()
 
 # Example 2 ----------------------------------
-tbl_uv_global_ex2 <-
-  trial[c("response", "trt", "age", "grade")] \%>\%
+trial[c("response", "age", "trt", "grade")] |>
   tbl_uvregression(
     method = glm,
     y = response,
     method.args = list(family = binomial),
     exponentiate = TRUE
-  ) \%>\%
+  ) |>
   add_global_p()
-}
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_uvregression tools: 
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_uvregression}()}
-
-Other tbl_regression tools: 
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
-\concept{tbl_uvregression tools}

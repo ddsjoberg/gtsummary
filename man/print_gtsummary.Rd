@@ -6,9 +6,17 @@
 \alias{knit_print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
-\method{print}{gtsummary}(x, print_engine = NULL, ...)
+\method{print}{gtsummary}(
+  x,
+  print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
+  ...
+)
 
-\method{knit_print}{gtsummary}(x, ...)
+\method{knit_print}{gtsummary}(
+  x,
+  print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
+  ...
+)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
@@ -20,9 +28,6 @@
 }
 \description{
 print and knit_print methods for gtsummary objects
-}
-\seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_merge} \link{tbl_stack}
 }
 \author{
 Daniel D. Sjoberg

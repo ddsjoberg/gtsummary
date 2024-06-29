@@ -7,10 +7,10 @@
 \alias{all_categorical}
 \alias{all_dichotomous}
 \alias{all_tests}
-\alias{all_stat_cols}
-\alias{all_interaction}
 \alias{all_intercepts}
+\alias{all_interaction}
 \alias{all_contrasts}
+\alias{all_stat_cols}
 \title{Select helper functions}
 \usage{
 all_continuous(continuous2 = TRUE)
@@ -21,36 +21,41 @@ all_categorical(dichotomous = TRUE)
 
 all_dichotomous()
 
-all_tests(tests = NULL)
-
-all_stat_cols(stat_0 = TRUE)
-
-all_interaction()
+all_tests(tests)
 
 all_intercepts()
 
-all_contrasts(contrasts_type = NULL)
+all_interaction()
+
+all_contrasts(
+  contrasts_type = c("treatment", "sum", "poly", "helmert", "other")
+)
+
+all_stat_cols(stat_0 = TRUE)
 }
 \arguments{
-\item{continuous2}{Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
+\item{continuous2}{(scalar \code{logical})\cr
+Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
 
-\item{dichotomous}{Logical indicating whether to include dichotomous variables.
-Default is \code{TRUE}}
+\item{dichotomous}{(scalar \code{logical})\cr
+Logical indicating whether to include dichotomous variables. Default is \code{TRUE}}
 
-\item{tests}{string indicating the test type of the variables to select, e.g.
-select all variables being compared with \code{"t.test"}}
+\item{tests}{(\code{character})\cr
+character vector indicating the test type of the variables to select, e.g.
+select all variables being compared with \code{"t.test"}.}
 
-\item{stat_0}{When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
+\item{contrasts_type}{(\code{character})\cr
+type of contrast to select. Select among contrast types \code{c("treatment", "sum", "poly", "helmert", "other")}.
+Default is all contrast types.}
 
-\item{contrasts_type}{type of contrast to select. When \code{NULL}, all variables with a
-contrast will be selected. Default is \code{NULL}.  Select among contrast types
-\code{c("treatment", "sum", "poly", "helmert", "other")}}
+\item{stat_0}{(scalar \code{logical})\cr
+When \code{FALSE}, will not select the \code{"stat_0"} column. Default is \code{TRUE}}
 }
 \value{
 A character vector of column names selected
 }
 \description{
-Set of functions to supplement the {tidyselect} set of
+Set of functions to supplement the \{tidyselect\} set of
 functions for selecting columns of data frames (and other items as well).
 \itemize{
 \item \code{all_continuous()} selects continuous variables
@@ -64,19 +69,10 @@ functions for selecting columns of data frames (and other items as well).
 \item \code{all_contrasts()} selects variables in regression model based on their type of contrast
 }
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/select_ex1.png" alt="image of rendered example table" style="width:55\%;">
-}}
-}
-
 \examples{
 select_ex1 <-
-  trial \%>\%
-  select(age, response, grade) \%>\%
+  trial |>
+  select(age, response, grade) |>
   tbl_summary(
     statistic = all_continuous() ~ "{mean} ({sd})",
     type = all_dichotomous() ~ "categorical"

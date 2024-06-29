@@ -8,8 +8,8 @@ style_sigfig(
   x,
   digits = 2,
   scale = 1,
-  big.mark = NULL,
-  decimal.mark = NULL,
+  big.mark = ifelse(decimal.mark == ",", " ", ","),
+  decimal.mark = getOption("OutDec"),
   ...
 )
 }
@@ -19,16 +19,19 @@ style_sigfig(
 \item{digits}{Integer specifying the minimum number of significant
 digits to display}
 
-\item{scale}{A scaling factor: x will be multiplied by scale before formatting.}
+\item{scale}{(scalar \code{numeric})\cr
+A scaling factor: \code{x} will be multiplied by scale before formatting.}
 
-\item{big.mark}{Character used between every 3 digits to separate
+\item{big.mark}{(\code{string})\cr
+Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+\item{decimal.mark}{(\code{string})\cr
+The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
-\item{...}{Other arguments passed on to \code{base::format()}}
+\item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled numbers
@@ -61,10 +64,7 @@ c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) \%>\%
 }
 \seealso{
 Other style tools: 
-\code{\link{style_number}()},
-\code{\link{style_percent}()},
-\code{\link{style_pvalue}()},
-\code{\link{style_ratio}()}
+\code{\link{label_style}}
 }
 \author{
 Daniel D. Sjoberg

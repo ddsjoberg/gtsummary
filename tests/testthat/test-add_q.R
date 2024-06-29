@@ -1,75 +1,37 @@
-skip_on_cran()
+test_that("add_q() works after add_p()", {
+  table1 <- trial %>%
+    tbl_summary(by = trt) %>%
+    add_p(pvalue_fun = label_style_pvalue(digits = 3))
 
-table1 <- trial %>%
-  tbl_summary(by = trt) %>%
-  add_p()
-
-test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
-  expect_snapshot(add_q(table1) %>% as.data.frame())
-  expect_warning(add_q(table1), NA)
-})
-
-
-test_that("expect error if no p value in table 1", {
-  table1 <- trial %>% tbl_summary(by = trt)
-
-  expect_error(
-    add_q(table1),
-    NULL
-  )
-})
-
-
-test_that("no errors/warnings with standard use after tbl_uvregression() and add_global_p()", {
-  skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
-  uni_reg <- trial %>%
-    tbl_uvregression(
-      method = lm,
-      y = age
-    ) %>%
-    add_global_p()
-
-  expect_snapshot(add_q(uni_reg) %>% as.data.frame())
-  expect_warning(add_q(uni_reg), NA)
-})
-
-test_that("add_q creates errors when non-function in input", {
-  expect_error(
-    add_q(uni_reg, pvalue_fun = mtcars),
-    NULL
-  )
-})
-
-
-
-test_that("Checking q-values against p.adjust", {
-  q_check1 <-
-    lm(marker ~ stage + age + grade + trt, trial) %>%
-    tbl_regression() %>%
-    add_q()
-  q_check2 <-
-    lm(marker ~ stage + age + grade + trt, trial) %>%
-    tbl_regression() %>%
-    add_q(method = "bonferroni")
+  # check the adjusted pvalues are correct
   expect_equal(
-    q_check1$table_body$q.value %>% purrr::discard(is.na),
-    q_check1$table_body$p.value %>% purrr::discard(is.na) %>% stats::p.adjust(method = "fdr")
+    table1 |>
+      add_q(method = "holm") |>
+      getElement("table_body") |>
+      dplyr::pull(q.value),
+    p.adjust(table1$table_body$p.value)
   )
+
+  # check the pvalue function is correctly inherited
   expect_equal(
-    q_check2$table_body$q.value %>% purrr::discard(is.na),
-    q_check2$table_body$p.value %>% purrr::discard(is.na) %>% stats::p.adjust(method = "bonferroni")
+    table1 |>
+      add_q(method = "holm") |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(q.value),
+    p.adjust(table1$table_body$p.value) |>
+      style_pvalue(digits = 3)
   )
 })
 
+test_that("add_q() errors with no p.value column", {
+  table1 <- tbl_summary(trial, by = trt)
 
-test_that("add_q messaging checks", {
-  expect_message(
-    add_q(table1),
-    NULL
-  )
-
-  expect_message(
-    add_q(table1, quiet = TRUE),
-    NA
+  expect_snapshot(
+    error = TRUE,
+    add_q(table1)
   )
 })
+
+# TODO: Add this after `tbl_uvregression()` and `add_global_p()`
+
+# TODO: Add this after `add_p.tbl_svysummary()`

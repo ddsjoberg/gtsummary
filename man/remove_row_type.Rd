@@ -2,7 +2,7 @@
 % Please edit documentation in R/remove_row_type.R
 \name{remove_row_type}
 \alias{remove_row_type}
-\title{Remove rows by type}
+\title{Remove rows}
 \usage{
 remove_row_type(
   x,
@@ -12,40 +12,31 @@ remove_row_type(
 )
 }
 \arguments{
-\item{x}{gtsummary object}
+\item{x}{(\code{gtsummary})\cr
+A gtsummary object}
 
-\item{variables}{variables to to remove rows from. Default is \code{everything()}}
+\item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to to remove rows from. Default is \code{everything()}}
 
-\item{type}{type of row to remove. Must be one of}
+\item{type}{(\code{string})\cr
+Type of row to remove. Must be one of \code{c("header", "reference", "missing", "level", "all")}}
 
-\item{level_value}{When \code{type='level'} you can specify the \emph{character} value of the level to remove.
-When \code{NULL} all levels are removed.
-\code{c("header", "reference", "missing")}}
+\item{level_value}{(\code{string})
+When \code{type='level'} you can specify the \emph{character} value of the level to remove.
+When \code{NULL} all levels are removed.}
+}
+\value{
+Modified gtsummary table
 }
 \description{
 Removes either the header, reference, or missing rows from a gtsummary table.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/remove_row_type_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
-}
-
 \examples{
 # Example 1 ----------------------------------
-library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
-remove_row_type_ex1 <-
-  trial \%>\%
-  select(trt, age) \%>\%
-  mutate(
-    age60 = case_when(age < 60 ~ "<60", age >= 60 ~ "60+")
-  ) \%>\%
-  tbl_summary(by = trt, missing = "no") \%>\%
+trial |>
+  dplyr::mutate(
+    age60 = ifelse(age < 60, "<60", "60+")
+  ) |>
+  tbl_summary(by = trt, missing = "no", include = c(trt, age, age60)) |>
   remove_row_type(age60, type = "header")
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 }

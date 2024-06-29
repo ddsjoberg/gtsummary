@@ -2,27 +2,38 @@
 % Please edit documentation in R/add_stat_label.R
 \name{add_stat_label}
 \alias{add_stat_label}
+\alias{add_stat_label.tbl_summary}
+\alias{add_stat_label.tbl_svysummary}
 \title{Add statistic labels}
 \usage{
-add_stat_label(x, location = NULL, label = NULL)
+add_stat_label(x, ...)
+
+\method{add_stat_label}{tbl_summary}(x, location = c("row", "column"), label = NULL, ...)
+
+\method{add_stat_label}{tbl_svysummary}(x, location = c("row", "column"), label = NULL, ...)
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function
-or with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}
+\item{x}{(\code{tbl_summary})\cr
+Object with class \code{'tbl_summary'} or with class \code{'tbl_svysummary'}}
 
-\item{location}{location where statistic label will be included.
+\item{...}{These dots are for future extensions and must be empty.}
+
+\item{location}{(\code{string})\cr
+Location where statistic label will be included.
 \code{"row"} (the default) to add the statistic label to the variable label row,
 and \code{"column"} adds a column with the statistic label.}
 
-\item{label}{a list of formulas or a single formula updating the statistic
-label, e.g. \code{label = all_categorical() ~ "No. (\%)"}}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+indicates the updates to the statistic label, e.g. \code{label = all_categorical() ~ "No. (\%)"}.
+When not specified, the default statistic labels are used.}
 }
 \value{
 A \code{tbl_summary} or \code{tbl_svysummary} object
 }
 \description{
-Adds labels describing the summary statistics presented for
-each variable in the \link{tbl_summary} / \link{tbl_svysummary} table.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}\cr
+Adds or modifies labels describing the summary statistics presented for
+each variable in a \code{\link[=tbl_summary]{tbl_summary()}} table.
 }
 \section{Tips}{
 
@@ -41,8 +52,8 @@ is merged with it.
 
 For example, the following two tables merge properly
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl1 <- trial \%>\% select(age, grade) \%>\% tbl_summary() \%>\% add_stat_label()
-tbl2 <- lm(marker ~ age + grade, trial) \%>\% tbl_regression()
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl1 <- trial \%>\% select(age, grade) |> tbl_summary() |> add_stat_label()
+tbl2 <- lm(marker ~ age + grade, trial) |> tbl_regression()
 
 tbl_merge(list(tbl1, tbl2))
 }\if{html}{\out{</div>}}
@@ -55,97 +66,36 @@ output for categorical variables identical what was produced without
 a \code{"add_stat_label()"} function call.
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex1.png" alt="image of rendered example table" style="width:60\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex2.png" alt="image of rendered example table" style="width:60\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex3.png" alt="image of rendered example table" style="width:45\%;">
-}}
-}
-
 \examples{
-\donttest{
-tbl <- trial \%>\%
-  dplyr::select(trt, age, grade, response) \%>\%
+tbl <- trial |>
+  dplyr::select(trt, age, grade, response) |>
   tbl_summary(by = trt)
 
 # Example 1 ----------------------------------
 # Add statistic presented to the variable label row
-add_stat_label_ex1 <-
-  tbl \%>\%
+tbl |>
   add_stat_label(
     # update default statistic label for continuous variables
     label = all_continuous() ~ "med. (iqr)"
   )
 
 # Example 2 ----------------------------------
-add_stat_label_ex2 <-
-  tbl \%>\%
+tbl |>
   add_stat_label(
     # add a new column with statistic labels
     location = "column"
   )
 
 # Example 3 ----------------------------------
-add_stat_label_ex3 <-
-  trial \%>\%
-  select(age, grade, trt) \%>\%
+trial |>
+  select(age, grade, trt) |>
   tbl_summary(
     by = trt,
     type = all_continuous() ~ "continuous2",
-    statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
-  ) \%>\%
-  add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
-}
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
+    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}"),
+  ) |>
+  add_stat_label(label = age ~ c("IQR", "Range"))
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary tools}
-\concept{tbl_svysummary tools}

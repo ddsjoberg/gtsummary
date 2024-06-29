@@ -2,45 +2,31 @@
 % Please edit documentation in R/tbl_stack.R
 \name{tbl_stack}
 \alias{tbl_stack}
-\title{Stacks two or more gtsummary objects}
+\title{Stack tables}
 \usage{
-tbl_stack(tbls, group_header = NULL, quiet = NULL)
+tbl_stack(tbls, group_header = NULL, quiet = FALSE)
 }
 \arguments{
-\item{tbls}{List of gtsummary objects}
+\item{tbls}{(\code{list})\cr
+List of gtsummary objects}
 
-\item{group_header}{Character vector with table headers where length matches
-the length of \verb{tbls=}}
+\item{group_header}{(\code{character})\cr
+Character vector with table headers where length matches the length of \code{tbls}}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
+\item{quiet}{(scalar \code{logical})\cr
+Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
 }
 \value{
 A \code{tbl_stack} object
 }
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
-or more \code{tbl_regression}, \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_merge} objects.
+or more gtsummary tables.
 Column attributes, including number formatting and column footnotes, are
 retained from the first passed gtsummary object.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_stack_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_stack_ex2.png" alt="image of rendered example table" style="width:80\%;">
-}}
-}
-
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("survival", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # stacking two tbl_regression objects
 t1 <-
@@ -58,7 +44,7 @@ t2 <-
     label = list(trt ~ "Treatment (adjusted)")
   )
 
-tbl_stack_ex1 <- tbl_stack(list(t1, t2))
+tbl_stack(list(t1, t2))
 
 # Example 2 ----------------------------------
 # stacking two tbl_merge objects
@@ -78,85 +64,13 @@ t4 <-
     label = list(trt ~ "Treatment (adjusted)")
   )
 
-
 # first merging, then stacking
 row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 row2 <- tbl_merge(list(t2, t4))
-tbl_stack_ex2 <-
-  tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-}
-}
-\seealso{
-\link{tbl_merge}
 
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
-
-Other tbl_regression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{combine_terms}()},
-\code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_regression}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_strata}()}
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_uvregression}()}
-
-Other tbl_survfit tools: 
-\code{\link{add_n.tbl_survfit}()},
-\code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_survfit}()}
+tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression tools}
-\concept{tbl_summary tools}
-\concept{tbl_survfit tools}
-\concept{tbl_svysummary tools}
-\concept{tbl_uvregression tools}

@@ -3,26 +3,17 @@
 \name{add_overall}
 \alias{add_overall}
 \alias{add_overall.tbl_summary}
-\alias{add_overall.tbl_svysummary}
 \alias{add_overall.tbl_continuous}
+\alias{add_overall.tbl_svysummary}
 \alias{add_overall.tbl_custom_summary}
-\title{Add column with overall summary statistics}
+\title{Add overall column}
 \usage{
 add_overall(x, ...)
 
 \method{add_overall}{tbl_summary}(
   x,
   last = FALSE,
-  col_label = NULL,
-  statistic = NULL,
-  digits = NULL,
-  ...
-)
-
-\method{add_overall}{tbl_svysummary}(
-  x,
-  last = FALSE,
-  col_label = NULL,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
@@ -31,7 +22,16 @@ add_overall(x, ...)
 \method{add_overall}{tbl_continuous}(
   x,
   last = FALSE,
-  col_label = NULL,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+\method{add_overall}{tbl_svysummary}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
@@ -40,78 +40,56 @@ add_overall(x, ...)
 \method{add_overall}{tbl_custom_summary}(
   x,
   last = FALSE,
-  col_label = NULL,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
   statistic = NULL,
   digits = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function,
-object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function,
-object with class \code{tbl_continuous} from the \link{tbl_continuous} function or
-object with class \code{tbl_custom_summary} from the \link{tbl_custom_summary} function.}
+\item{x}{(\code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous}, \code{tbl_custom_summary})\cr
+A stratified 'gtsummary' table}
 
-\item{...}{Not used}
+\item{...}{These dots are for future extensions and must be empty.}
 
-\item{last}{Logical indicator to display overall column last in table.
+\item{last}{(scalar \code{logical})\cr
+Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 
-\item{col_label}{String indicating the column label. Default is \code{"**Overall**,  N = {N}"}}
+\item{col_label}{(\code{string})\cr
+String indicating the column label. Default is \code{"**Overall**  \\nN = {style_number(N)}"}}
 
-\item{statistic}{Override the statistic argument in initial \verb{tbl_*} function.
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Override the statistic argument in initial \verb{tbl_*} function
 call. Default is \code{NULL}.}
 
-\item{digits}{Override the digits argument in initial \verb{tbl_*} function
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Override the digits argument in initial \verb{tbl_*} function
 call. Default is \code{NULL}.}
 }
 \value{
-A \verb{tbl_*} of same class as \code{x}
+A \code{gtsummary} of same class as \code{x}
 }
 \description{
 Adds a column with overall summary statistics to tables
-created by \code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous} or
-\code{tbl_custom_summary}.
+created by \code{tbl_summary()}, \code{tbl_svysummary()}, \code{tbl_continuous()} or
+\code{tbl_custom_summary()}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex1.png" alt="image of rendered example table" style="width:55\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex2.png" alt="image of rendered example table" style="width:55\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex3.png" alt="image of rendered example table" style="width:55\%;">
-}}
-}
-
 \examples{
-\donttest{
 # Example 1 ----------------------------------
-tbl_overall_ex1 <-
-  trial \%>\%
-  tbl_summary(include = c(age, grade), by = trt) \%>\%
+trial |>
+  tbl_summary(include = c(age, grade), by = trt) |>
   add_overall()
 
 # Example 2 ----------------------------------
-tbl_overall_ex2 <-
-  trial \%>\%
+trial |>
   tbl_summary(
     include = grade,
     by = trt,
     percent = "row",
     statistic = ~"{p}\%",
     digits = ~1
-  ) \%>\%
+  ) |>
   add_overall(
     last = TRUE,
     statistic = ~"{p}\% (n={n})",
@@ -119,61 +97,14 @@ tbl_overall_ex2 <-
   )
 
 # Example 3 ----------------------------------
-tbl_overall_ex3 <-
-  trial \%>\%
+trial |>
   tbl_continuous(
     variable = age,
     by = trt,
     include = grade
-  ) \%>\%
+  ) |>
   add_overall(last = TRUE)
-}
-}
-\seealso{
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
-
-Other tbl_svysummary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_svysummary}()}
-
-Other tbl_continuous tools: 
-\code{\link{add_p.tbl_continuous}()},
-\code{\link{tbl_continuous}()}
-
-Other tbl_custom_summary tools: 
-\code{\link{continuous_summary}()},
-\code{\link{proportion_summary}()},
-\code{\link{ratio_summary}()},
-\code{\link{tbl_custom_summary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_continuous tools}
-\concept{tbl_custom_summary tools}
-\concept{tbl_summary tools}
-\concept{tbl_svysummary tools}

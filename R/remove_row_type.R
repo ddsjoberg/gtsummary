@@ -1,59 +1,49 @@
-#' Remove rows by type
+#' Remove rows
 #'
 #' Removes either the header, reference, or missing rows from a gtsummary table.
 #'
-#' @param x gtsummary object
-#' @param variables variables to to remove rows from. Default is `everything()`
-#' @param type type of row to remove. Must be one of
-#' @param level_value When `type='level'` you can specify the *character* value of the level to remove.
-#' When `NULL` all levels are removed.
-#' `c("header", "reference", "missing")`
+#' @param x (`gtsummary`)\cr
+#'   A gtsummary object
+#' @param variables ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Variables to to remove rows from. Default is `everything()`
+#' @param type (`string`)\cr
+#'   Type of row to remove. Must be one of `c("header", "reference", "missing", "level", "all")`
+#' @param level_value (`string`)
+#'   When `type='level'` you can specify the *character* value of the level to remove.
+#'   When `NULL` all levels are removed.
+#'
 #' @export
-#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#' @return Modified gtsummary table
 #'
 #' @examples
 #' # Example 1 ----------------------------------
-#' library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
-#' remove_row_type_ex1 <-
-#'   trial %>%
-#'   select(trt, age) %>%
-#'   mutate(
-#'     age60 = case_when(age < 60 ~ "<60", age >= 60 ~ "60+")
-#'   ) %>%
-#'   tbl_summary(by = trt, missing = "no") %>%
+#' trial |>
+#'   dplyr::mutate(
+#'     age60 = ifelse(age < 60, "<60", "60+")
+#'   ) |>
+#'   tbl_summary(by = trt, missing = "no", include = c(trt, age, age60)) |>
 #'   remove_row_type(age60, type = "header")
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "remove_row_type_ex1.png", width = "60")`
-#' }}
 remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing", "level", "all"),
                             level_value = NULL) {
+  set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_row_type = match.call()))
+
   # check inputs ---------------------------------------------------------------
-  .assert_class(x, "gtsummary")
-  type <- match.arg(type)
+  check_class(x, "gtsummary")
+  check_string(level_value, allow_empty = TRUE)
+  type <- arg_match(type)
 
   if (!is.null(level_value) && type != "level") {
     cli::cli_inform("Argument {.code level_value} ignored when {.code type != 'level'}")
   }
-  if (!is.null(level_value) && !is.character(level_value)) {
-    cli::cli_abort("The {.code level_value} argument must be class {.cls character}")
-  }
 
   # convert variables input to character variable names ------------------------
-  variables <-
-    .select_to_varnames(
-      {{ variables }},
-      data = switch(class(x)[1],
-        "tbl_svysummary" = x$inputs$data$variables
-      ) %||%
-        x$inputs$data,
-      var_info = x$table_body,
-      arg_name = "variables"
-    )
+  cards::process_selectors(
+    select_prep(x$table_body),
+    variables = {{ variables }}
+  )
+
 
   # expression for selecting the appropriate rows ------------------------------
   if (type == "reference") {
@@ -66,7 +56,7 @@ remove_row_type <- function(x, variables = everything(),
       variables = c("var_type", "row_type"),
       expr = expr(.data$var_type %in% c("categorical", "continuous2") & .data$row_type == "label")
     )
-  } else if (type == "header") {
+  } else if (type == "header" && "header_row" %in% names(x$table_body)) {
     lst_expr <- list(
       variables = "header_row",
       expr = expr(.data$header_row %in% TRUE)
@@ -96,8 +86,11 @@ remove_row_type <- function(x, variables = everything(),
   }
 
   if (!all(lst_expr[["variables"]] %in% names(x$table_body))) {
-    glue("Cannot select '{type}' rows in this gtsummary table.") %>%
-      abort()
+    cli::cli_abort(
+      "Column(s) {.val {lst_expr[['variables']] |> setdiff(names(x$table_body)) |> unique()}}
+       are not present in {.code x$table_body}, and function cannot be used to remove these rows.",
+      call = get_cli_abort_call()
+    )
   }
 
   # removing selected rows -----------------------------------------------------

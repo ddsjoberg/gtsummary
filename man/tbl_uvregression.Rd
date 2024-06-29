@@ -2,111 +2,135 @@
 % Please edit documentation in R/tbl_uvregression.R
 \name{tbl_uvregression}
 \alias{tbl_uvregression}
-\title{Display univariate regression model results in table}
+\alias{tbl_uvregression.data.frame}
+\alias{tbl_uvregression.survey.design}
+\title{Univariable regression model summary}
 \usage{
-tbl_uvregression(
+tbl_uvregression(data, ...)
+
+\method{tbl_uvregression}{data.frame}(
   data,
-  method,
   y = NULL,
   x = NULL,
-  method.args = NULL,
+  method,
+  method.args = list(),
   exponentiate = FALSE,
   label = NULL,
   include = everything(),
-  tidy_fun = NULL,
+  tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
   hide_n = FALSE,
   show_single_row = NULL,
-  conf.level = NULL,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
+  conf.level = 0.95,
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
   formula = "{y} ~ {x}",
-  add_estimate_to_reference_rows = NULL,
-  conf.int = NULL,
+  add_estimate_to_reference_rows = FALSE,
+  conf.int = TRUE,
+  ...
+)
+
+\method{tbl_uvregression}{survey.design}(
+  data,
+  y = NULL,
+  x = NULL,
+  method,
+  method.args = list(),
+  exponentiate = FALSE,
+  label = NULL,
+  include = everything(),
+  tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
+  hide_n = FALSE,
+  show_single_row = NULL,
+  conf.level = 0.95,
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
+  formula = "{y} ~ {x}",
+  add_estimate_to_reference_rows = FALSE,
+  conf.int = TRUE,
   ...
 )
 }
 \arguments{
-\item{data}{Data frame to be used in univariate regression modeling.  Data
-frame includes the outcome variable(s) and the independent variables.
-Survey design objects are also accepted.}
+\item{data}{(\code{data.frame}, \code{survey.design})\cr
+A data frame or a survey design object.}
 
-\item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph},
-\code{survey::svyglm}, and more).}
+\item{...}{Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.}
 
-\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)}).
-All other column in \code{data} will be regressed on \code{y}.
-Specify one and only one of \code{y} or \code{x}}
+\item{y, x}{(\code{expression}\\code{string})\cr
+Model outcome (e.g. \code{y=recurrence} or \code{y=Surv(time, recur)}) or
+covariate (e.g. \code{x=trt}.
+All other column specified in \code{include} will be regressed against the constant \code{y} or \code{x}.
+Specify one and only one of \code{y} or \code{x}.}
 
-\item{x}{Model covariate (e.g. \code{x = trt}).
-All other columns in \code{data} will serve as the outcome in a regression model
-with \code{x} as a covariate.  Output table is best when \code{x} is a continuous or
-dichotomous variable displayed on a single row.
-Specify one and only one of \code{y} or \code{x}}
+\item{method}{(\code{string}/\code{function})\cr
+Regression method or function, e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, \code{survey::svyglm}, etc.
+Methods may be passed as functions (\code{method=lm}) or as strings (\code{method='lm'}).}
 
-\item{method.args}{List of additional arguments passed on to the regression
-function defined by \code{method}.}
+\item{method.args}{(named \code{list})\cr
+Named list of arguments assed to \code{method}.}
 
-\item{exponentiate}{Logical indicating whether to exponentiate the
-coefficient estimates. Default is \code{FALSE}.}
+\item{exponentiate}{(scalar \code{logical})\cr
+Logical indicating whether to exponentiate the coefficient estimates.
+Default is \code{FALSE}.}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to change variables labels, e.g. \code{list(age = "Age", stage = "Path T Stage")}}
 
-\item{include}{Variables to include in output. Input may be a vector of
-quoted variable names, unquoted variable names, or tidyselect select helper
-functions. Default is \code{everything()}.}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in output. Default is \code{everything()}.}
 
-\item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy()}, but if an error occurs
-then tidying of the model is attempted with \code{parameters::model_parameters()},
-if installed.}
+\item{tidy_fun}{(\code{function})\cr
+Tidier function for the model. Default is to use \code{broom::tidy()}.
+If an error occurs, the tidying of the model is attempted with
+\code{parameters::model_parameters()}, if installed.}
 
-\item{hide_n}{Hide N column. Default is \code{FALSE}}
+\item{hide_n}{(scalar \code{logical})\cr
+Hide N column. Default is \code{FALSE}}
 
-\item{show_single_row}{By default categorical variables are printed on
-multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
-the regression coefficient on a single row, include the variable name(s)
-here--quoted and unquoted variable name accepted.}
+\item{show_single_row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+By default categorical variables are printed on multiple rows.
+If a variable is dichotomous (e.g. Yes/No) and you wish to print the
+regression coefficient on a single row, include the variable name(s) here.}
 
-\item{conf.level}{Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+\item{conf.level}{(scalar \code{real})\cr
+Confidence level for confidence interval/credible interval. Defaults to \code{0.95}.}
 
-\item{estimate_fun}{Function to round and format coefficient estimates.
-Default is \link{style_sigfig} when the coefficients are not transformed, and
-\link{style_ratio} when the coefficients have been exponentiated.}
+\item{estimate_fun}{(\code{function})\cr
+Function to round and format coefficient estimates.
+Default is \code{\link[=label_style_sigfig]{label_style_sigfig()}} when the coefficients are not transformed, and
+\code{\link[=label_style_ratio]{label_style_ratio()}} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{Function to round and format p-values.
-Default is \link{style_pvalue}.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\item{pvalue_fun}{(\code{function})\cr
+Function to round and format p-values. Default is \code{\link[=label_style_pvalue]{label_style_pvalue()}}.}
 
-\item{formula}{String of the model formula.
-Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+\item{formula}{(\code{string})\cr
+String of the model formula.
+Uses \code{\link[glue:glue]{glue::glue()}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
 random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
+\item{add_estimate_to_reference_rows}{(scalar \code{logical})\cr
+Add a reference value. Default is \code{FALSE}.}
 
-\item{conf.int}{Logical indicating whether or not to include a confidence
-interval in the output. Defaults to \code{TRUE}.}
-
-\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.
-See \code{?tidy_plus_plus_dots} for details.}
+\item{conf.int}{(scalar \code{logical})\cr
+Logical indicating whether or not to include a confidence
+interval in the output. Default is \code{TRUE}.}
 }
 \value{
 A \code{tbl_uvregression} object
 }
 \description{
-This function estimates univariate regression models and returns them in
-a publication-ready table.  It can create univariate regression models holding
-either a covariate or outcome constant.
+This function estimates univariable regression models and returns them in
+a publication-ready table.
+It can create regression models holding
+either a covariate or an outcome constant.
+}
+\section{\code{x} and \code{y} arguments}{
 
 For models holding outcome constant, the function takes as arguments a data frame,
 the type of regression model, and the outcome variable \verb{y=}. Each column in the
-data frame is regressed on the specified outcome. The \code{tbl_uvregression}
-function arguments are similar to the \link{tbl_regression} arguments. Review the
+data frame is regressed on the specified outcome. The \code{tbl_uvregression()}
+function arguments are similar to the \code{\link[=tbl_regression]{tbl_regression()}} arguments. Review the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
 
@@ -117,20 +141,6 @@ the outcome in a univariate regression model. Take care using the \code{x} argum
 that each of the columns in the data frame are appropriate for the same type
 of model, e.g. they are all continuous variables appropriate for \link{lm}, or
 dichotomous variables appropriate for logistic regression with \link{glm}.
-}
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_ex2.png" alt="image of rendered example table" style="width:50\%;">
-}}
 }
 
 \section{Methods}{
@@ -148,7 +158,6 @@ fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
-\item \code{"tidycrr"}: Uses the tidier \code{tidycmprsk::tidy()} to print the model terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
@@ -156,47 +165,34 @@ to print the random components.
 }
 
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-tbl_uv_ex1 <-
-  tbl_uvregression(
-    trial[c("response", "age", "grade")],
-    method = glm,
-    y = response,
-    method.args = list(family = binomial),
-    exponentiate = TRUE
-  )
+tbl_uvregression(
+  trial,
+  method = glm,
+  y = response,
+  method.args = list(family = binomial),
+  exponentiate = TRUE,
+  include = c("age", "grade")
+)
 
 # Example 2 ----------------------------------
 # rounding pvalues to 2 decimal places
 library(survival)
-tbl_uv_ex2 <-
-  tbl_uvregression(
-    trial[c("ttdeath", "death", "age", "grade", "response")],
-    method = coxph,
-    y = Surv(ttdeath, death),
-    exponentiate = TRUE,
-    pvalue_fun = function(x) style_pvalue(x, digits = 2)
-  )
-}
+
+tbl_uvregression(
+  trial,
+  method = coxph,
+  y = Surv(ttdeath, death),
+  exponentiate = TRUE,
+  include = c("age", "grade", "response"),
+  pvalue_fun = label_style_pvalue(digits = 2)
+)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
-
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_uvregression tools: 
-\code{\link{add_global_p}()},
-\code{\link{add_q}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_uvregression tools}

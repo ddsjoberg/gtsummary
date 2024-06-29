@@ -3,66 +3,55 @@
 \name{add_ci}
 \alias{add_ci}
 \alias{add_ci.tbl_summary}
-\alias{add_ci.tbl_svysummary}
 \title{Add CI Column}
 \usage{
 add_ci(x, ...)
 
 \method{add_ci}{tbl_summary}(
   x,
-  method = NULL,
+  method = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"),
   include = everything(),
-  statistic = NULL,
+  statistic = list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~
+    "{conf.low}\%, {conf.high}\%"),
   conf.level = 0.95,
-  style_fun = NULL,
+  style_fun = list(all_continuous() ~ label_style_sigfig(), all_categorical() ~
+    label_style_sigfig(scale = 100)),
   pattern = NULL,
-  df = NULL,
-  ...
-)
-
-\method{add_ci}{tbl_svysummary}(
-  x,
-  method = NULL,
-  include = everything(),
-  statistic = NULL,
-  conf.level = 0.95,
-  style_fun = NULL,
-  pattern = NULL,
-  df = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{A \code{tbl_summary} or a \code{tbl_svysummary} object}
+\item{x}{(\code{tbl_summary})\cr
+a summary table of class \code{'tblsummary'}}
 
-\item{...}{Not used}
+\item{...}{These dots are for future extensions and must be empty.}
 
-\item{method}{Confidence interval method. Default is
-\code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")} for \code{tbl_summary} objects
-and \code{list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean")} for \code{tbl_svysummary}
-objects.
+\item{method}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Confidence interval method. Default is
+\code{list(all_continuous() ~ "t.test", all_categorical() ~ "wilson")}.
 See details below.}
 
-\item{include}{variables to include in the summary table. Default is \code{everything()}}
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Variables to include in the summary table. Default is \code{everything()}}
 
-\item{statistic}{Formula indicating how the confidence interval will be displayed.
-Default is \code{list(all_categorical() ~ "{conf.low}\%, {conf.high}\%", all_continuous() ~ "{conf.low}, {conf.high}")}}
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Indicates how the confidence interval will be displayed.
+Default is \code{list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~ "{conf.low}\%, {conf.high}\%")}}
 
-\item{conf.level}{Confidence level. Default is \code{0.95}}
+\item{conf.level}{(scalar \code{real})\cr
+Confidence level. Default is \code{0.95}}
 
-\item{style_fun}{Function to style upper and lower bound of confidence
-interval. Default is
-\code{list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)}.}
+\item{style_fun}{(\code{function})\cr
+Function to style upper and lower bound of confidence interval. Default is
+\code{list(all_continuous() ~ label_style_sigfig(), all_categorical() ~ label_style_sigfig(scale =  100))}.}
 
-\item{pattern}{string indicating the pattern to use to merge the CI with
+\item{pattern}{(\code{string})\cr
+Indicates the pattern to use to merge the CI with
 the statistics cell. The default is NULL, where no columns are merged.
 The two columns that will be merged are the statistics column,
 represented by \code{"{stat}"} and the CI column represented by \code{"{ci}"},
 e.g. \code{pattern = "{stat} ({ci})"} will merge the two columns with the CI
-in parentheses.}
-
-\item{df}{For \code{tbl_svysummary()}, the number of degrees of freedom used
-to estimate confidence intervals. By default, will use \code{survey::degf()}.}
+in parentheses. Default is \code{NULL}, and no merging is performed.}
 }
 \value{
 gtsummary table
@@ -73,102 +62,38 @@ Add a new column with the confidence intervals for proportions, means, etc.
 \section{method argument}{
 
 
-\strong{for \code{tbl_summary} tables}
-
 Must be one of
-\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
-variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
-
-Methods \code{c("wilson", "wilson.no.correct")} are calculated with
-\code{prop.test(correct = c(TRUE, FALSE))}.
-The default method, \code{"wilson"}, includes the Yates continuity correction.
-Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
-
-Confidence intervals for means are calculated using \code{t.test()} and
-\code{wilcox.test()} for pseudo-medians.
-
-\strong{for \code{tbl_svysummary} tables}
-
-Must be one of
-\code{c("svyprop", "svyprop.logit", "svyprop.likelihood", "svyprop.asin", "svyprop.beta", "svyprop.mean", "svyprop.xlogit")}
-for categorical variables, and
-\code{c("svymean", "svymedian", "svymedian.mean", "svymedian.beta", "svymedian.xlogit", "svymedian.asin", "svymedian.score")}
-for continuous variables.
-
-Confidence intervals for proportions are computed with \code{survey::svyciprop()}.
-See the help file of this function for details on the different methods
-available to compute CIs. The default method \code{"svyprop"} is equivalent
-to \code{"svyprop.logit"}, corresponding to a call to \code{survey::svyciprop()} with
-\code{method = "logit"}.
-
-Confidence intervals for means (method \code{"svymean"}) are computed using
-\code{confint(svymean())}.
-
-Confidence intervals for medians are computed with \code{survey::svyquantile()}.
-See the help file of this function for details on the different methods
-available to compute CIs. The default method \code{"svymedian"} is equivalent
-to \code{"svymedian.mean"}, corresponding to a call to \code{surevy::svyquantile()}
-with \code{method = "mean"}.
+\itemize{
+\item \code{"wilson"}, \code{"wilson.no.correct"} calculated via \code{prop.test(correct = c(TRUE, FALSE))} for \strong{categorical} variables
+\item \code{"exact"} calculated via \code{stats::binom.test()} for \strong{categorical} variables
+\item \code{"wald"}, \code{"wald.no.correct"} calculated via \verb{cardx::proportion_ci_wald(correct = c(TRUE, FALSE)} for \strong{categorical} variables
+\item \code{"agresti.coull"} calculated via \code{cardx::proportion_ci_agresti_coull()} for \strong{categorical} variables
+\item \code{"jeffreys"} calculated via \code{cardx::proportion_ci_jeffreys()} for \strong{categorical} variables
+\item \code{"t.test"} calculated via \code{stats::t.test()} for \strong{continuous} variables
+\item \code{"wilcox.test"} calculated via \code{stats::wilcox.test()} for \strong{continuous} variables
 }
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex1.png" alt="image of rendered example table" style="width:50\%;">
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex2.png" alt="image of rendered example table" style="width:45\%;">
-}}
-
-\if{html}{Example 3}
-
-\if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex3.png" alt="image of rendered example table" style="width:45\%;">
-}}
 }
 
 \examples{
-\donttest{
+\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_ci_ex1 <-
-  trial \%>\%
-  select(marker, response, trt) \%>\%
+trial |>
   tbl_summary(
     missing = "no",
-    statistic = all_continuous() ~ "{mean} ({sd})"
-  ) \%>\%
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    include = c(marker, response, trt)
+  ) |>
   add_ci()
 
 # Example 2 ----------------------------------
-add_ci_ex2 <-
-  trial \%>\%
+trial |>
   select(response, grade) \%>\%
   tbl_summary(
     statistic = all_categorical() ~ "{p}\%",
-    missing = "no"
-  ) \%>\%
-  add_ci(pattern = "{stat} ({ci})") \%>\%
+    missing = "no",
+    include = c(response, grade)
+  ) |>
+  add_ci(pattern = "{stat} ({ci})") |>
   modify_footnote(everything() ~ NA)
-
-# Example 3 ----------------------------------
-data(api, package = "survey")
-add_ci_ex3 <-
-  survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
-  tbl_svysummary(
-    include = c(api00, hsg, stype),
-    statistic = hsg ~ "{mean} ({sd})"
-  ) \%>\%
-  add_ci(
-    method = api00 ~ "svymedian"
-  )
+\dontshow{\}) # examplesIf}
 }
-}
-\seealso{
-Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-}
-\concept{tbl_summary tbl_svysummary tools}

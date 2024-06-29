@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
+[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test
@@ -80,11 +80,7 @@ The {gtsummary} package was written as a companion to the
 install.packages("gtsummary")
 ```
 
-Install the development version of {gtsummary} with:
-
-``` r
-remotes::install_github("ddsjoberg/gtsummary")
-```
+Install the development version with `pak::pak("ddsjoberg/gtsummary")`
 
 ## Examples
 
@@ -102,8 +98,8 @@ Example basic table:
 library(gtsummary)
 
 # summarize the data with our package
-table1 <- 
-  trial %>%
+table1 <-
+  trial |> 
   tbl_summary(include = c(age, grade, response))
 ```
 
@@ -122,10 +118,10 @@ table2 <-
     include = c(age, grade, response),
     by = trt, # split table by group
     missing = "no" # don't list missing data separately
-  ) %>%
-  add_n() %>% # add column with total number of non-missing observations
-  add_p() %>% # test for a difference between groups
-  modify_header(label = "**Variable**") %>% # update the column header
+  ) |> 
+  add_n() |> # add column with total number of non-missing observations
+  add_p() |> # test for a difference between groups
+  modify_header(label = "**Variable**") |> # update the column header
   bold_labels()
 ```
 
@@ -158,7 +154,7 @@ library(survival)
 
 # build survival model table
 t2 <-
-  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) |> 
   tbl_regression(exponentiate = TRUE)
 
 # merge tables
@@ -194,8 +190,8 @@ vignette for details.
 Word, RTF, and LaTeX file.
 
 ``` r
-tbl %>%
-  as_gt() %>%
+tbl |> 
+  as_gt() |> 
   gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
 ```
 
