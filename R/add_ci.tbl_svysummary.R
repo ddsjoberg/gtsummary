@@ -34,7 +34,11 @@
 #' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' data(api, package = "survey")
 #' survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
-#'   tbl_svysummary(by = "both", include = c(api00, stype), statistic = all_continuous() ~ "{mean} ({sd})") |>
+#'   tbl_svysummary(
+#'     by = "both",
+#'     include = c(api00, stype),
+#'     statistic = all_continuous() ~ "{mean} ({sd})"
+#'   ) |>
 #'   add_stat_label() |>
 #'   add_ci(pattern = "{stat} (95% CI {ci})") |>
 #'   modify_header(all_stat_cols() ~ "**{level}**") |>
