@@ -1,40 +1,26 @@
 #' Add overall column
 #'
-#' - [`add_overall.tbl_summary()`]
-#'
-#' @param x (`gtsummary`)\cr
-#'   Object with class 'gtsummary'
-#' @param ... Passed to other methods.
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-#' @export
-#'
-#' @seealso [`add_overall.tbl_summary()`]
-add_overall <- function(x, ...) {
-  check_not_missing(x)
-  check_class(x, "gtsummary")
-  UseMethod("add_overall")
-}
-
-#' Add overall column
-#'
 #' Adds a column with overall summary statistics to tables
-#' created by `tbl_summary`, `tbl_svysummary`, `tbl_continuous` or
-#' `tbl_custom_summary`.
+#' created by `tbl_summary()`, `tbl_svysummary()`, `tbl_continuous()` or
+#' `tbl_custom_summary()`.
 #'
-#' @param x (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`/`tbl_custom_summary`)\cr
+#' @param x (`tbl_summary`, `tbl_svysummary`, `tbl_continuous`, `tbl_custom_summary`)\cr
 #'   A stratified 'gtsummary' table
-#' @param last Logical indicator to display overall column last in table.
-#' Default is `FALSE`, which will display overall column first.
-#' @param col_label String indicating the column label. Default is `"**Overall**  \nN = {N}"`
-#' @param statistic Override the statistic argument in initial `tbl_*` function.
-#' call. Default is `NULL`.
-#' @param digits Override the digits argument in initial `tbl_*` function
-#' call. Default is `NULL`.
+#' @param last (scalar `logical`)\cr
+#'   Logical indicator to display overall column last in table.
+#'   Default is `FALSE`, which will display overall column first.
+#' @param col_label (`string`)\cr
+#'   String indicating the column label. Default is `"**Overall**  \nN = {style_number(N)}"`
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Override the statistic argument in initial `tbl_*` function
+#'   call. Default is `NULL`.
+#' @param digits ([`formula-list-selector`][syntax])\cr
+#'   Override the digits argument in initial `tbl_*` function
+#'   call. Default is `NULL`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @author Daniel D. Sjoberg
-#' @export
+#' @name add_overall
 #' @return A `gtsummary` of same class as `x`
 #' @examples
 #' # Example 1 ----------------------------------
@@ -65,14 +51,26 @@ add_overall <- function(x, ...) {
 #'     include = grade
 #'   ) |>
 #'   add_overall(last = TRUE)
-add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \nN = {N}",
+NULL
+
+#' @rdname add_overall
+#' @export
+add_overall <- function(x, ...) {
+  check_not_missing(x)
+  check_class(x, "gtsummary")
+  UseMethod("add_overall")
+}
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \nN = {style_number(N)}",
                                     statistic = NULL, digits = NULL, ...) {
   set_cli_abort_call()
   check_dots_empty()
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
-    paste0("**", translate_string("Overall"), "**  \nN = {N}")
+    paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
   }
 
   add_overall_generic(
@@ -191,10 +189,8 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
         dplyr::filter(.data$column %in% "stat_0")
     )
 
-  # Add
+  # Add header to overall column
   x <- modify_header(x, stat_0 = col_label)
-
-
 
   x
 }
