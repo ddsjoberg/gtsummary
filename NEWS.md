@@ -1,62 +1,71 @@
 # gtsummary (development version)
 
-### Overview of Changes
-
-* Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. *Note: There is still one known remaining issue with {gt} and indentation for RTF tables. We leave it to the user to change the printer if using RTF documents, which can be done using `theme_gtsummary_printer()`.*
-
-#### User-facing Updates
+### New Features
 
 * Added functions `tbl_wide_summary()` and `tbl_ard_wide_summary()` for simple summaries across multiple columns.
 
+* The {gt} package is now the default printer for all Quarto and R markdown output formats.
+  - Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. These output types are still supported.
+  
+* The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()` as these regression model types are not supported by `car::Anova()`.
+
 * The `add_ci.tbl_summary()` S3 method has been updated with new ways to calculate the confidence interval: Wald with and without continuity correction, Agresti-Coull, and Jeffreys.
-
-* The default `add_global_p(anova_fun)` argument value has been updated to `global_pvalue_fun()`, which is an S3 generic. The default method still calls `car::Anova()` for the calculation. Methods for `tidycmprsk::crr()` and `geepack::geeglm()` have been added that wrap `aod::wald.test()`.
-
-* The `add_q(quiet)` argument has been deprecated.
-
-* After `tbl_regression()`, the `.$model_obj` is no longer returned with the object. This is (and always has been) available in `.$inputs$x`.
-
-* Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
-
-* The counts in the header of `tbl_summary(by)` tables now appear on a new line.
-
-* If a column is all `NA_character_` in `tbl_summary()`, the default summary type is now `"continuous"`, where previously it was `"dichotomous"`.
 
 * Added a family of function `label_style_*()` that are similar to the `style_*()` except they return a styling _function_, rather than a styled value.
 
-* Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a character vector of all `"yes"` or all `"no"` values will default to a categorical summary instead of dichotomous.
+* New functions `tbl_ard_summary()` and `tbl_ard_continuous()` have been added. These provide general tools for creating bespoke summary tables. Rather than accepting a data frame, these functions accept an ARD object (Analysis Results Dataset often created with the {cards} or {cardx} packages). The ARD objects align with the emerging [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard). ARDs are now used throughout the package. See below under the "Internal Storage" heading.
 
-* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indent = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
+### Internal Storage
 
-* The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
+* Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
+  - These ARDs are now used to calculate the summary statistics for nearly every function in gtsummary. The raw summary statistics are saved in `.$cards`.
+  - *Users who previously accessed the internals of a gtsummary object will find the structure has been updated, and this may be an important breaking change.*
+
+* In `tbl_regression()`, the `.$model_obj` is no longer returned with the object. The modeling object is, and always has been, available in `.$inputs$x`.
+
+### Documentation
+
+* The "FAQ+Gallery", `tbl_summary()` Tutorial, `tbl_regression()`, and Quarto+R Markdown vignettes have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation utilizing more tools that don't need to be bundled with the package.  
+
+### Minor Improvements
+
+* Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
+
+* Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
+
+* The counts in the header of `tbl_summary(by)` tables now appear on a new line, e.g. `"**{level}**  \nN = {n}"`.
 
 * In `tbl_summary()`, the default calculation for quantiles (e.g. statistics of the form `"p25"` or `"p75"`) has been updated with type `quantile(type=2)`.
 
 * In `tbl_summary()`, dates and times showed the minimum and maximum values only by default. They are now treated as all other continuous summaries and share their default statistics of the median and IQR.
 
+* Previously, indentation was handled with `modify_table_styling(text_format = c("indent", "indent2"))`, which would indent a cell 4 and 8 spaces, respectively. Handling of indentation has been migrated to `modify_table_styling(indent = integer())`, and by default, the label column is indented to zero spaces. This makes it easier to indent a group of rows.
+
+* The inputs for `modify_table_styling(undo_text_format)` has been updated to mirror its counterpart `modify_table_styling(text_format)` and no longer accepts `TRUE` or `FALSE`.
+
 * The values passed in `tbl_summary(value)` are now only checked for columns that are summary type `"dichotomous"`. 
 
-* Previously, the gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., would error if used out of context. They will now select no columns when used out-of-context.
-
-* Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
+* The gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., are now simplified by wrapping `tidyselect::where()`, which not available when these functions were originally written. Previously, these functions would error if used out of context; they now, instead,select no columns when used out-of-context.
 
 * The design-based t-test has been added as possible methods for `add_difference.tbl_svysummary()` and is now the default for continuous variables.
 
-* The `inline_text(level)` argument now expects a character value.
+* When `add_ci()` is run after `add_overall()`, the overall column is now populated with the confidence interval. (#1569)
 
-#### Internal Updates
-
-* The "FAQ+Gallery", `tbl_summary()` Tutorial, `tbl_regression()`, and Quarto+R Markdown vignettes have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation utilizing more tools that don't need to be bundled with the package.  
-
-* Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
-
-### Bug Fixes 
+### Bug fixes
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
 
-* Fix when `add_ci()` was run after `add_overall()`, the overall column would not populate with the confidence interval. (#1569)
+### Lifecycle changes
 
-### Deprecations 
+* A couple of small changes to the default summary type in `tbl_summary()` have been made.
+  - If a column is all `NA_character_` in `tbl_summary()`, the default summary type is now `"continuous"`, where previously it was `"dichotomous"`.
+  - Previously, in a `tbl_summary()` variables that were `c(0, 1)`, `c("no", "yes")`, `c("No", "Yes")`, and `c("NO", "YES")` would default to a dichotomous summary with the `1` and `yes` level being shown in the table. This would occur even in the case when, for example, only `0` was observed. In this release, the line shown for dichotomous variables must be observed OR the unobserved level must be either explicitly defined in a factor or be a logical vector. This means that a character vector of all `"yes"` or all `"no"` values will default to a categorical summary instead of dichotomous.
+
+* When using the `tbl_summary(value)` argument, we no longer allow unobserved levels to be used unless it is an unobserved factor level or logical level.
+  
+* The `quiet` argument has been deprecated throughout the package, except in `tbl_stack()`. Documentation has been updated to ensure clarity in all methods.
+
+* The `inline_text(level)` argument now expects a character value.
 
 * The `tbl_butcher(include)` argument now only accepts character vectors.
 
@@ -65,12 +74,12 @@
       - The `pvalue_fun` elements should switch to the package-wide theme for p-value styling--`'pkgwide-fn:pvalue_fun'`.
     - These theme elements have been removed from the package immediately due to structural changes within the package: `'tbl_summary-str:continuous_stat'`, `'tbl_summary-str:categorical_stat'`.
       - The default statistics can still be modified with `'tbl_summary-arg:statistic'`
+ 
+* The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
 
-* The `set_gtsummary_theme(quiet)` argument has been deprecated.
-
-* Arguments `modify_header(quiet)`, `modify_footnote(quiet)`, and  `modify_spanning_header(quiet)` have been deprecated. Verbose messaging is no longer available.
-
-* Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun()` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`
+* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
+     
+* Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`, which has been the preferred method for passing updates for a few years.
 
 * Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
 
@@ -85,10 +94,6 @@
 * Custom selectors `all_numeric()`, `all_character()`, `all_integer()`, `all_double()`, `all_logical()`, `all_factor()` functions were deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package. These functions were added before the `tidyselect::where()` function was released, which is a replacement for all these functions.
 
 * The `modify_cols_merge()` functions was renamed to `modify_column_merge()` to match the other function names in v1.6.1 (2022-06-22). The deprecation has been upgraded from a warning to an error.
-
-* The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
-
-* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
 
 # gtsummary 1.7.2
 
