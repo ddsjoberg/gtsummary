@@ -2,7 +2,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml)[![CRAN
+[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml)
+[![CRAN
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test
 coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
