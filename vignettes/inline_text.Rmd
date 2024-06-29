@@ -1,0 +1,162 @@
+---
+title: "Tutorial: inline_text"
+date: "Last Updated: September 13, 2020"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Tutorial: inline_text}
+  %\VignetteEngine{knitr::rmarkdown}
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  comment = "#>"
+)
+gt_compact_fun <- function(x) {
+  gt::tab_options(x,
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+}
+```
+
+```{r, echo = FALSE, results = 'asis'}
+# we do NOT want the vignette to build on CRAN...it's taking too long
+if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
+  !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
+  msg <-
+    paste(
+      "View this vignette on the",
+      "[package website](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)."
+    )
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
+## Introduction
+
+**Reproducible reports** are an important part of good practices.  We often need to report the **results from a table** in the text of an R markdown report.
+**Inline reporting** has been made simple with [`inline_text()`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
+The `inline_text()` function reports statistics from {gtsummary} tables inline in an [R markdown](https://rmarkdown.rstudio.com/lesson-1.html) report.
+
+## Setup
+
+Before going through the tutorial, install and load {gtsummary}.
+
+```{r message = FALSE, warning=FALSE}
+# install.packages("gtsummary")
+library(gtsummary)
+```
+
+
+## Example data set
+
+We'll be using the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
+
+* This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
+The outcomes are tumor response and death.
+
+For brevity in the tutorial, let's keep a subset of the variables from the trial data set.
+
+```{r}
+trial2 <-
+  trial %>%
+  select(trt, marker, stage)
+```
+
+
+## Inline results from tbl_summary() {#inline_text_tbl_summary}
+
+First create a basic summary table using [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) (review [`tbl_summary()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) for detailed overview of this function if needed).
+
+```{r}
+tab1 <- tbl_summary(trial2, by = trt)
+tab1
+```
+
+To report the median (IQR) of the marker levels in each group, use the following commands inline.
+
+> The median (IQR) marker level in the Drug A and Drug B groups are `` `r
+inline_text(tab1, variable = marker, column = "Drug A")` `` and `` `r
+inline_text(tab1, variable = marker, column = "Drug B")` ``, respectively.
+
+Here's how the line will appear in your report.
+
+> The median (IQR) marker level in the Drug A and Drug B groups are `r inline_text(tab1, variable = marker, column = "Drug A")` and `r inline_text(tab1, variable = marker, column = "Drug B")`, respectively.
+
+If you display a statistic from a categorical variable, include the `level` argument.
+
+
+> `` `r
+inline_text(tab1, variable = stage, level = "T1", column = "Drug B")` `` resolves to "`r inline_text(tab1, variable = stage, level = "T1", column = "Drug B")`"
+
+
+
+
+## Inline results from tbl_regression() {#inline_text_tbl_regression}
+
+Similar syntax is used to report results from [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) and [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html) tables.
+Refer to the [`tbl_regression()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) if you need detailed guidance on using these functions. 
+
+Let's first create a regression model.
+
+```{r}
+# build logistic regression model
+m1 <- glm(response ~ age + stage, trial, family = binomial(link = "logit"))
+```
+
+Now summarize the results with `tbl_regression()`; exponentiate to get the odds ratios.
+```{r}
+tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
+tbl_m1
+```
+
+To report the result for `age`, use the following commands inline.
+
+> `` `r
+inline_text(tbl_m1, variable = age)` `` 
+
+Here's how the line will appear in your report.
+
+> `r inline_text(tbl_m1, variable = age)`
+
+It is reasonable that you'll need to modify the text.
+To do this, use the `pattern` argument.
+The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.
+The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
+
+```{r, echo = FALSE}
+tibble::tribble(
+  ~Parameter,       ~Description,
+  "`{estimate}`",   "primary estimate (e.g. model coefficient, odds ratio)",
+  "`{conf.low}`",   "lower limit of confidence interval",
+  "`{conf.high}`",  "upper limit of confidence interval",
+  "`{p.value}`",    "p-value",
+  "`{conf.level}`", "confidence level of interval",
+  "`{N}`",          "number of observations"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = c(Parameter)) %>%
+  gt_compact_fun()
+```
+
+> Age was not significantly associated with tumor response `` `r
+inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
+
+> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
+
+If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = stage, level = "T3")` resolves to "`r inline_text(tbl_m1, variable = stage, level = "T3")`".  
+
+The `inline_text` function has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).
+These default to the same rounding performed in the table, but can be modified when reporting inline.
+
+For more details about inline code, review to the  [RStudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).

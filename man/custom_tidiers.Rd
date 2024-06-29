@@ -108,8 +108,7 @@ package includes a wonderful function to calculate robust standard errors, confi
 The tidier uses the output from \code{parameters::model_parameters()}, and
 merely takes the result and puts it in \code{broom::tidy()} format. To use this
 function with \code{tbl_regression()}, pass a function with the arguments for
-\code{tidy_robust()} populated. This is easily done using \code{purrr::partial()} e.g.
-\code{tbl_regression(tidy_fun = partial(tidy_robust, vcov = "CL"))}
+\code{tidy_robust()} populated.
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.

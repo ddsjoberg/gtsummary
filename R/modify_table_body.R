@@ -43,7 +43,7 @@
 #' #  ) %>%
 #' #  # assigning header labels
 #' #  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") %>%
-#' #  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
+#' #  modify_fmt_fun(c(N_event, N_nonevent) ~ label_style_number())
 modify_table_body <- function(x, fun, ...) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
