@@ -291,10 +291,8 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
       }
 
       cli::cli_abort(
-        c("There was an error in the {.fun glue::glue} evaluation of {.val {value}} for column {.val {variable}}."
-          # TODO: Add this after we update `show_header_names()` to print info on the stats available for printing.
-          # i = "Run {.fun gtsummary::show_header_names} for information on values available for glue interpretation."
-          ),
+        c("There was an error in the {.fun glue::glue} evaluation of {.val {value}} for column {.val {variable}}.",
+          i = "Run {.fun gtsummary::show_header_names} for information on values available for glue interpretation."),
          call =  get_cli_abort_call()
       )
     }

@@ -23,18 +23,17 @@
 #'   add_p() |>
 #'   add_q()
 #'
-#' # TODO: Re-add this example after `add_global_p()` migrated
-#' # # Example 2 ----------------------------------
-#' # add_q_ex2 <-
-#' #   trial[c("trt", "age", "grade", "response")] |>
-#' #   tbl_uvregression(
-#' #     y = response,
-#' #     method = glm,
-#' #     method.args = list(family = binomial),
-#' #     exponentiate = TRUE
-#' #   ) |>
-#' #   add_global_p() |>
-#' #   add_q()
+#' # Example 2 ----------------------------------
+#' trial |>
+#'   tbl_uvregression(
+#'     y = response,
+#'     include = c("trt", "age", "grade"),
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) |>
+#'   add_global_p() |>
+#'   add_q()
 add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_q = match.call()))

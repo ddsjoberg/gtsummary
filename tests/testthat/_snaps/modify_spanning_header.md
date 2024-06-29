@@ -5,4 +5,5 @@
     Condition
       Error in `modify_spanning_header()`:
       ! There was an error in the `glue::glue()` evaluation of "This is not a valid {element}." for column "label".
+      i Run `gtsummary::show_header_names()` for information on values available for glue interpretation.
 
