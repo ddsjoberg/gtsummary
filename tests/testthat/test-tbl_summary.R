@@ -129,6 +129,27 @@ test_that("tbl_summary(statistic) errors properly", {
   )
 })
 
+test_that("tbl_summary(statistic,type) errors", {
+  # we get a nice message for a continuous variable with stat as a character vector
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      include = age,
+      statistic = ~c("{mean}", "{sd}")
+    )
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      include = grade,
+      statistic = ~c("{mean}", "{sd}")
+    )
+  )
+})
+
 # tbl_summary(digit) -----------------------------------------------------------
 test_that("tbl_summary(digit)", {
   expect_error(
