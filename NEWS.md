@@ -37,6 +37,9 @@
 
 * Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
 
+* Messaging and checks have been improved when tidyselect is invoked in the package, i.e. when the tilda is used to select variables `age ~ "Patient Age"`. The subset of variables that can be selected is now reduced the variables present in the table. For example, if you have a summary table of patient age (and only patient age), and age is a single column from a data set of many columns and you mis-spell age (`aggge ~ "Patient Age"`), the error message will now ask if you meant `"age"` instead of listing every column in the data set. 
+  - Note that as before, you can circumvent tidyselect by using a named list, e.g. `list(age = "Patient Age")`. 
+
 * Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
 
 * The counts in the header of `tbl_summary(by)` tables now appear on a new line, e.g. `"**{level}**  \nN = {n}"`.
