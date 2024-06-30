@@ -2,10 +2,14 @@
 
 ### New Features
 
+* Clearer error messages have been introduced throughout the package. We've adopted {cli} for all our messaging to users. Our goal was to return a clear message to users for all scenarios.
+
 * Added functions `tbl_wide_summary()` and `tbl_ard_wide_summary()` for simple summaries across multiple columns.
 
 * The {gt} package is now the default printer for all Quarto and R markdown output formats.
   - Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. These output types are still supported.
+
+* Previously, if I wanted a single statistic to be reported to additional levels of precision in a `tbl_summary()` table, I would need to specify the precision of every summary statistic for a variable. Now, we can simple update the one statistic we're interested in with a named list of vector: `tbl_summary(digits = age ~ list(sd = 2))`.
 
 * New functions `tbl_ard_summary()` and `tbl_ard_continuous()` have been added. These provide general tools for creating bespoke summary tables. Rather than accepting a data frame, these functions accept an ARD object (Analysis Results Dataset often created with the {cards} or {cardx} packages). The ARD objects align with the emerging [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard). ARDs are now used throughout the package. See below under the "Internal Storage" heading.
 
