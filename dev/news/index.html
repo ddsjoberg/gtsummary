@@ -101,6 +101,10 @@
 <div class="section level4">
 <h4 id="minor-improvements-development-version">Minor Improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-development-version"></a></h4>
 <ul><li><p>Argument <code>add_p.tbl_summary(adj.vars)</code> was added to more easily add p-values that are adjusted/stratified by other columns in a data frame.</p></li>
+<li>
+<p>Messaging and checks have been improved when tidyselect is invoked in the package, i.e. when the tilda is used to select variables <code>age ~ "Patient Age"</code>. The subset of variables that can be selected is now reduced the variables present in the table. For example, if you have a summary table of patient age (and only patient age), and age is a single column from a data set of many columns and you mis-spell age (<code>aggge ~ "Patient Age"</code>), the error message will now ask if you meant <code>"age"</code> instead of listing every column in the data set.</p>
+<ul><li>Note that as before, you can circumvent tidyselect by using a named list, e.g. <code>list(age = "Patient Age")</code>.</li>
+</ul></li>
 <li><p>Added the following methods for calculating differences in <code><a href="../reference/add_difference.tbl_summary.html">add_difference.tbl_summary()</a></code>: Hedge’s G, Paired data Cohen’s D, and Paired data Hedge’s G. All three are powered by the {effectsize} package.</p></li>
 <li><p>The counts in the header of <code>tbl_summary(by)</code> tables now appear on a new line, e.g. <code>"**{level}**  \nN = {n}"</code>.</p></li>
 <li><p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, the default calculation for quantiles (e.g. statistics of the form <code>"p25"</code> or <code>"p75"</code>) has been updated with type <code>quantile(type=2)</code>.</p></li>
