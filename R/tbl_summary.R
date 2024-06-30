@@ -304,6 +304,7 @@ tbl_summary <- function(data,
     data = data, label = label, statistic = statistic,
     digits = digits, type = type, value = value, sort = sort
   )
+  .check_statistic_type_agreement(statistic, type)
 
   # sort requested columns by frequency
   data <- .sort_data_infreq(data, sort)
@@ -697,5 +698,28 @@ tbl_summary <- function(data,
     x = sort,
     predicate = function(x) is.null(x) || (is_string(x) && x %in% c("alphanumeric", "frequency")),
     error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}."
+  )
+
+}
+
+.check_statistic_type_agreement <- function(statistic, type) {
+  # statistic must be a string for types "continuous", "categorical", "dichotomous" and character for "continuous2"
+  imap(
+    statistic,
+    \(stat, variable) {
+      if (type[[variable]] %in% c("continuous", "categorical", "dichotomous") && !is_string(stat)) {
+        msg <- "The {.arg statistic} argument value for variable {.val {variable}} must be a string, but is {.obj_type_friendly {stat}}."
+        if (type[[variable]] == "continuous" && is.character(stat)) {
+          msg <- c(msg, i = "Did you mean to set {.code type = list({variable} = {.val continuous2})} for a multi-line summary?")
+        }
+        cli::cli_abort(msg, call = get_cli_abort_call())
+      }
+      else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
+        cli::cli_abort(
+          "The {.arg statistic} argument value for variable {.val {variable}} must be {.cls character}, but is {.obj_type_friendly {stat}}.",
+          call = get_cli_abort_call()
+        )
+      }
+    }
   )
 }

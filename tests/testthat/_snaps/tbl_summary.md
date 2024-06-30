@@ -220,6 +220,23 @@
       Error converting string "not_a_summary_statistic" to a function.
       i Is the name spelled correctly and available?
 
+# tbl_summary(statistic,type) errors
+
+    Code
+      tbl_summary(trial, include = age, statistic = ~ c("{mean}", "{sd}"))
+    Condition
+      Error in `tbl_summary()`:
+      ! The `statistic` argument value for variable "age" must be a string, but is a character vector.
+      i Did you mean to set `type = list(age = "continuous2")` for a multi-line summary?
+
+---
+
+    Code
+      tbl_summary(trial, include = grade, statistic = ~ c("{mean}", "{sd}"))
+    Condition
+      Error in `tbl_summary()`:
+      ! The `statistic` argument value for variable "grade" must be a string, but is a character vector.
+
 # tbl_summary(type)
 
     Code
