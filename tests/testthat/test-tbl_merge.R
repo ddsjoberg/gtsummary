@@ -199,8 +199,8 @@ test_that("tbl_merge throws expected errors", {
     error = TRUE
   )
 
-  tbl <- list(table_body = head(mtcars)) |>
-    construct_initial_table_styling() |>
+  tbl <-
+    .create_gtsummary_object(table_body = head(mtcars)) |>
     modify_column_unhide(everything())
 
   # gtsummary tables must be correctly formatted
