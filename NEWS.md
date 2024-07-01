@@ -62,6 +62,8 @@
 
 * When `add_ci()` is run after `add_overall()`, the overall column is now populated with the confidence interval. (#1569)
 
+* Added `pkgdown_print.gtsummary()` method that is only registered when the pkgdown package is loaded. This enables printing of gtsummary tables on the pkgdown site in the Examples section. (#1771)
+
 ### Bug fixes
 
 * Fix in `add_difference()` for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (#1557)
