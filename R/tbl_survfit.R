@@ -383,8 +383,7 @@ brdg_survfit <- function(cards,
     dplyr::bind_rows()
 
   # construct gtsummary object -------------------------------------------------
-  res <- list(table_body = table_body, cards = list(brdg_survfit = cards))
-  res <- construct_initial_table_styling(res)
+  res <- .create_gtsummary_object(table_body, cards = list(brdg_survfit = cards))
 
   # add 'df_header_survfit' info to table_styling$header
   res$table_styling$header <-
