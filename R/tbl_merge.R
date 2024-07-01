@@ -109,7 +109,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
         ~ modify_spanning_header(
           .x, c(
             everything(),
-            -any_of(c("variable", "row_type", "var_label", "label"))
+            # TODO: Use of the "ci" column was deprecated in v2.0 and it can be removed from here in the future
+            -any_of(c("variable", "row_type", "var_label", "label", "ci"))
           ) ~ tab_spanner[.y]
         )
       )

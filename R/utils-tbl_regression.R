@@ -142,6 +142,29 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       fmt_fun = estimate_fun
     )
 
+  # the "ci" column was deprecated in v2.0
+  if (all(c("conf.low", "conf.high") %in% names(x$table_body))) {
+    x <- x |>
+      modify_table_body(
+        ~ .x |>
+          dplyr::mutate(
+            .before = "conf.low",
+            ci = dplyr::case_when(
+              .data$reference_row == TRUE & is.na(.data$conf.low) ~
+                get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"),
+              !is.na(.data$conf.low) ~
+                glue::glue("{estimate_fun(conf.low)}{get_theme_element('pkgwide-str:ci.sep', default = ', ')} {estimate_fun(conf.high)}"),
+              TRUE ~ NA_character_
+            )
+          )
+
+      ) %>% # suppress deprecation warning about "ci" column
+      {suppressWarnings(
+        modify_header(., ci = x$table_styling$header$label[x$table_styling$header$column == "conf.low"]) |>
+          modify_column_hide("ci")
+      )}
+  }
+
   # p.value --------------------------------------------------------------------
   x <- modify_table_styling(
     x,

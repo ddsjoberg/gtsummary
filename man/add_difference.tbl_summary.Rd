@@ -74,8 +74,7 @@ to the table along with the difference's confidence interval and a p-value (when
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
-add_difference_ex1 <-
-  trial |>
+trial |>
   select(trt, age, marker, response, death) \%>\%
   tbl_summary(
     by = trt,
@@ -86,13 +85,12 @@ add_difference_ex1 <-
       ),
     missing = "no"
   ) |>
-  # add_n() |>
+  add_n() |>
   add_difference()
 
 # Example 2 ----------------------------------
 # ANCOVA adjusted for grade and stage
-add_difference_ex2 <-
-  trial |>
+trial |>
   select(trt, age, marker, grade, stage) \%>\%
   tbl_summary(
     by = trt,
@@ -100,7 +98,7 @@ add_difference_ex2 <-
     missing = "no",
     include = c(age, marker, trt)
   ) |>
-  # add_n() |>
+  add_n() |>
   add_difference(adj.vars = c(grade, stage))
 \dontshow{\}) # examplesIf}
 }

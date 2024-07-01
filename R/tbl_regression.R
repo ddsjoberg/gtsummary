@@ -71,7 +71,7 @@
 #'
 #' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
 #' # Example 1 ----------------------------------
-#' glm(response ~ age + grade, trial, family = binomial()) %>%
+#' glm(response ~ age + grade, trial, family = binomial()) |>
 #'   tbl_regression(exponentiate = TRUE)
 NULL
 
