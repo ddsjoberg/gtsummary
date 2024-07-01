@@ -29,7 +29,7 @@
 #' modify_header(conf.low = "Confidence Interval")
 #' ```
 #'
-#' If you need to update a reference from `pattern` argument in `modify_column_merge()` or
+#' If you need to update a reference from the `pattern` argument in `modify_column_merge()` or
 #' `inline_text()`, you can replace the `"{ci}"` reference with `"{conf.low}, {conf.high}"`.
 #'
 #' @keywords internal
