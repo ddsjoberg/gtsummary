@@ -118,10 +118,8 @@ tbl_survfit(
 
 # Example 3 ----------------------------------
 # Pass a list of survfit() objects
-list(
- survfit(Surv(ttdeath, death) ~ 1, trial),
- survfit(Surv(ttdeath, death) ~ trt, trial)
-) |>
+list(survfit(Surv(ttdeath, death) ~ 1, trial),
+     survfit(Surv(ttdeath, death) ~ trt, trial)) |>
   tbl_survfit(times = c(12, 24))
 
 # Example 4 Competing Events Example ---------

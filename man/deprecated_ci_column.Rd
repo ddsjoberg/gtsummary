@@ -31,7 +31,7 @@ you would update your code to
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{modify_header(conf.low = "Confidence Interval")
 }\if{html}{\out{</div>}}
 
-If you need to update a reference from \code{pattern} argument in \code{modify_column_merge()} or
+If you need to update a reference from the \code{pattern} argument in \code{modify_column_merge()} or
 \code{inline_text()}, you can replace the \code{"{ci}"} reference with \code{"{conf.low}, {conf.high}"}.
 }
 }

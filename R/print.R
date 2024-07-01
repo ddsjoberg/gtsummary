@@ -64,3 +64,16 @@ knit_print.gtsummary <- function(x,
 
   knitr::knit_print(res)
 }
+
+#' @rdname print_gtsummary
+#' @export
+pkgdown_print.gtsummary <- function(x, visible = TRUE) {
+  if (!visible) {
+    return(invisible())
+  }
+
+  htmltools::div(
+    class = "gt-table",
+    gtsummary::as_gt(x) |> gt::as_raw_html()
+  )
+}

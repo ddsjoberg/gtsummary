@@ -4,6 +4,7 @@
 \alias{print_gtsummary}
 \alias{print.gtsummary}
 \alias{knit_print.gtsummary}
+\alias{pkgdown_print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
 \method{print}{gtsummary}(
@@ -17,6 +18,8 @@
   print_engine = c("gt", "flextable", "huxtable", "kable", "kable_extra", "tibble"),
   ...
 )
+
+pkgdown_print.gtsummary(x, visible = TRUE)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
