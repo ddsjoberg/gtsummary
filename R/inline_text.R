@@ -76,6 +76,17 @@ inline_text.gtsummary <- function(x,
     cli::cli_abort("Arguments {.arg column} and {.arg pattern} cannot both be empty.")
   }
 
+  # Deprecated in v2.0 use of the ci column
+  if (!is_empty(pattern) && "ci" %in% .extract_glue_elements(pattern)) {
+    cli::cli_warn(
+      c("Use of the {.val ci} column was deprecated in {.pkg gtsummary} v2.0,
+         and the column will eventually be removed from the tables.",
+        i = "The {.val ci} column has been replaced by the merged {.val {c('conf.low', 'conf.high')}} columns (merged with {.fun modify_column_merge}).",
+        i = "For patterns, replace {.val {{ci}}} with {.val {{conf.low}}, {{conf.high}}}.",
+        i = "See {.help deprecated_ci_column} for details.")
+    )
+  }
+
   level <- enquo(level)
 
   # adding raw stats if user will use them -------------------------------------

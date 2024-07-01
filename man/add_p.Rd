@@ -21,9 +21,6 @@ Object with class 'gtsummary'}
 \item \code{\link[=add_p.tbl_survfit]{add_p.tbl_survfit()}}
 }
 }
-\seealso{
-\code{\link[=add_p.tbl_summary]{add_p.tbl_summary()}}
-}
 \author{
 Daniel D. Sjoberg
 }

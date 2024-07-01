@@ -29,6 +29,8 @@
 
 * In `tbl_regression()`, the `.$model_obj` is no longer returned with the object. The modeling object is, and always has been, available in `.$inputs$x`.
 
+* When the gtsummary package was first written, the gt package was not on CRAN and the version of the package that was available did not have the ability to merge columns. Due to these limitations, the `"ci"` column was added to show the combined `"conf.low"` and `"conf.high"` columns. Column merging in both gt and gtsummary packages has matured over the years, and we are now adopting a more modern approach by using these features. As a result, the `"ci"` column will eventually be dropped from `.$table_body`. By using column merging, the conf.low and conf.high remain numeric and we can to continue to update how these columns are formatted. Review `?deprecated_ci_column` for details.
+
 ### Documentation
 
 * The vignettes "FAQ+Gallery", `tbl_summary()` Tutorial, `tbl_regression()` Tutorial, and Quarto+R Markdown have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation, utilizing more tools that don't need to be included in the package.  
