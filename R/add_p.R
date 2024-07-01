@@ -479,9 +479,11 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
             )
           ) |>
           dplyr::ungroup()
-      ) |>
-      modify_header(ci = x$table_styling$header$label[x$table_styling$header$column == "conf.low"]) |>
-      modify_column_hide("ci")
+      ) %>% # supress deprecation warning about "ci" column
+      {suppressWarnings(
+        modify_header(., ci = x$table_styling$header$label[x$table_styling$header$column == "conf.low"]) |>
+          modify_column_hide("ci")
+      )}
 
 
     x <-
