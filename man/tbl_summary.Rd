@@ -160,14 +160,12 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 
 \examples{
 # Example 1 ----------------------------------
-tbl_summary_ex1 <-
-  trial |>
+trial |>
   select(age, grade, response) |>
   tbl_summary()
 
 # Example 2 ----------------------------------
-tbl_summary_ex2 <-
-  trial |>
+trial |>
   select(age, grade, response, trt) |>
   tbl_summary(
     by = trt,
@@ -177,8 +175,7 @@ tbl_summary_ex2 <-
   )
 
 # Example 3 ----------------------------------
-tbl_summary_ex3 <-
-  trial |>
+trial |>
   select(age, marker) |>
   tbl_summary(
     type = all_continuous() ~ "continuous2",
