@@ -10,10 +10,9 @@
 #'   Object with class 'gtsummary'
 #' @param ... Passed to other methods.
 #' @keywords internal
+#'
 #' @author Daniel D. Sjoberg
 #' @export
-#'
-#' @seealso [`add_p.tbl_summary()`]
 add_p <- function(x, ...) {
   check_not_missing(x)
   check_class(x, "gtsummary")
@@ -142,7 +141,7 @@ add_p.tbl_summary <- function(x,
     test,
     predicate = \(x) is.character(x) || is.function(x),
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
-      i = "Value must be {.cls character} or {.cls function}."
+                  i = "Value must be {.cls character} or {.cls function}."
     )
   )
 
@@ -204,7 +203,7 @@ add_p.tbl_summary <- function(x,
     test.args,
     predicate = \(x) is.list(x) && is_named(x),
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
-      i = "Value must be a named list."
+                  i = "Value must be a named list."
     )
   )
 
@@ -241,9 +240,9 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
             do.call(
               what =
                 df_test_meta_data |>
-                  dplyr::filter(.data$variable %in% .env$variable) |>
-                  dplyr::pull("fun_to_run") %>%
-                  getElement(1),
+                dplyr::filter(.data$variable %in% .env$variable) |>
+                dplyr::pull("fun_to_run") %>%
+                getElement(1),
               args = list(
                 data = x$inputs[[1]], # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
                 variable = variable,
@@ -273,8 +272,8 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
           group1 = x$inputs$by,
           variable = variable,
           stat_name = switch(calling_fun,
-            "add_p" = "p.value",
-            "add_difference" = "estimate"
+                             "add_p" = "p.value",
+                             "add_difference" = "estimate"
           ),
           stat = list(NULL),
           warning = lst_captured_results["warning"],
@@ -302,11 +301,11 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
     dplyr::bind_rows() %>%
     {
       switch(!is_empty(.),
-        dplyr::filter(., .data$stat_name %in% c(
-          "estimate", "std.error", "parameter", "statistic",
-          "conf.low", "conf.high", "p.value"
-        )) |>
-          cards::print_ard_conditions()
+             dplyr::filter(., .data$stat_name %in% c(
+               "estimate", "std.error", "parameter", "statistic",
+               "conf.low", "conf.high", "p.value"
+             )) |>
+               cards::print_ard_conditions()
       )
     }
 
@@ -465,10 +464,30 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
     )
 
   if (calling_fun %in% "add_difference" && all(c("conf.low", "conf.high") %in% new_columns)) {
+    ci_sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
+    # use of the "ci" column was deprecated in v2.0.0
+    x <- x |>
+      modify_table_body(
+        ~ .x |>
+          dplyr::rowwise() |>
+          dplyr::mutate(
+            .before = "conf.low",
+            ci = ifelse(
+              !is.na(.data$conf.low) | !is.na(.data$conf.high),
+              glue("{estimate_fun[[variable]](conf.low)}{ci_sep} {estimate_fun[[variable]](conf.high)}"),
+              NA_character_
+            )
+          ) |>
+          dplyr::ungroup()
+      ) |>
+      modify_header(ci = x$table_styling$header$label[x$table_styling$header$column == "conf.low"]) |>
+      modify_column_hide("ci")
+
+
     x <-
       modify_column_merge(
         x,
-        pattern = paste("{conf.low}", "{conf.high}", sep = get_theme_element("pkgwide-str:ci.sep", default = ", ")),
+        pattern = paste("{conf.low}", "{conf.high}", sep = ci_sep),
         rows = !is.na(.data$conf.low)
       )
   }

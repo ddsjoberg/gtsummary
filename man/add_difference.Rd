@@ -18,9 +18,6 @@ Object with class 'gtsummary'}
 \item \code{\link[=add_difference.tbl_svysummary]{add_difference.tbl_svysummary()}}
 }
 }
-\seealso{
-\code{\link[=add_difference.tbl_summary]{add_difference.tbl_summary()}}
-}
 \author{
 Daniel D. Sjoberg
 }

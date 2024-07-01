@@ -7,10 +7,9 @@
 #'   Object with class 'gtsummary'
 #' @param ... Passed to other methods.
 #' @keywords internal
+#'
 #' @author Daniel D. Sjoberg
 #' @export
-#'
-#' @seealso [`add_difference.tbl_summary()`]
 add_difference <- function(x, ...) {
   check_not_missing(x)
   check_class(x, "gtsummary")
@@ -46,8 +45,7 @@ add_difference <- function(x, ...) {
 #'
 #' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
 #' # Example 1 ----------------------------------
-#' add_difference_ex1 <-
-#'   trial |>
+#' trial |>
 #'   select(trt, age, marker, response, death) %>%
 #'   tbl_summary(
 #'     by = trt,
@@ -58,13 +56,12 @@ add_difference <- function(x, ...) {
 #'       ),
 #'     missing = "no"
 #'   ) |>
-#'   # add_n() |>
+#'   add_n() |>
 #'   add_difference()
 #'
 #' # Example 2 ----------------------------------
 #' # ANCOVA adjusted for grade and stage
-#' add_difference_ex2 <-
-#'   trial |>
+#' trial |>
 #'   select(trt, age, marker, grade, stage) %>%
 #'   tbl_summary(
 #'     by = trt,
@@ -72,7 +69,7 @@ add_difference <- function(x, ...) {
 #'     missing = "no",
 #'     include = c(age, marker, trt)
 #'   ) |>
-#'   # add_n() |>
+#'   add_n() |>
 #'   add_difference(adj.vars = c(grade, stage))
 add_difference.tbl_summary <- function(x,
                                        test = NULL,

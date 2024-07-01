@@ -123,6 +123,7 @@ modify_table_styling <- function(x,
   }
 
   # deprecation ----------------------------------------------------------------
+  .check_ref_to_ci_column(x, column, cols_merge_pattern)
   if (isFALSE(undo_text_format)) undo_text_format <- NULL
   if (isTRUE(undo_text_format)) {
     # set new values for the user
@@ -345,6 +346,20 @@ modify_table_styling <- function(x,
   # return x -------------------------------------------------------------------
   x$call_list <- updated_call_list
   x
+}
+
+# use of the "ci" column was deprecated in v2.0
+.check_ref_to_ci_column <- function(x, column, cols_merge_pattern) {
+  # if "ci" column was selected & selector was not `everything()`, then print note
+  if (("ci" %in% column && !all(column %in% names(x$table_body))) ||
+      (!is_empty(cols_merge_pattern) && "ci" %in% .extract_glue_elements(cols_merge_pattern))) {
+    cli::cli_warn(
+      c("Use of the {.val ci} column was deprecated in {.pkg gtsummary} v2.0,
+         and the column will eventually be removed from the tables.",
+        i = "The {.val ci} column has been replaced by the merged {.val {c('conf.low', 'conf.high')}} columns (merged with {.fun modify_column_merge}).",
+        i = "See {.help deprecated_ci_column} for details.")
+    )
+  }
 }
 
 
