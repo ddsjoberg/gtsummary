@@ -55,8 +55,7 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
     )
 
   # build the table body pieces with bridge functions and stack them -----------
-  x <- list()
-  x$table_body <-
+  table_body <-
     map(
       unique(df_stat_info$stat_id),
       function(i) {
@@ -90,7 +89,7 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
 
 
   # construct default table_styling --------------------------------------------
-  x <- construct_initial_table_styling(x)
+  x <- .create_gtsummary_object(table_body)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
   x <- .add_table_styling_stats(x, cards = cards, by = NULL)

@@ -350,8 +350,7 @@ test_that("check for messaging about duplicate variables", {
 
 test_that("inline_text.gtsummary() messaging", {
   tbl <-
-    list(table_body = head(mtcars)) |>
-    construct_initial_table_styling() |>
+    .create_gtsummary_object(table_body = head(mtcars)) |>
     modify_column_unhide(everything())
 
   expect_error(
@@ -362,8 +361,7 @@ test_that("inline_text.gtsummary() messaging", {
   tbl <-
     head(mtcars) %>%
     dplyr::mutate(variable = "one") %>%
-    {list(table_body = .)} |> #styler: off
-    construct_initial_table_styling() %>%
+    .create_gtsummary_object() |>
     modify_column_unhide(everything())
 
   expect_error(

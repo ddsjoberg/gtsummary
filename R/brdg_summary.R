@@ -111,8 +111,7 @@ brdg_summary <- function(cards,
   set_cli_abort_call()
 
   # build the table body pieces with bridge functions and stack them -----------
-  x <- list()
-  x$table_body <-
+  table_body <-
     dplyr::left_join(
       dplyr::tibble(
         variable = variables,
@@ -151,7 +150,7 @@ brdg_summary <- function(cards,
     )
 
   # construct default table_styling --------------------------------------------
-  x <- construct_initial_table_styling(x)
+  x <- .create_gtsummary_object(table_body)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
   x <- .add_table_styling_stats(x, cards = cards, by = by)

@@ -173,10 +173,8 @@ tbl_regression.default <- function(x,
     )
 
   # construct initial gtsummary object -----------------------------------------
-  res <- list()
-  res$table_body <- table_body
   res <-
-    construct_initial_table_styling(res) |>
+    .create_gtsummary_object(table_body) |>
     utils::modifyList(
       list(
         N = table_body[["N_obs"]][1],
