@@ -16,7 +16,6 @@ Used to assign updates to formatting functions.
 Use \verb{modify_fmt_fun(colname = <fmt fn>)} to update a single column. Using a
 formula will invoke tidyselect, e.g. \verb{modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)}.
 
-TODO: Add link when the function below is added.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
 \item{rows}{(predicate \code{expression})\cr

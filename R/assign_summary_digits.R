@@ -174,7 +174,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
       c("p", "p_miss", "p_nonmiss", "p_unweighted",
         "p_miss_unweighted", "p_nonmiss_unweighted") |>
         intersect(statistics) |>
-        rep_named(list(label_style_percent())),
+        rep_named(list(get_theme_element("tbl_summary-fn:percent_fun", default = label_style_percent()))),
       c("p.std.error", "deff") |>
         intersect(statistics) |>
         rep_named(list(label_style_sigfig(digits = 3)))

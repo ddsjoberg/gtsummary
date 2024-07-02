@@ -565,7 +565,6 @@ add_p_test_svychisq.test <- function(data,
 }
 
 # add_p.tbl_continuous ---------------------------------------------------------
-# TODO: Do we need an ARD for storing glance() results? This is not a cards object.
 add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
   stats::lm(
     formula = cardx::reformulate2(c(variable, by), response = continuous_variable),

@@ -121,7 +121,6 @@ get_gtsummary_theme <- function() {
 #' @export
 with_gtsummary_theme <- function(x, expr,
                                  env = rlang::caller_env(),
-                                 # TODO: can we delete this argument?
                                  msg_ignored_elements = NULL) {
   # save current theme ---------------------------------------------------------
   current_theme <- get_gtsummary_theme()
@@ -131,7 +130,6 @@ with_gtsummary_theme <- function(x, expr,
   on.exit(set_gtsummary_theme(current_theme), add = TRUE)
 
   # message ignored theme elements ---------------------------------------------
-  # TODO: Do we need this messaging? Can we delete?
   .msg_ignored_elements(x, current_theme, msg_ignored_elements)
 
   # add specified theme --------------------------------------------------------
