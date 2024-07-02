@@ -135,7 +135,7 @@ The `pattern` argument syntax follows `glue::glue()` format with referenced R ob
 The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
 
 ```{r, echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Parameter,       ~Description,
   "`{estimate}`",   "primary estimate (e.g. model coefficient, odds ratio)",
   "`{conf.low}`",   "lower limit of confidence interval",
