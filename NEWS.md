@@ -26,6 +26,8 @@
 * Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with `brdg_*()`). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.
   - These ARDs are now used to calculate the summary statistics for nearly every function in gtsummary. The raw summary statistics are saved in `.$cards`.
   - *Users who previously accessed the internals of a gtsummary object will find the structure has been updated, and this may be an important breaking change.*
+  
+* Calculations that require other packages have been placed in another package called {cardx}. This package creates ARD objects with the calculated statistics.
 
 * In `tbl_regression()`, the `.$model_obj` is no longer returned with the object. The modeling object is, and always has been, available in `.$inputs$x`.
 
