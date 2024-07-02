@@ -164,7 +164,7 @@
     Condition
       Error in `tbl_uvregression()`:
       ! There was an error constructing the model for variable "trt". See message below.
-      x unused argument (not_an_arg = FALSE)
+      x There was an error evaluating the model Caused by error in `glm.control()`: ! unused argument (not_an_arg = FALSE)
 
 ---
 
