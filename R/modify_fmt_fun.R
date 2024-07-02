@@ -9,7 +9,6 @@
 #'   Use `modify_fmt_fun(colname = <fmt fn>)` to update a single column. Using a
 #'   formula will invoke tidyselect, e.g. `modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)`.
 #'
-#'   TODO: Add link when the function below is added.
 #'   Use the `show_header_names()` to see the column names that can be modified.
 #' @inheritParams modify
 #' @inheritParams modify_table_styling
