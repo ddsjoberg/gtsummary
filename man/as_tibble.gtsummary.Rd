@@ -37,7 +37,7 @@ Logical argument adding the missing value formats.}
 \item{...}{Arguments passed on to \code{gt::gt(...)}}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \href{https://tibble.tidyverse.org/}{tibble}
 }
 \description{
 Function converts a gtsummary object to a tibble.

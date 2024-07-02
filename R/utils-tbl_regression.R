@@ -35,7 +35,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     {dplyr::bind_cols(
       .,
       attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
-        tibble::as_tibble()
+        dplyr::as_tibble()
     )}
   # styler: on
 

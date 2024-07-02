@@ -9,7 +9,7 @@
 #'   Logical argument adding the missing value formats.
 #' @inheritParams rlang::args_dots_empty
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tibble](https://tibble.tidyverse.org/)
 #'
 #' @author Daniel D. Sjoberg
 #' @name as_tibble.gtsummary

@@ -181,7 +181,7 @@ test_that("add_stat() for 'tbl_continuous'", {
     )
 
   add_stat_test1 <- function(data, variable, by, ...) {
-    tibble::tibble(addtl = "Data from elsewhere")
+    dplyr::tibble(addtl = "Data from elsewhere")
   }
 
   expect_equal(

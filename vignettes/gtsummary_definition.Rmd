@@ -66,7 +66,7 @@ The `header` table has the following columns and is one row per column found in 
 The table contains styling information that applies to entire column or the columns headers.
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "hide", "Logical indicating whether the column is hidden in the output. This column is also scoped in `modify_header()` (and friends) to be used in a selecting environment",
@@ -99,7 +99,7 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 A footnote of `NA_character_` deletes an existing footnote.
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
@@ -125,7 +125,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
@@ -151,7 +151,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
@@ -179,7 +179,7 @@ For example, reference rows in `tbl_regression()` are shown with an em-dash.
 Updates/changes to styling functions are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
@@ -205,7 +205,7 @@ This tibble gives instructions for merging columns into a single column.
 The implementation in `as_gt()` will be updated after `gt::cols_label()` gains a `rows=` argument.
 
 ```{r, echo=FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
@@ -309,7 +309,7 @@ While the statistics contained in each `"df_stats"` tibble can vary within a sin
 
 Each tibble contain the following columns 
 ```{r, echo = FALSE}
-tibble::tribble(
+dplyr::tribble(
   ~Column, ~Description,
   "`variable`", "String of the variable name",
   "`label`", "String matching the variable's values in `.$table_body$label`",
