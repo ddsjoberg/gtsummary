@@ -143,8 +143,8 @@ The first is modifying internal behavior of the functions that is not directly c
 
 ```{r, echo=FALSE}
 gtsummary:::df_theme_elements %>%
-  dplyr::filter(argument == FALSE, deprecated == FALSE) %>%
-  dplyr::select(-argument, -deprecated) %>%
+  dplyr::filter(argument == FALSE, !is.na(deprecated_version)) %>%
+  dplyr::select(-argument, -deprecated_version) %>%
   dplyr::mutate(
     name = ifelse(!is.na(name), glue::glue("`{name}`"), NA_character_),
     example = ifelse(!is.na(example), glue::glue("`{example}`"), NA_character_)
@@ -171,7 +171,7 @@ The values of these theme elements must align with the functions' accepted input
 
 ```{r, echo=FALSE}
 gtsummary:::df_theme_elements %>%
-  dplyr::filter(argument == TRUE, deprecated == FALSE) %>%
+  dplyr::filter(argument == TRUE, !is.na(deprecated_version)) %>%
   dplyr::select(fn, name) %>%
   dplyr::group_by(fn) %>%
   dplyr::mutate(arg_list = paste0("`", name, "`", collapse = ", ")) %>%

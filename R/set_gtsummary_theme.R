@@ -218,11 +218,14 @@ get_theme_element <- function(x, default = NULL, eval = TRUE, env = caller_env()
   eval_tidy(env_gtsummary_theme[[x]], env = env) %||% default
 }
 
-get_deprecated_theme_element <- function(x, default = NULL, eval = TRUE, env = caller_env(), version = "2.0.0") {
+get_deprecated_theme_element <- function(x, default = NULL, eval = TRUE, env = caller_env()) {
   if (!is_empty(env_gtsummary_theme[[x]])) {
+    version <- df_theme_elements$deprecated_version[df_theme_elements$name == x]
+    details <- df_theme_elements$deprecated_details[df_theme_elements$name == x]
     lifecycle::deprecate_warn(
       when = version,
-      what = I(glue("gtsummary theme element {shQuote(x)}"))
+      what = I(glue("gtsummary theme element {shQuote(x)}")),
+      details = switch(!is_empty(details), details)
     )
   }
 

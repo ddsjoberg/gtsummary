@@ -61,7 +61,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   pvalue_fun <-
     pvalue_fun %||%
     # defaults from theme
-    get_theme_element("add_q-arg:pvalue_fun") %||%
+    get_deprecated_theme_element("add_q-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
     # default from p-value formatting function
     (dplyr::filter(x$table_styling$fmt_fun, .data$column == "p.value") |> dplyr::pull("fmt_fun") |> rev() |> getElement(1)) |>
