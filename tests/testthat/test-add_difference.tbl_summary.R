@@ -326,7 +326,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
         verbose = FALSE
       )
     ) |>
-      tibble::as_tibble() |>
+      dplyr::as_tibble() |>
       select(-CI) |>
       set_names(c("estimate", "conf.low", "conf.high")),
     ignore_attr = TRUE
@@ -350,7 +350,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
         verbose = FALSE
       )
     ) |>
-      tibble::as_tibble() |>
+      dplyr::as_tibble() |>
       select(-CI) |>
       set_names(c("estimate", "conf.low", "conf.high")),
     ignore_attr = TRUE

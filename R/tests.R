@@ -151,7 +151,7 @@
 #' The following table describes the argument inputs for each gtsummary table type.
 #'
 #' ```{r, echo = FALSE}
-#' tibble::tribble(
+#' dplyr::tribble(
 #'   ~`**argument**`, ~`**tbl_summary**`, ~`**tbl_svysummary**`, ~`**tbl_survfit**`, ~`**tbl_continuous**`,
 #'   "`data=`", "A data frame", "A survey object", "A `survfit()` object", "A data frame",
 #'   "`variable=`", "String variable name", "String variable name", "`NA`", "String variable name",

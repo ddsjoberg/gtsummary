@@ -298,7 +298,7 @@ test_that("as_gt passes appended glance statistics correctly", {
   gt_tbl <- tbl |> as_gt()
 
   loc_hline <- tbl$table_body |>
-    tibble::rownames_to_column() |>
+    rownames_to_column() |>
     dplyr::filter(!!tbl$table_styling$horizontal_line_above) |>
     dplyr::pull(rowname) |>
     as.numeric()

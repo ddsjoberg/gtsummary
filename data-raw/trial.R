@@ -3,7 +3,7 @@
 set.seed(8976)
 n <- 200
 trial <-
-  tibble::tibble(
+  dplyr::tibble(
     trt = sample(c("Drug A", "Drug B"), n, replace = TRUE),
     age = rnorm(n, mean = 50, sd = 15) %>% as.integer(),
     marker = rgamma(n, 1, 1) %>% round(digits = 3),
