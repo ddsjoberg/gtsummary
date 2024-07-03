@@ -154,7 +154,7 @@ tbl_svysummary <- function(data,
     default_types <- assign_summary_type(as.data.frame(data), include, value)
     # process the user-passed type argument
     cards::process_formula_selectors(
-      data = select_prep(.list2tb(default_types, "var_type"), as.data.frame(data)[include]),
+      data = scope_table_body(.list2tb(default_types, "var_type"), as.data.frame(data)[include]),
       type =
         case_switch(
           missing(type) ~
@@ -170,14 +170,14 @@ tbl_svysummary <- function(data,
   }
 
   value <-
-    select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
+    scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
     .assign_default_values(value, type)
 
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]),
+    scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]),
     statistic =
       case_switch(
         missing(statistic) ~
@@ -187,7 +187,7 @@ tbl_svysummary <- function(data,
       )
   )
 
-  select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
+  scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
     cards::process_formula_selectors(
       label =
         case_switch(
@@ -206,7 +206,7 @@ tbl_svysummary <- function(data,
     )
 
   cards::process_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]),
+    scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]),
     digits =
       case_switch(
         missing(digits) ~
@@ -218,7 +218,7 @@ tbl_svysummary <- function(data,
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]),
+    scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]),
     statistic =
       get_theme_element("tbl_svysummary-arg:statistic") %||%
       get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_svysummary)[["statistic"]])),
@@ -233,7 +233,7 @@ tbl_svysummary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      select_prep(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
+      scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 

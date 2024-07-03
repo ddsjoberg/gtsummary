@@ -61,12 +61,12 @@ add_p.tbl_svysummary <- function(x,
   }
 
   cards::process_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[x$inputs$include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[x$inputs$include]),
     include = {{ include }}
   )
 
   cards::process_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test =
       case_switch(
         missing(test) ~ get_theme_element("add_p.tbl_svysummary-arg:test", default = test),
@@ -76,7 +76,7 @@ add_p.tbl_svysummary <- function(x,
   )
 
   cards::fill_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test = eval(formals(asNamespace("gtsummary")[["add_p.tbl_svysummary"]])[["test"]])
   )
   # add the calling env to the test
@@ -140,7 +140,7 @@ add_p.tbl_svysummary <- function(x,
 
   # now process the `test.args` argument ---------------------------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test.args = test.args
   )
   cards::check_list_elements(

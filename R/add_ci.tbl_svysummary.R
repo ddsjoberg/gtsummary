@@ -66,18 +66,18 @@ add_ci.tbl_svysummary <- function(x,
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(
-    data = select_prep(x$table_body),
+    data = scope_table_body(x$table_body),
     include = {{ include }}
   )
 
   cards::process_formula_selectors(
-    data = select_prep(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
+    data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
     method = method,
     statistic = statistic,
     style_fun = style_fun
   )
   cards::fill_formula_selectors(
-    data = select_prep(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
+    data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
     method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["method"]]),
     statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["statistic"]]),
     style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["style_fun"]])

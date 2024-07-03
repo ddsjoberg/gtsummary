@@ -86,7 +86,7 @@ add_global_p.tbl_regression <- function(x,
     type <- get_theme_element("add_global_p-str:type", default = type)
   }
   cards::process_selectors(
-    data = select_prep(x$table_body),
+    data = scope_table_body(x$table_body),
     include = {{ include }}
   )
   if (is_empty(include)) return(x) # styler: off

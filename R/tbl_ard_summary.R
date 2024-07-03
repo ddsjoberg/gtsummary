@@ -149,12 +149,12 @@ tbl_ard_summary <- function(cards,
 
   # process arguments ----------------------------------------------------------
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(default_types, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
     type = type
   )
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(.list2tb(default_types, "var_type"), data[include]),
+    scope_table_body(.list2tb(default_types, "var_type"), data[include]),
     type = default_types,
   )
   cards::check_list_elements(
@@ -187,12 +187,12 @@ tbl_ard_summary <- function(cards,
   }
 
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(type, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = statistic
   )
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = eval(formals(gtsummary::tbl_ard_summary)[["statistic"]]),
   )
   cards::check_list_elements(
