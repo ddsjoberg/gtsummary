@@ -211,11 +211,11 @@ assign_tests.tbl_survfit <- function(x,
     test <- inject(everything() ~ !!test)
   }
   cards::process_formula_selectors(
-    data = select_prep(x$table_body)[include],
+    data = scope_table_body(x$table_body)[include],
     test = test
   )
   cards::fill_formula_selectors(
-    data = select_prep(x$table_body)[include],
+    data = scope_table_body(x$table_body)[include],
     test = inject(everything() ~ !!test)
   )
   cards::check_list_elements(

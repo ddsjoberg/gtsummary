@@ -16,7 +16,7 @@
 }
 \description{
 Many arguments in 'gtsummary' accept named lists. This function converts
-a named list to the \code{.$table_body} format expected in \code{select_prep()}
+a named list to the \code{.$table_body} format expected in \code{scope_table_body()}
 }
 \examples{
 type <- list(age = "continuous", response = "dichotomous")

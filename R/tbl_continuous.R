@@ -63,7 +63,7 @@ tbl_continuous <- function(data,
 
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
@@ -90,7 +90,7 @@ tbl_continuous <- function(data,
   )
 
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
     digits = digits
   )
 

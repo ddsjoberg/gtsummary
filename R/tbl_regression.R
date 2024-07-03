@@ -157,12 +157,12 @@ tbl_regression.default <- function(x,
 
   # saving evaluated `label`, `show_single_row`, and `include` -----------------
   cards::process_selectors(
-    data = select_prep(table_body),
+    data = scope_table_body(table_body),
     show_single_row = !!show_single_row,
     include = !!include
   )
   cards::process_formula_selectors(
-    data = select_prep(table_body),
+    data = scope_table_body(table_body),
     label = label
   )
   func_inputs <-

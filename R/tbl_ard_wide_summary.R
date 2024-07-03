@@ -101,7 +101,7 @@ tbl_ard_wide_summary <- function(cards,
   # processed arguments are saved into this env
   statistic <- rep_named(include, list(statistic))
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(type, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = statistic,
     include_env = TRUE
   )
