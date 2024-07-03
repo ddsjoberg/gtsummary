@@ -54,7 +54,7 @@ tbl_wide_summary <- function(data,
     default_types <- assign_summary_type(data, include, value)
     # process the user-passed type argument
     cards::process_formula_selectors(
-      data = select_prep(.list2tb(default_types, "var_type"), data[include]),
+      data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
       type = type
     )
     # fill in any types not specified by user
@@ -74,13 +74,13 @@ tbl_wide_summary <- function(data,
   statistic <- rep_named(include, list(statistic))
 
   value <-
-    select_prep(.list2tb(type, "var_type"), data[include]) |>
+    scope_table_body(.list2tb(type, "var_type"), data[include]) |>
     .assign_default_values(value, type)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(type, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = statistic,
     include_env = TRUE
   )
@@ -89,7 +89,7 @@ tbl_wide_summary <- function(data,
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(type, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     label = label,
     sort = sort,
     digits = digits
@@ -97,14 +97,14 @@ tbl_wide_summary <- function(data,
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[include]),
     sort = eval(formals(gtsummary::tbl_wide_summary)[["sort"]]),
   )
 
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      select_prep(.list2tb(type, "var_type"), data[include]) |>
+      scope_table_body(.list2tb(type, "var_type"), data[include]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -135,7 +135,7 @@ tbl_wide_summary <- function(data,
       ),
       # tabulate categorical summaries
       cards::ard_categorical(
-        select_prep(.list2tb(type, "var_type"), data),
+        scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_categorical(FALSE),
         fmt_fn = digits,
         denominator = "column",
@@ -143,7 +143,7 @@ tbl_wide_summary <- function(data,
       ),
       # tabulate dichotomous summaries
       cards::ard_dichotomous(
-        select_prep(.list2tb(type, "var_type"), data),
+        scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_dichotomous(),
         fmt_fn = digits,
         denominator = "column",
@@ -152,11 +152,11 @@ tbl_wide_summary <- function(data,
       ),
       # calculate continuous summaries
       cards::ard_continuous(
-        select_prep(.list2tb(type, "var_type"), data),
+        scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_continuous(),
         statistic =
           .continuous_statistics_chr_to_fun(
-            statistic[select(select_prep(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
+            statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
         fmt_fn = digits,
         stat_label = ~ default_stat_labels()

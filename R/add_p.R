@@ -119,14 +119,14 @@ add_p.tbl_summary <- function(x,
   }
 
   cards::process_selectors(
-    select_prep(x$table_body, x$inputs$data[x$inputs$include]),
+    scope_table_body(x$table_body, x$inputs$data[x$inputs$include]),
     include = {{ include }}
   )
   cards::process_selectors(x$inputs$data, group = {{ group }}, adj.vars = {{ adj.vars }})
   check_scalar(group, allow_empty = TRUE)
 
   cards::process_formula_selectors(
-    select_prep(x$table_body, x$inputs$data[include]),
+    scope_table_body(x$table_body, x$inputs$data[include]),
     test =
       case_switch(
         missing(test) ~ get_theme_element("add_p.tbl_summary-arg:test", default = test),
@@ -196,7 +196,7 @@ add_p.tbl_summary <- function(x,
 
   # now process the `test.args` argument ---------------------------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body, x$inputs$data[include]),
+    scope_table_body(x$table_body, x$inputs$data[include]),
     test.args = test.args
   )
   cards::check_list_elements(

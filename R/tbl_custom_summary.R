@@ -260,7 +260,7 @@ tbl_custom_summary <- function(data,
     default_types <- assign_summary_type(data, include, value)
     # process the user-passed type argument
     cards::process_formula_selectors(
-      data = select_prep(.list2tb(default_types, "var_type"), data[include]),
+      data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
       type =
         case_switch(
           missing(type) ~
@@ -276,13 +276,13 @@ tbl_custom_summary <- function(data,
   }
 
   value <-
-    select_prep(.list2tb(type, "var_type"), data[include]) |>
+    scope_table_body(.list2tb(type, "var_type"), data[include]) |>
     .assign_default_values(value, type)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    select_prep(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
@@ -296,7 +296,7 @@ tbl_custom_summary <- function(data,
     error_msg = "Each value passed in the {.arg stat_fns} argument must be a function."
   )
 
-  select_prep(.list2tb(type, "var_type"), data[include]) |>
+  scope_table_body(.list2tb(type, "var_type"), data[include]) |>
     cards::process_formula_selectors(
       label =
         case_switch(
@@ -308,7 +308,7 @@ tbl_custom_summary <- function(data,
     )
 
   cards::process_formula_selectors(
-    data = select_prep(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]),
     digits =
       case_switch(
         missing(digits) ~
@@ -321,7 +321,7 @@ tbl_custom_summary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      select_prep(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]) |>
+      scope_table_body(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]) |>
       assign_summary_digits(statistic, rep_named(include, list("continuous")), digits = digits)
   }
 

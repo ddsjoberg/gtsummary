@@ -121,12 +121,12 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
 
   # convert to named lists -----------------------------------------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     location = location,
     fns = fns
   )
   cards::fill_formula_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     location = eval(formals(gtsummary::add_stat)[["location"]])
   )
   cards::check_list_elements(

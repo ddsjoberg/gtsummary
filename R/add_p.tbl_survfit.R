@@ -69,7 +69,7 @@ add_p.tbl_survfit <- function(x,
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(
-    data = select_prep(x$table_body)[variables_strat],
+    data = scope_table_body(x$table_body)[variables_strat],
     include = {{ include }}
   )
 
@@ -109,7 +109,7 @@ add_p.tbl_survfit <- function(x,
 
   # now process the `test.args` argument ---------------------------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body, x$inputs$data[include]),
+    scope_table_body(x$table_body, x$inputs$data[include]),
     test.args = test.args
   )
   cards::check_list_elements(

@@ -28,7 +28,7 @@ add_p.tbl_continuous <- function(x,
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
 
   cards::process_selectors(
-    select_prep(x$table_body, x$inputs$data[x$inputs$include]),
+    scope_table_body(x$table_body, x$inputs$data[x$inputs$include]),
     include = {{ include }}
   )
 
@@ -44,7 +44,7 @@ add_p.tbl_continuous <- function(x,
   pvalue_fun <- as_function(pvalue_fun)
 
   cards::process_formula_selectors(
-    select_prep(x$table_body, x$inputs$data[include]),
+    scope_table_body(x$table_body, x$inputs$data[include]),
     test = test,
     include_env = TRUE
   )
@@ -102,7 +102,7 @@ add_p.tbl_continuous <- function(x,
 
   # now process the `test.args` argument ---------------------------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body, x$inputs$data[include]),
+    scope_table_body(x$table_body, x$inputs$data[include]),
     test.args = test.args
   )
   cards::check_list_elements(

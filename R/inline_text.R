@@ -57,7 +57,7 @@ inline_text.gtsummary <- function(x,
   check_string(pattern, allow_empty = TRUE)
 
   cards::process_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     variable = {{ variable }}
   )
   check_scalar(variable)
