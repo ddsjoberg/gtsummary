@@ -68,7 +68,7 @@ knit_print.gtsummary <- function(x,
 #' @rdname print_gtsummary
 #' @export
 pkgdown_print.gtsummary <- function(x, visible = TRUE) {
-  is_installed("htmltools")
+  check_installed("htmltools")
 
   if (!visible) {
     return(invisible())
