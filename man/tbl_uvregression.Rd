@@ -56,7 +56,7 @@ A data frame or a survey design object.}
 
 \item{...}{Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.}
 
-\item{y, x}{(\code{expression}\\code{string})\cr
+\item{y, x}{(\code{expression}, \code{string})\cr
 Model outcome (e.g. \code{y=recurrence} or \code{y=Surv(time, recur)}) or
 covariate (e.g. \code{x=trt}.
 All other column specified in \code{include} will be regressed against the constant \code{y} or \code{x}.
