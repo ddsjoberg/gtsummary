@@ -12,7 +12,7 @@ test_that("as_hux_table works with standard use", {
   expect_silent(ht_summary <- my_tbl_summary |> as_hux_table())
 
   # correct number of rows
-  expect_equal(nrow(ht), 8)
+  expect_equal(nrow(ht_summary), 8)
 })
 
 test_that("as_hux_table(return_calls) works as expected", {
