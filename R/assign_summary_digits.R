@@ -67,6 +67,15 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         # convert integers to a proper function
         digits[[variable]] <- .convert_integer_to_fmt_fn(digits[[variable]])
 
+        # check value is a function
+        if (!is_list(digits[[variable]]) || some(digits[[variable]], \(.x) !is_function(.x))) {
+          cli::cli_abort(
+            c("Error in {.arg digits} argument for variable {.val {variable}},",
+              i = "Passed values must be either a {.cls function} or {.cls integer}."),
+            call = get_cli_abort_call()
+          )
+        }
+
         # if the passed value fully specifies the formatting for each 'statistic',
         # then return it. Otherwise, the remaining stat will be filled below
         if (setequal(statistic[[variable]], names(digits[[variable]]))) {

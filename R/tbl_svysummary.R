@@ -245,6 +245,7 @@ tbl_svysummary <- function(data,
     data = as.data.frame(data), label = label, statistic = statistic,
     digits = digits, type = type, value = value, sort = sort
   )
+  .check_statistic_type_agreement(statistic, type)
 
   # sort requested columns by frequency
   data$variables <- .sort_data_infreq(data$variables, sort)
@@ -259,6 +260,14 @@ tbl_svysummary <- function(data,
   variables_continuous <- type |> keep(~.x %in% c("continuous", "continuous2")) |> names()
   variables_categorical <- type |> keep(~.x %in% "categorical") |> names()
   variables_dichotomous <- type |> keep(~.x %in% "dichotomous") |> names()
+  statistic_continuous <-
+    statistic[variables_continuous] |>
+    lapply(.extract_glue_elements) |>
+    map(~.x |> setdiff(c("N_obs", "N_miss", "p_miss", "N_nonmiss", "p_nonmiss", "N_obs_unweighted",
+                         "N_miss_unweighted", "p_miss_unweighted", "N_nonmiss_unweighted", "p_nonmiss_unweighted"))) |>
+    compact()
+  # if a user only requests missingness stats, there are no "continuous" stats to calculate
+  variables_continuous <- intersect(variables_continuous, names(statistic_continuous))
 
   cards <-
     cards::bind_ard(
@@ -300,7 +309,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_continuous),
-        statistic = statistic[variables_continuous] |> lapply(.extract_glue_elements),
+        statistic = statistic_continuous,
         fmt_fn = digits[variables_continuous],
         stat_label = ~ default_stat_labels()
       )
