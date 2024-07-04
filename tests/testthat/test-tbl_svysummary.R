@@ -348,10 +348,11 @@ test_that("tbl_svysummary(type) proper errors/messages", {
     tbl <- tbl_svysummary(
       svy_trial,
       include = grade,
-      type = grade ~ "continuous"
+      type = grade ~ "continuous",
+      statistic = ~ "{min}"
     )
   )
-  expect_equal(tbl$table_body$stat_0, "NA (NA, NA)")
+  expect_equal(tbl$table_body$stat_0, "NA")
 
   # unobserved levels cannot be summarized for a dichotomous summary
   expect_snapshot(

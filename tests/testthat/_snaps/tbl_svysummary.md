@@ -223,12 +223,11 @@
 # tbl_svysummary(type) proper errors/messages
 
     Code
-      tbl <- tbl_svysummary(svy_trial, include = grade, type = grade ~ "continuous")
+      tbl <- tbl_svysummary(svy_trial, include = grade, type = grade ~ "continuous",
+      statistic = ~"{min}")
     Message
       The following errors were returned during `tbl_svysummary()`:
-      x For variable `grade` and "median", "p25", and "p75" statistics: error in evaluating the argument 'x' in selecting a method for function 't': missing value where TRUE/FALSE needed
-      The following warnings were returned during `tbl_svysummary()`:
-      ! For variable `grade` and "median", "p25", and "p75" statistics: '<=' not meaningful for factors
+      x For variable `grade` and "min" statistic: 'min' not meaningful for factors
 
 ---
 
