@@ -174,6 +174,25 @@ test_that("as_hux_table passes captions correctly", {
   )
 })
 
+test_that("as_hux_table passes table indentation correctly", {
+  ht <- my_tbl_summary |> as_hux_table()
+
+  expect_equal(
+    attr(ht, "left_padding")[, 1] |> unname(),
+    c(6, 6, 15, 15, 6, 15, 6, 6)
+  )
+
+  # indentation removed
+  tbl <- my_tbl_summary |>
+    modify_column_indent(columns = label, indent = 0)
+  ht <- tbl |> as_hux_table()
+
+  expect_equal(
+    attr(ht, "left_padding")[, 1] |> unname(),
+    rep(6, 8)
+  )
+})
+
 test_that("as_hux_table passes missing symbols correctly", {
   tbl <- my_tbl_summary |>
     modify_table_body(~ .x |> mutate(stat_0 = NA_character_))
