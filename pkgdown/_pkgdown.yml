@@ -2,9 +2,14 @@ url: https://www.danieldsjoberg.com/gtsummary/
 
 template:
   bootstrap: 5
-  params:
-    ganalytics: UA-145876596-1
-    bootswatch: flatly
+  bslib:
+    info: "#4F4F52"
+    base_font:
+      google: {family: "Atkinson Hyperlegible", wght: [300, 400, 700], ital: [0, 1]}
+    headings-color: "#2e2e2e"
+    link-color: "#2e2e2e"
+    link-decoration: underline dotted
+
 
 development:
   mode: auto
@@ -21,6 +26,7 @@ authors:
     href: "https://joseph.larmarange.net/"
 
 navbar:
+  bg: info
   structure:
     left:  [intro, reference, tutorials, news]
     right: [search, github]

@@ -29,7 +29,7 @@
 #' @param method (`string`/`function`)\cr
 #'   Regression method or function, e.g. [lm], [glm], [survival::coxph], `survey::svyglm`, etc.
 #'   Methods may be passed as functions (`method=lm`) or as strings (`method='lm'`).
-#' @param y,x (`expression`\`string`)\cr
+#' @param y,x (`expression`, `string`)\cr
 #'   Model outcome (e.g. `y=recurrence` or `y=Surv(time, recur)`) or
 #'   covariate (e.g. `x=trt`.
 #'   All other column specified in `include` will be regressed against the constant `y` or `x`.

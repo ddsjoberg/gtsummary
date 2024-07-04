@@ -96,7 +96,8 @@ assign_tests.tbl_summary <- function(x,
         .process_test_argument_value(
           test = test[[variable]],
           class = intersect(class(x), c("tbl_summary", "tbl_continuous")),
-          calling_fun = calling_fun
+          calling_fun = calling_fun,
+          variable = variable
         )
     }
   ) |>
@@ -148,7 +149,8 @@ assign_tests.tbl_svysummary <- function(x,
         .process_test_argument_value(
           test = test[[variable]],
           class = "tbl_svysummary",
-          calling_fun = calling_fun
+          calling_fun = calling_fun,
+          variable = variable
         )
     }
   ) |>
@@ -211,11 +213,11 @@ assign_tests.tbl_survfit <- function(x,
     test <- inject(everything() ~ !!test)
   }
   cards::process_formula_selectors(
-    data = select_prep(x$table_body)[include],
+    data = scope_table_body(x$table_body)[include],
     test = test
   )
   cards::fill_formula_selectors(
-    data = select_prep(x$table_body)[include],
+    data = scope_table_body(x$table_body)[include],
     test = inject(everything() ~ !!test)
   )
   cards::check_list_elements(
@@ -229,29 +231,41 @@ assign_tests.tbl_survfit <- function(x,
       .process_test_argument_value(
         test = test[[i]],
         class = "tbl_survfit",
-        calling_fun = "add_p"
+        calling_fun = "add_p",
+        variable = i
       )
   }
 
   test
 }
 
-.process_test_argument_value <- function(test, class, calling_fun) {
+.process_test_argument_value <- function(test, class, calling_fun, variable) {
   # subset the data frame
   df_tests <-
     df_add_p_tests |>
     dplyr::filter(.data$class %in% .env$class, .data[[calling_fun]])
 
   # if the test is character and it's an internal test
-  if (is.character(test) && test %in% df_tests$test_name) {
+  if (is_string(test) && isTRUE(test %in% df_tests$test_name)) {
     test_to_return <- df_tests$fun_to_run[df_tests$test_name %in% test][[1]] |> eval()
     attr(test_to_return, "test_name") <- df_tests$test_name[df_tests$test_name %in% test]
     return(test_to_return)
   }
 
   # if the test is character and it's NOT an internal test
-  if (is.character(test)) {
-    return(eval(parse_expr(test), envir = attr(test, ".Environment")))
+  if (is_string(test)) {
+    test_return <- tryCatch(
+      eval(parse_expr(test), envir = attr(test, ".Environment")),
+      error = \(e) {
+        cli::cli_abort(
+          c("Could not process {.arg test} argument for variable {.val {variable}}.",
+            i = "See {.help gtsummary::tests} for details on constructing custom tests. See error message below:",
+            x = conditionMessage(e)),
+          call = get_cli_abort_call()
+        )
+      }
+    )
+    return(test_return)
   }
 
   # if passed test is a function and it's an internal test
@@ -265,7 +279,28 @@ assign_tests.tbl_survfit <- function(x,
   }
 
   # otherwise, if it's a function, return it
-  return(eval(test, envir = attr(test, ".Environment")))
+  test_return <-
+    tryCatch(
+      eval(test, envir = attr(test, ".Environment")),
+      error = \(e) {
+        cli::cli_abort(
+          c("Could not process {.arg test} argument for variable {.val {variable}}.",
+            i = "See {.help gtsummary::tests} for details on constructing custom tests. See error message below:",
+            x = conditionMessage(e)),
+          call = get_cli_abort_call()
+        )
+      }
+    )
+
+  if (!is_function(test_return)) {
+    cli::cli_abort(
+      c("Invalid value passed in {.arg test} argument for variable {.val {variable}}.",
+        i = "Expecting a {.cls string} or {.cls function}, not {.obj_type_friendly {test_return}}."),
+      call = get_cli_abort_call()
+    )
+  }
+
+  test_return
 }
 
 # compare after removing attributes

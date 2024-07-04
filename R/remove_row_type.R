@@ -40,7 +40,7 @@ remove_row_type <- function(x, variables = everything(),
 
   # convert variables input to character variable names ------------------------
   cards::process_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     variables = {{ variables }}
   )
 

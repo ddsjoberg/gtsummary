@@ -68,7 +68,7 @@ add_difference.tbl_svysummary <- function(x,
   pvalue_fun <- as_function(pvalue_fun)
 
   cards::process_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[x$inputs$include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[x$inputs$include]),
     include = {{ include }}
   )
 
@@ -86,7 +86,7 @@ add_difference.tbl_svysummary <- function(x,
   check_scalar(group, allow_empty = TRUE)
 
   cards::process_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test = test,
     include_env = TRUE
   )
@@ -134,17 +134,17 @@ add_difference.tbl_svysummary <- function(x,
 
   # now process the `test.args` and `estimate_fun` arguments -------------------
   cards::process_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     estimate_fun = estimate_fun
   )
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     estimate_fun = eval(formals(asNamespace("gtsummary")[["add_difference.tbl_svysummary"]])[["estimate_fun"]])
   )
 
   cards::process_formula_selectors(
-    select_prep(x$table_body, as.data.frame(x$inputs$data)[include]),
+    scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test.args = test.args
   )
   cards::check_list_elements(

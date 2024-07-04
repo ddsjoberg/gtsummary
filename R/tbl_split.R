@@ -34,7 +34,7 @@ tbl_split.gtsummary <- function(x, variables, ...) {
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(
-    data = select_prep(x$table_body),
+    data = scope_table_body(x$table_body),
     variables = {{ variables }}
   )
   # adding last variable

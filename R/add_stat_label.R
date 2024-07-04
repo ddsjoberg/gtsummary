@@ -109,7 +109,7 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   }
 
   cards::process_formula_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     label = label
   )
   # check the label values are all string (except continuous2)
@@ -126,7 +126,7 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   )
   updated_variables <- names(label) # variable whose stat labels were updated from the defaults
   cards::fill_formula_selectors(
-    select_prep(x$table_body),
+    scope_table_body(x$table_body),
     label = .add_stat_label_default_label_arg(x, statistic = x$inputs$statistic)
   )
 

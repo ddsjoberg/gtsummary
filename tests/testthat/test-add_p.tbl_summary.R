@@ -502,13 +502,14 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
 test_that("addressing GH #1513, where the default test was incorrect", {
   expect_equal(
     # before the fix, this was defaulting to a chi-squared, when it should be fisher
-    tibble::tibble(type = character(), answer = character()) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "A", answer = "C1"), 5)) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "B", answer = "C1"), 10)) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "A", answer = "C2"), 100)) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "B", answer = "C2"), 305)) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "A", answer = NA), 400)) |>
-      tibble::add_row(tidyr::uncount(tibble::tibble(type = "B", answer = NA), 300)) |>
+    dplyr::bind_rows(
+      tidyr::uncount(dplyr::tibble(type = "A", answer = "C1"), 5),
+      tidyr::uncount(dplyr::tibble(type = "B", answer = "C1"), 10),
+      tidyr::uncount(dplyr::tibble(type = "A", answer = "C2"), 100),
+      tidyr::uncount(dplyr::tibble(type = "B", answer = "C2"), 305),
+      tidyr::uncount(dplyr::tibble(type = "A", answer = NA), 400),
+      tidyr::uncount(dplyr::tibble(type = "B", answer = NA), 300)
+    ) |>
       tbl_summary(by = type) |>
       assign_tests(include = "answer", calling_fun = "add_p") |>
       getElement(1L) |>
