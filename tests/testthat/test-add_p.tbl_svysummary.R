@@ -255,6 +255,16 @@ test_that("add_p.tbl_svysummary(test)", {
       unlist(),
     ignore_attr = TRUE
   )
+
+  # test we can pass custom functions
+  expect_equal(
+    tbl_svysummary(svy_trial, by = trt, include = age) |>
+      add_p(test = age ~ cardx::ard_survey_svyttest, pvalue_fun = label_style_sigfig(digits = 4)) |>
+      as.data.frame(),
+    tbl_svysummary(svy_trial, by = trt, include = age) |>
+      add_p(test = age ~ "svy.t.test", pvalue_fun = label_style_sigfig(digits = 4)) |>
+      as.data.frame()
+  )
 })
 
 test_that("add_p.tbl_svysummary(test) messaging", {
