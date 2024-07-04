@@ -163,8 +163,6 @@
     Code
       tbl_svysummary(svy_trial, include = response, statistic = ~
         "{n} ({not_a_statistic})")
-    Message
-      7 missing observations in the "response" column have been removed.
     Condition
       Error in `tbl_svysummary()`:
       ! Statistic "not_a_statistic" is not available for variable "response".
@@ -204,8 +202,6 @@
         response, stage), type = list(age = "continuous", marker = "continuous2",
         response = "dichotomous", state = "categorical"), missing = "no"),
       "table_body"), variable, var_type, row_type, label)
-    Message
-      7 missing observations in the "response" column have been removed.
     Output
       # A tibble: 9 x 4
         variable var_type    row_type label               
@@ -282,8 +278,6 @@
     Code
       as.data.frame(tbl_svysummary(svy_trial, include = response, missing_text = "(MISSING)"),
       col_label = FALSE)
-    Message
-      7 missing observations in the "response" column have been removed.
     Output
                  label   stat_0
       1 Tumor Response 61 (32%)
