@@ -238,6 +238,7 @@
       Error in `tbl_svysummary()`:
       ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
+      i To summarize this value, use `forcats::fct_expand()` to add "IV" as a level.
 
 ---
 
@@ -266,6 +267,7 @@
       Error in `tbl_svysummary()`:
       ! Error in argument `value` for variable "grade".
       i A value of "IV" was passed, but must be one of I, II, and III.
+      i To summarize this value, use `forcats::fct_expand()` to add "IV" as a level.
 
 # tbl_svysummary(missing)
 
