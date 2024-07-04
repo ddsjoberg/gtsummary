@@ -68,12 +68,12 @@ knit_print.gtsummary <- function(x,
 #' @rdname print_gtsummary
 #' @export
 pkgdown_print.gtsummary <- function(x, visible = TRUE) {
+  is_installed("htmltools")
+
   if (!visible) {
     return(invisible())
   }
 
-  htmltools::div(
-    class = "gt-table",
-    gtsummary::as_gt(x) |> gt::as_raw_html()
-  )
+  call2("div", class = "gt-table", gtsummary::as_gt(x) |> gt::as_raw_html(), .ns = "htmltools") |>
+    eval_tidy()
 }
