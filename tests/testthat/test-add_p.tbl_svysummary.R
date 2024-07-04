@@ -1,4 +1,4 @@
-skip_if_not(is_pkg_installed("survey", reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c("survey", "cardx"), reference_pkg = "gtsummary"))
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
@@ -43,7 +43,7 @@ test_that("add_p.tbl_svysummary(test)", {
   svy_trial2$variables$age_emmeans <- svy_trial2$variables$age
   svy_trial2$variables$response_emmeans <- svy_trial2$variables$response
 
-  expect_silent(
+  expect_error(
     tbl <-
       tbl_svysummary(
         svy_trial2,
@@ -68,7 +68,8 @@ test_that("add_p.tbl_svysummary(test)", {
           contains("svy.saddlepoint.test") ~ "svy.saddlepoint.test",
           contains("emmeans") ~ "emmeans"
         )
-      )
+      ),
+    NA
   )
 
   # check the p-values are correct
