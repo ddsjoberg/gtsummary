@@ -5,6 +5,8 @@ my_tbl_summary <- trial |>
   tbl_summary()
 my_tbl_regression <- lm(marker ~ age, trial) |> tbl_regression()
 
+# as_hux_table ----
+
 test_that("as_hux_table works with standard use", {
   # include argument does not produce warnings
   expect_silent(my_tbl_summary |> as_hux_table(include = tibble))
@@ -217,4 +219,22 @@ test_that("as_hux_table(strip_md_bold) causes defunct error", {
   lifecycle::expect_defunct(
     my_tbl_summary |> as_hux_table(strip_md_bold = TRUE)
   )
+})
+
+# as_hux_xlsx ----
+
+test_that("as_hux_xlsx works with standard use", {
+  skip_if_not(is_pkg_installed("openxlsx", reference_pkg = "gtsummary"))
+
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(as_hux_xlsx(my_tbl_summary, file = tf))
+  expect_true(file.exists(tf))
+})
+
+test_that("as_hux_xlsx(bold_header_rows) works", {
+  skip_if_not(is_pkg_installed("openxlsx", reference_pkg = "gtsummary"))
+
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(as_hux_xlsx(my_tbl_summary, file = tf, bold_header_rows = FALSE))
+  expect_true(file.exists(tf))
 })
