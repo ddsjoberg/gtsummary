@@ -20,7 +20,7 @@
 #' @section method argument:
 #'
 #' Must be one of
-#' - `"svyprop"`, `"svyprop.logit"`, `"svyprop.likelihood"`, `"svyprop.asin"`,
+#' - `"svyprop.logit"`, `"svyprop.likelihood"`, `"svyprop.asin"`,
 #'     `"svyprop.beta"`, `"svyprop.mean"`, `"svyprop.xlogit"`
 #'     calculated via `survey::svyciprop()` for **categorical** variables
 #' - `"svymean"` calculated via `survey::svymean()` for **continuous** variables
@@ -44,7 +44,7 @@
 #'   modify_header(all_stat_cols() ~ "**{level}**") |>
 #'   modify_spanning_header(all_stat_cols() ~ "**Survived**")
 add_ci.tbl_svysummary <- function(x,
-                                  method = list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean"),
+                                  method = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"),
                                   include = everything(),
                                   statistic =
                                     list(all_continuous() ~ "{conf.low}, {conf.high}",
@@ -151,18 +151,19 @@ add_ci.tbl_svysummary <- function(x,
   x$cards$add_ci <-
     .calculate_add_ci_cards_svysummary(data = x$inputs$data, include = include, by = x$inputs$by,
                                        method = method, style_fun = style_fun, conf.level = conf.level,
-                                       overall= "add_overall" %in% names(x$call_list), df = df)
+                                       overall= "add_overall" %in% names(x$call_list), df = df,
+                                       value = x$inputs$value)
 
   # finalize styling of the table ----------------------------------------------
   brdg_add_ci(x, pattern = pattern, statistic = statistic, include = include,
               conf.level = conf.level, updated_call_list = updated_call_list)
 }
 
-.calculate_add_ci_cards_svysummary <- function(data, include, by, method, style_fun, conf.level, overall = FALSE, df = df) {
+.calculate_add_ci_cards_svysummary <- function(data, include, by, method, style_fun, conf.level, overall = FALSE, df, value) {
   lst_cards <-
     lapply(
       include,
-      FUN = \(v) .calculate_one_ci_ard_svysummary(data = data, variable = v, by = by, method = method, conf.level = conf.level, df = df)
+      FUN = \(v) .calculate_one_ci_ard_svysummary(data = data, variable = v, by = by, method = method, conf.level = conf.level, df = df, value = value)
     ) |>
     set_names(include)
 
@@ -171,7 +172,7 @@ add_ci.tbl_svysummary <- function(x,
     lst_cards <-
       lapply(
         include,
-        FUN = \(v) .calculate_one_ci_ard_svysummary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level, df = df)
+        FUN = \(v) .calculate_one_ci_ard_svysummary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level, df = df, value = value)
       ) |>
       set_names(include) |>
       append(lst_cards)
@@ -193,27 +194,27 @@ add_ci.tbl_svysummary <- function(x,
     cards::tidy_ard_column_order()
 }
 
-.calculate_one_ci_ard_svysummary <- function(data, variable, by, method, conf.level, df) {
+.calculate_one_ci_ard_svysummary <- function(data, variable, by, method, conf.level, df, value) {
   switch(
     method[[variable]],
     # continuous variables
-    "svymean" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymean", df = df),
-    "svymedian.mean" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "mean", df = df),
-    "svymedian.beta" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "beta", df = df),
-    "svymedian.xlogit" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "xlogit", df = df),
-    "svymedian.asin" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "asin", df = df),
-    "svymedian.score" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "score", df = df),
+    "svymean" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymean", df = df),
+    "svymedian.mean" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.mean", df = df),
+    "svymedian.beta" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.beta", df = df),
+    "svymedian.xlogit" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.xlogit", df = df),
+    "svymedian.asin" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.asin", df = df),
+    "svymedian.score" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.score", df = df),
 
     # categorical variables
-    "svyprop.logit" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "logit", df = df),
-    "svyprop.likelihood" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "likelihood", df = df),
-    "svyprop.asin" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "asin", df = df),
-    "svyprop.beta" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "beta", df = df),
-    "svyprop.mean" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "mean", df = df),
-    "svyprop.xlogit" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "xlogit", df = df),
+    "svyprop.logit" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "logit", df = df, value = value),
+    "svyprop.likelihood" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "likelihood", df = df, value = value),
+    "svyprop.asin" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "asin", df = df, value = value),
+    "svyprop.beta" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "beta", df = df, value = value),
+    "svyprop.mean" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "mean", df = df, value = value),
+    "svyprop.xlogit" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "xlogit", df = df, value = value),
 
     # documentation for `"svymedian"` and `"svyprop"` were removed in gtsummary v2.0
-    "svymedian" = cardx::ard_survey_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "mean", df = df),
-    "svyprop" = cardx::ard_survey_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "logit", df = df)
+    "svymedian" = cardx::ard_continuous_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "svymedian.mean", df = df),
+    "svyprop" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, method = "logit", df = df, value = value)
   )
 }

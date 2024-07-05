@@ -6,7 +6,7 @@
 \usage{
 \method{add_ci}{tbl_svysummary}(
   x,
-  method = list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean"),
+  method = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"),
   include = everything(),
   statistic = list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~
     "{conf.low}\%, {conf.high}\%"),
@@ -66,7 +66,7 @@ Add a new column with the confidence intervals for proportions, means, etc.
 
 Must be one of
 \itemize{
-\item \code{"svyprop"}, \code{"svyprop.logit"}, \code{"svyprop.likelihood"}, \code{"svyprop.asin"},
+\item \code{"svyprop.logit"}, \code{"svyprop.likelihood"}, \code{"svyprop.asin"},
 \code{"svyprop.beta"}, \code{"svyprop.mean"}, \code{"svyprop.xlogit"}
 calculated via \code{survey::svyciprop()} for \strong{categorical} variables
 \item \code{"svymean"} calculated via \code{survey::svymean()} for \strong{continuous} variables
