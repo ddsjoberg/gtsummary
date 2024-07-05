@@ -89,3 +89,12 @@
       Error in `add_ci()`:
       ! The value of the `method` argument for categorical variable "grade" must be one of "wald", "wald.no.correct", "exact", "wilson", "wilson.no.correct", "agresti.coull", and "jeffreys"
 
+# add_ci() correctly handles dichotomous variables
+
+    Code
+      as.data.frame(tbl)
+    Output
+        **Characteristic** **N = 200** **95% CI**
+      1     Tumor Response   132 (68%)   61%, 75%
+      2              Grade    64 (32%)   26%, 39%
+

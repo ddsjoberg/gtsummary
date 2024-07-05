@@ -172,7 +172,8 @@ add_ci.tbl_summary <- function(x,
   x$cards$add_ci <-
     .calculate_add_ci_cards_summary(data = x$inputs$data, include = include, by = x$inputs$by,
                                     method = method, style_fun = style_fun, conf.level = conf.level,
-                                    overall= "add_overall" %in% names(x$call_list))
+                                    overall= "add_overall" %in% names(x$call_list),
+                                    value = x$inputs$value)
 
 
 
@@ -343,11 +344,11 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
   x
 }
 
-.calculate_add_ci_cards_summary <- function(data, include, by, method, style_fun, conf.level, overall= FALSE) {
+.calculate_add_ci_cards_summary <- function(data, include, by, method, style_fun, conf.level, overall= FALSE, value) {
   lst_cards <-
     lapply(
       include,
-      FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = by, method = method, conf.level = conf.level)
+      FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = by, method = method, conf.level = conf.level, value = value)
     ) |>
     set_names(include)
 
@@ -356,7 +357,7 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
     lst_cards <-
       lapply(
         include,
-        FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level)
+        FUN = \(v) .calculate_one_ci_ard_summary(data = data, variable = v, by = NULL, method = method, conf.level = conf.level, value = value)
       ) |>
       set_names(include) |>
       append(lst_cards)
@@ -378,19 +379,23 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
     cards::tidy_ard_column_order()
 }
 
-.calculate_one_ci_ard_summary <- function(data, variable, by, method, conf.level) {
+.calculate_one_ci_ard_summary <- function(data, variable, by, method, conf.level, value) {
   switch(
     method[[variable]],
+    # continuous variables
     "t.test" = cardx::ard_stats_t_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level),
     "wilcox.test" = cardx::ard_stats_wilcox_test_onesample(data, variables = all_of(variable), by = any_of(by), conf.level = conf.level, conf.int = TRUE),
-    "wald" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "waldcc", conf.level = conf.level),
-    "wald.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level),
-    "exact" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "clopper-pearson", conf.level = conf.level),
-    "wilson" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilsoncc", conf.level = conf.level),
-    "wilson.no.correct" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wilson", conf.level = conf.level),
-    "agresti.coull" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "agresti-coull", conf.level = conf.level),
-    "jeffreys" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "jeffreys", conf.level = conf.level),
+
+    # categorical variables
+    "wald" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "waldcc", conf.level = conf.level, value = value),
+    "wald.no.correct" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level, value = value),
+    "exact" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "clopper-pearson", conf.level = conf.level, value = value),
+    "wilson" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "wilsoncc", conf.level = conf.level, value = value),
+    "wilson.no.correct" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "wilson", conf.level = conf.level, value = value),
+    "agresti.coull" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "agresti-coull", conf.level = conf.level, value = value),
+    "jeffreys" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "jeffreys", conf.level = conf.level, value = value),
+
     # Documentation for 'asymptotic' was removed in v2.0.0
-    "asymptotic" = cardx::ard_proportion_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level)
+    "asymptotic" = cardx::ard_categorical_ci(data, variables = all_of(variable), by = any_of(by), method = "wald", conf.level = conf.level, value = value)
   )
 }

@@ -78,7 +78,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -95,7 +95,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson.no.correct", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -112,7 +112,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wald", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "waldcc") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "waldcc") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -129,7 +129,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wald.no.correct", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wald") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wald") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -146,7 +146,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_exact", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -163,7 +163,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_agresti.coull", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -180,7 +180,7 @@ test_that("add_ci(method) with no `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_jeffreys", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -273,7 +273,7 @@ test_that("add_ci(method) with `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson", label == "I") |>
       dplyr::pull(ci_stat_1),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", by = trt) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
         fmt_fn = map2(
@@ -291,7 +291,7 @@ test_that("add_ci(method) with `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson.no.correct", label == "I") |>
       dplyr::pull(ci_stat_1),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilson", by = trt) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
         fmt_fn = map2(
@@ -309,7 +309,7 @@ test_that("add_ci(method) with `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_exact", label == "I") |>
       dplyr::pull(ci_stat_1),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", by = trt) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
         fmt_fn = map2(
@@ -327,7 +327,7 @@ test_that("add_ci(method) with `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_agresti.coull", label == "I") |>
       dplyr::pull(ci_stat_1),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", by = trt) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
         fmt_fn = map2(
@@ -345,7 +345,7 @@ test_that("add_ci(method) with `by`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_jeffreys", label == "I") |>
       dplyr::pull(ci_stat_1),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "jeffreys", by = trt) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
         fmt_fn = map2(
@@ -438,7 +438,7 @@ test_that("add_ci(method) after `add_overall()`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -455,7 +455,7 @@ test_that("add_ci(method) after `add_overall()`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson.no.correct", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -472,7 +472,7 @@ test_that("add_ci(method) after `add_overall()`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_exact", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -489,7 +489,7 @@ test_that("add_ci(method) after `add_overall()`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_agresti.coull", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -506,7 +506,7 @@ test_that("add_ci(method) after `add_overall()`", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_jeffreys", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -638,7 +638,7 @@ test_that("add_ci(conf.level)", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", conf.level = 0.80) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", conf.level = 0.80) |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -655,7 +655,7 @@ test_that("add_ci(conf.level)", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_wilson.no.correct", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "wilson", conf.level = 0.80) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson", conf.level = 0.80) |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -672,7 +672,7 @@ test_that("add_ci(conf.level)", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_exact", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", conf.level = 0.80) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", conf.level = 0.80) |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -689,7 +689,7 @@ test_that("add_ci(conf.level)", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_agresti.coull", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", conf.level = 0.80) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", conf.level = 0.80) |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -706,7 +706,7 @@ test_that("add_ci(conf.level)", {
     tbl$table_body |>
       dplyr::filter(variable == "grade_jeffreys", label == "I") |>
       dplyr::pull(ci_stat_0),
-    cardx::ard_proportion_ci(trial, variables = grade, value = ~"I", method = "jeffreys", conf.level = 0.80) |>
+    cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys", conf.level = 0.80) |>
       dplyr::mutate(
         fmt_fn = map2(
           fmt_fn, stat_name,
@@ -779,5 +779,23 @@ test_that("add_ci(method) messaging", {
       include = grade
     ) |>
       add_ci(method = list(grade = "t.test"))
+  )
+})
+
+test_that("add_ci() correctly handles dichotomous variables", {
+  expect_silent(
+    tbl <- tbl_summary(
+      trial,
+      include = c(response, grade),
+      value = list(response = 0, grade = "III"),
+      missing = "no"
+    ) |>
+      add_ci()
+  )
+  expect_snapshot(as.data.frame(tbl))
+
+  expect_equal(
+    tbl$inputs$value,
+    tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
   )
 })
