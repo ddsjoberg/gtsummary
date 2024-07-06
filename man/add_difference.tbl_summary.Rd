@@ -45,7 +45,7 @@ For example, add an argument for all t-tests, use
 \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
 
 \item{conf.level}{(\code{numeric})\cr
-a scalar in \verb{⁠(0, 1})⁠ indicating the confidence level. Default is 0.95}
+a scalar in the interval \verb{(0, 1)} indicating the confidence level. Default is 0.95}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in output. Default is \code{everything()}.}

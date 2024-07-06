@@ -37,7 +37,7 @@ add_difference <- function(x, ...) {
 #'   Default is
 #'   `list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \(x) paste0(style_sigfig(x, scale = 100), "%"))`
 #' @param conf.level (`numeric`)\cr
-#'  a scalar in `⁠(0, 1`)⁠ indicating the confidence level. Default is 0.95
+#'   a scalar in the interval `(0, 1)` indicating the confidence level. Default is 0.95
 #' @inheritParams  add_p.tbl_summary
 #'
 #' @export
