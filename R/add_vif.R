@@ -57,7 +57,8 @@ add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digit
       names_from = "stat_name",
       values_fn = unlist
     ) |>
-    dplyr::mutate(row_type = "label")
+    dplyr::mutate(row_type = "label") |>
+    dplyr::relocate(any_of(statistic), .after = everything())
 
   x <- x |>
     modify_table_body(
