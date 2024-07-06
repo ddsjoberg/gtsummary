@@ -7,6 +7,10 @@ test_that("modify_header(update,quiet) are deprecated", {
   )
   lifecycle::expect_deprecated(
     tbl_summary(trial, include = marker) |>
+      modify_header(list(label = "Variable"))
+  )
+  lifecycle::expect_deprecated(
+    tbl_summary(trial, include = marker) |>
       modify_header(quiet = FALSE)
   )
 })

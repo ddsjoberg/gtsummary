@@ -301,7 +301,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 
 .deprecate_modify_update_and_quiet_args <- function(dots, update, quiet, calling_fun) {
   # deprecated arguments
-  if (!missing(update)) {
+  if (!missing(update) || (!is_empty(dots) && is.list(dots[[1]]))) {
     lifecycle::deprecate_warn(
       "2.0.0", glue("gtsummary::{calling_fun}(update=)"),
       details =
@@ -309,7 +309,11 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
             Dynamic dots allow for syntax like `{calling_fun}(!!!list(...))`."),
       env = get_cli_abort_call()
     )
-    dots <- c(dots, update)
+
+    if (!is_empty(dots) && is.list(dots[[1]])) dots <- c(dots[-1], dots[[1]]) # styler: off
+    if (!missing(update)) dots <- c(dots, update) # styler: off
+
+    dots
   }
   if (!missing(quiet)) {
     lifecycle::deprecate_warn(
