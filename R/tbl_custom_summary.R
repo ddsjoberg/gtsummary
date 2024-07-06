@@ -178,7 +178,6 @@
 #'     by = "trt",
 #'     stat_fns = ~diff_to_great_mean,
 #'     statistic = ~"{mean} ({level}, diff: {diff})",
-#'     digits = ~list(level = as.character),
 #'     overall_row = TRUE
 #'   ) |>
 #'   bold_labels()
@@ -317,6 +316,7 @@ tbl_custom_summary <- function(data,
         .default = digits
       )
   )
+  passed_digits_arg <- digits
 
   # fill each element of digits argument
   if (!missing(digits)) {
@@ -342,39 +342,39 @@ tbl_custom_summary <- function(data,
   variables_categorical <- keep(type, \(x) x %in% c("categorical", "dichotomous")) |> names()
   ard_categorical <-
     if (is_empty(variables_categorical)) dplyr::tibble() # styler: off
-    else {
-      map(
-        variables_categorical,
-        \(variable) {
-          ard <-
-            cards::ard_complex(
-              data |> tidyr::drop_na(all_of(variable)),
-              variables = all_of(variable),
-              by = all_of(c(by, variable)),
-              statistic = stat_fns[variable] |> map(~list(complex = .x)),
-              fmt_fn = digits[variable]
-            ) |>
-            dplyr::select(-cards::all_ard_variables()) |>
-            dplyr::mutate(context = type[[variable]])
+  else {
+    map(
+      variables_categorical,
+      \(variable) {
+        ard <-
+          cards::ard_complex(
+            data |> tidyr::drop_na(all_of(variable)),
+            variables = all_of(variable),
+            by = all_of(c(by, variable)),
+            statistic = stat_fns[variable] |> map(~list(complex = .x)),
+            fmt_fn = digits[variable]
+          ) |>
+          dplyr::select(-cards::all_ard_variables()) |>
+          dplyr::mutate(context = type[[variable]])
 
-          # rename columns to align with expectations similar to `tbl_summary()` results
-          ard <-
-            case_switch(
-              !is_empty(by) ~ dplyr::rename(ard, variable = "group2", variable_level = "group2_level"),
-              .default = dplyr::rename(ard, variable = "group1", variable_level = "group1_level")
-            )
-        }
-      ) |>
-        cards::bind_ard() |>
-        cards::tidy_ard_column_order() |>
-        # for dichotomous, keep the value of interest
-        dplyr::filter(
-          map2_lgl(
-            .data$variable, .data$variable_level,
-            ~type[[.x]] == "categorical" | (type[[.x]] == "dichotomous" & .y %in% value[[.x]])
+        # rename columns to align with expectations similar to `tbl_summary()` results
+        ard <-
+          case_switch(
+            !is_empty(by) ~ dplyr::rename(ard, variable = "group2", variable_level = "group2_level"),
+            .default = dplyr::rename(ard, variable = "group1", variable_level = "group1_level")
           )
+      }
+    ) |>
+      cards::bind_ard() |>
+      cards::tidy_ard_column_order() |>
+      # for dichotomous, keep the value of interest
+      dplyr::filter(
+        map2_lgl(
+          .data$variable, .data$variable_level,
+          ~type[[.x]] == "categorical" | (type[[.x]] == "dichotomous" & .y %in% value[[.x]])
         )
-    }
+      )
+  }
 
 
   variables_continuous <- keep(type, \(x) x %in% c("continuous", "continuous2")) |> names()
@@ -408,14 +408,20 @@ tbl_custom_summary <- function(data,
       ard_continuous,
       ard_categorical
     ) |>
-    cards::replace_null_statistic() |>
-    # fixing integer fmt_fn that have defaulted to character/date results
+    cards::replace_null_statistic()
+
+
+  # fixing integer fmt_fn that have defaulted to character/date results
+  cards <- cards |>
     dplyr::mutate(
-      fmt_fn = map2(
-        .data$fmt_fn, .data$stat,
-        function(.x, .y) {
-          if (inherits(.y, c("character", "Date")) && is_scalar_integerish(.x)) return(as.character)
-          .x
+      fmt_fn = pmap(
+        list(.data$fmt_fn, .data$stat, .data$stat_name, .data$variable),
+        function(fmt_fn, stat, stat_name, variable) {
+          if (inherits(stat, c("character", "Date")) && # if the stat is character OR Date
+              is_empty(passed_digits_arg[[variable]][[stat_name]])) { # the user didn't specify a specific function to fmt stat
+            return(as.character)
+          }
+          fmt_fn
         }
       )
     )
