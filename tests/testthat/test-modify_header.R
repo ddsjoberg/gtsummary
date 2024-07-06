@@ -3,15 +3,44 @@
 test_that("modify_header(update,quiet) are deprecated", {
   lifecycle::expect_deprecated(
     tbl_summary(trial, include = marker) |>
-      modify_header(update = list(label = "Variable"))
-  )
-  lifecycle::expect_deprecated(
-    tbl_summary(trial, include = marker) |>
       modify_header(list(label = "Variable"))
   )
+
+  # THIS ONE FAILS LOCALLY UNLESS I RUN ALL THE TESTS WITH THE 'Test' BUTTON
+  lifecycle::expect_deprecated(
+    tbl_summary(trial, include = marker) |>
+      modify_header(update = list(label = "Variable"))
+  )
+
   lifecycle::expect_deprecated(
     tbl_summary(trial, include = marker) |>
       modify_header(quiet = FALSE)
+  )
+})
+
+
+test_that("modify_header(update) are deprecated and still work", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_header(list(label = "Variable")) |>
+      getElement("table_styling") |>
+      getElement("header"),
+    tbl_summary(trial, include = marker) |>
+      modify_header(label = "Variable") |>
+      getElement("table_styling") |>
+      getElement("header")
+  )
+
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_header(update = list(label = "Variable")) |>
+      getElement("table_styling") |>
+      getElement("header"),
+    tbl_summary(trial, include = marker) |>
+      modify_header(label = "Variable") |>
+      getElement("table_styling") |>
+      getElement("header")
   )
 })
 
