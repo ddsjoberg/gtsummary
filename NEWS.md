@@ -98,6 +98,8 @@
      
 * Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`, which has been the preferred method for passing updates for a few years.
 
+* Function `continuous_summary()` has been deprecated immediately. Apologies for the inconvenience of the immeidate deprecation. The way the function originally worked is not compatible with the updated internal structures. In most cases, users can use the `tbl_continuous()` function instead.
+
 * Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
 
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.

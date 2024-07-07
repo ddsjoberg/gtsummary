@@ -250,7 +250,6 @@ trial |>
     by = "trt",
     stat_fns = ~diff_to_great_mean,
     statistic = ~"{mean} ({level}, diff: {diff})",
-    digits = ~list(level = as.character),
     overall_row = TRUE
   ) |>
   bold_labels()

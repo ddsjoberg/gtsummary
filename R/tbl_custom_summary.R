@@ -178,7 +178,6 @@
 #'     by = "trt",
 #'     stat_fns = ~diff_to_great_mean,
 #'     statistic = ~"{mean} ({level}, diff: {diff})",
-#'     digits = ~list(level = as.character),
 #'     overall_row = TRUE
 #'   ) |>
 #'   bold_labels()
@@ -307,6 +306,7 @@ tbl_custom_summary <- function(data,
         )
     )
 
+
   cards::process_formula_selectors(
     data = scope_table_body(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]),
     digits =
@@ -317,6 +317,7 @@ tbl_custom_summary <- function(data,
         .default = digits
       )
   )
+  user_passed_digits <- digits
 
   # fill each element of digits argument
   if (!missing(digits)) {
@@ -342,39 +343,39 @@ tbl_custom_summary <- function(data,
   variables_categorical <- keep(type, \(x) x %in% c("categorical", "dichotomous")) |> names()
   ard_categorical <-
     if (is_empty(variables_categorical)) dplyr::tibble() # styler: off
-    else {
-      map(
-        variables_categorical,
-        \(variable) {
-          ard <-
-            cards::ard_complex(
-              data |> tidyr::drop_na(all_of(variable)),
-              variables = all_of(variable),
-              by = all_of(c(by, variable)),
-              statistic = stat_fns[variable] |> map(~list(complex = .x)),
-              fmt_fn = digits[variable]
-            ) |>
-            dplyr::select(-cards::all_ard_variables()) |>
-            dplyr::mutate(context = type[[variable]])
+  else {
+    map(
+      variables_categorical,
+      \(variable) {
+        ard <-
+          cards::ard_complex(
+            data |> tidyr::drop_na(all_of(variable)),
+            variables = all_of(variable),
+            by = all_of(c(by, variable)),
+            statistic = stat_fns[variable] |> map(~list(complex = .x)),
+            fmt_fn = digits[variable]
+          ) |>
+          dplyr::select(-cards::all_ard_variables()) |>
+          dplyr::mutate(context = type[[variable]])
 
-          # rename columns to align with expectations similar to `tbl_summary()` results
-          ard <-
-            case_switch(
-              !is_empty(by) ~ dplyr::rename(ard, variable = "group2", variable_level = "group2_level"),
-              .default = dplyr::rename(ard, variable = "group1", variable_level = "group1_level")
-            )
-        }
-      ) |>
-        cards::bind_ard() |>
-        cards::tidy_ard_column_order() |>
-        # for dichotomous, keep the value of interest
-        dplyr::filter(
-          map2_lgl(
-            .data$variable, .data$variable_level,
-            ~type[[.x]] == "categorical" | (type[[.x]] == "dichotomous" & .y %in% value[[.x]])
+        # rename columns to align with expectations similar to `tbl_summary()` results
+        ard <-
+          case_switch(
+            !is_empty(by) ~ dplyr::rename(ard, variable = "group2", variable_level = "group2_level"),
+            .default = dplyr::rename(ard, variable = "group1", variable_level = "group1_level")
           )
+      }
+    ) |>
+      cards::bind_ard() |>
+      cards::tidy_ard_column_order() |>
+      # for dichotomous, keep the value of interest
+      dplyr::filter(
+        map2_lgl(
+          .data$variable, .data$variable_level,
+          ~type[[.x]] == "categorical" | (type[[.x]] == "dichotomous" & .y %in% value[[.x]])
         )
-    }
+      )
+  }
 
 
   variables_continuous <- keep(type, \(x) x %in% c("continuous", "continuous2")) |> names()
@@ -408,17 +409,29 @@ tbl_custom_summary <- function(data,
       ard_continuous,
       ard_categorical
     ) |>
-    cards::replace_null_statistic() |>
-    # fixing integer fmt_fn that have defaulted to character/date results
-    dplyr::mutate(
-      fmt_fn = map2(
-        .data$fmt_fn, .data$stat,
-        function(.x, .y) {
-          if (inherits(.y, c("character", "Date")) && is_scalar_integerish(.x)) return(as.character)
-          .x
-        }
-      )
-    )
+    cards::replace_null_statistic()
+
+
+  # fixing integer fmt_fn that have defaulted to character/date results
+  # cycle through the formatting functions, and replace default numeric for character stats
+  # THIS IS NOT PERFECT! IN v2.0, WE NOW LET USERS PASS A SINGLE FMTFN TO A SINGLE
+  #   STAT USING NAMED LISTS (previously, each fn had to be specified if you specified one).
+  #   NOW IF A USER PASSES A SINGLE FMTN, THIS WILL NOT TRIGGER THE CHANGE TO
+  #   CHARACTER AND DATE FMTFNs
+  for (i in seq_len(nrow(cards))) {
+    stat <- cards$stat[i][[1]]
+    variable <- cards$variable[i]
+    stat_name <- cards$stat_name[i]
+
+    if (inherits(stat, c("character", "Date")) &&                  # if the stat is character OR Date
+        is_empty(digits[names(user_passed_digits)][[variable]][[stat_name]]) &&  # and the user didn't pass a digit for this stat
+        !is_empty(digits[[variable]][[stat_name]]) ) {                           # and we created a default formatting stat, THEN change the default to as.character()
+      cards$fmt_fn[i][[1]] <- as.character
+      digits[[variable]][[stat_name]] <- as.character
+    }
+  }
+  tbl_custom_summary_inputs$digits <- digits
+  tbl_custom_summary_inputs$user_passed_digits <- NULL
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
