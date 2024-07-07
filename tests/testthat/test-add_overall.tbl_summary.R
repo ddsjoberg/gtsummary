@@ -90,5 +90,11 @@ test_that("add_overall.tbl_summary() errors", {
     tbl_summary(mtcars) |> add_overall()
   )
 
-  # TODO: Add a test where we modify the labels after `add_stat_label()` is implemented
+  # Run add_overall() after after `add_stat_label()`
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(mtcars, by = am, include = "mpg", type = all_continuous() ~ "continuous2") |>
+      add_stat_label(label = mpg ~ "UPDATED!") |>
+      add_overall()
+  )
 })

@@ -465,7 +465,6 @@ tbl_summary <- function(data,
 }
 
 .check_stats_available <- function(cards, statistic) {
-  # TODO: this could be made more accurate by grouping the cards data frame by the group##_level columns
   statistic |>
     imap(
       function(pre_glue_stat, variable) {

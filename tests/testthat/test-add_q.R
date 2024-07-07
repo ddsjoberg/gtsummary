@@ -32,6 +32,3 @@ test_that("add_q() errors with no p.value column", {
   )
 })
 
-# TODO: Add this after `tbl_uvregression()` and `add_global_p()`
-
-# TODO: Add this after `add_p.tbl_svysummary()`

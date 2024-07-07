@@ -18,11 +18,8 @@ Selector of columns in \code{x$table_body}}
 }
 \description{
 Use these functions to hide or unhide columns in a gtsummary table.
-}
-\section{TODO: Ensure this is accurate after we update \code{show_header_names()}}{
 Use \code{show_header_names(show_hidden=TRUE)} to print available columns to update.
 }
-
 \examples{
 # Example 1 ----------------------------------
 # hide 95\% CI, and replace with standard error

@@ -1,7 +1,6 @@
 #' Modify hidden columns
 #'
 #' Use these functions to hide or unhide columns in a gtsummary table.
-#' # TODO: Ensure this is accurate after we update `show_header_names()`
 #' Use `show_header_names(show_hidden=TRUE)` to print available columns to update.
 #'
 #' @inheritParams modify_table_styling

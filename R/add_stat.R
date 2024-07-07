@@ -163,7 +163,7 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
       df_add_stats =
         imap(
           fns,
-          ~ eval_fn_safe(tbl = x, variable = .y, fn = .x) # TODO: UPDATE THIS NOW!
+          ~ eval_fn_safe(tbl = x, variable = .y, fn = .x)
         )
     ) |>
     select(-"summary_type")

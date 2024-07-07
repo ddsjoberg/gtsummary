@@ -68,7 +68,6 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     as_function(arg = "pvalue_fun")
 
   # calculate the adjusted p-value ---------------------------------------------
-  # TODO: add error handling here
   q.value <- stats::p.adjust(x$table_body$p.value, method = method)
 
   # update gtsummary table -----------------------------------------------------
