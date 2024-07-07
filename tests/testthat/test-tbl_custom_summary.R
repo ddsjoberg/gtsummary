@@ -248,8 +248,7 @@ test_that("character summaries do not cause error", {
         include = c("stage"),
         by = "trt",
         stat_fns = ~diff_to_great_mean,
-        statistic = ~"{mean} ({level}) [{date}]",
-        digits = ~list(level = as.character)
+        statistic = ~"{mean} ({level}) [{date}]"
       ),
     NA
   )
@@ -295,4 +294,36 @@ test_that("full_data contains all observations including missing values", {
 
   expect_snapshot(res)
   expect_equal(res[[2]][1], "189/200")
+})
+
+test_that("character statistic get default fmt_fn, as.character()", {
+  diff_to_great_mean <- function(data, full_data, ...) {
+    mean <- mean(data$marker, na.rm = TRUE)
+    great_mean <- mean(full_data$marker, na.rm = TRUE)
+    diff <- mean - great_mean
+    dplyr::tibble(
+      mean = mean,
+      great_mean = great_mean,
+      diff = diff,
+      level = ifelse(diff > 0, "high", "low")
+    )
+  }
+
+  expect_equal(
+    trial |>
+      tbl_custom_summary(
+        include = c("grade", "stage"),
+        by = "trt",
+        stat_fns = ~diff_to_great_mean,
+        statistic = ~"{mean} ({level}, diff: {diff})",
+        digits = ~list(level = as.character),
+        overall_row = TRUE
+      ) |>
+      getElement("cards") |>
+      getElement(1L) |>
+      dplyr::filter(stat_name %in% "level") |>
+      dplyr::pull(fmt_fn) |>
+      unique(),
+    list(as.character)
+  )
 })

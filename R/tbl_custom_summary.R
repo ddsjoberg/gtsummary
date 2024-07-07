@@ -306,6 +306,7 @@ tbl_custom_summary <- function(data,
         )
     )
 
+
   cards::process_formula_selectors(
     data = scope_table_body(.list2tb(rep_named(include, list("continuous")), "var_type"), data[include]),
     digits =
@@ -316,7 +317,7 @@ tbl_custom_summary <- function(data,
         .default = digits
       )
   )
-  passed_digits_arg <- digits
+  user_passed_digits <- digits
 
   # fill each element of digits argument
   if (!missing(digits)) {
@@ -412,19 +413,21 @@ tbl_custom_summary <- function(data,
 
 
   # fixing integer fmt_fn that have defaulted to character/date results
-  cards <- cards |>
-    dplyr::mutate(
-      fmt_fn = pmap(
-        list(.data$fmt_fn, .data$stat, .data$stat_name, .data$variable),
-        function(fmt_fn, stat, stat_name, variable) {
-          if (inherits(stat, c("character", "Date")) && # if the stat is character OR Date
-              is_empty(passed_digits_arg[[variable]][[stat_name]])) { # the user didn't specify a specific function to fmt stat
-            return(as.character)
-          }
-          fmt_fn
-        }
-      )
-    )
+  # cycle through the formatting functions, and replace default numeric for character stats
+  for (i in seq_len(nrow(cards))) {
+    stat <- cards$stat[i][[1]]
+    variable <- cards$variable[i]
+    stat_name <- cards$stat_name[i]
+
+    if (inherits(stat, c("character", "Date")) &&                  # if the stat is character OR Date
+        is_empty(digits[names(user_passed_digits)][[variable]][[stat_name]]) &&  # and the user didn't pass a digit for this stat
+        !is_empty(digits[[variable]][[stat_name]]) ) {                           # and we created a default formatting stat, THEN change the default to as.character()
+      cards$fmt_fn[i][[1]] <- as.character
+      digits[[variable]][[stat_name]] <- as.character
+    }
+  }
+  tbl_custom_summary_inputs$digits <- digits
+  tbl_custom_summary_inputs$user_passed_digits <- NULL
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
