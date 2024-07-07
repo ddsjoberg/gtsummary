@@ -227,7 +227,7 @@ test_that("tbl_custom_summary() helpers work as expected", {
 })
 
 
-test_that("character summaries do not cause error", {
+test_that("character/date summaries do not cause error", {
   diff_to_great_mean <- function(data, full_data, ...) {
     mean <- mean(data$marker, na.rm = TRUE)
     great_mean <- mean(full_data$marker, na.rm = TRUE)

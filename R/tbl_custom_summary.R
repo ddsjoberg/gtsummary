@@ -414,6 +414,10 @@ tbl_custom_summary <- function(data,
 
   # fixing integer fmt_fn that have defaulted to character/date results
   # cycle through the formatting functions, and replace default numeric for character stats
+  # THIS IS NOT PERFECT! IN v2.0, WE NOW LET USERS PASS A SINGLE FMTFN TO A SINGLE
+  #   STAT USING NAMED LISTS (previously, each fn had to be specified if you specified one).
+  #   NOW IF A USER PASSES A SINGLE FMTN, THIS WILL NOT TRIGGER THE CHANGE TO
+  #   CHARACTER AND DATE FMTFNs
   for (i in seq_len(nrow(cards))) {
     stat <- cards$stat[i][[1]]
     variable <- cards$variable[i]
