@@ -356,10 +356,9 @@ modify_table_styling <- function(x,
     cli::cli_warn(
       c("Use of the {.val ci} column was deprecated in {.pkg gtsummary} v2.0,
          and the column will eventually be removed from the tables.",
+        "!" = "Review {.help deprecated_ci_column} for details on {.emph how to update your code}.\n\n",
         i = "The {.val ci} column has been replaced by the merged {.val {c('conf.low', 'conf.high')}} columns (merged with {.fun modify_column_merge}).",
-        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient.",
-        i = "For patterns, replace {.val {{ci}}} with {.val {{conf.low}}, {{conf.high}}}.",
-        i = "See {.help deprecated_ci_column} for details on how to update your code.")
+        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient.")
     )
   }
 }

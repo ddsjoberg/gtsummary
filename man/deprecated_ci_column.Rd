@@ -2,37 +2,78 @@
 % Please edit documentation in R/deprecated_ci_column.R
 \name{deprecated_ci_column}
 \alias{deprecated_ci_column}
-\title{\code{"ci"} Column Deprecated}
+\title{Column \code{"ci"} Deprecated}
 \description{
 \lifecycle{deprecated}\cr
-\subsection{Overview}{
-
+}
+\section{Overview}{
 When the gtsummary package was first written, the gt package was not on CRAN
 and the version of the package that was available did not have the ability
 to merge columns.
-Due to these limitations, the \code{"ci"} column was added to show the combined
+Due to these limitations, the pre-formatted \code{"ci"} column was added to show the combined
 \code{"conf.low"} and \code{"conf.high"} columns.
 
 Column merging in both gt and gtsummary packages has matured over the years,
 and we are now adopting a more modern approach by using these features.
-As a result, the \code{"ci"} column will eventually be dropped from \code{.$table_body}.
+As a result, the pre-formatted \code{"ci"} column will eventually be dropped from \code{.$table_body}.
 
 By using column merging, the \code{conf.low} and \code{conf.high} remain numeric
-and we can to continue to update how these columns are formatted.
+and we can to continue to update how these columns are formatted, even after printing the table.
+
+The \code{"ci"} column is hidden, meaning that it appears in \code{.$table_body}, but is not printed.
+This means that references to the column in your code will not error, but will likely not have the intended effect.
 }
 
-\subsection{How to update?}{
-
+\section{How to update?}{
 In most cases it is a simple change to adapt your code to the updated
 structure: simply swap \code{ci} with \code{conf.low}.
-For example, if you had updated the column header with \code{modify_header(ci = "Confidence Interval")},
-you would update your code to
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{modify_header(conf.low = "Confidence Interval")
-}\if{html}{\out{</div>}}
+See below for examples on how to update your code.
+\subsection{\code{modify_header()}}{
 
-If you need to update a reference from the \code{pattern} argument in \code{modify_column_merge()} or
-\code{inline_text()}, you can replace the \code{"{ci}"} reference with \code{"{conf.low}, {conf.high}"}.
+While the \code{"ci"} column is hidden, if a new header is defined for the column it will be unhidden.
+Code that changes the header of \code{"ci"} will likely lead to duplicate columns appearing in your table
+(that is, the \code{"ci"} column and the merged \code{"conf.low"} and \code{"conf.high"} columns).\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{modify_header(ci = "Confidence Interval")} \tab \code{modify_header(conf.low = "Confidence Interval")} \cr
+}
+
+}
+
+\subsection{\code{modify_spanning_header()}}{\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{modify_spanning_header(ci = "Confidence Interval")} \tab \code{modify_spanning_header(conf.low = "Confidence Interval")} \cr
+}
+
+}
+
+\subsection{\code{modify_spanning_header()}}{\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{modify_spanning_header(ci = "Confidence Interval")} \tab \code{modify_spanning_header(conf.low = "Confidence Interval")} \cr
+}
+
+}
+
+\subsection{\code{modify_column_merge()}}{\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{modify_column_merge(pattern = "{estimate} ({ci})")} \tab \verb{modify_column_merge(pattern = "\{estimate\} (\{conf.low\}, \{conf.high\})"} \cr
+}
+
+}
+
+\subsection{\code{modify_column_hide()}}{\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{modify_column_hide(columns = "ci")} \tab \code{modify_column_hide(columns = "conf.low")} \cr
+}
+
+}
+
+\subsection{\code{inline_text()}}{\tabular{ll}{
+   \strong{Old Code} \tab \strong{Updated Code} \cr
+   \code{inline_text(pattern = "{estimate} (95\% CI {ci})")} \tab \code{inline_text(pattern = "{estimate} (95\% CI {conf.low}, {conf.high})")} \cr
+}
+
 }
 }
+
 \keyword{internal}
