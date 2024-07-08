@@ -251,9 +251,7 @@ A BibTeX entry for LaTeX users is
 
 ## Contributing
 
-Big thank you to
-[@jeffreybears](https://www.etsy.com/shop/jeffreybears/) for the hex
-sticker!
+Big thank you to `@jeffreybears` for the hex sticker!
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of
