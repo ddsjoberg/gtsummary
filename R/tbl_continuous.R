@@ -160,6 +160,13 @@ tbl_continuous <- function(data,
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
 
+  # if no by variable, fix the header N ----------------------------------------
+  if (is_empty(by)) {
+    x$table_styling$header <- x$table_styling$header |>
+      dplyr::mutate(across(c("modify_stat_N", "modify_stat_n"), ~nrow(data)))
+  }
+
+
   # adding styling -------------------------------------------------------------
   x <- x |>
     # updating the headers for the stats columns

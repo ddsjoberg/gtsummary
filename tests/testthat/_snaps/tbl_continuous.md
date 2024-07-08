@@ -23,7 +23,7 @@
       x For variable `grade` (`trt = "Drug B"`) and "median" statistic: need numeric data
       x For variable `grade` (`trt = "Drug B"`) and "p25" and "p75" statistics: (unordered) factors are not allowed
     Output
-            **Characteristic**  **N = 98**
+            **Characteristic** **N = 200**
       1 Chemotherapy Treatment        <NA>
       2                 Drug A NA (NA, NA)
       3                 Drug B NA (NA, NA)
@@ -54,14 +54,14 @@
       as.data.frame(tbl_continuous(trial, variable = age, include = c(trt, grade),
       statistic = list(trt = "{var}", grade = "{sd}")))
     Output
-            **Characteristic** **N = 98**
-      1 Chemotherapy Treatment       <NA>
-      2                 Drug A        216
-      3                 Drug B        196
-      4                  Grade       <NA>
-      5                      I         15
-      6                     II         14
-      7                    III         14
+            **Characteristic** **N = 200**
+      1 Chemotherapy Treatment        <NA>
+      2                 Drug A         216
+      3                 Drug B         196
+      4                  Grade        <NA>
+      5                      I          15
+      6                     II          14
+      7                    III          14
 
 # tbl_continuous(statistic) messaging
 
