@@ -376,7 +376,7 @@ test_that("as_gt applies formatting functions correctly", {
 
   # formatted column
   expect_equal(
-    gt_tbl$`_formats`[[13]]$func$default(gt_tbl$`_data`$estimate),
+    gt_tbl$`_formats`[[14]]$func$default(gt_tbl$`_data`$estimate),
     c("1,0191", NA, NA, "0,8535", "1,0136")
   )
 
@@ -408,8 +408,13 @@ test_that("as_gt applies formatting functions correctly", {
 
   # formatted column
   expect_equal(
-    gt_tbl2$`_data`$conf.low,
-    c("0.997, 1.04", NA, NA, "0.446, 2.00", "0.524, 2.29")
+    gt_tbl2$`_formats`[[23]]$func$default(gt_tbl2$`_data`$conf.low),
+    c("0.997", NA, NA, "0.446", "0.524")
+  )
+
+  expect_equal(
+    gt_tbl2$`_formats`[[24]]$func$default(gt_tbl2$`_data`$conf.high),
+    c("1.04", NA, NA, "2.00", "2.29")
   )
 })
 
