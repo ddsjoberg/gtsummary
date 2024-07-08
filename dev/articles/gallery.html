@@ -5893,9 +5893,8 @@ size.</p>
 <span>  <span class="fu"><a href="../reference/modify.html">modify_footnote</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">NA_character_</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_compact</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Setting theme <span style="color: #0000BB;">"Compact"</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span></span>
+<span><span class="co">#&gt; Setting theme <span style="color: #0000BB;">"Compact"</span></span></span>
+<span><span class="fu"><a href="../reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">gt_t1</span>, <span class="va">gt_r1</span>, <span class="va">gt_r2</span><span class="op">)</span>,</span>
 <span>  tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA_character_</span>, <span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -6458,7 +6457,7 @@ size.</p>
 <p><a id="add_nevent-levels"></a></p>
 <p>Include the number of events at each level of a categorical
 predictor.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span></span>
 <span>    method <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span>,</span>
@@ -6995,7 +6994,7 @@ predictor.</p>
 <p><a id="tbl_uvregression-x"></a></p>
 <p>Regression model where the covariate remains the same, and the
 outcome changes.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span></span>
 <span>    method <span class="op">=</span> <span class="va">lm</span>,</span>
@@ -7489,7 +7488,7 @@ outcome changes.</p>
 <p>Implement a custom tidier to report Wald confidence intervals. The
 Wald confidence intervals are calculated using
 <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint.default()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_tidy</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">exponentiate</span> <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">conf.level</span> <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span></span>
 <span>    <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, exponentiate <span class="op">=</span> <span class="va">exponentiate</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -7992,7 +7991,7 @@ Wald confidence intervals are calculated using
 <hr>
 <p><a id="add_significance_stars"></a></p>
 <p>Use significance stars on estimates with low p-values.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span></span>
 <span>    method <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span>,</span>

@@ -97,30 +97,29 @@ Collection of tidiers that can be utilized in gtsummary. See details below.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a regression model object</p></dd>
+<dd><p>(<code>model</code>)<br>
+Regression model object</p></dd>
 
 
 <dt id="arg-exponentiate">exponentiate<a class="anchor" aria-label="anchor" href="#arg-exponentiate"></a></dt>
-<dd><p>Logical indicating whether or not to exponentiate the
-the coefficient estimates. This is typical for logistic and multinomial
-regressions, but a bad idea if there is no log or logit link. Defaults
-to <code>FALSE</code>.</p></dd>
+<dd><p>(scalar <code>logical</code>)<br>
+Logical indicating whether to exponentiate the coefficient estimates.
+Default is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>The confidence level to use for the confidence interval
-if <code>conf.int = TRUE</code>. Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></dd>
+<dd><p>(scalar <code>real</code>)<br>
+Confidence level for confidence interval/credible interval. Defaults to <code>0.95</code>.</p></dd>
 
 
 <dt id="arg-conf-int">conf.int<a class="anchor" aria-label="anchor" href="#arg-conf-int"></a></dt>
-<dd><p>Logical indicating whether or not to include a confidence
-interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(scalar <code>logical</code>)<br>
+Logical indicating whether or not to include a confidence
+interval in the output. Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p><br>
-arguments passed to method;</p><ul><li><p><code>pool_and_tidy_mice()</code>: <code>mice::tidy(x, ...)</code></p></li>
+<dd><p>Arguments passed to method;</p><ul><li><p><code>pool_and_tidy_mice()</code>: <code>mice::tidy(x, ...)</code></p></li>
 <li><p><code>tidy_standardize()</code>: <code>parameters::standardize_parameters(x, ...)</code></p></li>
 <li><p><code>tidy_bootstrap()</code>: <code>parameters::bootstrap_parameters(x, ...)</code></p></li>
 <li><p><code>tidy_robust()</code>: <code>parameters::model_parameters(x, ...)</code></p></li>
@@ -132,14 +131,13 @@ arguments passed to method;</p><ul><li><p><code>pool_and_tidy_mice()</code>: <co
 
 
 <dt id="arg-vcov-vcov-args">vcov, vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-vcov-args"></a></dt>
-<dd><p><br>
-arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.
+<dd><p>Arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.
 At least one of these arguments <strong>must</strong> be specified.</p></dd>
 
 
 <dt id="arg-pool-args">pool.args<a class="anchor" aria-label="anchor" href="#arg-pool-args"></a></dt>
 <dd><p>(named <code>list</code>)<br>
-named list of arguments passed to <code><a href="https://amices.org/mice/reference/pool.html" class="external-link">mice::pool()</a></code> in
+Named list of arguments passed to <code><a href="https://amices.org/mice/reference/pool.html" class="external-link">mice::pool()</a></code> in
 <code>pool_and_tidy_mice()</code>. Default is <code>NULL</code></p></dd>
 
 
