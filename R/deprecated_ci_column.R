@@ -36,62 +36,68 @@
 #'
 #' ```{r, echo=FALSE}
 #' dplyr::tribble(
-#'   ~`Old Code`, ~`Updated Code`,
+#'   ~`**Old Code**`, ~`**Updated Code**`,
 #'   "`modify_header(ci = \"Confidence Interval\")`", "`modify_header(conf.low = \"Confidence Interval\")`"
 #' ) |>
-#'   gt::gt() |>
-#'   gt::fmt_markdown() |>
-#'   gt::as_raw_html()
+#'   knitr::kable()
 #' ```
 #'
 #' ## `modify_spanning_header()`
 #'
 #' ```{r, echo=FALSE}
 #' dplyr::tribble(
-#'   ~`Old Code`, ~`Updated Code`,
+#'   ~`**Old Code**`, ~`**Updated Code**`,
 #'   "`modify_spanning_header(ci = \"Confidence Interval\")`", "`modify_spanning_header(conf.low = \"Confidence Interval\")`"
 #' ) |>
-#'   gt::gt() |>
-#'   gt::fmt_markdown() |>
-#'   gt::as_raw_html()
+#'   knitr::kable()
+#' ```
+#'
+#' ## `modify_spanning_header()`
+#'
+#' ```{r, echo=FALSE}
+#' dplyr::tribble(
+#'   ~`**Old Code**`, ~`**Updated Code**`,
+#'   "`modify_spanning_header(ci = \"Confidence Interval\")`", "`modify_spanning_header(conf.low = \"Confidence Interval\")`"
+#' ) |>
+#'   knitr::kable()
 #' ```
 #'
 #' ## `modify_column_merge()`
 #'
 #' ```{r, echo=FALSE}
 #' dplyr::tribble(
-#'   ~`Old Code`, ~`Updated Code`,
+#'   ~`**Old Code**`, ~`**Updated Code**`,
 #'   "`modify_column_merge(pattern = \"{estimate} ({ci})\")`", "`modify_column_merge(pattern = \"{estimate} ({conf.low}, {conf.high})\"`"
 #' ) |>
-#'   gt::gt() |>
-#'   gt::fmt_markdown() |>
-#'   gt::as_raw_html()
+#'   knitr::kable()
 #' ```
 #'
 #' ## `modify_column_hide()`
 #'
 #' ```{r, echo=FALSE}
 #' dplyr::tribble(
-#'   ~`Old Code`, ~`Updated Code`,
+#'   ~`**Old Code**`, ~`**Updated Code**`,
 #'   "`modify_column_hide(columns = \"ci\")`", "`modify_column_hide(columns = \"conf.low\")`"
 #' ) |>
-#'   gt::gt() |>
-#'   gt::fmt_markdown() |>
-#'   gt::as_raw_html()
+#'   knitr::kable()
 #' ```
 #'
 #' ## `inline_text()`
 #'
 #' ```{r, echo=FALSE}
 #' dplyr::tribble(
-#'   ~`Old Code`, ~`Updated Code`,
+#'   ~`**Old Code**`, ~`**Updated Code**`,
 #'   "`inline_text(pattern = \"{estimate} (95% CI {ci})\")`", "`inline_text(pattern = \"{estimate} (95% CI {conf.low}, {conf.high})\")`"
 #' ) |>
-#'   gt::gt() |>
-#'   gt::fmt_markdown() |>
-#'   gt::as_raw_html()
+#'   knitr::kable()
 #' ```
 #'
 #' @keywords internal
 #' @name deprecated_ci_column
 NULL
+
+
+
+
+
+
