@@ -23,10 +23,10 @@ string indicating test to use. Must be one of \code{"logrank"}, \code{"tarone"},
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \code{"coxph_score"}.
 See details below}
 
-\item{test.args}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Containing additional arguments to pass to tests that accept arguments.
-For example, add an argument for all t-tests, use
-\code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}.}
+\item{test.args}{(named \code{list})\cr
+named list of arguments that will be passed to the method specified in the
+\code{test} argument.
+Default is \code{NULL}.}
 
 \item{pvalue_fun}{(\code{function})\cr
 Function to round and format p-values. Default is \code{label_style_pvalue()}.
