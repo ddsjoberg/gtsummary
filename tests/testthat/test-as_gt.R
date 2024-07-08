@@ -44,9 +44,9 @@ test_that("as_gt passes table body correctly", {
   )
 
   # tbl_regression
-  my_tbl_regression$table_body$conf.low <- my_tbl_regression |>
-    as_tibble(col_labels = FALSE) |>
-    dplyr::pull(conf.low)
+  # my_tbl_regression$table_body$conf.low <- my_tbl_regression |>
+  #   as_tibble(col_labels = FALSE) |>
+  #   dplyr::pull(conf.low)
 
   expect_equal(
     my_tbl_regression$table_body,
@@ -57,9 +57,9 @@ test_that("as_gt passes table body correctly", {
   # tbl_uvregression
   my_tbl_uvregression <- trial |> tbl_uvregression(method = lm, y = age)
   expect_silent(gt_tbl_uvregression <- my_tbl_uvregression |> as_gt())
-  my_tbl_uvregression$table_body$conf.low <- my_tbl_uvregression |>
-    as_tibble(col_labels = FALSE) |>
-    dplyr::pull(conf.low)
+  # my_tbl_uvregression$table_body$conf.low <- my_tbl_uvregression |>
+  #   as_tibble(col_labels = FALSE) |>
+  #   dplyr::pull(conf.low)
 
   expect_equal(
     my_tbl_uvregression$table_body,
@@ -424,7 +424,8 @@ test_that("as_gt passes column merging correctly", {
   # conf.low (default column merging)
   expect_equal(
     tbl |>
-      as_tibble(col_labels = FALSE) |>
+      getElement("table_body") |>
+      # as_tibble(col_labels = FALSE) |>
       dplyr::pull(conf.low),
     gt_tbl$`_data`$conf.low
   )
@@ -432,7 +433,8 @@ test_that("as_gt passes column merging correctly", {
   # estimate (added custom column merging)
   expect_equal(
     tbl |>
-      as_tibble(col_labels = FALSE) |>
+      getElement("table_body") |>
+      # as_tibble(col_labels = FALSE) |>
       dplyr::pull(estimate),
     gt_tbl$`_data`$estimate
   )
