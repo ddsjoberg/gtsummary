@@ -46,22 +46,21 @@ tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
 tidy_wald_test(x, tidy_fun = NULL, ...)
 }
 \arguments{
-\item{x}{a regression model object}
+\item{x}{(\code{model})\cr
+Regression model object}
 
-\item{exponentiate}{Logical indicating whether or not to exponentiate the
-the coefficient estimates. This is typical for logistic and multinomial
-regressions, but a bad idea if there is no log or logit link. Defaults
-to \code{FALSE}.}
+\item{exponentiate}{(scalar \code{logical})\cr
+Logical indicating whether to exponentiate the coefficient estimates.
+Default is \code{FALSE}.}
 
-\item{conf.level}{The confidence level to use for the confidence interval
-if \code{conf.int = TRUE}. Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+\item{conf.level}{(scalar \code{real})\cr
+Confidence level for confidence interval/credible interval. Defaults to \code{0.95}.}
 
-\item{conf.int}{Logical indicating whether or not to include a confidence
-interval in the tidied output. Defaults to \code{FALSE}.}
+\item{conf.int}{(scalar \code{logical})\cr
+Logical indicating whether or not to include a confidence
+interval in the output. Default is \code{TRUE}.}
 
-\item{...}{\cr
-arguments passed to method;
+\item{...}{Arguments passed to method;
 \itemize{
 \item \code{pool_and_tidy_mice()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{parameters::standardize_parameters(x, ...)}
@@ -71,12 +70,11 @@ arguments passed to method;
 
 \item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{vcov, vcov_args}{\cr
-arguments passed to \code{parameters::model_parameters()}.
+\item{vcov, vcov_args}{Arguments passed to \code{parameters::model_parameters()}.
 At least one of these arguments \strong{must} be specified.}
 
 \item{pool.args}{(named \code{list})\cr
-named list of arguments passed to \code{mice::pool()} in
+Named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
 
 \item{tidy_fun}{(\code{function})\cr

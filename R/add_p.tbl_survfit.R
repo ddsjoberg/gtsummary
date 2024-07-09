@@ -8,6 +8,10 @@
 #'   string indicating test to use. Must be one of `"logrank"`, `"tarone"`, `"survdiff"`,
 #'   `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score"`.
 #'   See details below
+#' @param test.args (named `list`)\cr
+#'   named list of arguments that will be passed to the method specified in the
+#'   `test` argument.
+#'   Default is `NULL`.
 #' @param quiet `r lifecycle::badge("deprecated")`
 #' @inheritParams add_p.tbl_summary
 #' @family tbl_survfit tools
@@ -108,6 +112,9 @@ add_p.tbl_survfit <- function(x,
     dplyr::relocate("test_name", .after = "variable")
 
   # now process the `test.args` argument ---------------------------------------
+  if (!missing(test.args)) {
+    test.args <- inject(~!!test.args)
+  }
   cards::process_formula_selectors(
     scope_table_body(x$table_body, x$inputs$data[include]),
     test.args = test.args
@@ -118,6 +125,7 @@ add_p.tbl_survfit <- function(x,
     error_msg = c("Error in the argument {.arg {arg_name}} for variable {.val {variable}}.",
                   i = "Value must be a named list.")
   )
+
 
   # calculate the results and update object to include p-value -----------------
   x <- x |>
