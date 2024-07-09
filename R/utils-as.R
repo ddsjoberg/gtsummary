@@ -254,31 +254,6 @@
     )
 }
 
-.table_styling_cols_merge <- function(x) {
-  if (is.null(x$table_styling$cols_merge) || nrow(x$table_styling$cols_merge) == 0) {
-    return(x)
-  }
-  x_cleaned <- .table_styling_expr_to_row_number(x)
-  if (nrow(x_cleaned$table_styling$cols_merge) == 0) {
-    return(x)
-  }
-
-  # replacing numeric columns with formatted/character,merged columns
-  merging_columns <- x_cleaned$table_styling$cols_merge$column
-  df_merged <- dplyr::as_tibble(x, include = c("tibble", "fmt", "cols_merge"))
-  x$table_body[merging_columns] <- df_merged[merging_columns]
-
-  # removing merging instructions ----------------------------------------------
-  x$table_styling$cols_merge <-
-    x$table_styling$cols_merge %>%
-    dplyr::filter(FALSE)
-
-  # replacing formatting functions for merged columns --------------------------
-  x <- modify_fmt_fun(x, any_of(merging_columns) ~ as.character)
-
-  # return merged gtsummary table ----------------------------------------------
-  x
-}
 
 
 # this function takes a list expressions and evaluates them with a `%>%` between them
