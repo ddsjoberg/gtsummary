@@ -412,26 +412,75 @@ test_that("as_gt applies formatting functions correctly", {
 })
 
 test_that("as_gt passes column merging correctly", {
-  tbl <- my_tbl_regression |>
+  tbl <- lm(marker ~ age + grade, trial) |>
+    tbl_regression() |>
     modify_column_merge(
       pattern = "{estimate} (pval {p.value})",
-      rows = !is.na(estimate)
+      rows = !is.na(estimate) & estimate < 0
     )
   gt_tbl <- tbl |> as_gt()
 
   # conf.low (default column merging)
   expect_equal(
-    tbl |>
-      getElement("table_body") |>
-      dplyr::pull(conf.low),
-    gt_tbl$`_data`$conf.low
+    eval_tidy(tbl$table_styling$cols_merge$rows[[1]], data = tbl$table_body) |> which(),
+    gt_tbl$`_col_merge`[[1]]$rows
+  )
+  expect_equal(
+    gt_tbl$`_col_merge`[[1]]$vars,
+    c("conf.low", "conf.high")
+  )
+  expect_equal(
+    gt_tbl$`_col_merge`[[1]]$pattern,
+    c("{1}, {2}")
   )
 
   # estimate (added custom column merging)
   expect_equal(
-    tbl |>
-      getElement("table_body") |>
-      dplyr::pull(estimate),
-    gt_tbl$`_data`$estimate
+    eval_tidy(tbl$table_styling$cols_merge$rows[[2]], data = tbl$table_body) |> which(),
+    gt_tbl$`_col_merge`[[2]]$rows
+  )
+  expect_equal(
+    gt_tbl$`_col_merge`[[2]]$vars,
+    c("estimate", "p.value")
+  )
+  expect_equal(
+    gt_tbl$`_col_merge`[[2]]$pattern,
+    c("{1} (pval {2})")
+  )
+  expect_equal(
+    as.data.frame(gt_tbl)$estimate,
+    c("0.00 (pval >0.9)", "<br />", "—", "-0.38 (pval 0.015)", "-0.12 (pval 0.5)")
+  )
+
+  # modify column merging pattern
+  tbl <- tbl |>
+    modify_table_styling(
+      columns = estimate,
+      rows = !is.na(estimate) & estimate < 0,
+      cols_merge_pattern = "{estimate} (p is {p.value})"
+    )
+  gt_tbl <- tbl |> as_gt()
+
+  expect_equal(
+    gt_tbl$`_col_merge`[[2]]$pattern,
+    c("{1} (p is {2})")
+  )
+  expect_equal(
+    as.data.frame(gt_tbl)$estimate,
+    c("0.00 (p is >0.9)", "<br />", "—", "-0.38 (p is 0.015)", "-0.12 (p is 0.5)")
+  )
+
+  # remove column merging
+  tbl <- tbl |>
+    modify_table_styling(
+      columns = estimate,
+      cols_merge_pattern = NA
+    )
+  gt_tbl <- tbl |> as_gt()
+
+  expect_equal(length(gt_tbl$`_col_merge`), 1)
+  expect_equal(
+    as.data.frame(gt_tbl)$estimate,
+    c("0.00", "<br />", "—", "-0.38", "-0.12")
   )
 })
