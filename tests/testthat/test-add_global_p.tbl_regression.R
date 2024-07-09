@@ -1,180 +1,123 @@
-test_that("add_global_p.tbl_regression(x)", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
+test_that("add_global_p.tbl_regression works with standard use", {
+  tbl <- glm(response ~ age + grade, trial, family = binomial()) |>
+    tbl_regression()
 
-  expect_silent(
-    res <- tbl |> add_global_p()
-  )
+  expect_silent(res <- tbl |> add_global_p())
 
-  expect_snapshot(res |> as.data.frame())
-
-  # two model terms, two p values
+  # 1 p-value per model term
+  expect_equal(sum(!is.na(res$table_body$p.value)), 2)
   expect_equal(
-    sum(!is.na(res$table_body$p.value)),
-    2
+    res |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(p.value),
+    c("0.092", "0.9", NA, NA, NA)
   )
 
-  # test p-values are properly being calculated
+  # p-values calculated are correct
   expect_equal(
     res$table_body$p.value[1:2],
-    c(
-      (car::Anova(lm(marker ~ age, trial)))$`Pr(>F)`[1],
-      (car::Anova(lm(marker ~ grade, trial)))$`Pr(>F)`[1]
-    )
+    (car::Anova(glm(response ~ age + grade, trial, family = binomial()), type = "III"))$`Pr(>Chisq)`
   )
 })
 
-test_that("add_global_p.tbl_regression(include)", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
+test_that("add_global_p.tbl_regression(include) works as expected", {
+  tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>
+    tbl_regression()
 
-  res1 <- tbl |> add_global_p(include = age)
+  expect_silent(res <- tbl |> add_global_p(include = c(age, marker)))
 
-  # one expected p-value for age
+  # 1 p-value per model term in include
+  expect_equal(sum(!is.na(res$table_body$p.value)), 2)
+})
+
+test_that("add_global_p.tbl_regression(keep) works as expected", {
+  tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>
+    tbl_regression()
+
+  expect_silent(res <- tbl |> add_global_p(keep = TRUE))
+
+  # 1 p-value per non-empty row
+  expect_equal(sum(!is.na(res$table_body$p.value)), 5)
+
+  # p-values calculated are correct
   expect_equal(
-    sum(!is.na(res1$table_body$p.value)),
-    1
+    res |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull(p.value),
+    c("0.10", ">0.9", NA, ">0.9", ">0.9", "0.14")
   )
 })
 
-test_that("add_global_p.tbl_regression(type)", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
+test_that("add_global_p.tbl_regression(anova_fun) works as expected", {
+  tbl <- glm(response ~ age + grade, trial, family = binomial()) |>
+    tbl_regression()
 
-  res2 <- tbl |> add_global_p(type = "II")
+  expect_silent(res <- tbl |> add_global_p(anova_fun = cardx::ard_aod_wald_test))
 
-  # 4 expected p-values, 2 for each variable, 2 for each level of grade
+  # 1 p-value per model term
+  expect_equal(sum(!is.na(res$table_body$p.value)), 2)
+
+  # p-values calculated are correct when anova_fun = aod_wald_test
   expect_equal(
-    sum(!is.na(res2$table_body$p.value)),
-    2
-  )
-
-  expect_equal(
-    res2$table_body$p.value[1:2],
-    c(
-      (car::Anova(lm(marker ~ age, trial), type = "II"))$`Pr(>F)`[1],
-      (car::Anova(lm(marker ~ grade, trial), type = "II"))$`Pr(>F)`[1]
-    )
+    res$table_body$p.value[1:2],
+    cardx::ard_aod_wald_test(glm(response ~ age + grade, trial, family = binomial())) |>
+      dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
+      dplyr::pull(stat) %>%
+      unlist()
   )
 })
 
-test_that("add_global_p.tbl_regression(keep)", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
+test_that("add_global_p.tbl_regression(type) works as expected", {
+  tbl <- glm(response ~ age + grade, trial, family = binomial()) |>
+    tbl_regression()
 
-  res3 <- tbl |> add_global_p(keep = TRUE)
+  expect_silent(res <- tbl |> add_global_p(type = 2))
 
-  # 4 expected p-values, 2 for each variable, 2 for each level of grade
+  # 1 p-value per model term
+  expect_equal(sum(!is.na(res$table_body$p.value)), 2)
+
+  # p-values calculated are correct
   expect_equal(
-    sum(!is.na(res3$table_body$p.value)),
-    4
+    res$table_body$p.value[1:2],
+    (car::Anova(glm(response ~ age + grade, trial, family = binomial()), type = "III"))$`Pr(>Chisq)`
   )
 })
 
-test_that("add_global_p.tbl_regression(anova_fun)", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
-
-  res4 <- tbl |> add_global_p(anova_fun = cardx::ard_aod_wald_test)
-
-  # two model terms, two p values
-  expect_equal(
-    sum(!is.na(res4$table_body$p.value)),
-    2
-  )
-
-  # p-values match when using aod_wald_test
-  expect_equal(
-    res4$table_body$p.value[1:2],
-    c(
-      lm(marker ~ age, trial) |>
-        cardx::ard_aod_wald_test() |>
-        dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
-        dplyr::pull(stat) %>%
-        unlist(),
-      lm(marker ~ grade, trial) |>
-        cardx::ard_aod_wald_test() |>
-        dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
-        dplyr::pull(stat) %>%
-        unlist()
-    )
-  )
-})
-
-test_that("add_global_p.tbl_regression(anova_fun) inappropriate anova function", {
-  tbl <- trial |>
-    tbl_regression(method = lm, y = marker, include = c("age", "grade"))
-
-  broken_anova <- function(x) {
-    x + 1
-  }
-
-  expect_error(
-    res5 <- tbl |> add_global_p(anova_fun = broken_anova),
-    regexp = "There was an error running `anova_fun`"
-  )
-})
-
-test_that("geeglm model for add_global_p.tbl_regression()", {
-  res5 <- geepack::respiratory |>
+test_that("add_global_p.tbl_regression works when table is modified to hide p-values via tidy_fun", {
+  tbl <- glm(response ~ age + grade, trial, family = binomial()) |>
     tbl_regression(
-      method = geepack::geeglm,
-      y = outcome,
-      include = c("treat", "baseline"),
-      method.args = list(
-        family = binomial,
-        id = id,
-        corstr = "exchangeable"
-      ),
-    ) |>
-    add_global_p()
+      include = c("age", "grade"),
+      tidy_fun = \(x, ...) broom::tidy(x, ...) |> dplyr::select(-p.value)
+    )
 
-  expect_equal(
-    res5$table_body |>
-      dplyr::filter(variable == "treat") |>
-      dplyr::pull("p.value") |>
-      getElement(1L),
-    geepack::geeglm(
-      outcome ~ treat,
-      geepack::respiratory,
-      family = binomial,
-      id = id,
-      corstr = "exchangeable"
-    ) |>
-      cardx::ard_aod_wald_test() |> # calculate Wald p-value
-      dplyr::filter(variable == "treat", stat_name == "p.value") |>
-      dplyr::pull("stat") |>
-      unlist()
+  expect_silent(res <- tbl |> add_global_p())
+
+  # p-value column is added to the table
+  expect_true(
+    "p.value" %in% (res |> as_tibble(col_labels = FALSE) |> names())
   )
 
-  expect_equal(
-    res5$table_body |>
-      dplyr::filter(variable == "baseline") |>
-      dplyr::pull("p.value") |>
-      getElement(1L),
-    geepack::geeglm(
-      outcome ~ baseline, geepack::respiratory,
-      family = binomial,
-      id = id,
-      corstr = "exchangeable"
-    ) |>
-      cardx::ard_aod_wald_test() |> # calculate Wald p-value
-      dplyr::filter(variable == "baseline", stat_name == "p.value") |>
-      dplyr::pull("stat") |>
-      unlist()
+  # 1 p-value per model term
+  expect_equal(sum(!is.na(res$table_body$p.value)), 2)
+})
+
+test_that("add_global_p.tbl_regression(quiet) causes deprecation error", {
+  tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>
+    tbl_regression()
+
+  lifecycle::expect_deprecated(
+    tbl |> add_global_p(quiet = TRUE),
   )
 })
 
-test_that("modify tidy_fun to not show p-values", {
-  expect_silent(
-    res6 <- trial |>
-      tbl_regression(
-        method = glm,
-        y = response,
-        include = c("age", "grade"),
-        tidy_fun = \(x, ...) broom::tidy(x, ...) |> dplyr::select(-p.value)
-      ) |>
-      add_global_p()
+test_that("add_global_p.tbl_regression returns an error for unsupported anova_fun input", {
+  tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>
+    tbl_regression()
+
+  not_anova <- function(x) x + 1
+
+  expect_snapshot(
+    res <- tbl |> add_global_p(anova_fun = not_anova),
+    error = TRUE
   )
-  expect_snapshot(res6 %>% as.data.frame())
 })
