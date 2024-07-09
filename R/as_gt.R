@@ -115,8 +115,8 @@ table_styling_to_gt_calls <- function(x, ...) {
     x$table_styling$cols_merge |>
     dplyr::rowwise() |>
     dplyr::mutate(
-      columns = .extract_glue_elements(pattern) |> list(),
-      pattern_cols_merge = .pattern_to_cols_merge_pattern(pattern, columns)
+      columns = .extract_glue_elements(.data$pattern) |> list(),
+      pattern_cols_merge = .pattern_to_cols_merge_pattern(.data$pattern, .data$columns)
     ) |>
     dplyr::ungroup()
 

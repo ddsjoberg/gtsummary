@@ -424,25 +424,25 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
 
   # set regression function and any additional arguments
   # styler: off
-  method.args <- list()
+  method.args <- expr(list())
   package <- "base"
   if (is.data.frame(data) && is_empty(group) && type %in% c("continuous", "continuous2")) {
     method <- "lm"
   }
   else if (is.data.frame(data) && is_empty(group) && type %in% "dichotomous") {
     method <- "glm"
-    method.args <- list(family = stats::binomial())
+    method.args <- expr(list(family = stats::binomial()))
   }
   else if (inherits(data, "survey.design")) {
     package <- "survey"
     method <- "svyglm"
-    if (type %in% "dichotomous") method.args <- list(family = stats::binomial())
+    if (type %in% "dichotomous") method.args <- expr(list(family = stats::binomial()))
   }
   else if (is.data.frame(data) && !is_empty(group)) {
     package <- "lme4"
     if (type %in% "dichotomous") {
       method <- "glmer"
-      method.args <- list(family = stats::binomial())
+      method.args <- expr(list(family = stats::binomial()))
     }
     else method <- "lmer"
   }
@@ -452,7 +452,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
     data = data,
     formula = formula,
     method = method,
-    method.args = method.args,
+    method.args = !!method.args,
     package = package,
     response_type = type,
     conf.level = conf.level,

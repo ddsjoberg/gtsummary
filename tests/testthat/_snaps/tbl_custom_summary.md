@@ -100,7 +100,7 @@
       7   3rd    17.3% (88/510) [14-21]  45.9% (90/196) [39-53]
       8  Crew   22.3% (192/862) [20-25]   87.0% (20/23) [65-97]
 
-# character summaries do not cause error
+# character/date summaries do not cause error
 
     Code
       as.data.frame(tbl)
