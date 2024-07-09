@@ -6296,20 +6296,16 @@ an example of the first few calls saved with
 <span><span class="co">#&gt; gt::sub_missing(columns = gt::everything(), missing_text = "")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $cols_merge</span></span>
+<span><span class="co">#&gt; list()</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $cols_align</span></span>
 <span><span class="co">#&gt; $cols_align[[1]]</span></span>
 <span><span class="co">#&gt; gt::cols_align(columns = c("variable", "var_type", "row_type", </span></span>
 <span><span class="co">#&gt; "var_label", "stat_0"), align = "center")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $cols_align[[2]]</span></span>
-<span><span class="co">#&gt; gt::cols_align(columns = "label", align = "left")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $indent</span></span>
-<span><span class="co">#&gt; $indent[[1]]</span></span>
-<span><span class="co">#&gt; gt::text_transform(locations = gt::cells_body(columns = "label", </span></span>
-<span><span class="co">#&gt;     rows = c(2L, 3L, 5L, 7L, 8L, 9L)), fn = function(x) paste0("    ", </span></span>
-<span><span class="co">#&gt;     x))</span></span></code></pre></div>
+<span><span class="co">#&gt; gt::cols_align(columns = "label", align = "left")</span></span></code></pre></div>
 <p>The {gt} functions are called in the order they appear, beginning
 with <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code>.</p>
 <p>If the user does not want a specific {gt} function to run (i.e. would
