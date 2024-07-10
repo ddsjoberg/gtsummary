@@ -76,6 +76,5 @@ test_that("add_stat_label() messaging", {
       invisible()
   )
 })
-# TODO: Add tests for `tbl_svysummary()`
 
 # TODO: Add tests with `tbl_merge()`
