@@ -1,12 +1,114 @@
 # TODO: add theme_gtsummary_journal('qjecon')
-# TODO: add theme_gtsummary_compact()
 # TODO: add theme_gtsummary_printer()
-# TODO: add theme_gtsummary_language()
-# TODO: add theme_gtsummary_continuous2()
-# TODO: add theme_gtsummary_mean_sd()
-# TODO: add theme_gtsummary_eda()
 
-# TODO: After inline_text() is added: theme_gtsummary_journal(c('jama', 'nejm', 'lancet')) with preprend_p examples
+# TODO: After inline_text() is added: theme_gtsummary_journal(c('jama', 'nejm')) with preprend_p examples
+
+test_that("theme_gtsummary_compact() works", {
+  expect_error(
+    with_gtsummary_theme(
+      theme_gtsummary_compact(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_gt()
+    ),
+    NA
+  )
+
+  expect_error(
+    with_gtsummary_theme(
+      theme_gtsummary_compact(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_hux_table()
+    ),
+    NA
+  )
+
+  expect_error(
+    with_gtsummary_theme(
+      theme_gtsummary_compact(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_flex_table()
+    ),
+    NA
+  )
+
+  expect_error(
+    with_gtsummary_theme(
+      theme_gtsummary_compact(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_kable_extra()
+    ),
+    NA
+  )
+})
+
+test_that("theme_gtsummary_eda() works", {
+  expect_snapshot(
+    with_gtsummary_theme(
+      theme_gtsummary_eda(),
+      expr = trial |> tbl_summary(include = c(age, grade))
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("theme_gtsummary_mean_sd() works", {
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_mean_sd(),
+      expr = trial |> tbl_summary(include = age)
+    ) |>
+      getElement("inputs") |>
+      getElement("statistic") |>
+      getElement("age"),
+    "{mean} ({sd})",
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_mean_sd(),
+      expr = trial |> tbl_summary(by = trt, include = age) |> add_p()
+    ) |>
+      getElement("table_body") |>
+      getElement("test_name") |>
+      dplyr::last(),
+      "t.test",
+    ignore_attr = TRUE
+  )
+})
+
+test_that("theme_gtsummary_continuous2() works", {
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_continuous2(),
+      expr = trial |> tbl_summary(include = age)
+    ) |>
+      getElement("table_body") |>
+      getElement("var_type") |>
+      dplyr::last(),
+    "continuous2"
+  )
+})
+
+test_that("theme_gtsummary_language() works", {
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_language("es"),
+      expr = trial |> tbl_summary(include = age)
+    ) |>
+      getElement("table_body") |>
+      getElement("label") |>
+      dplyr::last(),
+    "Desconocido"
+  )
+
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_language("es", big.mark = " ", decimal.mark = ",", iqr.sep = " - "),
+      expr = trial |> tbl_summary(include = marker)
+    ) |>
+      getElement("table_body") |>
+      getElement("stat_0") |>
+      head(n = 1L),
+    "0,64 (0,22 - 1,41)"
+  )
+})
 
 test_that("theme_gtsummary_journal('lancet') works", {
   # R 4.1 wasn't working with the UTF8 midpoint character, but is working on release (4.4 as of May 2024)
@@ -39,6 +141,17 @@ test_that("theme_gtsummary_journal('lancet') works", {
         unique()
     ),
     "Median (IQR)"
+  )
+
+  # check the prepend p-value function is used
+  expect_true(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("lancet"),
+      lm(age ~ marker, trial) |>
+        tbl_regression() |>
+        inline_text(variable = marker)
+    ) %>%
+      {str_detect(., "p=") && endsWith(., "97)")}
   )
 })
 

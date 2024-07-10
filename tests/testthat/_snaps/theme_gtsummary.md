@@ -1,3 +1,22 @@
+# theme_gtsummary_eda() works
+
+    Code
+      as.data.frame(with_gtsummary_theme(theme_gtsummary_eda(), expr = tbl_summary(
+        trial, include = c(age, grade))))
+    Message
+      Setting theme "Exploratory Data Analysis"
+    Output
+        **Characteristic** **N = 200**
+      1                Age        <NA>
+      2    Median (Q1, Q3) 47 (38, 57)
+      3          Mean (SD)     47 (14)
+      4           Min, Max       6, 83
+      5            Unknown          11
+      6              Grade        <NA>
+      7                  I  68 (34.0%)
+      8                 II  68 (34.0%)
+      9                III  64 (32.0%)
+
 # theme_gtsummary_journal('lancet') works
 
     Code

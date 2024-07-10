@@ -202,7 +202,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             if (prepend_p == TRUE) {
               p_fmt <- dplyr::case_when(
                 is.na(p_fmt) ~ NA_character_,
-                substr(p_fmt, start = 1L, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                substr(p_fmt, start = 1L, stop = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
                 TRUE ~ paste0("p=", p_fmt)
               )
             }
@@ -228,7 +228,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             if (prepend_p == TRUE) {
               p_fmt <- dplyr::case_when(
                 is.na(p_fmt) ~ NA_character_,
-                substr(p_fmt, start = 1L, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                substr(p_fmt, start = 1L, stop = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
                 TRUE ~ paste0("p=", p_fmt)
               )
             }
@@ -423,7 +423,7 @@ theme_gtsummary_language <- function(language = c(
 #' @rdname theme_gtsummary
 #' @param statistic Default statistic continuous variables
 #' @export
-theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", set_theme = TRUE) {
+theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25}, {p75})", set_theme = TRUE) {
   lst_theme <- list(
     "tbl_summary-str:default_con_type" = "continuous2",
     "tbl_summary-arg:statistic" = list(all_continuous() ~ statistic, all_categorical() ~ "{n} ({p}%)")
