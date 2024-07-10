@@ -590,6 +590,15 @@ headers.</p>
 #mwlefoodfi .gt_indent_5 {
   text-indent: 25px;
 }
+
+#mwlefoodfi .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -598,76 +607,40 @@ headers.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>hide</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Logical indicating whether the column is hidden in the output. This column is also scoped in <code><a href="../reference/modify.html">modify_header()</a></code> (and friends) to be used in a selecting environment</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">hide</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Logical indicating whether the column is hidden in the output. This column is also scoped in <code><a href="../reference/modify.html">modify_header()</a></code> (and friends) to be used in a selecting environment</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>align</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">align</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>label</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Label that will be displayed (if column is displayed in output)</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">label</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Label that will be displayed (if column is displayed in output)</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>interpret_label</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>the {gt} function that is used to interpret the column label, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">interpret_label</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">the {gt} function that is used to interpret the column label, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>spanning_header</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Includes text printed above columns as spanning headers.</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">spanning_header</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Includes text printed above columns as spanning headers.</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>interpret_spanning_header</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>the {gt} function that is used to interpret the column spanning headers, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">interpret_spanning_header</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">the {gt} function that is used to interpret the column spanning headers, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>modify_stat_{*}</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>any column beginning with <code>modify_stat_</code> is a statistic available to report in <code><a href="../reference/modify.html">modify_header()</a></code> (and others)</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">modify_stat_{*}</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">any column beginning with <code>modify_stat_</code> is a statistic available to report in <code><a href="../reference/modify.html">modify_header()</a></code> (and others)</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>modify_selector_{*}</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>any column beginning with <code>modify_selector_</code> is a column that is scoped in <code><a href="../reference/modify.html">modify_header()</a></code> (and friends) to be used in a selecting environment</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">modify_selector_{*}</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">any column beginning with <code>modify_selector_</code> is a column that is scoped in <code><a href="../reference/modify.html">modify_header()</a></code> (and friends) to be used in a selecting environment</span></td>
 </tr>
 </tbody>
 </table>
@@ -1118,6 +1091,15 @@ footnote.</p>
 #alspkzcbwj .gt_indent_5 {
   text-indent: 25px;
 }
+
+#alspkzcbwj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#alspkzcbwj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -1126,28 +1108,16 @@ footnote.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>rows</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>expression selecting rows in <code>.$table_body</code>, <code>NA</code> indicates to add footnote to header</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">rows</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">expression selecting rows in <code>.$table_body</code>, <code>NA</code> indicates to add footnote to header</span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>footnote</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>string containing footnote to add to column/row</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">footnote</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">string containing footnote to add to column/row</span></td>
 </tr>
 </tbody>
 </table>
@@ -1595,6 +1565,15 @@ to the bottom of the tibble.</p>
 #bfglzvnegs .gt_indent_5 {
   text-indent: 25px;
 }
+
+#bfglzvnegs .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#bfglzvnegs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -1603,28 +1582,16 @@ to the bottom of the tibble.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>rows</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>expression selecting rows in <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">rows</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">expression selecting rows in <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>fmt_fun</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>list of formatting/styling functions</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">fmt_fun</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">list of formatting/styling functions</span></td>
 </tr>
 </tbody>
 </table>
@@ -2072,6 +2039,15 @@ appended to the bottom of the tibble.</p>
 #ucmrwtkdbi .gt_indent_5 {
   text-indent: 25px;
 }
+
+#ucmrwtkdbi .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ucmrwtkdbi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -2080,36 +2056,20 @@ appended to the bottom of the tibble.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>rows</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>expression selecting rows in <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">rows</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">expression selecting rows in <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>format_type</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>one of <code>c('bold', 'italic', 'indent')</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">format_type</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">one of <code>c('bold', 'italic', 'indent')</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>undo_text_format</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>logical indicating where the formatting indicated should be undone/removed.</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">undo_text_format</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">logical indicating where the formatting indicated should be undone/removed.</span></td>
 </tr>
 </tbody>
 </table>
@@ -2559,6 +2519,15 @@ bottom of the tibble.</p>
 #jcdmfnbyes .gt_indent_5 {
   text-indent: 25px;
 }
+
+#jcdmfnbyes .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jcdmfnbyes div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -2567,28 +2536,16 @@ bottom of the tibble.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>rows</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>expression selecting rows in <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">rows</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">expression selecting rows in <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>symbol</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>string to replace missing values with, e.g. an em-dash</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">symbol</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">string to replace missing values with, e.g. an em-dash</span></td>
 </tr>
 </tbody>
 </table>
@@ -3037,6 +2994,15 @@ The implementation in <code><a href="../reference/as_gt.html">as_gt()</a></code>
 #eytkovhgsh .gt_indent_5 {
   text-indent: 25px;
 }
+
+#eytkovhgsh .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#eytkovhgsh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -3045,28 +3011,16 @@ The implementation in <code><a href="../reference/as_gt.html">as_gt()</a></code>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>column</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>Column name from <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">column</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Column name from <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>rows</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>expression selecting rows in <code>.$table_body</code></p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">rows</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">expression selecting rows in <code>.$table_body</code></span></td>
 </tr>
 <tr>
-<td headers="Column" class="gt_row gt_left"><div class="gt_from_md">
-<p>pattern</p>
-</div></td>
-<td headers="Description" class="gt_row gt_left"><div class="gt_from_md">
-<p>glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in ‘column’.</p>
-</div></td>
+<td headers="Column" class="gt_row gt_left"><span class="gt_from_md">pattern</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in ‘column’.</span></td>
 </tr>
 </tbody>
 </table>
