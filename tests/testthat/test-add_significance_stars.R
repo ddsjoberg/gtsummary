@@ -29,6 +29,13 @@ test_that("add_significance_stars(x)", {
       dplyr::pull(estimate),
     c("52", "-58**", "52", "-58**")
   )
+
+  expect_error(
+    lm(age ~ grade, trial) |>
+      tbl_regression(tidy_fun = \(x, ...) broom::tidy(x, ...) |> dplyr::select(-p.value)) |>
+      add_significance_stars(),
+    "There is no p-value column in the table and significance stars cannot be placed."
+  )
 })
 
 test_that("add_significance_stars(thresholds)", {
@@ -71,5 +78,13 @@ test_that("add_significance_stars(pattern) messaging", {
         pattern = "nothing selecting"
       ),
     "must be a string using glue syntax"
+  )
+
+  expect_message(
+    tbl2 |>
+      add_significance_stars(
+        pattern = "{estimate} ({conf.low}, {conf.high})"
+      ),
+    "no stars will be added"
   )
 })
