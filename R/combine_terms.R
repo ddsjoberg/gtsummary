@@ -153,7 +153,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
   if (!is.null(label)) {
     table_body <-
       table_body %>%
-      dplyr::mutate(label = ifelse(.data$collapse_row == TRUE, label, .data$label))
+      dplyr::mutate(label = ifelse(.data$collapse_row == TRUE, .env$label, .data$label))
   }
 
   # writing over the table_body in x -------------------------------------------
