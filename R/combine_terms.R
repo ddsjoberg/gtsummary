@@ -10,10 +10,10 @@
 #'   formula update passed to the [`stats::update()`].
 #'   This updated formula is used to construct a reduced model, and is
 #'   subsequently passed to [stats::anova()] to calculate the p-value for the
-#'   group of removed terms.  See the [`stats::update()`] help file for proper syntax.
-#'   function's `formula.=` argument
+#'   group of removed terms.  See the [`stats::update()`] function's `formula.=`
+#'   argument for proper syntax.
 #' @param label (`string`)\cr
-#'   Option string argument labeling the combined rows
+#'   Optional string argument labeling the combined rows
 #' @param quiet `r lifecycle::badge("deprecated")`
 #' @param ... Additional arguments passed to [stats::anova]
 #'
