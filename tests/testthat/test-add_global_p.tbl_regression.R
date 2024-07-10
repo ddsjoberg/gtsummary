@@ -62,7 +62,7 @@ test_that("add_global_p.tbl_regression(anova_fun) works as expected", {
     res$table_body$p.value[1:2],
     cardx::ard_aod_wald_test(glm(response ~ age + grade, trial, family = binomial())) |>
       dplyr::filter(variable %in% c("age", "grade") & stat_name == "p.value") |>
-      dplyr::pull(stat) %>%
+      dplyr::pull(stat) |>
       unlist()
   )
 })
