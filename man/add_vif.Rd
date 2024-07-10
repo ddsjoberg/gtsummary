@@ -12,10 +12,9 @@ add_vif(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2))
 \item{statistic}{\code{"VIF"} (variance inflation factors, for models with no categorical terms) or one of/combination of \code{"GVIF"} (generalized variance inflation factors), \code{"aGVIF"} 'adjusted GVIF, i.e. \verb{GVIF^[1/(2*df)]} and/or \code{"df"} (degrees of freedom).
 See \code{car::vif()} for details.}
 
-\item{estimate_fun}{Default is \code{\link[=style_sigfig]{style_sigfig()}}.}
+\item{estimate_fun}{Default is \code{label_style_sigfig(digits = 2)}.}
 }
 \description{
-\lifecycle{maturing}
 Add the variance inflation factor (VIF) or
 generalized VIF (GVIF) to the regression table.
 Function uses \code{car::vif()} to calculate the VIF.
