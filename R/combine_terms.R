@@ -52,7 +52,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
   check_not_missing(formula_update)
   check_class(x, "tbl_regression")
   check_class(formula_update, "formula")
-  check_string(label)
+  check_string(label, allow_empty = TRUE)
 
   # perform calculation --------------------------------------------------------
   reduced_model <-
