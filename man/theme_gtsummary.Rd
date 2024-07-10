@@ -34,7 +34,7 @@ theme_gtsummary_language(
 )
 
 theme_gtsummary_continuous2(
-  statistic = "{median} ({p25, {p75})",
+  statistic = "{median} ({p25}, {p75})",
   set_theme = TRUE
 )
 
