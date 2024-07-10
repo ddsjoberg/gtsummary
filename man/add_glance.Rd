@@ -11,7 +11,8 @@ add_glance_table(
   include = everything(),
   label = NULL,
   fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
-    label_style_pvalue(digits = 1), where(is.integer) ~ label_style_number()),
+    label_style_pvalue(digits = 1), c(where(is.integer), starts_with("df")) ~
+    label_style_number()),
   glance_fun = broom::glance
 )
 
@@ -20,7 +21,8 @@ add_glance_source_note(
   include = everything(),
   label = NULL,
   fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
-    label_style_pvalue(digits = 1), where(is.integer) ~ label_style_number()),
+    label_style_pvalue(digits = 1), c(where(is.integer), starts_with("df")) ~
+    label_style_number()),
   glance_fun = broom::glance,
   text_interpret = c("md", "html"),
   sep1 = " = ",
