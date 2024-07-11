@@ -185,21 +185,15 @@ check_gtsummary_theme <- function(x) {
   }
 
   # check all names are true theme elements
-  if (!all(names(x) %in% df_theme_elements$name)) {
+  else if (!all(names(x) %in% df_theme_elements$name)) {
     not_name <- names(x) %>% setdiff(df_theme_elements$name)
     cli::cli_warn(
       "The following names of {.arg x} are not accepted theme elemets: {.val {not_name}}."
     )
   }
 
-  if (!all(names(x) %in% df_theme_elements$name)) {
-    not_name <- names(x) %>% setdiff(df_theme_elements$name)
-    cli::cli_warn(
-      "The following names of {.arg x} are not accepted theme elemets: {.val {not_name}}."
-    )
-  }
+  else cli::cli_alert_success("Looks good!")
 
-  cli::cli_alert_success("Looks good!")
   invisible()
 }
 

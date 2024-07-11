@@ -68,7 +68,7 @@ test_that("theme_gtsummary_mean_sd() works", {
       getElement("table_body") |>
       getElement("test_name") |>
       dplyr::last(),
-      "t.test",
+    "t.test",
     ignore_attr = TRUE
   )
 })
@@ -214,4 +214,30 @@ test_that("theme_gtsummary_journal('jama') works", {
         as.data.frame()
     )
   )
+})
+
+test_that("check_gtsummary_theme()", {
+  expect_snapshot(
+    check_gtsummary_theme(mean)
+  )
+
+  expect_snapshot(
+    check_gtsummary_theme(list(not_a_theme_element = letters))
+  )
+
+  expect_snapshot(
+    check_gtsummary_theme(list("add_global_p-str:type" = letters))
+  )
+})
+
+test_that("with_gtsummary_theme()", {
+  expect_snapshot({
+    theme_gtsummary_compact()
+    with_gtsummary_theme(
+      x = list("pkgwide-str:theme_name" = "My new theme"),
+      expr = identical(1L, 1L),
+      msg_ignored_elements = "The following theme elements are temporarilty overwritten: {.val {elements}}."
+    )
+    reset_gtsummary_theme()
+  })
 })
