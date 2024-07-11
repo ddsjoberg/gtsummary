@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
 }
@@ -223,4 +225,22 @@ test_that("add_stat(location) for 'tbl_continuous'", {
     c(NA, p_vals)
   )
 })
+
+
+# adding test against a `tbl_svysummary()` object
+test_that("add_stat() with tbl_svysummary()", {
+  return_three_10s <- function(...) rep_len(10, 3)
+  expect_equal(
+    survey::svydesign(~1, data = trial, weights = ~1) |>
+      tbl_svysummary(include = grade) |>
+      add_stat(
+        fns = everything() ~ return_three_10s,
+        location = all_categorical() ~ "level"
+      ) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(add_stat_1),
+    c(NA, "10.0", "10.0", "10.0")
+  )
+})
+
 
