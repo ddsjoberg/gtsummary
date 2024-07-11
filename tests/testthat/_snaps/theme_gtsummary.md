@@ -70,3 +70,44 @@
         **Characteristic** **Beta** **(95% CI)** **p-value**
       1                 am       -33 (-83 to 16)        0.18
 
+# check_gtsummary_theme()
+
+    Code
+      check_gtsummary_theme(mean)
+    Condition
+      Warning:
+      The `x` argument must be a named list.
+
+---
+
+    Code
+      check_gtsummary_theme(list(not_a_theme_element = letters))
+    Condition
+      Warning:
+      The following names of `x` are not accepted theme elemets: "not_a_theme_element".
+
+---
+
+    Code
+      check_gtsummary_theme(list(`add_global_p-str:type` = letters))
+    Message
+      v Looks good!
+
+# with_gtsummary_theme()
+
+    Code
+      theme_gtsummary_compact()
+    Message
+      Setting theme "Compact"
+    Code
+      with_gtsummary_theme(x = list(`pkgwide-str:theme_name` = "My new theme"), expr = identical(
+        1L, 1L), msg_ignored_elements = "The following theme elements are temporarilty overwritten: {.val {elements}}.")
+    Message
+      The following theme elements are temporarilty overwritten: "pkgwide-str:theme_name".
+      Setting theme "My new theme"
+      Setting theme "Compact"
+    Output
+      [1] TRUE
+    Code
+      reset_gtsummary_theme()
+
