@@ -8,3 +8,60 @@ test_that("modify_caption(caption) works", {
       structure(text_interpret = "html")
   )
 })
+
+test_that("modify_caption() works with tbl_svysummary()", {
+  expect_equal(
+    survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+      tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))|>
+      add_overall() |>
+      modify_caption("**Adding a caption** N = {N}", text_interpret = "html") |>
+      getElement("table_styling") |>
+      getElement("caption"),
+    "**Adding a caption** N = 2201" |>
+      structure(text_interpret = "html")
+  )
+})
+
+test_that("modify_caption() works with tbl_continuous()", {
+  expect_equal(tbl_continuous(data = trial, variable = age, by = trt, include = grade)|>
+                 add_overall() |>
+                 modify_caption("**Adding a caption** N = {N}", text_interpret = "html") |>
+                 getElement("table_styling") |>
+                 getElement("caption"),
+               "**Adding a caption** N = 200" |>
+                 structure(text_interpret = "html")
+  )
+})
+
+
+test_that("modify_caption() works with tbl_cross()", {
+  expect_equal(tbl_cross(data = trial, row = trt, col = response) |>
+                 modify_caption("**Adding a caption** N = {N}", text_interpret = "html") |>
+                 getElement("table_styling") |>
+                 getElement("caption"),
+               "**Adding a caption** N = 200" |>
+                 structure(text_interpret = "html")
+  )
+})
+
+test_that("modify_caption() works with tbl_regression()", {
+  expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
+                 tbl_regression(exponentiate = TRUE) |>
+                 modify_caption("**Adding a caption** N = {N}", text_interpret = "html") |>
+                 getElement("table_styling") |>
+                 getElement("caption"),
+               "**Adding a caption** N = 183" |>
+                 structure(text_interpret = "html")
+  )
+})
+
+test_that("modify_caption() works with tbl_uvregression()", {
+  expect_equal(tbl_uvregression(trial, method = glm, y = response, method.args = list(family = binomial),
+                                exponentiate = TRUE, include = c("age", "grade")) |>
+                 modify_caption("**Adding a caption**", text_interpret = "html") |>
+                 getElement("table_styling") |>
+                 getElement("caption"),
+               "**Adding a caption**" |>
+                 structure(text_interpret = "html")
+  )
+})
