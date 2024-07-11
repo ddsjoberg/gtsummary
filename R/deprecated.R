@@ -1,6 +1,6 @@
 #' Deprecated functions
 #'
-#' \lifecycle{deprecated}
+#' \lifecycle{deprecated}\cr
 #' Some functions have been deprecated and are no longer being actively
 #' supported.
 #'

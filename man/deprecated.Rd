@@ -8,7 +8,7 @@
 modify_cols_merge(...)
 }
 \description{
-\lifecycle{deprecated}
+\lifecycle{deprecated}\cr
 Some functions have been deprecated and are no longer being actively
 supported.
 }
