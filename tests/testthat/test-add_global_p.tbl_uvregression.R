@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed(c("broom.helpers", "car", "aod", "cardx"), reference_pkg = "gtsummary"))
+
 test_that("add_global_p.tbl_uvregression(x)", {
   tbl <- trial |>
     tbl_uvregression(method = lm, y = marker, include = c("age", "grade"))
