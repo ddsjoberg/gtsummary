@@ -64,11 +64,6 @@ test_that("modify_footnote(...) works", {
   )
 })
 
-# TODO: Add dynamic headers work with `tbl_svysummary()`
-# TODO: Add dynamic headers work with `tbl_continuous()`
-# TODO: Add dynamic headers work with `tbl_cross()`
-# TODO: Add dynamic headers work with `tbl_regression()`
-# TODO: Add dynamic headers work with `tbl_uvregression()`
 test_that("modify_footnote(...) dynamic headers work with `tbl_summary()`", {
   tbl <- tbl_summary(trial, include = "marker")
 
@@ -134,6 +129,19 @@ test_that("modify_footnote(...) dynamic headers work with `tbl_summary()`", {
 })
 
 test_that("modify_footnote(text_interpret) works", {
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_footnote(label = "Variable", text_interpret = "html") |>
+      getElement("table_styling") |>
+      getElement("footnote") |>
+      dplyr::slice_tail(by = "column", n = 1) |>
+      dplyr::filter(column %in% "label") |>
+      dplyr::pull(text_interpret),
+    "gt::html"
+  )
+})
+
+test_that("modify_footnote() with tbl_svysummary()", {
   expect_equal(
     tbl_summary(trial, include = marker) |>
       modify_footnote(label = "Variable", text_interpret = "html") |>

@@ -1,4 +1,3 @@
-# TODO: add theme_gtsummary_printer()
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(

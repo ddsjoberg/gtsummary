@@ -59,11 +59,6 @@ test_that("modify_spanning_header(...) works", {
   )
 })
 
-# TODO: Add dynamic headers work with `tbl_svysummary()`
-# TODO: Add dynamic headers work with `tbl_continuous()`
-# TODO: Add dynamic headers work with `tbl_cross()`
-# TODO: Add dynamic headers work with `tbl_regression()`
-# TODO: Add dynamic headers work with `tbl_uvregression()`
 test_that("modify_spanning_header(...) dynamic headers work with `tbl_summary()`", {
   tbl <- tbl_summary(trial, include = "marker")
 
