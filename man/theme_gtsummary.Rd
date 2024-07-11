@@ -34,7 +34,7 @@ theme_gtsummary_language(
 )
 
 theme_gtsummary_continuous2(
-  statistic = "{median} ({p25, {p75})",
+  statistic = "{median} ({p25}, {p75})",
   set_theme = TRUE
 )
 
@@ -93,7 +93,7 @@ will default to an en dash}
 }
 \description{
 The following themes are available to use within the gtsummary package.
-Print theme elements with \verb{theme_gtsummary_journal(set_theme = FALSE |> print()}.
+Print theme elements with \code{theme_gtsummary_journal(set_theme = FALSE) |> print()}.
 Review the \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
 for details.
 }
@@ -121,7 +121,11 @@ for details.
 \item \code{"qjecon"} \emph{The Quarterly Journal of Economics}
 \itemize{
 \item \code{tbl_summary()} all percentages rounded to one decimal place
-\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output
+\item \code{tbl_regression()},\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()};
+hides CI and p-value from output
+\itemize{
+\item For flaxtable and huxtable output, the coeficient's standard error is placed below. For gt, it is placed to the right.
+}
 }
 }
 \item \code{theme_gtsummary_compact()}

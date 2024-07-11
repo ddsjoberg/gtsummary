@@ -1,7 +1,7 @@
 #' Available gtsummary themes
 #'
 #' The following themes are available to use within the gtsummary package.
-#' Print theme elements with `theme_gtsummary_journal(set_theme = FALSE |> print()`.
+#' Print theme elements with `theme_gtsummary_journal(set_theme = FALSE) |> print()`.
 #' Review the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' for details.
 #'
@@ -27,7 +27,9 @@
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
 #'   - `"qjecon"` _The Quarterly Journal of Economics_
 #'       - `tbl_summary()` all percentages rounded to one decimal place
-#'       - `tbl_regression()`/`tbl_uvregression()` add significance stars with `add_significance_stars()`; hides CI and p-value from output
+#'       - `tbl_regression()`,`tbl_uvregression()` add significance stars with `add_significance_stars()`;
+#'          hides CI and p-value from output
+#'           - For flaxtable and huxtable output, the coeficient's standard error is placed below. For gt, it is placed to the right.
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine)`
@@ -202,7 +204,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             if (prepend_p == TRUE) {
               p_fmt <- dplyr::case_when(
                 is.na(p_fmt) ~ NA_character_,
-                substr(p_fmt, start = 1L, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                substr(p_fmt, start = 1L, stop = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
                 TRUE ~ paste0("p=", p_fmt)
               )
             }
@@ -228,7 +230,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             if (prepend_p == TRUE) {
               p_fmt <- dplyr::case_when(
                 is.na(p_fmt) ~ NA_character_,
-                substr(p_fmt, start = 1L, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
+                substr(p_fmt, start = 1L, stop = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
                 TRUE ~ paste0("p=", p_fmt)
               )
             }
@@ -282,7 +284,6 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         },
         "as_gt-lst:addl_cmds" = list(
           tab_spanner = list(
-            rlang::expr(gt::fmt_markdown(columns = everything())),
             rlang::expr(gt::tab_style(style = "vertical-align:top", locations = gt::cells_body(columns = dplyr::any_of("label"))))
           )
         )
@@ -423,7 +424,7 @@ theme_gtsummary_language <- function(language = c(
 #' @rdname theme_gtsummary
 #' @param statistic Default statistic continuous variables
 #' @export
-theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", set_theme = TRUE) {
+theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25}, {p75})", set_theme = TRUE) {
   lst_theme <- list(
     "tbl_summary-str:default_con_type" = "continuous2",
     "tbl_summary-arg:statistic" = list(all_continuous() ~ statistic, all_categorical() ~ "{n} ({p}%)")

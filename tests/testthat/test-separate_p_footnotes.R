@@ -39,3 +39,15 @@ test_that("separate_p_footnotes() messaging", {
       separate_p_footnotes()
   )
 })
+
+
+# adding test against a `tbl_svysummary()` object
+test_that("separate_p_footnotes() with tbl_svysummary()", {
+  expect_error(
+    survey::svydesign(~1, data = trial, weights = ~1) |>
+      tbl_svysummary(by = trt, include = c(age, grade)) |>
+      add_p() |>
+      separate_p_footnotes(),
+    NA
+  )
+})
