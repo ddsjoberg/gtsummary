@@ -1,7 +1,4 @@
-# TODO: add theme_gtsummary_journal('qjecon')
 # TODO: add theme_gtsummary_printer()
-
-# TODO: After inline_text() is added: theme_gtsummary_journal(c('jama', 'nejm')) with preprend_p examples
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(
@@ -183,6 +180,17 @@ test_that("theme_gtsummary_journal('nejm') works", {
     ),
     "Median (IQR)"
   )
+
+  # checking preprended pvalue
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("nejm"),
+      expr = lm(hp ~ am, mtcars) |>
+        tbl_regression() |>
+        inline_text(variable = "am")
+    ),
+    "-33 (95% CI -83, 16; p=0.18)"
+  )
 })
 
 test_that("theme_gtsummary_journal('jama') works", {
@@ -213,6 +221,17 @@ test_that("theme_gtsummary_journal('jama') works", {
         tbl_regression() |>
         as.data.frame()
     )
+  )
+
+  # checking preprended pvalue
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("jama"),
+      expr = lm(hp ~ am, mtcars) |>
+        tbl_regression() |>
+        inline_text(variable = "am")
+    ),
+    "-33 (95% CI -83, 16; p=0.18)"
   )
 })
 
