@@ -114,6 +114,8 @@
 
 * The `modify_cols_merge()` functions was renamed to `modify_column_merge()` to match the other function names in v1.6.1 (2022-06-22). The deprecation has been upgraded from a warning to an error.
 
+* There is a change in the `theme_gtsummary_journal("qjecon")` theme for gt output. The journal prefers to present regression coefficients above their standard errors. To achieve this placement in gt table, we were taking advantage of a bug or feature (depending on your point of view) that allowed this placement when a gt table was output to HTML and HTML only. The gt package is now working on a proper solution for linebreaks within a cell, and until that feature is active, we are not using our hack. There is no change for this theme for the other tabling engine packages.
+
 # gtsummary 1.7.2
 
 * Removed messaging about the former auto-removal of the `tbl_summary(group)` variable from the table: a change that occurred 3+ years ago in gtsummary v1.3.1

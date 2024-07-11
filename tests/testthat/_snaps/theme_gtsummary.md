@@ -70,6 +70,21 @@
         **Characteristic** **Beta** **(95% CI)** **p-value**
       1                 am       -33 (-83 to 16)        0.18
 
+# theme_gtsummary_journal('qjecon') works
+
+    Code
+      with_gtsummary_theme(theme_gtsummary_journal("qjecon"), expr = as.data.frame(
+        tbl_regression(lm(mpg ~ factor(cyl) + hp, mtcars))))
+    Message
+      Setting theme "The Quarterly Journal of Economics"
+    Output
+        **Characteristic** **Beta**  \n**(SE)**
+      1        factor(cyl)                 <NA>
+      2                  4                 <NA>
+      3                  6     -6.0**  \n(1.64)
+      4                  8     -8.5**  \n(2.33)
+      5                 hp     -0.02  \n(0.015)
+
 # check_gtsummary_theme()
 
     Code

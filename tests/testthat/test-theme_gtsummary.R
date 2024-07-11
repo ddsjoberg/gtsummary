@@ -216,6 +216,36 @@ test_that("theme_gtsummary_journal('jama') works", {
   )
 })
 
+test_that("theme_gtsummary_journal('qjecon') works", {
+  # check that we get
+  #  - percentages rounded to one decimal place
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("qjecon"),
+      expr = trial |>
+        tbl_summary(include = response, missing = "no") |>
+        as.data.frame(col_labels = FALSE) |>
+        dplyr::select(stat_0) |>
+        dplyr::pull()
+    ),
+    "61 (31.6%)"
+  )
+
+  # check that we get
+  #  - pvalues are not shown
+  #  - CI is not shown
+  #  - estimate and std.error in same cell with line breaker between them
+  #  - sign stars added to beta
+  expect_snapshot(
+    with_gtsummary_theme(
+      theme_gtsummary_journal("qjecon"),
+      expr = lm(mpg ~ factor(cyl) + hp, mtcars) |>
+        tbl_regression() |>
+        as.data.frame()
+    )
+  )
+})
+
 test_that("check_gtsummary_theme()", {
   expect_snapshot(
     check_gtsummary_theme(mean)
