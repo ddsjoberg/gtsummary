@@ -170,8 +170,6 @@ test_that("add_stat(x) messaging", {
   )
 })
 
-# TODO: Add `tbl_svysummary()` tests
-
 # `tbl_continuous()` tests
 test_that("add_stat() for 'tbl_continuous'", {
   tt <-
