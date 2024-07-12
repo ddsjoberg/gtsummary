@@ -73,6 +73,14 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
 table_styling_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
+  # preparation ----------------------------------------------------------------
+  # in {gt} v0.11.0, there is an issue applying `gt::md()` to an empty string, e.g. `gt::md("")`
+  # in those cases, changing the interpreting function to `identity()` (https://github.com/rstudio/gt/issues/1769)
+  x$table_styling$header <- x$table_styling$header |>
+    dplyr::mutate(
+      interpret_label = ifelse(.data$label == "", "identity", .data$interpret_label)
+    )
+
   # gt -------------------------------------------------------------------------
   groupname_col <-
     switch("groupname_col" %in% x$table_styling$header$column,
