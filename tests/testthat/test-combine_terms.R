@@ -196,7 +196,7 @@ test_that("combine_terms works with GEE models", {
 })
 
 test_that("combine_terms works when used in map/apply", {
-  data <- tibble(outcome = "marker", exp = FALSE, test = "F")
+  data <- data.frame(outcome = "marker", exp = FALSE, test = "F")
 
   expect_no_error(
     res <- data |>
@@ -204,7 +204,8 @@ test_that("combine_terms works when used in map/apply", {
         mod = map(outcome, ~ glm(as.formula(paste0(.x, " ~ age + stage")), data = trial, family = gaussian)),
         tbl = map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
         tbl2 = map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
-      )
+      ) |>
+      invisible()
   )
 })
 
