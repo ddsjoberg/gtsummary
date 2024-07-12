@@ -382,6 +382,6 @@ test_that("works with mixed class stacking", {
         type = ~"continuous"
       ) %>%
       inline_text(variable = var_duration, pattern = "{median}"),
-    "0.0000"
+    "0.0000 days"
   )
 })
