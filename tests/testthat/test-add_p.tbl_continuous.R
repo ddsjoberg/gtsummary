@@ -13,6 +13,21 @@ test_that("add_p.tbl_continuous() works", {
   )
 })
 
+test_that("add_p.tbl_continuous(test) works", {
+  expect_silent(
+    tbl1 <- trial |>
+      tbl_continuous(variable = age, include = grade) |>
+      add_p(grade ~ 'kruskal.test')
+  )
+
+  compare <- stats::kruskal.test(age ~ grade, trial)
+
+  expect_equal(
+    tbl1$table_body$p.value[1],
+    compare$p.value
+  )
+})
+
 test_that("add_p.tbl_continuous(pvalue_fun) works", {
   s_ns <- function(x) ifelse(x < 0.05, "S", "N.S.")
   expect_snapshot(
@@ -24,7 +39,7 @@ test_that("add_p.tbl_continuous(pvalue_fun) works", {
 
 test_that("add_p.tbl_continuous(include) works", {
   expect_silent(
-    tbl1 <- trial |>
+    tbl2 <- trial |>
       tbl_continuous(variable = age, by = trt, include = c(grade, stage)) |>
       add_p(include = grade)
   )
@@ -34,7 +49,23 @@ test_that("add_p.tbl_continuous(include) works", {
   names(named_NA) <- ""
 
   expect_equal(
-    tbl1$table_body |> dplyr::filter(label == "T Stage") |> dplyr::pull(p.value),
+    tbl2$table_body |> dplyr::filter(label == "T Stage") |> dplyr::pull(p.value),
     named_NA
+  )
+})
+
+
+test_that("add_p.tbl_continuous(test.args) works", {
+  expect_silent(
+    tbl3 <- trial |>
+      tbl_continuous(variable = age, include = trt) |>
+      add_p(test = trt ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))
+  )
+
+  compare <- t.test(age ~ trt, trial, var.equal = TRUE)
+
+  expect_equal(
+    tbl3$table_body$p.value[1],
+    compare$p.value
   )
 })
