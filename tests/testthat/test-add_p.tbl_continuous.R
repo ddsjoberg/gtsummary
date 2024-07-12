@@ -69,3 +69,33 @@ test_that("add_p.tbl_continuous(test.args) works", {
     compare$p.value
   )
 })
+
+test_that("add_p.tbl_continuous(group) works", {
+  expect_silent(
+    tbl4 <- trial |>
+      tbl_continuous(
+        variable = age,
+        include = trt
+      ) |>
+      add_p(test = ~"lme4", group = stage)
+  )
+
+  compare <- cardx::ard_stats_anova(
+    x = trial |>  tidyr::drop_na(any_of(c("trt", "age", "grade"))),
+    formulas = list(
+      glue::glue("as.factor(trt) ~ 1 + (1 | stage)") |> stats::as.formula(),
+      glue::glue("as.factor(trt) ~ age + (1 | stage)") |> stats::as.formula()
+    ),
+    method = "glmer",
+    method.args = list(family = stats::binomial),
+    package = "lme4",
+    method_text = "random intercept logistic regression"
+  ) |>
+    dplyr::filter(stat_name == "p.value") |>
+    dplyr::pull(stat)
+
+  expect_equal(
+    tbl4$table_body$p.value[1],
+    unlist(compare)
+  )
+})
