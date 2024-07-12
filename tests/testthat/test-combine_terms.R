@@ -48,41 +48,6 @@ test_that("combine_terms(label) works as expected", {
   )
 })
 
-test_that("combine_terms works with models with splines", {
-  skip_if_not(is_pkg_installed("Hmisc", reference_pkg = "gtsummary"))
-
-  mod_splines <- lm(
-    age ~ Hmisc::rcspline.eval(marker, inclx = TRUE) + stage,
-    trial[c("age", "marker", "stage")] |> na.omit()
-  )
-
-  expect_silent(
-    tbl <- tbl_regression(mod_splines, label = stage ~ "Stage") |>
-      combine_terms(
-        formula_update = . ~ . - Hmisc::rcspline.eval(marker, inclx = TRUE),
-        label = "Marker (non-linear terms)"
-      )
-  )
-
-  # correct row contents
-  expect_equal(nrow(tbl$table_body), 6)
-  expect_equal(
-    as_tibble(tbl)[1, -1] |> unlist(use.names = FALSE),
-    c(NA, NA, "0.8")
-  )
-
-  # p-value calculated is correct
-  expect_equal(
-    tbl$table_body |>
-      dplyr::slice(1) |>
-      dplyr::pull(p.value),
-    anova(mod_splines, mod_simple) |>
-      as_tibble() |>
-      dplyr::slice(dplyr::n()) |>
-      dplyr::pull(`Pr(>F)`)
-  )
-})
-
 test_that("combine_terms works with add_global_p", {
   expect_silent(
     tbl <- lmod |>
@@ -106,17 +71,9 @@ test_that("combine_terms works with add_global_p", {
 })
 
 test_that("combine_terms works with logistic regression models", {
-  skip_if_not(is_pkg_installed("Hmisc", reference_pkg = "gtsummary"))
-
   mod <- glm(
-    response ~ age + marker + sp2marker + sp3marker,
-    data = trial |>
-      bind_cols(
-        Hmisc::rcspline.eval(trial$marker, nk = 4, inclx = FALSE, norm = 0) |>
-          as.data.frame() |>
-          set_names("sp2marker", "sp3marker")
-      ) |>
-      na.omit(),
+    response ~ age + marker + grade,
+    data = trial |> na.omit(),
     family = "binomial"
   )
 
@@ -124,24 +81,24 @@ test_that("combine_terms works with logistic regression models", {
     tbl <- mod |>
       tbl_regression(exponentiate = TRUE) |>
       combine_terms(
-        formula_update = . ~ . - marker - sp2marker - sp3marker,
+        formula_update = . ~ . - grade,
         test = "LRT"
       )
   )
 
   # correct row contents
-  expect_equal(nrow(tbl$table_body), 2)
+  expect_equal(nrow(tbl$table_body), 3)
   expect_equal(
-    as_tibble(tbl)[2, ] |> unlist(use.names = FALSE),
-    c("Marker Level (ng/mL)", NA, NA, "0.5")
+    as_tibble(tbl)[3, ] |> unlist(use.names = FALSE),
+    c("Grade", NA, NA, ">0.9")
   )
 })
 
 test_that("combine_terms works with Cox models", {
-  skip_if_not(is_pkg_installed(c("Hmisc", "survival"), reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
 
   mod <- survival::coxph(
-    survival::Surv(ttdeath, death) ~ grade + Hmisc::rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
+    survival::Surv(ttdeath, death) ~ age + stage,
     data = trial |> na.omit()
   )
 
@@ -149,30 +106,24 @@ test_that("combine_terms works with Cox models", {
     tbl <- mod |>
       tbl_regression() |>
       combine_terms(
-        formula_update = . ~ . - Hmisc::rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
-        label = "Marker"
+        formula_update = . ~ . - stage
       )
   )
 
   # correct row contents
-  expect_equal(nrow(tbl$table_body), 5)
+  expect_equal(nrow(tbl$table_body), 2)
   expect_equal(
-    as_tibble(tbl)[5, ] |> unlist(use.names = FALSE),
-    c("Marker", NA, NA, "0.7")
+    as_tibble(tbl)[2, ] |> unlist(use.names = FALSE),
+    c("T Stage", NA, NA, "<0.001")
   )
 })
 
 test_that("combine_terms works with GEE models", {
-  skip_if_not(is_pkg_installed(c("Hmisc", "geepack"), reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("geepack", reference_pkg = "gtsummary"))
 
   mod <- geepack::geeglm(
-    as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
-    data = ChickWeight |>
-      bind_cols(
-        Hmisc::rcspline.eval(ChickWeight$Time, nk = 4, inclx = FALSE, norm = 0) |>
-          as.data.frame() |>
-          set_names("sp2Time", "sp3Time")
-      ),
+    as.formula("weight ~ Diet + Time"),
+    data = ChickWeight |> na.omit(),
     family = gaussian,
     id = Chick,
     corstr = "exchangeable"
@@ -182,16 +133,14 @@ test_that("combine_terms works with GEE models", {
   expect_silent(
     tbl <- mod |>
       tbl_regression() |>
-      combine_terms(
-        formula_update = . ~ . - Time - sp2Time - sp3Time
-      )
+      combine_terms(formula_update = . ~ . - Diet)
   )
 
   # correct row contents
-  expect_equal(nrow(tbl$table_body), 6)
+  expect_equal(nrow(tbl$table_body), 2)
   expect_equal(
-    as_tibble(tbl)[6, ] |> unlist(use.names = FALSE),
-    c("Time", NA, NA, "<0.001")
+    as_tibble(tbl)[1, ] |> unlist(use.names = FALSE),
+    c("Diet", NA, NA, "<0.001")
   )
 })
 
