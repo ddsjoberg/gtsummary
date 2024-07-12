@@ -89,15 +89,8 @@ test_that("tbl_survfit(statistic) works", {
 })
 
 test_that("tbl_survfit(label) works", {
-  # label currently WILL NOT OVERRIDE PREXISTING LABELS
-  remove_labels <- function(x) {
-    attr(x, "label") <- NULL
-    return(x)
-  }
-
   expect_silent(
-    trial |>
-      dplyr::mutate(dplyr::across(everything(), remove_labels)) |>
+    tbl1 <- trial |>
       tbl_survfit(
         include = c(trt, grade),
         y = "Surv(ttdeath, death)",
@@ -105,12 +98,15 @@ test_that("tbl_survfit(label) works", {
         label = list(trt = "TREATMENT", grade = "GRADE")
       )
   )
+  expect_equal(
+    tbl1$table_body |> dplyr::filter(row_type == "label") |> dplyr::pull(label),
+    c(trt = "TREATMENT", grade = "GRADE")
+  )
 })
-
 
 test_that("tbl_survfit(label_header) works", {
   expect_silent(
-    tbl1 <- trial |>
+    tbl2 <- trial |>
       tbl_survfit(
         include = c(trt, grade),
         y = "Surv(ttdeath, death)",
@@ -119,7 +115,7 @@ test_that("tbl_survfit(label_header) works", {
       )
   )
   expect_equal(
-    tbl1$table_styling$header |> dplyr::filter(column == "stat_1") |> dplyr::pull(label),
+    tbl2$table_styling$header |> dplyr::filter(column == "stat_1") |> dplyr::pull(label),
     "Time (12)"
   )
 })
@@ -131,7 +127,7 @@ test_that("tbl_survfit(estimate_fun) works", {
   }
 
   expect_silent(
-    tbl2 <- trial |>
+    tbl3 <- trial |>
       tbl_survfit(
         include = trt,
         y = "Surv(ttdeath, death)",
@@ -140,14 +136,14 @@ test_that("tbl_survfit(estimate_fun) works", {
       )
   )
   expect_equal(
-    tbl2$table_body$stat_1,
+    tbl3$table_body$stat_1,
     c(NA, "91%% (85%%, 97%%)", "86%% (80%%, 93%%)")
   )
 })
 
 test_that("tbl_survfit(missing) works", {
   expect_silent(
-    tbl3 <- trial |>
+    tbl4 <- trial |>
       tbl_survfit(
         include = trt,
         y = "Surv(ttdeath, death)",
@@ -156,14 +152,14 @@ test_that("tbl_survfit(missing) works", {
       )
   )
   expect_equal(
-    tbl3$table_body$stat_1,
+    tbl4$table_body$stat_1,
     c(NA, "24 (21, ???)", "21 (18, ???)")
   )
 })
 
 test_that("tbl_survfit(type) works", {
   expect_silent(
-    tbl4 <- trial |>
+    tbl5 <- trial |>
       tbl_survfit(
         include = trt,
         y = "Surv(ttdeath, death)",
@@ -172,12 +168,12 @@ test_that("tbl_survfit(type) works", {
       )
   )
   expect_equal(
-    tbl4$table_body$stat_1,
+    tbl5$table_body$stat_1,
     c(NA, "9.2% (3.3%, 15%)", "14% (6.8%, 20%)")
   )
 
   expect_silent(
-    tbl5 <- trial |>
+    tbl6 <- trial |>
       tbl_survfit(
         include = trt,
         y = "Surv(ttdeath, death)",
@@ -186,7 +182,7 @@ test_that("tbl_survfit(type) works", {
       )
   )
   expect_equal(
-    tbl5$table_body$stat_1,
+    tbl6$table_body$stat_1,
     c(NA, "9.6% (3.3%, 16%)", "15% (7.0%, 23%)")
   )
 })
