@@ -14,11 +14,11 @@ A \code{tbl_regression} object}
 formula update passed to the \code{\link[stats:update]{stats::update()}}.
 This updated formula is used to construct a reduced model, and is
 subsequently passed to \code{\link[stats:anova]{stats::anova()}} to calculate the p-value for the
-group of removed terms.  See the \code{\link[stats:update]{stats::update()}} help file for proper syntax.
-function's \verb{formula.=} argument}
+group of removed terms.  See the \code{\link[stats:update]{stats::update()}} function's \verb{formula.=}
+argument for proper syntax.}
 
 \item{label}{(\code{string})\cr
-Option string argument labeling the combined rows}
+Optional string argument labeling the combined rows}
 
 \item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
