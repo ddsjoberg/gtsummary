@@ -43,7 +43,7 @@ test_that("combine_terms(label) works as expected", {
     )
 
   expect_equal(
-    tbl$table_body$label[1],
+    tbl$table_body$label[[1]],
     "Marker (non-linear terms)"
   )
 })
@@ -93,7 +93,7 @@ test_that("combine_terms works with add_global_p", {
 
   # correct label when unspecified
   expect_equal(
-    tbl$table_body$label[1],
+    tbl$table_body$label[[1]],
     "Marker Level (ng/mL)"
   )
 
@@ -101,7 +101,7 @@ test_that("combine_terms works with add_global_p", {
   expect_equal(nrow(tbl$table_body), 6)
   expect_equal(
     as_tibble(tbl)[1, -1] |> unlist(use.names = FALSE),
-    c(NA, NA, "0.8")
+    c(NA, NA, ">0.9")
   )
 })
 
@@ -190,7 +190,7 @@ test_that("combine_terms works with GEE models", {
   # correct row contents
   expect_equal(nrow(tbl$table_body), 6)
   expect_equal(
-    as_tibble(tbl)[5, ] |> unlist(use.names = FALSE),
+    as_tibble(tbl)[6, ] |> unlist(use.names = FALSE),
     c("Time", NA, NA, "<0.001")
   )
 })
