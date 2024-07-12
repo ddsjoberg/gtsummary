@@ -10,6 +10,8 @@ test_that("modify_caption(caption) works", {
 })
 
 test_that("modify_caption() works with tbl_svysummary()", {
+  skip_if_not(is_pkg_installed(c("survey", "cardx"), reference_pkg = "gtsummary"))
+
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
       tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))|>
@@ -45,12 +47,14 @@ test_that("modify_caption() works with tbl_cross()", {
 })
 
 test_that("modify_caption() works with tbl_regression()", {
+  skip_if_not(is_pkg_installed("broom.helpers", reference_pkg = "gtsummary"))
+
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>
-                 modify_caption("**Adding a caption** N = {N}", text_interpret = "html") |>
+                 modify_caption("**Adding a caption** N = {N} (Event N = {N_event})", text_interpret = "html") |>
                  getElement("table_styling") |>
                  getElement("caption"),
-               "**Adding a caption** N = 183" |>
+               "**Adding a caption** N = 183 (Event N = 58)" |>
                  structure(text_interpret = "html")
   )
 })
