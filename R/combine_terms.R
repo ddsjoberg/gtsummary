@@ -10,10 +10,10 @@
 #'   formula update passed to the [`stats::update()`].
 #'   This updated formula is used to construct a reduced model, and is
 #'   subsequently passed to [stats::anova()] to calculate the p-value for the
-#'   group of removed terms.  See the [`stats::update()`] help file for proper syntax.
-#'   function's `formula.=` argument
+#'   group of removed terms.  See the [`stats::update()`] function's `formula.=`
+#'   argument for proper syntax.
 #' @param label (`string`)\cr
-#'   Option string argument labeling the combined rows
+#'   Optional string argument labeling the combined rows
 #' @param quiet `r lifecycle::badge("deprecated")`
 #' @param ... Additional arguments passed to [stats::anova]
 #'
@@ -52,7 +52,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
   check_not_missing(formula_update)
   check_class(x, "tbl_regression")
   check_class(formula_update, "formula")
-  check_string(label)
+  check_string(label, allow_empty = TRUE)
 
   # perform calculation --------------------------------------------------------
   reduced_model <-
@@ -153,7 +153,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
   if (!is.null(label)) {
     table_body <-
       table_body %>%
-      dplyr::mutate(label = ifelse(.data$collapse_row == TRUE, label, .data$label))
+      dplyr::mutate(label = ifelse(.data$collapse_row == TRUE, .env$label, .data$label))
   }
 
   # writing over the table_body in x -------------------------------------------
