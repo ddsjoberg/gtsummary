@@ -42,17 +42,17 @@ style_number <- function(x,
 
   digits <- rep(digits, length.out = length(x))
 
-  ret <-
-    map2_chr(
-      x, digits,
-      function(.x, .y) {
-        cards::round5(.x * scale, digits = .y) |>
-          format(
-            big.mark = big.mark, decimal.mark = decimal.mark, nsmall = .y,
-            scientific = FALSE, trim = TRUE, ...
-          )
-      }
-    )
+  ret <- rep(NA_character_, length.out = length(x))
+
+  for (d in unique(digits)) {
+    idx <- digits %in% d
+    ret[idx] <-
+      cards::round5(x[idx] * scale, digits = d) |>
+      format(
+        big.mark = big.mark, decimal.mark = decimal.mark, nsmall = d,
+        scientific = FALSE, trim = TRUE, ...
+      )
+  }
   ret[is.na(x)] <- NA_character_
   attributes(ret) <- attributes(unclass(x))
 
