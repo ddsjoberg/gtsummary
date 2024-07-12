@@ -80,8 +80,8 @@ test_that("add_glance_table(x)", {
   expect_snapshot(
     lm(age ~ trt, trial) |>
       tbl_regression() |>
-      add_glance_table(),
-    NA
+      add_glance_table() |>
+      as.data.frame()
   )
 })
 
