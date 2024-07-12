@@ -33,6 +33,45 @@ test_that("Using both times and probs errors correctly", {
   )
 })
 
+test_that("Double check results with ard_survival_survfit", {
+  check_res <- function(x) {
+    y <- tbl_survfit(
+      trial,
+      include = trt,
+      y = "Surv(ttdeath, death)",
+      times = 12,
+      statistic = paste0("{", x, "}")
+    )
+    return(y)
+  }
+
+  check_comp <- function(x) {
+    compare = survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
+      cardx::ard_survival_survfit(times = 12) %>%
+      as.data.frame |>
+      dplyr::filter(stat_name == x) |>
+      dplyr::pull(stat) |>
+      unlist()
+    return(compare)
+  }
+
+
+  expect_equal(
+    check_res("estimate")$table_body$stat_1,
+    c(NA, paste0(round(check_comp("estimate")*100), "%"))
+  )
+
+  expect_equal(
+    check_res("conf.low")$table_body$stat_1,
+    c(NA, paste0(round(check_comp("conf.low")*100), "%"))
+  )
+
+  expect_equal(
+    check_res("conf.high")$table_body$stat_1,
+    c(NA, paste0(round(check_comp("conf.high")*100), "%"))
+  )
+})
+
 test_that("tbl_survfit(statistic) works", {
   expect_silent(
     tbl <- trial |>
