@@ -2,8 +2,7 @@
 #'
 #' The function creates a cross table of categorical variables.
 #'
-#' @param data (`data.frame`)\cr
-#'   A data frame
+#' @param data (`data.frame`)\cr A data frame.
 #' @param row ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Column name in `data` to be used for the rows of cross table.
 #'   Default is the first column in `data`.
