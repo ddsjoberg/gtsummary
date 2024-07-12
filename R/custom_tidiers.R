@@ -39,24 +39,25 @@
 #'   `aod::wald.test()` function.
 #'   Use this tidier with `add_global_p(anova_fun = tidy_wald_test)`
 #'
-#' @inheritParams broom::tidy.glm
 #' @inheritParams tbl_regression
+#' @inheritParams broom::tidy.glm
 #'
+#' @param x (`model`)\cr
+#'   Regression model object
 #' @param pool.args (named `list`)\cr
-#'   named list of arguments passed to `mice::pool()` in
+#'   Named list of arguments passed to `mice::pool()` in
 #'   `pool_and_tidy_mice()`. Default is `NULL`
-#' @param vcov,vcov_args \cr
-#'   arguments passed to `parameters::model_parameters()`.
+#' @param vcov,vcov_args
+#'  Arguments passed to `parameters::model_parameters()`.
 #'  At least one of these arguments **must** be specified.
 #' @param quiet `r lifecycle::badge("deprecated")`
-#' @param ... \cr
-#' arguments passed to method;
+#' @param ...
+#' Arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `parameters::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
 #' - `tidy_robust()`: `parameters::model_parameters(x, ...)`
 #'
-#' @param x a regression model object
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export

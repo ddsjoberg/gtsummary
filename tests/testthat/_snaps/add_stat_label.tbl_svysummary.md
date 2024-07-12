@@ -76,8 +76,8 @@
 # add_stat_label(label) standard use
 
     Code
-      as.data.frame(add_stat_label(tbl_summary(trial, include = c(age, grade, trt),
-      by = trt, type = all_continuous() ~ "continuous2", statistic = all_continuous() ~
+      as.data.frame(add_stat_label(tbl_svysummary(svy_trial, include = c(age, grade,
+        trt), by = trt, type = all_continuous() ~ "continuous2", statistic = all_continuous() ~
         c("{median} ({p25}, {p75})", "{min} - {max}"), ), label = age ~ c(
         "Median (IQR)", "Range")))
     Output
@@ -94,8 +94,8 @@
 # add_stat_label(label) messaging
 
     Code
-      add_stat_label(tbl_summary(trial, include = c(age, trt), by = trt, ), label = age ~
-        letters)
+      add_stat_label(tbl_svysummary(svy_trial, include = c(age, trt), by = trt, ),
+      label = age ~ letters)
     Condition
       Error:
       ! Elements of the `label` argument for variable "age" must be a string of length 1.
@@ -103,9 +103,10 @@
 ---
 
     Code
-      add_stat_label(tbl_summary(trial, include = c(age, grade, trt), by = trt, type = all_continuous() ~
-        "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
-        "{min} - {max}"), ), label = age ~ c("Median (IQR)", "Range", "TOO LONG!"))
+      add_stat_label(tbl_svysummary(svy_trial, include = c(age, grade, trt), by = trt,
+      type = all_continuous() ~ "continuous2", statistic = all_continuous() ~ c(
+        "{median} ({p25}, {p75})", "{min} - {max}"), ), label = age ~ c(
+        "Median (IQR)", "Range", "TOO LONG!"))
     Condition
       Error in `add_stat_label()`:
       ! The element of the `label` argument for variable "age" must be a string of length 2.
@@ -113,20 +114,8 @@
 # add_stat_label() messaging
 
     Code
-      invisible(add_stat_label(add_stat_label(tbl_summary(trial, include = c(age, trt),
-      ))))
+      invisible(add_stat_label(add_stat_label(tbl_svysummary(svy_trial, include = c(
+        age, trt), ))))
     Message
       `add_stat_label()` has previously been applied. Returning gtsummary table unaltered.
-
-# add_stat_label() with tbl_merge()
-
-    Code
-      as.data.frame(tbl1)
-    Output
-           **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102
-      1  Age, Median (Q1, Q3)          46 (37, 60)           48 (39, 56)
-      2 Tumor Response, n (%)             28 (29%)              33 (34%)
-        **Drug A**  \nN = 98 **Drug B**  \nN = 102
-      1          46 (37, 60)           48 (39, 56)
-      2             28 (29%)              33 (34%)
 

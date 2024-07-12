@@ -239,32 +239,32 @@ tbl_summary <- function(data,
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
-  scope_table_body(.list2tb(type, "var_type"), data[include]) |>
-    cards::process_formula_selectors(
-      statistic =
-        case_switch(
-          missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
-          .default = statistic
-        ),
-      include_env = TRUE
-    )
+  cards::process_formula_selectors(
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+    statistic =
+      case_switch(
+        missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
+        .default = statistic
+      ),
+    include_env = TRUE
+  )
 
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
-  scope_table_body(.list2tb(type, "var_type"), data[include]) |>
-    cards::process_formula_selectors(
-      label =
-        case_switch(
-          missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
-          .default = label
-        ),
-      sort =
-        case_switch(
-          missing(sort) ~ get_theme_element("tbl_summary-arg:sort", default = sort),
-          .default = sort
-        )
-    )
+  cards::process_formula_selectors(
+    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    label =
+      case_switch(
+        missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
+        .default = label
+      ),
+    sort =
+      case_switch(
+        missing(sort) ~ get_theme_element("tbl_summary-arg:sort", default = sort),
+        .default = sort
+      )
+  )
 
   cards::process_formula_selectors(
     scope_table_body(.list2tb(type, "var_type"), data[include]),
