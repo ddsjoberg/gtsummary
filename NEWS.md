@@ -98,6 +98,8 @@
      
 * Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`, which has been the preferred method for passing updates for a few years.
 
+* Function `continuous_summary()` has been deprecated immediately. Apologies for the inconvenience of the immeidate deprecation. The way the function originally worked is not compatible with the updated internal structures. In most cases, users can use the `tbl_continuous()` function instead.
+
 * Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
 
 * Global options have been deprecated in gtsummary since v1.3.1 (2020-06-02). They have now been fully removed from the package.
@@ -111,6 +113,8 @@
 * Custom selectors `all_numeric()`, `all_character()`, `all_integer()`, `all_double()`, `all_logical()`, `all_factor()` functions were deprecated in v1.3.6 (2021-01-08), and has now been fully removed from the package. These functions were added before the `tidyselect::where()` function was released, which is a replacement for all these functions.
 
 * The `modify_cols_merge()` functions was renamed to `modify_column_merge()` to match the other function names in v1.6.1 (2022-06-22). The deprecation has been upgraded from a warning to an error.
+
+* There is a change in the `theme_gtsummary_journal("qjecon")` theme for gt output. The journal prefers to present regression coefficients above their standard errors. To achieve this placement in gt table, we were taking advantage of a bug or feature (depending on your point of view) that allowed this placement when a gt table was output to HTML and HTML only. The gt package is now working on a proper solution for linebreaks within a cell, and until that feature is active, we are not using our hack. There is no change for this theme for the other tabling engine packages.
 
 # gtsummary 1.7.2
 

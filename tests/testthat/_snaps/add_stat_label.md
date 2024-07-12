@@ -118,3 +118,15 @@
     Message
       `add_stat_label()` has previously been applied. Returning gtsummary table unaltered.
 
+# add_stat_label() with tbl_merge()
+
+    Code
+      as.data.frame(tbl1)
+    Output
+           **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102
+      1  Age, Median (Q1, Q3)          46 (37, 60)           48 (39, 56)
+      2 Tumor Response, n (%)             28 (29%)              33 (34%)
+        **Drug A**  \nN = 98 **Drug B**  \nN = 102
+      1          46 (37, 60)           48 (39, 56)
+      2             28 (29%)              33 (34%)
+

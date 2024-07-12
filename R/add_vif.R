@@ -1,6 +1,5 @@
 #' Add Variance Inflation Factor
 #'
-#' \lifecycle{maturing}
 #' Add the variance inflation factor (VIF) or
 #' generalized VIF (GVIF) to the regression table.
 #' Function uses `car::vif()` to calculate the VIF.
@@ -8,7 +7,7 @@
 #' @param x `'tbl_regression'` object
 #' @param statistic `"VIF"` (variance inflation factors, for models with no categorical terms) or one of/combination of `"GVIF"` (generalized variance inflation factors), `"aGVIF"` 'adjusted GVIF, i.e. `GVIF^[1/(2*df)]` and/or `"df"` (degrees of freedom).
 #' See `car::vif()` for details.
-#' @param estimate_fun Default is [`style_sigfig()`].
+#' @param estimate_fun Default is `label_style_sigfig(digits = 2)`.
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
@@ -24,12 +23,13 @@
 #'   add_vif(c("aGVIF", "df"))
 add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2)) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(add_vif = match.call()))
+  check_pkg_installed(c("car", "cardx"), reference_pkg = "gtsummary")
 
   # check inputs ---------------------------------------------------------------
   check_not_missing(x)
   check_class(x, "tbl_regression")
   estimate_fun <- as_function(estimate_fun)
+  updated_call_list <- c(x$call_list, list(add_vif = match.call()))
 
   # calculating VIF ------------------------------------------------------------
   ard_vif <-
@@ -57,7 +57,8 @@ add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digit
       names_from = "stat_name",
       values_fn = unlist
     ) |>
-    dplyr::mutate(row_type = "label")
+    dplyr::mutate(row_type = "label") |>
+    dplyr::relocate(any_of(statistic), .after = everything())
 
   x <- x |>
     modify_table_body(

@@ -1,6 +1,6 @@
-skip_if_not(broom.helpers::.assert_package("ggstats", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(is_pkg_installed(c("ggstats", "broom.helpers"), reference_pkg = "gtsummary"))
 
-test_that("plot.tbl_regression() works", {
+test_that("plot.tbl_uvregression() works", {
   plot_obj <- trial %>%
     tbl_uvregression(method = lm, y = marker, include = c("grade")) %>%
     plot()

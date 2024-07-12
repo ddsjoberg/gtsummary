@@ -113,7 +113,8 @@ tbl_svysummary <- function(data,
                 i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
-  data$variable <- .drop_missing_by_obs(data$variable, by = by) # styler: off
+
+  data$variables <- .drop_missing_by_obs(data$variables, by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
 
 
@@ -245,6 +246,7 @@ tbl_svysummary <- function(data,
     data = as.data.frame(data), label = label, statistic = statistic,
     digits = digits, type = type, value = value, sort = sort
   )
+  .check_statistic_type_agreement(statistic, type)
 
   # sort requested columns by frequency
   data$variables <- .sort_data_infreq(data$variables, sort)
@@ -259,25 +261,33 @@ tbl_svysummary <- function(data,
   variables_continuous <- type |> keep(~.x %in% c("continuous", "continuous2")) |> names()
   variables_categorical <- type |> keep(~.x %in% "categorical") |> names()
   variables_dichotomous <- type |> keep(~.x %in% "dichotomous") |> names()
+  statistic_continuous <-
+    statistic[variables_continuous] |>
+    lapply(.extract_glue_elements) |>
+    map(~.x |> setdiff(c("N_obs", "N_miss", "p_miss", "N_nonmiss", "p_nonmiss", "N_obs_unweighted",
+                         "N_miss_unweighted", "p_miss_unweighted", "N_nonmiss_unweighted", "p_nonmiss_unweighted"))) |>
+    compact()
+  # if a user only requests missingness stats, there are no "continuous" stats to calculate
+  variables_continuous <- intersect(variables_continuous, names(statistic_continuous))
 
   cards <-
     cards::bind_ard(
       # attributes for summary columns
-      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      cardx::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       # tabulate missing information
-      cards::ard_missing(data,
+      cardx::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
                          fmt_fn = digits,
                          stat_label = ~ default_stat_labels()),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
-        cards::ard_categorical(data,
+        cardx::ard_categorical(data,
                                variables = all_of(by),
                                stat_label = ~ default_stat_labels())
       },
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cardx::ard_categorical(
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
@@ -286,21 +296,21 @@ tbl_svysummary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cardx::ard_dichotomous(
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
         fmt_fn = digits[variables_dichotomous],
         denominator = percent,
-        value = value,
+        value = value[variables_dichotomous],
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cardx::ard_continuous(
         data,
         by = all_of(by),
         variables = all_of(variables_continuous),
-        statistic = statistic[variables_continuous] |> lapply(.extract_glue_elements),
+        statistic = statistic_continuous,
         fmt_fn = digits[variables_continuous],
         stat_label = ~ default_stat_labels()
       )

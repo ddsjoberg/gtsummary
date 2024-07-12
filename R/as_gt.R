@@ -32,10 +32,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
-  # merging column specified in `x$table_styling$cols_merge` -------------------
-  # UPDATE THIS WHEN `gt::cols_merge(rows=)` argument is added!
-  x <- .table_styling_cols_merge(x)
-
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .table_styling_expr_to_row_number(x)
 
@@ -77,6 +73,14 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
 table_styling_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
+  # preparation ----------------------------------------------------------------
+  # in {gt} v0.11.0, there is an issue applying `gt::md()` to an empty string, e.g. `gt::md("")`
+  # in those cases, changing the interpreting function to `identity()` (https://github.com/rstudio/gt/issues/1769)
+  x$table_styling$header <- x$table_styling$header |>
+    dplyr::mutate(
+      interpret_label = ifelse(.data$label == "", "identity", .data$interpret_label)
+    )
+
   # gt -------------------------------------------------------------------------
   groupname_col <-
     switch("groupname_col" %in% x$table_styling$header$column,
@@ -113,6 +117,29 @@ table_styling_to_gt_calls <- function(x, ...) {
         ))
       )
     )
+
+  # cols_merge -----------------------------------------------------------------
+  df_cols_merge <-
+    x$table_styling$cols_merge |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      columns = .extract_glue_elements(.data$pattern) |> list(),
+      pattern_cols_merge = .pattern_to_cols_merge_pattern(.data$pattern, .data$columns)
+    ) |>
+    dplyr::ungroup()
+
+  gt_calls[["cols_merge"]] <-
+    map(
+      seq_len(nrow(x$table_styling$cols_merge)),
+      ~ expr(gt::cols_merge(
+        columns = all_of(!!df_cols_merge$columns[[.x]]),
+        hide_columns = character(0L),
+        rows = !!df_cols_merge$rows[[.x]],
+        pattern = !!df_cols_merge$pattern_cols_merge[.x]
+      ))
+    )
+  df_cols_merge <-
+    x$table_styling$cols_merge
 
   # cols_align -----------------------------------------------------------------
   df_cols_align <-
@@ -303,4 +330,18 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # return list of gt expressions
   gt_calls
+}
+
+.pattern_to_cols_merge_pattern <- function(pattern, columns) {
+  cols_merge_pattern <- pattern
+  for (i in seq_along(columns)) {
+    cols_merge_pattern <-
+      str_replace_all(
+        string = cols_merge_pattern,
+        pattern = paste0("{", columns[i], "}"),
+        replacement = paste0("{", i, "}"),
+        fixed = TRUE
+      )
+  }
+  cols_merge_pattern
 }
