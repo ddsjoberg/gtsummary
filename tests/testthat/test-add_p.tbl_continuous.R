@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+
 test_that("add_p.tbl_continuous() works", {
   expect_silent(
     tbl <- trial |>
@@ -33,7 +35,8 @@ test_that("add_p.tbl_continuous(pvalue_fun) works", {
   expect_snapshot(
     trial |>
       tbl_continuous(variable = age, by = trt, include = c(grade, stage)) |>
-      add_p(pvalue_fun = s_ns)
+      add_p(pvalue_fun = s_ns) |>
+      as.data.frame()
   )
 })
 
@@ -44,13 +47,10 @@ test_that("add_p.tbl_continuous(include) works", {
       add_p(include = grade)
   )
 
-  # there should **not** be a p-value calculated for stage
-  named_NA <- NA_real_
-  names(named_NA) <- ""
-
   expect_equal(
     tbl2$table_body |> dplyr::filter(label == "T Stage") |> dplyr::pull(p.value),
-    named_NA
+    NA_real_,
+    ignore_attr = TRUE
   )
 })
 
@@ -71,6 +71,8 @@ test_that("add_p.tbl_continuous(test.args) works", {
 })
 
 test_that("add_p.tbl_continuous(group) works", {
+  skip_if_not(is_pkg_installed("lme4", reference_pkg = "gtsummary"))
+
   expect_silent(
     tbl4 <- trial |>
       tbl_continuous(
