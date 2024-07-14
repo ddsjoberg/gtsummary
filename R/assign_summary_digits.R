@@ -61,7 +61,8 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 
         # if user-passed value is not named, repeat the passed value to the length of 'statistic'
         if (!is_named(digits[[variable]])) {
-          digits[[variable]] <- rep_named(statistic[[variable]], digits[[variable]])
+          if (!is_function(digits[[variable]])) digits[[variable]] <- rep_named(statistic[[variable]], digits[[variable]])
+          else digits[[variable]] <- rep_named(statistic[[variable]], digits[variable])
         }
 
         # convert integers to a proper function
