@@ -136,10 +136,12 @@ all_stat_cols <- function(stat_0 = TRUE) {
 #' ## `scope_header()`
 #'
 #' This function takes information from `.$table_styling$header` and adds it
-#' to `table_body`. Columns that begin with
+#' to `table_body`. Columns that begin with `'modify_selector_'` and the `hide`
+#' column.
 #'
 #' @param table_body a data frame from `.$table_body`
 #' @param data an optional data frame the attributes will be added to
+#' @param header the header data frame from `.$table_styling$header`
 #'
 #' @return a data frame
 #' @name scoping_gtsummary
@@ -197,11 +199,8 @@ scope_header <- function(table_body, header = NULL) {
   if (is_empty(header)) return(table_body) # styler: off
 
   header <- header |>
-    dplyr::select("column", starts_with("modify_selector_")) |>
+    dplyr::select("column", "hide", starts_with("modify_selector_")) |>
     dplyr::rename_with(.fn = ~str_remove(.x, "^modify_selector_"), .cols = starts_with("modify_selector_"))
-
-  # if there are not additional scoping columns, return table_body
-  if (identical(names(header), "header")) return(table_body) # styler: off
 
   # add information as attributes to table_body
   for (modify_selector_column in names(header)[-1]) {

@@ -14,6 +14,8 @@ scope_header(table_body, header = NULL)
 \item{table_body}{a data frame from \code{.$table_body}}
 
 \item{data}{an optional data frame the attributes will be added to}
+
+\item{header}{the header data frame from \code{.$table_styling$header}}
 }
 \value{
 a data frame
@@ -37,7 +39,8 @@ That attribute is then used in a selector like \code{all_continuous()}.
 \subsection{\code{scope_header()}}{
 
 This function takes information from \code{.$table_styling$header} and adds it
-to \code{table_body}. Columns that begin with
+to \code{table_body}. Columns that begin with \code{'modify_selector_'} and the \code{hide}
+column.
 }
 }
 \examples{
