@@ -21,7 +21,8 @@ scope_header()
 
 
 This function takes information from .$table_styling$header and adds it
-to table_body. Columns that begin with
+to table_body. Columns that begin with 'modify_selector_' and the hide
+column.
 
 "><meta property="og:description" content="
 
@@ -45,7 +46,8 @@ scope_header()
 
 
 This function takes information from .$table_styling$header and adds it
-to table_body. Columns that begin with
+to table_body. Columns that begin with 'modify_selector_' and the hide
+column.
 
 "><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -115,7 +117,8 @@ That attribute is then used in a selector like <code><a href="select_helpers.htm
 
 
 <p>This function takes information from <code>.$table_styling$header</code> and adds it
-to <code>table_body</code>. Columns that begin with</p>
+to <code>table_body</code>. Columns that begin with <code>'modify_selector_'</code> and the <code>hide</code>
+column.</p>
 </div>
 
     </div>
@@ -137,6 +140,10 @@ to <code>table_body</code>. Columns that begin with</p>
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>an optional data frame the attributes will be added to</p></dd>
+
+
+<dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
+<dd><p>the header data frame from <code>.$table_styling$header</code></p></dd>
 
 </dl></div>
     <div class="section level2">
