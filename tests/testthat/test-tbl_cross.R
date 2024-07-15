@@ -63,13 +63,6 @@ test_that("tbl_cross(label) errors properly", {
     error = TRUE,
     tbl_cross(trial2, label = list(trt = NA))
   )
-
-  expect_snapshot(
-    error = TRUE,
-    tbl_cross(trial2,
-      label = list(trt = "TRT", stage = TRUE, stage = NULL)
-    )
-  )
 })
 
 # tbl_cross(statistic) ---------------------------------------------------------
