@@ -40,7 +40,7 @@ modify_fmt_fun <- function(x, ..., rows = NULL, update, quiet) {
 
   # converting dots arg to a tidyselect list -----------------------------------
   cards::process_formula_selectors(
-    data = x$table_body,
+    data = scope_header(x$table_body, x$table_styling$header),
     dots = dots
   )
   cards::check_list_elements(

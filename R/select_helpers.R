@@ -116,9 +116,11 @@ all_stat_cols <- function(stat_0 = TRUE) {
 }
 
 
-#' Table Body Select Prep
+#' Scoping for Table Body and Header
 #'
 #' @description
+#' ## `scope_table_body()`
+#'
 #' This function uses the information in `.$table_body` and adds them
 #' as attributes to `data` (if passed). Once they've been assigned as
 #' proper gtsummary attributes, gtsummary selectors like `all_continuous()`
@@ -131,17 +133,29 @@ all_stat_cols <- function(stat_0 = TRUE) {
 #' `attr(.$age, 'gtsummary.var_type') <- 'continuous'` is set.
 #' That attribute is then used in a selector like `all_continuous()`.
 #'
+#' ## `scope_header()`
+#'
+#' This function takes information from `.$table_styling$header` and adds it
+#' to `table_body`. Columns that begin with `'modify_selector_'` and the `hide`
+#' column.
+#'
 #' @param table_body a data frame from `.$table_body`
 #' @param data an optional data frame the attributes will be added to
+#' @param header the header data frame from `.$table_styling$header`
 #'
 #' @return a data frame
-#' @export
+#' @name scoping_gtsummary
+#'
 #' @keywords internal
 #'
 #' @examples
 #' tbl <- tbl_summary(trial, include = c(age, grade))
 #'
 #' scope_table_body(tbl$table_body) |> select(all_continuous()) |> names()
+NULL
+
+#' @rdname scoping_gtsummary
+#' @export
 scope_table_body <- function(table_body, data = NULL) {
   if (!"variable" %in% names(table_body)) {
     cli::cli_abort(
@@ -178,6 +192,27 @@ scope_table_body <- function(table_body, data = NULL) {
   data
 }
 
+#' @rdname scoping_gtsummary
+#' @export
+scope_header <- function(table_body, header = NULL) {
+  # if header not passed, return table_body unaltered
+  if (is_empty(header)) return(table_body) # styler: off
+
+  header <- header |>
+    dplyr::select("column", "hide", starts_with("modify_selector_")) |>
+    dplyr::rename_with(.fn = ~str_remove(.x, "^modify_selector_"), .cols = starts_with("modify_selector_"))
+
+  # add information as attributes to table_body
+  for (modify_selector_column in names(header)[-1]) {
+    # cycle over the values where the modify selector column is not NA
+    for (column in header$column[!is.na(header[[modify_selector_column]])]) {
+        attr(table_body[[column]], paste0("gtsummary.", modify_selector_column)) <-
+          header[header$column == column, modify_selector_column][[1]]
+    }
+  }
+
+  table_body
+}
 
 #' Convert character vector to data frame
 #'
