@@ -193,7 +193,9 @@ test_that("tbl_ard_summary(statistic) error messages", {
   )
 })
 
+# regression test for #1765 ----------------------------------------------------
 test_that("tbl_ard_summary() produces warnings when glue selects first stat from a group", {
+
   trial1 <- head(trial)
   stack_ard <- ard_stack(
     data = trial1,
