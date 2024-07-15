@@ -192,3 +192,17 @@ test_that("tbl_ard_summary(statistic) error messages", {
       tbl_ard_summary(by = ARM, statistic = list(AGE = c("{mean}", "{median}")))
   )
 })
+
+test_that("tbl_ard_summary() produces warnings when glue selects first stat from a group", {
+  trial1 <- head(trial)
+  stack_ard <- ard_stack(
+    data = trial1,
+    ard_continuous(variables = c(age)),
+    ard_categorical(variables = c(age)),
+    .attributes = TRUE
+  )
+  expect_warning(
+    tbl_ard_summary(stack_ard, missing = "no"),
+    "Selecting first statistic from a group of identical statistics"
+  )
+})

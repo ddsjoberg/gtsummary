@@ -432,6 +432,10 @@ pier_summary_continuous <- function(cards,
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
     cards::apply_fmt_fn()
 
+  # if (all(cards_no_attr$context != "continuous")) {
+  #   stop("Something wrong")
+  # }
+
   # construct formatted statistics ---------------------------------------------
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
@@ -441,12 +445,21 @@ pier_summary_continuous <- function(cards,
       function(.x, .y) {
         dplyr::mutate(
           .data = .y,
-          stat =
+          stat = {
+            if (NROW(.x) > 1) {
+              warning(
+                "Selecting first statistic from a group of identical statistics (with label ",
+                '"', unique(.x$stat_label), '"',
+                "). This is happening for variable ", '"', .data$variable[1],'"',
+                ". Please control to have used correct type(s)."
+              )
+            }
             glue::glue(
               statistic[[.data$variable[1]]],
               .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
             ) |>
             as.character()
+          }
         )
       }
     ) |>
