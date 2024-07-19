@@ -8,7 +8,7 @@ test_that("add_p.tbl_survfit() works", {
 
   # p-value added to table
   expect_snapshot(
-    tbl |> add_p()
+    tbl |> add_p() |> as.data.frame()
   )
 })
 
@@ -21,7 +21,7 @@ test_that("add_p.tbl_survfit(test) works", {
     ) |>
     add_p(test = "petopeto_gehanwilcoxon")
 
-    compare <- ard_survival_survdiff(Surv(ttdeath, death) ~ trt, trial, rho = 1)
+    compare <- cardx::ard_survival_survdiff(survival::Surv(ttdeath, death) ~ trt, trial, rho = 1)
 
   expect_equal(
     tbl1$table_body$p.value[1],
