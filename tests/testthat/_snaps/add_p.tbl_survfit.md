@@ -11,8 +11,7 @@
 # add_p.tbl_survfit(pvalue_fun) works
 
     Code
-      as.data.frame(add_p(tbl_survfit(trial, include = trt, y = "Surv(ttdeath, death)",
-        times = 12), pvalue_fun = s_ns))
+      as.data.frame(add_p(tbl, pvalue_fun = s_ns))
     Output
             **Characteristic**    **Time 12** **p-value**
       1 Chemotherapy Treatment           <NA>        N.S.

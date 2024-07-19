@@ -31,13 +31,15 @@ test_that("add_p.tbl_survfit(test) works", {
 
 test_that("add_p.tbl_survfit(pvalue_fun) works", {
   s_ns <- function(x) ifelse(x < 0.05, "S", "N.S.")
+  tbl <- trial |>
+    tbl_survfit(
+      include = trt,
+      y = "Surv(ttdeath, death)",
+      times = 12
+    )
+
   expect_snapshot(
-    trial |>
-      tbl_survfit(
-        include = trt,
-        y = "Surv(ttdeath, death)",
-        times = 12
-      )|>
+    tbl |>
       add_p(pvalue_fun = s_ns) |>
       as.data.frame()
   )
