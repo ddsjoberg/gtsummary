@@ -2,7 +2,7 @@ test_that("add_p.tbl_survfit() works", {
   tbl <- trial |>
     tbl_survfit(
       include = trt,
-      y = "Surv(ttdeath, death)",
+      y = "survival::Surv(ttdeath, death)",
       times = 12
     )
 
@@ -16,7 +16,7 @@ test_that("add_p.tbl_survfit(test) works", {
   tbl1 <- trial |>
     tbl_survfit(
       include = trt,
-      y = "Surv(ttdeath, death)",
+      y = "survival::Surv(ttdeath, death)",
       times = 12
     ) |>
     add_p(test = "petopeto_gehanwilcoxon")
@@ -34,7 +34,7 @@ test_that("add_p.tbl_survfit(pvalue_fun) works", {
   tbl <- trial |>
     tbl_survfit(
       include = trt,
-      y = "Surv(ttdeath, death)",
+      y = "survival::Surv(ttdeath, death)",
       times = 12
     )
 
