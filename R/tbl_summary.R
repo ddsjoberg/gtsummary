@@ -6,10 +6,10 @@
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
-#' @param data (`data.frame`)\cr A data frame
+#' @param data (`data.frame`)\cr A data frame.
 #' @param by ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   A single column from `data`. Summary statistics will be stratified by this variable.
-#'   Default is `NULL`
+#'   Default is `NULL`.
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   Used to override default labels in summary table, e.g. `list(age = "Age, years")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
@@ -41,16 +41,16 @@
 #'   - `missing`: must be one of `c("ifany", "no", "always")`
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
-#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`
+#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param sort ([`formula-list-selector`][syntax])\cr
 #'   Specifies sorting to perform for categorical variables.
 #'   Values must be one of `c("alphanumeric", "frequency")`.
-#'   Default is `all_categorical(FALSE) ~ "alphanumeric"`
+#'   Default is `all_categorical(FALSE) ~ "alphanumeric"`.
 #' @param percent (`string`)\cr
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   Variables to include in the summary table. Default is `everything()`
+#'   Variables to include in the summary table. Default is `everything()`.
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
