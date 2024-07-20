@@ -109,7 +109,7 @@ If no label has been set, the column name is used.</p></dd>
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
 Specifies the function to be used to compute the statistics
 (see below for details and examples).
-You can also use dedicated helpers such as <code><a href="continuous_summary.html">continuous_summary()</a></code>, <code><a href="ratio_summary.html">ratio_summary()</a></code>
+You can also use dedicated helpers such as <code><a href="ratio_summary.html">ratio_summary()</a></code>
 or <code><a href="proportion_summary.html">proportion_summary()</a></code>.</p></dd>
 
 
@@ -347,8 +347,8 @@ N = 200</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 <span class="r-in"><span>  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"marker"</span>, <span class="st">"ttdeath"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
-<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span><span class="va">mean_ci</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{mean} [{conf.low}; {conf.high}]"</span></span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">mean_ci</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} [{conf.low}; {conf.high}]"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_overall.html">add_overall</a></span><span class="op">(</span>last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span></span>
@@ -396,8 +396,8 @@ N = 200</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 <span class="r-in"><span>  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grade"</span>, <span class="st">"stage"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
-<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span><span class="va">diff_to_great_mean</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{mean} ({level}, diff: {diff})"</span>,</span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">diff_to_great_mean</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} ({level}, diff: {diff})"</span>,</span></span>
 <span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span></span>

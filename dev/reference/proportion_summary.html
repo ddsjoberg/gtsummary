@@ -136,9 +136,14 @@ and the corresponding method.</p>
 <span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="st">"Class"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="st">"Sex"</span>,</span></span>
 <span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="fu">proportion_summary</span><span class="op">(</span><span class="st">"Survived"</span>, <span class="st">"Yes"</span>, weights <span class="op">=</span> <span class="st">"Freq"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span><span class="st">"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,</span></span>
-<span class="r-in"><span>    digits <span class="op">=</span></span></span>
-<span class="r-in"><span>      <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,</span></span>
+<span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      prop <span class="op">=</span> <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      n <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>      N <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>      conf.low <span class="op">=</span> <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      conf.high <span class="op">=</span> <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>    overall_row_last <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
