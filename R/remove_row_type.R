@@ -51,16 +51,17 @@ remove_row_type <- function(x, variables = everything(),
       variables = "reference_row",
       expr = expr(.data$reference_row %in% TRUE)
     )
-  } else if (type == "header" && inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_survfit"))) {
-    lst_expr <- list(
-      variables = c("var_type", "row_type"),
-      expr = expr(.data$var_type %in% c("categorical", "continuous2") & .data$row_type == "label")
-    )
   } else if (type == "header" && "header_row" %in% names(x$table_body)) {
     lst_expr <- list(
       variables = "header_row",
       expr = expr(.data$header_row %in% TRUE)
     )
+  } else if (type == "header") {
+    lst_expr <- list(
+      variables = c("var_type", "row_type"),
+      expr = expr(.data$var_type %in% c("categorical", "continuous2") & .data$row_type == "label")
+    )
+
   } else if (type == "missing") {
     lst_expr <- list(
       variables = "row_type",
