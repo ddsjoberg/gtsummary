@@ -37,7 +37,7 @@ If no label has been set, the column name is used.}
 \item{stat_fns}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the function to be used to compute the statistics
 (see below for details and examples).
-You can also use dedicated helpers such as \code{\link[=continuous_summary]{continuous_summary()}}, \code{\link[=ratio_summary]{ratio_summary()}}
+You can also use dedicated helpers such as \code{\link[=ratio_summary]{ratio_summary()}}
 or \code{\link[=proportion_summary]{proportion_summary()}}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
@@ -221,8 +221,8 @@ trial |>
   tbl_custom_summary(
     include = c("marker", "ttdeath"),
     by = "trt",
-    stat_fns = ~mean_ci,
-    statistic = ~"{mean} [{conf.low}; {conf.high}]"
+    stat_fns = ~ mean_ci,
+    statistic = ~ "{mean} [{conf.low}; {conf.high}]"
   ) |>
   add_overall(last = TRUE) |>
   modify_footnote(
@@ -248,8 +248,8 @@ trial |>
   tbl_custom_summary(
     include = c("grade", "stage"),
     by = "trt",
-    stat_fns = ~diff_to_great_mean,
-    statistic = ~"{mean} ({level}, diff: {diff})",
+    stat_fns = ~ diff_to_great_mean,
+    statistic = ~ "{mean} ({level}, diff: {diff})",
     overall_row = TRUE
   ) |>
   bold_labels()
