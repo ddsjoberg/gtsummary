@@ -71,7 +71,7 @@ continuous_summary <- function(variable) {
 #'     by = "trt",
 #'     stat_fns = ~ ratio_summary("response", "ttdeath"),
 #'     statistic = ~"{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
-#'     digits = ~ c(3, 2, 2, 0, 0),
+#'     digits = ~ c(ratio = 3, conf.low = 2, conf.high = 2),
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
 #'   ) |>
@@ -150,9 +150,14 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'     include = c("Age", "Class"),
 #'     by = "Sex",
 #'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-#'     statistic = ~"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-#'     digits =
-#'       ~list(label_style_percent(digits=1), 0, 0, label_style_percent(), label_style_percent()),
+#'     statistic = ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
+#'     digits = ~ list(
+#'       prop = label_style_percent(digits = 1),
+#'       n = 0,
+#'       N = 0,
+#'       conf.low = label_style_percent(),
+#'       conf.high = label_style_percent()
+#'     ),
 #'     overall_row = TRUE,
 #'     overall_row_last = TRUE
 #'   ) |>

@@ -67,9 +67,14 @@ Titanic |>
     include = c("Age", "Class"),
     by = "Sex",
     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-    statistic = ~"{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
-    digits =
-      ~list(label_style_percent(digits=1), 0, 0, label_style_percent(), label_style_percent()),
+    statistic = ~ "{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
+    digits = ~ list(
+      prop = label_style_percent(digits = 1),
+      n = 0,
+      N = 0,
+      conf.low = label_style_percent(),
+      conf.high = label_style_percent()
+    ),
     overall_row = TRUE,
     overall_row_last = TRUE
   ) |>

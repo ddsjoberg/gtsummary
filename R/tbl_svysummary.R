@@ -22,7 +22,7 @@
 #' \itemize{
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
-#'   \item `{p}` percentage
+#'   \item `{p}` proportion
 #'   \item `{p.std.error}` standard error of the sample proportion computed with [survey::svymean()]
 #'   \item `{deff}` design effect of the sample proportion computed with [survey::svymean()]
 #'   \item `{n_unweighted}` unweighted frequency

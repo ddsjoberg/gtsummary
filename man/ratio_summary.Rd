@@ -49,7 +49,7 @@ trial |>
     by = "trt",
     stat_fns = ~ ratio_summary("response", "ttdeath"),
     statistic = ~"{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
-    digits = ~ c(3, 2, 2, 0, 0),
+    digits = ~ c(ratio = 3, conf.low = 2, conf.high = 2),
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
   ) |>
