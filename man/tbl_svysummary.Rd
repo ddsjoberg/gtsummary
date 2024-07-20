@@ -96,9 +96,9 @@ For categorical variables the following statistics are available to display.
 \itemize{
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
-\item \code{{p}} percentage
-\item \code{{p.std.error}} standard error of the sample proportion computed with \code{\link[survey:svymean]{survey::svymean()}}
-\item \code{{deff}} design effect of the sample proportion computed with \code{\link[survey:svymean]{survey::svymean()}}
+\item \code{{p}} proportion
+\item \code{{p.std.error}} standard error of the sample proportion computed with \code{\link[survey:surveysummary]{survey::svymean()}}
+\item \code{{deff}} design effect of the sample proportion computed with \code{\link[survey:surveysummary]{survey::svymean()}}
 \item \code{{n_unweighted}} unweighted frequency
 \item \code{{N_unweighted}} unweighted denominator
 \item \code{{p_unweighted}} unweighted formatted percentage
@@ -107,8 +107,8 @@ For continuous variables the following statistics are available to display.
 \itemize{
 \item \code{{median}} median
 \item \code{{mean}} mean
-\item \code{{mean.std.error}} standard error of the sample mean computed with \code{\link[survey:svymean]{survey::svymean()}}
-\item \code{{deff}} design effect of the sample mean computed with \code{\link[survey:svymean]{survey::svymean()}}
+\item \code{{mean.std.error}} standard error of the sample mean computed with \code{\link[survey:surveysummary]{survey::svymean()}}
+\item \code{{deff}} design effect of the sample mean computed with \code{\link[survey:surveysummary]{survey::svymean()}}
 \item \code{{sd}} standard deviation
 \item \code{{var}} variance
 \item \code{{min}} minimum
