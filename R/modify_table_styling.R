@@ -113,7 +113,7 @@ modify_table_styling <- function(x,
 
   # convert column input to string ---------------------------------------------
   cards::process_selectors(
-    data = x$table_body,
+    data = scope_header(x$table_body, x$table_styling$header),
     columns = {{ columns }}
   )
 

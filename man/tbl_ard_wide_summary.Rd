@@ -35,7 +35,7 @@ The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
 with this argument. Default is \code{NULL}. See below for details.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 }
 \value{
 a gtsummary table of class 'tbl_wide_summary'

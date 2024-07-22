@@ -99,7 +99,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
     )
 
 
-  cards::process_formula_selectors(data = x$table_body, dots = dots)
+  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x),
@@ -145,7 +145,7 @@ modify_footnote <- function(x, ..., abbreviation = FALSE,
 
   # process arguments ----------------------------------------------------------
   text_interpret <- rlang::arg_match(text_interpret)
-  cards::process_formula_selectors(data = x$table_body, dots = dots)
+  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x) || is.na(x),
@@ -196,7 +196,7 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
   dots <- rlang::dots_list(...)
   dots <- .deprecate_modify_update_and_quiet_args(dots, update, quiet, calling_fun = "modify_spanning_header")
 
-  cards::process_formula_selectors(data = x$table_body, dots = dots)
+  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x) || is.na(x),

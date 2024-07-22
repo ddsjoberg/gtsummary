@@ -17,7 +17,7 @@ tbl_wide_summary(
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
@@ -49,10 +49,10 @@ with this argument. Default is \code{NULL}. See below for details.}
 \item{sort}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies sorting to perform for categorical variables.
 Values must be one of \code{c("alphanumeric", "frequency")}.
-Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
+Default is \code{all_categorical(FALSE) ~ "alphanumeric"}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 }
 \value{
 a gtsummary table of class 'tbl_wide_summary'
