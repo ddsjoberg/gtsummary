@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.9.9.9009</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,13 +40,16 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.0.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="gtsummary-200">gtsummary 2.0.0<a class="anchor" aria-label="anchor" href="#gtsummary-200"></a></h2><p class="text-muted">CRAN release: 2024-07-23</p>
 <div class="section level4">
-<h4 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h4>
+<h4 id="new-features-2-0-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-2-0-0"></a></h4>
 <ul><li><p>Clearer error messages have been introduced throughout the package. We’ve adopted {cli} for all our messaging to users. Our goal was to return a clear message to users for all scenarios.</p></li>
 <li><p>Added functions <code><a href="../reference/tbl_wide_summary.html">tbl_wide_summary()</a></code> and <code><a href="../reference/tbl_ard_wide_summary.html">tbl_ard_wide_summary()</a></code> for simple summaries across multiple columns.</p></li>
 <li>
@@ -61,7 +64,7 @@
 <li><p>Functions <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> have gained the <code>missing_stat</code> argument, which gives users great control over the statistics presented in the missing row of a summary table.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="internal-storage-development-version">Internal Storage<a class="anchor" aria-label="anchor" href="#internal-storage-development-version"></a></h4>
+<h4 id="internal-storage-2-0-0">Internal Storage<a class="anchor" aria-label="anchor" href="#internal-storage-2-0-0"></a></h4>
 <ul><li>
 <p>Greater consistency has been put in place for all calculated statistics in gtsummary. Previously, each function handled its own calculations and transforming these statistics into data frames that would be printed. Now each function will first prepare an Analysis Result Dataset (ARD), and ARDs are converted to gtsummary structures using bridge functions (prefixed with <code>brdg_*()</code>). The bridge functions will be exported to allow anyone to more easily extend gtsummary functions.</p>
 <ul><li>These ARDs are now used to calculate the summary statistics for nearly every function in gtsummary. The raw summary statistics are saved in <code>.$cards</code>.</li>
@@ -72,11 +75,11 @@
 <li><p>When the gtsummary package was first written, the gt package was not on CRAN and the version of the package that was available did not have the ability to merge columns. Due to these limitations, the <code>"ci"</code> column was added to show the combined <code>"conf.low"</code> and <code>"conf.high"</code> columns. Column merging in both gt and gtsummary packages has matured over the years, and we are now adopting a more modern approach by using these features. As a result, the <code>"ci"</code> column will eventually be dropped from <code>.$table_body</code>. By using column merging, the conf.low and conf.high remain numeric and we can to continue to update how these columns are formatted. Review <code><a href="../reference/deprecated_ci_column.html">?deprecated_ci_column</a></code> for details.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h4>
+<h4 id="documentation-2-0-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-2-0-0"></a></h4>
 <ul><li>The vignettes “FAQ+Gallery”, <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> Tutorial, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> Tutorial, and Quarto+R Markdown have been converted to articles. The URLs on the website have not changed for these pages, but the vignettes are no longer is bundled in the package. This change allows us to provide better documentation, utilizing more tools that don’t need to be included in the package.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="minor-improvements-development-version">Minor Improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-development-version"></a></h4>
+<h4 id="minor-improvements-2-0-0">Minor Improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-2-0-0"></a></h4>
 <ul><li><p>Argument <code>add_p.tbl_summary(adj.vars)</code> was added to more easily add p-values that are adjusted/stratified by other columns in a data frame.</p></li>
 <li>
 <p>Messaging and checks have been improved when tidyselect is invoked in the package, i.e. when the tilda is used to select variables <code>age ~ "Patient Age"</code>. The subset of variables that can be selected is now reduced the variables present in the table. For example, if you have a summary table of patient age (and only patient age), and age is a single column from a data set of many columns and you mis-spell age (<code>aggge ~ "Patient Age"</code>), the error message will now ask if you meant <code>"age"</code> instead of listing every column in the data set.</p>
@@ -96,11 +99,11 @@
 <li><p>The package now uses updated <code><a href="https://rdrr.io/pkg/survey/man/svyquantile.html" class="external-link">survey::svyquantile()</a></code> function to calculate quatiles, which was introduced in survey v4.1</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-2-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-0-0"></a></h4>
 <ul><li>Fix in <code><a href="../reference/add_difference.html">add_difference()</a></code> for paired t-tests. Previously, the sign of the reported difference depended on which group appeared first in the source data. Function has been updated to consistently report the difference as the first group mean minus the second group mean. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1557" class="external-link">#1557</a>)</li>
 </ul></div>
 <div class="section level4">
-<h4 id="lifecycle-changes-development-version">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-development-version"></a></h4>
+<h4 id="lifecycle-changes-2-0-0">Lifecycle changes<a class="anchor" aria-label="anchor" href="#lifecycle-changes-2-0-0"></a></h4>
 <ul><li>
 <p>A couple of small changes to the default summary type in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> have been made.</p>
 <ul><li>If a column is all <code>NA_character_</code> in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, the default summary type is now <code>"continuous"</code>, where previously it was <code>"dichotomous"</code>.</li>
