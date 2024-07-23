@@ -1,3 +1,5 @@
+skip_on_cran()
+
 lmod <- lm(
   age ~ marker + I(marker^2) + stage,
   trial[c("age", "marker", "stage")] |> na.omit()

@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_survfit(time) works", {
   expect_silent(
     trial |>
