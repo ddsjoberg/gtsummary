@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # tbl_summary(data) ------------------------------------------------------------
 test_that("tbl_summary(data)", {
   # creates table when data frame is passed

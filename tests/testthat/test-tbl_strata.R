@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_strata works with standard use", {
   # one stratifier ----
   expect_silent(

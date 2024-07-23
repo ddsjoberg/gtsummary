@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # adding a few basic tests here to ensure we don't break the function with other updates
 test_that("tbl_ard_summary() works", {
   expect_snapshot(

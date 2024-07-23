@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_ard_wide_summary(cards)", {
   # works with standard use
   expect_snapshot(
