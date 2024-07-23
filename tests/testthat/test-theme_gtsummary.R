@@ -1,3 +1,4 @@
+skip_on_cran()
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(

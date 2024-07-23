@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_wide_summary(data)", {
   # works with standard use
   expect_snapshot(

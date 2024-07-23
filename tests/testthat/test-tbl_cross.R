@@ -1,3 +1,5 @@
+skip_on_cran()
+
 trial2 <- rbind(
   NA, # For missing stats
   trial[, c(1, 4)] # Useful for not specifying row and col

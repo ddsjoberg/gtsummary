@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_ard_continuous(cards)", {
   # works with correct specification
   expect_snapshot(

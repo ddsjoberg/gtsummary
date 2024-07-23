@@ -19,7 +19,7 @@
 #' @return a gtsummary object
 #' @export
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' tbl_large <-
 #'   trial |>
 #'   tbl_uvregression(

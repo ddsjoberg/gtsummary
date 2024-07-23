@@ -135,15 +135,6 @@
       Error in `tbl_cross()`:
       ! Error in argument `label` for column "trt": value must be a string.
 
----
-
-    Code
-      tbl_cross(trial2, label = list(trt = "TRT", stage = TRUE, stage = NULL))
-    Condition
-      Error in `tbl_cross()`:
-      ! All values passed in `...` must be strings.
-      i For example, `all_stat_cols() ~ '**Treatment**'`
-
 # tbl_cross(margin) works
 
     Code

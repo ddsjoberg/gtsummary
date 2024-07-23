@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("survey", "cardx"), reference_pkg = "gtsummary"))
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)

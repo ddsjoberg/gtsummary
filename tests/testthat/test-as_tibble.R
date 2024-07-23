@@ -1,3 +1,4 @@
+skip_on_cran()
 t1_summary <- trial |>
   select(trt, age, death) |>
   tbl_summary()
