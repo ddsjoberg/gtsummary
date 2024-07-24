@@ -110,6 +110,8 @@ tbl_survfit <- function(x, ...) {
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.survfit <- function(x, ...) {
+  set_cli_abort_call()
+
   tbl_survfit.list(x = list(x), ...)
 }
 
