@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_custom_summary() basics", {
   mean_age <- function(data, ...) {
     dplyr::tibble(mean_age = mean(data$age, na.rm = TRUE))

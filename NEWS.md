@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+# gtsummary 2.0.0
+
 ### New Features
 
 * Clearer error messages have been introduced throughout the package. We've adopted {cli} for all our messaging to users. Our goal was to return a clear message to users for all scenarios.

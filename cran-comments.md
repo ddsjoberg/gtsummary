@@ -5,7 +5,8 @@
 * win-builder devel
 
 ## R CMD check results
-Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 ## revdepcheck results
 
