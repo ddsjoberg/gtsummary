@@ -22,7 +22,7 @@ test_that("tbl_survfit(probs) works", {
   )
 })
 
-test_that("tbl_survfit(times) works with integer times values", {
+test_that("tbl_survfit works with integer times values", {
   expect_silent(
     trial |>
       tbl_survfit(
