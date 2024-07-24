@@ -1,6 +1,6 @@
 skip_on_cran()
 
-test_that("tbl_survfit(time) works", {
+test_that("tbl_survfit(times) works", {
   expect_silent(
     trial |>
       tbl_survfit(
@@ -18,6 +18,17 @@ test_that("tbl_survfit(probs) works", {
         include = trt,
         y = "Surv(ttdeath, death)",
         probs = 0.5
+      )
+  )
+})
+
+test_that("tbl_survfit works with integer times values", {
+  expect_silent(
+    trial |>
+      tbl_survfit(
+        include = trt,
+        y = "Surv(ttdeath, death)",
+        times = c(6L, 12L)
       )
   )
 })

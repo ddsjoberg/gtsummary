@@ -110,6 +110,8 @@ tbl_survfit <- function(x, ...) {
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.survfit <- function(x, ...) {
+  set_cli_abort_call()
+
   tbl_survfit.list(x = list(x), ...)
 }
 
@@ -194,7 +196,7 @@ tbl_survfit.list <- function(x,
     predicate = \(x) inherits(x, "survfit"),
     error_msg = "The values passed in the {.cls list} from argument {.arg x} must be class {.cls survfit}."
   )
-  check_class(times, "numeric", allow_empty = TRUE)
+  check_class(times, c("numeric", "integer"), allow_empty = TRUE)
   check_class(probs, "numeric", allow_empty = TRUE)
   if (is_empty(times) + is_empty(probs) != 1L) {
     cli::cli_abort(

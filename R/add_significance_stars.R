@@ -82,7 +82,7 @@ add_significance_stars <- function(x,
   # checking inputs ------------------------------------------------------------
   check_not_missing(x)
   check_class(x, "gtsummary")
-  check_class(thresholds, "numeric")
+  check_class(thresholds, c("numeric", "integer"))
   check_range(thresholds, range = c(0, 1), include_bounds = c(TRUE, TRUE))
   check_scalar_logical(hide_ci)
   check_scalar_logical(hide_p)
