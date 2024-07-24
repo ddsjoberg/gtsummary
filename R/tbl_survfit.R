@@ -194,8 +194,8 @@ tbl_survfit.list <- function(x,
     predicate = \(x) inherits(x, "survfit"),
     error_msg = "The values passed in the {.cls list} from argument {.arg x} must be class {.cls survfit}."
   )
-  check_class(times, "numeric", allow_empty = TRUE)
-  check_class(probs, "numeric", allow_empty = TRUE)
+  check_class(times, c("numeric", "integer"), allow_empty = TRUE)
+  check_class(probs, c("numeric", "integer"), allow_empty = TRUE)
   if (is_empty(times) + is_empty(probs) != 1L) {
     cli::cli_abort(
       "Specify one and only one of arguments {.arg times} and {.arg probs}.",
