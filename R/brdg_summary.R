@@ -258,8 +258,13 @@ pier_summary_categorical <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows() |>
-    dplyr::arrange(as.integer(str_remove(!!sym("gts_column"), "^stat_")))
+    dplyr::bind_rows() %>%
+    # this ensures the correct order when there are 10+ groups
+    dplyr::left_join(
+      cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
+      .,
+      by = "gts_column"
+    )
 
   # reshape results for final table --------------------------------------------
   df_result_levels <-
@@ -365,7 +370,13 @@ pier_summary_continuous2 <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() %>%
+    # this ensures the correct order when there are 10+ groups
+    dplyr::left_join(
+      cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
+      .,
+      by = "gts_column"
+    )
 
   # reshape results for final table --------------------------------------------
   df_result_levels <-
@@ -451,8 +462,13 @@ pier_summary_continuous <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows() |>
-    dplyr::arrange(as.integer(str_remove(!!sym("gts_column"), "^stat_")))
+    dplyr::bind_rows() %>%
+    # this ensures the correct order when there are 10+ groups
+    dplyr::left_join(
+      cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
+      .,
+      by = "gts_column"
+    )
 
   # reshape results for final table --------------------------------------------
   df_results <-
