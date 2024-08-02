@@ -258,7 +258,8 @@ pier_summary_categorical <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    dplyr::arrange(as.integer(str_remove(!!sym("gts_column"), "^stat_")))
 
   # reshape results for final table --------------------------------------------
   df_result_levels <-
@@ -450,7 +451,8 @@ pier_summary_continuous <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    dplyr::arrange(as.integer(str_remove(!!sym("gts_column"), "^stat_")))
 
   # reshape results for final table --------------------------------------------
   df_results <-
