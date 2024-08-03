@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Restore functionality of `inline_text.tbl_summary(column)` argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (#1883)
+
 # gtsummary 2.0.0
 
 ### New Features
