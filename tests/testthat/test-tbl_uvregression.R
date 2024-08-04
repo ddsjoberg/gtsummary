@@ -197,6 +197,21 @@ test_that("tbl_uvregression(include)", {
   )
   expect_equal(tbl2$inputs$include, c("age", "marker"))
   expect_snapshot(as.data.frame(tbl2))
+
+  # check that variables in the formula are removed from include
+  expect_equal(
+    trial |>
+      select(age, grade, trt) |>
+      tbl_uvregression(
+        y = age,
+        method = "lm",
+        formula = "{y} ~ {x} + grade"
+      ) |>
+      getElement("table_body") |>
+      getElement("variable") |>
+      unique(),
+    "trt"
+  )
 })
 
 test_that("tbl_uvregression(tidy_fun)", {

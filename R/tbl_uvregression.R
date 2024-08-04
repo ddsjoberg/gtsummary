@@ -165,7 +165,11 @@ tbl_uvregression.data.frame <- function(data,
   # styler: off
   # remove any variables specified in arguments `x`/`y` from include
   include <- include |>
-    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character()))
+    # remove the x/y variable from the list
+    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character(0L))) |>
+    # remove any other columns listed in the formula
+    setdiff(tryCatch(glue::glue_data(.x = list(y = 1, x = 1), formula) |> stats::as.formula() |> all.vars(), error = \(e) character(0L)))
+
   # remove any variables not in include
   show_single_row <-
     if (is_empty(x)) intersect(show_single_row, include)
