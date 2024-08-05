@@ -62,7 +62,7 @@ inline_text.tbl_summary <- function(x,
       dplyr::filter(.data$group1 %in% .env$x$inputs$by) |>
       dplyr::select("gts_column", "group1_level") |>
       unique() |>
-      dplyr::mutate(group1_level = unlist(.data$group1_level)) |>
+      dplyr::mutate(group1_level = unlist(.data$group1_level) |> as.character()) |>
       deframe() |>
       as.list()
 

@@ -89,6 +89,15 @@ test_that("inline_text.tbl_summary", {
       inline_text(variable = grade, level = "I", column = "stat_1"),
     "35 (36%)"
   )
+
+  # ensure inline_text(column) argument works with factor levels
+  expect_equal(
+    trial |>
+      dplyr::mutate(trt = factor(trt)) |>
+      tbl_summary(by = trt, include = age) |>
+      inline_text(variable = "age", column = "Drug A", pattern = "{median}"),
+    "46"
+  )
 })
 
 
