@@ -29,6 +29,7 @@ the majority of \code{inline_text()} calls will continue to execute
 properly.
 }
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl_large <-
   trial |>
   tbl_uvregression(
@@ -43,4 +44,5 @@ tbl_butchered <-
 # size comparison
 object.size(tbl_large) |> format(units = "Mb")
 object.size(tbl_butchered)|> format(units = "Mb")
+\dontshow{\}) # examplesIf}
 }

@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Restore functionality of `inline_text.tbl_summary(column)` argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (#1883)
+
+* Correct the order of the columns when the `tbl_summary(by)` variables has ten or more levels: a regression introduced in v2.0.0. (#1877)
+
+# gtsummary 2.0.0
+
 ### New Features
 
 * Clearer error messages have been introduced throughout the package. We've adopted {cli} for all our messaging to users. Our goal was to return a clear message to users for all scenarios.

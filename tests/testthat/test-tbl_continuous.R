@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_continuous(data)", {
   # testing a typical case
   expect_silent(

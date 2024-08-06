@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_butcher()", {
   tbl <- trial |>
     tbl_uvregression(y = age, method = lm)

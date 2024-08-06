@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_strata works with standard use", {
   # one stratifier ----
   expect_silent(
@@ -265,6 +267,29 @@ test_that("tbl_strata2(.quiet) produces deprecation warning", {
         strata = grade,
         .tbl_fun = ~ .x |> tbl_summary(),
         .quiet = TRUE
+      )
+  )
+})
+
+test_that("tbl_strata works with survey objects", {
+  skip_if_not(is_pkg_installed("survey", reference_pkg = "gtsummary"))
+
+  svy_obj <- survey::svydesign(~1, data = trial, weights = ~1)
+
+  expect_silent(
+    svy_obj |>
+      tbl_strata(
+        strata = grade,
+        ~ tbl_svysummary(.x, by = trt, include = c(stage, trt), percent = "cell")
+      )
+  )
+
+  # error when multiple strata variables selected
+  expect_error(
+    svy_obj |>
+      tbl_strata(
+        strata = c(grade, trt),
+        ~ tbl_svysummary(.x, by = trt, include = c(stage, trt), percent = "cell")
       )
   )
 })

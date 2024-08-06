@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # tbl_summary(data) ------------------------------------------------------------
 test_that("tbl_summary(data)", {
   # creates table when data frame is passed
@@ -18,12 +20,43 @@ test_that("tbl_summary(by)", {
   expect_snapshot(tbl_summary(data = trial, by = trt) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars, by = am) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris, by = Species) |> as.data.frame())
+
+  # ensure the columns appear in the correct order with 10+ by levels
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "continuous") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "continuous2") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "categorical") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "dichotomous", value = x ~ 1) |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
 })
 
 test_that("tbl_summary(by) errors properly", {
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
 })
+
 
 # tbl_summary(label) -----------------------------------------------------------
 test_that("tbl_summary(label)", {

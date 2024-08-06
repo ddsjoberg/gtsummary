@@ -1,3 +1,5 @@
+skip_on_cran()
+
 mod_lm <- lm(hp ~ am, data = mtcars)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <-
