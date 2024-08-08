@@ -10,6 +10,8 @@ Updates to address regressions in the v2.0.0 release:
   
   * The `tbl_survfit(times)` argument accepts integers once again. (#1867)
 
+  * Fix in `tbl_uvregression()` for the `formula` argument when it includes a hard-coded column name, e.g. `formula='{y} ~ {x} + grade'`. The hard-coded variable name is now removed from the `include` argument. This was a regression introduced in the v2.0.0 release. (#1886)
+
 # gtsummary 2.0.0
 
 ### New Features
