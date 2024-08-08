@@ -1,10 +1,16 @@
 # gtsummary (development version)
 
-* Fix in `tbl_uvregression()` for the `formula` argument when it includes a hard-coded column name, e.g. `formula='{y} ~ {x} + grade'`. The hard-coded variable name is now removed from the `include` argument. This was a regression introduced in the v2.0.0 release. (#1886)
+Updates to address regressions in the v2.0.0 release:
 
-* Restore functionality of `inline_text.tbl_summary(column)` argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (#1883)
+  * Restore functionality of `inline_text.tbl_summary(column)` argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (#1883)
+  
+  * Correct the order of the columns when the `tbl_summary(by)` variables has ten or more levels: a regression introduced in v2.0.0. (#1877)
+  
+  * Re-establishing strong link between header by variable levels and those in the table body to ensure correct ordering of columns in `tbl_summary()`.
+  
+  * The `tbl_survfit(times)` argument accepts integers once again. (#1867)
 
-* Correct the order of the columns when the `tbl_summary(by)` variables has ten or more levels: a regression introduced in v2.0.0. (#1877)
+  * Fix in `tbl_uvregression()` for the `formula` argument when it includes a hard-coded column name, e.g. `formula='{y} ~ {x} + grade'`. The hard-coded variable name is now removed from the `include` argument. This was a regression introduced in the v2.0.0 release. (#1886)
 
 # gtsummary 2.0.0
 
