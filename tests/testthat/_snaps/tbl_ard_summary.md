@@ -142,7 +142,7 @@
     Condition
       Error in `tbl_ard_summary()`:
       ! Statistic "not_a_valid_summary_statistic" is not available for variable "AGE".
-      i Select among "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", "N_obs", "max", "min", "p75", "p25", "median", "sd", "mean", and "N".
+      i Select among "N", "mean", "sd", "median", "p25", "p75", "min", "max", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
 
 ---
 
