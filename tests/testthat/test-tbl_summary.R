@@ -607,3 +607,19 @@ test_that("tbl_summary(percent)", {
     tbl_summary(trial, by = trt, include = grade, percent = letters, statistic = ~"{p}%")
   )
 })
+
+test_that("tbl_summary() with hms times", {
+  # originally reported in https://github.com/ddsjoberg/gtsummary/issues/1893
+  skip_if_not_installed("hms")
+  withr::local_package("hms")
+
+  trial2 <- trial |> dplyr::mutate(time_hms = hms(seconds = 15))
+  expect_silent(
+    tbl <- tbl_summary(trial2, by = trt, include = time_hms)
+  )
+  expect_equal(
+    tbl$table_body$label,
+    c("time_hms", "00:00:15")
+  )
+})
+
