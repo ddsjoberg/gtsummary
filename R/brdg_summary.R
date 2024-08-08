@@ -248,7 +248,7 @@ pier_summary_categorical <- function(cards,
                           as.character()
                       }
                     ),
-                  label = unlist(.data$variable_level) |> as.character()
+                  label = map_chr(.data$variable_level, as.character)
                 )
               }
             ) |>
