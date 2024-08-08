@@ -169,6 +169,9 @@ tbl_uvregression.data.frame <- function(data,
     setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character(0L))) |>
     # remove any other columns listed in the formula
     setdiff(tryCatch(glue::glue_data(.x = list(y = 1, x = 1), formula) |> stats::as.formula() |> all.vars(), error = \(e) character(0L)))
+  if (is_empty(include)) {
+    cli::cli_abort("The {.arg include} argument cannot be empty.", call = get_cli_abort_call())
+  }
 
   # remove any variables not in include
   show_single_row <-

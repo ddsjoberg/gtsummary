@@ -212,6 +212,17 @@ test_that("tbl_uvregression(include)", {
       unique(),
     "trt"
   )
+
+  # check we get an error if no variables are selected
+  expect_error(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = "lm",
+      include  = starts_with("xxxx")
+    ),
+    "The `include` argument cannot be empty"
+  )
 })
 
 test_that("tbl_uvregression(tidy_fun)", {
