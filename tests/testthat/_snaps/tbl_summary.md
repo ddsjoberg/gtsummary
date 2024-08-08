@@ -208,7 +208,7 @@
     Condition
       Error in `tbl_summary()`:
       ! Statistic "not_a_statistic" is not available for variable "response".
-      i Select among "p", "N", "n", "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", and "N_obs".
+      i Select among "n", "N", "p", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
 
 ---
 

@@ -208,7 +208,6 @@ pier_summary_categorical <- function(cards,
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
     cards::apply_fmt_fn()
 
-
   # construct formatted statistics ---------------------------------------------
   df_glued <-
     # construct stat columns with glue by grouping variables and primary summary variable
@@ -571,28 +570,34 @@ pier_summary_missing_row <- function(cards,
     df_by_stats_wide <-
       df_by_stats |>
       dplyr::filter(.data$stat_name %in% c("n", "p")) |>
-      dplyr::mutate(
-        .by = "variable_level",
-        column = paste0("stat_", dplyr::cur_group_id())
+      dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
+      dplyr::left_join(
+        cards |>
+          dplyr::select(cards::all_ard_groups(), "gts_column") |>
+          dplyr::filter(!is.na(.data$gts_column)) |>
+          dplyr::distinct() |>
+          dplyr::rename(variable = "group1", variable_level = "group1_level"),
+        by = c("variable", "variable_level")
       ) %>%
       dplyr::bind_rows(
-        dplyr::select(., "variable_level", "column", stat = "variable_level") |>
+        dplyr::select(., "variable_level", "gts_column", stat = "variable_level") |>
           dplyr::mutate(stat_name = "level") |>
           dplyr::distinct()
       ) |>
       tidyr::pivot_wider(
-        id_cols = "column",
+        id_cols = "gts_column",
         names_from = "stat_name",
         values_from = "stat"
       ) |>
       dplyr::mutate(
-        dplyr::across(-"column", unlist),
+        dplyr::across(-"gts_column", unlist),
         dplyr::across("level", as.character)
       ) |>
       dplyr::rename_with(
         function(x) paste0("modify_stat_", x),
-        .cols = -"column"
-      )
+        .cols = -"gts_column"
+      ) |>
+      dplyr::rename(column = "gts_column")
 
     # add the stats here to the header data frame
     x$table_styling$header <-

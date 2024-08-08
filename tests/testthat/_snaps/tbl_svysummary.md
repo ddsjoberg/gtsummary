@@ -166,7 +166,7 @@
     Condition
       Error in `tbl_svysummary()`:
       ! Statistic "not_a_statistic" is not available for variable "response".
-      i Select among "p_unweighted", "N_unweighted", "n_unweighted", "deff", "p.std.error", "p", "N", "n", "p_nonmiss_unweighted", "N_nonmiss_unweighted", "p_miss_unweighted", "N_obs_unweighted", "N_miss_unweighted", "p_miss", "N_miss", "p_nonmiss", "N_obs", and "N_nonmiss".
+      i Select among "N_nonmiss", "N_obs", "p_nonmiss", "N_miss", "p_miss", "N_miss_unweighted", "N_obs_unweighted", "p_miss_unweighted", "N_nonmiss_unweighted", "p_nonmiss_unweighted", "n", "N", "p", "p.std.error", "deff", "n_unweighted", "N_unweighted", and "p_unweighted".
 
 ---
 
