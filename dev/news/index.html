@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+<p>Updates to address regressions in the v2.0.0 release:</p>
 <ul><li><p>Restore functionality of <code>inline_text.tbl_summary(column)</code> argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1883" class="external-link">#1883</a>)</p></li>
 <li><p>Correct the order of the columns when the <code>tbl_summary(by)</code> variables has ten or more levels: a regression introduced in v2.0.0. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1877" class="external-link">#1877</a>)</p></li>
 <li><p>Re-establishing strong link between header by variable levels and those in the table body to ensure correct ordering of columns in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</p></li>
