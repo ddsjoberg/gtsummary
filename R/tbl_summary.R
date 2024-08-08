@@ -316,20 +316,6 @@ tbl_summary <- function(data,
   # construct cards ------------------------------------------------------------
   cards <-
     cards::bind_ard(
-      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
-      cards::ard_missing(data,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fn = digits,
-                         stat_label = ~ default_stat_labels()
-      ),
-      # tabulate by variable for header stats
-      if (!is_empty(by)) {
-        cards::ard_categorical(data,
-                               variables = all_of(by),
-                               stat_label = ~ default_stat_labels()
-        )
-      },
       # tabulate categorical summaries
       cards::ard_categorical(
         scope_table_body(.list2tb(type, "var_type"), data),
@@ -360,8 +346,26 @@ tbl_summary <- function(data,
           ),
         fmt_fn = digits,
         stat_label = ~ default_stat_labels()
+      ),
+      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      cards::ard_missing(data,
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()
+      ),
+      # tabulate by variable for header stats
+      case_switch(
+        !is_empty(by) ~
+          cards::ard_categorical(
+            data,
+            variables = all_of(by),
+            stat_label = ~ default_stat_labels()
+          ),
+        .default = NULL
       )
-    ) |>
+    ) %>%
+    structure(., class = c("card", class(.))) |>
     cards::replace_null_statistic()
 
   # print all warnings and errors that occurred while calculating requested stats
@@ -442,6 +446,7 @@ tbl_summary <- function(data,
         ) |>
           dplyr::select(cards::all_ard_groups(), "variable", "context") |>
           dplyr::distinct() |>
+          dplyr::arrange(unlist(!!sym("group1_level"))) |>
           dplyr::mutate(
             .by = cards::all_ard_groups(),
             gts_column = paste0("stat_", dplyr::cur_group_id())
@@ -478,7 +483,7 @@ tbl_summary <- function(data,
         if (!is_empty(missing_stats)) {
           cli::cli_abort(
             c("Statistic {.val {missing_stats}} is not available for variable {.val {variable}}.",
-              i = "Select among {.val {rev(unique(available_stats))}}."
+              i = "Select among {.val {unique(available_stats)}}."
             ),
             call = get_cli_abort_call()
           )

@@ -23,7 +23,7 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` proportion
-#'   \item `{p.std.error}` standard error of the sample proportion computed with [survey::svymean()]
+#'   \item `{p.std.error}` standard error of the sample proportion (on the 0 to 1 scale) computed with [survey::svymean()]
 #'   \item `{deff}` design effect of the sample proportion computed with [survey::svymean()]
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
