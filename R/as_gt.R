@@ -220,12 +220,6 @@ table_styling_to_gt_calls <- function(x, ...) {
     set_names(x$table_styling$header$column) %>%
     {call2(expr(gt::cols_label), !!!.)} # styler: off
 
-  # remove_line_breaks ---------------------------------------------------------
-  gt_calls[["remove_line_breaks"]] <-
-    expr(
-      gt::cols_label_with(fn = function(x) str_replace_all(x, pattern = "\\n(?!\\\\)", replacement = ""))
-    )
-
   # tab_footnote ---------------------------------------------------------------
   if (nrow(x$table_styling$footnote) == 0 &&
     nrow(x$table_styling$footnote_abbrev) == 0) {
