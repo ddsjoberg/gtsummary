@@ -234,6 +234,21 @@ test_that("tbl_summary(digit)", {
       dplyr::pull(stat_0),
     "22.41 (15.92, 24.00)"
   )
+
+  expect_silent(
+    tbl <-
+      tbl_summary(
+        mtcars,
+        include = carb,
+        type = carb ~ "categorical",
+        digits = carb ~ c(0, 1)
+      )
+  )
+  expect_equal(
+    tbl$table_body$stat_0 |>
+      dplyr::last(),
+    "1 (3.1%)"
+  )
 })
 
 test_that("tbl_summary(digit) errors properly", {
