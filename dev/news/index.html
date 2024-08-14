@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9004</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
 <li>The <code>tbl_survfit(times)</code> argument accepts integers once again. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1867" class="external-link">#1867</a>)</li>
 <li>Fix in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> for the <code>formula</code> argument when it includes a hard-coded column name, e.g. <code>formula='{y} ~ {x} + grade'</code>. The hard-coded variable name is now removed from the <code>include</code> argument. This was a regression introduced in the v2.0.0 release. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1886" class="external-link">#1886</a>)</li>
 <li>Fix for non-Base R classes tabulated with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that would not coerce to character correctly after <code><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1893" class="external-link">#1893</a>)</li>
+<li>Updated the styling function from <code><a href="../reference/style_percent.html">style_percent()</a></code> to <code>style_number(scale=100)</code> when user passes an integer to change the rounding of percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1899" class="external-link">#1899</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="gtsummary-200">gtsummary 2.0.0<a class="anchor" aria-label="anchor" href="#gtsummary-200"></a></h2><p class="text-muted">CRAN release: 2024-07-23</p>
