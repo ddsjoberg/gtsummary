@@ -152,7 +152,7 @@ tidyr::expand_grid(
   cols_width(
     c(HTML, PDF, RTF, Word) ~ px(60),
     c(link) ~ px(110),
-    c(link, fns) ~ px(180)
+    c(link, fns) ~ px(160)
   ) %>%
   gt::tab_source_note(
     source_note = gt_markdown_key %>% as_raw_html() %>% html()
