@@ -8,6 +8,7 @@ Updates to address regressions in the v2.0.0 release:
   * The `tbl_survfit(times)` argument accepts integers once again. (#1867)
   * Fix in `tbl_uvregression()` for the `formula` argument when it includes a hard-coded column name, e.g. `formula='{y} ~ {x} + grade'`. The hard-coded variable name is now removed from the `include` argument. This was a regression introduced in the v2.0.0 release. (#1886)
   * Fix for non-Base R classes tabulated with `tbl_summary()` that would not coerce to character correctly after `unlist()`. (#1893)
+  * Updated the styling function from `style_percent()` to `style_number(scale=100)` when user passes an integer to change the rounding of percentages in `tbl_summary()`. (#1899)
 
 # gtsummary 2.0.0
 
