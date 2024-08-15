@@ -6,9 +6,8 @@
 #' The default function uses `car::Anova()` (via [`cardx::ard_car_anova()`]) to
 #' calculate the p-values.
 #'
-#' Methods for GEE models (created from `geepack::geeglm()`) and completing
-#' risks regression (created from `tidycmprsk::crr()`) return Wald tests calculated
-#' using `aod::wald.test()` (via [`cardx::ard_aod_wald_test()`]). For these methods,
+#' The method for GEE models (created from `geepack::geeglm()`) returns Wald tests calculated
+#' using `aod::wald.test()` (via [`cardx::ard_aod_wald_test()`]). For this method,
 #' the `type` argument is not used.
 #'
 #' @name global_pvalue_fun

@@ -104,13 +104,6 @@ tbl_regression.gam <- function(x, tidy_fun = tidy_gam, ...) {
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.tidycrr <- function(x, tidy_fun = tidycmprsk::tidy, ...) {
-  check_pkg_installed("tidycmprsk", reference_pkg = "gtsummary")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
 tbl_regression.crr <- function(x, ...) {
   cli::cli_inform(
     c("For better summary support, build model with {.fun tidycmprsk::crr}.",
