@@ -15,7 +15,12 @@
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
 #' @param ... Arguments passed on to `gt::gt(...)`
+#'
 #' @return A `gt_tbl` object
+#'
+#' @note
+#' As of 2024-08-15, line breaks (e.g. `'\n'`) do not render properly for PDF output.
+#' For now, these line breaks are stripped when rendering to PDF with Quarto and R markdown.
 #'
 #' @author Daniel D. Sjoberg
 #' @export

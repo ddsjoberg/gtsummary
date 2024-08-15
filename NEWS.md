@@ -18,6 +18,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * Updated the default value of `tbl_ard_summary(missing)` to `"no"`. (#1857)
 
+* Line breaks (i.e. `'\n'`) are now auto-stripped from gt-rendered tables when in an R markdown or Quarto environment. (#1896)
+
 # gtsummary 2.0.0
 
 ### New Features
