@@ -18,7 +18,7 @@
 #'   `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`
+#'   - `missing`: must be one of `c("no", "ifany", "always")`
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`
@@ -61,7 +61,7 @@ tbl_ard_summary <- function(cards,
                               all_categorical() ~ "{n} ({p}%)"
                             ),
                             type = NULL,
-                            missing = c("ifany", "no", "always"),
+                            missing = c("no", "ifany", "always"),
                             missing_text = "Unknown",
                             missing_stat = "{N_miss}",
                             include = everything()) {
