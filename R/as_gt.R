@@ -15,7 +15,13 @@
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
 #' @param ... Arguments passed on to `gt::gt(...)`
+#'
 #' @return A `gt_tbl` object
+#'
+#' @note Updated 15.08.2024: from version `2.0`, `as_gt()` is the default transformation
+#'   for pdf output, but, when using `quarto` or `knitr` engines, pdf table does not show `\n`
+#'   in the column labels correctly. Hence, for now, we remove all newlines from header when
+#'   converting to `gt` for pdf outputs.
 #'
 #' @author Daniel D. Sjoberg
 #' @export

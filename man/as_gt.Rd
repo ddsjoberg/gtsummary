@@ -30,6 +30,12 @@ Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 }
+\note{
+Updated 15.08.2024: from version \code{2.0}, \code{as_gt()} is the default transformation
+for pdf output, but, when using \code{quarto} or \code{knitr} engines, pdf table does not show \verb{\\n}
+in the column labels correctly. Hence, for now, we remove all newlines from header when
+converting to \code{gt} for pdf outputs.
+}
 \examples{
 # Example 1 ----------------------------------
 trial |>
