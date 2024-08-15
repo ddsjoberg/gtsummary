@@ -24,9 +24,8 @@ An S3 generic that serves as the default for \code{add_global_p(anova_fun)}.
 The default function uses \code{car::Anova()} (via \code{\link[cardx:ard_car_anova]{cardx::ard_car_anova()}}) to
 calculate the p-values.
 
-Methods for GEE models (created from \code{geepack::geeglm()}) and completing
-risks regression (created from \code{tidycmprsk::crr()}) return Wald tests calculated
-using \code{aod::wald.test()} (via \code{\link[cardx:ard_aod_wald_test]{cardx::ard_aod_wald_test()}}). For these methods,
+The method for GEE models (created from \code{geepack::geeglm()}) returns Wald tests calculated
+using \code{aod::wald.test()} (via \code{\link[cardx:ard_aod_wald_test]{cardx::ard_aod_wald_test()}}). For this method,
 the \code{type} argument is not used.
 }
 \examples{
