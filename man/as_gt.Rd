@@ -31,10 +31,8 @@ A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 }
 \note{
-Updated 15.08.2024: from version \code{2.0}, \code{as_gt()} is the default transformation
-for pdf output, but, when using \code{quarto} or \code{knitr} engines, pdf table does not show \verb{\\n}
-in the column labels correctly. Hence, for now, we remove all newlines from header when
-converting to \code{gt} for pdf outputs.
+As of 2024-08-15, line breaks (e.g. \code{'\\n'}) do not render properly for PDF output.
+For now, these line breaks are stripped when rendering to PDF with Quarto and R markdown.
 }
 \examples{
 # Example 1 ----------------------------------
