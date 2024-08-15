@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,11 @@
 <li>Fix in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> for the <code>formula</code> argument when it includes a hard-coded column name, e.g. <code>formula='{y} ~ {x} + grade'</code>. The hard-coded variable name is now removed from the <code>include</code> argument. This was a regression introduced in the v2.0.0 release. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1886" class="external-link">#1886</a>)</li>
 <li>Fix for non-Base R classes tabulated with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that would not coerce to character correctly after <code><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1893" class="external-link">#1893</a>)</li>
 <li>Updated the styling function from <code><a href="../reference/style_percent.html">style_percent()</a></code> to <code>style_number(scale=100)</code> when user passes an integer to change the rounding of percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1899" class="external-link">#1899</a>)</li>
+</ul><div class="section level4">
+<h4 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h4>
+<ul><li>The {tidycmprsk} dependency has been removed and the <code>tbl_regression.tidycrr()</code> method has been migrated to the {tidycmprsk} package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1865" class="external-link">#1865</a>)</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="gtsummary-200">gtsummary 2.0.0<a class="anchor" aria-label="anchor" href="#gtsummary-200"></a></h2><p class="text-muted">CRAN release: 2024-07-23</p>
 <div class="section level4">
@@ -334,7 +338,7 @@
 <div class="section level4">
 <h4 id="new-functions-1-6-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-6-0"></a></h4>
 <ul><li><p>New function <code><a href="../reference/as_hux_table.html">as_hux_xlsx()</a></code> added to export a formatted {gtsummary} table directly to Excel.</p></li>
-<li><p>Added a <code><a href="../reference/tbl_regression_methods.html">tbl_regression.tidycrr()</a></code> method to summarize competing risks regression models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1169" class="external-link">#1169</a>)</p></li>
+<li><p>Added a <code>tbl_regression.tidycrr()</code> method to summarize competing risks regression models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1169" class="external-link">#1169</a>)</p></li>
 <li><p>Added tidier <code><a href="../reference/custom_tidiers.html">tidy_wald_test()</a></code>, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code> and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> to obtain the variance-covariance matrix and the coef vector.</p></li>
 <li><p>Adding functions <code><a href="../reference/set_gtsummary_theme.html">get_gtsummary_theme()</a></code> and <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code> for extracting the current gtsummary theme and running code with a temporarily theme.</p></li>
 <li><p>Added new function <code><a href="../reference/modify_column_indent.html">modify_column_indent()</a></code>–a wrapper for <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>–to make it easier to add and remove indentation in a table.</p></li>
