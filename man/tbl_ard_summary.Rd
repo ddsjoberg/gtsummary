@@ -10,7 +10,7 @@ tbl_ard_summary(
   statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~
     "{n} ({p}\%)"),
   type = NULL,
-  missing = c("ifany", "no", "always"),
+  missing = c("no", "ifany", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
   include = everything()
@@ -39,7 +39,7 @@ categorical and dichotomous cannot be modified.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
-\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
+\item \code{missing}: must be one of \code{c("no", "ifany", "always")}
 \item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}

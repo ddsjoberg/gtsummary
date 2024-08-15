@@ -16,6 +16,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The class of `tbl_split()` objects has been updated from `"tbl_split"` to `c("tbl_split", "list")`. (#1854)
 
+* Updated the default value of `tbl_ard_summary(missing)` to `"no"`. (#1857)
+
 # gtsummary 2.0.0
 
 ### New Features
