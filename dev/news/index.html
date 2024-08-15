@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,16 +46,17 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
 <p>Updates to address regressions in the v2.0.0 release:</p>
-<ul><li>Restore functionality of <code>inline_text.tbl_summary(column)</code> argument to specify a by level when the by variable is a factor: a regression introduced in v2.0.0. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1883" class="external-link">#1883</a>)</li>
-<li>Correct the order of the columns when the <code>tbl_summary(by)</code> variables has ten or more levels: a regression introduced in v2.0.0. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1877" class="external-link">#1877</a>)</li>
+<ul><li>Restore functionality of <code>inline_text.tbl_summary(column)</code> argument to specify a by level when the by variable is a factor. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1883" class="external-link">#1883</a>)</li>
+<li>Correct the order of the columns when the <code>tbl_summary(by)</code> variables has ten or more levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1877" class="external-link">#1877</a>)</li>
 <li>Re-establishing strong link between header by variable levels and those in the table body to ensure correct ordering of columns in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</li>
 <li>The <code>tbl_survfit(times)</code> argument accepts integers once again. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1867" class="external-link">#1867</a>)</li>
-<li>Fix in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> for the <code>formula</code> argument when it includes a hard-coded column name, e.g. <code>formula='{y} ~ {x} + grade'</code>. The hard-coded variable name is now removed from the <code>include</code> argument. This was a regression introduced in the v2.0.0 release. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1886" class="external-link">#1886</a>)</li>
+<li>Fix in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> for the <code>formula</code> argument when it includes a hard-coded column name, e.g. <code>formula='{y} ~ {x} + grade'</code>. The hard-coded variable name is now removed from the <code>include</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1886" class="external-link">#1886</a>)</li>
 <li>Fix for non-Base R classes tabulated with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that would not coerce to character correctly after <code><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1893" class="external-link">#1893</a>)</li>
 <li>Updated the styling function from <code><a href="../reference/style_percent.html">style_percent()</a></code> to <code>style_number(scale=100)</code> when user passes an integer to change the rounding of percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1899" class="external-link">#1899</a>)</li>
 </ul><div class="section level4">
-<h4 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h4>
-<ul><li>The {tidycmprsk} dependency has been removed and the <code>tbl_regression.tidycrr()</code> method has been migrated to the {tidycmprsk} package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1865" class="external-link">#1865</a>)</li>
+<h4 id="other-updates-development-version">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<ul><li><p>The {tidycmprsk} dependency has been removed and the <code>tbl_regression.tidycrr()</code> method has been migrated to the {tidycmprsk} package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1865" class="external-link">#1865</a>)</p></li>
+<li><p>The class of <code><a href="../reference/tbl_split.html">tbl_split()</a></code> objects has been updated from <code>"tbl_split"</code> to <code>c("tbl_split", "list")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1854" class="external-link">#1854</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
