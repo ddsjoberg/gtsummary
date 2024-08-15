@@ -56,7 +56,7 @@ tbl_split.gtsummary <- function(x, variables, ...) {
         c(utils::modifyList(x, val = list(table_body = NULL))) %>% # add the other parts of the gtsummary table
         `class<-`(class(x)) # add original class from `x`
     ) %>%
-    `class<-`("tbl_split") # assign class (can't assign gtsummary because of print definitions)
+    `class<-`(c("tbl_split", "list")) # assign class (can't assign gtsummary because of print definitions)
 }
 
 #' @export
