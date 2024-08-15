@@ -10,7 +10,7 @@ Updates to address regressions in the v2.0.0 release:
   * Fix for non-Base R classes tabulated with `tbl_summary()` that would not coerce to character correctly after `unlist()`. (#1893)
   * Updated the styling function from `style_percent()` to `style_number(scale=100)` when user passes an integer to change the rounding of percentages in `tbl_summary()`. (#1899)
   
-### Other changes
+### Other updates
 
 * The {tidycmprsk} dependency has been removed and the `tbl_regression.tidycrr()` method has been migrated to the {tidycmprsk} package. (#1865)
 
