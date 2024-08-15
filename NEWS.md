@@ -14,6 +14,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The {tidycmprsk} dependency has been removed and the `tbl_regression.tidycrr()` method has been migrated to the {tidycmprsk} package. (#1865)
 
+* The class of `tbl_split()` objects has been updated from `"tbl_split"` to `c("tbl_split", "list")`. (#1854)
+
 # gtsummary 2.0.0
 
 ### New Features
