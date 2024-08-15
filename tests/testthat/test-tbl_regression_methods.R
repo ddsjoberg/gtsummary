@@ -79,19 +79,9 @@ test_that("tbl_regression.gam()", {
   )
 })
 
-test_that("tbl_regression.tidycrr()", {
-  skip_if_not(is_pkg_installed("tidycmprsk", reference_pkg = "gtsummary"))
-  withr::local_package("tidycmprsk")
-
-  expect_snapshot(
-    crr(Surv(ttdeath, death_cr) ~ age + grade, tidycmprsk::trial) |>
-      tbl_regression() |>
-      as.data.frame()
-  )
-})
 
 test_that("tbl_regression.crr()", {
-  skip_if_not(is_pkg_installed("tidycmprsk", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("cmprsk", reference_pkg = "gtsummary"))
   withr::local_package("cmprsk")
   withr::local_seed(10)
 
