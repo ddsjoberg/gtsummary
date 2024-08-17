@@ -159,6 +159,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(age, grade, response) |>
@@ -182,6 +183,7 @@ trial |>
     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
     missing = "no"
   )
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial
