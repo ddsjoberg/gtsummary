@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+Updates to address regressions in the v2.0.0 release:
+
+  * The default `add_glance_*(glance_fun)` function fixed for `mice` models with class `'mira'`. (#1912)
+  
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
