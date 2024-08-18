@@ -81,7 +81,7 @@ add_glance_table <- function(x,
   check_class(x, "tbl_regression")
 
   # use a modified glance for mice models --------------------------------------
-  if (missing(glance_fun) && inherits(x$inputs$x, "mice")) {
+  if (missing(glance_fun) && inherits(x$inputs$x, "mira")) {
     check_pkg_installed("mice", reference_pkg = "gtsummary")
     glance_fun <- \(x) broom::glance(mice::pool(x))
   }
@@ -145,7 +145,7 @@ add_glance_source_note <- function(x,
   check_string(sep2)
 
   # use a modified glance for mice models --------------------------------------
-  if (missing(glance_fun) && inherits(x$inputs$x, "mice")) {
+  if (missing(glance_fun) && inherits(x$inputs$x, "mira")) {
     check_pkg_installed("mice", reference_pkg = "gtsummary")
     glance_fun <- \(x) broom::glance(mice::pool(x))
   }
