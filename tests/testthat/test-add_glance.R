@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx"), reference_pkg = "gtsummary"))
+
 # add_glance_source_note() -----------------------------------------------------
 test_that("add_glance_source_note(x)", {
   expect_equal(
@@ -119,6 +121,43 @@ test_that("add_glance_table(glance_fun)", {
       tbl_regression() |>
       add_glance_table(include = 1:3) |>
       as.data.frame()
+  )
+})
+
+test_that("add_glance_table(glance_fun) for mice models", {
+  skip_if_not(is_pkg_installed("mice", reference_pkg = "gtsummary"))
+
+
+  tbl <- mice::mice(mice::nhanes2, print = FALSE, maxit = 1) |>
+    with(lm(bmi ~ age)) |>
+    tbl_regression()
+  glance <- tbl$inputs$x |>
+    mice::pool() |>
+    broom::glance() |>
+    dplyr::mutate(
+      across(c(nimp, nobs), label_style_number()),
+      across(c(r.squared, adj.r.squared), label_style_number(digits = 3))
+    ) |>
+    as.list()
+
+  expect_equal(
+    tbl |>
+      add_glance_table() |>
+      as_tibble(col_labels = FALSE) |>
+      getElement("estimate") %>%
+      `[`(5:8),
+    unlist(unname(glance))
+  )
+
+  expect_equal(
+    tbl |>
+      add_glance_source_note(
+        label = names(glance) |> as.list() |> setNames(names(glance))
+      ) |>
+      getElement("table_styling") |>
+      getElement("source_note"),
+    imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
+    ignore_attr = TRUE
   )
 })
 
