@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,11 +40,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.0.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.1" id="gtsummary-201">gtsummary 2.0.1<a class="anchor" aria-label="anchor" href="#gtsummary-201"></a></h2><p class="text-muted">CRAN release: 2024-08-17</p>
 <p>Updates to address regressions in the v2.0.0 release:</p>
 <ul><li>Restore functionality of <code>inline_text.tbl_summary(column)</code> argument to specify a by level when the by variable is a factor. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1883" class="external-link">#1883</a>)</li>
 <li>Correct the order of the columns when the <code>tbl_summary(by)</code> variables has ten or more levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1877" class="external-link">#1877</a>)</li>
@@ -54,7 +57,7 @@
 <li>Fix for non-Base R classes tabulated with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that would not coerce to character correctly after <code><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1893" class="external-link">#1893</a>)</li>
 <li>Updated the styling function from <code><a href="../reference/style_percent.html">style_percent()</a></code> to <code>style_number(scale=100)</code> when user passes an integer to change the rounding of percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1899" class="external-link">#1899</a>)</li>
 </ul><div class="section level4">
-<h4 id="other-updates-development-version">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<h4 id="other-updates-2-0-1">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-2-0-1"></a></h4>
 <ul><li><p>The {tidycmprsk} dependency has been removed and the <code>tbl_regression.tidycrr()</code> method has been migrated to the {tidycmprsk} package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1865" class="external-link">#1865</a>)</p></li>
 <li><p>The class of <code><a href="../reference/tbl_split.html">tbl_split()</a></code> objects has been updated from <code>"tbl_split"</code> to <code>c("tbl_split", "list")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1854" class="external-link">#1854</a>)</p></li>
 <li><p>Updated the default value of <code>tbl_ard_summary(missing)</code> to <code>"no"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1857" class="external-link">#1857</a>)</p></li>
