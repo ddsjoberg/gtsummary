@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
 
