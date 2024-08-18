@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -3214,28 +3214,28 @@ details.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">cards</span><span class="op">[[</span><span class="st">"tbl_summary"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 75 x 12</span></span></span>
-<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name stat_label       stat</span></span>
-<span><span class="co">#&gt; 1    &lt;NA&gt;                   age                    label  Variable…        Age</span></span>
-<span><span class="co">#&gt; 2    &lt;NA&gt;                   age                    class  Variable…    numeric</span></span>
-<span><span class="co">#&gt; 3    &lt;NA&gt;                 grade                   levels     levels I, II, III</span></span>
-<span><span class="co">#&gt; 4    &lt;NA&gt;                 grade                    class  Variable…     factor</span></span>
-<span><span class="co">#&gt; 5    &lt;NA&gt;                 grade                    label  Variable…      Grade</span></span>
-<span><span class="co">#&gt; 6    &lt;NA&gt;              response                    label  Variable…  Tumor Re…</span></span>
-<span><span class="co">#&gt; 7    &lt;NA&gt;              response                    class  Variable…    integer</span></span>
-<span><span class="co">#&gt; 8    &lt;NA&gt;                   trt                    label  Variable…  Chemothe…</span></span>
-<span><span class="co">#&gt; 9    &lt;NA&gt;                   trt                    class  Variable…  character</span></span>
-<span><span class="co">#&gt; 10    trt       Drug A      age                    N_obs   No. obs.         98</span></span>
+<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name stat_label  stat</span></span>
+<span><span class="co">#&gt; 1     trt       Drug A    grade              I         n          n    35</span></span>
+<span><span class="co">#&gt; 2     trt       Drug A    grade              I         N          N    98</span></span>
+<span><span class="co">#&gt; 3     trt       Drug A    grade              I         p          % 0.357</span></span>
+<span><span class="co">#&gt; 4     trt       Drug B    grade              I         n          n    33</span></span>
+<span><span class="co">#&gt; 5     trt       Drug B    grade              I         N          N   102</span></span>
+<span><span class="co">#&gt; 6     trt       Drug B    grade              I         p          % 0.324</span></span>
+<span><span class="co">#&gt; 7     trt       Drug A    grade             II         n          n    32</span></span>
+<span><span class="co">#&gt; 8     trt       Drug A    grade             II         N          N    98</span></span>
+<span><span class="co">#&gt; 9     trt       Drug A    grade             II         p          % 0.327</span></span>
+<span><span class="co">#&gt; 10    trt       Drug B    grade             II         n          n    36</span></span>
 <span><span class="co">#&gt;    gts_column</span></span>
-<span><span class="co">#&gt; 1        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 8        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 9        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 10     stat_1</span></span>
+<span><span class="co">#&gt; 1      stat_1</span></span>
+<span><span class="co">#&gt; 2      stat_1</span></span>
+<span><span class="co">#&gt; 3      stat_1</span></span>
+<span><span class="co">#&gt; 4      stat_2</span></span>
+<span><span class="co">#&gt; 5      stat_2</span></span>
+<span><span class="co">#&gt; 6      stat_2</span></span>
+<span><span class="co">#&gt; 7      stat_1</span></span>
+<span><span class="co">#&gt; 8      stat_1</span></span>
+<span><span class="co">#&gt; 9      stat_1</span></span>
+<span><span class="co">#&gt; 10     stat_2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">65 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">4 more variables: context, fmt_fn, warning, error</span></span></span></code></pre></div>
