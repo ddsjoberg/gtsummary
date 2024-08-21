@@ -157,7 +157,7 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   # if `by` is missing, then remove Ns since they are not in the ARD by default
   if (is_empty(by)) {
     x$table_styling$header <- x$table_styling$header |>
-      dplyr::mutate(across(c("modify_stat_N", "modify_stat_n"), ~NA_integer_))
+      dplyr::mutate(modify_stat_N = NA_integer_, modify_stat_n = NA_integer_, modify_stat_p = NA_real_)
   }
 
   # adding styling -------------------------------------------------------------
