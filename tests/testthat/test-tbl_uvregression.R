@@ -81,7 +81,7 @@ test_that("tbl_uvregression(method.args)", {
   )
 
   # check with NSE argument
-  expect_silent(
+  expect_error(
     tbl2 <-
       tbl_uvregression(
         trial,
@@ -89,7 +89,8 @@ test_that("tbl_uvregression(method.args)", {
         method = survival::coxph,
         method.args = list(id = response),
         include = c(age, trt)
-      )
+      ),
+    NA
   )
   # check models are the same
   expect_equal(
