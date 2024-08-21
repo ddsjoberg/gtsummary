@@ -638,3 +638,18 @@ test_that("tbl_summary() with hms times", {
   )
 })
 
+# addressing issue #1915
+test_that("tbl_summary() edge case of warning condition printing", {
+ expect_snapshot(
+   dplyr::tibble(
+     by_var = c(rep("cohort_1", 3), rep("cohort_2", 3)) |> as.factor(),
+     continuous_var = c(NA, NA, NA, 1, 2, 3)
+   ) |>
+     tbl_summary(
+       by = by_var,
+       type = continuous_var ~ "continuous",
+       statistic = continuous_var ~ "{min}, {max}"
+     ) |>
+     as_kable()
+ )
+})
