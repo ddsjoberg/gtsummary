@@ -57,6 +57,9 @@ brdg_continuous <- function(cards, by = NULL, statistic, include, variable) {
         if (.y$context %in% "attributes" || identical(.x$variable[1], by)) {
           return(dplyr::bind_cols(.x, .y))
         }
+        if (.y$context %in% "total_n") {
+          return(dplyr::bind_cols(.x, .y))
+        }
 
         .x |>
           dplyr::select(-cards::all_ard_variables()) %>%

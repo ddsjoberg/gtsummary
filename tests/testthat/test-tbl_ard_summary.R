@@ -21,13 +21,12 @@ test_that("tbl_ard_summary() works", {
       cards::ard_categorical(variables = "AGEGR1"),
       cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
-      .missing = TRUE
+      .missing = TRUE,
+      .total_n = TRUE
     ) |>
       tbl_ard_summary() |>
       as.data.frame()
   )
-
-
 })
 
 
@@ -121,7 +120,8 @@ test_that("tbl_ard_summary(statistic) argument works", {
       cards::ard_categorical(variables = "AGEGR1"),
       cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
-      .missing = TRUE
+      .missing = TRUE,
+      .total_n = TRUE
     )
 
   expect_snapshot(

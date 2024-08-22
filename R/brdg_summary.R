@@ -542,35 +542,26 @@ pier_summary_missing_row <- function(cards,
 
 .add_table_styling_stats <- function(x, cards, by) {
   if (is_empty(by)) {
+    x$table_styling$header$modify_stat_level <- translate_string("Overall")
+
     # add overall N to x$table_styling$header
-    if ("N_obs" %in% unique(cards$stat_name)) {
+    lst_total_n <- cards::get_ard_statistics(cards, .data$variable %in% "..ard_total_n..")
+    if ("N" %in% names(lst_total_n)) {
       x$table_styling$header <-
         x$table_styling$header |>
         dplyr::mutate(
-          modify_stat_N =
-            cards |>
-            dplyr::filter(.data$stat_name %in% "N_obs") |>
-            dplyr::pull("stat") |>
-            unlist() |>
-            getElement(1) %||% NA_integer_,
+          modify_stat_N = lst_total_n[["N"]],
           modify_stat_n = .data$modify_stat_N,
-          modify_stat_p = 1,
-          modify_stat_level = translate_string("Overall")
+          modify_stat_p = 1
         )
     }
 
-
     # if this is a survey object, then add unweighted stats as well
-    if ("N_obs_unweighted" %in% unique(cards$stat_name)) {
+    if ("N_unweighted" %in% names(lst_total_n)) {
       x$table_styling$header <-
         x$table_styling$header |>
         dplyr::mutate(
-          modify_stat_N_unweighted =
-            cards |>
-            dplyr::filter(.data$stat_name %in% "N_obs_unweighted") |>
-            dplyr::pull("stat") |>
-            unlist() |>
-            getElement(1) %||% NA_integer_,
+          modify_stat_N_unweighted = lst_total_n[["N_unweighted"]],
           modify_stat_n_unweighted = .data$modify_stat_N_unweighted,
           modify_stat_p_unweighted = 1
         )
