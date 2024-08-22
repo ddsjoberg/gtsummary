@@ -80,6 +80,7 @@ NULL
 #' @name tbl_uvregression
 tbl_uvregression <- function(data, ...) {
   check_not_missing(data)
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
   UseMethod("tbl_uvregression")
 }
 
