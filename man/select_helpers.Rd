@@ -28,7 +28,7 @@ all_intercepts()
 all_interaction()
 
 all_contrasts(
-  contrasts_type = c("treatment", "sum", "poly", "helmert", "other")
+  contrasts_type = c("treatment", "sum", "poly", "helmert", "sdif", "other")
 )
 
 all_stat_cols(stat_0 = TRUE)
@@ -45,7 +45,7 @@ character vector indicating the test type of the variables to select, e.g.
 select all variables being compared with \code{"t.test"}.}
 
 \item{contrasts_type}{(\code{character})\cr
-type of contrast to select. Select among contrast types \code{c("treatment", "sum", "poly", "helmert", "other")}.
+type of contrast to select. Select among contrast types \code{c("treatment", "sum", "poly", "helmert", "sdif", "other")}.
 Default is all contrast types.}
 
 \item{stat_0}{(scalar \code{logical})\cr
