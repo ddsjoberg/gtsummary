@@ -3,7 +3,14 @@
 Updates to address regressions in the v2.0.0 release:
 
   * The default `add_glance_*(glance_fun)` function fixed for `mice` models with class `'mira'`. (#1912)
+  * We can again report unweighted statistics in the headers of `tbl_svysummary()` tables. (#1911)
   
+### Other updates
+
+* The total N is now returned with `.$cards` using the `cards::ard_total_n()` function for the calculation.
+
+* The default headers for `tbl_ard_*()` functions no longer include counts, as these are not required data to be passed along in the ARD input.
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:

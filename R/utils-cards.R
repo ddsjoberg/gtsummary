@@ -13,7 +13,7 @@ bootstrap_df_from_cards <- function(x) {
         dplyr::rename(name = any_of(.x), level = any_of(paste0(.x, "_level")))
     ) |>
     dplyr::bind_rows() |>
-    dplyr::filter(!is.na(.data$name))
+    dplyr::filter(!is.na(.data$name), !.data$name %in% "..ard_total_n..")
 
   if (!"level" %in% df_long) {
     df_long$level <- list(NA)

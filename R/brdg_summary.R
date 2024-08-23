@@ -542,22 +542,38 @@ pier_summary_missing_row <- function(cards,
 
 .add_table_styling_stats <- function(x, cards, by) {
   if (is_empty(by)) {
-    x$table_styling$header <-
-      x$table_styling$header |>
-      dplyr::mutate(
-        modify_stat_N =
-          cards |>
-          dplyr::filter(.data$stat_name %in% "N_obs") |>
-          dplyr::pull("stat") |>
-          unlist() |>
-          getElement(1) %||% NA_integer_,
-        modify_stat_n = .data$modify_stat_N,
-        modify_stat_p = 1,
-        modify_stat_level = "Overall"
-      )
-  } else {
+    x$table_styling$header$modify_stat_level <- translate_string("Overall")
+
+    # add overall N to x$table_styling$header
+    lst_total_n <- cards::get_ard_statistics(cards, .data$variable %in% "..ard_total_n..")
+    if ("N" %in% names(lst_total_n)) {
+      x$table_styling$header <-
+        x$table_styling$header |>
+        dplyr::mutate(
+          modify_stat_N = lst_total_n[["N"]],
+          modify_stat_n = .data$modify_stat_N,
+          modify_stat_p = 1
+        )
+    }
+
+    # if this is a survey object, then add unweighted stats as well
+    if ("N_unweighted" %in% names(lst_total_n)) {
+      x$table_styling$header <-
+        x$table_styling$header |>
+        dplyr::mutate(
+          modify_stat_N_unweighted = lst_total_n[["N_unweighted"]],
+          modify_stat_n_unweighted = .data$modify_stat_N_unweighted,
+          modify_stat_p_unweighted = 1
+        )
+    }
+  }
+  # add by variable stats
+  else {
     df_by_stats <- cards |>
-      dplyr::filter(.data$variable %in% .env$by & .data$stat_name %in% c("N", "n", "p"))
+      dplyr::filter(
+        .data$variable %in% .env$by,
+        .data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")
+      )
 
     if (nrow(df_by_stats) == 0L) {
       cli::cli_abort(
@@ -569,7 +585,7 @@ pier_summary_missing_row <- function(cards,
 
     df_by_stats_wide <-
       df_by_stats |>
-      dplyr::filter(.data$stat_name %in% c("n", "p")) |>
+      dplyr::filter(.data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")) |>
       dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
       dplyr::left_join(
         cards |>
@@ -602,19 +618,23 @@ pier_summary_missing_row <- function(cards,
     # add the stats here to the header data frame
     x$table_styling$header <-
       x$table_styling$header |>
-      dplyr::mutate(
-        modify_stat_N =
-          df_by_stats |>
-          dplyr::filter(.data$stat_name %in% "N") |>
-          dplyr::pull("stat") |>
-          unlist() |>
-          getElement(1L)
-      ) |>
       dplyr::left_join(
         df_by_stats_wide,
         by = "column"
-      )
+      ) |>
+      tidyr::fill(any_of(c("modify_stat_N", "modify_stat_N_unweighted")), .direction = "updown")
   }
 
+  # re-ording the columns
+  x$table_styling$header <-
+    x$table_styling$header |>
+    dplyr::relocate(
+      any_of(c("modify_stat_level",
+               "modify_stat_N", "modify_stat_n", "modify_stat_p",
+               "modify_stat_N_unweighted", "modify_stat_n_unweighted", "modify_stat_p_unweighted")),
+      .before = last_col()
+    )
+
+  # return final object
   x
 }

@@ -244,7 +244,7 @@ add_stat_label.tbl_svysummary <- add_stat_label.tbl_summary
               expr(glue::glue(gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = sub_statistic))),
               cards::get_ard_statistics(
                 x$cards[[1]] |>
-                  dplyr::filter(.data$variable %in% variable) |>
+                  dplyr::filter(.data$variable %in% .env$variable) |>
                   dplyr::distinct(.data$stat_name, .data$stat_label),
                 .column = "stat_label"
               )

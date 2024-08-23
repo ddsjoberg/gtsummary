@@ -274,6 +274,8 @@ tbl_svysummary <- function(data,
     cards::bind_ard(
       # attributes for summary columns
       cardx::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      # total N
+      cardx::ard_total_n(data),
       # tabulate missing information
       cardx::ard_missing(data,
                          variables = all_of(include),
