@@ -154,23 +154,10 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
 
-  # if `by` is missing, then remove Ns since they are not in the ARD by default
-  if (is_empty(by)) {
-    x$table_styling$header <- x$table_styling$header |>
-      dplyr::mutate(across(c("modify_stat_N", "modify_stat_n"), ~NA_integer_))
-  }
-
   # adding styling -------------------------------------------------------------
   x <- x |>
     # updating the headers for the stats columns
-    modify_header(
-      all_stat_cols() ~
-        ifelse(
-          is_empty(by),
-          "**N = {style_number(N)}**",
-          "**{level}**  \nN = {style_number(n)}"
-        )
-    )
+    modify_header(all_stat_cols() ~ "**{level}**")
 
   # prepend the footnote with information about the variable -------------------
   x$table_styling$footnote$footnote <-

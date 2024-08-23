@@ -354,6 +354,8 @@ tbl_summary <- function(data,
                          fmt_fn = digits,
                          stat_label = ~ default_stat_labels()
       ),
+      # adding total N
+      cards::ard_total_n(data),
       # tabulate by variable for header stats
       case_switch(
         !is_empty(by) ~
@@ -429,7 +431,7 @@ tbl_summary <- function(data,
   if (is_empty(by)) {
     cards$gts_column <-
       ifelse(
-        !cards$context %in% "attributes",
+        !cards$context %in% "attributes" & !cards$variable %in% "..ard_total_n..",
         "stat_0",
         NA_character_
       )

@@ -165,6 +165,20 @@ test_that("modify_header() works with tbl_svysummary()", {
       "No | N = 2201 | n = 1490 | p = 68%",
       "Yes | N = 2201 | n = 711 | p = 32%")
   )
+
+  expect_equal(
+    survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+      tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))|>
+      add_overall() |>
+      modify_header(all_stat_cols() ~ "{level} | N = {N_unweighted} | n = {n_unweighted} | p = {style_percent(p_unweighted)}%") |>
+      getElement("table_styling") |>
+      getElement("header") |>
+      dplyr::filter(startsWith(column, "stat_")) |>
+      dplyr::pull("label"),
+    c("Overall | N = 32 | n = 32 | p = 100%",
+      "No | N = 32 | n = 16 | p = 50%",
+      "Yes | N = 32 | n = 16 | p = 50%")
+  )
 })
 
 test_that("modify_header() works with tbl_continuous()", {

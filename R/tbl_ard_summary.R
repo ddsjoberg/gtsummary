@@ -261,9 +261,9 @@ tbl_ard_summary <- function(cards,
         ifelse(
           is_empty(by),
           get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
+                            default = "**{level}**"),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+                            default = "**{level}**")
         )
     )
 

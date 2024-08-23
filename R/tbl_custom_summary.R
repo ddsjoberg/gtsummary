@@ -399,6 +399,7 @@ tbl_custom_summary <- function(data,
                          fmt_fn = digits,
                          stat_label = ~ default_stat_labels()
       ),
+      cards::ard_total_n(data),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
         cards::ard_categorical(data,
