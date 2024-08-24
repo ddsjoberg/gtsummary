@@ -251,8 +251,8 @@ test_that("tbl_svysummary(type)", {
 
   # yes/no variables default to dichotomous
   expect_equal(
-    data.frame(yn = c("no", "yes", "yes")) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c("no", "yes", "yes")) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("value") |>
@@ -262,8 +262,8 @@ test_that("tbl_svysummary(type)", {
   expect_equal(
     data.frame(
       yn = c("no", "yes", "yes") |> factor()
-    ) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    ) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("value") |>
@@ -273,8 +273,8 @@ test_that("tbl_svysummary(type)", {
   expect_equal(
     data.frame(
       yn = c("no", "yes", "yes") |> factor(levels = c("yes", "no"))
-    ) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    ) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("value") |>
@@ -284,8 +284,8 @@ test_that("tbl_svysummary(type)", {
   expect_equal(
     data.frame(
       yn = c("no", "no", "no") |> factor(levels = c("no", "yes"))
-    ) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    ) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("value") |>
@@ -295,8 +295,8 @@ test_that("tbl_svysummary(type)", {
 
   # a yes or no only character defaults to categorical
   expect_equal(
-    data.frame(yn = c("yes", "yes")) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c("yes", "yes")) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("type") |>
@@ -304,8 +304,8 @@ test_that("tbl_svysummary(type)", {
     "categorical"
   )
   expect_equal(
-    data.frame(yn = c("no", "no")) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c("no", "no")) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("type") |>
@@ -313,8 +313,8 @@ test_that("tbl_svysummary(type)", {
     "categorical"
   )
   expect_equal(
-    data.frame(yn = c("nO", "yEs", "yEs")) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c("nO", "yEs", "yEs")) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("value") |>
@@ -324,8 +324,8 @@ test_that("tbl_svysummary(type)", {
 
   # a zero or one only numeric defaults to categorical
   expect_equal(
-    data.frame(yn = c(0, 0)) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c(0, 0)) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("type") |>
@@ -333,8 +333,8 @@ test_that("tbl_svysummary(type)", {
     "categorical"
   )
   expect_equal(
-    data.frame(yn = c(1, 1)) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+    data.frame(yn = c(1, 1)) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary() |>
       getElement("inputs") |>
       getElement("type") |>
@@ -398,8 +398,8 @@ test_that("tbl_svysummary(value)", {
       dplyr::mutate(
         grade = factor(grade, levels = c("I", "II", "III", "IV")),
         response = TRUE
-      ) |>
-      survey::svydesign(~1, data = _, weights = ~1) |>
+      ) %>%
+      survey::svydesign(~1, data = ., weights = ~1) |>
       tbl_svysummary(
         include = c(grade, response),
         value = list(grade = "IV", response = FALSE)

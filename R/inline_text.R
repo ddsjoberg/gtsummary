@@ -126,8 +126,8 @@ inline_text.gtsummary <- function(x,
     }
 
     result <-
-      cards::get_ard_statistics(cards, .column = "stat_fmt") |>
-      glue::glue_data(.x = _, pattern)
+      cards::get_ard_statistics(cards, .column = "stat_fmt") %>%
+      glue::glue_data(.x = ., pattern)
 
     return(result)
   }

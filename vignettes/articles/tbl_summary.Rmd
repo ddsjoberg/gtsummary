@@ -409,8 +409,8 @@ svy_apiclus1 |>
 
 ```{r}
 Titanic |>
-  as_tibble() |>
-  survey::svydesign(data = _, ids = ~1, weights = ~n) |>
+  as_tibble() %>%
+  survey::svydesign(data = ., ids = ~1, weights = ~n) |>
   tbl_svysummary(include = c(Age, Survived))
 ```
 
