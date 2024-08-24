@@ -38,6 +38,7 @@
 #'
 #' To ensure correct results, the call formula in `survfit()` must represent the
 #' formula that will be used in `survival::survdiff()`.
+#' If you utilize the `tbl_survfit.data.frame()` S3 method, this is handled for you.
 #'
 #' @export
 #' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")

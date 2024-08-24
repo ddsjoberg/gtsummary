@@ -68,6 +68,7 @@ error or an incorrect calculation.
 
 To ensure correct results, the call formula in \code{survfit()} must represent the
 formula that will be used in \code{survival::survdiff()}.
+If you utilize the \code{tbl_survfit.data.frame()} S3 method, this is handled for you.
 }
 
 \examples{
