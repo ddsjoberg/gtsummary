@@ -43,6 +43,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install older MatrixModels
+        run: |
+          install.packages('remotes')
+          if (package_version(paste(R.version$major, R.version$minor, sep = ".")) < package_version("4.4.0")) remotes::install_version('MatrixModels', version = '0.5-1', repos = 'http://cran.rstudio.com')
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
