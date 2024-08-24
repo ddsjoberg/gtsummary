@@ -119,6 +119,19 @@ and a second test of the <em>G-rho</em> family.</p>
 <span>        test.args <span class="op">=</span> <span class="va">grade</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+
+
+
+<p>To calculate the p-values, the formula is re-constructed from the the call in the
+original <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code> object.
+When the <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code> object is created a for loop, <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>, <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>
+setting the call <em>may not</em> reflect the true formula which may result in an
+error or an incorrect calculation.</p>
+<p>To ensure correct results, the call formula in <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code> must represent the
+formula that will be used in <code><a href="https://rdrr.io/pkg/survival/man/survdiff.html" class="external-link">survival::survdiff()</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other tbl_survfit tools:
 <code><a href="add_nevent.tbl_survfit.html">add_nevent.tbl_survfit</a>()</code></p></div>
