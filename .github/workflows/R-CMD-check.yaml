@@ -45,8 +45,8 @@ jobs:
 
       - name: Install older MatrixModels
         run: |
-          install.packages('remotes')
-          if (getRversion() < package_version("4.4.0")) remotes::install_version('MatrixModels', version = '0.5-1', repos = 'http://cran.rstudio.com')
+          install.packages('pak')
+          if (getRversion() < package_version("4.4.0")) pak::pak('MatrixModels@0.5-1')
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
