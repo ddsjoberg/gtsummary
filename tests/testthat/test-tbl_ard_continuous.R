@@ -15,6 +15,13 @@ test_that("tbl_ard_continuous(cards)", {
       tbl_ard_continuous(variable = "age", include = "grade", by = "trt") |>
       as.data.frame()
   )
+
+  # no error when no tablulation of the 'by' data is passed
+  expect_snapshot(
+    cards::ard_continuous(trial, by = c(trt, grade), variables = age) |>
+      tbl_ard_continuous(by = trt, variable = age, include = grade) |>
+      as.data.frame()
+  )
 })
 
 test_that("tbl_ard_continuous(cards) error messaging", {

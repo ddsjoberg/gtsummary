@@ -44,6 +44,15 @@
         **Xanomeline Low Dose**
       1       77.5 (71.0, 82.0)
 
+---
+
+    Code
+      as.data.frame(tbl_ard_summary(cards::ard_continuous(trial, by = trt, variables = age),
+      by = trt))
+    Output
+        **Characteristic**        **Drug A**        **Drug B**
+      1                age 46.0 (37.0, 60.0) 48.0 (39.0, 56.0)
+
 # tbl_ard_summary(cards) error messages
 
     Code
