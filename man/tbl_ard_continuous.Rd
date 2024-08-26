@@ -9,6 +9,7 @@ tbl_ard_continuous(
   variable,
   include,
   by = NULL,
+  label = NULL,
   statistic = everything() ~ "{median} ({p25}, {p75})"
 )
 }
@@ -24,6 +25,11 @@ Character vector of the categorical variables to}
 
 \item{by}{(\code{string})\cr
 A single variable name of the stratifying variable.}
+
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is

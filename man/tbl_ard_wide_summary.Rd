@@ -9,6 +9,7 @@ tbl_ard_wide_summary(
   statistic = switch(type[[1]], continuous = c("{median}", "{p25}, {p75}"), c("{n}",
     "{p}\%")),
   type = NULL,
+  label = NULL,
   value = NULL,
   include = everything()
 )
@@ -28,6 +29,11 @@ Specifies the summary type. Accepted value are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
+
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
 \item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the level of a variable to display on a single row.
@@ -54,7 +60,8 @@ ard_stack(
   trial,
   ard_continuous(variables = age),
   .missing = TRUE,
-  .attributes = TRUE
+  .attributes = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_wide_summary()
 
@@ -63,7 +70,8 @@ ard_stack(
   ard_dichotomous(variables = response),
   ard_categorical(variables = grade),
   .missing = TRUE,
-  .attributes = TRUE
+  .attributes = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_wide_summary()
 }

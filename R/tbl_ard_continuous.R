@@ -55,7 +55,8 @@
 #'   ard_attributes(trial, variables = c(grade, age))
 #' ) |>
 #'   tbl_ard_continuous(variable = "age", include = "grade")
-tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
+tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL,
+                               statistic = everything() ~ "{median} ({p25}, {p75})") {
   set_cli_abort_call()
   check_not_missing(cards)
   check_not_missing(variable)
@@ -112,6 +113,11 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
     statistic = statistic,
     include_env = TRUE
   )
+  cards::process_formula_selectors(
+    data[include],
+    label = label
+  )
+
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
   cards::check_list_elements(
@@ -125,18 +131,15 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   tbl_ard_continuous_inputs$data <- NULL
   call <- match.call()
 
-  # adding attributes if not already present
-  missing_ard_attributes <-
-    dplyr::filter(cards, .data$variable %in% c(.env$include, .env$variable, .env$by), .data$context %in% "attributes") |>
-    dplyr::pull("variable") |>
-    unique() %>%
-    {setdiff(c(include, variable, by), .)}
-  if (!is_empty(missing_ard_attributes)) {
-    cards <- cards |>
-      cards::bind_ard(
-        cards::ard_attributes(data, variables = all_of(missing_ard_attributes))
-      )
-  }
+  # add/update attributes ------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      cards::ard_attributes(data, variables = all_of(include)),
+      cards,
+      cards::ard_attributes(data, variables = all_of(names(label)), label = label),
+      .update = TRUE,
+      .quiet = TRUE
+    )
 
   # fill NULL stats with NA
   cards <- cards::replace_null_statistic(cards)
