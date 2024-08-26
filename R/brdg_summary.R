@@ -575,7 +575,7 @@ pier_summary_missing_row <- function(cards,
         .data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")
       )
 
-    # if not tabulation of the by variable provided, just give return the by levels
+    # if no tabulation of the 'by' variable provided, just return the 'by' levels
     if (nrow(df_by_stats) == 0L) {
       df_by_stats_wide <-
         cards |>
