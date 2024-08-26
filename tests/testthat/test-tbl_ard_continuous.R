@@ -48,6 +48,36 @@ test_that("tbl_ard_continuous(cards) error messaging", {
   )
 })
 
+test_that("tbl_ard_summary(label) argument works", {
+  expect_equal(
+    cards::bind_ard(
+      # the primary ARD with the results
+      cards::ard_continuous(trial, by = grade, variables = age),
+      # add missing and attributes ARD
+      cards::ard_missing(trial, by = grade, variables = age)
+    ) |>
+      tbl_ard_continuous(variable = "age", include = "grade", label = grade ~ "Updated GRADE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    "Updated GRADE!"
+  )
+
+  expect_equal(
+    cards::bind_ard(
+      # the primary ARD with the results
+      cards::ard_continuous(trial, by = grade, variables = age),
+      # add missing and attributes ARD
+      cards::ard_missing(trial, by = grade, variables = age),
+      cards::ard_attributes(trial, variables = c(grade, age))
+    ) |>
+      tbl_ard_continuous(variable = "age", include = "grade", label = grade ~ "Updated GRADE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    "Updated GRADE!"
+  )
+})
 
 test_that("tbl_ard_continuous(statistic) error messaging", {
   # statistic argument is a long vector

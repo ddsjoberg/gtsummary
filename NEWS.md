@@ -15,6 +15,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The `tbl_ard_wide_summary()` function no longer requires the results from `cards::ard_attributes()` to create tables. (#1873)
 
+* Added the `label` argument to functions `tbl_ard_summary()`, `tbl_ard_wide_summary()`, and `tbl_ard_continuous()`. (#1850)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
