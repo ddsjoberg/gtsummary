@@ -12,6 +12,19 @@
       4                 II    68 34.0%
       5                III    64 32.0%
 
+---
+
+    Code
+      as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(
+        variables = response), cards::ard_categorical(variables = grade))))
+    Output
+        **Characteristic** **n** **%**
+      1           response    61 31.6%
+      2              grade  <NA>  <NA>
+      3                  I    68 34.0%
+      4                 II    68 34.0%
+      5                III    64 32.0%
+
 # tbl_ard_wide_summary(cards) messaging
 
     Code

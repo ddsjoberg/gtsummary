@@ -13,6 +13,17 @@ test_that("tbl_ard_wide_summary(cards)", {
       tbl_ard_wide_summary() |>
       as.data.frame()
   )
+
+  # works without missing or attributes
+  expect_snapshot(
+    cards::ard_stack(
+      trial,
+      cards::ard_dichotomous(variables = response),
+      cards::ard_categorical(variables = grade)
+    ) |>
+      tbl_ard_wide_summary() |>
+      as.data.frame()
+  )
 })
 
 test_that("tbl_ard_wide_summary(cards) messaging", {
