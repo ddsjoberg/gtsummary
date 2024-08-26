@@ -15,7 +15,7 @@ summaries or all categorical summaries (which encompasses dichotomous variables)
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@ summaries or all categorical summaries (which encompasses dichotomous variables)
 <span>  statistic <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">type</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, continuous <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{median}"</span>, <span class="st">"{p25}, {p75}"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{n}"</span>,</span>
 <span>    <span class="st">"{p}%"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  value <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -97,6 +98,13 @@ If not specified, default type is assigned via
 <code><a href="assign_summary_type.html">assign_summary_type()</a></code>. See below for details.</p></dd>
 
 
+<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
+<dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
+Used to override default labels in summary table, e.g. <code>list(age = "Age, years")</code>.
+The default for each variable is the column label attribute, <code>attr(., 'label')</code>.
+If no label has been set, the column name is used.</p></dd>
+
+
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
 Specifies the level of a variable to display on a single row.
@@ -122,7 +130,8 @@ Variables to include in the summary table. Default is <code><a href="https://tid
 <span class="r-in"><span>  <span class="va">trial</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  .missing <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  .attributes <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  .attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  .total_n <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">tbl_ard_wide_summary</span><span class="op">(</span><span class="op">)</span></span></span>
 <div class="gt-table"><div id="lmwhjtvkiy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -138,7 +147,8 @@ Variables to include in the summary table. Default is <code><a href="https://tid
 <span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="va">response</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="va">grade</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  .missing <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  .attributes <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  .attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  .total_n <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">tbl_ard_wide_summary</span><span class="op">(</span><span class="op">)</span></span></span>
 <div class="gt-table"><div id="nyaimezhql" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
