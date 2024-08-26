@@ -11,6 +11,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The default headers for `tbl_ard_*()` functions no longer include counts, as these are not required data to be passed along in the ARD input.
 
+* The summary statistics of the `'by'` variable are no longer required in the ARD for functions `tbl_ard_summary()` and `tbl_ard_continuous()`. When the tabulation summary statistics are passed, they are available to place in the header dynamically. (#1860)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
