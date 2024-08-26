@@ -800,3 +800,16 @@ test_that("add_ci() correctly handles dichotomous variables", {
     tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
   )
 })
+
+test_that("add_ci() messaging for tbl_summary(percent)", {
+  expect_message(
+    trial |>
+      tbl_summary(
+        missing = "no",
+        statistic = all_continuous() ~ "{mean} ({sd})",
+        include = c(marker, response, trt), percent = "row"
+      ) |>
+      add_ci(),
+    "function is meant to work with"
+  )
+})
