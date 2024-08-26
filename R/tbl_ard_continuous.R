@@ -28,7 +28,7 @@
 #'     # 'trt' is the column stratifying variable and needs to be listed first.
 #'     by = c(trt, grade),
 #'     variables = age
-#'   ) ,
+#'   ),
 #'   # add univariate trt tabulation
 #'   ard_categorical(
 #'     trial,

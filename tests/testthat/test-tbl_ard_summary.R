@@ -31,7 +31,7 @@ test_that("tbl_ard_summary() works", {
 
 
 test_that("tbl_ard_summary(cards)", {
-  # when attribute labels are not provided, we defatult to variable names
+  # when attribute labels are not provided, we default to variable names
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
@@ -58,6 +58,13 @@ test_that("tbl_ard_summary(cards)", {
       .missing = FALSE
     ) |>
       tbl_ard_summary(by = ARM, missing = "no") |>
+      as.data.frame()
+  )
+
+  # no error when no tablulation of the 'by' data is passed
+  expect_snapshot(
+    cards::ard_continuous(trial, by = trt, variables = age) |>
+      tbl_ard_summary(by = trt) |>
       as.data.frame()
   )
 })
