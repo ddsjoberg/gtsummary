@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
 <h4 id="other-updates-development-version">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
 <ul><li><p>The total N is now returned with <code>.$cards</code> using the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html" class="external-link">cards::ard_total_n()</a></code> function for the calculation.</p></li>
 <li><p>The default headers for <code>tbl_ard_*()</code> functions no longer include counts, as these are not required data to be passed along in the ARD input.</p></li>
+<li><p>The summary statistics of the <code>'by'</code> variable are no longer required in the ARD for functions <code><a href="../reference/tbl_ard_summary.html">tbl_ard_summary()</a></code> and <code><a href="../reference/tbl_ard_continuous.html">tbl_ard_continuous()</a></code>. When the tabulation summary statistics are passed, they are available to place in the header dynamically. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1860" class="external-link">#1860</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
