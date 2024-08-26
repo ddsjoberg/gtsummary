@@ -726,3 +726,17 @@ test_that("add_ci() correctly handles dichotomous variables", {
     tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
   )
 })
+
+test_that("add_ci() messaging for tbl_svysummary(percent)", {
+  expect_message({
+    data(api, package = "survey")
+    survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
+      tbl_svysummary(
+        by = "both",
+        include = stype,
+        percent = "row"
+      ) |>
+      add_ci()},
+    "function is meant to work with"
+  )
+})
