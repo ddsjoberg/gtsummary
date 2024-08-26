@@ -61,3 +61,33 @@ test_that("tbl_ard_wide_summary(type) messaging", {
       tbl_ard_wide_summary()
   )
 })
+
+test_that("tbl_ard_summary(label) argument works", {
+  expect_equal(
+    cards::ard_stack(
+      trial,
+      cards::ard_continuous(variables = age),
+      .missing = TRUE,
+      .attributes = TRUE,
+      .total_n = TRUE
+    ) |>
+      tbl_ard_wide_summary(label = age ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    "Updated AGE!"
+  )
+
+  expect_equal(
+    cards::ard_stack(
+      trial,
+      cards::ard_continuous(variables = age),
+      .attributes = FALSE
+    ) |>
+      tbl_ard_wide_summary(label = age ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    "Updated AGE!"
+  )
+})
