@@ -121,6 +121,15 @@ tbl_ard_wide_summary <- function(cards,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add/update attributes ------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      cards::ard_attributes(data, variables = all_of(include)),
+      cards,
+      .update = TRUE,
+      .quiet = TRUE
+    )
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_wide_summary(

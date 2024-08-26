@@ -13,6 +13,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The summary statistics of the `'by'` variable are no longer required in the ARD for functions `tbl_ard_summary()` and `tbl_ard_continuous()`. When the tabulation summary statistics are passed, they are available to place in the header dynamically. (#1860)
 
+* The `tbl_ard_wide_summary()` function no longer requires the results from `cards::ard_attributes()` to create tables. (#1873)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
