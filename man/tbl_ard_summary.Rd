@@ -10,6 +10,7 @@ tbl_ard_summary(
   statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~
     "{n} ({p}\%)"),
   type = NULL,
+  label = NULL,
   missing = c("no", "ifany", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
@@ -36,6 +37,11 @@ Specifies the summary type. Accepted value are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 Continuous summaries may be assigned \code{c("continuous", "continuous2")}, while
 categorical and dichotomous cannot be modified.}
+
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
@@ -65,7 +71,8 @@ ard_stack(
   ard_categorical(variables = "AGEGR1"),
   ard_continuous(variables = "AGE"),
   .attributes = TRUE,
-  .missing = TRUE
+  .missing = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_summary()
 
@@ -75,7 +82,8 @@ ard_stack(
   ard_categorical(variables = "AGEGR1"),
   ard_continuous(variables = "AGE"),
   .attributes = TRUE,
-  .missing = TRUE
+  .missing = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_summary(by = ARM)
 }

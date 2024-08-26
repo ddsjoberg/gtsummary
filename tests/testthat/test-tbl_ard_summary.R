@@ -120,6 +120,36 @@ test_that("tbl_ard_summary(by) messaging", {
   )
 })
 
+test_that("tbl_ard_summary(label) argument works", {
+  expect_equal(
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = TRUE
+    ) |>
+      tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    c("Pooled Age Group 1", "Updated AGE!")
+  )
+
+  expect_equal(
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = FALSE
+    ) |>
+      tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    c("AGEGR1", "Updated AGE!")
+  )
+})
+
 test_that("tbl_ard_summary(statistic) argument works", {
   ard <-
     cards::ard_stack(
