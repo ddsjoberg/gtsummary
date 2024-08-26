@@ -1,11 +1,11 @@
 skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
 
-test_that("get_cards(x) works with `tbl_*()` functions", {
+test_that("gather_ard(x) works with `tbl_*()` functions", {
   # tbl_summary()
   expect_false(
     tbl_summary(trial, by = trt, include = c(age, grade)) |>
       add_difference() |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -17,7 +17,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
       by = trt,
       include = grade
     ) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -25,7 +25,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
   expect_false(
     glm(response ~ age + grade, trial, family = binomial()) |>
       tbl_regression(exponentiate = TRUE) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -39,7 +39,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
       exponentiate = TRUE,
       include = c("age", "grade")
     ) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -61,7 +61,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
       )
 
     tbl_stack(list(t1, t2)) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   })
 
@@ -71,7 +71,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
       tbl_regression(exponentiate = TRUE) %>%
       list(., .) |>
       tbl_merge() |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   })
 
@@ -88,7 +88,7 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
           add_n(),
         .header = "**{strata}**, N = {n}"
       ) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -104,12 +104,12 @@ test_that("get_cards(x) works with `tbl_*()` functions", {
           add_n(),
         .combine_with = "tbl_stack"
       ) |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 })
 
-test_that("get_cards(x) works with `tbl_ard_*()` functions", {
+test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
   # tbl_ard_summary()
   expect_false(
     cards::ard_stack(
@@ -120,7 +120,7 @@ test_that("get_cards(x) works with `tbl_ard_*()` functions", {
       .missing = TRUE
     ) |>
       tbl_ard_summary() |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -134,7 +134,7 @@ test_that("get_cards(x) works with `tbl_ard_*()` functions", {
       cards::ard_attributes(trial, variables = c(grade, age))
     ) |>
       tbl_ard_continuous(variable = "age", include = "grade") |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 
@@ -147,7 +147,7 @@ test_that("get_cards(x) works with `tbl_ard_*()` functions", {
       .attributes = TRUE
     ) |>
       tbl_ard_wide_summary() |>
-      get_cards() |>
+      gather_ard() |>
       is_empty()
   )
 })

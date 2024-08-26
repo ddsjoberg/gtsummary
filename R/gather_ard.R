@@ -12,18 +12,18 @@
 #' tbl_summary(trial, by = trt, include = age) |>
 #'   add_overall() |>
 #'   add_p() |>
-#'   get_cards()
+#'   gather_ard()
 #'
 #' glm(response ~ trt, data = trial, family = binomial()) |>
 #'   tbl_regression() |>
-#'   get_cards()
-get_cards <- function(x) {
+#'   gather_ard()
+gather_ard <- function(x) {
   check_not_missing(x)
   check_class(x, "gtsummary")
 
   # cycle through the underlying tbls, and get ARD from each
   if (inherits(x, c("tbl_stack", "tbl_merge", "tbl_uvregression"))) {
-    return(map(x[["tbls"]], get_cards))
+    return(map(x[["tbls"]], gather_ard))
   }
 
   # the ARD for regression models is an additional calculation, so we don't do it by default
