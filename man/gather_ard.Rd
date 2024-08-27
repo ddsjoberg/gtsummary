@@ -7,7 +7,7 @@
 gather_ard(x)
 }
 \arguments{
-\item{x}{(\code{gtsummary})\cr a gtsummary table}
+\item{x}{(\code{gtsummary})\cr a gtsummary table.}
 }
 \value{
 list
