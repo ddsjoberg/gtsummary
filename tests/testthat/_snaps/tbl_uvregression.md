@@ -48,6 +48,24 @@
       1                  Age   189   1.01 0.99, 1.02         0.3
       2 Marker Level (ng/mL)   190   0.91 0.72, 1.15         0.4
 
+---
+
+    Code
+      as.data.frame(tbl_uvregression(dplyr::select(mtcars, `M P G` = mpg, hp), y = hp,
+      method = lm))
+    Output
+        **Characteristic** **N** **Beta** **95% CI** **p-value**
+      1              M P G    32     -8.8  -12, -6.2      <0.001
+
+---
+
+    Code
+      as.data.frame(tbl_uvregression(dplyr::select(mtcars, `M P G` = mpg, hp), x = hp,
+      method = lm))
+    Output
+        **Outcome** **N** **Beta**   **95% CI** **p-value**
+      1       M P G    32    -0.07 -0.09, -0.05      <0.001
+
 # tbl_uvregression(tidy_fun)
 
     Code
