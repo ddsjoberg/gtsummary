@@ -3,7 +3,7 @@
 #' Extract the ARDs from a gtsummary table. If needed, results may be combined
 #' with `cards::bind_ard()`.
 #'
-#' @param x (`gtsummary`)\cr a gtsummary table
+#' @param x (`gtsummary`)\cr a gtsummary table.
 #'
 #' @return list
 #' @export
