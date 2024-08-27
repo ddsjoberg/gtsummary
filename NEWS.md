@@ -4,6 +4,7 @@ Updates to address regressions in the v2.0.0 release:
 
   * The default `add_glance_*(glance_fun)` function fixed for `mice` models with class `'mira'`. (#1912)
   * We can again report unweighted statistics in the headers of `tbl_svysummary()` tables. (#1911)
+  * `tbl_uvregression()` properly handles variables specified in the `include` argument with non-syntactic names. (#1932)
   
 ### Other updates
 
