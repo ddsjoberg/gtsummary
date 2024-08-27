@@ -355,8 +355,8 @@ is_quo_empty <- function(x) {
           cards::eval_capture_conditions(
             glue(
               formula,
-              .envir = list(y = ifelse(is_empty(y), variable, y),
-                            x = ifelse(is_empty(x), variable, x))
+              .envir = list(y = ifelse(is_empty(y), cardx::bt(variable), y),
+                            x = ifelse(is_empty(x), cardx::bt(variable), x))
             ) |>
               stats::as.formula()
           )

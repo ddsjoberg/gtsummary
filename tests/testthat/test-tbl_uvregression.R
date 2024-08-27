@@ -224,6 +224,20 @@ test_that("tbl_uvregression(include)", {
     ),
     "The `include` argument cannot be empty"
   )
+
+  # ensure non-syntactic names work in the `include` variables
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(y = hp, method = lm) |>
+      as.data.frame()
+  )
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(x = hp, method = lm) |>
+      as.data.frame()
+  )
 })
 
 test_that("tbl_uvregression(tidy_fun)", {
