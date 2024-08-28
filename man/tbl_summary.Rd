@@ -22,11 +22,11 @@ tbl_summary(
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}}
+Default is \code{NULL}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
@@ -59,20 +59,20 @@ with this argument. Default is \code{NULL}. See below for details.}
 \item \code{missing}: must be one of \code{c("ifany", "no", "always")}
 \item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
-Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
 }}
 
 \item{sort}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies sorting to perform for categorical variables.
 Values must be one of \code{c("alphanumeric", "frequency")}.
-Default is \code{all_categorical(FALSE) ~ "alphanumeric"}}
+Default is \code{all_categorical(FALSE) ~ "alphanumeric"}.}
 
 \item{percent}{(\code{string})\cr
 Indicates the type of percentage to return.
 Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 }
 \value{
 a gtsummary table of class \code{"tbl_summary"}
@@ -159,6 +159,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(age, grade, response) |>
@@ -182,6 +183,7 @@ trial |>
     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
     missing = "no"
   )
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial

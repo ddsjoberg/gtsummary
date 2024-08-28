@@ -208,7 +208,7 @@
     Condition
       Error in `tbl_summary()`:
       ! Statistic "not_a_statistic" is not available for variable "response".
-      i Select among "p", "N", "n", "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", and "N_obs".
+      i Select among "n", "N", "p", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
 
 ---
 
@@ -417,4 +417,23 @@
     Condition
       Error in `tbl_summary()`:
       ! `percent` must be one of "column", "row", or "cell", not "a".
+
+# tbl_summary() edge case of warning condition printing
+
+    Code
+      as_kable(tbl_summary(dplyr::tibble(by_var = as.factor(c(rep("cohort_1", 3), rep(
+        "cohort_2", 3))), continuous_var = c(NA, NA, NA, 1, 2, 3)), by = by_var,
+      type = continuous_var ~ "continuous", statistic = continuous_var ~
+        "{min}, {max}"))
+    Message
+      The following warnings were returned during `as_kable()`:
+      ! For variable `continuous_var` (`by_var = "cohort_1"`) and "min" statistic: no non-missing arguments to min; returning Inf
+      ! For variable `continuous_var` (`by_var = "cohort_1"`) and "max" statistic: no non-missing arguments to max; returning -Inf
+    Output
+      
+      
+      |**Characteristic** | **cohort_1**  N = 3 | **cohort_2**  N = 3 |
+      |:------------------|:-------------------:|:-------------------:|
+      |continuous_var     |      Inf, -Inf      |     1.00, 3.00      |
+      |Unknown            |          3          |          0          |
 

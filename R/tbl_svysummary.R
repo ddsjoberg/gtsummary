@@ -22,8 +22,8 @@
 #' \itemize{
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
-#'   \item `{p}` percentage
-#'   \item `{p.std.error}` standard error of the sample proportion computed with [survey::svymean()]
+#'   \item `{p}` proportion
+#'   \item `{p.std.error}` standard error of the sample proportion (on the 0 to 1 scale) computed with [survey::svymean()]
 #'   \item `{deff}` design effect of the sample proportion computed with [survey::svymean()]
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
@@ -274,6 +274,8 @@ tbl_svysummary <- function(data,
     cards::bind_ard(
       # attributes for summary columns
       cardx::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      # total N
+      cardx::ard_total_n(data),
       # tabulate missing information
       cardx::ard_missing(data,
                          variables = all_of(include),

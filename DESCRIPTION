@@ -1,6 +1,6 @@
 Package: gtsummary
 Title: Presentation-Ready Data Summary and Analytic Result Tables
-Version: 1.9.9.9009
+Version: 2.0.1.9006
 Authors@R: c(
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0862-2018")),
@@ -43,10 +43,9 @@ URL: https://github.com/ddsjoberg/gtsummary,
     https://www.danieldsjoberg.com/gtsummary/
 BugReports: https://github.com/ddsjoberg/gtsummary/issues
 Depends: 
-    R (>= 4.1)
+    R (>= 4.2)
 Imports: 
-    cards (>= 0.1.0.9043),
-    cardx (>= 0.1.0.9067),
+    cards (>= 0.2.1.9009),
     cli (>= 3.6.1),
     dplyr (>= 1.1.3),
     glue (>= 1.6.2),
@@ -61,6 +60,7 @@ Suggests:
     broom.helpers (>= 1.15.0),
     broom.mixed (>= 0.2.9),
     car (>= 3.0-11),
+    cardx (>= 0.2.0.9008),
     cmprsk,
     effectsize (>= 0.6.0),
     emmeans (>= 1.7.3),
@@ -83,16 +83,14 @@ Suggests:
     survey (>= 4.2),
     survival (>= 3.6-4),
     testthat (>= 3.2.0),
-    tidycmprsk (>= 1.0.0),
     withr (>= 2.5.0),
     workflows (>= 0.2.4)
+Remotes: insightsengineering/cards, insightsengineering/cardx
 VignetteBuilder: 
     knitr
 RdMacros: 
     lifecycle
-Remotes: 
-    github::insightsengineering/cards,
-    github::insightsengineering/cardx
+Config/Needs/check: hms
 Config/Needs/website: forcats, scales
 Config/testthat/edition: 3
 Config/testthat/parallel: true

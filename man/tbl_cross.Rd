@@ -19,8 +19,7 @@ tbl_cross(
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr
-A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Column name in \code{data} to be used for the rows of cross table.

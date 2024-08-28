@@ -1,5 +1,47 @@
 # gtsummary (development version)
 
+Updates to address regressions in the v2.0.0 release:
+
+  * The default `add_glance_*(glance_fun)` function fixed for `mice` models with class `'mira'`. (#1912)
+  * We can again report unweighted statistics in the headers of `tbl_svysummary()` tables. (#1911)
+  * `tbl_uvregression()` properly handles variables specified in the `include` argument with non-syntactic names. (#1932)
+  
+### Other updates
+
+* The total N is now returned with `.$cards` using the `cards::ard_total_n()` function for the calculation.
+
+* The default headers for `tbl_ard_*()` functions no longer include counts, as these are not required data to be passed along in the ARD input.
+
+* The summary statistics of the `'by'` variable are no longer required in the ARD for functions `tbl_ard_summary()` and `tbl_ard_continuous()`. When the tabulation summary statistics are passed, they are available to place in the header dynamically. (#1860)
+
+* The `tbl_ard_wide_summary()` function no longer requires the results from `cards::ard_attributes()` to create tables. (#1873)
+
+* Added the `label` argument to functions `tbl_ard_summary()`, `tbl_ard_wide_summary()`, and `tbl_ard_continuous()`. (#1850)
+
+# gtsummary 2.0.1
+
+Updates to address regressions in the v2.0.0 release:
+
+  * Restore functionality of `inline_text.tbl_summary(column)` argument to specify a by level when the by variable is a factor. (#1883)
+  * Correct the order of the columns when the `tbl_summary(by)` variables has ten or more levels. (#1877)
+  * Re-establishing strong link between header by variable levels and those in the table body to ensure correct ordering of columns in `tbl_summary()`.
+  * The `tbl_survfit(times)` argument accepts integers once again. (#1867)
+  * Fix in `tbl_uvregression()` for the `formula` argument when it includes a hard-coded column name, e.g. `formula='{y} ~ {x} + grade'`. The hard-coded variable name is now removed from the `include` argument. (#1886)
+  * Fix for non-Base R classes tabulated with `tbl_summary()` that would not coerce to character correctly after `unlist()`. (#1893)
+  * Updated the styling function from `style_percent()` to `style_number(scale=100)` when user passes an integer to change the rounding of percentages in `tbl_summary()`. (#1899)
+  
+### Other updates
+
+* The {tidycmprsk} dependency has been removed and the `tbl_regression.tidycrr()` method has been migrated to the {tidycmprsk} package. (#1865)
+
+* The class of `tbl_split()` objects has been updated from `"tbl_split"` to `c("tbl_split", "list")`. (#1854)
+
+* Updated the default value of `tbl_ard_summary(missing)` to `"no"`. (#1857)
+
+* Line breaks (i.e. `'\n'`) are now auto-stripped from gt-rendered tables when in an R markdown or Quarto environment. (#1896)
+
+# gtsummary 2.0.0
+
 ### New Features
 
 * Clearer error messages have been introduced throughout the package. We've adopted {cli} for all our messaging to users. Our goal was to return a clear message to users for all scenarios.

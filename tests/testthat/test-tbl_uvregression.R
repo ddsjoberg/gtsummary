@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom.helpers", "broom", "survival", "survey"), reference_pkg = "gtsummary"))
 
 test_that("tbl_uvregression(x)", {
@@ -80,7 +81,7 @@ test_that("tbl_uvregression(method.args)", {
   )
 
   # check with NSE argument
-  expect_silent(
+  expect_error(
     tbl2 <-
       tbl_uvregression(
         trial,
@@ -88,7 +89,8 @@ test_that("tbl_uvregression(method.args)", {
         method = survival::coxph,
         method.args = list(id = response),
         include = c(age, trt)
-      )
+      ),
+    NA
   )
   # check models are the same
   expect_equal(
@@ -196,6 +198,46 @@ test_that("tbl_uvregression(include)", {
   )
   expect_equal(tbl2$inputs$include, c("age", "marker"))
   expect_snapshot(as.data.frame(tbl2))
+
+  # check that variables in the formula are removed from include
+  expect_equal(
+    trial |>
+      select(age, grade, trt) |>
+      tbl_uvregression(
+        y = age,
+        method = "lm",
+        formula = "{y} ~ {x} + grade"
+      ) |>
+      getElement("table_body") |>
+      getElement("variable") |>
+      unique(),
+    "trt"
+  )
+
+  # check we get an error if no variables are selected
+  expect_error(
+    tbl_uvregression(
+      trial,
+      y = age,
+      method = "lm",
+      include  = starts_with("xxxx")
+    ),
+    "The `include` argument cannot be empty"
+  )
+
+  # ensure non-syntactic names work in the `include` variables
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(y = hp, method = lm) |>
+      as.data.frame()
+  )
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(x = hp, method = lm) |>
+      as.data.frame()
+  )
 })
 
 test_that("tbl_uvregression(tidy_fun)", {

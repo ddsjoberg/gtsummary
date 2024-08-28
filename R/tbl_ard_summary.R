@@ -18,7 +18,7 @@
 #'   `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`
+#'   - `missing`: must be one of `c("no", "ifany", "always")`
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`
@@ -29,6 +29,7 @@
 #'   categorical and dichotomous cannot be modified.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`
+#' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export
@@ -41,7 +42,8 @@
 #'   ard_categorical(variables = "AGEGR1"),
 #'   ard_continuous(variables = "AGE"),
 #'   .attributes = TRUE,
-#'   .missing = TRUE
+#'   .missing = TRUE,
+#'   .total_n = TRUE
 #' ) |>
 #'   tbl_ard_summary()
 #'
@@ -51,7 +53,8 @@
 #'   ard_categorical(variables = "AGEGR1"),
 #'   ard_continuous(variables = "AGE"),
 #'   .attributes = TRUE,
-#'   .missing = TRUE
+#'   .missing = TRUE,
+#'   .total_n = TRUE
 #' ) |>
 #'   tbl_ard_summary(by = ARM)
 tbl_ard_summary <- function(cards,
@@ -61,14 +64,19 @@ tbl_ard_summary <- function(cards,
                               all_categorical() ~ "{n} ({p}%)"
                             ),
                             type = NULL,
-                            missing = c("ifany", "no", "always"),
+                            label = NULL,
+                            missing = c("no", "ifany", "always"),
                             missing_text = "Unknown",
                             missing_stat = "{N_miss}",
                             include = everything()) {
   set_cli_abort_call()
   # data argument checks -------------------------------------------------------
   check_not_missing(cards)
-  check_class(cards, "card")
+  check_class(
+    cards, "card",
+    message = c("The {.arg {arg_name}} argument must be class {.cls {'card'}}, not {.obj_type_friendly {x}}.",
+                i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
+  )
   missing <- arg_match(missing)
 
   # define a data frame based on the context of `card` -------------------------
@@ -124,19 +132,6 @@ tbl_ard_summary <- function(cards,
       )
   }
 
-  # adding attributes if not already present
-  missing_ard_attributes <-
-    dplyr::filter(cards, .data$variable %in% .env$include, .data$context %in% "attributes") |>
-    dplyr::pull("variable") |>
-    unique() %>%
-    {setdiff(include, .)}
-  if (!is_empty(missing_ard_attributes)) {
-    cards <- cards |>
-      cards::bind_ard(
-        cards::ard_attributes(data, variables = all_of(missing_ard_attributes))
-      )
-  }
-
   # temporary type so we can evaluate `statistic`, then we'll update it
   default_types <- dplyr::select(cards, "variable", "context") |>
     dplyr::distinct() |>
@@ -150,7 +145,8 @@ tbl_ard_summary <- function(cards,
   # process arguments ----------------------------------------------------------
   cards::process_formula_selectors(
     data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
-    type = type
+    type = type,
+    label = label
   )
   # fill in unspecified variables
   cards::fill_formula_selectors(
@@ -216,6 +212,16 @@ tbl_ard_summary <- function(cards,
     }
   )
 
+  # add/update attributes ------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      cards::ard_attributes(data, variables = all_of(include)),
+      cards,
+      cards::ard_attributes(data, variables = all_of(names(label)), label = label),
+      .update = TRUE,
+      .quiet = TRUE
+    )
+
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_summary(cards, include, by)
 
@@ -261,9 +267,9 @@ tbl_ard_summary <- function(cards,
         ifelse(
           is_empty(by),
           get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
+                            default = "**{level}**"),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+                            default = "**{level}**")
         )
     )
 

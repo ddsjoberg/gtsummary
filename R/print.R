@@ -62,6 +62,12 @@ knit_print.gtsummary <- function(x,
     "tibble" = as_tibble(x)
   )
 
+  # remove_line_breaks
+  if (print_engine == "gt" && knitr::is_latex_output()) {
+    res <- res |>
+        gt::cols_label_with(fn = function(x) str_replace_all(x, pattern = "\\n(?!\\\\)", replacement = ""))
+  }
+
   knitr::knit_print(res)
 }
 

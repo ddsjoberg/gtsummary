@@ -15,13 +15,13 @@ tbl_continuous(
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{variable}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Variable name of the continuous column to be summarized.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 
 \item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies how summary statistics are rounded. Values may be either integer(s)
@@ -30,7 +30,7 @@ via \code{assign_summary_digits()}. See below for details.}
 
 \item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}}
+Default is \code{NULL}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is

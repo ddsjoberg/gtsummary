@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # tbl_summary(data) ------------------------------------------------------------
 test_that("tbl_summary(data)", {
   # creates table when data frame is passed
@@ -18,12 +20,43 @@ test_that("tbl_summary(by)", {
   expect_snapshot(tbl_summary(data = trial, by = trt) |> as.data.frame())
   expect_snapshot(tbl_summary(data = mtcars, by = am) |> as.data.frame())
   expect_snapshot(tbl_summary(data = iris, by = Species) |> as.data.frame())
+
+  # ensure the columns appear in the correct order with 10+ by levels
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "continuous") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "continuous2") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "categorical") |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
+  expect_equal(
+    tbl_summary(data.frame(x = 1, y = LETTERS[1:10]), by = y, type = x ~ "dichotomous", value = x ~ 1) |>
+      getElement("table_body") |>
+      select(all_stat_cols()) |>
+      names(),
+    paste0("stat_", 1:10)
+  )
 })
 
 test_that("tbl_summary(by) errors properly", {
   # errors thrown when bad data argument passed
   expect_snapshot(error = TRUE, tbl_summary(mtcars, by = c("mpg", "am")))
 })
+
 
 # tbl_summary(label) -----------------------------------------------------------
 test_that("tbl_summary(label)", {
@@ -200,6 +233,21 @@ test_that("tbl_summary(digit)", {
       dplyr::filter(variable == "ttdeath") |>
       dplyr::pull(stat_0),
     "22.41 (15.92, 24.00)"
+  )
+
+  expect_silent(
+    tbl <-
+      tbl_summary(
+        mtcars,
+        include = carb,
+        type = carb ~ "categorical",
+        digits = carb ~ c(0, 1)
+      )
+  )
+  expect_equal(
+    tbl$table_body$stat_0 |>
+      dplyr::last(),
+    "1 (3.1%)"
   )
 })
 
@@ -573,4 +621,35 @@ test_that("tbl_summary(percent)", {
     error = TRUE,
     tbl_summary(trial, by = trt, include = grade, percent = letters, statistic = ~"{p}%")
   )
+})
+
+test_that("tbl_summary() with hms times", {
+  # originally reported in https://github.com/ddsjoberg/gtsummary/issues/1893
+  skip_if_not_installed("hms")
+  withr::local_package("hms")
+
+  trial2 <- trial |> dplyr::mutate(time_hms = hms(seconds = 15))
+  expect_silent(
+    tbl <- tbl_summary(trial2, by = trt, include = time_hms)
+  )
+  expect_equal(
+    tbl$table_body$label,
+    c("time_hms", "00:00:15")
+  )
+})
+
+# addressing issue #1915
+test_that("tbl_summary() edge case of warning condition printing", {
+ expect_snapshot(
+   dplyr::tibble(
+     by_var = c(rep("cohort_1", 3), rep("cohort_2", 3)) |> as.factor(),
+     continuous_var = c(NA, NA, NA, 1, 2, 3)
+   ) |>
+     tbl_summary(
+       by = by_var,
+       type = continuous_var ~ "continuous",
+       statistic = continuous_var ~ "{min}, {max}"
+     ) |>
+     as_kable()
+ )
 })

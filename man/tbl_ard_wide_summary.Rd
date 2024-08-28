@@ -9,6 +9,7 @@ tbl_ard_wide_summary(
   statistic = switch(type[[1]], continuous = c("{median}", "{p25}, {p75}"), c("{n}",
     "{p}\%")),
   type = NULL,
+  label = NULL,
   value = NULL,
   include = everything()
 )
@@ -29,13 +30,18 @@ Specifies the summary type. Accepted value are
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
 
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
+
 \item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the level of a variable to display on a single row.
 The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
 with this argument. Default is \code{NULL}. See below for details.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 }
 \value{
 a gtsummary table of class 'tbl_wide_summary'
@@ -54,7 +60,8 @@ ard_stack(
   trial,
   ard_continuous(variables = age),
   .missing = TRUE,
-  .attributes = TRUE
+  .attributes = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_wide_summary()
 
@@ -63,7 +70,8 @@ ard_stack(
   ard_dichotomous(variables = response),
   ard_categorical(variables = grade),
   .missing = TRUE,
-  .attributes = TRUE
+  .attributes = TRUE,
+  .total_n = TRUE
 ) |>
   tbl_ard_wide_summary()
 }

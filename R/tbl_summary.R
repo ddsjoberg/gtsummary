@@ -6,10 +6,10 @@
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
-#' @param data (`data.frame`)\cr A data frame
+#' @param data (`data.frame`)\cr A data frame.
 #' @param by ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   A single column from `data`. Summary statistics will be stratified by this variable.
-#'   Default is `NULL`
+#'   Default is `NULL`.
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   Used to override default labels in summary table, e.g. `list(age = "Age, years")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
@@ -41,16 +41,16 @@
 #'   - `missing`: must be one of `c("ifany", "no", "always")`
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
-#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`
+#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param sort ([`formula-list-selector`][syntax])\cr
 #'   Specifies sorting to perform for categorical variables.
 #'   Values must be one of `c("alphanumeric", "frequency")`.
-#'   Default is `all_categorical(FALSE) ~ "alphanumeric"`
+#'   Default is `all_categorical(FALSE) ~ "alphanumeric"`.
 #' @param percent (`string`)\cr
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   Variables to include in the summary table. Default is `everything()`
+#'   Variables to include in the summary table. Default is `everything()`.
 #'
 #' @return a gtsummary table of class `"tbl_summary"`
 #' @export
@@ -127,7 +127,7 @@
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(age, grade, response) |>
@@ -316,20 +316,6 @@ tbl_summary <- function(data,
   # construct cards ------------------------------------------------------------
   cards <-
     cards::bind_ard(
-      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
-      cards::ard_missing(data,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fn = digits,
-                         stat_label = ~ default_stat_labels()
-      ),
-      # tabulate by variable for header stats
-      if (!is_empty(by)) {
-        cards::ard_categorical(data,
-                               variables = all_of(by),
-                               stat_label = ~ default_stat_labels()
-        )
-      },
       # tabulate categorical summaries
       cards::ard_categorical(
         scope_table_body(.list2tb(type, "var_type"), data),
@@ -360,8 +346,28 @@ tbl_summary <- function(data,
           ),
         fmt_fn = digits,
         stat_label = ~ default_stat_labels()
+      ),
+      cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
+      cards::ard_missing(data,
+                         variables = all_of(include),
+                         by = all_of(by),
+                         fmt_fn = digits,
+                         stat_label = ~ default_stat_labels()
+      ),
+      # adding total N
+      cards::ard_total_n(data),
+      # tabulate by variable for header stats
+      case_switch(
+        !is_empty(by) ~
+          cards::ard_categorical(
+            data,
+            variables = all_of(by),
+            stat_label = ~ default_stat_labels()
+          ),
+        .default = NULL
       )
-    ) |>
+    ) %>%
+    structure(., class = c("card", class(.))) |>
     cards::replace_null_statistic()
 
   # print all warnings and errors that occurred while calculating requested stats
@@ -425,7 +431,7 @@ tbl_summary <- function(data,
   if (is_empty(by)) {
     cards$gts_column <-
       ifelse(
-        !cards$context %in% "attributes",
+        !cards$context %in% "attributes" & !cards$variable %in% "..ard_total_n..",
         "stat_0",
         NA_character_
       )
@@ -442,6 +448,7 @@ tbl_summary <- function(data,
         ) |>
           dplyr::select(cards::all_ard_groups(), "variable", "context") |>
           dplyr::distinct() |>
+          dplyr::arrange(unlist(!!sym("group1_level"))) |>
           dplyr::mutate(
             .by = cards::all_ard_groups(),
             gts_column = paste0("stat_", dplyr::cur_group_id())
@@ -478,7 +485,7 @@ tbl_summary <- function(data,
         if (!is_empty(missing_stats)) {
           cli::cli_abort(
             c("Statistic {.val {missing_stats}} is not available for variable {.val {variable}}.",
-              i = "Select among {.val {rev(unique(available_stats))}}."
+              i = "Select among {.val {unique(available_stats)}}."
             ),
             call = get_cli_abort_call()
           )

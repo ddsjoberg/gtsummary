@@ -80,6 +80,7 @@ NULL
 #' @name tbl_uvregression
 tbl_uvregression <- function(data, ...) {
   check_not_missing(data)
+  check_pkg_installed("cardx", reference_pkg = "gtsummary")
   UseMethod("tbl_uvregression")
 }
 
@@ -165,7 +166,14 @@ tbl_uvregression.data.frame <- function(data,
   # styler: off
   # remove any variables specified in arguments `x`/`y` from include
   include <- include |>
-    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character()))
+    # remove the x/y variable from the list
+    setdiff(tryCatch(stats::reformulate(c(x, y)) |> all.vars(), error = \(e) character(0L))) |>
+    # remove any other columns listed in the formula
+    setdiff(tryCatch(glue::glue_data(.x = list(y = 1, x = 1), formula) |> stats::as.formula() |> all.vars(), error = \(e) character(0L)))
+  if (is_empty(include)) {
+    cli::cli_abort("The {.arg include} argument cannot be empty.", call = get_cli_abort_call())
+  }
+
   # remove any variables not in include
   show_single_row <-
     if (is_empty(x)) intersect(show_single_row, include)
@@ -347,8 +355,8 @@ is_quo_empty <- function(x) {
           cards::eval_capture_conditions(
             glue(
               formula,
-              .envir = list(y = ifelse(is_empty(y), variable, y),
-                            x = ifelse(is_empty(x), variable, x))
+              .envir = list(y = ifelse(is_empty(y), cardx::bt(variable), y),
+                            x = ifelse(is_empty(x), cardx::bt(variable), x))
             ) |>
               stats::as.formula()
           )

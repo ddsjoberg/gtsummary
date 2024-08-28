@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary") && is_pkg_installed("broom", reference_pkg = "cardx"))
 
 test_that("add_ci(method) with no `by`", {
@@ -797,5 +798,18 @@ test_that("add_ci() correctly handles dichotomous variables", {
   expect_equal(
     tbl$inputs$value,
     tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
+  )
+})
+
+test_that("add_ci() messaging for tbl_summary(percent)", {
+  expect_message(
+    trial |>
+      tbl_summary(
+        missing = "no",
+        statistic = all_continuous() ~ "{mean} ({sd})",
+        include = c(marker, response, trt), percent = "row"
+      ) |>
+      add_ci(),
+    "function is meant to work with"
   )
 })

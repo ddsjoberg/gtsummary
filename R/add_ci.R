@@ -91,6 +91,10 @@ add_ci.tbl_summary <- function(x,
   # check inputs ---------------------------------------------------------------
   check_scalar_range(conf.level, range = c(0, 1))
   check_string(pattern, allow_empty = TRUE)
+  if (!"column" %in% x$inputs$percent) {
+    cli::cli_inform("The {.fun add_ci} function is meant to work with {.code tbl_summary(percent={cli::cli_format('column')})},
+                     but {.code tbl_summary(percent={cli::cli_format(x$inputs$percent)})} was used.")
+  }
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(

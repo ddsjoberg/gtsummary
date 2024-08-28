@@ -5,27 +5,27 @@
       cards::ard_categorical(variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), by = ARM))
     Output
-        **Characteristic** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
-      1 Pooled Age Group 1                  <NA>                               <NA>
-      2              65-80            42 (48.8%)                         55 (65.5%)
-      3                <65            14 (16.3%)                         11 (13.1%)
-      4                >80            30 (34.9%)                         18 (21.4%)
-      5                Age     76.0 (69.0, 82.0)                  76.0 (70.5, 80.0)
-        **Xanomeline Low Dose**  \nN = 84
-      1                              <NA>
-      2                        47 (56.0%)
-      3                          8 (9.5%)
-      4                        29 (34.5%)
-      5                 77.5 (71.0, 82.0)
+        **Characteristic**       **Placebo** **Xanomeline High Dose**
+      1 Pooled Age Group 1              <NA>                     <NA>
+      2              65-80        42 (48.8%)               55 (65.5%)
+      3                <65        14 (16.3%)               11 (13.1%)
+      4                >80        30 (34.9%)               18 (21.4%)
+      5                Age 76.0 (69.0, 82.0)        76.0 (70.5, 80.0)
+        **Xanomeline Low Dose**
+      1                    <NA>
+      2              47 (56.0%)
+      3                8 (9.5%)
+      4              29 (34.5%)
+      5       77.5 (71.0, 82.0)
 
 ---
 
     Code
       as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
         variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"), .attributes = TRUE,
-      .missing = TRUE)))
+      .missing = TRUE, .total_n = TRUE)))
     Output
-        **Characteristic**       **N = 254**
+        **Characteristic**       **Overall**
       1 Pooled Age Group 1              <NA>
       2              65-80       144 (56.7%)
       3                <65        33 (13.0%)
@@ -39,10 +39,19 @@
       cards::ard_continuous(variables = "AGE"), .attributes = FALSE, .missing = FALSE),
       by = ARM, missing = "no"))
     Output
-        **Characteristic** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
-      1                AGE     76.0 (69.0, 82.0)                  76.0 (70.5, 80.0)
-        **Xanomeline Low Dose**  \nN = 84
-      1                 77.5 (71.0, 82.0)
+        **Characteristic**       **Placebo** **Xanomeline High Dose**
+      1                AGE 76.0 (69.0, 82.0)        76.0 (70.5, 80.0)
+        **Xanomeline Low Dose**
+      1       77.5 (71.0, 82.0)
+
+---
+
+    Code
+      as.data.frame(tbl_ard_summary(cards::ard_continuous(trial, by = trt, variables = age),
+      by = trt))
+    Output
+        **Characteristic**        **Drug A**        **Drug B**
+      1                age 46.0 (37.0, 60.0) 48.0 (39.0, 56.0)
 
 # tbl_ard_summary(cards) error messages
 
@@ -91,7 +100,7 @@
       as.data.frame(tbl_ard_summary(ard, statistic = list(all_continuous() ~
         "{median}", all_categorical() ~ "{n} / {N} (Total {N_obs})")))
     Output
-        **Characteristic**           **N = 254**
+        **Characteristic**           **Overall**
       1 Pooled Age Group 1                  <NA>
       2              65-80 144 / 254 (Total 254)
       3                <65  33 / 254 (Total 254)
@@ -104,7 +113,7 @@
       as.data.frame(tbl_ard_summary(ard, type = list(all_continuous() ~ "continuous2"),
       statistic = list(all_continuous() ~ c("{median}", "{mean}"))))
     Output
-        **Characteristic** **N = 254**
+        **Characteristic** **Overall**
       1 Pooled Age Group 1        <NA>
       2              65-80 144 (56.7%)
       3                <65  33 (13.0%)
@@ -142,7 +151,7 @@
     Condition
       Error in `tbl_ard_summary()`:
       ! Statistic "not_a_valid_summary_statistic" is not available for variable "AGE".
-      i Select among "p_nonmiss", "p_miss", "N_nonmiss", "N_miss", "N_obs", "max", "min", "p75", "p25", "median", "sd", "mean", and "N".
+      i Select among "N", "mean", "sd", "median", "p25", "p75", "min", "max", "N_obs", "N_miss", "N_nonmiss", "p_miss", and "p_nonmiss".
 
 ---
 

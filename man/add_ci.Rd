@@ -32,7 +32,7 @@ Confidence interval method. Default is
 See details below.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Indicates how the confidence interval will be displayed.

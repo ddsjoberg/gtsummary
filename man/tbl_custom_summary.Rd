@@ -23,11 +23,11 @@ tbl_custom_summary(
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}}
+Default is \code{NULL}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
@@ -37,7 +37,7 @@ If no label has been set, the column name is used.}
 \item{stat_fns}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the function to be used to compute the statistics
 (see below for details and examples).
-You can also use dedicated helpers such as \code{\link[=continuous_summary]{continuous_summary()}}, \code{\link[=ratio_summary]{ratio_summary()}}
+You can also use dedicated helpers such as \code{\link[=ratio_summary]{ratio_summary()}}
 or \code{\link[=proportion_summary]{proportion_summary()}}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
@@ -66,11 +66,11 @@ with this argument. Default is \code{NULL}. See below for details.}
 \item \code{missing}: must be one of \code{c("ifany", "no", "always")}
 \item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
-Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
 }}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 
 \item{overall_row}{(scalar \code{logical})\cr
 Logical indicator to display an overall row. Default is
@@ -221,8 +221,8 @@ trial |>
   tbl_custom_summary(
     include = c("marker", "ttdeath"),
     by = "trt",
-    stat_fns = ~mean_ci,
-    statistic = ~"{mean} [{conf.low}; {conf.high}]"
+    stat_fns = ~ mean_ci,
+    statistic = ~ "{mean} [{conf.low}; {conf.high}]"
   ) |>
   add_overall(last = TRUE) |>
   modify_footnote(
@@ -248,8 +248,8 @@ trial |>
   tbl_custom_summary(
     include = c("grade", "stage"),
     by = "trt",
-    stat_fns = ~diff_to_great_mean,
-    statistic = ~"{mean} ({level}, diff: {diff})",
+    stat_fns = ~ diff_to_great_mean,
+    statistic = ~ "{mean} ({level}, diff: {diff})",
     overall_row = TRUE
   ) |>
   bold_labels()

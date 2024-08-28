@@ -20,7 +20,8 @@
 #'   trial,
 #'   ard_continuous(variables = age),
 #'   .missing = TRUE,
-#'   .attributes = TRUE
+#'   .attributes = TRUE,
+#'   .total_n = TRUE
 #' ) |>
 #'   tbl_ard_wide_summary()
 #'
@@ -29,7 +30,8 @@
 #'   ard_dichotomous(variables = response),
 #'   ard_categorical(variables = grade),
 #'   .missing = TRUE,
-#'   .attributes = TRUE
+#'   .attributes = TRUE,
+#'   .total_n = TRUE
 #' ) |>
 #'   tbl_ard_wide_summary()
 tbl_ard_wide_summary <- function(cards,
@@ -38,13 +40,18 @@ tbl_ard_wide_summary <- function(cards,
                                           "continuous" = c("{median}", "{p25}, {p75}"),
                                           c("{n}", "{p}%")),
                                  type = NULL,
+                                 label = NULL,
                                  value = NULL,
                                  include = everything()) {
   set_cli_abort_call()
 
   # process inputs -------------------------------------------------------------
   check_not_missing(cards)
-  check_class(cards, "card")
+  check_class(
+    cards, "card",
+    message = c("The {.arg {arg_name}} argument must be class {.cls {'card'}}, not {.obj_type_friendly {x}}.",
+                i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
+  )
   if (!is_empty(dplyr::select(cards, cards::all_ard_groups()) |> names())) {
     cli::cli_abort(
       "The {.arg cards} object cannot contain grouping variables {.val {dplyr::select(cards, cards::all_ard_groups()) |> names()}}.",
@@ -105,6 +112,10 @@ tbl_ard_wide_summary <- function(cards,
     statistic = statistic,
     include_env = TRUE
   )
+  cards::process_formula_selectors(
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+    label = label
+  )
 
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
@@ -120,6 +131,16 @@ tbl_ard_wide_summary <- function(cards,
 
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
+
+  # add/update attributes ------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      cards::ard_attributes(data, variables = all_of(include)),
+      cards,
+      cards::ard_attributes(data, variables = all_of(names(label)), label = label),
+      .update = TRUE,
+      .quiet = TRUE
+    )
 
   # construct initial tbl_summary object ---------------------------------------
   x <-

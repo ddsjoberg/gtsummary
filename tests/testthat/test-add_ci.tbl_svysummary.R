@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary") && is_pkg_installed("broom", reference_pkg = "cardx"))
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
@@ -723,5 +724,19 @@ test_that("add_ci() correctly handles dichotomous variables", {
   expect_equal(
     tbl$inputs$value |> lapply(as.character),
     tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
+  )
+})
+
+test_that("add_ci() messaging for tbl_svysummary(percent)", {
+  expect_message({
+    data(api, package = "survey")
+    survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
+      tbl_svysummary(
+        by = "both",
+        include = stype,
+        percent = "row"
+      ) |>
+      add_ci()},
+    "function is meant to work with"
   )
 })

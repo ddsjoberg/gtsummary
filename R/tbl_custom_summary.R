@@ -10,7 +10,7 @@
 #' @param stat_fns ([`formula-list-selector`][syntax])\cr
 #'   Specifies the function to be used to compute the statistics
 #'   (see below for details and examples).
-#'   You can also use dedicated helpers such as [`continuous_summary()`], [`ratio_summary()`]
+#'   You can also use dedicated helpers such as [`ratio_summary()`]
 #'   or [`proportion_summary()`].
 #' @param overall_row (scalar `logical`)\cr
 #'   Logical indicator to display an overall row. Default is
@@ -149,8 +149,8 @@
 #'   tbl_custom_summary(
 #'     include = c("marker", "ttdeath"),
 #'     by = "trt",
-#'     stat_fns = ~mean_ci,
-#'     statistic = ~"{mean} [{conf.low}; {conf.high}]"
+#'     stat_fns = ~ mean_ci,
+#'     statistic = ~ "{mean} [{conf.low}; {conf.high}]"
 #'   ) |>
 #'   add_overall(last = TRUE) |>
 #'   modify_footnote(
@@ -176,8 +176,8 @@
 #'   tbl_custom_summary(
 #'     include = c("grade", "stage"),
 #'     by = "trt",
-#'     stat_fns = ~diff_to_great_mean,
-#'     statistic = ~"{mean} ({level}, diff: {diff})",
+#'     stat_fns = ~ diff_to_great_mean,
+#'     statistic = ~ "{mean} ({level}, diff: {diff})",
 #'     overall_row = TRUE
 #'   ) |>
 #'   bold_labels()
@@ -399,6 +399,7 @@ tbl_custom_summary <- function(data,
                          fmt_fn = digits,
                          stat_label = ~ default_stat_labels()
       ),
+      cards::ard_total_n(data),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
         cards::ard_categorical(data,
