@@ -61,7 +61,11 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL
   check_not_missing(cards)
   check_not_missing(variable)
   check_not_missing(include)
-  check_class(cards, "card")
+  check_class(
+    cards, "card",
+    message = c("The {.arg {arg_name}} argument must be class {.cls {'card'}}, not {.obj_type_friendly {x}}.",
+                i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
+  )
 
   # define a data frame based on the context of `card` -------------------------
   data <- bootstrap_df_from_cards(cards)
