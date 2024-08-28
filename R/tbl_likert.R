@@ -4,12 +4,13 @@
 #' Create a table of ordered categorical variables in a wide format.
 #'
 #' @inheritParams tbl_summary
-#' @param statistic (`string`)\cr
-#'   a string indicating the statistics to include.
-#'   Use glue syntax to place statistics and select among the `'n'`, `'N'`, and `'p'`
-#'   statistics. Default is `"{n} ({p}%)"`.
-#' @param digits (named `list`)\cr
-#'   named list the formatting functions to apply to the statistics.
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Used to specify the summary statistics for each variable.
+#'   The default is `everything() ~ "{n} ({p}%)"`.
+#' @param digits ([`formula-list-selector`][syntax])\cr
+#'  Specifies how summary statistics are rounded. Values may be either integer(s)
+#'   or function(s). If not specified, default formatting is assigned
+#'   via `assign_summary_digits()`.
 #' @param sort (`string`)\cr
 #'   indicates whether levels of variables should be placed in
 #'   ascending order (the default) or descending.
@@ -43,11 +44,9 @@
 #' ) |>
 #'   tbl_merge(tab_spanner = FALSE)
 tbl_likert <- function(data,
-                       statistic = "{n} ({p}%)",
+                       statistic = ~"{n} ({p}%)",
                        label = NULL,
-                       digits = list(n = label_style_number(),
-                                     N = label_style_number(),
-                                     p = label_style_percent()),
+                       digits = NULL,
                        include = everything(),
                        sort = c("ascending", "descending")) {
   set_cli_abort_call()
@@ -55,26 +54,38 @@ tbl_likert <- function(data,
   # process inputs -------------------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
-  check_class(digits, "list", allow_empty = TRUE)
   sort <- arg_match(sort)
-  check_string(statistic)
-  if (is_empty(.extract_glue_elements(statistic))) {
-    cli::cli_abort("The {.arg statistic} argument string does not contain any glue element, e.g. {.val {{n}} ({{p}}%)}.",
-                   call = get_cli_abort_call())
-  }
-  if (any(!.extract_glue_elements(statistic) %in% c("n", "N", "p"))) {
-    not_valid_stat <- .extract_glue_elements(statistic) |> setdiff(c("n", "N", "p"))
-    cli::cli_abort(c("Statistic(s) {.val {not_valid_stat}} are not valid.",
-                     i = "Select one or more of {.val {c('n', 'N', 'p')}}"),
-                   call = get_cli_abort_call())
-  }
 
   cards::process_selectors(data, include = {{ include }})
-  cards::process_formula_selectors(data, label = label)
+
+  cards::process_formula_selectors(data[include], label = label, statistic = statistic, digits = digits)
   cards::check_list_elements(
     x = label,
     predicate = \(x) is_string(x),
     error_msg = "Values pass in {.arg label} argument must be strings."
+  )
+  cards::check_list_elements(
+    x = statistic,
+    predicate = \(x) is_string(x),
+    error_msg = "Values pass in {.arg statistic} argument must be strings."
+  )
+
+  # fill in unspecified variables
+  cards::fill_formula_selectors(
+    data[include],
+    statistic = eval(formals(gtsummary::tbl_likert)[["statistic"]])
+  )
+
+  # fill each element of digits argument
+  if (!missing(digits)) {
+    digits <-
+      assign_summary_digits(data[include], statistic, type = rep_named(include, list("categorical")), digits = digits)
+  }
+
+  .check_haven_labelled(data[include])
+  .check_tbl_summary_args(
+    data = data, label = label, statistic = statistic,
+    digits = digits, type = rep_named(include, list("categorical")), value = NULL
   )
 
   # save processed function inputs ---------------------------------------------
@@ -88,19 +99,6 @@ tbl_likert <- function(data,
       c("All variables in the {.arg include} argument must be {.cls factor}.",
         i = "Variables {.val {not_fct}} are not class {.cls factor}.")
     )
-  }
-
-  if (!is_named(digits)) {
-    cli::cli_abort("The {.arg digits} argument must be a named list.", call = get_cli_abort_call())
-  }
-  cards::check_list_elements(
-    digits,
-    predicate = \(x) is_scalar_integerish(x) || is_function(x),
-    error_msg = "The elements of the {.arg digits} argument list must be a scalar {.cls integer} or {.cls function}."
-  )
-  if (!missing(digits)) {
-    digits <- eval(formals(gtsummary::tbl_likert)[["digits"]]) |>
-      utils::modifyList(digits)
   }
 
   # check all factors have the same levels -------------------------------------
@@ -136,7 +134,7 @@ tbl_likert <- function(data,
       cards::ard_categorical(
         data = data,
         variables = all_of(include),
-        fmt_fn = ~digits,
+        fmt_fn = digits,
         denominator = "column",
         stat_label = ~ default_stat_labels()
       )
@@ -155,20 +153,20 @@ tbl_likert <- function(data,
     dplyr::left_join(
       dplyr::tibble(
         variable_level = factor(levels(data[[include[1]]]), levels = levels(data[[include[1]]])) |> as.list(),
-        gts_colname = paste0("stat_", seq_along(levels(data[[include[1]]])))
+        gts_column = paste0("stat_", seq_along(levels(data[[include[1]]])))
       ),
       by = "variable_level"
     )
 
   x <-
-    brdg_likert(cards = cards, variables = include, statistic =  statistic) |>
+    brdg_likert(cards = cards, variables = include, statistic = statistic) |>
     append(
       list(
         cards = list(tbl_likert = cards),
         inputs = tbl_likert_inputs
       )
     ) |>
-    structure(class = c("tbl_summary", "gtsummary"))
+    structure(class = c("tbl_likert", "gtsummary"))
 
   # adding styling -------------------------------------------------------------
   x <- x |>
@@ -187,7 +185,28 @@ brdg_likert <- function(cards,
                         statistic) {
   set_cli_abort_call()
 
-  # create table_body
+  # check the ARD has all the requested statistics -----------------------------
+  walk(
+    variables,
+    \(variable) {
+      specified_stats <- .extract_glue_elements(statistic[[variable]])
+      available_stats <- dplyr::filter(cards, .data$variable %in% .env$variable, !is.na(.data$gts_column))$stat_name |> unique()
+
+      if (is_empty(specified_stats)) {
+        cli::cli_abort("The {.arg statistic} argument string does not contain any
+                        glue element for variable {.val {variable}}, e.g. {.val {{n}} ({{p}}%)}.",
+                       call = get_cli_abort_call())
+      }
+      if (any(!specified_stats %in% available_stats)) {
+        not_valid_stat <- specified_stats[!specified_stats %in% available_stats]
+        cli::cli_abort(c("Statistic(s) {.val {not_valid_stat}} are not valid.",
+                         i = "Select one or more of {.val {available_stats}}"),
+                       call = get_cli_abort_call())
+      }
+    }
+  )
+
+  # create table_body ----------------------------------------------------------
   table_body <-
     pier_likert(cards = cards, variables = variables, statistic = statistic)
 
@@ -199,8 +218,8 @@ brdg_likert <- function(cards,
     x$table_styling$header |>
     dplyr::left_join(
       cards |>
-        dplyr::filter(!is.na(.data$gts_colname)) |>
-        dplyr::select(column = "gts_colname", modify_stat_level = "variable_level") |>
+        dplyr::filter(!is.na(.data$gts_column)) |>
+        dplyr::select(column = "gts_column", modify_stat_level = "variable_level") |>
         unique() |>
         dplyr::mutate(modify_stat_level = unlist(.data$modify_stat_level) |> as.character()),
       by = "column"
@@ -223,39 +242,12 @@ brdg_likert <- function(cards,
 pier_likert <- function(cards, variables, statistic) {
   set_cli_abort_call()
 
-  cards |>
-    dplyr::filter(!is.na(.data$gts_colname))  |>
-    cards::apply_fmt_fn() |>
-    dplyr::group_by(.data$variable, .data$variable_level, .data$gts_colname) |>
-    dplyr::group_map(
-      function(df_variable_stats, df_groups_and_variable) {
-        lst_variable_stats <-
-          cards::get_ard_statistics(df_variable_stats, .column = "stat_fmt")
-
-        df_groups_and_variable |>
-          dplyr::mutate(
-            stat = glue::glue(
-              statistic,
-              .envir =
-                cards::get_ard_statistics(df_variable_stats, .column = "stat_fmt")
-            ) |>
-              as.character(),
-            var_type = "continuous",
-            row_type = "label",
-            var_label = cards |>
-              dplyr::filter(.data$context %in% "attributes",
-                            .data$stat_name %in% "label",
-                            .data$variable %in% .env$df_groups_and_variable$variable) |>
-              dplyr::pull("stat") |>
-              getElement(1L),
-            label = .data$var_label
-          )
-      }
-    ) |>
-    dplyr::bind_rows() |>
-    tidyr::pivot_wider(
-      id_cols = c("variable", "row_type", "var_label", "label"),
-      values_from = "stat",
-      names_from = "gts_colname"
-    )
+  pier_summary_continuous(
+    cards =
+      cards |>
+      dplyr::filter(!is.na(.data$gts_column) | .data$context %in% "attributes") |>
+      dplyr::mutate(group1 = .data$variable, group1_level = .data$variable_level),
+    variables = variables,
+    statistic = statistic
+  )
 }

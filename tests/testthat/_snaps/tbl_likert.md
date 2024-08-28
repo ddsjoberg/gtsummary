@@ -13,7 +13,7 @@
 # tbl_likert(statistic)
 
     Code
-      as.data.frame(tbl_likert(df_likert, statistic = "{n} / {N} ({p}%)"))
+      as.data.frame(tbl_likert(df_likert, statistic = ~"{n} / {N} ({p}%)"))
     Output
         **Characteristic** **Strongly Disagree**  **Disagree**    **Agree**
       1   recommend_friend          7 / 20 (35%)  3 / 20 (15%) 7 / 20 (35%)
@@ -25,7 +25,7 @@
 # tbl_likert(digits)
 
     Code
-      as.data.frame(tbl_likert(df_likert, digits = list(p = label_style_sigfig(
+      as.data.frame(tbl_likert(df_likert, digits = ~ list(p = label_style_sigfig(
         digits = 3, scale = 100))))
     Output
         **Characteristic** **Strongly Disagree** **Disagree** **Agree**

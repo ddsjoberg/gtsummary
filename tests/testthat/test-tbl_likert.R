@@ -30,28 +30,28 @@ test_that("tbl_likert(statistic)", {
   # standard use works well
   expect_snapshot(
     df_likert |>
-      tbl_likert(statistic = "{n} / {N} ({p}%)") |>
+      tbl_likert(statistic = ~"{n} / {N} ({p}%)") |>
       as.data.frame()
   )
 
   # errors with bad inputs
   expect_error(
     df_likert |>
-      tbl_likert(statistic = letters),
-    "The `statistic` argument must be a string, not a character vector"
+      tbl_likert(statistic = ~letters),
+    "Values pass in `statistic` argument must be strings"
   )
 
   # statistic doesn't have any glue syntax
   expect_error(
     df_likert |>
-      tbl_likert(statistic = "n / N"),
+      tbl_likert(statistic = ~"n / N"),
     "The `statistic` argument string does not contain any glue element"
   )
 
   # statistic has stats that are not available
   expect_error(
     df_likert |>
-      tbl_likert(statistic = "{n} ({sd})"),
+      tbl_likert(statistic = ~"{n} ({sd})"),
     "are not valid"
   )
 })
@@ -78,21 +78,15 @@ test_that("tbl_likert(digits)", {
   # standard use works well
   expect_snapshot(
     df_likert |>
-      tbl_likert(digits = list(p = label_style_sigfig(digits = 3, scale = 100))) |>
+      tbl_likert(digits = ~list(p = label_style_sigfig(digits = 3, scale = 100))) |>
       as.data.frame()
   )
 
   # errors with bad inputs
   expect_error(
     df_likert |>
-      tbl_likert(digits = letters),
-    "The `digits` argument must be class"
-  )
-
-  expect_error(
-    df_likert |>
-      tbl_likert(digits = list(p = letters)),
-    "The elements of the `digits` argument list must be a scalar"
+      tbl_likert(digits = ~letters),
+    "Error in `digits` argument for variable"
   )
 })
 

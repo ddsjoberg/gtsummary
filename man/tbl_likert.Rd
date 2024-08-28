@@ -6,21 +6,19 @@
 \usage{
 tbl_likert(
   data,
-  statistic = "{n} ({p}\%)",
+  statistic = ~"{n} ({p}\%)",
   label = NULL,
-  digits = list(n = label_style_number(), N = label_style_number(), p =
-    label_style_percent()),
+  digits = NULL,
   include = everything(),
   sort = c("ascending", "descending")
 )
 }
 \arguments{
-\item{data}{(\code{data.frame})\cr A data frame}
+\item{data}{(\code{data.frame})\cr A data frame.}
 
 \item{statistic}{(\code{string})\cr
-a string indicating the statistics to include.
-Use glue syntax to place statistics and select among the \code{'n'}, \code{'N'}, and \code{'p'}
-statistics. Default is \code{"{n} ({p}\%)"}.}
+Used to specify the summary statistics for each variable.
+The default is \code{everything() ~ "{n} ({p}\%)"}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
@@ -28,10 +26,12 @@ The default for each variable is the column label attribute, \code{attr(., 'labe
 If no label has been set, the column name is used.}
 
 \item{digits}{(named \code{list})\cr
-named list the formatting functions to apply to the statistics.}
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to include in the summary table. Default is \code{everything()}}
+Variables to include in the summary table. Default is \code{everything()}.}
 
 \item{sort}{(\code{string})\cr
 indicates whether levels of variables should be placed in
