@@ -28,6 +28,18 @@
 #'         test.args = grade ~ list(rho = 0.5))
 #' ```
 #'
+#' @section Note:
+#'
+#' To calculate the p-values, the formula is re-constructed from the the call in the
+#' original `survfit()` object.
+#' When the `survfit()` object is created a for loop, `lapply()`, `purrr::map()`
+#' setting the call _may not_ reflect the true formula which may result in an
+#' error or an incorrect calculation.
+#'
+#' To ensure correct results, the call formula in `survfit()` must represent the
+#' formula that will be used in `survival::survdiff()`.
+#' If you utilize the `tbl_survfit.data.frame()` S3 method, this is handled for you.
+#'
 #' @export
 #' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")
 #' library(survival)

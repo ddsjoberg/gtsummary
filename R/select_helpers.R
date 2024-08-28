@@ -22,7 +22,7 @@
 #'   character vector indicating the test type of the variables to select, e.g.
 #'   select all variables being compared with `"t.test"`.
 #' @param contrasts_type (`character`)\cr
-#'   type of contrast to select. Select among contrast types `c("treatment", "sum", "poly", "helmert", "other")`.
+#'   type of contrast to select. Select among contrast types `c("treatment", "sum", "poly", "helmert", "sdif", "other")`.
 #'   Default is all contrast types.
 #' @name select_helpers
 #' @return A character vector of column names selected
@@ -87,7 +87,7 @@ all_interaction <- function() {
 
 #' @rdname select_helpers
 #' @export
-all_contrasts <- function(contrasts_type = c("treatment", "sum", "poly", "helmert", "other")) {
+all_contrasts <- function(contrasts_type = c("treatment", "sum", "poly", "helmert", "sdif", "other")) {
   contrasts_type <- arg_match(contrasts_type, multiple = TRUE)
   where(function(x) isTRUE(attr(x, "gtsummary.contrasts_type") %in% contrasts_type))
 }

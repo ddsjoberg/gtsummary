@@ -57,6 +57,20 @@ and a second test of the \emph{G-rho} family.
 }\if{html}{\out{</div>}}
 }
 
+\section{Note}{
+
+
+To calculate the p-values, the formula is re-constructed from the the call in the
+original \code{survfit()} object.
+When the \code{survfit()} object is created a for loop, \code{lapply()}, \code{purrr::map()}
+setting the call \emph{may not} reflect the true formula which may result in an
+error or an incorrect calculation.
+
+To ensure correct results, the call formula in \code{survfit()} must represent the
+formula that will be used in \code{survival::survdiff()}.
+If you utilize the \code{tbl_survfit.data.frame()} S3 method, this is handled for you.
+}
+
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)

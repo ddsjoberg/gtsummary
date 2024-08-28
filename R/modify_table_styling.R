@@ -140,7 +140,7 @@ modify_table_styling <- function(x,
         list(text_format = NULL, undo_text_format = undo_text_format, indent = indent)
       ) |>
       compact()
-    if (nchar(expr_deparse(updated_call[["x"]])) > 30L) updated_call[["x"]] <- expr(.)
+    if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30L) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
     lifecycle::deprecate_warn(
@@ -165,7 +165,7 @@ modify_table_styling <- function(x,
       as.list() |>
       utils::modifyList(lst_new_args) |>
       compact()
-    if (nchar(expr_deparse(updated_call[["x"]])) > 30) updated_call[["x"]] <- expr(.)
+    if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
     lifecycle::deprecate_warn(

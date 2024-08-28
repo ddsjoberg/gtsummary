@@ -21,18 +21,17 @@ test_that("tbl_ard_summary() works", {
       cards::ard_categorical(variables = "AGEGR1"),
       cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
-      .missing = TRUE
+      .missing = TRUE,
+      .total_n = TRUE
     ) |>
       tbl_ard_summary() |>
       as.data.frame()
   )
-
-
 })
 
 
 test_that("tbl_ard_summary(cards)", {
-  # when attribute labels are not provided, we defatult to variable names
+  # when attribute labels are not provided, we default to variable names
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
@@ -59,6 +58,13 @@ test_that("tbl_ard_summary(cards)", {
       .missing = FALSE
     ) |>
       tbl_ard_summary(by = ARM, missing = "no") |>
+      as.data.frame()
+  )
+
+  # no error when no tablulation of the 'by' data is passed
+  expect_snapshot(
+    cards::ard_continuous(trial, by = trt, variables = age) |>
+      tbl_ard_summary(by = trt) |>
       as.data.frame()
   )
 })
@@ -114,6 +120,36 @@ test_that("tbl_ard_summary(by) messaging", {
   )
 })
 
+test_that("tbl_ard_summary(label) argument works", {
+  expect_equal(
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = TRUE
+    ) |>
+      tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    c("Pooled Age Group 1", "Updated AGE!")
+  )
+
+  expect_equal(
+    cards::ard_stack(
+      data = cards::ADSL,
+      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_continuous(variables = "AGE"),
+      .attributes = FALSE
+    ) |>
+      tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "label") |>
+      dplyr::pull(label),
+    c("AGEGR1", "Updated AGE!")
+  )
+})
+
 test_that("tbl_ard_summary(statistic) argument works", {
   ard <-
     cards::ard_stack(
@@ -121,7 +157,8 @@ test_that("tbl_ard_summary(statistic) argument works", {
       cards::ard_categorical(variables = "AGEGR1"),
       cards::ard_continuous(variables = "AGE"),
       .attributes = TRUE,
-      .missing = TRUE
+      .missing = TRUE,
+      .total_n = TRUE
     )
 
   expect_snapshot(

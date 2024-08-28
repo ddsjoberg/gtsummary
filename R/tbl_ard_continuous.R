@@ -28,7 +28,7 @@
 #'     # 'trt' is the column stratifying variable and needs to be listed first.
 #'     by = c(trt, grade),
 #'     variables = age
-#'   ) ,
+#'   ),
 #'   # add univariate trt tabulation
 #'   ard_categorical(
 #'     trial,
@@ -55,12 +55,17 @@
 #'   ard_attributes(trial, variables = c(grade, age))
 #' ) |>
 #'   tbl_ard_continuous(variable = "age", include = "grade")
-tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = everything() ~ "{median} ({p25}, {p75})") {
+tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL,
+                               statistic = everything() ~ "{median} ({p25}, {p75})") {
   set_cli_abort_call()
   check_not_missing(cards)
   check_not_missing(variable)
   check_not_missing(include)
-  check_class(cards, "card")
+  check_class(
+    cards, "card",
+    message = c("The {.arg {arg_name}} argument must be class {.cls {'card'}}, not {.obj_type_friendly {x}}.",
+                i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
+  )
 
   # define a data frame based on the context of `card` -------------------------
   data <- bootstrap_df_from_cards(cards)
@@ -112,6 +117,11 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
     statistic = statistic,
     include_env = TRUE
   )
+  cards::process_formula_selectors(
+    data[include],
+    label = label
+  )
+
   # add the calling env to the statistics
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
   cards::check_list_elements(
@@ -125,18 +135,15 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   tbl_ard_continuous_inputs$data <- NULL
   call <- match.call()
 
-  # adding attributes if not already present
-  missing_ard_attributes <-
-    dplyr::filter(cards, .data$variable %in% c(.env$include, .env$variable, .env$by), .data$context %in% "attributes") |>
-    dplyr::pull("variable") |>
-    unique() %>%
-    {setdiff(c(include, variable, by), .)}
-  if (!is_empty(missing_ard_attributes)) {
-    cards <- cards |>
-      cards::bind_ard(
-        cards::ard_attributes(data, variables = all_of(missing_ard_attributes))
-      )
-  }
+  # add/update attributes ------------------------------------------------------
+  cards <-
+    cards::bind_ard(
+      cards::ard_attributes(data, variables = all_of(include)),
+      cards,
+      cards::ard_attributes(data, variables = all_of(names(label)), label = label),
+      .update = TRUE,
+      .quiet = TRUE
+    )
 
   # fill NULL stats with NA
   cards <- cards::replace_null_statistic(cards)
@@ -149,28 +156,14 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
 
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_continuous(cards, include, by)
-  tbl_ard_continuous_inputs$cards <- cards # saving the version of cards that has gts_colname
 
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
 
-  # if `by` is missing, then remove Ns since they are not in the ARD by default
-  if (is_empty(by)) {
-    x$table_styling$header <- x$table_styling$header |>
-      dplyr::mutate(across(c("modify_stat_N", "modify_stat_n"), ~NA_integer_))
-  }
-
   # adding styling -------------------------------------------------------------
   x <- x |>
     # updating the headers for the stats columns
-    modify_header(
-      all_stat_cols() ~
-        ifelse(
-          is_empty(by),
-          "**N = {style_number(N)}**",
-          "**{level}**  \nN = {style_number(n)}"
-        )
-    )
+    modify_header(all_stat_cols() ~ "**{level}**")
 
   # prepend the footnote with information about the variable -------------------
   x$table_styling$footnote$footnote <-
@@ -186,6 +179,7 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, statistic = 
   # add other information to the returned object
   x$inputs <- tbl_ard_continuous_inputs
   x$call_list <- list(tbl_ard_continuous = call)
+  x$cards[["tbl_ard_continuous"]] <- cards
 
   x |>
     structure(class = c("tbl_ard_continuous", "gtsummary"))

@@ -81,7 +81,7 @@ test_that("tbl_uvregression(method.args)", {
   )
 
   # check with NSE argument
-  expect_silent(
+  expect_error(
     tbl2 <-
       tbl_uvregression(
         trial,
@@ -89,7 +89,8 @@ test_that("tbl_uvregression(method.args)", {
         method = survival::coxph,
         method.args = list(id = response),
         include = c(age, trt)
-      )
+      ),
+    NA
   )
   # check models are the same
   expect_equal(
@@ -222,6 +223,20 @@ test_that("tbl_uvregression(include)", {
       include  = starts_with("xxxx")
     ),
     "The `include` argument cannot be empty"
+  )
+
+  # ensure non-syntactic names work in the `include` variables
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(y = hp, method = lm) |>
+      as.data.frame()
+  )
+  expect_snapshot(
+    mtcars |>
+      dplyr::select(`M P G` = mpg, hp) |>
+      tbl_uvregression(x = hp, method = lm) |>
+      as.data.frame()
   )
 })
 

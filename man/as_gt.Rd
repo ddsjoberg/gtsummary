@@ -30,6 +30,10 @@ Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
 }
+\note{
+As of 2024-08-15, line breaks (e.g. \code{'\\n'}) do not render properly for PDF output.
+For now, these line breaks are stripped when rendering to PDF with Quarto and R markdown.
+}
 \examples{
 # Example 1 ----------------------------------
 trial |>
