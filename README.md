@@ -80,7 +80,8 @@ The {gtsummary} package was written as a companion to the
 install.packages("gtsummary")
 ```
 
-Install the development version with `pak::pak("ddsjoberg/gtsummary")`
+Install the development version with
+`pak::pkg_install("ddsjoberg/gtsummary", dependencies = TRUE)`
 
 ## Examples
 
