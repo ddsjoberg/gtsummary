@@ -25,8 +25,8 @@
       as.data.frame(tbl2)
     Output
             **Characteristic** **N** **log(HR)**  **95% CI** **p-value**
-      1                    Age   189        0.01  0.01, 0.01      <0.001
-      2 Chemotherapy Treatment   200        <NA>        <NA>        <NA>
+      1                    Age   183        0.01  0.01, 0.01      <0.001
+      2 Chemotherapy Treatment   193        <NA>        <NA>        <NA>
       3                 Drug A  <NA>        <NA>        <NA>        <NA>
       4                 Drug B  <NA>        0.29 -0.12, 0.70         0.2
 
