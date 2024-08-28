@@ -253,8 +253,7 @@ tbl_ard_summary <- function(cards,
     utils::modifyList(
       list(
         cards = list(tbl_ard_summary = cards),
-        inputs = tbl_ard_summary_inputs,
-        call_list = list(tbl_ard_summary = call)
+        inputs = tbl_ard_summary_inputs
       )
     ) |>
     structure(class = c("tbl_ard_summary", "gtsummary"))
@@ -273,6 +272,7 @@ tbl_ard_summary <- function(cards,
         )
     )
 
-  # return tbl_ard_summary table --------------------------------------------------
+  # return tbl_ard_summary table -----------------------------------------------
+  x$call_list <- list(tbl_ard_summary = call)
   x
 }
