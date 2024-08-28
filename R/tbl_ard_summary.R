@@ -72,7 +72,11 @@ tbl_ard_summary <- function(cards,
   set_cli_abort_call()
   # data argument checks -------------------------------------------------------
   check_not_missing(cards)
-  check_class(cards, "card")
+  check_class(
+    cards, "card",
+    message = c("The {.arg {arg_name}} argument must be class {.cls {'card'}}, not {.obj_type_friendly {x}}.",
+                i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
+  )
   missing <- arg_match(missing)
 
   # define a data frame based on the context of `card` -------------------------
