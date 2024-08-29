@@ -56,11 +56,16 @@ NULL
 
 #' @rdname add_overall_ard
 #' @export
-add_overall.tbl_ard_summary <- function(x, cards, last = FALSE,
+add_overall.tbl_ard_summary <- function(x,
+                                        cards,
+                                        last = FALSE,
                                         col_label = "**Overall**",
-                                        statistic = NULL, digits = NULL, ...) {
+                                        statistic = NULL,
+                                        digits = NULL, ...) {
   set_cli_abort_call()
   check_dots_empty()
+  check_not_missing(cards)
+  check_class(cards, "card")
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
