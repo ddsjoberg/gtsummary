@@ -222,3 +222,7 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
 #' @name add_n_summary
 #' @export
 add_n.tbl_svysummary <- add_n.tbl_summary
+
+#' @name add_n_summary
+#' @export
+add_n.tbl_likert <- add_n.tbl_summary
