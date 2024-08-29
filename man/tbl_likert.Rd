@@ -16,7 +16,7 @@ tbl_likert(
 \arguments{
 \item{data}{(\code{data.frame})\cr A data frame.}
 
-\item{statistic}{(\code{string})\cr
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Used to specify the summary statistics for each variable.
 The default is \code{everything() ~ "{n} ({p}\%)"}.}
 
@@ -25,7 +25,7 @@ Used to override default labels in summary table, e.g. \code{list(age = "Age, ye
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
 
-\item{digits}{(named \code{list})\cr
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies how summary statistics are rounded. Values may be either integer(s)
 or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}.}
@@ -54,7 +54,7 @@ df_likert <- data.frame(
 # Example 1 ----------------------------------
 tbl_likert_ex1 <-
   df_likert |>
-  tbl_likert() |>
+  tbl_likert(include = c(recommend_friend, regret_purchase)) |>
   add_n()
 tbl_likert_ex1
 
@@ -65,7 +65,8 @@ list(
   tbl_wide_summary(
     df_likert |> dplyr::mutate(dplyr::across(everything(), as.numeric)),
     statistic = c("{mean}", "{sd}"),
-    type = ~"continuous"
+    type = ~"continuous",
+    include = c(recommend_friend, regret_purchase)
   )
 ) |>
   tbl_merge(tab_spanner = FALSE)

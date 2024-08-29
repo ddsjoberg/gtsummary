@@ -28,7 +28,7 @@
 #' # Example 1 ----------------------------------
 #' tbl_likert_ex1 <-
 #'   df_likert |>
-#'   tbl_likert() |>
+#'   tbl_likert(include = c(recommend_friend, regret_purchase)) |>
 #'   add_n()
 #' tbl_likert_ex1
 #'
@@ -39,7 +39,8 @@
 #'   tbl_wide_summary(
 #'     df_likert |> dplyr::mutate(dplyr::across(everything(), as.numeric)),
 #'     statistic = c("{mean}", "{sd}"),
-#'     type = ~"continuous"
+#'     type = ~"continuous",
+#'     include = c(recommend_friend, regret_purchase)
 #'   )
 #' ) |>
 #'   tbl_merge(tab_spanner = FALSE)
