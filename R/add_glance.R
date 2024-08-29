@@ -19,16 +19,19 @@
 #'   the number of observations and degrees of freedom to the nearest integer,
 #'   p-values are styled with `style_pvalue()` and the remaining statistics
 #'   are styled with `style_sigfig(x, digits = 3)`
-#' @param glance_fun function that returns model statistics. Default is
-#' `broom::glance()` for most model obejcts, and
-#' `broom::glance(mice::pool())` for MICE 'mira' models.
-#' Custom functions must return a single row tibble.
-#' @param sep1 Separator between statistic name and statistic.
-#' Default is `" = "`, e.g. `"R2 = 0.456"`
-#' @param sep2 Separator between statistics. Default is `"; "`
-#' @param text_interpret String indicates whether source note text
-#' will be interpreted with
-#' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#' @param glance_fun (`function`)\cr
+#'   function that returns model statistics. Default is
+#'   `glance_fun()` (which is `broom::glance()` for most model objects).
+#'   Custom functions must return a single row tibble.
+#' @param sep1 (`string`)\cr
+#'   Separator between statistic name and statistic.
+#'   Default is `" = "`, e.g. `"R2 = 0.456"`
+#' @param sep2 (`string`)\cr
+#'   Separator between statistics. Default is `"; "`
+#' @param text_interpret (`string`)\cr
+#'   String indicates whether source note text
+#'   will be interpreted with
+#'   [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #'
 #' @return gtsummary table
 #' @name add_glance
@@ -72,19 +75,13 @@ add_glance_table <- function(x,
                                  any_of("p.value") ~ label_style_pvalue(digits = 1),
                                  c(where(is.integer), starts_with("df")) ~ label_style_number()
                                ),
-                             glance_fun = broom::glance) {
+                             glance_fun = glance_fun_s3(x$inputs$x)) {
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
   check_pkg_installed("broom", reference_pkg = "gtsummary")
   check_not_missing(x)
   check_class(x, "tbl_regression")
-
-  # use a modified glance for mice models --------------------------------------
-  if (missing(glance_fun) && inherits(x$inputs$x, "mira")) {
-    check_pkg_installed("mice", reference_pkg = "gtsummary")
-    glance_fun <- \(x) broom::glance(mice::pool(x))
-  }
 
   # calculate and prepare the glance function results --------------------------
   lst_prep_glance <-
@@ -131,7 +128,7 @@ add_glance_source_note <- function(x,
                                        any_of("p.value") ~ label_style_pvalue(digits = 1),
                                        c(where(is.integer), starts_with("df")) ~ label_style_number()
                                      ),
-                                   glance_fun = broom::glance,
+                                   glance_fun = glance_fun_s3(x$inputs$x),
                                    text_interpret = c("md", "html"),
                                    sep1 = " = ", sep2 = "; ") {
   # check inputs ---------------------------------------------------------------
@@ -143,12 +140,6 @@ add_glance_source_note <- function(x,
   text_interpret <- arg_match(text_interpret)
   check_string(sep1)
   check_string(sep2)
-
-  # use a modified glance for mice models --------------------------------------
-  if (missing(glance_fun) && inherits(x$inputs$x, "mira")) {
-    check_pkg_installed("mice", reference_pkg = "gtsummary")
-    glance_fun <- \(x) broom::glance(mice::pool(x))
-  }
 
   # calculate and prepare the glance function results --------------------------
   lst_prep_glance <-

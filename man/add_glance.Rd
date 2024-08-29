@@ -13,7 +13,7 @@ add_glance_table(
   fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
     label_style_pvalue(digits = 1), c(where(is.integer), starts_with("df")) ~
     label_style_number()),
-  glance_fun = broom::glance
+  glance_fun = glance_fun_s3(x$inputs$x)
 )
 
 add_glance_source_note(
@@ -23,7 +23,7 @@ add_glance_source_note(
   fmt_fun = list(everything() ~ label_style_sigfig(digits = 3), any_of("p.value") ~
     label_style_pvalue(digits = 1), c(where(is.integer), starts_with("df")) ~
     label_style_number()),
-  glance_fun = broom::glance,
+  glance_fun = glance_fun_s3(x$inputs$x),
   text_interpret = c("md", "html"),
   sep1 = " = ",
   sep2 = "; "
@@ -49,19 +49,22 @@ the number of observations and degrees of freedom to the nearest integer,
 p-values are styled with \code{style_pvalue()} and the remaining statistics
 are styled with \code{style_sigfig(x, digits = 3)}}
 
-\item{glance_fun}{function that returns model statistics. Default is
-\code{broom::glance()} for most model obejcts, and
-\code{broom::glance(mice::pool())} for MICE 'mira' models.
+\item{glance_fun}{(\code{function})\cr
+function that returns model statistics. Default is
+\code{glance_fun()} (which is \code{broom::glance()} for most model objects).
 Custom functions must return a single row tibble.}
 
-\item{text_interpret}{String indicates whether source note text
+\item{text_interpret}{(\code{string})\cr
+String indicates whether source note text
 will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
-\item{sep1}{Separator between statistic name and statistic.
+\item{sep1}{(\code{string})\cr
+Separator between statistic name and statistic.
 Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 
-\item{sep2}{Separator between statistics. Default is \code{"; "}}
+\item{sep2}{(\code{string})\cr
+Separator between statistics. Default is \code{"; "}}
 }
 \value{
 gtsummary table
