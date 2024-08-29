@@ -19,6 +19,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added the `label` argument to functions `tbl_ard_summary()`, `tbl_ard_wide_summary()`, and `tbl_ard_continuous()`. (#1850)
 
+* The `add_glance*(glance_fun)` argument's default value has been updated to an S3 generic, allowing bespoke handling for some regression classes. (#1822)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
