@@ -4,6 +4,7 @@
 \alias{add_n_summary}
 \alias{add_n.tbl_summary}
 \alias{add_n.tbl_svysummary}
+\alias{add_n.tbl_likert}
 \title{Add column with N}
 \usage{
 \method{add_n}{tbl_summary}(
@@ -16,6 +17,15 @@
 )
 
 \method{add_n}{tbl_svysummary}(
+  x,
+  statistic = "{N_nonmiss}",
+  col_label = "**N**",
+  footnote = FALSE,
+  last = FALSE,
+  ...
+)
+
+\method{add_n}{tbl_likert}(
   x,
   statistic = "{N_nonmiss}",
   col_label = "**N**",

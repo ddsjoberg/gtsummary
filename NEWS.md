@@ -21,6 +21,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * The `add_glance*(glance_fun)` argument's default value has been updated to an S3 generic, allowing bespoke handling for some regression classes. (#1822)
 
+* Added function `tbl_likert()` for summarizing ordered categorical (or Likert scales) data as well as the associated `add_n.tbl_likert()` S3 method. (#1660)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:
