@@ -116,7 +116,7 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   imap(
     label[intersect(names(label), x$inputs$type |> discard(~.x == "continuous2") |> names())],
     function(.x, .y) {
-      if (!is_string(.x)) {
+      if (length(.x) > 1L || !(is_string(.x) || is.na(.x))) {
         cli::cli_abort(
           "Elements of the {.arg label} argument for variable {.val {.y}} must be a string of length 1.",
           all = get_cli_abort_call()
