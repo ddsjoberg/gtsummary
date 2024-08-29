@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.1.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,8 @@
 <li>We can again report unweighted statistics in the headers of <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1911" class="external-link">#1911</a>)</li>
 <li>
 <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> properly handles variables specified in the <code>include</code> argument with non-syntactic names. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1932" class="external-link">#1932</a>)</li>
+<li>
+<code>NA</code> values can again be specified in <code>add_stat_label(label)</code> to suppress a statistic label from being placed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1937" class="external-link">#1937</a>)</li>
 </ul><div class="section level4">
 <h4 id="other-updates-development-version">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
 <ul><li><p>The total N is now returned with <code>.$cards</code> using the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html" class="external-link">cards::ard_total_n()</a></code> function for the calculation.</p></li>
