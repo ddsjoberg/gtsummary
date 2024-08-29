@@ -91,6 +91,18 @@
       7                 II             32 (33%)              36 (35%)
       8                III             31 (32%)              33 (32%)
 
+---
+
+    Code
+      as.data.frame(add_stat_label(tbl_summary(trial, type = age ~ "continuous2",
+      include = c(age, response), missing = "no"), label = list(all_continuous() ~
+        "Median (IQR)", all_categorical() ~ NA_character_), location = "row"))
+    Output
+        **Characteristic** **N = 200**
+      1                Age        <NA>
+      2       Median (IQR) 47 (38, 57)
+      3     Tumor Response    61 (32%)
+
 # add_stat_label(label) messaging
 
     Code
