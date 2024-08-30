@@ -6,6 +6,7 @@ Updates to address regressions in the v2.0.0 release:
   * We can again report unweighted statistics in the headers of `tbl_svysummary()` tables. (#1911)
   * `tbl_uvregression()` properly handles variables specified in the `include` argument with non-syntactic names. (#1932)
   * `NA` values can again be specified in `add_stat_label(label)` to suppress a statistic label from being placed. (#1937)
+  * Corrected bug in `tbl_cross()` where the `digits` argument was not always being passed accurately to `tbl_summary()`. (#1943)
   
 ### Other updates
 

@@ -109,3 +109,19 @@ test_that("tbl_cross(percent) errors properly", {
   expect_snapshot(error = TRUE, tbl_cross(trial2, percent = "columsadasn"))
   expect_snapshot(error = TRUE, tbl_cross(trial2, percent = 1))
 })
+
+# tbl_cross(digits) -----------------------------------------------------------
+test_that("tbl_cross(digits) works", {
+  # ensuring the proper formatting is passed along
+  expect_snapshot(
+    tbl_cross(
+      rep(list(trial), 11L) |> dplyr::bind_rows(),
+      row       = grade,
+      col       = trt,
+      statistic = "{n}/{N_nonmiss}/{N} ({p}%)",
+      digits    = c(0, 0, 0, 4)
+    ) |>
+      as.data.frame()
+  )
+})
+
