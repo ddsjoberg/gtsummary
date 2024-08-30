@@ -178,3 +178,22 @@
       Error in `tbl_cross()`:
       ! `percent` must be a character vector, not the number 1.
 
+# tbl_cross(digits) works
+
+    Code
+      as.data.frame(tbl_cross(dplyr::bind_rows(rep(list(trial), 11L)), row = grade,
+      col = trt, statistic = "{n}/{N_nonmiss}/{N} ({p}%)", digits = c(0, 0, 0, 4)))
+    Output
+                                    Drug A                       Drug B
+      1 grade                         <NA>                         <NA>
+      2     I   385/1,078/2,200 (17.5000%)   363/1,122/2,200 (16.5000%)
+      3    II   352/1,078/2,200 (16.0000%)   396/1,122/2,200 (18.0000%)
+      4   III   341/1,078/2,200 (15.5000%)   363/1,122/2,200 (16.5000%)
+      5 Total 1,078/1,078/2,200 (49.0000%) 1,122/1,122/2,200 (51.0000%)
+                                Total
+      1                          <NA>
+      2    748/2,200/2,200 (34.0000%)
+      3    748/2,200/2,200 (34.0000%)
+      4    704/2,200/2,200 (32.0000%)
+      5 2,200/2,200/2,200 (100.0000%)
+

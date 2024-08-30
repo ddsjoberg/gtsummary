@@ -161,7 +161,7 @@ tbl_cross <- function(data,
       statistic = ~ statistic,
       digits =
         case_switch(
-          !is_empty(digits) ~ everything() ~ digits,
+          !is_empty(digits) ~ (everything() ~ digits),
           .default = NULL
         ),
       percent = ifelse(percent == "none", "cell", percent),
