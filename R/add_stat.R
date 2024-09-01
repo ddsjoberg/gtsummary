@@ -242,12 +242,12 @@ eval_fn_safe <- function(variable, tbl, fn) {
 
   if (!is_empty(result[["warning"]])) {
     cli::cli_inform(
-      c("There was a warning for variable {.val {variable}}", "!" = result[["warning"]])
+      c("There was a warning for variable {.val {variable}}", "!" = "{result[['warning']]}")
     )
   }
   if (!is_empty(result[["error"]])) {
     cli::cli_inform(
-      c("There was a error for variable {.val {variable}}", "x" = result[["error"]])
+      c("There was a error for variable {.val {variable}}", "x" = "{result[['error']]}")
     )
   }
 

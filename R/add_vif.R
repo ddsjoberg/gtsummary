@@ -37,7 +37,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digit
       cardx::ard_car_vif(x$inputs$x)
     )
   if (!is_empty(ard_vif[["error"]])) {
-    cli::cli_abort(ard_vif[["error"]], call = get_cli_abort_call())
+    cli::cli_abort("{ard_vif[['error']]}", call = get_cli_abort_call())
   }
   x$cards$vif <- ard_vif[["result"]]
 
