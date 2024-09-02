@@ -68,7 +68,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
         i = "There are two common causes for an error. See error message below.",
         "*" = "The model type is not supported by {.fun stats::anova}.",
         "*" = "The number of observations used to estimate the full and reduced models is different.",
-        "x" = anova[["error"]]
+        "x" = "{anova[['error']]}"
         ),
       call = get_cli_abort_call()
     )
