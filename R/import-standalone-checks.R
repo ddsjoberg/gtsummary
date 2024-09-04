@@ -462,5 +462,90 @@ check_formula_list_selector <- function(x,
   invisible(x)
 }
 
+#' Check is Integerish
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_integerish <- function(x,
+                             allow_empty = FALSE,
+                             message =
+                               ifelse(
+                                 allow_empty,
+                                 "The {.arg {arg_name}} argument must an integer vector or empty.",
+                                 "The {.arg {arg_name}} argument must an integer vector."
+                               ),
+                             arg_name = rlang::caller_arg(x),
+                             class = "check_integerish",
+                             call = get_cli_abort_call(),
+                             envir = rlang::current_env()) {
+  # if empty, skip test
+  if (isTRUE(allow_empty) && rlang::is_empty(x)) {
+    return(invisible(x))
+  }
+
+  if (!rlang::is_integerish(x)) {
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+  }
+
+  invisible(x)
+}
+
+#' Check is Scalar Integerish
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_scalar_integerish <- function(x,
+                                    allow_empty = FALSE,
+                                    message =
+                                      ifelse(
+                                        allow_empty,
+                                        "The {.arg {arg_name}} argument must an scalar integer or empty.",
+                                        "The {.arg {arg_name}} argument must an scalar integer."
+                                      ),
+                                    arg_name = rlang::caller_arg(x),
+                                    class = "check_integerish",
+                                    call = get_cli_abort_call(),
+                                    envir = rlang::current_env()) {
+  # if empty, skip test
+  if (isTRUE(allow_empty) && rlang::is_empty(x)) {
+    return(invisible(x))
+  }
+
+  if (!rlang::is_scalar_integerish(x)) {
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+  }
+
+  invisible(x)
+}
+
+
+#' Check for presence of `NA` factor levels in the data
+#'
+#' @param x (`data.frame`)\cr
+#'   a data frame
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_na_factor_levels <- function(x,
+                                   message =
+                                     "Factors with {.val {NA}} levels are not allowed,
+                                      which are present in column {.val {variable}}.",
+                                   arg_name = rlang::caller_arg(x),
+                                   class = "na_factor_levels",
+                                   call = get_cli_abort_call(),
+                                   envir = rlang::current_env()) {
+  check_data_frame(x, arg_name = arg_name, class = class, call = call, envir = envir)
+
+  for (variable in names(x)) {
+    if (is.factor(x[[variable]]) && any(is.na(levels(x[[variable]])))) {
+      cli::cli_abort(message = message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+    }
+  }
+
+  invisible(x)
+}
+
 # nocov end
 # styler: on
