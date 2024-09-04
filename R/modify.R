@@ -245,20 +245,28 @@ show_header_names <- function(x, include_example, quiet) {
   }
 
   # printing info --------------------------------------------------------------
-  x$table_styling$header |>
+  df_print <-
+    x$table_styling$header |>
     dplyr::filter(!.data$hide) |>
-    dplyr::select("column", "label", starts_with("modify_stat_")) |>
-    dplyr::rename_with(
-      .fn = ~ str_remove(., pattern = "^modify_stat_")|> paste0("*"),
-      .cols = starts_with("modify_stat_")
-    ) |>
+    dplyr::select("column", "label", starts_with("modify_stat_"))
+
+  # if any columns begin with 'modify_stat_', then rename
+  if (any(str_detect(names(df_print), "^modify_stat_"))) {
+    df_print <- df_print |>
+      dplyr::rename_with(
+        .fn = ~ str_remove(., pattern = "^modify_stat_")|> paste0("*"),
+        .cols = starts_with("modify_stat_")
+      )
+  }
+
+  df_print |>
     dplyr::mutate(
       across(where(is.integer), label_style_number()),
       across(where(is.numeric), label_style_sigfig(digits = 3)),
       across(-c(where(is.integer) | where(is.numeric)), as.character),
       label = cli::cli_format(.data$label)
     ) |>
-    gtsummary::tibble_as_cli(label = list(column = "Column Name", label = "Header"))
+    tibble_as_cli(label = list(column = "Column Name", label = "Header"))
 
   cat("\n")
   cli::cli_inform(c("* These values may be dynamically placed into headers (and other locations).",
