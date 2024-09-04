@@ -49,7 +49,6 @@ tibble_as_cli <- function(x, na_value = "", label = list(), padding = 3L) {
   x <- dplyr::mutate_all(x, ~ifelse(is.na(.x), .env$na_value, .x))
 
   # update 'label' with colnames if not supplied -------------------------------
-  browser()
   label <- as.list(names(x)) |> stats::setNames(names(x)) |> utils::modifyList(val = label)
 
   # add a header row as the first row of the data frame ------------------------
