@@ -28,6 +28,8 @@ Updates to address regressions in the v2.0.0 release:
 
 * Fix where error or warning condition messages containing curly brace pairs could not be printed.
 
+* Updated the `show_header_names()` output to include the values that may be dynamically placed in the headers. Additionally, the `include_example` and `quiet` arguments have been deprecated. (#1696)
+
 # gtsummary 2.0.1
 
 Updates to address regressions in the v2.0.0 release:

@@ -21,7 +21,7 @@ modify_footnote(
 
 modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
-show_header_names(x = NULL, include_example = TRUE, quiet = NULL)
+show_header_names(x, include_example, quiet)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -47,7 +47,7 @@ String indicates whether text will be interpreted with
 \item{abbreviation}{(scalar \code{logical})\cr
 Logical indicating if an abbreviation is being updated.}
 
-\item{include_example}{(scalar \code{logical})\cr}
+\item{include_example}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
 Updated gtsummary object
