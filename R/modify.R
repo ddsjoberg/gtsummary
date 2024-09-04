@@ -27,9 +27,8 @@
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
-#' @param include_example (scalar `logical`)\cr
-#   Logical whether to include print of `modify_header()` example
 #' @param update,quiet `r lifecycle::badge("deprecated")`
+#' @param include_example `r lifecycle::badge("deprecated")`
 #'
 #' @author Daniel D. Sjoberg
 #'
@@ -225,36 +224,54 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
-  # setting defaults -----------------------------------------------------------
-  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
-
+show_header_names <- function(x, include_example, quiet) {
   # checking input -------------------------------------------------------------
   check_class(x, "gtsummary")
 
-  df_cols <-
-    x$table_styling$header %>%
-    dplyr::filter(.data$hide == FALSE) %>%
-    dplyr::select("column", "label")
-
-  if (identical(quiet, FALSE) && isTRUE(include_example)) {
-    cat("\n")
-    cli::cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
-    block <- dplyr::mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
-      dplyr::pull("formula") %>%
-      paste0("", collapse = ",\n") %>%
-      {
-        glue("modify_header(\n{.}\n)")
-      }
-
-    cli::cli_code(block)
+  # deprecated arguments -------------------------------------------------------
+  if (!missing(include_example)) {
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = "gtsummary::show_header_names(include_example)",
+      details = "Argument has been ignored."
+    )
   }
-  if (identical(quiet, FALSE)) {
-    knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
-      print()
+  if (!missing(quiet)) {
+    lifecycle::deprecate_warn(
+      when = "2.0.0",
+      what = "gtsummary::show_header_names(quiet)",
+      details = "Argument has been ignored."
+    )
   }
 
-  return(invisible(df_cols))
+  # printing info --------------------------------------------------------------
+  df_print <-
+    x$table_styling$header |>
+    dplyr::filter(!.data$hide) |>
+    dplyr::select("column", "label", starts_with("modify_stat_"))
+
+  # if any columns begin with 'modify_stat_', then rename
+  if (any(str_detect(names(df_print), "^modify_stat_"))) {
+    df_print <- df_print |>
+      dplyr::rename_with(
+        .fn = ~ str_remove(., pattern = "^modify_stat_")|> paste0("*"),
+        .cols = starts_with("modify_stat_")
+      )
+  }
+
+  df_print |>
+    dplyr::mutate(
+      across(where(is.integer), label_style_number()),
+      across(where(is.numeric), label_style_sigfig(digits = 3)),
+      across(-c(where(is.integer) | where(is.numeric)), as.character),
+      label = cli::cli_format(.data$label)
+    ) |>
+    tibble_as_cli(label = list(column = "Column Name", label = "Header"))
+
+  cat("\n")
+  cli::cli_inform(c("* These values may be dynamically placed into headers (and other locations).",
+                    "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify)} help for examples."))
+
 }
 
 .evaluate_string_with_glue <- function(x, dots) {
