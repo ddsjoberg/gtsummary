@@ -12,7 +12,14 @@
 
 We checked 21 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 1 new problems in the gtreg pkg. It has already been addressed and will submit a new version to CRAN.
+ * We saw 0 new problems
+ * We failed to check 3 packages
+
+Issues with CRAN packages are summarised below.
+
+### Failed to check
+
+* brms.mmrm, equatiomatic, MiscMetabar
 
 ## Additional Comments
 
