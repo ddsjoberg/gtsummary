@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("modify_caption(caption) works", {
   expect_equal(
     tbl_summary(trial, include = marker) |>

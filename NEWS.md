@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 2.0.2
 
 Updates to address regressions in the v2.0.0 release:
 
@@ -9,6 +9,8 @@ Updates to address regressions in the v2.0.0 release:
   * Corrected bug in `tbl_cross()` where the `digits` argument was not always being passed accurately to `tbl_summary()`. (#1943)
   
 ### Other updates
+
+* The Themes and Inline Text vignettes have been converted to articles (that is, they are no longer bundled with the package, but are still available on the website).
 
 * The total N is now returned with `.$cards` using the `cards::ard_total_n()` function for the calculation.
 

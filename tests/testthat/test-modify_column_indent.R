@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # begin with deprecation messaging
 test_that("modify_column_indent() deprecations", {
   lifecycle::expect_deprecated(

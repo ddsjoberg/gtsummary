@@ -1,3 +1,4 @@
+skip_on_cran()
 tbl <- tbl_summary(trial, include = age)
 
 test_that("bold_labels() works", {

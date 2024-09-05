@@ -1,4 +1,5 @@
-skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+skip_on_cran()
+skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
 
 # inline_text.tbl_summary tests ------------------------------------------------
 test_inline1 <- trial |> tbl_summary()

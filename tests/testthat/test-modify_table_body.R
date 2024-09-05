@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("modify_table_body() works", {
   expect_snapshot(
     glm(response ~ trt + marker, trial, family = binomial) |>

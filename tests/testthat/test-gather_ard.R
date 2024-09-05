@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
 
 test_that("gather_ard(x) works with `tbl_*()` functions", {

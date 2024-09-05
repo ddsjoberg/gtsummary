@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_stat_label(location='row') standard use", {
   tbl <- trial |> tbl_summary(by = trt)
 

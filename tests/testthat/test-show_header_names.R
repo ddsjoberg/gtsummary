@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers"), reference_pkg = "gtsummary"))
+
 test_that("show_header_names() works with tbl_summary()", {
   expect_snapshot(
     tbl_summary(trial, include = age, by = trt, missing = "no") |>

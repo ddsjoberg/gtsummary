@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx"), reference_pkg = "gtsummary"))
+
 mod <- lm(marker ~ age + grade, trial) |> tbl_regression()
 
 test_that("modify_column_merge() works", {

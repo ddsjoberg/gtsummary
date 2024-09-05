@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+
 test_that("bold_p() works", {
   expect_equal(
     trial |>

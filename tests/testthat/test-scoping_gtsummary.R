@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("scope_header()", {
   tbl <- trial |>
     tbl_summary(by = trt, include = age, missing = "no")

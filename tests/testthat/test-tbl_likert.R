@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed("withr", reference_pkg = "gtsummary"))
 
 levels <- c("Strongly Disagree", "Disagree", "Agree", "Strongly Agree")

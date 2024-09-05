@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_nevent.tbl_survfit() works", {
   tbl <- trial |>
     tbl_survfit(

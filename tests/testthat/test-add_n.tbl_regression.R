@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_n.tbl_regression() works", {
   tbl <-
     glm(response ~ grade + age, trial, family = binomial) %>%
