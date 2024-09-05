@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,8 +131,8 @@ in parentheses. Default is <code>NULL</code>, and no merging is performed.</p></
 <p>Must be one of</p><ul><li><p><code>"wilson"</code>, <code>"wilson.no.correct"</code> calculated via <code>prop.test(correct = c(TRUE, FALSE))</code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"exact"</code> calculated via <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">stats::binom.test()</a></code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"wald"</code>, <code>"wald.no.correct"</code> calculated via <code>cardx::proportion_ci_wald(correct = c(TRUE, FALSE)</code> for <strong>categorical</strong> variables</p></li>
-<li><p><code>"agresti.coull"</code> calculated via <code><a href="https://rdrr.io/pkg/cardx/man/proportion_ci.html" class="external-link">cardx::proportion_ci_agresti_coull()</a></code> for <strong>categorical</strong> variables</p></li>
-<li><p><code>"jeffreys"</code> calculated via <code><a href="https://rdrr.io/pkg/cardx/man/proportion_ci.html" class="external-link">cardx::proportion_ci_jeffreys()</a></code> for <strong>categorical</strong> variables</p></li>
+<li><p><code>"agresti.coull"</code> calculated via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html" class="external-link">cardx::proportion_ci_agresti_coull()</a></code> for <strong>categorical</strong> variables</p></li>
+<li><p><code>"jeffreys"</code> calculated via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html" class="external-link">cardx::proportion_ci_jeffreys()</a></code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"t.test"</code> calculated via <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">stats::t.test()</a></code> for <strong>continuous</strong> variables</p></li>
 <li><p><code>"wilcox.test"</code> calculated via <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">stats::wilcox.test()</a></code> for <strong>continuous</strong> variables</p></li>
 </ul></div>

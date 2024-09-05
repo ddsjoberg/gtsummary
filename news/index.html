@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,31 @@
       <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.2" id="gtsummary-202">gtsummary 2.0.2<a class="anchor" aria-label="anchor" href="#gtsummary-202"></a></h2><p class="text-muted">CRAN release: 2024-09-05</p>
+<p>Updates to address regressions in the v2.0.0 release:</p>
+<ul><li>The default <code>add_glance_*(glance_fun)</code> function fixed for <code>mice</code> models with class <code>'mira'</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1912" class="external-link">#1912</a>)</li>
+<li>We can again report unweighted statistics in the headers of <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1911" class="external-link">#1911</a>)</li>
+<li>
+<code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> properly handles variables specified in the <code>include</code> argument with non-syntactic names. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1932" class="external-link">#1932</a>)</li>
+<li>
+<code>NA</code> values can again be specified in <code>add_stat_label(label)</code> to suppress a statistic label from being placed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1937" class="external-link">#1937</a>)</li>
+<li>Corrected bug in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> where the <code>digits</code> argument was not always being passed accurately to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1943" class="external-link">#1943</a>)</li>
+</ul><div class="section level4">
+<h4 id="other-updates-2-0-2">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-2-0-2"></a></h4>
+<ul><li><p>The Themes and Inline Text vignettes have been converted to articles (that is, they are no longer bundled with the package, but are still available on the website).</p></li>
+<li><p>The total N is now returned with <code>.$cards</code> using the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html" class="external-link">cards::ard_total_n()</a></code> function for the calculation.</p></li>
+<li><p>The default headers for <code>tbl_ard_*()</code> functions no longer include counts, as these are not required data to be passed along in the ARD input.</p></li>
+<li><p>The summary statistics of the <code>'by'</code> variable are no longer required in the ARD for functions <code><a href="../reference/tbl_ard_summary.html">tbl_ard_summary()</a></code> and <code><a href="../reference/tbl_ard_continuous.html">tbl_ard_continuous()</a></code>. When the tabulation summary statistics are passed, they are available to place in the header dynamically. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1860" class="external-link">#1860</a>)</p></li>
+<li><p>The <code><a href="../reference/tbl_ard_wide_summary.html">tbl_ard_wide_summary()</a></code> function no longer requires the results from <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">cards::ard_attributes()</a></code> to create tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1873" class="external-link">#1873</a>)</p></li>
+<li><p>Added the <code>label</code> argument to functions <code><a href="../reference/tbl_ard_summary.html">tbl_ard_summary()</a></code>, <code><a href="../reference/tbl_ard_wide_summary.html">tbl_ard_wide_summary()</a></code>, and <code><a href="../reference/tbl_ard_continuous.html">tbl_ard_continuous()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1850" class="external-link">#1850</a>)</p></li>
+<li><p>The <code>add_glance*(glance_fun)</code> argument’s default value has been updated to an S3 generic, allowing bespoke handling for some regression classes. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1822" class="external-link">#1822</a>)</p></li>
+<li><p>Added <code><a href="../reference/add_overall_ard.html">add_overall.tbl_ard_summary()</a></code> S3 method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1848" class="external-link">#1848</a>)</p></li>
+<li><p>Added function <code><a href="../reference/tbl_likert.html">tbl_likert()</a></code> for summarizing ordered categorical (or Likert scales) data as well as the associated <code><a href="../reference/add_n_summary.html">add_n.tbl_likert()</a></code> S3 method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1660" class="external-link">#1660</a>)</p></li>
+<li><p>Fix where error or warning condition messages containing curly brace pairs could not be printed.</p></li>
+<li><p>Updated the <code><a href="../reference/modify.html">show_header_names()</a></code> output to include the values that may be dynamically placed in the headers. Additionally, the <code>include_example</code> and <code>quiet</code> arguments have been deprecated. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1696" class="external-link">#1696</a>)</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.1" id="gtsummary-201">gtsummary 2.0.1<a class="anchor" aria-label="anchor" href="#gtsummary-201"></a></h2><p class="text-muted">CRAN release: 2024-08-17</p>
 <p>Updates to address regressions in the v2.0.0 release:</p>
