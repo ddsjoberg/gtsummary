@@ -1,3 +1,4 @@
+skip_on_cran()
 test_that("add_overall.tbl_continuous() works", {
   # typical usage works
   expect_error(

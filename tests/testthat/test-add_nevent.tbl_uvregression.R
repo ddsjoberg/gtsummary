@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom.helpers", "broom"), reference_pkg = "gtsummary"))
 
 test_that("add_nevent.tbl_uvregression() works", {

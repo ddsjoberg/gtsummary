@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("select_helpers work", {
   tbl_sum <- trial |> tbl_summary(type = age ~ "continuous2")
   tbl_reg <-

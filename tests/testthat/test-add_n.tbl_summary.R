@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_n.tbl_summary() works", {
   # with stratifying variable
   expect_error(

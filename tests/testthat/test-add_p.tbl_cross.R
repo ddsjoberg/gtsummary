@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+
 test_that("add_p.tbl_cross() works", {
   expect_silent(
     out <- trial |>

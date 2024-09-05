@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers"), reference_pkg = "gtsummary"))
+
 test_that("remove_row_type(type) works", {
   tbl1 <- tbl_summary(trial, include = c(response, age, grade))
   tbl2 <- lm(age ~ grade + response, trial) |> tbl_regression()

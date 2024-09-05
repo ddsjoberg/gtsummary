@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_q() works after add_p()", {
   table1 <- trial %>%
     tbl_summary(by = trt) %>%

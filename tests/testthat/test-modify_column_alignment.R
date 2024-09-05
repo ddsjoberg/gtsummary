@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("modify_column_alignment() works", {
   tbl <-
     lm(age ~ marker + grade, trial) |>

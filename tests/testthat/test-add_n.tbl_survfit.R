@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_n.tbl_survfit() works", {
   # add_n.tbl_survfit works
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)

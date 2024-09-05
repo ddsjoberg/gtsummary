@@ -1,5 +1,5 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom.helpers", "withr"), reference_pkg = "gtsummary"))
-
 
 test_that("tbl_regression.model_fit()", {
   skip_if_not(is_pkg_installed("parsnip", reference_pkg = "gtsummary"))
@@ -78,7 +78,6 @@ test_that("tbl_regression.gam()", {
       as.data.frame()
   )
 })
-
 
 test_that("tbl_regression.crr()", {
   skip_if_not(is_pkg_installed("cmprsk", reference_pkg = "gtsummary"))

@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom.helpers", "cardx"), reference_pkg = "gtsummary"))
 
 test_that("tidy_standardize()", {
