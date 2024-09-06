@@ -254,10 +254,35 @@ show_header_names <- function(x, include_example, quiet) {
   if (any(str_detect(names(df_print), "^modify_stat_"))) {
     df_print <- df_print |>
       dplyr::rename_with(
-        .fn = ~ str_remove(., pattern = "^modify_stat_")|> paste0("*"),
+        .fn = ~ str_remove(., pattern = "^modify_stat_") |> paste0("*"),
         .cols = starts_with("modify_stat_")
       )
   }
+
+  # create class map
+  class_mapping <- c(
+    "integer" = "int",
+    "numeric" = "dbl",
+    "character" = "chr",
+    "factor" = "fct",
+    "logical" = "lgl",
+    "Date" = "Date",
+    "POSIXct" = "POSIXct",
+    "POSIXlt" = "POSIXlt"
+  )
+
+  # Identify data type of dynamic values
+  df_print <- df_print |>
+    dplyr::mutate(
+      across(
+        if (ncol(df_print) > 2) 3:ncol(df_print) else everything(),
+        ~ paste0(
+          ., " <",
+          sapply(class(.), function(cls) class_mapping[cls]),
+          ">"
+        )
+      )
+    )
 
   df_print |>
     dplyr::mutate(
@@ -270,8 +295,8 @@ show_header_names <- function(x, include_example, quiet) {
 
   cat("\n")
   cli::cli_inform(c("* These values may be dynamically placed into headers (and other locations).",
-                    "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify)} help for examples."))
-
+    "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify)} help for examples."
+  ))
 }
 
 .evaluate_string_with_glue <- function(x, dots) {
@@ -309,8 +334,9 @@ show_header_names <- function(x, include_example, quiet) {
 
       cli::cli_abort(
         c("There was an error in the {.fun glue::glue} evaluation of {.val {value}} for column {.val {variable}}.",
-          i = "Run {.fun gtsummary::show_header_names} for information on values available for glue interpretation."),
-         call =  get_cli_abort_call()
+          i = "Run {.fun gtsummary::show_header_names} for information on values available for glue interpretation."
+        ),
+        call = get_cli_abort_call()
       )
     }
   )
