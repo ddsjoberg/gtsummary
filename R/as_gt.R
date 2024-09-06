@@ -225,6 +225,16 @@ table_styling_to_gt_calls <- function(x, ...) {
     set_names(x$table_styling$header$column) %>%
     {call2(expr(gt::cols_label), !!!.)} # styler: off
 
+  # remove_line_breaks ---------------------------------------------------------
+  # We include line breaks in many tables by default in the headers
+  # This removes them if rendering to PDF. Hopefully we can remove this soon.
+  gt_calls[["remove_line_breaks"]] <-
+    case_switch(
+      knitr::is_latex_output() ~
+        expr(gt::cols_label_with(fn = function(x) gsub(x = x, pattern = "\\n(?!\\\\)", replacement = "", fixed = FALSE, perl = TRUE)))
+    )
+
+
   # tab_footnote ---------------------------------------------------------------
   if (nrow(x$table_styling$footnote) == 0 &&
     nrow(x$table_styling$footnote_abbrev) == 0) {

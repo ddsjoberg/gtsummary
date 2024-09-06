@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
+
 # gtsummary 2.0.2
 
 Updates to address regressions in the v2.0.0 release:
