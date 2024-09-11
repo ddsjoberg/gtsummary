@@ -152,6 +152,9 @@ tbl_hierarchical <- function(data,
     dplyr::mutate(gts_column = paste0("stat_", cur_group_id())) |>
     ungroup()
 
+  labels_hierarch <- hierarchies |>
+    sapply(\(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
+
   # browser()
   # call bridge function here
   brdg_hierarchical(
@@ -161,7 +164,8 @@ tbl_hierarchical <- function(data,
     by,
     id,
     include,
-    statistic
+    statistic,
+    labels_hierarch
   )
 }
 
@@ -173,6 +177,7 @@ brdg_hierarchical <- function(cards,
                               id,
                               include,
                               statistic,
+                              labels_hierarch,
                               missing = "no",
                               missing_stat = "{N_miss}",
                               missing_text = "Unknown") {
@@ -201,11 +206,26 @@ brdg_hierarchical <- function(cards,
 
   x <- tbl_stack(x)
 
-  # browser()
+  indent <- unique(x$table_styling$indent$n_spaces)
+  lbl_hierarch <- sapply(
+    seq_along(labels_hierarch),
+    function(x) {
+      paste0(
+        paste(rep(" ", indent[x]), collapse = ""),
+        "**",
+        labels_hierarch[x],
+        "**",
+        if (x < length(indent)) "  "
+      )
+    }
+  ) |>
+    paste(collapse = "\n")
+
   # adding styling -------------------------------------------------------------
   x <- x |>
     # updating the headers for the stats columns
     modify_header(
+      label = lbl_hierarch,
       all_stat_cols() ~
         ifelse(
           is_empty(by),
