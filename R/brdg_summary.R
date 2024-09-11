@@ -278,7 +278,12 @@ pier_summary_categorical <- function(cards,
         ) |>
         dplyr::select("variable", var_label = "stat"),
       by = "variable"
-    ) |>
+    )
+
+  if (all(is.null(unlist(df_result_levels$var_label)))) df_result_levels$var_label <- df_result_levels$group2_level
+
+  df_result_levels <-
+    df_result_levels |>
     dplyr::mutate(
       .by = "variable",
       row_type = "level",
