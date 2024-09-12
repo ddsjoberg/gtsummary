@@ -276,14 +276,17 @@ show_header_names <- function(x, include_example, quiet) {
     dplyr::mutate(
       across(
         if (ncol(df_print) > 2) 3:ncol(df_print) else everything(),
-        ~ paste0(
-          ., " <",
-          sapply(class(.), function(cls) class_mapping[cls]),
-          ">"
+        ~ ifelse(
+          !is.na(.),
+          paste0(
+            ., " <",
+            sapply(class(.), function(cls) class_mapping[cls]),
+            ">"
+          ),
+          .
         )
       )
     )
-
   df_print |>
     dplyr::mutate(
       across(where(is.integer), label_style_number()),

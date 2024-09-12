@@ -60,8 +60,9 @@ tibble_as_cli <- function(x, na_value = "", label = list(), padding = 3L) {
 
   # save the max width of each column ------------------------------------------
   lst_max_nchar <- map(x, ~ as.character(.) |>
-                         nchar() |>
-                         max(na.rm = TRUE))
+    nchar() |>
+    max(na.rm = TRUE))
+
 
   # add padding to all value in x so they are the same length ------------------
   x <- x |>
@@ -74,9 +75,9 @@ tibble_as_cli <- function(x, na_value = "", label = list(), padding = 3L) {
       ~ ifelse(dplyr::row_number() == 1L, cli::style_underline(.) |> cli::style_italic(), .)
     )
 
-  # italicizing data type values in strings ----------
-  x <- x %>%
-    mutate(across(everything(), ~str_replace_all(., "(<[^>]+>)", function(x) cli::style_italic(x))))
+  # italicize data type string
+  x <- x |>
+    mutate(across(everything(), ~ str_replace_all(.x, "(<[^>]+>)", cli::style_italic("\\1"))))
 
   # print header strings blue
   x <- x |>
