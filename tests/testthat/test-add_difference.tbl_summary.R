@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed(c(
   "broom", "broom.helpers", "lme4", "smd",
   "effectsize", "emmeans"

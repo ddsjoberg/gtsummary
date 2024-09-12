@@ -1,5 +1,5 @@
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
-skip_if_not(is_pkg_installed("broom", reference_pkg = "cardx"))
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("cardx", "broom"), reference_pkg = "gtsummary"))
 
 test_that("separate_p_footnotes()", {
   tbl <- trial |>

@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("cardx", "survival"), reference_pkg = "cardx"))
+
 test_that("add_p.tbl_survfit() works", {
   tbl <- trial |>
     tbl_survfit(

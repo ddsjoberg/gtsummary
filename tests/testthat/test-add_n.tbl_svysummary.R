@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed("survey", reference_pkg = "gtsummary"))
 
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)

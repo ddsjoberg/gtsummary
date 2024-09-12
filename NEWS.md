@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
+
+* Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
+
+# gtsummary 2.0.2
+
 Updates to address regressions in the v2.0.0 release:
 
   * The default `add_glance_*(glance_fun)` function fixed for `mice` models with class `'mira'`. (#1912)
@@ -9,6 +15,8 @@ Updates to address regressions in the v2.0.0 release:
   * Corrected bug in `tbl_cross()` where the `digits` argument was not always being passed accurately to `tbl_summary()`. (#1943)
   
 ### Other updates
+
+* The Themes and Inline Text vignettes have been converted to articles (that is, they are no longer bundled with the package, but are still available on the website).
 
 * The total N is now returned with `.$cards` using the `cards::ard_total_n()` function for the calculation.
 

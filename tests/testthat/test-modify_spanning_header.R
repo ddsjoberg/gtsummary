@@ -1,3 +1,4 @@
+skip_on_cran()
 
 # first, testing deprecation
 test_that("modify_spanning_header(update,quiet) are deprecated", {

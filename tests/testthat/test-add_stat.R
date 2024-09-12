@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
 
 my_ttest <- function(data, variable, by, ...) {

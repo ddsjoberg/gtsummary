@@ -1,3 +1,5 @@
+skip_on_cran()
+
 # starting with checks of the deprecation
 test_that("modify_table_styling(undo_text_format=logical()) deprecation", {
   withr::local_options(lifecycle_verbosity = "quiet")
