@@ -11,6 +11,9 @@
 #'   Character vector with table headers where length matches the length of `tbls`
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
+#' @param .combine (scalar `logical`)\cr
+#'   Logical indicating whether to combine `tbls` with the same labels to avoid repeated printing of the same label.
+#'   Default is `FALSE`.
 #'
 #' @author Daniel D. Sjoberg
 #' @export
@@ -59,7 +62,7 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .combine = FALSE) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -158,6 +161,21 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
       align = "left",
       hide = FALSE
     )
+
+  # remove duplicate labels from hierarchical stacks
+  if (.combine) {
+    hierarchies <- cbind(
+      tbl_id1 = results$table_body$tbl_id1 |> unique(),
+      lapply(tbls, \(x) x$table_styling$hierarchy) |>
+        dplyr::bind_rows() |>
+        mutate(across(is.list, unlist))
+    )
+
+    results$table_body <- results$table_body |>
+      left_join(hierarchies, by = "tbl_id1") |>
+      distinct(across(-c(tbl_id1, last_col())), .keep_all = TRUE) |>
+      select(-names(hierarchies[, -1]))
+  }
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
