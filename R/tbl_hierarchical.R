@@ -158,7 +158,6 @@ tbl_hierarchical <- function(data,
   labels_hierarch <- hierarchies |>
     sapply(\(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
-  # browser()
   # call bridge function here
   brdg_hierarchical(
     cards,
@@ -171,7 +170,6 @@ tbl_hierarchical <- function(data,
     labels_hierarch
   )
 }
-
 
 brdg_hierarchical <- function(cards,
                               hierarchies,
