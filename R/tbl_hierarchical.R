@@ -1,12 +1,14 @@
 #' Create hierarchical table
 #'
 #' @examples
+#' data <- cards::ADAE |>
+#'   dplyr::filter(
+#'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+#'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+#'   )
+#'
 #' tbl_hierarchical(
-#'   data = cards::ADAE |>
-#'     dplyr::filter(
-#'       AESOC %in% unique(cards::ADAE$AESOC)[1:10],
-#'       AETERM %in% unique(cards::ADAE$AETERM)[1:10]
-#'     ),
+#'   data = data,
 #'   hierarchies = c(SEX, AESOC, AETERM),
 #'   by = TRTA,
 #'   denominator = cards::ADSL,
@@ -50,7 +52,7 @@ tbl_hierarchical <- function(data,
   }
 
   if (is_empty(id) + is_empty(denominator) == 1L) {
-    cil::cli_abort(
+    cli::cli_abort(
       "Specify both arguments {.arg id} and {.arg denominator}, or neither.",
       call = get_cli_abort_call()
     )
