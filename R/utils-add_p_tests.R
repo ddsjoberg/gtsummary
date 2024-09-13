@@ -159,7 +159,6 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   check_empty(c("group", "adj.vars"), ...)
 
-  browser()
   rlang::inject(
     cardx::ard_stats_oneway_test(
       formula = cardx::reformulate2(termlabels = by, response = variable),
