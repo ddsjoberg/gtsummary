@@ -425,7 +425,7 @@ tbl_summary <- function(data,
   x
 }
 
-.add_gts_column_to_cards_summary <- function(cards, variables, by) {
+.add_gts_column_to_cards_summary <- function(cards, variables, by, hierarchical = FALSE) {
   # adding the name of the column the stats will populate
   if (is_empty(by)) {
     cards$gts_column <-
@@ -434,6 +434,11 @@ tbl_summary <- function(data,
         "stat_0",
         NA_character_
       )
+  } else if (hierarchical) { # disregard hierarchies, only check by variable
+    cards <- cards |>
+      dplyr::group_by(group1_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
+      dplyr::ungroup()
   } else {
     # styler: off
     cards <-
