@@ -25,7 +25,6 @@ tbl_hierarchical <- function(data,
                              include = everything(), # this would be the variables from `hierarchy` that we would include summary stats for (some of the nested drug class tables don't need stats on the class level)
                              statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
                              digits = NULL,
-                             sort = all_categorical() ~ "alphanumeric",
                              overall_row = FALSE) {
   set_cli_abort_call()
 
@@ -127,8 +126,6 @@ tbl_hierarchical <- function(data,
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic =
       get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
-    sort =
-      get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
   )
@@ -139,9 +136,6 @@ tbl_hierarchical <- function(data,
       scope_table_body(.list2tb(type, "var_type"), data[include]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
-
-  # sort requested columns by frequency
-  data <- .sort_data_infreq(data, sort)
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
