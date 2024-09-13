@@ -23,13 +23,9 @@ tbl_hierarchical <- function(data,
                              label = NULL,
                              denominator = NULL,
                              include = everything(), # this would be the variables from `hierarchy` that we would include summary stats for (some of the nested drug class tables don't need stats on the class level)
-                             statistic = ifelse(
-                               !missing(id),
-                               list(all_categorical() ~ "{n} ({p})"),
-                               list(all_categorical() ~ "{n}")
-                             ),
+                             statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
                              digits = NULL,
-                             sort = all_categorical(FALSE) ~ "alphanumeric",
+                             sort = all_categorical() ~ "alphanumeric",
                              overall_row = FALSE) {
   set_cli_abort_call()
 
@@ -37,7 +33,7 @@ tbl_hierarchical <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  # check_string(statistic)
+  check_string(statistic)
   check_scalar_logical(overall_row)
 
   # evaluate tidyselect
@@ -77,6 +73,10 @@ tbl_hierarchical <- function(data,
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
+  type <- assign_summary_type(data, include, value = NULL)
+
+  statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
+
   # calculate statistics -------------------------------------------------------
   # TODO: Update this with cards::ard_stack_hierarchical() when it's ready
   cards <-
@@ -84,15 +84,11 @@ tbl_hierarchical <- function(data,
       data = data,
       variables = all_of(hierarchies),
       by = all_of(by),
+      statistic = statistic,
       denominator = denominator,
       id = all_of(id)
     ) |>
     suppressWarnings() # TODO
-
-  type <- assign_summary_type(data, include, value = NULL)
-
-  # TODO
-  # statistic <- list(all_categorical() ~ statistic)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
