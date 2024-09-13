@@ -72,6 +72,9 @@ tbl_hierarchical <- function(data,
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
+  # get variable labels for each hierarchy level
+  labels_hierarchy <- sapply(hierarchies, \(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
+
   type <- assign_summary_type(data, include, value = NULL)
 
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
@@ -162,10 +165,6 @@ tbl_hierarchical <- function(data,
       .default = NULL
     )
   )
-
-  # get variable labels for each hierarchy level
-  labels_hierarchy <- hierarchies |>
-    sapply(\(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
   # call bridge function here
   brdg_hierarchical(
