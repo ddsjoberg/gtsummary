@@ -280,7 +280,19 @@ pier_summary_categorical <- function(cards,
       by = "variable"
     )
 
-  if (all(is.null(unlist(df_result_levels$var_label)))) df_result_levels$var_label <- df_result_levels$group2_level
+  is_hierarchical <- all(is.null(unlist(df_result_levels$var_label)))
+
+  # for hierarchical tables, manually add 'var_label'
+  if (is_hierarchical) {
+    if ("group2_level" %in% names(df_result_levels)) {
+      df_result_levels$var_label <- df_result_levels |>
+        select(all_ard_groups("levels")) |>
+        pull(last_col())
+    } else {
+      df_result_levels <- df_result_levels |>
+        mutate(var_label = NA)
+    }
+  }
 
   df_result_levels <-
     df_result_levels |>
@@ -298,6 +310,11 @@ pier_summary_categorical <- function(cards,
       names_from = "gts_column",
       values_from = "stat"
     )
+
+  #
+  if (is_hierarchical) {
+    return(df_result_levels)
+  }
 
   # add header rows to results -------------------------------------------------
   df_results <-
