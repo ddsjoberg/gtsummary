@@ -4,8 +4,8 @@
 #' tbl_hierarchical(
 #'   data = cards::ADAE |>
 #'     dplyr::filter(
-#'       AESOC %in% unique(ADAE$AESOC)[1:10],
-#'       AETERM %in% unique(ADAE$AETERM)[1:10]
+#'       AESOC %in% unique(cards::ADAE$AESOC)[1:10],
+#'       AETERM %in% unique(cards::ADAE$AETERM)[1:10]
 #'     ),
 #'   hierarchies = c(SEX, AESOC, AETERM),
 #'   by = TRTA,
@@ -72,8 +72,6 @@ tbl_hierarchical <- function(data,
     )
   }
 
-  # TODO: Add digits argument processing
-
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
@@ -86,10 +84,12 @@ tbl_hierarchical <- function(data,
       by = all_of(by),
       denominator = denominator,
       id = all_of(id)
-    )
+    ) |>
+    suppressWarnings() # TODO
 
   type <- assign_summary_type(data, include, value = NULL)
-  # browser()
+
+  # TODO
   # statistic <- list(all_categorical() ~ statistic)
 
   # evaluate the remaining list-formula arguments ------------------------------
@@ -143,6 +143,9 @@ tbl_hierarchical <- function(data,
       assign_summary_digits(statistic, type, digits = digits)
   }
 
+  # sort requested columns by frequency
+  data <- .sort_data_infreq(data, sort)
+
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
 
@@ -150,10 +153,30 @@ tbl_hierarchical <- function(data,
   cards$stat_label <- translate_vector(cards$stat_label)
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- cards |>
-    group_by(group1_level) |>
-    dplyr::mutate(gts_column = paste0("stat_", cur_group_id())) |>
-    ungroup()
+  cards <- if (is_empty(by)) {
+    cards |> dplyr::mutate(gts_column = "stat_0")
+  } else {
+    cards |>
+      dplyr::group_by(group1_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
+      dplyr::ungroup()
+  }
+
+  cards <- cards::bind_ard(
+    cards,
+    cards::ard_total_n(data = data) |>
+      mutate(gts_column = NA),
+    case_switch(
+      !is_empty(by) ~
+        cards::ard_categorical(
+          data,
+          variables = all_of(by),
+          stat_label = ~ default_stat_labels()
+        ) |>
+      mutate(gts_column = NA),
+      .default = NULL
+    )
+  )
 
   labels_hierarch <- hierarchies |>
     sapply(\(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
@@ -168,7 +191,14 @@ tbl_hierarchical <- function(data,
     include,
     statistic,
     labels_hierarch
-  )
+  ) |>
+    append(
+      list(
+        cards = list(tbl_hierarchical = cards),
+        inputs = tbl_hierarchical_inputs
+      )
+    ) |>
+    structure(class = c("tbl_hierarchical", "gtsummary"))
 }
 
 brdg_hierarchical <- function(cards,
@@ -184,13 +214,29 @@ brdg_hierarchical <- function(cards,
                               missing_text = "Unknown") {
   set_cli_abort_call()
 
-  # build the table body pieces with bridge functions and stack them -----------
+  overall_stats <- cards |>
+    dplyr::filter(is.na(gts_column))
+  cards <- cards |>
+    dplyr::filter(!is.na(gts_column))
+
   x <- cards |>
-    group_by(across(c(all_ard_groups(types = "levels"), -group1_level, variable))) |>
-    group_map(
+    dplyr::group_by(dplyr::across(c(
+      cards::all_ard_groups(types = "levels"),
+      variable
+    )))
+  if (!is_empty(by)) {
+    x <- x |> dplyr::ungroup(group1_level)
+  }
+
+  # build the table body pieces with bridge functions and stack them -----------
+  x <- x |>
+    dplyr::group_map(
       function(.x, .y) {
         brdg_summary(
-          cards = .x |> as_card(),
+          cards = cards::bind_ard(
+            .x |> cards::as_card(),
+            overall_stats
+          ),
           variables = .y$variable,
           type = type,
           statistic = statistic,
@@ -204,7 +250,7 @@ brdg_hierarchical <- function(cards,
       .keep = TRUE
     )
 
-  x <- tbl_stack(x)
+  x <- tbl_stack(x, .combine = TRUE)
 
   indent <- unique(x$table_styling$indent$n_spaces)
   lbl_hierarch <- sapply(
@@ -232,7 +278,7 @@ brdg_hierarchical <- function(cards,
           get_theme_element("tbl_summary-str:header-noby",
                             default = "**N = {style_number(N)}**"),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**")
+                            default = "**{level}**  \nN = {style_number(n)}")
         )
     )
 
@@ -264,11 +310,11 @@ add_hierarchy_levels <- function(x, context) {
   n_labels <- length(labels)
 
   x$table_body <- x$table_body[rep(1, n_labels - 1), ] |>
-    mutate(
+    dplyr::mutate(
       var_label = missing_labels,
       label = missing_labels
     ) |>
-    bind_rows(x$table_body)
+    dplyr::bind_rows(x$table_body)
 
   for (i in seq(2, n_labels)) {
     x <- x |>
