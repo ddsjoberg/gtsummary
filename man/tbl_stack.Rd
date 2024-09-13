@@ -4,7 +4,7 @@
 \alias{tbl_stack}
 \title{Stack tables}
 \usage{
-tbl_stack(tbls, group_header = NULL, quiet = FALSE)
+tbl_stack(tbls, group_header = NULL, quiet = FALSE, .combine = FALSE)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -15,6 +15,10 @@ Character vector with table headers where length matches the length of \code{tbl
 
 \item{quiet}{(scalar \code{logical})\cr
 Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
+
+\item{.combine}{(scalar \code{logical})\cr
+Logical indicating whether to combine \code{tbls} with the same labels to avoid repeated printing of the same label.
+Default is \code{FALSE}.}
 }
 \value{
 A \code{tbl_stack} object
