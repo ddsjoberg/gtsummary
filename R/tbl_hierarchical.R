@@ -4,10 +4,10 @@
 #' tbl_hierarchical(
 #'   data = cards::ADAE |>
 #'     dplyr::filter(
-#'       AESOC %in% unique(ADAE$AESOC)[1:3],
-#'       AETERM %in% unique(ADAE$AETERM)[1:3]
+#'       AESOC %in% unique(ADAE$AESOC)[1:10],
+#'       AETERM %in% unique(ADAE$AETERM)[1:10]
 #'     ),
-#'   hierarchies = c(AESOC, AETERM),
+#'   hierarchies = c(SEX, AESOC, AETERM),
 #'   by = TRTA,
 #'   denominator = cards::ADSL,
 #'   id = USUBJID
@@ -27,6 +27,7 @@ tbl_hierarchical <- function(data,
                                list(all_categorical() ~ "{n}")
                              ),
                              digits = NULL,
+                             sort = all_categorical(FALSE) ~ "alphanumeric",
                              overall_row = FALSE) {
   set_cli_abort_call()
 
@@ -129,6 +130,8 @@ tbl_hierarchical <- function(data,
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic =
       get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
+    sort =
+      get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
   )
@@ -181,13 +184,11 @@ brdg_hierarchical <- function(cards,
                               missing = "no",
                               missing_stat = "{N_miss}",
                               missing_text = "Unknown") {
-  # browser()
   set_cli_abort_call()
 
-  # browser()
   # build the table body pieces with bridge functions and stack them -----------
   x <- cards |>
-    group_by(group2_level, variable) |>
+    group_by(across(c(all_ard_groups(types = "levels"), -group1_level, variable))) |>
     group_map(
       function(.x, .y) {
         brdg_summary(
@@ -199,7 +200,8 @@ brdg_hierarchical <- function(cards,
           missing = missing,
           missing_stat = missing_stat,
           missing_text = missing_test
-        )
+        ) |>
+          add_hierarchy_levels(.y)
       },
       .keep = TRUE
     )
@@ -242,6 +244,48 @@ brdg_hierarchical <- function(cards,
   x <-
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
+
+  x
+}
+
+add_hierarchy_levels <- function(x, context) {
+  # add 'hierarchy' element to table_styling
+  x$table_styling[["hierarchy"]] <-
+    context |>
+    select(-variable)
+
+  if (ncol(context) == 1) {
+    return(x)
+  }
+
+  labels <- context |>
+    select(-variable) |>
+    unlist(use.names = FALSE) |>
+    c()
+  missing_labels <- labels |> head(-1)
+  n_labels <- length(labels)
+
+  x$table_body <- x$table_body[rep(1, n_labels - 1), ] |>
+    mutate(
+      var_label = missing_labels,
+      label = missing_labels
+    ) |>
+    bind_rows(x$table_body)
+
+  for (i in seq(2, n_labels)) {
+    x <- x |>
+      modify_column_indent(
+        columns = label,
+        rows = row_type == "label" & var_label == labels[i],
+        indent = (i - 1) * 4
+      )
+  }
+  x <- x |>
+    modify_column_indent(
+      columns = label,
+      rows = row_type != "label",
+      indent = n_labels * 4
+    )
 
   x
 }

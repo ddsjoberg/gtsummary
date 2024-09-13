@@ -9,10 +9,13 @@ tbl_hierarchical(
   hierarchies,
   by = NULL,
   id = NULL,
+  label = NULL,
   denominator = NULL,
   include = everything(),
-  statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
+  statistic = ifelse(!missing(id), list(all_categorical() ~ "{n} ({p})"),
+    list(all_categorical() ~ "{n}")),
   digits = NULL,
+  sort = all_categorical(FALSE) ~ "alphanumeric",
   overall_row = FALSE
 )
 }
@@ -21,10 +24,13 @@ Create hierarchical table
 }
 \examples{
 tbl_hierarchical(
-  data = cards::ADAE,
-  hierarchies = c(AESOC, AETERM),
-  by = ARM,
-  statistic = "{n} ({p})",
+  data = cards::ADAE |>
+    dplyr::filter(
+      AESOC \%in\% unique(ADAE$AESOC)[1:10],
+      AETERM \%in\% unique(ADAE$AETERM)[1:10]
+    ),
+  hierarchies = c(SEX, AESOC, AETERM),
+  by = TRTA,
   denominator = cards::ADSL,
   id = USUBJID
 )
