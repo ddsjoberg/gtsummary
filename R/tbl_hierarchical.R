@@ -162,23 +162,25 @@ tbl_hierarchical <- function(data,
       dplyr::ungroup()
   }
 
+  # add total N rows to 'cards'
   cards <- cards::bind_ard(
     cards,
     cards::ard_total_n(data = data) |>
-      mutate(gts_column = NA),
-    case_switch(
+      dplyr::mutate(gts_column = NA),
+    dplyr::case_switch(
       !is_empty(by) ~
         cards::ard_categorical(
           data,
-          variables = all_of(by),
+          variables = dplyr::all_of(by),
           stat_label = ~ default_stat_labels()
         ) |>
-      mutate(gts_column = NA),
+        dplyr::mutate(gts_column = NA),
       .default = NULL
     )
   )
 
-  labels_hierarch <- hierarchies |>
+  # get variable labels for each hierarchy level
+  labels_hierarchy <- hierarchies |>
     sapply(\(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
   # call bridge function here
@@ -190,7 +192,7 @@ tbl_hierarchical <- function(data,
     id,
     include,
     statistic,
-    labels_hierarch
+    labels_hierarchy
   ) |>
     append(
       list(
@@ -208,7 +210,7 @@ brdg_hierarchical <- function(cards,
                               id,
                               include,
                               statistic,
-                              labels_hierarch,
+                              labels_hierarchy,
                               missing = "no",
                               missing_stat = "{N_miss}",
                               missing_text = "Unknown") {
@@ -219,6 +221,7 @@ brdg_hierarchical <- function(cards,
   cards <- cards |>
     dplyr::filter(!is.na(gts_column))
 
+  # create groups for each hierarchy level combination
   x <- cards |>
     dplyr::group_by(dplyr::across(c(
       cards::all_ard_groups(types = "levels"),
@@ -250,16 +253,18 @@ brdg_hierarchical <- function(cards,
       .keep = TRUE
     )
 
+  # combine hierarchy sub-tables
   x <- tbl_stack(x, .combine = TRUE)
 
+  # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)
   lbl_hierarch <- sapply(
-    seq_along(labels_hierarch),
+    seq_along(labels_hierarchy),
     function(x) {
       paste0(
         paste(rep(" ", indent[x]), collapse = ""),
         "**",
-        labels_hierarch[x],
+        labels_hierarchy[x],
         "**",
         if (x < length(indent)) "  "
       )
@@ -292,12 +297,14 @@ brdg_hierarchical <- function(cards,
   x
 }
 
+# add 'hierarchy' element to gtsummary object
 add_hierarchy_levels <- function(x, context) {
   # add 'hierarchy' element to table_styling
   x$table_styling[["hierarchy"]] <-
     context |>
     select(-variable)
 
+  # no hierarchy
   if (ncol(context) == 1) {
     return(x)
   }
@@ -309,6 +316,7 @@ add_hierarchy_levels <- function(x, context) {
   missing_labels <- labels |> head(-1)
   n_labels <- length(labels)
 
+  # add label rows for each additional hierarchy level
   x$table_body <- x$table_body[rep(1, n_labels - 1), ] |>
     dplyr::mutate(
       var_label = missing_labels,
@@ -316,6 +324,7 @@ add_hierarchy_levels <- function(x, context) {
     ) |>
     dplyr::bind_rows(x$table_body)
 
+  # indent label rows for each hierarchy level
   for (i in seq(2, n_labels)) {
     x <- x |>
       modify_column_indent(
@@ -324,6 +333,8 @@ add_hierarchy_levels <- function(x, context) {
         indent = (i - 1) * 4
       )
   }
+
+  # indent non-label rows
   x <- x |>
     modify_column_indent(
       columns = label,
