@@ -153,21 +153,14 @@ tbl_hierarchical <- function(data,
   cards$stat_label <- translate_vector(cards$stat_label)
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- if (is_empty(by)) {
-    cards |> dplyr::mutate(gts_column = "stat_0")
-  } else {
-    cards |>
-      dplyr::group_by(group1_level) |>
-      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
-      dplyr::ungroup()
-  }
+  cards <- .add_gts_column_to_cards_summary(cards, hierarchies, by, hierarchical = TRUE)
 
   # add total N rows to 'cards'
   cards <- cards::bind_ard(
     cards,
     cards::ard_total_n(data = data) |>
       dplyr::mutate(gts_column = NA),
-    dplyr::case_switch(
+    case_switch(
       !is_empty(by) ~
         cards::ard_categorical(
           data,
