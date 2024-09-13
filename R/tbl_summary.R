@@ -312,7 +312,6 @@ tbl_summary <- function(data,
     utils::modifyList(list(default_types = NULL))
   call <- match.call()
 
-
   # construct cards ------------------------------------------------------------
   cards <-
     cards::bind_ard(

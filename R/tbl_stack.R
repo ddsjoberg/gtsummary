@@ -172,9 +172,9 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .combine = FALSE
     )
 
     results$table_body <- results$table_body |>
-      left_join(hierarchies, by = "tbl_id1") |>
-      distinct(across(-c(tbl_id1, last_col())), .keep_all = TRUE) |>
-      select(-names(hierarchies[, -1]))
+      dplyr::left_join(hierarchies, by = "tbl_id1") |>
+      dplyr::distinct(dplyr::across(-c(tbl_id1, dplyr::last_col())), .keep_all = TRUE) |>
+      dplyr::select(-names(hierarchies[, -1]))
   }
 
   # returning results ----------------------------------------------------------
