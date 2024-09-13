@@ -4,7 +4,7 @@
       tbl_stack(t1_summary, t2_summary)
     Condition
       Error in `tbl_stack()`:
-      ! The `tbls` argument must be class <list>, not a <tbl_summary> object.
+      ! The `tbls` argument must be class <list>, not a <tbl_summary/gtsummary> object.
 
 ---
 
