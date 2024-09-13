@@ -87,8 +87,7 @@ tbl_hierarchical <- function(data,
       statistic = statistic,
       denominator = denominator,
       id = all_of(id)
-    ) |>
-    suppressWarnings() # TODO
+    )
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
