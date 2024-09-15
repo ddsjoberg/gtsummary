@@ -29,6 +29,11 @@
 #'   categorical and dichotomous cannot be modified.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`
+#' @param overall (scalar `logical`)\cr
+#'   When `TRUE`, the `cards` input is parsed into two parts to run
+#'   `tbl_ard_summary(cards_by) |> add_overall(cards_overall)`.
+#'   Can only by used when `by` argument is specified.
+#'   Default is `FALSE`.
 #' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table of class `"tbl_ard_summary"`
@@ -57,6 +62,18 @@
 #'   .total_n = TRUE
 #' ) |>
 #'   tbl_ard_summary(by = ARM)
+#'
+#' ard_stack(
+#'   data = ADSL,
+#'   .by = ARM,
+#'   ard_categorical(variables = "AGEGR1"),
+#'   ard_continuous(variables = "AGE"),
+#'   .attributes = TRUE,
+#'   .missing = TRUE,
+#'   .total_n = TRUE,
+#'   .overall = TRUE
+#' ) |>
+#'   tbl_ard_summary(by = ARM, overall = TRUE)
 tbl_ard_summary <- function(cards,
                             by = NULL,
                             statistic = list(
@@ -68,7 +85,8 @@ tbl_ard_summary <- function(cards,
                             missing = c("no", "ifany", "always"),
                             missing_text = "Unknown",
                             missing_stat = "{N_miss}",
-                            include = everything()) {
+                            include = everything(),
+                            overall = FALSE) {
   set_cli_abort_call()
   # data argument checks -------------------------------------------------------
   check_not_missing(cards)
@@ -91,6 +109,12 @@ tbl_ard_summary <- function(cards,
   cards::process_selectors(data, include = {{ include }}, by = {{ by }})
   include <- setdiff(include, by) # remove by variable from list vars included
   check_scalar(by, allow_empty = TRUE)
+  check_scalar_logical(overall)
+  if (isTRUE(overall) && is_empty(by)) {
+    cli::cli_inform(c("Cannot use {.code overall=TRUE} when {.arg by} argment not specified.",
+                      "*" = "Setting {.code overall=FALSE}."))
+    overall <- FALSE
+  }
 
   # check structure of ARD input -----------------------------------------------
   if (is_empty(by) && !is_empty(names(dplyr::select(cards, cards::all_ard_groups())))) {
@@ -222,12 +246,32 @@ tbl_ard_summary <- function(cards,
       .quiet = TRUE
     )
 
+  # if `overall=TRUE`, parse cards into primary and overall parts --------------
+  if (isTRUE(overall)) {
+    cards_overall <- cards |>
+      # remove grouped summary statistics
+      dplyr::filter(is.na(.data$group1)) |>
+      # remove `by` variable univariate tabulation
+      dplyr::filter(!.data$variable %in% .env$by) |>
+      dplyr::select(-(cards::all_missing_columns() & cards::all_ard_groups()))
+
+    cards <- cards |>
+      # remove univariate summary stats
+      dplyr::filter(!(is.na(.data$group1) & .data$variable %in% .env$include) | .data$context %in% "attributes")
+  }
+
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_summary(cards, include, by)
 
   # save inputs
   tbl_ard_summary_inputs <- as.list(environment())[names(formals(tbl_ard_summary))]
   call <- match.call()
+
+  # if overall=TRUE, then remove overall items from inputs object
+  if (isTRUE(overall)) {
+    tbl_ard_summary_inputs$overall <- FALSE
+    tbl_ard_summary_inputs$cards_overall <- NULL
+  }
 
   # fill NULL stats with NA
   cards <- cards::replace_null_statistic(cards)
@@ -272,7 +316,14 @@ tbl_ard_summary <- function(cards,
         )
     )
 
-  # return tbl_ard_summary table -----------------------------------------------
+  # add call list to tbl_ard_summary table -------------------------------------
   x$call_list <- list(tbl_ard_summary = call)
+
+  # if overall=TRUE, then run add_overall() ------------------------------------
+  if (isTRUE(overall)) {
+    x <- add_overall(x, cards = cards_overall)
+  }
+
+  # return tbl_ard_summary table -----------------------------------------------
   x
 }
