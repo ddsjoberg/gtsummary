@@ -4,12 +4,12 @@
       as.data.frame(modify_column_hide(add_stat_label(tbl_ard, location = "row"),
       all_stat_cols()))
     Output
-               **Characteristic**
-      1 Pooled Age Group 1, n (%)
-      2                       <65
-      3                       >80
-      4                     65-80
-      5      Age, Median (Q1, Q3)
+          **Characteristic**
+      1        AGEGR1, n (%)
+      2                  <65
+      3                65-80
+      4                  >80
+      5 Age, Median (Q1, Q3)
 
 # add_stat_label(location='column') standard use
 
@@ -18,10 +18,10 @@
       all_stat_cols()))
     Output
         **Characteristic**   **Statistic**
-      1 Pooled Age Group 1            <NA>
+      1             AGEGR1            <NA>
       2                <65           n (%)
-      3                >80           n (%)
-      4              65-80           n (%)
+      3              65-80           n (%)
+      4                >80           n (%)
       5                Age Median (Q1, Q3)
 
 ---
@@ -31,10 +31,10 @@
         label = all_categorical() ~ "no. (%)"), all_stat_cols()))
     Output
         **Characteristic**   **Statistic**
-      1 Pooled Age Group 1            <NA>
+      1             AGEGR1            <NA>
       2                <65         no. (%)
-      3                >80         no. (%)
-      4              65-80         no. (%)
+      3              65-80         no. (%)
+      4                >80         no. (%)
       5                Age Median (Q1, Q3)
 
 # add_stat_label(label) standard use

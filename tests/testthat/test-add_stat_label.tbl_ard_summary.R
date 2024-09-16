@@ -2,7 +2,7 @@ skip_on_cran()
 skip_if_not(is_pkg_installed("survey", reference_pkg = "gtsummary"))
 
 tbl_ard <- cards::ard_stack(
-  data = cards::ADSL,
+  data = cards::ADSL |> dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))),
   cards::ard_categorical(variables = "AGEGR1"),
   cards::ard_continuous(variables = "AGE"),
   .attributes = TRUE,
