@@ -4,6 +4,8 @@
 
 * Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
 
+* Added `add_stat_label.tbl_ard_summary()` method. (#1969)
+
 # gtsummary 2.0.2
 
 Updates to address regressions in the v2.0.0 release:
