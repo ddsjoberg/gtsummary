@@ -194,7 +194,7 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL
     )
 
   # prepare the base table via `brdg_continuous()` -----------------------------
-  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable, type = type)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
