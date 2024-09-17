@@ -11,7 +11,6 @@
   last = FALSE,
   col_label = "**Overall**",
   statistic = NULL,
-  digits = NULL,
   ...
 )
 }
@@ -31,10 +30,6 @@ String indicating the column label. Default is \code{"**Overall**"}}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Override the statistic argument in initial \verb{tbl_*} function
-call. Default is \code{NULL}.}
-
-\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Override the digits argument in initial \verb{tbl_*} function
 call. Default is \code{NULL}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
