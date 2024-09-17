@@ -32,7 +32,7 @@
 #'     statistic = list(grade = "{median} ({p25}, {p75})")
 #'  ) |>
 #'  as_tibble()
-brdg_continuous <- function(cards, by = NULL, statistic, include, variable) {
+brdg_continuous <- function(cards, by = NULL, statistic, include, variable, type) {
   set_cli_abort_call()
 
   # prepare the cards object for `brdg_summary()` ------------------------------
@@ -43,7 +43,7 @@ brdg_continuous <- function(cards, by = NULL, statistic, include, variable) {
     cards = cards,
     statistic = statistic,
     by = by,
-    type = rep_named(include, list("categorical")),
+    type = type,
     variables = include,
     missing = "no"
   )

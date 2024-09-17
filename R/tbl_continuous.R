@@ -11,6 +11,13 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
+#' @param type ([`formula-list-selector`][syntax])\cr
+#'   Specifies the summary type for the variables in `include`. Values
+#'   must be either `'categorical'` or `'dichotomous'`. Default
+#'   is `'categorical'` for all variables, unless a value is specified for the variable.
+#' @param value ([`formula-list-selector`][syntax])\cr
+#'   For dichotomous variables, this argumetn specifies the single value
+#'   to show. The default for dichotomous variables is the maximum value.
 #' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table
@@ -39,7 +46,9 @@ tbl_continuous <- function(data,
                            digits = NULL,
                            by = NULL,
                            statistic = everything() ~ "{median} ({p25}, {p75})",
-                           label = NULL) {
+                           label = NULL,
+                           type = NULL,
+                           value = NULL) {
   set_cli_abort_call()
 
   # data argument checks -------------------------------------------------------
@@ -61,9 +70,34 @@ tbl_continuous <- function(data,
   include <- setdiff(include, c(by, variable)) # remove by and variable columns from list vars included
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
 
+  # assign types
+  cards::process_formula_selectors(data[include], type = type, value = value)
+  for (varname in include) {
+    if (is_empty(type[[varname]]) && !is_empty(value[[varname]])) type[[varname]] <- "dichotomous"
+    if (is_empty(type[[varname]])) type[[varname]] <- "categorical"
+    if (type[[varname]] == "dichotomous" && is_empty(value[[varname]])) {
+      value[[varname]] <- cards::maximum_variable_value(data[varname])[[1]]
+    }
+  }
+  cards::check_list_elements(
+    x = type,
+    predicate = \(x) is_string(x) && x %in% c("categorical", "dichotomous"),
+    error_msg =
+      c("Error in argument {.arg {arg_name}} for variable {.val {variable}}.",
+        "i" = "Elements values must be one of {.val {c('categorical', 'dichotomous')}}.")
+  )
+  cards::check_list_elements(
+    x = value,
+    predicate = \(x) length(x) == 1L,
+    error_msg =
+      c("Error in argument {.arg {arg_name}} for variable {.val {variable}}.",
+        "i" = "Elements values must be a scalar.")
+  )
+
+
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = statistic,
     include_env = TRUE
   )
@@ -86,15 +120,13 @@ tbl_continuous <- function(data,
   )
 
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     digits = digits
   )
-
 
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
   call <- match.call()
-
 
   # prepare the ARD data frame -------------------------------------------------
   cards <-
@@ -111,14 +143,15 @@ tbl_continuous <- function(data,
           )
 
         # calculate the continuous summary stats
-        cards::ard_continuous(
-          data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
-          variables = all_of(variable),
-          by = any_of(c(by, cat_variable)),
-          statistic = .continuous_statistics_chr_to_fun(statistic)[cat_variable] |> set_names(variable),
-          fmt_fn = variable_digits,
-          stat_label = ~ default_stat_labels()
-        ) |>
+        ard <-
+          cards::ard_continuous(
+            data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
+            variables = all_of(variable),
+            by = any_of(c(by, cat_variable)),
+            statistic = .continuous_statistics_chr_to_fun(statistic)[cat_variable] |> set_names(variable),
+            fmt_fn = variable_digits,
+            stat_label = ~ default_stat_labels()
+          ) |>
           # add the missingness information
           cards::bind_ard(
             cards::ard_missing(
@@ -129,6 +162,18 @@ tbl_continuous <- function(data,
               stat_label = ~ default_stat_labels()
             )
           )
+
+        if (type[[cat_variable]] == "dichotomous") {
+          # check the specified value is observed
+          check_colname <- ifelse(is_empty(by), "group1_level", "group2_level")
+          if (!value[[cat_variable]] %in% unlist(ard[[check_colname]])) {
+            cli::cli_abort(c("Error in {.arg value} argument for variable {.val {cat_variable}}",
+                             "i" = "Value must be one of {.val {unique(unlist(ard[[check_colname]]))}}."))
+          }
+          ard <- dplyr::filter(ard, .data[[check_colname]] %in% .env$value[[cat_variable]])
+        }
+
+        ard
       }
     ) |>
     dplyr::bind_rows()
@@ -155,7 +200,8 @@ tbl_continuous <- function(data,
   cards <- .add_gts_column_to_cards_continuous(cards, include, by)
 
   # prepare the base table via `brdg_continuous()` -----------------------------
-  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include,
+                       variable = variable, type = type)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
