@@ -80,7 +80,6 @@ tbl_hierarchical <- function(data,
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
 
   # calculate statistics -------------------------------------------------------
-  # TODO: Update this with cards::ard_stack_hierarchical() when it's ready
   cards <-
     ard_stack_hierarchical(
       data = data,
@@ -90,7 +89,7 @@ tbl_hierarchical <- function(data,
       denominator = denominator,
       id = all_of(id),
       include = include
-    ) |> suppressWarnings() # TODO
+    )
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
