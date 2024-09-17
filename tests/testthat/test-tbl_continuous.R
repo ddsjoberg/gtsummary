@@ -194,3 +194,59 @@ test_that("tbl_continuous(label) messaging", {
     tbl_continuous(trial, variable = age, include = c(trt, grade), label = list(trt = mean))
   )
 })
+
+test_that("tbl_continuous(type,value)", {
+  # when a level is not specified, it defaults of the "max" value
+  expect_equal(
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ "Drug B"
+    ) |>
+      as.data.frame(),
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      type = trt ~ "dichotomous"
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_continuous(type,value) messaging", {
+  # specified a level that does not exist
+  expect_snapshot(
+    error = TRUE,
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ "XXXXXXXXXX"
+    )
+  )
+
+  # specified a value that is not a single unit in length
+  expect_snapshot(
+    error = TRUE,
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ letters
+    )
+  )
+
+  # specified a type other than categorical/dichotomous
+  expect_snapshot(
+    error = TRUE,
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      type = trt ~ "NOT_A_TYPE"
+    )
+  )
+})
+

@@ -90,3 +90,33 @@
       Error in `tbl_continuous()`:
       ! Elements of the `label` argument must be strings.
 
+# tbl_continuous(type,value) messaging
+
+    Code
+      tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
+        "XXXXXXXXXX")
+    Condition
+      Error in `FUN()`:
+      ! Error in `value` argument for variable "trt"
+      i Value must be one of "Drug A" and "Drug B".
+
+---
+
+    Code
+      tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
+        letters)
+    Condition
+      Error in `tbl_continuous()`:
+      ! Error in argument `value` for variable "trt".
+      i Elements values must be a scalar.
+
+---
+
+    Code
+      tbl_continuous(trial, variable = age, include = c(trt, grade), type = trt ~
+        "NOT_A_TYPE")
+    Condition
+      Error in `tbl_continuous()`:
+      ! Error in argument `type` for variable "trt".
+      i Elements values must be one of "categorical" and "dichotomous".
+

@@ -11,7 +11,9 @@ tbl_continuous(
   digits = NULL,
   by = NULL,
   statistic = everything() ~ "{median} ({p25}, {p75})",
-  label = NULL
+  label = NULL,
+  type = NULL,
+  value = NULL
 )
 }
 \arguments{
@@ -40,6 +42,15 @@ Specifies summary statistics to display for each variable.  The default is
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
+
+\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the summary type for the variables in \code{include}. Values
+must be either \code{'categorical'} or \code{'dichotomous'}. Default
+is \code{'categorical'} for all variables, unless a value is specified for the variable.}
+
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+For dichotomous variables, this argument specifies the single value
+to show. The default for dichotomous variables is the maximum value.}
 }
 \value{
 a gtsummary table

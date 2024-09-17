@@ -4,7 +4,7 @@
 \alias{brdg_continuous}
 \title{Continuous Summary Table Bridges}
 \usage{
-brdg_continuous(cards, by = NULL, statistic, include, variable)
+brdg_continuous(cards, by = NULL, statistic, include, variable, type)
 }
 \arguments{
 \item{cards}{(\code{card})\cr
@@ -21,6 +21,9 @@ Variables to include in the summary table. Default is \code{everything()}.}
 
 \item{variable}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Variable name of the continuous column to be summarized.}
+
+\item{type}{(named \code{list})\cr
+named list of summary types}
 }
 \value{
 a gtsummary object
