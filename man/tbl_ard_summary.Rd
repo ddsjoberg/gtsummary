@@ -14,7 +14,8 @@ tbl_ard_summary(
   missing = c("no", "ifany", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
-  include = everything()
+  include = everything(),
+  overall = FALSE
 )
 }
 \arguments{
@@ -53,6 +54,12 @@ Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}}
+
+\item{overall}{(scalar \code{logical})\cr
+When \code{TRUE}, the \code{cards} input is parsed into two parts to run
+\code{tbl_ard_summary(cards_by) |> add_overall(cards_overall)}.
+Can only by used when \code{by} argument is specified.
+Default is \code{FALSE}.}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_summary"}
@@ -86,4 +93,16 @@ ard_stack(
   .total_n = TRUE
 ) |>
   tbl_ard_summary(by = ARM)
+
+ard_stack(
+  data = ADSL,
+  .by = ARM,
+  ard_categorical(variables = "AGEGR1"),
+  ard_continuous(variables = "AGE"),
+  .attributes = TRUE,
+  .missing = TRUE,
+  .total_n = TRUE,
+  .overall = TRUE
+) |>
+  tbl_ard_summary(by = ARM, overall = TRUE)
 }
