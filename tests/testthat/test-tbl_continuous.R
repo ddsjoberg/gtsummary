@@ -213,6 +213,30 @@ test_that("tbl_continuous(type,value)", {
     ) |>
       as.data.frame()
   )
+
+  # works with a by variable
+  expect_snapshot({
+    df <-
+      tbl_continuous(
+        trial,
+        variable = age,
+        include = c(trt, grade),
+        by = response,
+        value = trt ~ "Drug B"
+      ) |>
+      as.data.frame()
+    df
+  })
+
+  # check the result is accurate
+  expect_equal(
+    df[1, 2],
+    trial |>
+      dplyr::filter(trt == "Drug B", response == 0) |>
+      tbl_summary(include = age) |>
+      as.data.frame() %>%
+      `[`(1, 2)
+  )
 })
 
 test_that("tbl_continuous(type,value) messaging", {
