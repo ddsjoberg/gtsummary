@@ -89,19 +89,19 @@ brdg_hierarchical <- function(cards,
     paste(collapse = "\n")
 
   # adding styling -------------------------------------------------------------
-  # x <- x |>
-  #   # updating the headers for the stats columns
-  #   modify_header(
-  #     label = lbl_hierarch,
-  #     all_stat_cols() ~
-  #       ifelse(
-  #         is_empty(by),
-  #         get_theme_element("tbl_summary-str:header-noby",
-  #                           default = "**N = {style_number(N)}**"),
-  #         get_theme_element("tbl_summary-str:header-withby",
-  #                           default = "**{level}**  \nN = {style_number(n)}")
-  #       )
-  #   )
+  x <- x |>
+    # updating the headers for the stats columns
+    modify_header(
+      label = lbl_hierarch,
+      all_stat_cols() ~
+        ifelse(
+          is_empty(by),
+          get_theme_element("tbl_summary-str:header-noby",
+                            default = "**N = {style_number(N)}**"),
+          get_theme_element("tbl_summary-str:header-withby",
+                            default = "**{level}**  \nN = {style_number(n)}")
+        )
+    )
 
   # return tbl_summary table ---------------------------------------------------
   x$call_list <- list(tbl_summary = call)
