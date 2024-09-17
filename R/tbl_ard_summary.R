@@ -223,7 +223,14 @@ tbl_ard_summary <- function(cards,
     )
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- .add_gts_column_to_cards_summary(cards, include, by)
+  cards <-
+    cards::eval_capture_conditions(.add_gts_column_to_cards_summary(cards, include, by)) |>
+    cards::captured_condition_as_error(
+      c("There was an assigning a {.pkg gtsummary} column name in the ARD.",
+        "i" = "The error suggests a malformed ARD input in the {.arg cards} argument. See error message below:",
+        "x" = "{condition}")
+    )
+
 
   # save inputs
   tbl_ard_summary_inputs <- as.list(environment())[names(formals(tbl_ard_summary))]

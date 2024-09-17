@@ -155,7 +155,13 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL
   cards$stat_label <- translate_vector(cards$stat_label)
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- .add_gts_column_to_cards_continuous(cards, include, by)
+  cards <-
+    cards::eval_capture_conditions(.add_gts_column_to_cards_continuous(cards, include, by)) |>
+    cards::captured_condition_as_error(
+      c("There was an assigning a {.pkg gtsummary} column name in the ARD.",
+        "i" = "The error suggests a malformed ARD input in the {.arg cards} argument. See error message below:",
+        "x" = "{condition}")
+    )
 
   # prepare the base table via `brdg_continuous()` -----------------------------
   x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
