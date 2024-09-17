@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.2.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.2.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,7 @@
 <ul><li><p>Headers in {gt} tables being exported to PDF do not support the <code>\n</code> line breaker. Previously, line breakers were stripped from the header in the <code><a href="../reference/print_gtsummary.html">print.gtsummary()</a></code> S3 method. But this did not apply to users utilizing <code><a href="../reference/as_gt.html">as_gt()</a></code> to further customize their tables. As a result, the line breaking strip has been migrated to <code><a href="../reference/as_gt.html">as_gt()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1960" class="external-link">#1960</a>)</p></li>
 <li><p>Removed the <code>"tbl_summary-arg:statistic"</code> theme that was incorrectly added to <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>.</p></li>
 <li><p>Added <code><a href="../reference/add_stat_label.html">add_stat_label.tbl_ard_summary()</a></code> method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1969" class="external-link">#1969</a>)</p></li>
+<li><p>Removed documentation for the <code>add_overall.tbl_ard_summary(digits)</code> argument, which was never meant to be a part of this function. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1975" class="external-link">#1975</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.2" id="gtsummary-202">gtsummary 2.0.2<a class="anchor" aria-label="anchor" href="#gtsummary-202"></a></h2><p class="text-muted">CRAN release: 2024-09-05</p>
