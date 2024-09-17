@@ -6,6 +6,8 @@
 
 * Added `add_stat_label.tbl_ard_summary()` method. (#1969)
 
+* Removed documentation for the `add_overall.tbl_ard_summary(digits)` argument, which was never meant to be a part of this function. (#1975)
+
 # gtsummary 2.0.2
 
 Updates to address regressions in the v2.0.0 release:
