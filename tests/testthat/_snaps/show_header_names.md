@@ -33,12 +33,12 @@
       show_header_names(tbl_uvregression(trial, x = trt, include = c(marker, age),
       show_single_row = trt, method = lm))
     Output
-      Column Name      Header                 
-      label <chr>      "**Outcome** <chr>"    
-      stat_n <chr>     "**N** <chr>"          
-      estimate <chr>   "**Beta** <chr>"       
-      conf.low <chr>   "**95% CI** <chr>"     
-      p.value <chr>    "**p-value** <chr>"    
+      Column Name   Header           
+      label         "**Outcome**"    
+      stat_n        "**N**"          
+      estimate      "**Beta**"       
+      conf.low      "**95% CI**"     
+      p.value       "**p-value**"    
       
     Message
       * These values may be dynamically placed into headers (and other locations).

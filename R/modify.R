@@ -266,27 +266,32 @@ show_header_names <- function(x, include_example, quiet) {
     "character" = "chr",
     "factor" = "fct",
     "logical" = "lgl",
-    "Date" = "Date",
-    "POSIXct" = "POSIXct",
-    "POSIXlt" = "POSIXlt"
+    "Date" = "date",
+    "POSIXct" = "dttm",
+    "POSIXlt" = "dttm"
   )
 
   # Identify data type of dynamic values
-  df_print <- df_print |>
-    dplyr::mutate(
-      across(
-        if (ncol(df_print) > 2) 3:ncol(df_print) else everything(),
-        ~ ifelse(
-          !is.na(.),
-          paste0(
-            ., " <",
-            sapply(class(.), function(cls) class_mapping[cls]),
-            ">"
-          ),
-          .
+  df_print <- if (ncol(df_print) > 2) {
+    df_print |>
+      mutate(
+        across(
+          .cols = 3:ncol(df_print),
+          .fns = ~ ifelse(
+            !is.na(.),
+            paste0(
+              ., " <",
+              sapply(class(.), function(cls) class_mapping[cls] %||% "<???>"),
+              ">"
+            ),
+            .
+          )
         )
       )
-    )
+  } else {
+    df_print
+  }
+
   df_print |>
     dplyr::mutate(
       across(where(is.integer), label_style_number()),
