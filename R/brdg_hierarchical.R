@@ -17,9 +17,10 @@ brdg_hierarchical <- function(cards,
   cards <- cards |>
     dplyr::filter(!is.na(gts_column))
 
-  h <- unique(cards$variable)
+  h <- intersect(hierarchies, unique(cards$variable))
   idx <- length(h)
 
+  # browser()
   if (idx > 1) {
     cards_inner <- cards |>
       dplyr::filter(variable != h[1])
@@ -38,7 +39,7 @@ brdg_hierarchical <- function(cards,
       missing_text = missing_text
     )
 
-    if (idx == length(hierarchies)) return(x_inner)
+    # if (idx == length(hierarchies)) return(x_inner)
   } else {
     # create groups for each hierarchy level combination
     x <- cards |>
@@ -132,38 +133,33 @@ brdg_hierarchical <- function(cards,
   #     .keep = TRUE
   #   )
 
-  # combine hierarchy sub-tables
-  all_tbls <- x_inner#, x_outer)
-  ord_all_tbls <- lapply(
-    all_tbls,
-    \(x) sapply(
-      x$table_styling$hierarchy,
-      \(x) {
-        if (is.null(x[[1]])) NA else as.character(unlist(x))
-      }
-    )
-  ) |>
-    bind_rows() |>
-    mutate(
-      idx = dplyr::cur_group_rows()
-    )
+  if (idx < length(hierarchies)) {
+    # combine hierarchy sub-tables
+    all_tbls <- x_inner
+    ord_all_tbls <-
+      lapply(
+        all_tbls,
+        \(x) sapply(
+          x$table_styling$hierarchy,
+          \(x) {
+            if (is.null(x[[1]])) " " else as.character(unlist(x))
+          }
+        )
+      ) |>
+      bind_rows() |>
+      mutate(
+        idx = dplyr::cur_group_rows()
+      ) |>
+      arrange(across(-idx)) |>
+      dplyr::pull(idx)
 
-  ord_all_tbls <- ord_all_tbls |>
-    tibble::add_column(
-      checkna = !is.na(ord_all_tbls[ncol(ord_all_tbls) - 1]) |> unname(),
-      .after = 1
-    ) |>
-    arrange(across(-idx)) |>
-    dplyr::pull(idx)
+    x <- tbl_stack(all_tbls[ord_all_tbls], .combine = TRUE)
 
-
-  x <- tbl_stack(
-    all_tbls[ord_all_tbls],
-    .combine = TRUE
-  ) |>
-    add_hierarchy_levels(context = data.frame(hierarchies))
-
-  return(x)
+    return(x)
+  } else {
+    # browser()
+    x <- x_inner
+  }
 
   # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)

@@ -236,16 +236,25 @@ add_hierarchy_levels <- function(x, context) {
       )
   } else {
     # add label rows for each additional hierarchy level
-    x$table_body <-
-      tibble(
-        variable = x$table_body$variable[1],
-        row_type = "label",
-        var_label = missing_labels,
-        label = missing_labels,
-        var_type = "categorical"
-      ) |>
-      dplyr::bind_rows(x$table_body)
-  }
+    if (!is.null(missing_labels)) {
+      x$table_body <-
+        tibble(
+          variable = x$table_body$variable[1],
+          row_type = "label",
+          var_label = missing_labels,
+          label = missing_labels,
+          var_type = "categorical"
+        ) |>
+        dplyr::bind_rows(x$table_body)
+    }
+
+    x <- x |>
+      modify_column_indent(
+        columns = label,
+        rows = row_type != "label",
+        indent = n_labels * 4
+      )
+    }
 
   x
 }
