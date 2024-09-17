@@ -10,7 +10,9 @@ tbl_ard_continuous(
   include,
   by = NULL,
   label = NULL,
-  statistic = everything() ~ "{median} ({p25}, {p75})"
+  statistic = everything() ~ "{median} ({p25}, {p75})",
+  type = NULL,
+  value = NULL
 )
 }
 \arguments{
@@ -34,6 +36,12 @@ If no label has been set, the column name is used.}
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is
 \code{everything() ~ "{median} ({p25}, {p75})"}.}
+
+\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies the summary type. Accepted value are
+\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
+Continuous summaries may be assigned \code{c("continuous", "continuous2")}, while
+categorical and dichotomous cannot be modified.}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_summary"}
