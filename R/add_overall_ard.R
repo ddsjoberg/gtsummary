@@ -15,9 +15,6 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Override the statistic argument in initial `tbl_*` function
 #'   call. Default is `NULL`.
-#' @param digits ([`formula-list-selector`][syntax])\cr
-#'   Override the digits argument in initial `tbl_*` function
-#'   call. Default is `NULL`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @author Daniel D. Sjoberg
@@ -60,8 +57,7 @@ add_overall.tbl_ard_summary <- function(x,
                                         cards,
                                         last = FALSE,
                                         col_label = "**Overall**",
-                                        statistic = NULL,
-                                        digits = NULL, ...) {
+                                        statistic = NULL, ...) {
   set_cli_abort_call()
   check_dots_empty()
   check_not_missing(cards)
@@ -80,7 +76,7 @@ add_overall.tbl_ard_summary <- function(x,
     last = last,
     col_label = col_label,
     statistic = statistic,
-    digits = digits,
+    digits = NULL,
     call = c(x$call_list, list(add_overall = match.call())),
     calling_fun = names(x$call_list)[1]
   )
