@@ -79,6 +79,8 @@ tbl_continuous <- function(data,
       value[[varname]] <- cards::maximum_variable_value(data[varname])[[1]]
     }
   }
+  rm("varname")
+
   cards::check_list_elements(
     x = type,
     predicate = \(x) is_string(x) && x %in% c("categorical", "dichotomous"),
