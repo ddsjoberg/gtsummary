@@ -12,10 +12,8 @@ tbl_hierarchical(
   label = NULL,
   denominator = NULL,
   include = everything(),
-  statistic = ifelse(!missing(id), list(all_categorical() ~ "{n} ({p})"),
-    list(all_categorical() ~ "{n}")),
+  statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
   digits = NULL,
-  sort = all_categorical(FALSE) ~ "alphanumeric",
   overall_row = FALSE
 )
 }
@@ -31,7 +29,7 @@ data <- cards::ADAE |>
 
 tbl_hierarchical(
   data = data,
-  hierarchies = c(SEX, AESOC, AETERM),
+  hierarchies = c(AESOC, AETERM, AESEV),
   by = TRTA,
   denominator = cards::ADSL,
   id = USUBJID
