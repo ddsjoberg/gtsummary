@@ -4,6 +4,8 @@
 
 * Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
 
+* Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
+
 * Added `add_stat_label.tbl_ard_summary()` method. (#1969)
 
 * Removed documentation for the `add_overall.tbl_ard_summary(digits)` argument, which was never meant to be a part of this function. (#1975)

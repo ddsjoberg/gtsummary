@@ -231,3 +231,53 @@ test_that("tbl_ard_summary(statistic) error messages", {
       tbl_ard_summary(by = ARM, statistic = list(AGE = c("{mean}", "{median}")))
   )
 })
+
+test_that("tbl_ard_summary(overall)", {
+  # check no errors when using function as expected
+  expect_silent(
+    tbl <-
+      cards::ard_stack(
+        trial,
+        .by = trt,
+        cards::ard_continuous(variables = age),
+        cards::ard_categorical(variables = grade),
+        .missing = TRUE,
+        .attributes = TRUE,
+        .total_n = TRUE,
+        .overall = TRUE
+      ) |>
+      tbl_ard_summary(by = trt, overall = TRUE)
+  )
+
+  # check the parsed cards objects are the same when constructed separately
+  expect_equal(
+    tbl$cards$tbl_ard_summary |>
+      dplyr::select(-gts_column) |>
+      cards::tidy_ard_row_order(),
+    cards::ard_stack(
+      trial,
+      .by = trt,
+      cards::ard_continuous(variables = age),
+      cards::ard_categorical(variables = grade),
+      .missing = TRUE,
+      .attributes = TRUE,
+      .total_n = TRUE
+    ) |>
+      cards::tidy_ard_row_order()
+  )
+  expect_equal(
+    tbl$cards$add_overall |>
+      dplyr::select(-gts_column) |>
+      cards::tidy_ard_row_order(),
+    cards::ard_stack(
+      trial,
+      cards::ard_continuous(variables = age),
+      cards::ard_categorical(variables = grade),
+      .missing = TRUE,
+      .attributes = TRUE,
+      .total_n = TRUE
+    ) |>
+      cards::tidy_ard_row_order()
+  )
+})
+
