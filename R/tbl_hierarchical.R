@@ -73,7 +73,7 @@ tbl_hierarchical <- function(data,
   tbl_hierarchical_inputs <- as.list(environment())
 
   # get variable labels for each hierarchy level
-  labels_hierarchy <- sapply(hierarchies, \(x) if (!is.na(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
+  labels_hierarchy <- sapply(hierarchies, \(x) if (!is.null(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
   type <- assign_summary_type(data, include, value = NULL)
 
@@ -90,7 +90,7 @@ tbl_hierarchical <- function(data,
       denominator = denominator,
       id = all_of(id),
       include = include
-    )
+    ) |> suppressWarnings() # TODO
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
@@ -205,26 +205,8 @@ brdg_hierarchical <- function(cards,
   cards <- cards |>
     dplyr::filter(!is.na(gts_column))
 
-  # # create groups for each hierarchy level combination
-  # x <- cards |>
-  #   dplyr::group_by(dplyr::across(c(
-  #     cards::all_ard_groups(types = "levels"),
-  #     variable
-  #   )))
-  # if (!is_empty(by)) {
-  #   x <- x |> dplyr::ungroup(group1_level)
-  # }
-  # x_grps <- as.data.frame(group_keys(x))[1] |> unique()
-  # x_last <- x |>
-  #   ungroup() |>
-  #   select(cards::all_ard_groups("levels")) |>
-  #   select(last_col()) |>
-  #   names()
-
-  ards <- list()
   h <- unique(cards$variable)
   idx <- length(h)
-  browser()
 
   if (idx > 1) {
     cards_inner <- cards |>
@@ -243,6 +225,8 @@ brdg_hierarchical <- function(cards,
       missing_stat = missing_stat,
       missing_text = missing_text
     )
+
+    if (idx == length(hierarchies)) return(x_inner)
   } else {
     # create groups for each hierarchy level combination
     x <- cards |>
@@ -253,98 +237,121 @@ brdg_hierarchical <- function(cards,
     if (!is_empty(by)) {
       x <- x |> dplyr::ungroup(group1_level)
     }
-    x_grps <- as.data.frame(group_keys(x))[1] |> unique()
-    x_last <- x |>
-      ungroup() |>
-      select(cards::all_ard_groups("levels")) |>
-      select(last_col()) |>
-      names()
-    # browser()
-    ards <- list()
 
     # build the table body pieces with bridge functions and stack them -----------
-    for (lvl in unlist(x_grps)) {
-      x_f <- x |>
-        dplyr::filter(!!sym(names(x_grps)) == lvl)
-      x_f <- x_f[!sapply(x_f[[x_last]], is.null), ]
+    tbls <- x |>
+      dplyr::group_map(
+        function(.x, .y) {
+          brdg_summary(
+            cards = cards::bind_ard(
+              .x |> cards::as_card(),
+              overall_stats
+            ),
+            variables = .y$variable,
+            type = type,
+            statistic = statistic,
+            by = by,
+            missing = missing,
+            missing_stat = missing_stat,
+            missing_text = missing_test
+          ) |>
+            add_hierarchy_levels(.y)
+        },
+        .keep = TRUE
+      )
 
-      x_inner <- x_f |>
-        dplyr::group_map(
-          function(.x, .y) {
-            brdg_summary(
-              cards = cards::bind_ard(
-                .x |> cards::as_card(),
-                overall_stats
-              ),
-              variables = .y$variable,
-              type = type,
-              statistic = statistic,
-              by = by,
-              missing = missing,
-              missing_stat = missing_stat,
-              missing_text = missing_test
-            ) |>
-              add_hierarchy_levels(.y)
-          },
-          .keep = TRUE
-        )
-
-      ards <- c(ards, list(tbl_stack(x_inner, .combine = TRUE)))
-    }
-    return(ards)
+    return(tbls)
   }
 
-  browser()
-  outer_cols <- cards |>
-    dplyr::filter(variable == h[1]) |>
-    select(cards::all_ard_groups()) |>
-    select(last_col(1):last_col()) |>
-    names()
-
-  cards_outer <- cards |>
-    dplyr::filter(variable == h[1]) |>
-    dplyr::select(-outer_cols)
-
-
-  # create groups for each hierarchy level combination
-  x <- cards_outer |>
-    dplyr::group_by(dplyr::across(c(
-      cards::all_ard_groups(types = "levels"),
-      variable
-    )))
-  if (!is_empty(by)) {
-    x <- x |> dplyr::ungroup(group1_level)
-  }
-
-  ards <- list()
-
-  browser()
+  # cards_outer <- cards[apply(cards, 1, \(x) !h[1] %in% unlist(x)), ]
+  #
+  # # create groups for each hierarchy level combination
+  # x <- cards_outer |>
+  #   dplyr::group_by(dplyr::across(c(
+  #     cards::all_ard_groups(types = "levels"),
+  #     variable
+  #   )))
+  # if (!is_empty(by)) {
+  #   x <- x |> dplyr::ungroup(group1_level)
+  # }
+  #
+  # this is what you would use as row labels
   # build the table body pieces with bridge functions and stack them -----------
-  x_outer <- x |>
-    dplyr::group_map(
-      function(.x, .y) {
-        brdg_summary(
-          cards = cards::bind_ard(
-            .x |> cards::as_card(),
-            overall_stats
-          ),
-          variables = .y$variable,
-          type = type,
-          statistic = statistic,
-          by = by,
-          missing = missing,
-          missing_stat = missing_stat,
-          missing_text = missing_test
-        ) |>
-          add_hierarchy_levels(.y)
-      },
-      .keep = TRUE
-    )
+  # x_outer <- x |>
+  #   dplyr::group_map(
+  #     function(.x, .y) {
+  #       browser()
+  #       brdg_summary(
+  #         cards = cards::bind_ard(
+  #           .x |> cards::as_card(),
+  #           overall_stats
+  #         ),
+  #         variables = .y$variable,
+  #         type = type,
+  #         statistic = statistic,
+  #         by = by,
+  #         missing = missing,
+  #         missing_stat = missing_stat,
+  #         missing_text = missing_test
+  #       ) |>
+  #         add_hierarchy_levels(.y)
+  #     },
+  #     .keep = TRUE
+  #   )
 
-  browser()
+  # x_outer <- x |>
+  #   dplyr::group_map(
+  #     function(.x, .y) {
+  #       brdg_summary(
+  #         cards = cards::bind_ard(
+  #           .x |> cards::as_card(),
+  #           overall_stats
+  #         ),
+  #         variables = .y$variable,
+  #         type = type,
+  #         statistic = statistic,
+  #         by = by,
+  #         missing = missing,
+  #         missing_stat = missing_stat,
+  #         missing_text = missing_test
+  #       ) |>
+  #         add_hierarchy_levels(.y)
+  #     },
+  #     .keep = TRUE
+  #   )
 
   # combine hierarchy sub-tables
-  x <- tbl_stack(res, x_outer, .combine = TRUE)
+  all_tbls <- x_inner#, x_outer)
+  ord_all_tbls <- lapply(
+    all_tbls,
+    \(x) sapply(
+      x$table_styling$hierarchy,
+      \(x) {
+        if (is.null(x[[1]])) NA else as.character(unlist(x))
+      }
+    )
+  ) |>
+    bind_rows() |>
+    mutate(
+      idx = dplyr::cur_group_rows()
+    )
+
+  ord_all_tbls <- ord_all_tbls |>
+    tibble::add_column(
+      checkna = !is.na(ord_all_tbls[ncol(ord_all_tbls) - 1]) |> unname(),
+      .after = 1
+    ) |>
+    arrange(across(-idx)) |>
+    dplyr::pull(idx)
+
+
+  x <- tbl_stack(
+    all_tbls[ord_all_tbls],
+    .combine = TRUE
+  ) |>
+    add_hierarchy_levels(context = data.frame(hierarchies))
+
+  return(x)
 
   # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)
@@ -363,19 +370,19 @@ brdg_hierarchical <- function(cards,
     paste(collapse = "\n")
 
   # adding styling -------------------------------------------------------------
-  x <- x |>
-    # updating the headers for the stats columns
-    modify_header(
-      label = lbl_hierarch,
-      all_stat_cols() ~
-        ifelse(
-          is_empty(by),
-          get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
-          get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
-        )
-    )
+  # x <- x |>
+  #   # updating the headers for the stats columns
+  #   modify_header(
+  #     label = lbl_hierarch,
+  #     all_stat_cols() ~
+  #       ifelse(
+  #         is_empty(by),
+  #         get_theme_element("tbl_summary-str:header-noby",
+  #                           default = "**N = {style_number(N)}**"),
+  #         get_theme_element("tbl_summary-str:header-withby",
+  #                           default = "**{level}**  \nN = {style_number(n)}")
+  #       )
+  #   )
 
   # return tbl_summary table ---------------------------------------------------
   x$call_list <- list(tbl_summary = call)
@@ -400,13 +407,13 @@ add_hierarchy_levels <- function(x, context) {
   # add 'hierarchy' element to table_styling
   x$table_styling[["hierarchy"]] <- context
 
-  # browser()
-
   labels <- context |>
+    select(!cards::all_missing_columns()) |>
     unlist(use.names = FALSE) |>
     c()
-  missing_labels <- if (ncol(context) > 1) labels |> head(-1) else labels
+
   n_labels <- length(labels)
+  missing_labels <- if (n_labels > 1) labels |> head(-1) else labels
 
   if (sum(x$table_body$row_type == "label") > 0) {
     # add label rows for each additional hierarchy level
@@ -441,7 +448,8 @@ add_hierarchy_levels <- function(x, context) {
         variable = x$table_body$variable[1],
         row_type = "label",
         var_label = missing_labels,
-        label = missing_labels
+        label = missing_labels,
+        var_type = "categorical"
       ) |>
       dplyr::bind_rows(x$table_body)
   }
@@ -462,6 +470,7 @@ ard_stack_hierarchical <- function(data,
                                    .total_n = FALSE,
                                    .shuffle = FALSE) {
   ard_lvls <- list()
+
   for (i in seq_along(hierarchies)) {
     ard_lvls <- c(
       ard_lvls,
@@ -473,12 +482,26 @@ ard_stack_hierarchical <- function(data,
           statistic = statistic,
           denominator = denominator,
           id = all_of(id)
-        )
+        ),
+        if (i != 1 && i != length(hierarchies)) {
+          cards::ard_hierarchical(
+            data = data,
+            variables = hierarchies[-i],
+            by = all_of(by),
+            statistic = statistic,
+            denominator = denominator,
+            id = all_of(id)
+          )
+        } else {
+          NULL
+        }
+
       )
     )
   }
 
   ard_lvls |>
     dplyr::bind_rows() |>
-    cards::tidy_ard_column_order()
+    cards::tidy_ard_column_order() |>
+    cards::tidy_ard_row_order()
 }

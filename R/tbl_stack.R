@@ -166,9 +166,16 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .combine = FALSE
   if (.combine) {
     hierarchies <- cbind(
       tbl_id1 = results$table_body$tbl_id1 |> unique(),
-      lapply(tbls, \(x) x$table_styling$hierarchy) |>
-        dplyr::bind_rows() |>
-        mutate(across(is.list, unlist))
+      lapply(
+        tbls,
+        \(x) sapply(
+          x$table_styling$hierarchy,
+          \(x) {
+            if (is.null(x[[1]])) NA else as.character(unlist(x))
+          }
+        )
+      ) |>
+        dplyr::bind_rows()
     )
 
     results$table_body <- results$table_body |>
