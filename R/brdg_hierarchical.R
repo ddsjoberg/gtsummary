@@ -52,25 +52,12 @@ brdg_hierarchical <- function(cards,
       .keep = TRUE
     )
 
-  # combine hierarchy sub-tables
-  ord_sub_tbls <-
-    lapply(
-      sub_tbls,
-      \(x) sapply(
-        x$table_styling$hierarchy,
-        \(x) {
-          if (is.null(x[[1]])) " " else as.character(unlist(x))
-        }
-      )
-    ) |>
-    bind_rows() |>
-    mutate(
-      idx = dplyr::cur_group_rows()
-    ) |>
-    arrange(across(-idx)) |>
-    dplyr::pull(idx)
-
-  x <- tbl_stack(sub_tbls[ord_sub_tbls], .combine = TRUE)
+  # order and stack hierarchy sub-tables
+  x <- if (length(hierarchies) > 1) {
+    .order_stack_sub_tables(sub_tbls)
+  } else {
+    sub_tbls[[1]]
+  }
 
   # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)
@@ -111,4 +98,25 @@ brdg_hierarchical <- function(cards,
     do.call(list(x))
 
   x
+}
+
+.order_stack_sub_tables <- function(tbls) {
+  ord_sub_tbls <-
+    lapply(
+      tbls,
+      \(x) sapply(
+        x$table_styling$hierarchy,
+        \(x) {
+          if (is.null(x[[1]])) " " else as.character(unlist(x))
+        }
+      )
+    ) |>
+    bind_rows() |>
+    mutate(
+      idx = dplyr::cur_group_rows()
+    ) |>
+    arrange(across(-idx)) |>
+    dplyr::pull(idx)
+
+  tbl_stack(tbls[ord_sub_tbls], .combine = TRUE)
 }
