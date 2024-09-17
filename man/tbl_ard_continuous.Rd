@@ -38,10 +38,13 @@ Specifies summary statistics to display for each variable.  The default is
 \code{everything() ~ "{median} ({p25}, {p75})"}.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
-\code{c("continuous", "continuous2", "categorical", "dichotomous")}.
-Continuous summaries may be assigned \code{c("continuous", "continuous2")}, while
-categorical and dichotomous cannot be modified.}
+Specifies the summary type for the variables in \code{include}. Values
+must be either \code{'categorical'} or \code{'dichotomous'}. Default
+is \code{'categorical'} for all variables, unless a value is specified for the variable.}
+
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+For dichotomous variables, this argument specifies the single value
+to show. The default for dichotomous variables is the maximum value.}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_summary"}

@@ -51,7 +51,8 @@ bind_ard(
   brdg_continuous(
     variable = "age",
     include = "grade",
-    statistic = list(grade = "{median} ({p25}, {p75})")
+    statistic = list(grade = "{median} ({p25}, {p75})"),
+    type = list(grade = "categorical")
  ) |>
  as_tibble()
 }

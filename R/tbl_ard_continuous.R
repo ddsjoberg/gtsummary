@@ -12,6 +12,13 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
+#' @param type ([`formula-list-selector`][syntax])\cr
+#'   Specifies the summary type for the variables in `include`. Values
+#'   must be either `'categorical'` or `'dichotomous'`. Default
+#'   is `'categorical'` for all variables, unless a value is specified for the variable.
+#' @param value ([`formula-list-selector`][syntax])\cr
+#'   For dichotomous variables, this argument specifies the single value
+#'   to show. The default for dichotomous variables is the maximum value.
 #' @inheritParams tbl_ard_summary
 #'
 #' @return a gtsummary table of class `"tbl_ard_summary"`

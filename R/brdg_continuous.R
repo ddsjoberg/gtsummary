@@ -29,7 +29,8 @@
 #'   brdg_continuous(
 #'     variable = "age",
 #'     include = "grade",
-#'     statistic = list(grade = "{median} ({p25}, {p75})")
+#'     statistic = list(grade = "{median} ({p25}, {p75})"),
+#'     type = list(grade = "categorical")
 #'  ) |>
 #'  as_tibble()
 brdg_continuous <- function(cards, by = NULL, statistic, include, variable, type) {
