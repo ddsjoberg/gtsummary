@@ -11,7 +11,17 @@ ard_stack_hierarchical <- function(data,
                                    .attributes = FALSE,
                                    .total_n = FALSE,
                                    .shuffle = FALSE) {
-  ard_lvls <- list()
+  ard_lvls <- list(
+    cards::ard_hierarchical(
+      data = data,
+      variables = tail(hierarchies, 1),
+      by = all_of(by),
+      statistic = statistic,
+      denominator = denominator,
+      id = all_of(id)
+    )
+  )
+  # ard_lvls <- list()
 
   for (i in seq_along(hierarchies)) {
     ard_lvls <- c(
