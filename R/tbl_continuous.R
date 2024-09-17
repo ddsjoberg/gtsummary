@@ -70,11 +70,11 @@ tbl_continuous <- function(data,
   include <- setdiff(include, c(by, variable)) # remove by and variable columns from list vars included
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
 
-  # assign types
+  # assign types and values
   cards::process_formula_selectors(data[include], type = type, value = value)
   for (varname in include) {
     if (is_empty(type[[varname]]) && !is_empty(value[[varname]])) type[[varname]] <- "dichotomous"
-    if (is_empty(type[[varname]])) type[[varname]] <- "categorical"
+    else if (is_empty(type[[varname]])) type[[varname]] <- "categorical"
     if (type[[varname]] == "dichotomous" && is_empty(value[[varname]])) {
       value[[varname]] <- cards::maximum_variable_value(data[varname])[[1]]
     }

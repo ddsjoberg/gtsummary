@@ -56,7 +56,8 @@
 #' ) |>
 #'   tbl_ard_continuous(variable = "age", include = "grade")
 tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL,
-                               statistic = everything() ~ "{median} ({p25}, {p75})") {
+                               statistic = everything() ~ "{median} ({p25}, {p75})",
+                               type = NULL, value = NULL) {
   set_cli_abort_call()
   check_not_missing(cards)
   check_not_missing(variable)
@@ -80,6 +81,9 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL
                 i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
+
+  # process type and value arguments
+  cards::process_formula_selectors(data[include], type = type, value = value)
 
   # check the structure of the cards object ------------------------------------
   # check that the continuous variable appears somewhere in `cards$variable`
@@ -111,6 +115,32 @@ tbl_ard_continuous <- function(cards, variable, include, by = NULL, label = NULL
       call = get_cli_abort_call()
     )
   }
+
+  # assign types and values
+  for (varname in include) {
+    if (is_empty(type[[varname]]) && !is_empty(value[[varname]])) type[[varname]] <- "dichotomous"
+    else if (is_empty(type[[varname]])) type[[varname]] <- "categorical"
+    if (type[[varname]] == "dichotomous" && is_empty(value[[varname]])) {
+      value[[varname]] <- cards::maximum_variable_value(data[varname])[[1]]
+    }
+  }
+  rm("varname")
+
+  cards::check_list_elements(
+    x = type,
+    predicate = \(x) is_string(x) && x %in% c("categorical", "dichotomous"),
+    error_msg =
+      c("Error in argument {.arg {arg_name}} for variable {.val {variable}}.",
+        "i" = "Elements values must be one of {.val {c('categorical', 'dichotomous')}}.")
+  )
+  cards::check_list_elements(
+    x = value,
+    predicate = \(x) length(x) == 1L,
+    error_msg =
+      c("Error in argument {.arg {arg_name}} for variable {.val {variable}}.",
+        "i" = "Elements values must be a scalar.")
+  )
+
 
   cards::process_formula_selectors(
     data[include],
