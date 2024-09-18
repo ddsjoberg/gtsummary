@@ -59,15 +59,24 @@ test_that("add_p.tbl_continuous(include) works", {
 test_that("add_p.tbl_continuous(test.args) works", {
   expect_silent(
     tbl3 <- trial |>
-      tbl_continuous(variable = age, include = trt) |>
-      add_p(test = trt ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))
+      tbl_continuous(variable = age, include = c(trt, grade)) |>
+      add_p(
+        test = list(trt = "t.test", grade = "oneway.test"),
+        test.args =
+          c(all_tests("t.test"), all_tests("oneway.test")) ~ list(var.equal = TRUE)
+      )
   )
 
-  compare <- t.test(age ~ trt, trial, var.equal = TRUE)
+  compare_t.test <- t.test(age ~ trt, trial, var.equal = TRUE)
+  compare_oneway.test <- oneway.test(age ~ grade, trial, var.equal = TRUE)
 
   expect_equal(
-    tbl3$table_body$p.value[1],
-    compare$p.value
+    tbl3$table_body |> dplyr::filter(variable == "trt") |> dplyr::pull("p.value") |> getElement(1),
+    compare_t.test$p.value
+  )
+  expect_equal(
+    tbl3$table_body |> dplyr::filter(variable == "grade") |> dplyr::pull("p.value") |> getElement(1),
+    compare_oneway.test$p.value
   )
 })
 
