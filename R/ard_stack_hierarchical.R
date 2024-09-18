@@ -30,7 +30,7 @@ ard_stack_hierarchical <- function(data,
   which_include <- which(hierarchies %in% include)
 
   # get top level
-  if (hierarchies[1] %in% include) {
+  if (1 %in% which_include) {
     ard_lvls <- list(
       cards::ard_hierarchical(
         data = data,
@@ -41,6 +41,7 @@ ard_stack_hierarchical <- function(data,
         id = all_of(id)
       )
     )
+    which_include <- which_include[-1]
   } else {
     ard_lvls <- list()
   }
