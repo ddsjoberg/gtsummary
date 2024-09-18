@@ -17,6 +17,7 @@ brdg_hierarchical <- function(cards,
   cards <- cards |>
     dplyr::filter(!is.na(gts_column))
 
+  # will not need
   cards <- cards |>
     dplyr::filter(variable == tail(hierarchies, 1))
 
