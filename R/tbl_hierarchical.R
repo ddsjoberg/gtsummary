@@ -12,8 +12,7 @@
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
 #'   denominator = cards::ADSL,
-#'   id = USUBJID,
-#'   lvl_groups = AESEV ~ c("- Any Intensity -" = c("MILD", "MODERATE", "SEVERE"))
+#'   id = USUBJID
 #' )
 #'
 #' @export
@@ -26,8 +25,7 @@ tbl_hierarchical <- function(data,
                              include = everything(), # this would be the variables from `hierarchy` that we would include summary stats for (some of the nested drug class tables don't need stats on the class level)
                              statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
                              digits = NULL,
-                             overall_row = FALSE,
-                             lvl_groups = NULL) {
+                             overall_row = FALSE) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -64,8 +62,8 @@ tbl_hierarchical <- function(data,
     )
   }
 
+  # TODO: figure out include argument restrictions
   # check that 'include' is the correct subset of 'hierarchies'
-  # TODO: figure out include argument
   # if (!setequal(include, hierarchies[seq_len(length(include))])) {
   #   cli::cli_abort(
   #     message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}",
@@ -82,22 +80,6 @@ tbl_hierarchical <- function(data,
   type <- assign_summary_type(data, include, value = NULL)
 
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
-
-  # browser()
-  # # evaluate the remaining list-formula arguments ------------------------------
-  # # processed arguments are saved into this env
-  # cards::process_formula_selectors(
-  #   data = scope_table_body(.list2tb(type, "var_type"), data[include]),
-  #   lvl_groups =
-  #     case_switch(
-  #       missing(lvl_groups) ~ get_theme_element("tbl_hierarchical-arg:lvl_groups", default = lvl_groups),
-  #       .default = lvl_groups
-  #     ),
-  #   include_env = TRUE
-  # )
-  #
-  # # add the calling env to the statistics
-  # lvl_groups <- .add_env_to_list_elements(lvl_groups, env = caller_env())
 
   # calculate statistics -------------------------------------------------------
   cards <-
