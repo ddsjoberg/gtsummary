@@ -149,8 +149,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
   check_pkg_installed("cardx", reference_pkg = "gtsummary")
   cli::cli_warn(c(
     "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
-    i = "The same functionality is covered with {.val oneway.test}. Use the following code instead:",
-    i = "{.code add_p(test = list({variable} = 'oneway.test'), test.args = list({variable} = list(var.equal = TRUE)))}."
+    i = "The same functionality is covered in {.val oneway.test} with argument `var.equal = TRUE`."
   ))
 
   add_p_test_oneway.test(data = data, variable = variable, by = by, test.args = list(var.equal = TRUE))
@@ -590,6 +589,10 @@ add_p_test_tbl_summary_to_tbl_continuous <- function(data, variable, by, continu
            by = variable, test.args = test.args, ...
          ),
          "aov" = add_p_test_aov(
+           data = data, variable = continuous_variable,
+           by = variable, test.args = test.args, ...
+         ),
+         "oneway.test" = add_p_test_oneway.test(
            data = data, variable = continuous_variable,
            by = variable, test.args = test.args, ...
          ),

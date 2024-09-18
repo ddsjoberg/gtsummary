@@ -4,6 +4,10 @@
 
 * Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
 
+* Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
+
+* Removed the deprecated `'aov'` test from the `tests.R` file listing available tests. (#1970)
+
 * Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
 
 * Added `add_stat_label.tbl_ard_summary()` method. (#1969)
