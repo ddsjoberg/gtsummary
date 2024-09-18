@@ -25,6 +25,6 @@ Print a tibble or data frame using cli styling and formatting.
 \examples{
 trial[1:3, ] |>
   dplyr::mutate_all(as.character) |>
-  tibble_as_cli()
+  gtsummary:::tibble_as_cli()
 }
 \keyword{internal}

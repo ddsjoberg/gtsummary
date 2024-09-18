@@ -17,7 +17,7 @@
 #' @examples
 #' trial[1:3, ] |>
 #'   dplyr::mutate_all(as.character) |>
-#'   tibble_as_cli()
+#'   gtsummary:::tibble_as_cli()
 tibble_as_cli <- function(x, na_value = "", label = list(), padding = 3L) {
   # check the input is a data frame --------------------------------------------
   check_data_frame(x)
