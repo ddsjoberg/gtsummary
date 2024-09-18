@@ -12,7 +12,8 @@
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
 #'   denominator = cards::ADSL,
-#'   id = USUBJID
+#'   id = USUBJID,
+#'   lvl_groups = AESEV ~ c("- Any Intensity -" = c("MILD", "MODERATE", "SEVERE"))
 #' )
 #'
 #' @export
@@ -25,7 +26,8 @@ tbl_hierarchical <- function(data,
                              include = everything(), # this would be the variables from `hierarchy` that we would include summary stats for (some of the nested drug class tables don't need stats on the class level)
                              statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
                              digits = NULL,
-                             overall_row = FALSE) {
+                             overall_row = FALSE,
+                             lvl_groups = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -38,6 +40,7 @@ tbl_hierarchical <- function(data,
   # evaluate tidyselect
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, id = {{ id }}, by = {{ by }})
   cards::process_selectors(data[hierarchies], include = {{ include }})
+
   # if id provided, then check that denominator also provided
   if (!is_empty(id)) {
     check_data_frame(
@@ -80,6 +83,22 @@ tbl_hierarchical <- function(data,
 
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
 
+  # browser()
+  # # evaluate the remaining list-formula arguments ------------------------------
+  # # processed arguments are saved into this env
+  # cards::process_formula_selectors(
+  #   data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+  #   lvl_groups =
+  #     case_switch(
+  #       missing(lvl_groups) ~ get_theme_element("tbl_hierarchical-arg:lvl_groups", default = lvl_groups),
+  #       .default = lvl_groups
+  #     ),
+  #   include_env = TRUE
+  # )
+  #
+  # # add the calling env to the statistics
+  # lvl_groups <- .add_env_to_list_elements(lvl_groups, env = caller_env())
+
   # calculate statistics -------------------------------------------------------
   cards <-
     ard_stack_hierarchical(
@@ -98,7 +117,7 @@ tbl_hierarchical <- function(data,
     data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic =
       case_switch(
-        missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
+        missing(statistic) ~ get_theme_element("tbl_hierarchical-arg:statistic", default = statistic),
         .default = statistic
       ),
     include_env = TRUE
@@ -111,7 +130,7 @@ tbl_hierarchical <- function(data,
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     label =
       case_switch(
-        missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
+        missing(label) ~ get_deprecated_theme_element("tbl_hierarchical-arg:label", default = label),
         .default = label
       )
   )
@@ -120,7 +139,7 @@ tbl_hierarchical <- function(data,
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     digits =
       case_switch(
-        missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
+        missing(digits) ~ get_theme_element("tbl_hierarchical-arg:digits", default = digits),
         .default = digits
       )
   )
@@ -129,9 +148,9 @@ tbl_hierarchical <- function(data,
   cards::fill_formula_selectors(
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic =
-      get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
+      get_theme_element("tbl_hierarchical-arg:statistic", default = eval(formals(gtsummary::tbl_hierarchical)[["statistic"]])),
     digits =
-      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
+      get_theme_element("tbl_hierarchical-arg:digits", default = eval(formals(gtsummary::tbl_hierarchical)[["digits"]]))
   )
 
   # fill each element of digits argument
