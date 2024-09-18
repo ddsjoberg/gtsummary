@@ -62,12 +62,13 @@ tbl_hierarchical <- function(data,
   }
 
   # check that 'include' is the correct subset of 'hierarchies'
-  if (!setequal(include, hierarchies[seq_len(length(include))])) {
-    cli::cli_abort(
-      message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}",
-                  "i" = "For example, when {.code hierarchies = c(SOC, AETERM)}, {.arg include} can be {.code AETERM} but not {.code SOC}.")
-    )
-  }
+  # TODO: figure out include argument
+  # if (!setequal(include, hierarchies[seq_len(length(include))])) {
+  #   cli::cli_abort(
+  #     message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}",
+  #                 "i" = "For example, when {.code hierarchies = c(SOC, AETERM)}, {.arg include} can be {.code AETERM} but not {.code SOC}.")
+  #   )
+  # }
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
@@ -184,74 +185,4 @@ tbl_hierarchical <- function(data,
       )
     ) |>
     structure(class = c("tbl_hierarchical", "gtsummary"))
-}
-
-# add 'hierarchy' element to gtsummary object
-add_hierarchy_levels <- function(x, context) {
-  # no hierarchy
-  if (ncol(context) == 1) {
-    # remove indent
-    x <- x |>
-      modify_column_indent(
-        columns = label,
-        rows = row_type != "label",
-        indent = 0
-      )
-    return(x)
-  }
-
-  context <- context |>
-    dplyr::select(-variable)
-
-  # add 'hierarchy' element to table_styling
-  x$table_styling[["hierarchy"]] <- context
-
-  labels <- context |>
-    select(!cards::all_missing_columns()) |>
-    unlist(use.names = FALSE) |>
-    c()
-
-  n_labels <- length(labels)
-  missing_labels <- if (n_labels > 1) labels |> head(-1) else labels
-
-  if (sum(x$table_body$row_type == "label") > 0) {
-    # add label rows for each additional hierarchy level
-    x$table_body <- x$table_body[rep(1, n_labels - 1), ] |>
-      dplyr::mutate(
-        var_label = missing_labels,
-        label = missing_labels
-      ) |>
-      dplyr::bind_rows(x$table_body)
-
-    # indent label rows for each hierarchy level
-    for (i in seq(2, n_labels)) {
-      x <- x |>
-        modify_column_indent(
-          columns = label,
-          rows = row_type == "label" & var_label == labels[i],
-          indent = (i - 1) * 4
-        )
-    }
-  } else if (!is.null(missing_labels)) {
-    # add label rows for each additional hierarchy level
-    x$table_body <-
-      tibble(
-        variable = x$table_body$variable[1],
-        row_type = "label",
-        var_label = missing_labels,
-        label = missing_labels,
-        var_type = "categorical"
-      ) |>
-      dplyr::bind_rows(x$table_body)
-  }
-
-  # indent non-label rows
-  x <- x |>
-    modify_column_indent(
-      columns = label,
-      rows = row_type != "label",
-      indent = n_labels * 4
-    )
-
-  x
 }
