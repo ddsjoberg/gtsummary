@@ -11,7 +11,6 @@ tbl_ard_continuous(
   by = NULL,
   label = NULL,
   statistic = everything() ~ "{median} ({p25}, {p75})",
-  type = NULL,
   value = NULL
 )
 }
@@ -36,15 +35,6 @@ If no label has been set, the column name is used.}
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is
 \code{everything() ~ "{median} ({p25}, {p75})"}.}
-
-\item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type for the variables in \code{include}. Values
-must be either \code{'categorical'} or \code{'dichotomous'}. Default
-is \code{'categorical'} for all variables, unless a value is specified for the variable.}
-
-\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
-For dichotomous variables, this argument specifies the single value
-to show. The default for dichotomous variables is the maximum value.}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_summary"}
@@ -56,39 +46,31 @@ Summarize a continuous variable by one or more categorical variables
 \examples{
 library(cards)
 
-bind_ard(
-  # the primary ARD with the results
-  ard_continuous(
-    trial,
-    # the order variables are passed here is important.
-    # 'trt' is the column stratifying variable and needs to be listed first.
-    by = c(trt, grade),
-    variables = age
-  ),
-  # add univariate trt tabulation
-  ard_categorical(
-    trial,
-    variables = trt
-  ),
-  # add missing and attributes ARD
-  ard_missing(
-    trial,
-    by = c(trt, grade),
-    variables = age
-  ),
-  ard_attributes(
-    trial,
-    variables = c(trt, grade, age)
-  )
+# Example 1 ----------------------------------
+# the primary ARD with the results
+ard_continuous(
+  # the order variables are passed is important for the `by` variable.
+  # 'trt' is the column stratifying variable and needs to be listed first.
+  trial, by = c(trt, grade), variables = age
 ) |>
+  # adding OPTIONAL information about the summary variables
+  bind_ard(
+    # add univariate trt tabulation
+    ard_categorical(trial, variables = trt),
+    # add missing and attributes ARD
+    ard_missing(trial, by = c(trt, grade), variables = age),
+    ard_attributes(trial, variables = c(trt, grade, age))
+  ) |>
   tbl_ard_continuous(by = "trt", variable = "age", include = "grade")
 
-bind_ard(
-  # the primary ARD with the results
-  ard_continuous(trial, by = grade, variables = age),
-  # add missing and attributes ARD
-  ard_missing(trial, by = grade, variables = age),
-  ard_attributes(trial, variables = c(grade, age))
-) |>
+# Example 2 ----------------------------------
+# the primary ARD with the results
+ard_continuous(trial, by = grade, variables = age) |>
+  # adding OPTIONAL information about the summary variables
+  bind_ard(
+    # add missing and attributes ARD
+    ard_missing(trial, by = grade, variables = age),
+    ard_attributes(trial, variables = c(grade, age))
+  ) |>
   tbl_ard_continuous(variable = "age", include = "grade")
 }

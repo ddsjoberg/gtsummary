@@ -195,23 +195,25 @@ test_that("tbl_continuous(label) messaging", {
   )
 })
 
-test_that("tbl_continuous(type,value)", {
+test_that("tbl_continuous(value)", {
   # when a level is not specified, it defaults of the "max" value
-  expect_equal(
-    tbl_continuous(
+  expect_snapshot({
+    df <- tbl_continuous(
       trial,
       variable = age,
       include = c(trt, grade),
       value = trt ~ "Drug B"
     ) |>
-      as.data.frame(),
-    tbl_continuous(
-      trial,
-      variable = age,
-      include = c(trt, grade),
-      type = trt ~ "dichotomous"
-    ) |>
       as.data.frame()
+    df
+  })
+  expect_equal(
+    df[1, 2],
+    trial |>
+      dplyr::filter(trt == "Drug B") |>
+      tbl_summary(include = age) |>
+      as.data.frame() %>%
+      `[`(1, 2)
   )
 
   # works with a by variable
@@ -239,7 +241,7 @@ test_that("tbl_continuous(type,value)", {
   )
 })
 
-test_that("tbl_continuous(type,value) messaging", {
+test_that("tbl_continuous(value) messaging", {
   # specified a level that does not exist
   expect_snapshot(
     error = TRUE,
@@ -259,17 +261,6 @@ test_that("tbl_continuous(type,value) messaging", {
       variable = age,
       include = c(trt, grade),
       value = trt ~ letters
-    )
-  )
-
-  # specified a type other than categorical/dichotomous
-  expect_snapshot(
-    error = TRUE,
-    tbl_continuous(
-      trial,
-      variable = age,
-      include = c(trt, grade),
-      type = trt ~ "NOT_A_TYPE"
     )
   )
 })

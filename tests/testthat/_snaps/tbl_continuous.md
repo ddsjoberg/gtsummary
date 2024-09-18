@@ -94,6 +94,20 @@
 
     Code
       df <- as.data.frame(tbl_continuous(trial, variable = age, include = c(trt,
+        grade), value = trt ~ "Drug B"))
+      df
+    Output
+            **Characteristic** **N = 200**
+      1 Chemotherapy Treatment 48 (39, 56)
+      2                  Grade        <NA>
+      3                      I 47 (37, 56)
+      4                     II 49 (37, 57)
+      5                    III 47 (38, 58)
+
+---
+
+    Code
+      df <- as.data.frame(tbl_continuous(trial, variable = age, include = c(trt,
         grade), by = response, value = trt ~ "Drug B"))
     Message
       7 missing rows in the "response" column have been removed.
@@ -113,9 +127,9 @@
       tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
         "XXXXXXXXXX")
     Condition
-      Error in `FUN()`:
-      ! Error in `value` argument for variable "trt"
-      i Value must be one of "Drug A" and "Drug B".
+      Error in `tbl_continuous()`:
+      ! There was an error in the `value` argument for variable "trt".
+      The list value must be one of "Drug A" and "Drug B".
 
 ---
 
@@ -126,14 +140,4 @@
       Error in `tbl_continuous()`:
       ! Error in argument `value` for variable "trt".
       i Elements values must be a scalar.
-
----
-
-    Code
-      tbl_continuous(trial, variable = age, include = c(trt, grade), type = trt ~
-        "NOT_A_TYPE")
-    Condition
-      Error in `tbl_continuous()`:
-      ! Error in argument `type` for variable "trt".
-      i Elements values must be one of "categorical" and "dichotomous".
 
