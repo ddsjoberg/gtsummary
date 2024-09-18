@@ -13,7 +13,7 @@
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
 #' @inheritParams tbl_ard_summary
-#' @inheritParams tbl_ard_continuous
+#' @inheritParams tbl_continuous
 #'
 #' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export

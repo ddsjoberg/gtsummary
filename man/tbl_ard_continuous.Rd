@@ -35,6 +35,11 @@ If no label has been set, the column name is used.}
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is
 \code{everything() ~ "{median} ({p25}, {p75})"}.}
+
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Supply a value to display a variable on a single row, printing the
+results for the variable associated with the value (similar to a
+\code{'dichotomous'} display in \code{tbl_summary()}).}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_summary"}
