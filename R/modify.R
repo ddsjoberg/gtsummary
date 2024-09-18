@@ -281,7 +281,11 @@ show_header_names <- function(x, include_example, quiet) {
             !is.na(.),
             paste0(
               ., " <",
-              sapply(class(.), function(cls) class_mapping[cls] %||% "<???>"),
+              ifelse(
+                class(.) %in% names(class_mapping),
+                class_mapping[class(.)],
+                "???"
+              ),
               ">"
             ),
             .
