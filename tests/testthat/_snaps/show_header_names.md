@@ -58,3 +58,17 @@
       * These values may be dynamically placed into headers (and other locations).
       i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
 
+# show_header_names() returns fallback value for unknown class
+
+    Code
+      show_header_names(test_table)
+    Output
+      Column Name   Header                    level*         N*          n*          p*            
+      label         "**Characteristic**"                     200 <???>                             
+      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <???>   98 <int>    0.49 <dbl>    
+      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <???>   102 <int>   0.51 <dbl>    
+      
+    Message
+      * These values may be dynamically placed into headers (and other locations).
+      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+
