@@ -15,7 +15,6 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
-   \code{'aov'} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \tab  \cr
    \code{'mood.test'} \tab Mood two-sample test of scale \tab \code{mood.test(variable ~ as.factor(by), data = data, ...)} \tab Not to be confused with the Brown-Mood test of medians \cr
    \code{'oneway.test'} \tab One-way ANOVA \tab \code{oneway.test(variable ~ as.factor(by), data = data, ...)} \tab  \cr
    \code{'kruskal.test'} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \tab  \cr
@@ -70,7 +69,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{'anova_2way'} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
    \code{'t.test'} \tab t-test \tab \code{t.test(continuous_variable ~ as.factor(variable), data = data, conf.level = 0.95, ...)} \cr
-   \code{'aov'} \tab One-way ANOVA \tab \code{aov(continuous_variable ~ as.factor(variable), data = data) \%>\% summary()} \cr
+   \code{'oneway.test'} \tab One-way ANOVA \tab \code{oneway.test(continuous_variable ~ as.factor(variable), data = data)} \cr
    \code{'kruskal.test'} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[continuous_variable]], as.factor(data[[variable]]))} \cr
    \code{'wilcox.test'} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(continuous_variable) ~ as.factor(variable), data = data, ...)} \cr
    \code{'lme4'} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(variable ~ continuous_variable + (1 \\UFF5C group), data, family = binomial))} \cr
