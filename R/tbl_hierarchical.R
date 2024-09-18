@@ -169,15 +169,17 @@ tbl_hierarchical <- function(data,
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_summary(cards, hierarchies, by, hierarchical = TRUE)
 
-  # add total N rows to 'cards'
+  if (is_empty(denominator)) denominator <- data
+
+  # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
   cards <- cards::bind_ard(
     cards,
-    cards::ard_total_n(data = data) |>
+    cards::ard_total_n(data = denominator) |>
       dplyr::mutate(gts_column = NA),
     case_switch(
       !is_empty(by) ~
         cards::ard_categorical(
-          data,
+          denominator,
           variables = dplyr::all_of(by),
           stat_label = ~ default_stat_labels()
         ) |>
