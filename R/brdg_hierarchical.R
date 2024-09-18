@@ -100,6 +100,70 @@ brdg_hierarchical <- function(cards,
   x
 }
 
+# add 'hierarchy' element to gtsummary object
+add_hierarchy_levels <- function(x, context) {
+  # no hierarchy
+  if (ncol(context) == 1) {
+    # remove indent
+    x <- x |>
+      modify_column_indent(
+        columns = label,
+        rows = row_type != "label",
+        indent = 0
+      )
+    return(x)
+  }
+
+  context <- context |>
+    dplyr::select(-variable)
+
+  # add 'hierarchy' element to table_styling
+  x$table_styling[["hierarchy"]] <- context
+
+  labels <- context |>
+    select(!cards::all_missing_columns()) |>
+    unlist(use.names = FALSE) |>
+    c()
+  n_labels <- length(labels)
+  pre_labels <- x$table_body |>
+    dplyr::filter(row_type == "label") |>
+    dplyr::pull(label)
+  missing_labels <- setdiff(labels, pre_labels)
+
+  if (length(missing_labels) > 0) {
+    # add label rows for each additional hierarchy level
+    x$table_body <-
+      tibble(
+        variable = x$table_body$variable[1],
+        row_type = "label",
+        var_label = missing_labels,
+        label = missing_labels,
+        var_type = "categorical"
+      ) |>
+      dplyr::bind_rows(x$table_body)
+
+    # indent label rows for each hierarchy level
+    for (i in seq_along(labels)) {
+      x <- x |>
+        modify_column_indent(
+          columns = label,
+          rows = row_type == "label" & var_label == !!labels[i],
+          indent = (i - 1) * 4
+        )
+    }
+  }
+
+  # indent non-label rows
+  x <- x |>
+    modify_column_indent(
+      columns = label,
+      rows = row_type != "label",
+      indent = n_labels * 4
+    )
+
+  x
+}
+
 .order_stack_sub_tables <- function(tbls) {
   ord_sub_tbls <-
     lapply(

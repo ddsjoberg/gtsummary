@@ -27,7 +27,7 @@ ard_stack_hierarchical <- function(data,
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, id = {{ id }}, by = {{ by }})
   cards::process_selectors(data[hierarchies], include = {{ include }})
 
-  which_include <- which(head(hierarchies, -1) %in% include)
+  which_include <- which(hierarchies %in% include)
 
   # get top level
   if (hierarchies[1] %in% include) {
@@ -52,7 +52,7 @@ ard_stack_hierarchical <- function(data,
       list(
         cards::ard_hierarchical(
           data = data,
-          variables = hierarchies[c(1:i, length(hierarchies))],
+          variables = hierarchies[c(1:(i - 1), length(hierarchies))],
           by = all_of(by),
           statistic = statistic,
           denominator = denominator,
