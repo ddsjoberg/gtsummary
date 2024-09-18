@@ -12,7 +12,6 @@
 #'   an integer indicating the amount of padding between columns.
 #'
 #' @return NULL
-#' @export
 #' @keywords internal
 #'
 #' @examples
