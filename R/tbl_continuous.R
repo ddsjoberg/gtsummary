@@ -11,6 +11,10 @@
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   Specifies summary statistics to display for each variable.  The default is
 #'   `everything() ~ "{median} ({p25}, {p75})"`.
+#' @param value ([`formula-list-selector`][syntax])\cr
+#'   Supply a value to display a variable on a single row, printing the
+#'   results for the variable associated with the value (similar to a
+#'   `'dichotomous'` display in `tbl_summary()`).
 #' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table
@@ -26,20 +30,24 @@
 #' )
 #'
 #' # Example 2 ----------------------------------
-#' tbl_continuous(
-#'   data = trial,
-#'   variable = age,
-#'   statistic = ~"{mean} ({sd})",
-#'   by = trt,
-#'   include = c(stage, grade)
-#' )
+#' trial |>
+#'   dplyr::mutate(all_subjects = 1) |>
+#'   tbl_continuous(
+#'     variable = age,
+#'     statistic = ~"{mean} ({sd})",
+#'     by = trt,
+#'     include = c(all_subjects, stage, grade),
+#'     value = all_subjects ~ 1,
+#'     label = list(all_subjects = "All Subjects")
+#'   )
 tbl_continuous <- function(data,
                            variable,
                            include = everything(),
                            digits = NULL,
                            by = NULL,
                            statistic = everything() ~ "{median} ({p25}, {p75})",
-                           label = NULL) {
+                           label = NULL,
+                           value = NULL) {
   set_cli_abort_call()
 
   # data argument checks -------------------------------------------------------
@@ -61,9 +69,23 @@ tbl_continuous <- function(data,
   include <- setdiff(include, c(by, variable)) # remove by and variable columns from list vars included
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
 
+  # assign types and values
+  cards::process_formula_selectors(data[include], value = value)
+  type <- rep_named(include, list("categorical")) |>
+    utils::modifyList(rep_named(names(compact(value)), list("dichotomous")))
+
+  cards::check_list_elements(
+    x = value,
+    predicate = \(x) length(x) == 1L,
+    error_msg =
+      c("Error in argument {.arg {arg_name}} for variable {.val {variable}}.",
+        "i" = "Elements values must be a scalar.")
+  )
+
+
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = statistic,
     include_env = TRUE
   )
@@ -78,6 +100,10 @@ tbl_continuous <- function(data,
         i = "For example {.code statistic = list(colname = '{{mean}} ({{sd}})')}, to report the {.field mean} and {.field standard deviation}.")
   )
 
+  cards::process_formula_selectors(
+    data = scope_table_body(.list2tb(type, "var_type"), data[c(include, variable)]),
+    label = label
+  )
   cards::check_list_elements(
     label,
     predicate = \(x) is_string(x),
@@ -86,15 +112,14 @@ tbl_continuous <- function(data,
   )
 
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(rep_named(include, list("categorical")), "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
     digits = digits
   )
 
-
   # save processed function inputs ---------------------------------------------
   tbl_continuous_inputs <- as.list(environment())
+  tbl_continuous_inputs$type <- NULL
   call <- match.call()
-
 
   # prepare the ARD data frame -------------------------------------------------
   cards <-
@@ -142,6 +167,9 @@ tbl_continuous <- function(data,
       cards::ard_total_n(data)
     )
 
+  # subsetting ARD based on passed value ---------------------------------------
+  cards <- .subset_card_based_on_value(cards, value, by)
+
   # fill NULL stats with NA
   cards <- cards::replace_null_statistic(cards)
 
@@ -155,7 +183,8 @@ tbl_continuous <- function(data,
   cards <- .add_gts_column_to_cards_continuous(cards, include, by)
 
   # prepare the base table via `brdg_continuous()` -----------------------------
-  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include, variable = variable)
+  x <- brdg_continuous(cards, by = by, statistic = statistic, include = include,
+                       variable = variable, type = type)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
