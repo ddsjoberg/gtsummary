@@ -30,13 +30,16 @@
 #' )
 #'
 #' # Example 2 ----------------------------------
-#' tbl_continuous(
-#'   data = trial,
-#'   variable = age,
-#'   statistic = ~"{mean} ({sd})",
-#'   by = trt,
-#'   include = c(stage, grade)
-#' )
+#' trial |>
+#'   dplyr::mutate(all_subjects = 1) |>
+#'   tbl_continuous(
+#'     variable = age,
+#'     statistic = ~"{mean} ({sd})",
+#'     by = trt,
+#'     include = c(all_subjects, stage, grade),
+#'     value = all_subjects ~ 1,
+#'     label = list(all_subjects = "All Subjects")
+#'   )
 tbl_continuous <- function(data,
                            variable,
                            include = everything(),
