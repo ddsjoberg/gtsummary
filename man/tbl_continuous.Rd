@@ -11,7 +11,8 @@ tbl_continuous(
   digits = NULL,
   by = NULL,
   statistic = everything() ~ "{median} ({p25}, {p75})",
-  label = NULL
+  label = NULL,
+  value = NULL
 )
 }
 \arguments{
@@ -40,6 +41,11 @@ Specifies summary statistics to display for each variable.  The default is
 Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
+
+\item{value}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Supply a value to display a variable on a single row, printing the
+results for the variable associated with the value (similar to a
+\code{'dichotomous'} display in \code{tbl_summary()}).}
 }
 \value{
 a gtsummary table
@@ -57,11 +63,14 @@ tbl_continuous(
 )
 
 # Example 2 ----------------------------------
-tbl_continuous(
-  data = trial,
-  variable = age,
-  statistic = ~"{mean} ({sd})",
-  by = trt,
-  include = c(stage, grade)
-)
+trial |>
+  dplyr::mutate(all_subjects = 1) |>
+  tbl_continuous(
+    variable = age,
+    statistic = ~"{mean} ({sd})",
+    by = trt,
+    include = c(all_subjects, stage, grade),
+    value = all_subjects ~ 1,
+    label = list(all_subjects = "All Subjects")
+  )
 }

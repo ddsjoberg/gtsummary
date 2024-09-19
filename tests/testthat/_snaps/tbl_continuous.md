@@ -90,3 +90,54 @@
       Error in `tbl_continuous()`:
       ! Elements of the `label` argument must be strings.
 
+# tbl_continuous(type,value)
+
+    Code
+      df <- as.data.frame(tbl_continuous(trial, variable = age, include = c(trt,
+        grade), value = trt ~ "Drug B"))
+      df
+    Output
+            **Characteristic** **N = 200**
+      1 Chemotherapy Treatment 48 (39, 56)
+      2                  Grade        <NA>
+      3                      I 47 (37, 56)
+      4                     II 49 (37, 57)
+      5                    III 47 (38, 58)
+
+---
+
+    Code
+      df <- as.data.frame(tbl_continuous(trial, variable = age, include = c(trt,
+        grade), by = response, value = trt ~ "Drug B"))
+    Message
+      7 missing rows in the "response" column have been removed.
+    Code
+      df
+    Output
+            **Characteristic** **0**  \nN = 132 **1**  \nN = 61
+      1 Chemotherapy Treatment      47 (37, 54)     49 (43, 59)
+      2                  Grade             <NA>            <NA>
+      3                      I      47 (36, 53)     48 (41, 63)
+      4                     II      47 (34, 55)     49 (44, 58)
+      5                    III      46 (38, 59)     50 (43, 58)
+
+# tbl_continuous(type,value) messaging
+
+    Code
+      tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
+        "XXXXXXXXXX")
+    Condition
+      Error in `tbl_continuous()`:
+      ! There was an error in the `value` argument for variable "trt".
+      The list value must be one of "Drug A" and "Drug B".
+
+---
+
+    Code
+      tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
+        letters)
+    Condition
+      Error in `tbl_continuous()`:
+      ! Error in argument `value` for variable "trt".
+      i Elements values must be a scalar.
+
