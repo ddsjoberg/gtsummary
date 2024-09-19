@@ -194,3 +194,74 @@ test_that("tbl_continuous(label) messaging", {
     tbl_continuous(trial, variable = age, include = c(trt, grade), label = list(trt = mean))
   )
 })
+
+test_that("tbl_continuous(value)", {
+  # when a level is not specified, it defaults of the "max" value
+  expect_snapshot({
+    df <- tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ "Drug B"
+    ) |>
+      as.data.frame()
+    df
+  })
+  expect_equal(
+    df[1, 2],
+    trial |>
+      dplyr::filter(trt == "Drug B") |>
+      tbl_summary(include = age) |>
+      as.data.frame() %>%
+      `[`(1, 2)
+  )
+
+  # works with a by variable
+  expect_snapshot({
+    df <-
+      tbl_continuous(
+        trial,
+        variable = age,
+        include = c(trt, grade),
+        by = response,
+        value = trt ~ "Drug B"
+      ) |>
+      as.data.frame()
+    df
+  })
+
+  # check the result is accurate
+  expect_equal(
+    df[1, 2],
+    trial |>
+      dplyr::filter(trt == "Drug B", response == 0) |>
+      tbl_summary(include = age) |>
+      as.data.frame() %>%
+      `[`(1, 2)
+  )
+})
+
+test_that("tbl_continuous(value) messaging", {
+  # specified a level that does not exist
+  expect_snapshot(
+    error = TRUE,
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ "XXXXXXXXXX"
+    )
+  )
+
+  # specified a value that is not a single unit in length
+  expect_snapshot(
+    error = TRUE,
+    tbl_continuous(
+      trial,
+      variable = age,
+      include = c(trt, grade),
+      value = trt ~ letters
+    )
+  )
+})
+
