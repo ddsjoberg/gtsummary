@@ -1,16 +1,16 @@
 # gtsummary (development version)
 
-* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
-
-* Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
-
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
-
-* Removed the deprecated `'aov'` test from the `tests.R` file listing available tests. (#1970)
 
 * Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
 
 * Added `add_stat_label.tbl_ard_summary()` method. (#1969)
+
+* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
+
+* Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
+
+* Removed the deprecated `'aov'` test from the `tests.R` file listing available tests. (#1970)
 
 * Removed documentation for the `add_overall.tbl_ard_summary(digits)` argument, which was never meant to be a part of this function. (#1975)
 
