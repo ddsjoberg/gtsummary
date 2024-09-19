@@ -63,3 +63,23 @@
       Error in `tbl_ard_continuous()`:
       ! Elements of the `statistic` argument must be strings.
 
+# tbl_ard_continuous(value) messaging
+
+    Code
+      tbl_ard_continuous(cards::ard_continuous(trial, by = c(trt, grade), variables = age),
+      by = "trt", variable = "age", include = "grade", value = grade ~ "XXXXXXX")
+    Condition
+      Error in `tbl_ard_continuous()`:
+      ! There was an error in the `value` argument for variable "grade".
+      The list value must be one of I, II, and III.
+
+---
+
+    Code
+      tbl_ard_continuous(cards::ard_continuous(trial, by = c(trt, grade), variables = age),
+      by = "trt", variable = "age", include = "grade", value = grade ~ letters)
+    Condition
+      Error in `tbl_ard_continuous()`:
+      ! Error in argument `value` for variable "grade".
+      i Elements values must be a scalar.
+
