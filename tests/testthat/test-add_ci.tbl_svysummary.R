@@ -67,8 +67,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.mean results
@@ -84,8 +84,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
 
@@ -102,8 +102,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.xlogit results
@@ -119,8 +119,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.asin results
@@ -136,8 +136,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.score results
@@ -153,8 +153,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.logit
@@ -170,8 +170,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.logit
@@ -187,8 +187,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.likelihood
@@ -204,8 +204,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.asin
@@ -221,8 +221,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.beta
@@ -238,8 +238,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.mean
@@ -255,8 +255,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.xlogit
@@ -272,8 +272,8 @@ test_that("add_ci(method) with no `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
@@ -344,8 +344,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.mean results
@@ -362,8 +362,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
 
@@ -381,8 +381,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.xlogit results
@@ -399,8 +399,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.asin results
@@ -417,8 +417,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svymedian.score results
@@ -435,8 +435,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.logit
@@ -453,8 +453,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.logit
@@ -471,8 +471,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.likelihood
@@ -489,8 +489,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.asin
@@ -507,8 +507,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.beta
@@ -525,8 +525,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.mean
@@ -543,8 +543,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check svyprop.xlogit
@@ -561,8 +561,8 @@ test_that("add_ci(method) with `by`", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
@@ -641,8 +641,8 @@ test_that("add_ci(conf.level)", {
         )
       ) |>
       cards::apply_fmt_fn() |>
-      cards::get_ard_statistics(.column = "stat_fmt") %>%
-      {glue("{conf.low}, {conf.high}", .envir = .)} # styler: off
+      cards::get_ard_statistics(.column = "stat_fmt") |>
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
