@@ -271,7 +271,6 @@ show_header_names <- function(x, include_example, quiet) {
     "POSIXlt" = "dttm"
   )
 
-  # Identify data type of dynamic values
   df_print <- if (ncol(df_print) > 2) {
     df_print |>
       mutate(
@@ -280,12 +279,22 @@ show_header_names <- function(x, include_example, quiet) {
           .fns = ~ ifelse(
             !is.na(.),
             paste0(
-              ., " <",
-              ifelse(
-                class(.) %in% names(class_mapping),
-                class_mapping[class(.)],
-                "???"
-              ),
+              .,
+              " <",
+              {
+                # Get the classes of the current column
+                classes <- class(.)
+
+                # Check each class against mapping
+                valid_classes <- na.omit(sapply(classes, function(cls) class_mapping[cls]))
+
+                # Use the first valid mapped class, or "???" if none found
+                if (length(valid_classes) > 0) {
+                  valid_classes[1]
+                } else {
+                  "???"
+                }
+              },
               ">"
             ),
             .
@@ -295,6 +304,7 @@ show_header_names <- function(x, include_example, quiet) {
   } else {
     df_print
   }
+
 
   df_print |>
     dplyr::mutate(

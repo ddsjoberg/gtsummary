@@ -51,3 +51,15 @@ test_that("show_header_names() returns fallback value for unknown class", {
     test_table |> show_header_names()
   )
 })
+
+
+test_that("show_header_names() returns single class value", {
+  test_table <-
+    trial |>
+    tbl_summary(include = age, by = trt)
+
+  class(test_table$table_styling$header$modify_stat_N) <- c(c("integer", "character"), c("my_class", "integer"))
+  expect_snapshot(
+    test_table |> show_header_names()
+  )
+})
