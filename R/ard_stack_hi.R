@@ -3,7 +3,7 @@
 #' @export
 #'
 #' @examples
-#' ard_stack_hierarchical(
+#' ard_stack_hierarchical2(
 #'   data = cards::ADAE,
 #'   hierarchies = c(SEX, AESEV),
 #'   by = TRTA,
@@ -13,7 +13,16 @@
 #'   denominator = cards::ADSL
 #' )
 #'
-ard_stack_hierarchical <- function(data,
+#' cards::ard_stack_hierarchical(
+#'   data = cards::ADAE,
+#'   variables = c(SEX, AESEV),
+#'   by = TRTA,
+#'   id = USUBJID,
+#'   include = everything(),
+#'   denominator = cards::ADSL
+#' )
+#'
+ard_stack_hierarchical2 <- function(data,
                                    hierarchies,
                                    by = NULL,
                                    id = NULL,
@@ -25,6 +34,10 @@ ard_stack_hierarchical <- function(data,
                                    .attributes = FALSE,
                                    .total_n = FALSE,
                                    .shuffle = FALSE) {
+  # evaluate tidyselect
+  cards::process_selectors(data, hierarchies = {{ hierarchies }}, id = {{ id }}, by = {{ by }})
+  cards::process_selectors(data[hierarchies], include = {{ include }})
+
   # if id provided, then check that denominator also provided
   if (!is_empty(id)) {
     check_data_frame(
@@ -32,10 +45,6 @@ ard_stack_hierarchical <- function(data,
       message = "A {.cls data.frame} must be passed in argument {.arg denominator} when argument {.arg id} is supplied."
     )
   }
-
-  # evaluate tidyselect
-  cards::process_selectors(data, hierarchies = {{ hierarchies }}, id = {{ id }}, by = {{ by }})
-  cards::process_selectors(data[hierarchies], include = {{ include }})
 
   which_include <- which(hierarchies %in% include)
 
@@ -46,7 +55,7 @@ ard_stack_hierarchical <- function(data,
     # count by id
     if (!is_empty(id)) {
       data_top <- data_top |>
-        slice(1L, .by = c(id, by, tail(hierarchies, 1)))
+        dplyr::slice(1L, .by = c(id, by, tail(hierarchies, 1)))
     }
 
     ard_lvls <- list(
@@ -71,9 +80,10 @@ ard_stack_hierarchical <- function(data,
     # count by id
     if (!is_empty(id)) {
       data_inner <- data_inner |>
-        slice(1L, .by = c(id, by, hierarchies[c(1:(i - 1), length(hierarchies))]))
+        dplyr::slice(1L, .by = c(id, by, hierarchies[c(1:(i - 1), length(hierarchies))]))
     }
 
+    # browser()
     ard_lvls <- c(
       ard_lvls,
       list(
