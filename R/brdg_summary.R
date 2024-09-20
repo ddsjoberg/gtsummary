@@ -239,11 +239,11 @@ pier_summary_categorical <- function(cards,
                       str_statistic_pre_glue,
                       function(str_to_glue) {
                         stat <-
-                          glue::glue(
-                            str_to_glue,
-                            .envir =
+                          glue::glue_data(
+                            .x =
                               cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
-                              c(lst_variable_stats)
+                              c(lst_variable_stats),
+                            str_to_glue
                           ) |>
                           as.character()
                       }
@@ -368,9 +368,9 @@ pier_summary_continuous2 <- function(cards,
               statistic[[.y$variable[1]]],
               function(str_to_glue) {
                 stat <-
-                  glue::glue(
-                    str_to_glue,
-                    .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
+                  glue::glue_data(
+                    .x = cards::get_ard_statistics(.x, .column = "stat_fmt"),
+                    str_to_glue
                   ) |>
                   as.character()
               }
@@ -381,9 +381,9 @@ pier_summary_continuous2 <- function(cards,
               statistic[[.y$variable[1]]],
               function(str_to_glue) {
                 label <-
-                  glue::glue(
-                    str_to_glue,
-                    .envir = cards::get_ard_statistics(.x, .column = "stat_label")
+                  glue::glue_data(
+                    .x = cards::get_ard_statistics(.x, .column = "stat_label"),
+                    str_to_glue
                   ) |>
                   as.character()
               }
@@ -476,9 +476,9 @@ pier_summary_continuous <- function(cards,
         dplyr::mutate(
           .data = .y,
           stat =
-            glue::glue(
-              statistic[[.data$variable[1]]],
-              .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")
+            glue::glue_data(
+              .x = cards::get_ard_statistics(.x, .column = "stat_fmt"),
+              statistic[[.data$variable[1]]]
             ) |>
             as.character()
         )

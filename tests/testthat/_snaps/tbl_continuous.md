@@ -90,7 +90,7 @@
       Error in `tbl_continuous()`:
       ! Elements of the `label` argument must be strings.
 
-# tbl_continuous(type,value)
+# tbl_continuous(value)
 
     Code
       df <- as.data.frame(tbl_continuous(trial, variable = age, include = c(trt,
@@ -121,7 +121,7 @@
       4                     II      47 (34, 55)     49 (44, 58)
       5                    III      46 (38, 59)     50 (43, 58)
 
-# tbl_continuous(type,value) messaging
+# tbl_continuous(value) messaging
 
     Code
       tbl_continuous(trial, variable = age, include = c(trt, grade), value = trt ~
