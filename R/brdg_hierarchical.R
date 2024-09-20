@@ -185,5 +185,5 @@ add_hierarchy_levels <- function(x, context) {
     dplyr::arrange(dplyr::across(-idx)) |>
     dplyr::pull(idx)
 
-  tbl_stack(tbls[ord_sub_tbls], .combine = TRUE)
+  tbl_stack(tbls[ord_sub_tbls], .condense = TRUE)
 }
