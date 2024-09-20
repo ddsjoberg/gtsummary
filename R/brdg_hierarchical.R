@@ -1,3 +1,5 @@
+#' Hierarchical Summary Table Bridges
+#'
 #' @export
 brdg_hierarchical <- function(cards,
                               hierarchies,
@@ -176,11 +178,11 @@ add_hierarchy_levels <- function(x, context) {
         }
       )
     ) |>
-    bind_rows() |>
-    mutate(
+    dplyr::bind_rows() |>
+    dplyr::mutate(
       idx = dplyr::cur_group_rows()
     ) |>
-    arrange(across(-idx)) |>
+    dplyr::arrange(dplyr::across(-idx)) |>
     dplyr::pull(idx)
 
   tbl_stack(tbls[ord_sub_tbls], .combine = TRUE)

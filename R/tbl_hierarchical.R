@@ -1,5 +1,9 @@
 #' Create hierarchical table
 #'
+#' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   variables from `hierarchy` on whose levels (prior to nesting by the variable) summary statistics should be
+#'   calculated for. Must include the last element of `hierarchy`.
+#'
 #' @examples
 #' data <- cards::ADAE |>
 #'   dplyr::filter(
@@ -11,7 +15,7 @@
 #'   data = data,
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   denominator = cards::ADSL,
+#'   denominator = cards::ADSL %>% mutate(TRTA = ARM),
 #'   id = USUBJID
 #' )
 #'
@@ -22,7 +26,7 @@ tbl_hierarchical <- function(data,
                              id = NULL,
                              label = NULL,
                              denominator = NULL,
-                             include = everything(), # this would be the variables from `hierarchy` that we would include summary stats for (some of the nested drug class tables don't need stats on the class level)
+                             include = everything(),
                              statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
                              digits = NULL,
                              overall_row = FALSE) {
@@ -70,6 +74,12 @@ tbl_hierarchical <- function(data,
   #                 "i" = "For example, when {.code hierarchies = c(SOC, AETERM)}, {.arg include} can be {.code AETERM} but not {.code SOC}.")
   #   )
   # }
+  if (!tail(hierarchies, 1) %in% include) {
+    cli::cli_abort(
+      message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
+                  "or else this variable should be excluded from {.arg hierarchies} altogether.")
+    )
+  }
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
