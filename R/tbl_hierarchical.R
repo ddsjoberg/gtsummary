@@ -93,12 +93,14 @@ tbl_hierarchical <- function(data,
 
   # calculate statistics -------------------------------------------------------
   cards <-
-    ard_stack_hierarchical(
+    ard_stack_hierarchical2(
+    # cards::ard_stack_hierarchical(
       data = data,
       hierarchies = all_of(hierarchies),
+      # variables = all_of(hierarchies),
       by = all_of(by),
-      statistic = statistic,
       denominator = denominator,
+      statistic = statistic,
       id = all_of(id),
       include = include
     )
@@ -151,6 +153,14 @@ tbl_hierarchical <- function(data,
       scope_table_body(.list2tb(type, "var_type"), data[include]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
+
+  # check inputs ---------------------------------------------------------------
+  .check_haven_labelled(data[c(include, by)])
+  .check_tbl_summary_args(
+    data = data, label = label, statistic = statistic,
+    digits = digits, value = NULL, type = type, sort = NULL
+  )
+  .check_statistic_type_agreement(statistic, type)
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)

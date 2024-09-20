@@ -8,10 +8,7 @@ brdg_hierarchical <- function(cards,
                               id,
                               include,
                               statistic,
-                              labels_hierarchy,
-                              missing = "no",
-                              missing_stat = "{N_miss}",
-                              missing_text = "Unknown") {
+                              labels_hierarchy) {
   set_cli_abort_call()
 
   overall_stats <- cards |>
@@ -45,10 +42,7 @@ brdg_hierarchical <- function(cards,
           variables = .y$variable,
           type = type,
           statistic = statistic,
-          by = by,
-          missing = missing,
-          missing_stat = missing_stat,
-          missing_text = missing_test
+          by = by
         ) |>
           add_hierarchy_levels(.y)
       },
@@ -136,7 +130,7 @@ add_hierarchy_levels <- function(x, context) {
   if (length(missing_labels) > 0) {
     # add label rows for each additional hierarchy level
     x$table_body <-
-      tibble(
+      tibble::tibble(
         variable = x$table_body$variable[1],
         row_type = "label",
         var_label = missing_labels,
