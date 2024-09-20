@@ -17,6 +17,11 @@ tbl_hierarchical(
   overall_row = FALSE
 )
 }
+\arguments{
+\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+variables from \code{hierarchy} on whose levels (prior to nesting by the variable) summary statistics should be
+calculated for. Must include the last element of \code{hierarchy}.}
+}
 \description{
 Create hierarchical table
 }
@@ -31,7 +36,7 @@ tbl_hierarchical(
   data = data,
   hierarchies = c(AESOC, AETERM, AESEV),
   by = TRTA,
-  denominator = cards::ADSL,
+  denominator = cards::ADSL \%>\% mutate(TRTA = ARM),
   id = USUBJID
 )
 
