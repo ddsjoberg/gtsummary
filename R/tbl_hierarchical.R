@@ -20,14 +20,14 @@
 #' )
 #'
 #' @export
-tbl_hierarchical <- function(data,
-                             hierarchies,
+tbl_hierarchical <- function(data, # works
+                             hierarchies, # works
                              by = NULL,
-                             id = NULL,
+                             id = NULL, # works
                              label = NULL,
-                             denominator = NULL,
-                             include = everything(),
-                             statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
+                             denominator = NULL, # works
+                             include = everything(), # works
+                             statistic = ifelse(!missing(id), "{n} ({p})", "{n}"), # works
                              digits = NULL,
                              overall_row = FALSE) {
   set_cli_abort_call()
@@ -87,22 +87,25 @@ tbl_hierarchical <- function(data,
   # get variable labels for each hierarchy level
   labels_hierarchy <- sapply(hierarchies, \(x) if (!is.null(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
-  type <- assign_summary_type(data, include, value = NULL)
+  type <- assign_summary_type(data, union(by, include), value = NULL)
 
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
 
   # calculate statistics -------------------------------------------------------
   cards <-
-    ard_stack_hierarchical2(
-    # cards::ard_stack_hierarchical(
+    # ard_stack_hierarchical2(
+    cards::ard_stack_hierarchical(
       data = data,
-      hierarchies = all_of(hierarchies),
-      # variables = all_of(hierarchies),
-      by = all_of(by),
-      denominator = denominator,
-      statistic = statistic,
+      # hierarchies = all_of(hierarchies),
+      variables = head(hierarchies, -1),
+      by = c(all_of(by), tail(hierarchies, 1)),
       id = all_of(id),
-      include = include
+      denominator = denominator,
+      # statistic = statistic,
+      include = setdiff(include, tail(hierarchies, 1)),
+      overall = TRUE,
+      overall_row = TRUE,
+      total_n = TRUE
     )
 
   # evaluate the remaining list-formula arguments ------------------------------
@@ -173,22 +176,22 @@ tbl_hierarchical <- function(data,
 
   if (is_empty(denominator)) denominator <- data
 
-  # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
-  cards <- cards::bind_ard(
-    cards,
-    cards::ard_total_n(data = denominator) |>
-      dplyr::mutate(gts_column = NA),
-    case_switch(
-      !is_empty(by) ~
-        cards::ard_categorical(
-          denominator,
-          variables = dplyr::all_of(by),
-          stat_label = ~ default_stat_labels()
-        ) |>
-        dplyr::mutate(gts_column = NA),
-      .default = NULL
-    )
-  )
+  # # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
+  # cards <- cards::bind_ard(
+  #   cards,
+  #   cards::ard_total_n(data = denominator) |>
+  #     dplyr::mutate(gts_column = NA),
+  #   case_switch(
+  #     !is_empty(by) ~
+  #       cards::ard_categorical(
+  #         denominator,
+  #         variables = dplyr::all_of(by),
+  #         stat_label = ~ default_stat_labels()
+  #       ) |>
+  #       dplyr::mutate(gts_column = NA),
+  #     .default = NULL
+  #   )
+  # )
 
   # call bridge function here
   brdg_hierarchical(

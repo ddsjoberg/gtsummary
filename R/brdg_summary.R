@@ -285,8 +285,9 @@ pier_summary_categorical <- function(cards,
   # for hierarchical tables, manually add 'var_label'
   if (is_hierarchical) {
     df_last <- df_result_levels |>
-      dplyr::select(cards::all_ard_groups("levels")) |>
-      dplyr::pull(dplyr::last_col())
+      dplyr::pull(df_stats) |>
+      sapply(\(x) x[["variable_level"]]) |>
+      unlist()
 
     if ("group2_level" %in% names(cards) && !is.null(unlist(df_last))) {
       df_result_levels$var_label <- df_last
