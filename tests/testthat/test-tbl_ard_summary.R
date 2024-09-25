@@ -106,7 +106,7 @@ test_that("tbl_ard_summary(by) messaging", {
       tbl_ard_summary(by = trt)
   )
 
-    # when ARD is stratified, but `by` arg not specified
+  # when ARD is stratified, but `by` arg not specified
   expect_snapshot(
     error = TRUE,
     cards::ard_stack(
@@ -278,6 +278,22 @@ test_that("tbl_ard_summary(overall)", {
       .total_n = TRUE
     ) |>
       cards::tidy_ard_row_order()
+  )
+})
+
+test_that("tbl_ard_summary() existing 'gts_column'", {
+  # test there is no error when passing an ARD with an existing 'gts_column'
+  tbl <- tbl_summary(trial, by = trt, include = c(age, grade, response))
+  expect_equal(
+    tbl_ard_summary(
+      cards = tbl$cards[[1]],
+      include = c(age, grade, response),
+      by = trt,
+      missing = "ifany"
+    ) |>
+      modify_header(all_stat_cols() ~ "**{level}**  \nN = {n}") |>
+      as.data.frame(),
+    as.data.frame(tbl)
   )
 })
 

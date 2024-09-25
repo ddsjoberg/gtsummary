@@ -136,3 +136,25 @@ test_that("tbl_ard_continuous(value) messaging", {
       tbl_ard_continuous(by = "trt", variable = "age", include = "grade", value = grade ~ letters)
   )
 })
+
+test_that("tbl_ard_continuous() existing 'gts_column'", {
+  # test there is no error when passing an ARD with an existing 'gts_column'
+  tbl <-
+    tbl_continuous(
+      data = trial,
+      variable = age,
+      by = trt,
+      include = grade
+    )
+  expect_equal(
+    tbl_ard_continuous(
+      cards = tbl$cards[[1]],
+      variable = age,
+      by = trt,
+      include = grade
+    ) |>
+      modify_header(all_stat_cols() ~ "**{level}**  \nN = {n}") |>
+      as.data.frame(),
+    as.data.frame(tbl)
+  )
+})

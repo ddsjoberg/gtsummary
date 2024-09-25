@@ -91,3 +91,19 @@ test_that("tbl_ard_summary(label) argument works", {
     "Updated AGE!"
   )
 })
+
+test_that("tbl_ard_wide_summary() existing 'gts_column'", {
+  # test there is no error when passing an ARD with an existing 'gts_column'
+  tbl <-
+    trial |>
+    tbl_wide_summary(include = c(response, grade))
+  expect_equal(
+    tbl_ard_wide_summary(
+      cards = tbl$cards[[1]],
+      include = c(response, grade)
+    ) |>
+      as.data.frame(),
+    as.data.frame(tbl)
+  )
+})
+
