@@ -92,21 +92,17 @@ tbl_hierarchical <- function(data, # works
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
 
   # calculate statistics -------------------------------------------------------
-  cards <-
-    # ard_stack_hierarchical2(
-    cards::ard_stack_hierarchical(
-      data = data,
-      # hierarchies = all_of(hierarchies),
-      variables = head(hierarchies, -1),
-      by = c(all_of(by), tail(hierarchies, 1)),
-      id = all_of(id),
-      denominator = denominator,
-      # statistic = statistic,
-      include = setdiff(include, tail(hierarchies, 1)),
-      overall = TRUE,
-      overall_row = TRUE,
-      total_n = TRUE
-    )
+  # browser()
+  cards <- cards::ard_stack_hierarchical(
+    data = data,
+    variables = head(hierarchies, -1),
+    by = c(by, tail(hierarchies, 1)),
+    denominator = denominator,
+    id = all_of(id),
+    include = head(hierarchies, -1),
+    overall = TRUE,
+    overall_row = TRUE
+  )
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
@@ -176,7 +172,7 @@ tbl_hierarchical <- function(data, # works
 
   if (is_empty(denominator)) denominator <- data
 
-  # # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
+  # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
   # cards <- cards::bind_ard(
   #   cards,
   #   cards::ard_total_n(data = denominator) |>
@@ -202,6 +198,7 @@ tbl_hierarchical <- function(data, # works
     id,
     include,
     statistic,
+    overall_row,
     labels_hierarchy
   ) |>
     append(
