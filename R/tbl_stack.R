@@ -168,14 +168,19 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
       tbl_id1 = results$table_body$tbl_id1 |> unique(),
       lapply(
         tbls,
-        \(x) sapply(
-          x$table_styling$hierarchy,
-          \(x) {
-            if (is.null(x[[1]])) NA else as.character(unlist(x))
+        \(x) {
+          if (is.null(x$table_styling$hierarchy)) {
+            data.frame(no_hierarchy = NA)
+          } else {
+            sapply(
+              x$table_styling$hierarchy,
+              \(x) if (is.na(x[[1]])) " " else as.character(unlist(x))
+            )
           }
-        )
+        }
       ) |>
-        dplyr::bind_rows()
+        dplyr::bind_rows() |>
+        select(-no_hierarchy)
     )
 
     results$table_body <- results$table_body |>
