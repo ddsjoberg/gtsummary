@@ -117,11 +117,12 @@ tbl_survfit.survfit <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_survfit
-tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
+tbl_survfit.data.frame <- function(x, y, include = everything(), conf.level = 0.95, ...) {
   set_cli_abort_call()
   check_pkg_installed("survival", reference_pkg = "cardx")
 
   # process inputs -------------------------------------------------------------
+  check_scalar_range(conf.level, range = c(0, 1))
   # convert to a string, in case it wasn't passed this way originally
   y <- .process_x_and_y_args_as_string(x, enquo(y))
   cards::process_selectors(x, include = {{ include }})
@@ -145,7 +146,8 @@ tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
           data = x,
           formula = stats::reformulate(termlabels = cardx::bt(variable), response = y),
           method = "survfit",
-          package = "survival"
+          package = "survival",
+          method.args = list(conf.int = conf.level)
         )
       }
     ) |>
@@ -165,7 +167,6 @@ tbl_survfit.list <- function(x,
                              label_header = ifelse(!is.null(times), "**Time {time}**", "**{style_sigfig(prob, scale=100)}% Percentile**"),
                              estimate_fun = ifelse(!is.null(times), label_style_percent(symbol=TRUE), label_style_sigfig()),
                              missing = "--",
-                             conf.level = 0.95,
                              type = NULL,
                              reverse = FALSE,
                              quiet = TRUE, ...) {
@@ -224,7 +225,6 @@ tbl_survfit.list <- function(x,
   check_string(label_header)
   estimate_fun <- as_function(estimate_fun)
   missing <- ifelse(missing(missing), "\U2014", check_string(missing))
-  check_scalar_range(conf.level, range = c(0, 1))
   if (!is_empty(type)) type <- arg_match(type, values = c("survival", "risk", "cumhaz"))
 
   tbl_survfit_inputs <- as.list(environment())
