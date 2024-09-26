@@ -12,60 +12,76 @@ brdg_hierarchical <- function(cards,
                               labels_hierarchy) {
   set_cli_abort_call()
 
+  # browser()
   overall_stats <- cards |>
     dplyr::filter(!variable %in% c(hierarchies, "..ard_hierarchical_overall..")) |>
     mutate(gts_column = NA, context = "attributes")
 
   # process 'include'
-  which_include <- c(hierarchies %in% include, FALSE)
-  vars <- c("..ard_hierarchical_overall..", hierarchies)[which_include]
+  vars <- if (length(hierarchies) == 1) {
+    hierarchies
+  } else {
+    which_include <- c(hierarchies %in% include, TRUE)
+    c("..ard_hierarchical_overall..", hierarchies)[which_include]
+  }
 
-  cards <- cards |> dplyr::filter(group1 == by, variable %in% vars)
+  cards <- cards |> dplyr::filter(group1 %in% by, variable %in% vars)
   cards$variable_level[cards$variable == "..ard_hierarchical_overall.."] <- list(NULL)
 
-  # browser()
-  # create groups for each hierarchy level combination
-  n_by <- length(by) + 1
-  by_groups <- (cards |> select(cards::all_ard_groups()) |> colnames())[seq_len(2 * n_by)]
-  x <- cards |>
-    dplyr::group_by(dplyr::across(c(
-      cards::all_ard_groups(),
-      cards::all_ard_variables()
-    ))) |>
-    dplyr::ungroup(by_groups)
-
-  # build the table body pieces with bridge functions and stack them -----------
-  sub_tbls <- x |>
-    dplyr::group_map(
-      function(.x, .y) {
-        brdg_summary(
-          cards = cards::bind_ard(
-            .x |>
-              cards::as_card() |>
-              dplyr::rename(
-                !!paste0("group", n_by, "_level") := "variable_level",
-                !!paste0("group", n_by) := "variable",
-                "variable_level" = !!paste0("group", n_by, "_level"),
-                "variable" = !!paste0("group", n_by),
-              ),
-            overall_stats
-          ),
-          variables = tail(hierarchies, 1),
-          type = type,
-          statistic = statistic,
-          by = by
-        ) |>
-          add_hierarchy_levels(.y)
-      },
-      .keep = TRUE
-    )
-
-
-  # order and stack hierarchy sub-tables
-  x <- if (length(hierarchies) > 1) {
-    .order_stack_sub_tables(sub_tbls)
+  if (length(hierarchies) == 1) {
+    x <- brdg_summary(
+      cards =
+        cards::bind_ard(
+          cards |> cards::as_card(),
+          overall_stats
+        ),
+      variables = tail(hierarchies, 1),
+      type = type,
+      statistic = statistic,
+      by = by
+    ) |>
+      add_hierarchy_levels(data.frame(variable = NA))
   } else {
-    sub_tbls[[1]]
+    # create groups for each hierarchy level combination
+    n_by <- length(by) + as.numeric(length(hierarchies) > 1)
+    by_groups <- (cards |> select(cards::all_ard_groups()) |> colnames())[seq_len(2 * n_by)]
+    x <- cards |>
+      dplyr::group_by(dplyr::across(c(
+        cards::all_ard_groups(),
+        cards::all_ard_variables()
+      ))) |>
+      dplyr::ungroup(by_groups)
+
+    # browser()
+    # build the table body pieces with bridge functions and stack them -----------
+    sub_tbls <- x |>
+      dplyr::group_map(
+        function(.x, .y) {
+          brdg_summary(
+            cards =
+              cards::bind_ard(
+                .x |>
+                  dplyr::rename(
+                    !!paste0("group", n_by, "_level") := "variable_level",
+                    !!paste0("group", n_by) := "variable",
+                    "variable_level" = !!paste0("group", n_by, "_level"),
+                    "variable" = !!paste0("group", n_by),
+                  ) |>
+                  cards::as_card(),
+                overall_stats
+              ),
+            variables = tail(hierarchies, 1),
+            type = type,
+            statistic = statistic,
+            by = by
+          ) |>
+            add_hierarchy_levels(.y)
+        },
+        .keep = TRUE
+      )
+
+    # order and stack hierarchy sub-tables
+    x <- .order_stack_sub_tables(sub_tbls)
   }
 
   # formulate top-left label for the label column

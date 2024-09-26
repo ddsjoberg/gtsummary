@@ -66,20 +66,18 @@ tbl_hierarchical <- function(data, # works
     )
   }
 
-  # TODO: figure out include argument restrictions
   # check that 'include' is the correct subset of 'hierarchies'
-  # if (!setequal(include, hierarchies[seq_len(length(include))])) {
-  #   cli::cli_abort(
-  #     message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}",
-  #                 "i" = "For example, when {.code hierarchies = c(SOC, AETERM)}, {.arg include} can be {.code AETERM} but not {.code SOC}.")
-  #   )
-  # }
-  # if (!tail(hierarchies, 1) %in% include) {
-  #   cli::cli_abort(
-  #     message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
-  #                 "or else this variable should be excluded from {.arg hierarchies} altogether.")
-  #   )
-  # }
+  if (!all(include %in% hierarchies)) {
+    cli::cli_abort(
+      message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}.")
+    )
+  }
+  if (!tail(hierarchies, 1) %in% include) {
+    cli::cli_abort(
+      message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
+                  "or else this variable should be excluded from {.arg hierarchies} altogether.")
+    )
+  }
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
@@ -90,13 +88,13 @@ tbl_hierarchical <- function(data, # works
   type <- assign_summary_type(data, union(by, include), value = NULL)
 
   statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
+  vars <- if (length(hierarchies) < 2) hierarchies else head(hierarchies, -1)
 
   # calculate statistics -------------------------------------------------------
-  # browser()
   cards <- cards::ard_stack_hierarchical(
     data = data,
-    variables = head(hierarchies, -1),
-    by = c(by, tail(hierarchies, 1)),
+    variables = vars,
+    by = c(by, setdiff(hierarchies, vars)),
     denominator = denominator,
     id = all_of(id),
     overall = TRUE,
@@ -170,23 +168,6 @@ tbl_hierarchical <- function(data, # works
   cards <- .add_gts_column_to_cards_summary(cards, hierarchies, by, hierarchical = TRUE)
 
   if (is_empty(denominator)) denominator <- data
-
-  # add total N rows to 'cards' - not needed if incorporated into ard_stack_hierarchical()
-  # cards <- cards::bind_ard(
-  #   cards,
-  #   cards::ard_total_n(data = denominator) |>
-  #     dplyr::mutate(gts_column = NA),
-  #   case_switch(
-  #     !is_empty(by) ~
-  #       cards::ard_categorical(
-  #         denominator,
-  #         variables = dplyr::all_of(by),
-  #         stat_label = ~ default_stat_labels()
-  #       ) |>
-  #       dplyr::mutate(gts_column = NA),
-  #     .default = NULL
-  #   )
-  # )
 
   # call bridge function here
   brdg_hierarchical(
