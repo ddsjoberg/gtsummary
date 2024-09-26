@@ -22,7 +22,7 @@
 #' @param cont_variable (`string`)\cr
 #'   a column name of the continuous summary variable in `tbl_continuous()`
 #' @param summary_type (named `list`)\cr
-#'   naemd list of summary types
+#'   named list of summary types
 #' @inheritParams cli::cli_abort
 #'
 #' @return A table of class `'gtsummary'`

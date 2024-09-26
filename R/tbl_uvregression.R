@@ -40,7 +40,7 @@
 #'   is the dependent variable, and `{x}` represents a single covariate. For a
 #'   random intercept model, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
 #' @param method.args (named `list`)\cr
-#'   Named list of arguments assed to `method`.
+#'   Named list of arguments passed to `method`.
 #' @param hide_n (scalar `logical`)\cr
 #'   Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
@@ -353,10 +353,10 @@ is_quo_empty <- function(x) {
       \(variable) {
         formula_i <-
           cards::eval_capture_conditions(
-            glue(
-              formula,
-              .envir = list(y = ifelse(is_empty(y), cardx::bt(variable), y),
-                            x = ifelse(is_empty(x), cardx::bt(variable), x))
+            glue_data(
+              .x = list(y = ifelse(is_empty(y), cardx::bt(variable), y),
+                            x = ifelse(is_empty(x), cardx::bt(variable), x)),
+              formula
             ) |>
               stats::as.formula()
           )

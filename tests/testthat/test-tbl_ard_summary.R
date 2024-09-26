@@ -106,7 +106,7 @@ test_that("tbl_ard_summary(by) messaging", {
       tbl_ard_summary(by = trt)
   )
 
-    # when ARD is stratified, but `by` arg not specified
+  # when ARD is stratified, but `by` arg not specified
   expect_snapshot(
     error = TRUE,
     cards::ard_stack(
@@ -281,3 +281,41 @@ test_that("tbl_ard_summary(overall)", {
   )
 })
 
+test_that("tbl_ard_summary() existing 'gts_column'", {
+  # test there is no error when passing an ARD with an existing 'gts_column'
+  tbl <- tbl_summary(trial, by = trt, include = c(age, grade, response))
+  expect_equal(
+    tbl_ard_summary(
+      cards = tbl$cards[[1]],
+      include = c(age, grade, response),
+      by = trt,
+      missing = "ifany"
+    ) |>
+      modify_header(all_stat_cols() ~ "**{level}**  \nN = {n}") |>
+      as.data.frame(),
+    as.data.frame(tbl)
+  )
+})
+
+test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorical', etc)", {
+  skip_if_not(is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary"))
+
+  # build non-standard ARDs
+  ard <- cards::bind_ard(
+    survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
+      cardx::ard_survival_survfit(times = c(12, 24)) |>
+      dplyr::filter(stat_name %in% c("estimate")) |>
+      dplyr::mutate(
+        fmt_fn = list("xx.x%"),
+        group1_level = unlist(group1_level) |> as.character() |> as.list()
+      ),
+    cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>
+      dplyr::filter(stat_name %in% c("estimate"))
+  ) |>
+    dplyr::select(-cards::all_missing_columns())
+
+  expect_snapshot(
+    tbl_ard_summary(ard, by = trt, statistic = ~ "{estimate}") |>
+      as.data.frame()
+  )
+})

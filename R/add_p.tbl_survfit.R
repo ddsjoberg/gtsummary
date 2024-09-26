@@ -41,7 +41,7 @@
 #' If you utilize the `tbl_survfit.data.frame()` S3 method, this is handled for you.
 #'
 #' @export
-#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary")
 #' library(survival)
 #'
 #' gts_survfit <-
