@@ -74,12 +74,12 @@ tbl_hierarchical <- function(data, # works
   #                 "i" = "For example, when {.code hierarchies = c(SOC, AETERM)}, {.arg include} can be {.code AETERM} but not {.code SOC}.")
   #   )
   # }
-  if (!tail(hierarchies, 1) %in% include) {
-    cli::cli_abort(
-      message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
-                  "or else this variable should be excluded from {.arg hierarchies} altogether.")
-    )
-  }
+  # if (!tail(hierarchies, 1) %in% include) {
+  #   cli::cli_abort(
+  #     message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
+  #                 "or else this variable should be excluded from {.arg hierarchies} altogether.")
+  #   )
+  # }
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
@@ -99,7 +99,6 @@ tbl_hierarchical <- function(data, # works
     by = c(by, tail(hierarchies, 1)),
     denominator = denominator,
     id = all_of(id),
-    include = head(hierarchies, -1),
     overall = TRUE,
     overall_row = TRUE
   )

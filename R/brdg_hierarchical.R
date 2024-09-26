@@ -12,19 +12,21 @@ brdg_hierarchical <- function(cards,
                               labels_hierarchy) {
   set_cli_abort_call()
 
-  overall_stats <- cards %>% dplyr::filter(!variable %in% c(hierarchies, "..ard_hierarchical_overall..")) |>
+  overall_stats <- cards |>
+    dplyr::filter(!variable %in% c(hierarchies, "..ard_hierarchical_overall..")) |>
     mutate(gts_column = NA, context = "attributes")
-  cards <- cards |>
-    dplyr::filter(
-      group1 == by,
-      variable %in% c(hierarchies, "..ard_hierarchical_overall..")
-    )
+
+  # process 'include'
+  which_include <- c(hierarchies %in% include, FALSE)
+  vars <- c("..ard_hierarchical_overall..", hierarchies)[which_include]
+
+  cards <- cards |> dplyr::filter(group1 == by, variable %in% vars)
   cards$variable_level[cards$variable == "..ard_hierarchical_overall.."] <- list(NULL)
 
+  # browser()
+  # create groups for each hierarchy level combination
   n_by <- length(by) + 1
   by_groups <- (cards |> select(cards::all_ard_groups()) |> colnames())[seq_len(2 * n_by)]
-
-  # create groups for each hierarchy level combination
   x <- cards |>
     dplyr::group_by(dplyr::across(c(
       cards::all_ard_groups(),
@@ -57,6 +59,7 @@ brdg_hierarchical <- function(cards,
       },
       .keep = TRUE
     )
+
 
   # order and stack hierarchy sub-tables
   x <- if (length(hierarchies) > 1) {
@@ -185,7 +188,7 @@ add_hierarchy_levels <- function(x, context) {
       }
     ) |>
     dplyr::bind_rows() |>
-    select(-no_hierarchy) |>
+    select(-any_of("no_hierarchy")) |>
     mutate(across(everything(), ~replace(., is.na(.), " "))) |>
     dplyr::mutate(
       idx = dplyr::cur_group_rows()

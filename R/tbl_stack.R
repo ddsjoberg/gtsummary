@@ -180,7 +180,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
         }
       ) |>
         dplyr::bind_rows() |>
-        select(-no_hierarchy)
+        select(-any_of("no_hierarchy"))
     )
 
     results$table_body <- results$table_body |>
