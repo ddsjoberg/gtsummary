@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Update in `tbl_ard_summary()` to better handle non-standard ARDs (i.e. not our typical continuous or categorical summaries) by assigning them a default summary type. (#1991)
+
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
 
 * Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
