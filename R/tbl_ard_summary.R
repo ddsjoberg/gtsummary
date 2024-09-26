@@ -168,7 +168,7 @@ tbl_ard_summary <- function(cards,
   # for non-standard ARDs, fill in the missing default types
   for (v in setdiff(include, names(default_types))) {
     if (!"variable_level" %in% names(cards) ||
-        is_empty(compact(dplyr::filter(cards, .data$variable %in%.env$v)$variable_level))) {
+        is_empty(compact(dplyr::filter(cards, .data$variable %in% .env$v)$variable_level))) {
       default_types[[v]] <- "continuous"
     }
     else default_types[[v]] <- "categorical" # styler: off
