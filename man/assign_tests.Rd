@@ -62,7 +62,7 @@ Default is \code{NULL}.}
 Variables to include in adjusted calculations (e.g. in ANCOVA models).}
 
 \item{summary_type}{(named \code{list})\cr
-naemd list of summary types}
+named list of summary types}
 
 \item{calling_fun}{(\code{string})\cr
 Must be one of \code{'add_p'} and \code{'add_difference'}. Depending on the context,
