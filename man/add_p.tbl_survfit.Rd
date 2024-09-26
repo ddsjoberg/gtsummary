@@ -72,7 +72,7 @@ If you utilize the \code{tbl_survfit.data.frame()} S3 method, this is handled fo
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 gts_survfit <-
