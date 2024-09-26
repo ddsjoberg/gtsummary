@@ -59,7 +59,7 @@ formatted summary table of the results</p>
 <span><span class="fu">tbl_survfit</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
-<span><span class="fu">tbl_survfit</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">tbl_survfit</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'list'</span></span>
 <span><span class="fu">tbl_survfit</span><span class="op">(</span></span>
@@ -73,7 +73,6 @@ formatted summary table of the results</p>
 <span>  estimate_fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">times</span><span class="op">)</span>, <span class="fu"><a href="label_style.html">label_style_percent</a></span><span class="op">(</span>symbol <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="label_style.html">label_style_sigfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  missing <span class="op">=</span> <span class="st">"--"</span>,</span>
-<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reverse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -104,6 +103,11 @@ is called directly.</p></dd>
 
 <dt id="arg-include">include<a class="anchor" aria-label="anchor" href="#arg-include"></a></dt>
 <dd><p>Variable to include as stratifying variables.</p></dd>
+
+
+<dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
+<dd><p>(scalar <code>numeric</code>)<br> ]
+Confidence level for confidence intervals. Default is <code>0.95</code></p></dd>
 
 
 <dt id="arg-times">times<a class="anchor" aria-label="anchor" href="#arg-times"></a></dt>
@@ -146,11 +150,6 @@ survival times</p></dd>
 <dt id="arg-missing">missing<a class="anchor" aria-label="anchor" href="#arg-missing"></a></dt>
 <dd><p>(<code>string</code>)<br>
 text to fill when estimate is not estimable. Default is <code>"--"</code></p></dd>
-
-
-<dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>(scalar <code>numeric</code>)<br> ]
-Confidence level for confidence intervals. Default is <code>0.95</code></p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
