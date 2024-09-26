@@ -248,7 +248,7 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
                 variable = variable,
                 by = x$inputs$by,
                 group = group,
-                type = x$inputs$type[[variable]],
+                type = tryCatch(x$inputs$type[[variable]], error = \(e) NULL), # in tbl_survfit(), the type argument is for transforming the estimate, not the summary type
                 test.args = test.args[[variable]],
                 adj.vars = adj.vars,
                 conf.level = conf.level,
