@@ -298,36 +298,21 @@ test_that("tbl_ard_summary() existing 'gts_column'", {
 })
 
 test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorical', etc)", {
-  # This ARD was created with this code:
-  # cards::bind_ard(
-  #   survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
-  #     cardx::ard_survival_survfit(times = c(12, 24)) |>
-  #     dplyr::filter(stat_name %in% c("estimate")) |>
-  #     dplyr::mutate(
-  #       fmt_fn = list("xx.x%"),
-  #       group1_level = unlist(group1_level) |> as.character() |> as.list()
-  #     ),
-  #   cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>
-  #     dplyr::filter(stat_name %in% c("estimate"))
-  # ) |>
-  #   dplyr::select(-cards::all_missing_columns()) |>
-  #   dput()
+  skip_if_not(is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary"))
 
-  ard <-
-    structure(list(group1 = c("trt", "trt", "trt", "trt", "trt",
-                              "trt"), group1_level = list("Drug A", "Drug A", "Drug B", "Drug B",
-                                                          "Drug A", "Drug B"), variable = c("time", "time", "time",
-                                                                                            "time", "age", "age"), variable_level = list(12, 24, 12, 24,
-                                                                                                                                         NULL, NULL), context = c("survival", "survival", "survival",
-                                                                                                                                                                  "survival", "stats_t_test_onesample", "stats_t_test_onesample"
-                                                                                                                                         ), stat_name = c("estimate", "estimate", "estimate", "estimate",
-                                                                                                                                                          "estimate", "estimate"), stat_label = c("Survival Probability",
-                                                                                                                                                                                                  "Survival Probability", "Survival Probability", "Survival Probability",
-                                                                                                                                                                                                  "Mean", "Mean"), stat = list(0.908163265306122, 0.46938775510204,
-                                                                                                                                                                                                                               0.862745098039216, 0.411764705882353, c(`mean of x` = 47.010989010989),
-                                                                                                                                                                                                                               c(`mean of x` = 47.4489795918367)), fmt_fn = list("xx.x%",
-                                                                                                                                                                                                                                                                                 "xx.x%", "xx.x%", "xx.x%", 1L, 1L)), row.names = c(NA, -6L
-                                                                                                                                                                                                                                                                                 ), class = c("card", "tbl_df", "tbl", "data.frame"))
+  # build non-standard ARDs
+  ard <- cards::bind_ard(
+    survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
+      cardx::ard_survival_survfit(times = c(12, 24)) |>
+      dplyr::filter(stat_name %in% c("estimate")) |>
+      dplyr::mutate(
+        fmt_fn = list("xx.x%"),
+        group1_level = unlist(group1_level) |> as.character() |> as.list()
+      ),
+    cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>
+      dplyr::filter(stat_name %in% c("estimate"))
+  ) |>
+    dplyr::select(-cards::all_missing_columns())
 
   expect_snapshot(
     tbl_ard_summary(ard, by = trt, statistic = ~ "{estimate}") |>
