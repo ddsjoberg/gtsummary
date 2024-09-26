@@ -2,6 +2,8 @@
 
 * Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
 
+* Migrated the `tbl_survfit.list(conf.level)` up to `tbl_survfit.data.frame(conf.level)` where the confidence level is passed to `survival::survfit()`.
+
 * Update in `tbl_ard_summary()` to better handle non-standard ARDs (i.e. not our typical continuous or categorical summaries) by assigning them a default summary type. (#1991)
 
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)

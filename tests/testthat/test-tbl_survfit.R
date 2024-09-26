@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("survival", "cardx", "broom"), reference_pkg = "gtsummary"))
 
 test_that("tbl_survfit(times) works", {
   expect_silent(
@@ -210,5 +211,29 @@ test_that("tbl_survfit(type with prob) errors properly", {
         type = "risk"
       ),
     regexp = "Cannot use `type` argument when `probs` argument specifed."
+  )
+})
+
+test_that("tbl_survfit(conf.level)", {
+  expect_silent(
+    tbl <- tbl_survfit(
+      trial,
+      y = "Surv(ttdeath, death)",
+      include = trt,
+      probs = 0.5,
+      label_header = "**Median Survival**",
+      conf.level = 0.50,
+      statistic = "{conf.low}"
+    )
+  )
+
+  # check CI matches
+  expect_equal(
+    as.data.frame(tbl, col_label = FALSE)$stat_1 |> discard(is.na),
+    survival::survfit(survival::Surv(ttdeath, death) ~ trt, data = trial, conf.int = 0.50) |>
+      quantile(probs = 0.5) |>
+      getElement("lower") |>
+      as.vector() |>
+      style_number()
   )
 })

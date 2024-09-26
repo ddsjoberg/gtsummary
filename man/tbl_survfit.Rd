@@ -11,7 +11,7 @@ tbl_survfit(x, ...)
 
 \method{tbl_survfit}{survfit}(x, ...)
 
-\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
+\method{tbl_survfit}{data.frame}(x, y, include = everything(), conf.level = 0.95, ...)
 
 \method{tbl_survfit}{list}(
   x,
@@ -24,7 +24,6 @@ tbl_survfit(x, ...)
   estimate_fun = ifelse(!is.null(times), label_style_percent(symbol = TRUE),
     label_style_sigfig()),
   missing = "--",
-  conf.level = 0.95,
   type = NULL,
   reverse = FALSE,
   quiet = TRUE,
@@ -44,6 +43,9 @@ is called directly.}
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
 
 \item{include}{Variable to include as stratifying variables.}
+
+\item{conf.level}{(scalar \code{numeric})\cr ]
+Confidence level for confidence intervals. Default is \code{0.95}}
 
 \item{times}{(\code{numeric})\cr
 a vector of times for which to return survival probabilities.}
@@ -72,9 +74,6 @@ survival times}
 
 \item{missing}{(\code{string})\cr
 text to fill when estimate is not estimable. Default is \code{"--"}}
-
-\item{conf.level}{(scalar \code{numeric})\cr ]
-Confidence level for confidence intervals. Default is \code{0.95}}
 
 \item{type}{(\code{string} or \code{NULL})\cr
 type of statistic to report. Available for Kaplan-Meier time estimates only, otherwise \code{type}
