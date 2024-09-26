@@ -165,6 +165,15 @@ tbl_ard_summary <- function(cards,
     ) |>
     deframe() |>
     as.list()
+  # for non-standard ARDs, fill in the missing default types
+  for (v in setdiff(include, names(default_types))) {
+    if (!"variable_level" %in% names(cards) ||
+        is_empty(compact(dplyr::filter(cards, .data$variable %in%.env$v)$variable_level))) {
+      default_types[[v]] <- "continuous"
+    }
+    else default_types[[v]] <- "categorical" # styler: off
+  }
+  if (exists("v")) remove("v") # styler: off
 
   # process arguments ----------------------------------------------------------
   cards::process_formula_selectors(
@@ -187,14 +196,14 @@ tbl_ard_summary <- function(cards,
     walk(
       include,
       function(variable) {
-        if (default_types[[variable]] %in% "continuous" &&
+        if (isTRUE(default_types[[variable]] %in% "continuous") &&
             !type[[variable]] %in% c("continuous", "continuous2")) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be one of
              {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
             call = get_cli_abort_call()
           )
-        } else if (default_types[[variable]] %in% c("categorical", "dichotomous") &&
+        } else if (isTRUE(default_types[[variable]] %in% c("categorical", "dichotomous")) &&
                    !identical(type[[variable]], default_types[[variable]])) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be
