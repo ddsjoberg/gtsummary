@@ -297,3 +297,25 @@ test_that("tbl_ard_summary() existing 'gts_column'", {
   )
 })
 
+test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorical', etc)", {
+  skip_if_not(is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary"))
+
+  # build non-standard ARDs
+  ard <- cards::bind_ard(
+    survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
+      cardx::ard_survival_survfit(times = c(12, 24)) |>
+      dplyr::filter(stat_name %in% c("estimate")) |>
+      dplyr::mutate(
+        fmt_fn = list("xx.x%"),
+        group1_level = unlist(group1_level) |> as.character() |> as.list()
+      ),
+    cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>
+      dplyr::filter(stat_name %in% c("estimate"))
+  ) |>
+    dplyr::select(-cards::all_missing_columns())
+
+  expect_snapshot(
+    tbl_ard_summary(ard, by = trt, statistic = ~ "{estimate}") |>
+      as.data.frame()
+  )
+})

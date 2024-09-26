@@ -67,7 +67,7 @@ Regression method or function, e.g. \link{lm}, \link{glm}, \link[survival:coxph]
 Methods may be passed as functions (\code{method=lm}) or as strings (\code{method='lm'}).}
 
 \item{method.args}{(named \code{list})\cr
-Named list of arguments assed to \code{method}.}
+Named list of arguments passed to \code{method}.}
 
 \item{exponentiate}{(scalar \code{logical})\cr
 Logical indicating whether to exponentiate the coefficient estimates.

@@ -40,7 +40,7 @@
 #'   is the dependent variable, and `{x}` represents a single covariate. For a
 #'   random intercept model, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
 #' @param method.args (named `list`)\cr
-#'   Named list of arguments assed to `method`.
+#'   Named list of arguments passed to `method`.
 #' @param hide_n (scalar `logical`)\cr
 #'   Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
