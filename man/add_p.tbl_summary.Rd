@@ -60,7 +60,7 @@ Adds p-values to tables created by \code{\link[=tbl_summary]{tbl_summary()}} by 
 
 
 See the \link[=tests]{?tests} help file for details on available tests and creating custom tests.
-The \link[=tests]{?tests} help file also includes psuedo-code for each test to be clear
+The \link[=tests]{?tests} help file also includes pseudo-code for each test to be clear
 precisely how the calculation is performed.
 
 The default test used in \code{add_p()} primarily depends on these factors:

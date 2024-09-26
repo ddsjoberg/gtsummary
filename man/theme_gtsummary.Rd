@@ -50,7 +50,7 @@ theme_gtsummary_eda(set_theme = TRUE)
 Logical indicating whether to set the theme. Default is \code{TRUE}.
 When \code{FALSE} the named list of theme elements is returned invisibly}
 
-\item{font_size}{(scaler \code{numeric})\cr
+\item{font_size}{(scalar \code{numeric})\cr
 Numeric font size for compact theme.
 Default is 13 for gt tables, and 8 for all other output types}
 
@@ -124,7 +124,7 @@ for details.
 \item \code{tbl_regression()},\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()};
 hides CI and p-value from output
 \itemize{
-\item For flaxtable and huxtable output, the coeficient's standard error is placed below. For gt, it is placed to the right.
+\item For flextable and huxtable output, the coefficients' standard error is placed below. For gt, it is placed to the right.
 }
 }
 }

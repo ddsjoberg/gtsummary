@@ -163,3 +163,14 @@
       Error in `tbl_ard_summary()`:
       ! Variable "AGE" is type `continuous` and `statistic` argument value must be a string of length one.
 
+# tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorical', etc)
+
+    Code
+      as.data.frame(tbl_ard_summary(ard, by = trt, statistic = ~"{estimate}"))
+    Output
+        **Characteristic** **Drug A** **Drug B**
+      1               time       <NA>       <NA>
+      2                 12       90.8       86.3
+      3                 24       46.9       41.2
+      4                age       47.0       47.4
+
