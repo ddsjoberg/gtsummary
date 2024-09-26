@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
+
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
 
 * Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
