@@ -2,19 +2,50 @@
 % Please edit documentation in R/brdg_hierarchical.R
 \name{brdg_hierarchical}
 \alias{brdg_hierarchical}
-\title{Hierarchical Summary Table Bridges}
+\title{Hierarchy table bridge}
 \usage{
 brdg_hierarchical(
   cards,
   hierarchies,
-  type,
   by,
   include,
   statistic,
+  type,
   cards_summary,
-  labels_hierarchy
+  label
 )
 }
+\arguments{
+\item{cards}{(\code{card})\cr
+an ARD object of class \code{"card"} created with \code{cards::ard_hierarchical_stack()}.}
+
+\item{hierarchies}{(\code{character})\cr
+character list of hierarchy variables.}
+
+\item{by}{(\code{string})\cr
+string indicating the stratifying column.}
+
+\item{include}{(\code{character})\cr
+character list of hierarchy variables to include statistics for.}
+
+\item{statistic}{(named \code{list})\cr
+named list of summary statistic names.}
+
+\item{type}{(named \code{list})\cr
+named list of summary types.}
+
+\item{cards_summary}{(\code{card})\cr
+an ARD object of class \code{"card"} created with \code{cards::ard_hierarchical_stack()}.}
+
+\item{label}{(named \code{list})\cr
+named list of hierarchy variable labels.}
+}
+\value{
+a gtsummary object
+}
 \description{
-Hierarchical Summary Table Bridges
+Bridge function for converting \code{tbl_hierarchical()} (and similar) cards to basic gtsummary objects.
+}
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 }

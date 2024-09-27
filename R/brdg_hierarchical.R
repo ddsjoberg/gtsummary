@@ -1,17 +1,40 @@
-#' Hierarchical Summary Table Bridges
+#' Hierarchy table bridge
+#'
+#' @description
+#' Bridge function for converting `tbl_hierarchical()` (and similar) cards to basic gtsummary objects.
+#'
+#' @param cards (`card`)\cr
+#'   an ARD object of class `"card"` created with `cards::ard_hierarchical_stack()`.
+#' @param hierarchies (`character`)\cr
+#'   character list of hierarchy variables.
+#' @param by (`string`)\cr
+#'   string indicating the stratifying column.
+#' @param include (`character`)\cr
+#'   character list of hierarchy variables to include statistics for.
+#' @param statistic (named `list`)\cr
+#'   named list of summary statistic names.
+#' @param type (named `list`)\cr
+#'   named list of summary types.
+#' @param cards_summary (`card`)\cr
+#'   an ARD object of class `"card"` created with `cards::ard_hierarchical_stack()`.
+#' @param label (named `list`)\cr
+#'   named list of hierarchy variable labels.
+#'
+#' @return a gtsummary object
+#'
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @export
 brdg_hierarchical <- function(cards,
                               hierarchies,
-                              type,
                               by,
                               include,
                               statistic,
+                              type,
                               cards_summary,
-                              labels_hierarchy) {
+                              label) {
   set_cli_abort_call()
 
-  # browser()
   overall_stats <- cards |>
     dplyr::filter(!variable %in% c(hierarchies, "..ard_hierarchical_overall..")) |>
     mutate(gts_column = NA, context = "attributes")
@@ -27,6 +50,7 @@ brdg_hierarchical <- function(cards,
   cards <- cards |> dplyr::filter(group1 %in% by, variable %in% vars)
   cards$variable_level[cards$variable == "..ard_hierarchical_overall.."] <- list(NULL)
 
+  # add summary rows if requested -----------------------------------
   overall_rows <- list()
   if (!is_empty(cards_summary)) {
     if (any(is.na(cards_summary$group1))) {
@@ -47,7 +71,7 @@ brdg_hierarchical <- function(cards,
           type = type,
           statistic = statistic |> setNames(by)
         ) |>
-          add_hierarchy_levels(context = data.frame(variable = NA), summary_row = TRUE)
+          .add_hierarchy_levels(context = data.frame(variable = NA), summary_row = TRUE)
       )
     }
 
@@ -77,7 +101,7 @@ brdg_hierarchical <- function(cards,
                 statistic = statistic,
                 by = by
               ) |>
-                add_hierarchy_levels(.y, summary_row = TRUE)
+                .add_hierarchy_levels(.y, summary_row = TRUE)
             },
             .keep = TRUE
           )
@@ -85,6 +109,7 @@ brdg_hierarchical <- function(cards,
     }
   }
 
+  # calculate sub-tables ----------------------------
   if (length(hierarchies) == 1) {
     x <- brdg_summary(
       cards =
@@ -97,7 +122,7 @@ brdg_hierarchical <- function(cards,
       statistic = statistic,
       by = by
     ) |>
-      add_hierarchy_levels(data.frame(variable = NA)) |>
+      .add_hierarchy_levels(data.frame(variable = NA)) |>
       list()
   } else {
     # create groups for each hierarchy level combination
@@ -132,7 +157,7 @@ brdg_hierarchical <- function(cards,
             statistic = statistic,
             by = by
           ) |>
-            add_hierarchy_levels(.y)
+            .add_hierarchy_levels(.y)
         },
         .keep = TRUE
       )
@@ -144,12 +169,12 @@ brdg_hierarchical <- function(cards,
   # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)[seq_along(hierarchies)]
   lbl_hierarch <- sapply(
-    seq_along(labels_hierarchy),
+    seq_along(label),
     function(x) {
       paste0(
         paste(rep("\U00A0", indent[x]), collapse = ""),
         "**",
-        labels_hierarchy[x],
+        label[x],
         "**",
         if (x < length(indent)) "  "
       )
@@ -170,6 +195,9 @@ brdg_hierarchical <- function(cards,
           get_theme_element("tbl_summary-str:header-withby",
                             default = "**{level}**  \nN = {style_number(n)}")
         )
+    ) |>
+    modify_table_styling(
+
     )
 
   # return tbl_summary table ---------------------------------------------------
@@ -182,8 +210,8 @@ brdg_hierarchical <- function(cards,
   x
 }
 
-# add 'hierarchy' element to gtsummary object
-add_hierarchy_levels <- function(x, context, summary_row = FALSE, count = FALSE) {
+# add 'hierarchy' element to gtsummary object, correct labelling and indentation
+.add_hierarchy_levels <- function(x, context, summary_row = FALSE, count = FALSE) {
   # no hierarchy
   if (ncol(context) == 1 || context$variable == "..ard_hierarchical_overall..") {
     # remove indent
@@ -227,6 +255,7 @@ add_hierarchy_levels <- function(x, context, summary_row = FALSE, count = FALSE)
       )
   }
 
+  # extract and identify missing labels
   labels <- context |>
     select(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")) |>
     unlist(use.names = FALSE) |>
