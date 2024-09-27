@@ -23,6 +23,8 @@ an integer indicating the amount of padding between columns.}
 Print a tibble or data frame using cli styling and formatting.
 }
 \examples{
-trial[1:3, ] |> dplyr::mutate_all(as.character) |> tibble_as_cli()
+trial[1:3, ] |>
+  dplyr::mutate_all(as.character) |>
+  gtsummary:::tibble_as_cli()
 }
 \keyword{internal}
