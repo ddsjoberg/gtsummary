@@ -74,10 +74,11 @@ or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}.}
 }
 \value{
-a gtsummary table of class \code{"tbl_hierarchical"}
+a gtsummary table of class \code{"tbl_hierarchical"}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
+
 Use these functions to generate hierarchical tables.
 \itemize{
 \item \code{tbl_hierarchical()}: Calculates \emph{rates} of events (e.g. adverse events)
@@ -99,14 +100,9 @@ tbl_hierarchical(
   hierarchies = c(AESOC, AETERM, AESEV),
   by = TRTA,
   denominator = cards::ADSL \%>\% mutate(TRTA = ARM),
-  id = USUBJID
+  id = USUBJID,
+  summary_row = AESOC
 )
-
-data <- cards::ADAE |>
-  dplyr::filter(
-    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
-    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
-  )
 
 tbl_hierarchical_count(
   data = data,
