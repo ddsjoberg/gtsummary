@@ -3,6 +3,8 @@
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   variables from `hierarchy` on whose levels (prior to nesting by the variable) summary statistics should be
 #'   calculated for. Must include the last element of `hierarchy`.
+#' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   variables from `hierarchy` on whose levels (prior to nesting by the variable) a summary row should be displayed.
 #'
 #' @examples
 #' data <- cards::ADAE |>
@@ -29,7 +31,7 @@ tbl_hierarchical <- function(data, # works
                              include = everything(), # works
                              statistic = ifelse(!missing(id), "{n} ({p})", "{n}"), # works
                              digits = NULL,
-                             overall_row = FALSE) {
+                             summary_row = NULL) { # works
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -37,11 +39,10 @@ tbl_hierarchical <- function(data, # works
   check_data_frame(data)
   check_not_missing(hierarchies)
   check_string(statistic)
-  check_scalar_logical(overall_row)
 
   # evaluate tidyselect
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, id = {{ id }}, by = {{ by }})
-  cards::process_selectors(data[hierarchies], include = {{ include }})
+  cards::process_selectors(data[hierarchies], include = {{ include }}, summary_row = {{ summary_row }})
 
   # if id provided, then check that denominator also provided
   if (!is_empty(id)) {
@@ -66,16 +67,26 @@ tbl_hierarchical <- function(data, # works
     )
   }
 
-  # check that 'include' is the correct subset of 'hierarchies'
+  # check that 'include' is a subset of 'hierarchies'
   if (!all(include %in% hierarchies)) {
     cli::cli_abort(
       message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}.")
     )
   }
-  if (!tail(hierarchies, 1) %in% include) {
+
+  # check that 'summary_row' is a subset of 'hierarchies'
+  if (!all(summary_row %in% hierarchies)) {
     cli::cli_abort(
-      message = c("The columns selected in {.arg include} must include the final variable of {.arg hierarchies}",
-                  "or else this variable should be excluded from {.arg hierarchies} altogether.")
+      message = c("The columns selected in {.arg summary_row} must be nested within the columns in {.arg hierarchies}.")
+    )
+  }
+
+  # check that the last hierarchy level is in either 'include' or 'summary_row'
+  if (!tail(hierarchies, 1) %in% intersect(include, summary_row)) {
+    cli::cli_abort(
+      message = c(
+        "The final variable of {.arg hierarchies} must be included in either {.arg include} or {arg.summary_row},",
+        "otherwise this variable should be excluded from {.arg hierarchies} altogether.")
     )
   }
 
@@ -85,9 +96,9 @@ tbl_hierarchical <- function(data, # works
   # get variable labels for each hierarchy level
   labels_hierarchy <- sapply(hierarchies, \(x) if (!is.null(attr(data[[x]], "label"))) attr(data[[x]], "label") else x)
 
-  type <- assign_summary_type(data, union(by, include), value = NULL)
+  type <- assign_summary_type(data, union(by, hierarchies), value = NULL)
 
-  statistic <- as.formula(sprintf("all_categorical() ~ \"%s\"", statistic))
+  statistic <- as.list(rep(statistic, length(hierarchies))) |> setNames(hierarchies)
   vars <- if (length(hierarchies) < 2) hierarchies else head(hierarchies, -1)
 
   # calculate statistics -------------------------------------------------------
@@ -98,13 +109,29 @@ tbl_hierarchical <- function(data, # works
     denominator = denominator,
     id = all_of(id),
     overall = TRUE,
-    overall_row = TRUE
+    over_variables = TRUE
   )
+
+  # calculate summary row statistics -------------------------------------------
+  which_summarize <- c(hierarchies %in% summary_row, FALSE)
+  cards_summary <- if (!is_empty(summary_row)) {
+    cards::ard_stack_hierarchical(
+      data = data,
+      variables = head(hierarchies, -1),
+      by = by,
+      denominator = denominator,
+      id = all_of(id)
+    ) |>
+      dplyr::filter(variable %in% c(by, hierarchies)[which_summarize]) |>
+      .add_gts_column_to_cards_summary(head(hierarchies, -1), by, hierarchical = TRUE)
+  } else {
+    NULL
+  }
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element("tbl_hierarchical-arg:statistic", default = statistic),
@@ -117,7 +144,7 @@ tbl_hierarchical <- function(data, # works
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     label =
       case_switch(
         missing(label) ~ get_deprecated_theme_element("tbl_hierarchical-arg:label", default = label),
@@ -126,7 +153,7 @@ tbl_hierarchical <- function(data, # works
   )
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     digits =
       case_switch(
         missing(digits) ~ get_theme_element("tbl_hierarchical-arg:digits", default = digits),
@@ -136,7 +163,7 @@ tbl_hierarchical <- function(data, # works
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     statistic =
       get_theme_element("tbl_hierarchical-arg:statistic", default = eval(formals(gtsummary::tbl_hierarchical)[["statistic"]])),
     digits =
@@ -146,7 +173,7 @@ tbl_hierarchical <- function(data, # works
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      scope_table_body(.list2tb(type, "var_type"), data[include]) |>
+      scope_table_body(.list2tb(type, "var_type"), data[hierarchies]) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -178,7 +205,7 @@ tbl_hierarchical <- function(data, # works
     id,
     include,
     statistic,
-    overall_row,
+    cards_summary,
     labels_hierarchy
   ) |>
     append(

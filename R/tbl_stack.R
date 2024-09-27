@@ -185,7 +185,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
 
     results$table_body <- results$table_body |>
       dplyr::left_join(hierarchies, by = "tbl_id1") |>
-      dplyr::distinct(dplyr::across(-c(tbl_id1, names(hierarchies)[-(1:2)])), .keep_all = TRUE) |>
+      dplyr::distinct(dplyr::across(-c("variable", tbl_id1, names(hierarchies)[-(1:2)])), .keep_all = TRUE) |>
       dplyr::select(-names(hierarchies[, -1]))
   }
 
