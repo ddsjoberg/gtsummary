@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
+
+* Migrated the `tbl_survfit.list(conf.level)` up to `tbl_survfit.data.frame(conf.level)` where the confidence level is passed to `survival::survfit()`.
+
+* Update in `tbl_ard_summary()` to better handle non-standard ARDs (i.e. not our typical continuous or categorical summaries) by assigning them a default summary type. (#1991)
+
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
 
 * Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
@@ -138,7 +144,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added `pkgdown_print.gtsummary()` method that is only registered when the pkgdown package is loaded. This enables printing of gtsummary tables on the pkgdown site in the Examples section. (#1771)
 
-* The package now uses updated `survey::svyquantile()` function to calculate quatiles, which was introduced in survey v4.1
+* The package now uses updated `survey::svyquantile()` function to calculate quantiles, which was introduced in survey v4.1
 
 ### Bug fixes
 
@@ -170,7 +176,7 @@ Updates to address regressions in the v2.0.0 release:
      
 * Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`, which has been the preferred method for passing updates for a few years.
 
-* Function `continuous_summary()` has been deprecated immediately. Apologies for the inconvenience of the immeidate deprecation. The way the function originally worked is not compatible with the updated internal structures. In most cases, users can use the `tbl_continuous()` function instead.
+* Function `continuous_summary()` has been deprecated immediately. Apologies for the inconvenience of the immediate deprecation. The way the function originally worked is not compatible with the updated internal structures. In most cases, users can use the `tbl_continuous()` function instead.
 
 * Arguments `add_stat(fmt_fun, header, footnote, new_col_name)` have been deprecated since v1.4.0 (2021-04-13). They have now been fully removed from the package.
 

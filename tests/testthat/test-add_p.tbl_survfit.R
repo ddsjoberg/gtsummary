@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survival"), reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "cardx"))
 
 test_that("add_p.tbl_survfit() works", {
   tbl <- trial |>
@@ -45,5 +45,20 @@ test_that("add_p.tbl_survfit(pvalue_fun) works", {
     tbl |>
       add_p(pvalue_fun = s_ns) |>
       as.data.frame()
+  )
+})
+
+test_that("add_p.tbl_survfit() works with tbl_survfit(type)", {
+  tbl <- trial |>
+    tbl_survfit(
+      include = trt,
+      y = "survival::Surv(ttdeath, death)",
+      times = 12,
+      type = "risk"
+    )
+
+  # p-value added to table
+  expect_snapshot(
+    tbl |> add_p() |> as.data.frame()
   )
 })

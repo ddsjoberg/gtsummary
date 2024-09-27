@@ -8,7 +8,7 @@
 #' @param set_theme (scalar `logical`)\cr
 #'   Logical indicating whether to set the theme. Default is `TRUE`.
 #'   When `FALSE` the named list of theme elements is returned invisibly
-#' @param font_size (scaler `numeric`)\cr
+#' @param font_size (scalar `numeric`)\cr
 #'   Numeric font size for compact theme.
 #'   Default is 13 for gt tables, and 8 for all other output types
 #'
@@ -29,7 +29,7 @@
 #'       - `tbl_summary()` all percentages rounded to one decimal place
 #'       - `tbl_regression()`,`tbl_uvregression()` add significance stars with `add_significance_stars()`;
 #'          hides CI and p-value from output
-#'           - For flaxtable and huxtable output, the coeficient's standard error is placed below. For gt, it is placed to the right.
+#'           - For flextable and huxtable output, the coefficients' standard error is placed below. For gt, it is placed to the right.
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine)`
