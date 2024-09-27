@@ -9,13 +9,10 @@ brdg_hierarchical(
   hierarchies,
   type,
   by,
-  id,
   include,
   statistic,
-  labels_hierarchy,
-  missing = "no",
-  missing_stat = "{N_miss}",
-  missing_text = "Unknown"
+  cards_summary,
+  labels_hierarchy
 )
 }
 \description{

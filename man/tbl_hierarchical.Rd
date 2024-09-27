@@ -7,20 +7,23 @@
 tbl_hierarchical(
   data,
   hierarchies,
-  by = NULL,
+  by = dplyr::group_vars(data),
   id = NULL,
   label = NULL,
   denominator = NULL,
   include = everything(),
   statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
   digits = NULL,
-  overall_row = FALSE
+  summary_row = NULL
 )
 }
 \arguments{
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables from \code{hierarchy} on whose levels (prior to nesting by the variable) summary statistics should be
 calculated for. Must include the last element of \code{hierarchy}.}
+
+\item{summary_row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+variables from \code{hierarchy} on whose levels (prior to nesting by the variable) a summary row should be displayed.}
 }
 \description{
 Create hierarchical table
