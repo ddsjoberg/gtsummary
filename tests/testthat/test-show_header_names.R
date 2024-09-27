@@ -24,7 +24,7 @@ test_that("show_header_names() works with tbl_uvregression", {
       include = c(marker, age),
       show_single_row = trt,
       method = lm
-    )|>
+    ) |>
       show_header_names()
   )
 })
@@ -36,7 +36,30 @@ test_that("show_header_names() works with tbl_survfit", {
         include = trt,
         y = "Surv(ttdeath, death)",
         probs = 0.5
-      )|>
+      ) |>
       show_header_names()
+  )
+})
+
+test_that("show_header_names() returns fallback value for unknown class", {
+  test_table <-
+    trial |>
+    tbl_summary(include = age, by = trt)
+
+  class(test_table$table_styling$header$modify_stat_N) <- "I made this class up :)"
+  expect_snapshot(
+    test_table |> show_header_names()
+  )
+})
+
+
+test_that("show_header_names() returns single class value", {
+  test_table <-
+    trial |>
+    tbl_summary(include = age, by = trt)
+
+  class(test_table$table_styling$header$modify_stat_N) <- c("my_class", "integer")
+  expect_snapshot(
+    test_table |> show_header_names()
   )
 })
