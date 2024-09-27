@@ -3,10 +3,10 @@
     Code
       show_header_names(tbl_summary(trial, include = age, by = trt, missing = "no"))
     Output
-      Column Name   Header                    level*         N*          n*          p*            
-      label         "**Characteristic**"                     200 <int>                             
-      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <int>   98 <int>    0.49 <dbl>    
-      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <int>   102 <int>   0.51 <dbl>    
+      Column Name   Header                    level*         N*          n*          p*             
+      label         "**Characteristic**"                     200 <int>                              
+      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <int>    98 <int>   0.490 <dbl>    
+      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <int>   102 <int>   0.510 <dbl>    
       
     Message
       * These values may be dynamically placed into headers (and other locations).
@@ -50,9 +50,9 @@
       show_header_names(tbl_survfit(trial, include = trt, y = "Surv(ttdeath, death)",
         probs = 0.5))
     Output
-      Column Name   Header                 prob*        
-      label         "**Characteristic**"                
-      stat_1        "**50% Percentile**"   0.5 <dbl>    
+      Column Name   Header                 prob*          
+      label         "**Characteristic**"                  
+      stat_1        "**50% Percentile**"   0.500 <dbl>    
       
     Message
       * These values may be dynamically placed into headers (and other locations).
@@ -63,10 +63,10 @@
     Code
       show_header_names(test_table)
     Output
-      Column Name   Header                    level*         N*          n*          p*            
-      label         "**Characteristic**"                     200 <???>                             
-      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <???>   98 <int>    0.49 <dbl>    
-      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <???>   102 <int>   0.51 <dbl>    
+      Column Name   Header                    level*         N*          n*          p*             
+      label         "**Characteristic**"                     200 <???>                              
+      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <???>    98 <int>   0.490 <dbl>    
+      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <???>   102 <int>   0.510 <dbl>    
       
     Message
       * These values may be dynamically placed into headers (and other locations).
@@ -77,10 +77,10 @@
     Code
       show_header_names(test_table)
     Output
-      Column Name   Header                    level*         N*          n*          p*            
-      label         "**Characteristic**"                     200 <int>                             
-      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <int>   98 <int>    0.49 <dbl>    
-      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <int>   102 <int>   0.51 <dbl>    
+      Column Name   Header                    level*         N*          n*          p*             
+      label         "**Characteristic**"                     200 <int>                              
+      stat_1        "**Drug A**  \nN = 98"    Drug A <chr>   200 <int>    98 <int>   0.490 <dbl>    
+      stat_2        "**Drug B**  \nN = 102"   Drug B <chr>   200 <int>   102 <int>   0.510 <dbl>    
       
     Message
       * These values may be dynamically placed into headers (and other locations).

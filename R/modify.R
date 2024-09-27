@@ -250,76 +250,73 @@ show_header_names <- function(x, include_example, quiet) {
     dplyr::filter(!.data$hide) |>
     dplyr::select("column", "label", starts_with("modify_stat_"))
 
+  # save column class abbreviations
+  column_cls_abbreviation <- df_print |>
+    dplyr::select(starts_with("modify_stat_")) |>
+    map(.get_class_abbreviation)
+
+  # round stats
+  df_print <- df_print |>
+    dplyr::mutate(
+      across(where(is_integerish), label_style_number()),
+      across(where(is.numeric), label_style_sigfig(digits = 3)),
+      across(-c(where(is.integer) | where(is.numeric)), as.character),
+      label = cli::cli_format(.data$label)
+    )
+
+  # append class abbreviations
+  for (v in names(column_cls_abbreviation)) {
+    df_print[[v]] <-
+      ifelse(
+        !is.na(df_print[[v]]),
+        paste(df_print[[v]], column_cls_abbreviation[[v]]),
+        df_print[[v]]
+      )
+  }
+
   # if any columns begin with 'modify_stat_', then rename
   if (any(str_detect(names(df_print), "^modify_stat_"))) {
     df_print <- df_print |>
+      dplyr::mutate(
+        across(
+          .cols = starts_with("modify_stat_"),
+          .fns = \(.x) {
+            ifelse(
+              !is.na(.x),
+              str_pad(.x, width = max(nchar(.x), na.rm = TRUE), side = "left", pad = " "),
+              .x
+            )
+          }
+        )
+      ) |>
       dplyr::rename_with(
         .fn = ~ str_remove(., pattern = "^modify_stat_") |> paste0("*"),
         .cols = starts_with("modify_stat_")
       )
   }
 
-  # create class map
-  class_mapping <- c(
-    "integer" = "int",
-    "numeric" = "dbl",
-    "character" = "chr",
-    "factor" = "fct",
-    "logical" = "lgl",
-    "Date" = "date",
-    "POSIXct" = "dttm",
-    "POSIXlt" = "dttm"
-  )
-
-  df_print <- if (ncol(df_print) > 2) {
-    df_print |>
-      mutate(
-        across(
-          .cols = 3:ncol(df_print),
-          .fns = ~ ifelse(
-            !is.na(.),
-            paste0(
-              .,
-              " <",
-              {
-                # Get the classes of the current column
-                classes <- class(.)
-
-                # Check each class against mapping
-                valid_classes <- na.omit(sapply(classes, function(cls) class_mapping[cls]))
-
-                # Use the first valid mapped class, or "???" if none found
-                if (length(valid_classes) > 0) {
-                  valid_classes[1]
-                } else {
-                  "???"
-                }
-              },
-              ">"
-            ),
-            .
-          )
-        )
-      )
-  } else {
-    df_print
-  }
-
-
-  df_print |>
-    dplyr::mutate(
-      across(where(is.integer), label_style_number()),
-      across(where(is.numeric), label_style_sigfig(digits = 3)),
-      across(-c(where(is.integer) | where(is.numeric)), as.character),
-      label = cli::cli_format(.data$label)
-    ) |>
-    tibble_as_cli(label = list(column = "Column Name", label = "Header"))
+  tibble_as_cli(df_print, label = list(column = "Column Name", label = "Header"))
 
   cat("\n")
   cli::cli_inform(c("* These values may be dynamically placed into headers (and other locations).",
     "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify)} help for examples."
   ))
 }
+
+.get_class_abbreviation <- function(x) {
+  dplyr::case_when(
+    inherits(x, "integer") ~ "<int>",
+    inherits(x, "numeric") ~ "<dbl>",
+    inherits(x, "character") ~ "<chr>",
+    inherits(x, "factor") ~ "<fct>",
+    inherits(x, "logical") ~ "<lgl>",
+    inherits(x, "Date") ~ "<date>",
+    inherits(x, "POSIXct") ~ "<dttm>",
+    inherits(x, "POSIXlt") ~ "<dttm>",
+    .default = "<???>"
+  )
+}
+
 
 .evaluate_string_with_glue <- function(x, dots) {
   # only keep values that are in the table_body
