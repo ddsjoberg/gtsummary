@@ -2,31 +2,90 @@
 % Please edit documentation in R/tbl_hierarchical.R
 \name{tbl_hierarchical}
 \alias{tbl_hierarchical}
-\title{Create hierarchical table}
+\alias{tbl_hierarchical_count}
+\title{Hierarchical table}
 \usage{
 tbl_hierarchical(
   data,
   hierarchies,
-  by = dplyr::group_vars(data),
+  by = NULL,
   id = NULL,
-  label = NULL,
   denominator = NULL,
   include = everything(),
-  statistic = ifelse(!missing(id), "{n} ({p})", "{n}"),
-  digits = NULL,
-  summary_row = NULL
+  statistic = "{n} ({p})",
+  summary_row = NULL,
+  label = NULL,
+  digits = NULL
+)
+
+tbl_hierarchical_count(
+  data,
+  hierarchies,
+  by = NULL,
+  denominator = NULL,
+  include = everything(),
+  summary_row = NULL,
+  label = NULL,
+  digits = NULL
 )
 }
 \arguments{
+\item{data}{(\code{data.frame})\cr
+a data frame.}
+
+\item{hierarchies}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
+variables in the order given.}
+
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+a single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}.}
+
+\item{id}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+argument used to subset \code{data} to identify rows in \code{data} to calculate
+event rates in \code{tbl_hierarchical()}.}
+
+\item{denominator}{(\code{data.frame}, \code{integer})\cr
+used to define the denominator and enhance the output.
+The argument is required for \code{tbl_hierarchical()} and optional for \code{tbl_hierarchical_count()}.
+The \code{denominator} argument must be specified when \code{id} is used to calculate event rates.}
+
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables from \code{hierarchy} on whose levels (prior to nesting by the variable) summary statistics should be
-calculated for. Must include the last element of \code{hierarchy}.}
+calculated for. Must include the last element of \code{hierarchy}.
+The default is \code{everything()}.}
+
+\item{statistic}{(\code{string})\cr
+used to specify the summary statistics to display for all variables.
+The default is \code{"{n} ({p})"}.}
 
 \item{summary_row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{hierarchy} on whose levels (prior to nesting by the variable) a summary row should be displayed.}
+variables from \code{hierarchy} on whose levels (prior to nesting by the variable) a summary row should be displayed.
+The default is \code{NULL}.}
+
+\item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
+used to override default labels in hierarchical table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
+
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}.}
+}
+\value{
+a gtsummary table of class \code{"tbl_hierarchical"}
 }
 \description{
-Create hierarchical table
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
+Use these functions to generate hierarchical tables.
+\itemize{
+\item \code{tbl_hierarchical()}: Calculates \emph{rates} of events (e.g. adverse events)
+utilizing the \code{denominator} and \code{id} arguments to identify the rows in \code{data}
+to include in each rate calculation.
+\item \code{tbl_hierarchical_count()}: Calculates \emph{counts} of events utilizing
+all rows for each tabulation.
+}
 }
 \examples{
 data <- cards::ADAE |>
@@ -41,6 +100,19 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL \%>\% mutate(TRTA = ARM),
   id = USUBJID
+)
+
+data <- cards::ADAE |>
+  dplyr::filter(
+    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
+    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
+  )
+
+tbl_hierarchical_count(
+  data = data,
+  hierarchies = c(AESOC, AETERM, AESEV),
+  by = TRTA,
+  denominator = cards::ADSL \%>\% mutate(TRTA = ARM)
 )
 
 }
