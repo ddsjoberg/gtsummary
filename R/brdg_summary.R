@@ -283,11 +283,13 @@ pier_summary_categorical <- function(cards,
   is_hierarchical <- all(is.null(unlist(df_result_levels$var_label)))
 
   # for hierarchical tables, manually add 'var_label'
-  if (is_hierarchical && !"group2_level" %in% names(cards)) {
+  if (is_hierarchical) {
     df_result_levels <- df_result_levels |>
       dplyr::mutate(var_label = NA)
+
+    df_last <- df_result_levels[["group2_level"]]
     if ("group2_level" %in% names(cards) && !is.null(unlist(df_last)) && !is.logical(unlist(df_last))) {
-      df_result_levels$var_label <- df_result_levels[["group2_level"]]
+      df_result_levels$var_label <- df_last
     }
   }
 
