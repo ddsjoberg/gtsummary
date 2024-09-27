@@ -1,7 +1,7 @@
 #' Hierarchical table
 #'
-#' @description
-#' `r lifecycle::badge('experimental')`\cr
+#' @description `r lifecycle::badge('experimental')`\cr
+#'
 #' Use these functions to generate hierarchical tables.
 #'
 #' - `tbl_hierarchical()`: Calculates *rates* of events (e.g. adverse events)
@@ -45,7 +45,7 @@
 #'   or function(s). If not specified, default formatting is assigned
 #'   via `assign_summary_digits()`.
 #'
-#' @return a gtsummary table of class `"tbl_hierarchical"`
+#' @return a gtsummary table of class `"tbl_hierarchical"`.
 #'
 #' @examples
 #' data <- cards::ADAE |>
@@ -59,7 +59,8 @@
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
 #'   denominator = cards::ADSL %>% mutate(TRTA = ARM),
-#'   id = USUBJID
+#'   id = USUBJID,
+#'   summary_row = AESOC
 #' )
 #'
 #' @export
@@ -118,12 +119,6 @@ tbl_hierarchical <- function(data,
 #' @rdname tbl_hierarchical
 #'
 #' @examples
-#' data <- cards::ADAE |>
-#'   dplyr::filter(
-#'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
-#'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
-#'   )
-#'
 #' tbl_hierarchical_count(
 #'   data = data,
 #'   hierarchies = c(AESOC, AETERM, AESEV),

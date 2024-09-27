@@ -59,7 +59,7 @@ brdg_hierarchical <- function(cards,
         dplyr::group_by(variable_level) |>
         dplyr::mutate(
           variable = by,
-          variable_level = "Total number of patients",
+          variable_level = list("Total number of patients"),
           gts_column = paste0("stat_", dplyr::cur_group_id())
         ) |>
         dplyr::ungroup()
@@ -73,6 +73,18 @@ brdg_hierarchical <- function(cards,
         ) |>
           .add_hierarchy_levels(context = data.frame(variable = NA), summary_row = TRUE)
       )
+
+      # add column counts to header df
+      nrow_header <- nrow(overall_rows[[1]]$table_styling$header)
+      N <- overall_stats$stat[overall_stats$stat_name == "N"][[1]]
+      n_trt <- overall_stats$stat[overall_stats$stat_name == "n"] |> unlist()
+      overall_rows[[1]]$table_styling$header <- overall_rows[[1]]$table_styling$header |>
+        dplyr::mutate(
+          modify_stat_level = c(rep(NA, nrow_header - length(n_trt)), unique(unlist(cards_summary$variable_level))),
+          modify_stat_N = rep(N, nrow_header),
+          modify_stat_n = c(rep(NA, nrow_header - length(n_trt)), n_trt),
+          modify_stat_p = modify_stat_n / modify_stat_N
+        )
     }
 
     if (any(!is.na(cards_summary$group1))) {
@@ -168,7 +180,7 @@ brdg_hierarchical <- function(cards,
 
   # formulate top-left label for the label column
   indent <- unique(x$table_styling$indent$n_spaces)[seq_along(hierarchies)]
-  lbl_hierarch <- sapply(
+  label_hierarchy <- sapply(
     seq_along(label),
     function(x) {
       paste0(
@@ -186,7 +198,7 @@ brdg_hierarchical <- function(cards,
   x <- x |>
     # updating the headers for the stats columns
     modify_header(
-      label = lbl_hierarch,
+      label = label_hierarchy,
       all_stat_cols() ~
         ifelse(
           is_empty(by),
