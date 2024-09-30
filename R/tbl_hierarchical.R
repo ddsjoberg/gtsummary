@@ -27,15 +27,15 @@
 #'   The argument is required for `tbl_hierarchical()` and optional for `tbl_hierarchical_count()`.
 #'   The `denominator` argument must be specified when `id` is used to calculate event rates.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   variables from `hierarchy` on whose levels (prior to nesting by the variable) summary statistics should be
-#'   calculated for. Must include the last element of `hierarchy`.
+#'   variables from `hierarchy` for which summary statistics should be returned (on the variable label rows) Including
+#'   the last element of `hierarchy` has no effect since each level has its own row for this variable.
 #'   The default is `everything()`.
 #' @param statistic (`string`)\cr
 #'   used to specify the summary statistics to display for all variables.
 #'   The default is `"{n} ({p})"`.
-#' @param summary_row ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   variables from `hierarchy` on whose levels (prior to nesting by the variable) a summary row should be displayed.
-#'   The default is `NULL`.
+#' @param overall_row (`logical`)\cr
+#'   whether an overall summmary row should be included at the top of the table.
+#'   The default is `FALSE`.
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   used to override default labels in hierarchical table, e.g. `list(age = "Age, years")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
@@ -71,7 +71,7 @@ tbl_hierarchical <- function(data,
                              denominator = NULL,
                              include = everything(),
                              statistic = "{n} ({p})",
-                             summary_row = NULL,
+                             overall_row = FALSE,
                              label = NULL,
                              digits = NULL) {
   set_cli_abort_call()
@@ -110,7 +110,7 @@ tbl_hierarchical <- function(data,
     denominator = denominator,
     include = {{ include }},
     statistic = statistic,
-    summary_row = {{ summary_row }},
+    overall_row = {{ overall_row }},
     label = label,
     digits = digits
   )
@@ -132,7 +132,7 @@ tbl_hierarchical_count <- function(data,
                                    by = NULL,
                                    denominator = NULL,
                                    include = everything(),
-                                   summary_row = NULL,
+                                   overall_row = FALSE,
                                    label = NULL,
                                    digits = NULL) {
   set_cli_abort_call()
@@ -163,7 +163,7 @@ tbl_hierarchical_count <- function(data,
     denominator = denominator,
     include = {{ include }},
     statistic = "{n}",
-    summary_row = {{ summary_row }},
+    overall_row = {{ overall_row }},
     label = label,
     digits = digits
   )
@@ -174,10 +174,10 @@ internal_tbl_hierarchical <- function(data,
                                       by = NULL, # TODO
                                       id = NULL,
                                       denominator = NULL,
-                                      include = everything(),
+                                      include = everything(), # TODO
                                       statistic = NULL,
-                                      summary_row = NULL,
-                                      label = NULL, # TODO
+                                      overall_row = FALSE, # TODO
+                                      label = NULL,
                                       digits = NULL) { # TODO
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
@@ -186,7 +186,7 @@ internal_tbl_hierarchical <- function(data,
   check_not_missing(include)
 
   # evaluate tidyselect
-  cards::process_selectors(data[hierarchies], include = {{ include }}, summary_row = {{ summary_row }})
+  cards::process_selectors(data[hierarchies], include = {{ include }}, overall_row = {{ overall_row }})
 
   # check that neither 'hierarchies' nor 'include' is empty
   if (is_empty(hierarchies) || is_empty(include)) {
@@ -203,30 +203,15 @@ internal_tbl_hierarchical <- function(data,
     )
   }
 
-  # check that 'summary_row' is a subset of 'hierarchies'
-  if (!all(summary_row %in% hierarchies)) {
-    cli::cli_abort(
-      message = c("The columns selected in {.arg summary_row} must be nested within the columns in {.arg hierarchies}.")
-    )
-  }
-
-  # check that the last hierarchy level is in either 'include' or 'summary_row'
-  if (!tail(hierarchies, 1) %in% union(include, summary_row)) {
-    cli::cli_abort(
-      message = c(
-        "The final variable of {.arg hierarchies} must be included in either {.arg include} or {.arg summary_row},",
-        "otherwise this variable should be excluded from {.arg hierarchies} altogether.")
-    )
-  }
-
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
+  browser()
   # process arguments
-  type <- assign_summary_type(data, union(by, hierarchies), value = NULL)
+  type <- assign_summary_type(data, hierarchies, value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
   if (!is_empty(statistic)) statistic <- as.formula(sprintf("everything() ~ \"%s\"", statistic))
-  vars <- if (length(hierarchies) < 2) hierarchies else head(hierarchies, -1)
+  include <- setdiff(include, tail(hierarchies, 1))
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
@@ -235,8 +220,7 @@ internal_tbl_hierarchical <- function(data,
     by = by,
     id = id,
     denominator = if (is_empty(denominator)) data else denominator,
-    vars = vars,
-    summary_row = summary_row
+    overall_row = overall_row
   )
   cards_summary <- cards[[2]]
   cards <- cards[[1]]
@@ -327,12 +311,11 @@ internal_tbl_hierarchical <- function(data,
     include,
     statistic,
     type,
-    cards_summary,
     label
   ) |>
     append(
       list(
-        cards = list(tbl_hierarchical = cards),
+        cards = list(cards) |> setNames(func),
         inputs = tbl_hierarchical_inputs
       )
     ) |>
@@ -340,58 +323,23 @@ internal_tbl_hierarchical <- function(data,
 }
 
 # this function calculates either the counts or the rates of the events
-.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, vars, summary_row) {
-  # calculate statistics -------------------------------------------------------
+.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, vars, overall_row) {
   if (!is_empty(id)) {
-    cards <- cards::ard_stack_hierarchical(
+    cards::ard_stack_hierarchical(
       data = data,
-      variables = vars,
-      by = c(by, setdiff(hierarchies, vars)),
+      variables = hierarchies,
+      by = by,
       denominator = denominator,
-      id = all_of(id),
+      id = id,
       over_variables = TRUE
     )
-
-    # calculate summary row statistics -------------------------------------------
-    which_summarize <- c(hierarchies %in% summary_row, FALSE)
-    cards_summary <- if (!is_empty(summary_row)) {
-      cards::ard_stack_hierarchical(
-        data = data,
-        variables = head(hierarchies, -1),
-        by = by,
-        denominator = denominator,
-        id = all_of(id)
-      ) |>
-        dplyr::filter(variable %in% c(by, hierarchies)[which_summarize]) |>
-        .add_gts_column_to_cards_summary(head(hierarchies, -1), by, hierarchical = TRUE)
-    } else {
-      NULL
-    }
   } else {
-    # calculate statistics -------------------------------------------------------
-    cards <- cards::ard_stack_hierarchical_count(
+    cards::ard_stack_hierarchical_count(
       data = data,
-      variables = vars,
-      by = c(by, setdiff(hierarchies, vars)),
+      variables = hierarchies,
+      by = by,
       denominator = denominator,
       over_variables = TRUE
     )
-
-    # calculate summary row statistics -------------------------------------------
-    which_summarize <- c(hierarchies %in% summary_row, FALSE)
-    cards_summary <- if (!is_empty(summary_row)) {
-      cards::ard_stack_hierarchical_count(
-        data = data,
-        variables = head(hierarchies, -1),
-        by = by,
-        denominator = denominator
-      ) |>
-        dplyr::filter(variable %in% c(by, hierarchies)[which_summarize]) |>
-        .add_gts_column_to_cards_summary(head(hierarchies, -1), by, hierarchical = TRUE)
-    } else {
-      NULL
-    }
   }
-
-  list(cards = cards, cards_summary = cards_summary)
 }
