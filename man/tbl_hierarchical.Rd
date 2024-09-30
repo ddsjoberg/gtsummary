@@ -13,7 +13,7 @@ tbl_hierarchical(
   denominator = NULL,
   include = everything(),
   statistic = "{n} ({p})",
-  summary_row = NULL,
+  overall_row = FALSE,
   label = NULL,
   digits = NULL
 )
@@ -24,7 +24,7 @@ tbl_hierarchical_count(
   by = NULL,
   denominator = NULL,
   include = everything(),
-  summary_row = NULL,
+  overall_row = FALSE,
   label = NULL,
   digits = NULL
 )
@@ -51,17 +51,17 @@ The argument is required for \code{tbl_hierarchical()} and optional for \code{tb
 The \code{denominator} argument must be specified when \code{id} is used to calculate event rates.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{hierarchy} on whose levels (prior to nesting by the variable) summary statistics should be
-calculated for. Must include the last element of \code{hierarchy}.
+variables from \code{hierarchy} for which summary statistics should be returned (on the variable label rows) Including
+the last element of \code{hierarchy} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
 \item{statistic}{(\code{string})\cr
 used to specify the summary statistics to display for all variables.
 The default is \code{"{n} ({p})"}.}
 
-\item{summary_row}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{hierarchy} on whose levels (prior to nesting by the variable) a summary row should be displayed.
-The default is \code{NULL}.}
+\item{overall_row}{(\code{logical})\cr
+whether an overall summmary row should be included at the top of the table.
+The default is \code{FALSE}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to override default labels in hierarchical table, e.g. \code{list(age = "Age, years")}.
