@@ -198,7 +198,7 @@ test_that("inline_text.tbl_survfit()", {
         time = 24,
         level = "Drug A",
         pattern = "{estimate}",
-        estimate_fun = ~ style_percent(., digits = 3, symbol = TRUE)
+        estimate_fun = label_style_percent(digits = 3, suffix = "%")
       )
   )
   expect_equal(tbl1_pattern, "46.939%")
