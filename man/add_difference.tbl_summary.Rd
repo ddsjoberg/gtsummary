@@ -14,8 +14,8 @@
   include = everything(),
   pvalue_fun = label_style_pvalue(digits = 1),
   estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
-    all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_,
-    paste0(style_sigfig(x, scale = 100), "\%")), all_tests("smd") ~ label_style_sigfig()),
+    all_dichotomous() ~ label_style_sigfig(scale = 100, suffix = "\%"), all_tests("smd")
+    ~ label_style_sigfig()),
   ...
 )
 }
@@ -57,9 +57,7 @@ the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits
 
 \item{estimate_fun}{(\code{\link[=syntax]{formula-list-selector}})\cr
 List of formulas specifying the functions
-to round and format differences and confidence limits.
-Default is
-\verb{list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \\(x) paste0(style_sigfig(x, scale = 100), "\%"))}}
+to round and format differences and confidence limits.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }

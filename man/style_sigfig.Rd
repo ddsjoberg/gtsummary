@@ -10,6 +10,8 @@ style_sigfig(
   scale = 1,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  prefix = "",
+  suffix = "",
   ...
 )
 }
@@ -30,6 +32,12 @@ Default is \code{","}, except when \code{decimal.mark = ","} when the default is
 \item{decimal.mark}{(\code{string})\cr
 The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
+
+\item{prefix}{(\code{string})\cr
+Additional text to display before the number.}
+
+\item{suffix}{(\code{string})\cr
+Additional text to display after the number.}
 
 \item{...}{Arguments passed on to \code{base::format()}}
 }

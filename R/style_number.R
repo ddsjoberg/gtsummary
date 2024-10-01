@@ -15,6 +15,10 @@
 #'   Default is `"."`  or `getOption("OutDec")`
 #' @param scale (scalar `numeric`)\cr
 #'   A scaling factor: `x` will be multiplied by scale before formatting.
+#' @param prefix (`string`)\cr
+#'   Additional text to display before the number.
+#' @param suffix (`string`)\cr
+#'   Additional text to display after the number.
 #' @param ... Arguments passed on to `base::format()`
 #'
 #' @return formatted character vector
@@ -27,8 +31,16 @@ style_number <- function(x,
                          digits = 0,
                          big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
-                         scale = 1, ...) {
+                         scale = 1,
+                         prefix = "",
+                         suffix = "", ...) {
   set_cli_abort_call()
+  if (!is_string(prefix) || !is_string(suffix)) {
+    cli::cli_abort(
+      "Arguments {.arg prefix} and {.arg suffix} must be strings.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -53,6 +65,7 @@ style_number <- function(x,
         scientific = FALSE, trim = TRUE, ...
       )
   }
+  ret <- paste0(prefix, ret, suffix)
   ret[is.na(x)] <- NA_character_
   attributes(ret) <- attributes(unclass(x))
 

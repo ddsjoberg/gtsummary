@@ -10,6 +10,8 @@ style_number(
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   scale = 1,
+  prefix = "",
+  suffix = "",
   ...
 )
 }
@@ -33,6 +35,12 @@ Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{scale}{(scalar \code{numeric})\cr
 A scaling factor: \code{x} will be multiplied by scale before formatting.}
+
+\item{prefix}{(\code{string})\cr
+Additional text to display before the number.}
+
+\item{suffix}{(\code{string})\cr
+Additional text to display after the number.}
 
 \item{...}{Arguments passed on to \code{base::format()}}
 }
