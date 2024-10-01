@@ -287,8 +287,10 @@ pier_summary_categorical <- function(cards,
     df_result_levels <- df_result_levels |>
       dplyr::mutate(var_label = NA)
 
-    df_last <- df_result_levels[["group2_level"]]
-    if ("group2_level" %in% names(cards) && !is.null(unlist(df_last)) && !is.logical(unlist(df_last))) {
+    df_last <- df_result_levels |>
+      select(cards::all_ard_groups("levels")) |>
+      dplyr::pull(dplyr::last_col())
+    if (cards |> select(cards::all_ard_groups("names")) |> ncol() > 1 && !is.null(unlist(df_last))) {
       df_result_levels$var_label <- df_last
     }
   }

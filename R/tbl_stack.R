@@ -11,7 +11,7 @@
 #'   Character vector with table headers where length matches the length of `tbls`
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
-#' @param .condense (scalar `logical`)\cr
+#' @param condense (scalar `logical`)\cr
 #'   Logical indicating whether to combine `tbls` with the same labels to avoid repeated printing of the same label.
 #'   Default is `FALSE`.
 #'
@@ -62,7 +62,7 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALSE) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, condense = FALSE) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -163,7 +163,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
     )
 
   # remove duplicate labels from hierarchical stacks
-  if (.condense) {
+  if (condense) {
     hierarchies <- cbind(
       tbl_id1 = results$table_body$tbl_id1 |> unique(),
       lapply(
@@ -172,10 +172,8 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
           if (is.null(x$table_styling$hierarchy)) {
             data.frame(no_hierarchy = NA)
           } else {
-            sapply(
-              x$table_styling$hierarchy,
-              \(x) if (is.na(x[[1]])) " " else as.character(unlist(x))
-            )
+            x$table_styling$hierarchy |>
+                dplyr::mutate(dplyr::across(where(is.list), ~unlist(.x)))
           }
         }
       ) |>
@@ -185,8 +183,17 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, .condense = FALS
 
     results$table_body <- results$table_body |>
       dplyr::left_join(hierarchies, by = "tbl_id1") |>
-      dplyr::distinct(dplyr::across(-c("variable", tbl_id1, names(hierarchies)[-(1:2)])), .keep_all = TRUE) |>
-      dplyr::select(-names(hierarchies[, -1]))
+      dplyr::distinct(dplyr::across(-c("variable", tbl_id1, names(hierarchies)[-(1:2)])), .keep_all = TRUE)
+
+    if (!is_empty(attr(tbls, "include"))) {
+      remove_rows <- apply(results$table_body |> select(all_stat_cols()), 1, \(x) all(is.na(x)))
+      if (!is_empty(setdiff(names(hierarchies)[-1], attr(tbls, "include")))) {
+        remove_rows <- remove_rows &
+          apply(results$table_body, 1, \(x) any(x[attr(tbls, "include")] %in% x[["var_label"]]))
+      }
+      results$table_body <- results$table_body[!remove_rows, ] |>
+        dplyr::select(-names(hierarchies[, -1]))
+    }
   }
 
   # returning results ----------------------------------------------------------

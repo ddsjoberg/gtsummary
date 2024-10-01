@@ -33,7 +33,7 @@
 #' @param statistic (`string`)\cr
 #'   used to specify the summary statistics to display for all variables.
 #'   The default is `"{n} ({p})"`.
-#' @param overall_row (`logical`)\cr
+#' @param overall_row (scalar `logical`)\cr
 #'   whether an overall summmary row should be included at the top of the table.
 #'   The default is `FALSE`.
 #' @param label ([`formula-list-selector`][syntax])\cr
@@ -60,7 +60,7 @@
 #'   by = TRTA,
 #'   denominator = cards::ADSL %>% mutate(TRTA = ARM),
 #'   id = USUBJID,
-#'   summary_row = AESOC
+#'   overall_row = TRUE
 #' )
 #'
 #' @export
@@ -184,9 +184,10 @@ internal_tbl_hierarchical <- function(data,
   check_data_frame(data)
   check_not_missing(hierarchies)
   check_not_missing(include)
+  check_logical(overall_row)
 
   # evaluate tidyselect
-  cards::process_selectors(data[hierarchies], include = {{ include }}, overall_row = {{ overall_row }})
+  cards::process_selectors(data[hierarchies], include = {{ include }})
 
   # check that neither 'hierarchies' nor 'include' is empty
   if (is_empty(hierarchies) || is_empty(include)) {
@@ -206,12 +207,12 @@ internal_tbl_hierarchical <- function(data,
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
-  browser()
   # process arguments
   type <- assign_summary_type(data, hierarchies, value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
   if (!is_empty(statistic)) statistic <- as.formula(sprintf("everything() ~ \"%s\"", statistic))
-  include <- setdiff(include, tail(hierarchies, 1))
+  include <- union(include, tail(hierarchies, 1))
+  denom <- if (is_empty(denominator)) data else denominator
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
@@ -219,11 +220,10 @@ internal_tbl_hierarchical <- function(data,
     hierarchies = hierarchies,
     by = by,
     id = id,
-    denominator = if (is_empty(denominator)) data else denominator,
+    denominator = denom,
+    include = include,
     overall_row = overall_row
   )
-  cards_summary <- cards[[2]]
-  cards <- cards[[1]]
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
@@ -323,14 +323,15 @@ internal_tbl_hierarchical <- function(data,
 }
 
 # this function calculates either the counts or the rates of the events
-.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, vars, overall_row) {
+.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, vars, overall_row) {
   if (!is_empty(id)) {
     cards::ard_stack_hierarchical(
       data = data,
       variables = hierarchies,
       by = by,
-      denominator = denominator,
       id = id,
+      denominator = denominator,
+      include = include,
       over_variables = TRUE
     )
   } else {
@@ -339,6 +340,7 @@ internal_tbl_hierarchical <- function(data,
       variables = hierarchies,
       by = by,
       denominator = denominator,
+      include = include,
       over_variables = TRUE
     )
   }
