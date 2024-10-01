@@ -22,4 +22,9 @@ test_that("style_sigfig() works", {
     attributes(vec2),
     style_sigfig(vec2) |> attributes()
   )
+
+  expect_equal(
+    style_sigfig(c(0, 1, 11, NA), digits = 2, prefix = "$", suffix = "*"),
+    c("$0.00*", "$1.0*", "$11*",  NA)
+  )
 })
