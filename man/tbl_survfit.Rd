@@ -21,7 +21,7 @@ tbl_survfit(x, ...)
   label = NULL,
   label_header = ifelse(!is.null(times), "**Time {time}**",
     "**{style_sigfig(prob, scale=100)}\% Percentile**"),
-  estimate_fun = ifelse(!is.null(times), label_style_percent(symbol = TRUE),
+  estimate_fun = ifelse(!is.null(times), label_style_percent(suffix = "\%"),
     label_style_sigfig()),
   missing = "--",
   type = NULL,

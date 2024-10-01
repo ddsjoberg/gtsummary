@@ -36,6 +36,8 @@ style_sigfig <- function(x,
                          scale = 1,
                          big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
+                         prefix = "",
+                         suffix = "",
                          ...) {
   set_cli_abort_call()
 
@@ -62,5 +64,5 @@ style_sigfig <- function(x,
     eval()
 
   # formatting number
-  style_number(x, digits = d, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  style_number(x, digits = d, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...)
 }

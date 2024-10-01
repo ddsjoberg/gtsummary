@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding the `style_*(prefix, suffix)` and  `label_style_*(prefix, suffix)` for adding a string before or after the formatted results. These arguments have not been added to the p-value formatting functions. (#1690)
+
 * Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
 
 * Migrated the `tbl_survfit.list(conf.level)` up to `tbl_survfit.data.frame(conf.level)` where the confidence level is passed to `survival::survfit()`.

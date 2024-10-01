@@ -6,18 +6,17 @@
 \usage{
 style_percent(
   x,
-  symbol = FALSE,
   digits = 0,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  prefix = "",
+  suffix = "",
+  symbol,
   ...
 )
 }
 \arguments{
 \item{x}{numeric vector of percentages}
-
-\item{symbol}{Logical indicator to include percent symbol in output.
-Default is \code{FALSE}.}
 
 \item{digits}{number of digits to round large percentages (i.e. greater than 10\%).
 Smaller percentages are rounded to \code{digits + 1} places.
@@ -32,6 +31,15 @@ Default is \code{","}, except when \code{decimal.mark = ","} when the default is
 The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
+\item{prefix}{(\code{string})\cr
+Additional text to display before the number.}
+
+\item{suffix}{(\code{string})\cr
+Additional text to display after the number.}
+
+\item{symbol}{Logical indicator to include percent symbol in output.
+Default is \code{FALSE}.}
+
 \item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
@@ -43,7 +51,7 @@ Style percentages
 \examples{
 percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 style_percent(percent_vals)
-style_percent(percent_vals, symbol = TRUE, digits = 1)
+style_percent(percent_vals, suffix = "\%", digits = 1)
 }
 \author{
 Daniel D. Sjoberg

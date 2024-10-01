@@ -35,7 +35,7 @@ add_difference.tbl_svysummary <- function(x,
                                           pvalue_fun = label_style_pvalue(digits = 1),
                                           estimate_fun = list(
                                             c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
-                                            all_dichotomous() ~ function(x) ifelse(is.na(x), NA_character_, paste0(style_sigfig(x, scale = 100), "%")),
+                                            all_dichotomous() ~ label_style_sigfig(scale = 100, suffix = "%"),
                                             all_tests("smd") ~ label_style_sigfig()
                                           ),
                                           ...) {

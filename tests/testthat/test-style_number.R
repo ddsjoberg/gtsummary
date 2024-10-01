@@ -26,4 +26,14 @@ test_that("style_number() works", {
     style_number(c(-2.5, 2.5, 1000002.5, -1000002.5, 1000000002.5, -1000000002.5)),
     c("-3", "3", "1,000,003", "-1,000,003", "1,000,000,003", "-1,000,000,003")
   )
+
+  expect_equal(
+    style_number(c(-1:1, NA), digits = 1, prefix = "$", suffix = "*"),
+    c("$-1.0*", "$0.0*", "$1.0*",  NA)
+  )
+
+  expect_error(
+    style_number(4, prefix = letters),
+    "must be strings."
+  )
 })
