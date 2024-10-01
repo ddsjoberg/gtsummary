@@ -152,7 +152,6 @@ tbl_hierarchical_count <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  check_not_missing(include)
 
   # evaluate tidyselect
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, by = {{ by }})
@@ -194,7 +193,6 @@ internal_tbl_hierarchical <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  check_not_missing(include)
   check_length(by, 1)
   check_logical(overall_row)
 
@@ -202,15 +200,15 @@ internal_tbl_hierarchical <- function(data,
   cards::process_selectors(data[hierarchies], include = {{ include }})
 
   # check that neither 'hierarchies' nor 'include' is empty
-  if (is_empty(hierarchies) || is_empty(include)) {
+  if (is_empty(hierarchies)) {
     cli::cli_abort(
-      message = "Arguments {.arg hierarchies} and {.arg include} cannot be empty.",
+      message = "Argument {.arg hierarchies} cannot be empty.",
       call = get_cli_abort_call()
     )
   }
 
   # check that 'include' is a subset of 'hierarchies'
-  if (!all(include %in% hierarchies)) {
+  if (!is_empty(include) && !all(include %in% hierarchies)) {
     cli::cli_abort(
       message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}.")
     )
