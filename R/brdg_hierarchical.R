@@ -33,6 +33,7 @@ brdg_hierarchical <- function(cards,
                               label) {
   set_cli_abort_call()
 
+  # overall statistics used to calculate Ns
   overall_stats <- cards |>
     dplyr::filter(variable %in% by) |>
     mutate(gts_column = NA, context = "attributes")
@@ -47,6 +48,7 @@ brdg_hierarchical <- function(cards,
     label[["overall"]] <- NULL
   }
 
+  # no rows needed for 'by' variables
   cards <- cards |> dplyr::filter(!variable %in% by)
 
   # create groups for each hierarchy level combination
@@ -63,7 +65,9 @@ brdg_hierarchical <- function(cards,
   sub_tbls <- x |>
     dplyr::group_map(
       function(.x, .y) {
+        # process summary & overall rows
         if (any(is.na(unlist(.y)))) {
+          # produce one summary row per variable in 'include'
           .x <- if (!.y$variable == "overall") {
             .x |>
             dplyr::group_by(across(c(
@@ -72,6 +76,7 @@ brdg_hierarchical <- function(cards,
               -cards::all_missing_columns(),
               -by_groups
             )))
+          # produce one summary row for overall stats
           } else {
             .x |> dplyr::group_by(across(cards::all_ard_variables()))
           }
@@ -93,6 +98,7 @@ brdg_hierarchical <- function(cards,
                   .add_hierarchy_levels(.y)
               }
             )
+        # process hierarchy level rows
         } else {
           brdg_summary(
             cards =
@@ -164,9 +170,8 @@ brdg_hierarchical <- function(cards,
 
 # add 'hierarchy' element to gtsummary object
 .add_hierarchy_levels <- function(x, context) {
-  # no hierarchy
+  # remove indent and return if no hierarchy
   if (ncol(context) == 1) {
-    # remove indent
     x <- x |>
       modify_column_indent(
         columns = label,
@@ -176,6 +181,7 @@ brdg_hierarchical <- function(cards,
     return(x)
   }
 
+  # add labels to summary rows
   if (all(c("variable", "variable_level") %in% names(context))) {
     x$table_body <- x$table_body |>
       dplyr::mutate(
@@ -192,6 +198,7 @@ brdg_hierarchical <- function(cards,
   hierarchy <- setNames(context[seq(2, ncol(context), 2)], hierarchy_nms)
   x$table_styling[["hierarchy"]] <- hierarchy[!is.na(names(hierarchy))]
 
+  # extract and identify labels from context
   labels <- context |>
     select(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")) |>
     select(!cards::all_missing_columns()) |>
@@ -238,6 +245,7 @@ brdg_hierarchical <- function(cards,
 }
 
 .order_stack_sub_tables <- function(tbls, include) {
+  # unlist nested summary rows to create a list of all sub-tables
   which_summary <- which(sapply(tbls, class) == "list")
   if (length(which_summary) > 0) {
     tbls <- c(
@@ -246,6 +254,7 @@ brdg_hierarchical <- function(cards,
     )
   }
 
+  # get hierarchy for each sub-table
   ord_sub_tbls <- lapply(
     tbls,
     \(x) {
@@ -255,12 +264,15 @@ brdg_hierarchical <- function(cards,
   ) |>
     dplyr::bind_rows()
 
+  # find indices of ordered sub-tables
+  # NAs replaced by " " so that summary rows precede hierarchy level rows
   ord_sub_tbls <- ord_sub_tbls |>
     dplyr::mutate(dplyr::across(everything(), .fns = ~tidyr::replace_na(., " "))) |>
     dplyr::mutate(idx = dplyr::cur_group_rows()) |>
     dplyr::arrange(dplyr::across(-idx)) |>
     dplyr::pull(idx)
 
+  # order sub-tables, add attributes used in `tbl_stack` calculations
   tbls <- tbls[ord_sub_tbls]
   attr(tbls, "include") <- include
   attr(tbls, "hierarchical") <- TRUE
