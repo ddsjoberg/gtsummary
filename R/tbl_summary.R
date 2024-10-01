@@ -442,8 +442,15 @@ tbl_summary <- function(data,
   } else if (hierarchical) { # disregard hierarchies, only check by variable
     cards <- cards |>
       dplyr::group_by(group1_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
+
+    # overall row
+    cards[cards$variable == by, ] <- cards[cards$variable == by, ] |>
+      group_by(variable_level) |>
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
       dplyr::ungroup()
+
+
   } else {
     # styler: off
     cards <-

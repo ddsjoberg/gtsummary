@@ -40,7 +40,7 @@
 #'   used to override default labels in hierarchical table, e.g. `list(age = "Age, years")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
 #'   If no label has been set, the column name is used.
-#' @param digits  ([`formula-list-selector`][syntax])\cr
+#' @param digits ([`formula-list-selector`][syntax])\cr
 #'   specifies how summary statistics are rounded. Values may be either integer(s)
 #'   or function(s). If not specified, default formatting is assigned
 #'   via `assign_summary_digits()`.
@@ -82,7 +82,6 @@ tbl_hierarchical <- function(data,
   check_not_missing(id)
   check_not_missing(denominator)
   check_not_missing(hierarchies)
-  check_not_missing(include)
   check_string(statistic)
 
   # evaluate tidyselect
@@ -208,7 +207,7 @@ internal_tbl_hierarchical <- function(data,
   tbl_hierarchical_inputs <- as.list(environment())
 
   # process arguments
-  type <- assign_summary_type(data, hierarchies, value = NULL)
+  type <- assign_summary_type(data, c(hierarchies, if (overall_row) by), value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
   if (!is_empty(statistic)) statistic <- as.formula(sprintf("everything() ~ \"%s\"", statistic))
   include <- union(include, tail(hierarchies, 1))
@@ -228,7 +227,7 @@ internal_tbl_hierarchical <- function(data,
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[c(hierarchies, if (overall_row) by)]),
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element(paste0(func, "-arg:statistic"), default = statistic),
@@ -250,7 +249,7 @@ internal_tbl_hierarchical <- function(data,
   )
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
+    scope_table_body(.list2tb(type, "var_type"), data[c(hierarchies, if (overall_row) by)]),
     digits =
       case_switch(
         missing(digits) ~ get_theme_element(paste0(func, "-arg:digits"), default = digits),
@@ -295,6 +294,10 @@ internal_tbl_hierarchical <- function(data,
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_summary(cards, hierarchies, by, hierarchical = TRUE)
 
+  # define type & statistics for overall row
+  statistic[["OVERALL"]] <- statistic[[by]]
+  type[["OVERALL"]] <- type[[by]]
+
   # fill in missing labels -----------------------------------------------------
   default_label <- sapply(
     hierarchies,
@@ -311,6 +314,8 @@ internal_tbl_hierarchical <- function(data,
     include,
     statistic,
     type,
+    count = func == "tbl_hierarchical_count",
+    overall_row,
     label
   ) |>
     append(
@@ -323,7 +328,7 @@ internal_tbl_hierarchical <- function(data,
 }
 
 # this function calculates either the counts or the rates of the events
-.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, vars, overall_row) {
+.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, overall_row) {
   if (!is_empty(id)) {
     cards::ard_stack_hierarchical(
       data = data,

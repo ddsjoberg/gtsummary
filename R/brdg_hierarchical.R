@@ -29,13 +29,16 @@ brdg_hierarchical <- function(cards,
                               include,
                               statistic,
                               type,
+                              count,
+                              overall_row,
                               label) {
   set_cli_abort_call()
 
   overall_stats <- cards |>
-    dplyr::filter(!variable %in% c(hierarchies, "..ard_hierarchical_overall..")) |>
+    dplyr::filter(variable %in% c(by, "..ard_hierarchical_overall..")) |>
     mutate(gts_column = NA, context = "attributes")
-  cards <- cards |> dplyr::filter(variable %in% hierarchies)
+  # overall_row <- cards |> dplyr::filter(variable %in% by)
+  cards <- cards |> dplyr::filter(variable %in% c(by, hierarchies))
 
   # calculate sub-tables ----------------------------
   if (length(hierarchies) == 1) {
@@ -68,13 +71,26 @@ brdg_hierarchical <- function(cards,
       dplyr::group_map(
         function(.x, .y) {
           if (any(is.na(unlist(.y)))) {
-            .x |>
+            .x <- if (!.y$variable %in% by) {
+              .x |>
               group_by(across(c(
                 cards::all_ard_groups(),
                 cards::all_ard_variables(),
                 -cards::all_missing_columns(),
                 -by_groups
-              ))) |>
+              )))
+            } else {
+              .x |>
+                mutate(
+                  group1 = variable,
+                  group1_level = variable_level,
+                  variable = "OVERALL",
+                  variable_level = list(if (!count) "Total number of patients" else "Total number of records")
+                ) |>
+                group_by(variable, variable_level)
+            }
+
+            .x |>
               group_map(
                 function(.x, .y) {
                   brdg_summary(
@@ -83,7 +99,7 @@ brdg_hierarchical <- function(cards,
                         .x |> bind_cols(.y) |> cards::as_card(),
                         overall_stats
                       ),
-                    variables = .y$variable[[1]],
+                    variables = .y$variable,
                     type = type,
                     statistic = statistic,
                     by = by
@@ -110,7 +126,6 @@ brdg_hierarchical <- function(cards,
       )
   }
 
-  # browser()
   # order and stack hierarchy sub-tables
   x <- .order_stack_sub_tables(sub_tbls, setdiff(include, tail(hierarchies, 1)))
 
@@ -171,7 +186,6 @@ brdg_hierarchical <- function(cards,
       )
     return(x)
   }
-  # browser()
 
   if (all(c("variable", "variable_level") %in% names(context))) {
     x$table_body <- x$table_body |>
@@ -235,7 +249,6 @@ brdg_hierarchical <- function(cards,
 }
 
 .order_stack_sub_tables <- function(tbls, include) {
-  # browser()
   which_summary <- which(sapply(tbls, class) == "list")
   if (length(which_summary) > 0) {
     tbls <- c(
