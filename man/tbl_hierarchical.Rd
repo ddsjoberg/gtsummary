@@ -59,7 +59,7 @@ The default is \code{everything()}.}
 used to specify the summary statistics to display for all variables.
 The default is \code{"{n} ({p})"}.}
 
-\item{overall_row}{(\code{logical})\cr
+\item{overall_row}{(scalar \code{logical})\cr
 whether an overall summmary row should be included at the top of the table.
 The default is \code{FALSE}.}
 
@@ -101,7 +101,7 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL \%>\% mutate(TRTA = ARM),
   id = USUBJID,
-  summary_row = AESOC
+  overall_row = TRUE
 )
 
 tbl_hierarchical_count(
