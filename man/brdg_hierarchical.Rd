@@ -4,7 +4,16 @@
 \alias{brdg_hierarchical}
 \title{Hierarchy table bridge}
 \usage{
-brdg_hierarchical(cards, hierarchies, by, include, statistic, type, label)
+brdg_hierarchical(
+  cards,
+  hierarchies,
+  by,
+  include,
+  statistic,
+  type,
+  overall_row,
+  label
+)
 }
 \arguments{
 \item{cards}{(\code{card})\cr

@@ -37,7 +37,7 @@
 #'   whether an overall summmary row should be included at the top of the table.
 #'   The default is `FALSE`.
 #' @param label ([`formula-list-selector`][syntax])\cr
-#'   used to override default labels in hierarchical table, e.g. `list(age = "Age, years")`.
+#'   used to override default labels in hierarchical table, e.g. `list(AESOC = "System Organ Class")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
 #'   If no label has been set, the column name is used.
 #' @param digits ([`formula-list-selector`][syntax])\cr
@@ -45,7 +45,19 @@
 #'   or function(s). If not specified, default formatting is assigned
 #'   via `assign_summary_digits()`.
 #'
-#' @return a gtsummary table of class `"tbl_hierarchical"`.
+#' @section Overall Row:
+#'
+#' An overall row can be added to the table as the first row by specifying `overall_row = TRUE`. Assuming that each row
+#' in `data` corresponds to one event record, this row will count the overall number of events recorded when used in
+#' `tbl_hierarchical_count()`, or the overall number of patients recorded with any event when used in
+#' `tbl_hierarchical()`.
+#'
+#' A label for this overall row can be specified by passing an `overall` element in `label`. If no `overall` label has
+#' been set and `overall_row = TRUE`, `"Total number of patients with any event"` will be used by `tbl_hierarchical()`
+#' and `"Total number of records"` will be used by `tbl_hierarchical_count()`.
+#'
+#' @return a gtsummary table of class `"tbl_hierarchical"` (for `tbl_hierarchical()`) or `"tbl_hierarchical_count"`
+#'   (for `tbl_hierarchical_count()`).
 #'
 #' @examples
 #' data <- cards::ADAE |>
@@ -227,7 +239,7 @@ internal_tbl_hierarchical <- function(data,
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[c(hierarchies, if (overall_row) by)]),
+    data = scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element(paste0(func, "-arg:statistic"), default = statistic),
@@ -235,21 +247,20 @@ internal_tbl_hierarchical <- function(data,
       ),
     include_env = TRUE
   )
-
-  # add the calling env to the statistics
-  statistic <- .add_env_to_list_elements(statistic, env = caller_env())
-
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
+    scope_table_body(
+      .list2tb(type, "var_type"),
+      data[hierarchies] |>
+        mutate(overall = if (overall_row) NA else NULL)
+    ),
     label =
       case_switch(
-        missing(label) ~ get_deprecated_theme_element(paste0(func, "-arg:label"), default = label),
+        missing(label) ~ get_theme_element(paste0(func, "-arg:label"), default = label),
         .default = label
       )
   )
-
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[c(hierarchies, if (overall_row) by)]),
+    scope_table_body(.list2tb(type, "var_type"), data[hierarchies]),
     digits =
       case_switch(
         missing(digits) ~ get_theme_element(paste0(func, "-arg:digits"), default = digits),
@@ -294,17 +305,28 @@ internal_tbl_hierarchical <- function(data,
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_summary(cards, hierarchies, by, hierarchical = TRUE)
 
-  # define type & statistics for overall row
-  statistic[["OVERALL"]] <- statistic[[by]]
-  type[["OVERALL"]] <- type[[by]]
-
   # fill in missing labels -----------------------------------------------------
   default_label <- sapply(
     hierarchies,
     \(x) if (!is.null(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
   ) |>
     as.list()
-  label <- c(label, default_label[setdiff(names(default_label), names(label))])[hierarchies]
+  label <- c(
+    label, default_label[setdiff(names(default_label), names(label))]
+  )[c(hierarchies, if (overall_row) "overall")]
+
+  # define type & statistics for overall row
+  if (overall_row) {
+    statistic[["overall"]] <- statistic[1]
+    type[["overall"]] <- "categorical"
+    if (!"overall" %in% names(label)) {
+      label[["overall"]] <- ifelse(
+        func == "tbl_hierarchical_count",
+        "Total number of records",
+        "Total number of patients with any event"
+      )
+    }
+  }
 
   # call bridge function here
   brdg_hierarchical(
@@ -314,7 +336,6 @@ internal_tbl_hierarchical <- function(data,
     include,
     statistic,
     type,
-    count = func == "tbl_hierarchical_count",
     overall_row,
     label
   ) |>

@@ -64,7 +64,7 @@ whether an overall summmary row should be included at the top of the table.
 The default is \code{FALSE}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
-used to override default labels in hierarchical table, e.g. \code{list(age = "Age, years")}.
+used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
 
@@ -74,7 +74,8 @@ or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}.}
 }
 \value{
-a gtsummary table of class \code{"tbl_hierarchical"}.
+a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical()}) or \code{"tbl_hierarchical_count"}
+(for \code{tbl_hierarchical_count()}).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -88,6 +89,19 @@ to include in each rate calculation.
 all rows for each tabulation.
 }
 }
+\section{Overall Row}{
+
+
+An overall row can be added to the table as the first row by specifying \code{overall_row = TRUE}. Assuming that each row
+in \code{data} corresponds to one event record, this row will count the overall number of events recorded when used in
+\code{tbl_hierarchical_count()}, or the overall number of patients recorded with any event when used in
+\code{tbl_hierarchical()}.
+
+A label for this overall row can be specified by passing an \code{overall} element in \code{label}. If no \code{overall} label has
+been set and \code{overall_row = TRUE}, \code{"Total number of patients with any event"} will be used by \code{tbl_hierarchical()}
+and \code{"Total number of records"} will be used by \code{tbl_hierarchical_count()}.
+}
+
 \examples{
 data <- cards::ADAE |>
   dplyr::filter(

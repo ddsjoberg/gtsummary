@@ -29,7 +29,6 @@ brdg_hierarchical <- function(cards,
                               include,
                               statistic,
                               type,
-                              count,
                               overall_row,
                               label) {
   set_cli_abort_call()
@@ -37,17 +36,17 @@ brdg_hierarchical <- function(cards,
   overall_stats <- cards |>
     dplyr::filter(variable %in% c(by, "..ard_hierarchical_overall..")) |>
     mutate(gts_column = NA, context = "attributes")
+
+  # process overall row data
   if (overall_row) {
     cards <- cards |>
       dplyr::mutate(
-        variable_level = dplyr::case_when(
-          variable == "..ard_hierarchical_overall.." & count ~ list("Total number of records"),
-          variable == "..ard_hierarchical_overall.." ~ list("Total number of patients with any event"),
-          TRUE ~ variable_level
-        ),
-        variable = ifelse(variable == "..ard_hierarchical_overall..", "OVERALL", variable)
+        variable_level = ifelse(variable == "..ard_hierarchical_overall..", label[["overall"]], variable_level),
+        variable = ifelse(variable == "..ard_hierarchical_overall..", "overall", variable)
       )
+    label[["overall"]] <- NULL
   }
+
   cards <- cards |> dplyr::filter(!variable %in% by)
 
   # calculate sub-tables ----------------------------
@@ -81,7 +80,7 @@ brdg_hierarchical <- function(cards,
       dplyr::group_map(
         function(.x, .y) {
           if (any(is.na(unlist(.y)))) {
-            .x <- if (!.y$variable == "OVERALL") {
+            .x <- if (!.y$variable == "overall") {
               .x |>
               group_by(across(c(
                 cards::all_ard_groups(),
