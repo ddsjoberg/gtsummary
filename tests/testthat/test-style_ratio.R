@@ -23,4 +23,9 @@ test_that("style_ratio() works", {
     attributes(vec2),
     style_ratio(vec2) %>% attributes()
   )
+
+  expect_equal(
+    style_ratio(c(0, 1, 11, NA), digits = 2, prefix = "$", suffix = "*"),
+    c("$0.00*", "$1.00*", "$11.0*",  NA)
+  )
 })

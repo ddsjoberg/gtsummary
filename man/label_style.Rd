@@ -14,6 +14,8 @@ label_style_number(
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
   scale = 1,
+  prefix = "",
+  suffix = "",
   ...
 )
 
@@ -22,6 +24,8 @@ label_style_sigfig(
   scale = 1,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  prefix = "",
+  suffix = "",
   ...
 )
 
@@ -37,11 +41,14 @@ label_style_ratio(
   digits = 2,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  prefix = "",
+  suffix = "",
   ...
 )
 
 label_style_percent(
-  symbol = FALSE,
+  prefix = "",
+  suffix = "",
   digits = 0,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
@@ -49,7 +56,7 @@ label_style_percent(
 )
 }
 \arguments{
-\item{digits, big.mark, decimal.mark, scale, prepend_p, symbol, ...}{arguments
+\item{digits, big.mark, decimal.mark, scale, prepend_p, prefix, suffix, ...}{arguments
 passed to the \verb{style_*()} functions}
 }
 \value{
