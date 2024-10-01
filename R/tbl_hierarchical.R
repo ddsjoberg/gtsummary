@@ -359,7 +359,7 @@ internal_tbl_hierarchical <- function(data,
       id = id,
       denominator = denominator,
       include = include,
-      over_variables = TRUE
+      over_variables = overall_row
     )
   } else {
     cards::ard_stack_hierarchical_count(
@@ -368,7 +368,7 @@ internal_tbl_hierarchical <- function(data,
       by = by,
       denominator = denominator,
       include = include,
-      over_variables = TRUE
+      over_variables = overall_row
     )
   }
 }
