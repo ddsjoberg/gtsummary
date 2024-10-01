@@ -17,7 +17,7 @@ larger. style_ratio() performs significant figure-like rounding in this manner."
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.2.9008</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.2.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,8 @@ larger. <code>style_ratio()</code> performs significant figure-like rounding in 
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  big.mark <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">decimal.mark</span> <span class="op">==</span> <span class="st">","</span>, <span class="st">" "</span>, <span class="st">","</span><span class="op">)</span>,</span>
 <span>  decimal.mark <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  suffix <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,6 +103,16 @@ Default is <code>","</code>, except when <code>decimal.mark = ","</code> when th
 <dd><p>(<code>string</code>)<br>
 The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
+
+
+<dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
+<dd><p>(<code>string</code>)<br>
+Additional text to display before the number.</p></dd>
+
+
+<dt id="arg-suffix">suffix<a class="anchor" aria-label="anchor" href="#arg-suffix"></a></dt>
+<dd><p>(<code>string</code>)<br>
+Additional text to display after the number.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
