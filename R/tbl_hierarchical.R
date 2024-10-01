@@ -31,7 +31,7 @@
 #'   the last element of `hierarchy` has no effect since each level has its own row for this variable.
 #'   The default is `everything()`.
 #' @param statistic (`string`)\cr
-#'   used to specify the summary statistics to display for all variables.
+#'   used to specify the summary statistics to display for all variables in `tbl_hierarchical()`.
 #'   The default is `"{n} ({p})"`.
 #' @param overall_row (scalar `logical`)\cr
 #'   whether an overall summmary row should be included at the top of the table.
@@ -195,6 +195,7 @@ internal_tbl_hierarchical <- function(data,
   check_data_frame(data)
   check_not_missing(hierarchies)
   check_not_missing(include)
+  check_length(by, 1)
   check_logical(overall_row)
 
   # evaluate tidyselect
@@ -308,12 +309,12 @@ internal_tbl_hierarchical <- function(data,
   # fill in missing labels -----------------------------------------------------
   default_label <- sapply(
     hierarchies,
-    \(x) if (!is.null(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
+    \(x) if (!is_empty(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
   ) |>
     as.list()
   label <- c(
     label, default_label[setdiff(names(default_label), names(label))]
-  )[c(hierarchies, if (overall_row) "overall")]
+  )[c(hierarchies, if ("overall" %in% names(label)) "overall")]
 
   # define type & statistics for overall row
   if (overall_row) {

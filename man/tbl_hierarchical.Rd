@@ -56,7 +56,7 @@ the last element of \code{hierarchy} has no effect since each level has its own 
 The default is \code{everything()}.}
 
 \item{statistic}{(\code{string})\cr
-used to specify the summary statistics to display for all variables.
+used to specify the summary statistics to display for all variables in \code{tbl_hierarchical()}.
 The default is \code{"{n} ({p})"}.}
 
 \item{overall_row}{(scalar \code{logical})\cr

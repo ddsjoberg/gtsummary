@@ -444,13 +444,11 @@ tbl_summary <- function(data,
       dplyr::group_by(group1_level) |>
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
 
-    # overall row
-    cards[cards$variable == by, ] <- cards[cards$variable == by, ] |>
-      group_by(variable_level) |>
+    # process overall row
+    cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
+      dplyr::group_by(variable_level) |>
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
       dplyr::ungroup()
-
-
   } else {
     # styler: off
     cards <-
