@@ -34,7 +34,7 @@ brdg_hierarchical <- function(cards,
   set_cli_abort_call()
 
   overall_stats <- cards |>
-    dplyr::filter(variable %in% c(by, "..ard_hierarchical_overall..")) |>
+    dplyr::filter(variable %in% by) |>
     mutate(gts_column = NA, context = "attributes")
 
   # process overall row data
@@ -82,24 +82,23 @@ brdg_hierarchical <- function(cards,
           if (any(is.na(unlist(.y)))) {
             .x <- if (!.y$variable == "overall") {
               .x |>
-              group_by(across(c(
+              dplyr::group_by(across(c(
                 cards::all_ard_groups(),
                 cards::all_ard_variables(),
                 -cards::all_missing_columns(),
                 -by_groups
               )))
             } else {
-              # browser()
-              .x |> group_by(across(all_ard_variables()))
+              .x |> dplyr::group_by(across(cards::all_ard_variables()))
             }
 
             .x |>
-              group_map(
+              dplyr::group_map(
                 function(.x, .y) {
                   brdg_summary(
                     cards =
                       cards::bind_ard(
-                        .x |> bind_cols(.y) |> cards::as_card(),
+                        .x |> dplyr::bind_cols(.y) |> cards::as_card(),
                         overall_stats
                       ),
                     variables = .y$variable,
@@ -277,6 +276,7 @@ brdg_hierarchical <- function(cards,
 
   tbls <- tbls[ord_sub_tbls]
   attr(tbls, "include") <- include
+  attr(tbls, "hierarchical") <- TRUE
 
-  tbl_stack(tbls, condense = TRUE)
+  tbl_stack(tbls)
 }
