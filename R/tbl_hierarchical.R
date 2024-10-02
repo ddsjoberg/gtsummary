@@ -184,16 +184,16 @@ internal_tbl_hierarchical <- function(data,
                                       by = NULL, # TODO
                                       id = NULL,
                                       denominator = NULL,
-                                      include = everything(), # TODO
+                                      include = everything(),
                                       statistic = NULL,
-                                      overall_row = FALSE, # TODO
+                                      overall_row = FALSE,
                                       label = NULL,
                                       digits = NULL) { # TODO
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  # check_length(by, 1)
+  check_length(by, 1)
   check_logical(overall_row)
 
   # evaluate tidyselect
@@ -235,17 +235,19 @@ internal_tbl_hierarchical <- function(data,
     overall_row = overall_row
   )
 
+  browser()
   cards_overall <- cards::ard_stack_hierarchical(
     data,
     variables = by,
     id = id,
     denominator = denom
-  )
+  ) |>
+    na.omit()
 
-  # cards <- dplyr::bind_rows(
-  #   cards,
-  #   cards_overall
-  # )
+  cards <- dplyr::bind_rows(
+    cards,
+    cards_overall
+  )
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env

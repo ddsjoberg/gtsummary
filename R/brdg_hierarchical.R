@@ -155,7 +155,6 @@ brdg_hierarchical <- function(cards,
     structure(class = "gtsummary") |>
     modify_column_unhide(columns = all_stat_cols())
 
-
   # correct indentation to account for label rows
   for (i in seq_along(hierarchies)) {
     x <- x |>
