@@ -14,7 +14,7 @@
 # tidy_bootstrap()
 
     Code
-      tidy_bootstrap(lm(age ~ grade + marker, trial), exponentiate = TRUE)
+      df
     Output
       # A tibble: 4 x 5
         term        estimate conf.low conf.high p.value
