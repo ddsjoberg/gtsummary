@@ -193,7 +193,7 @@ internal_tbl_hierarchical <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  check_length(by, 1)
+  # check_length(by, 1)
   check_logical(overall_row)
 
   # evaluate tidyselect

@@ -149,6 +149,8 @@ brdg_summary <- function(cards,
       by = "variable"
     )
 
+  browser()
+
   # construct default table_styling --------------------------------------------
   x <- .create_gtsummary_object(table_body)
 
@@ -280,21 +282,6 @@ pier_summary_categorical <- function(cards,
       by = "variable"
     )
 
-  is_hierarchical <- all(is.null(unlist(df_result_levels$var_label)))
-
-  # for hierarchical tables, manually add 'var_label'
-  if (is_hierarchical) {
-    df_result_levels <- df_result_levels |>
-      dplyr::mutate(var_label = NA)
-
-    df_last <- df_result_levels |>
-      select(cards::all_ard_groups("levels")) |>
-      dplyr::pull(dplyr::last_col())
-    if (cards |> select(cards::all_ard_groups("names")) |> ncol() > 1 && !is.null(unlist(df_last))) {
-      df_result_levels$var_label <- df_last
-    }
-  }
-
   df_result_levels <-
     df_result_levels |>
     dplyr::mutate(
@@ -312,15 +299,12 @@ pier_summary_categorical <- function(cards,
       values_from = "stat"
     )
 
-  if (is_hierarchical && all(is.na(df_result_levels$var_label))) {
-    return(df_result_levels)
-  }
-
   # add header rows to results -------------------------------------------------
   df_results <-
     map(
       variables,
-      ~ dplyr::bind_rows(
+      \(.x) {
+        dplyr::bind_rows(
         df_result_levels |>
           dplyr::select("variable", "var_label", "row_type") |>
           dplyr::filter(.data$variable %in% .x) |>
@@ -332,6 +316,7 @@ pier_summary_categorical <- function(cards,
         df_result_levels |>
           dplyr::filter(.data$variable %in% .x)
       )
+      }
     ) |>
     dplyr::bind_rows()
 
@@ -614,7 +599,7 @@ pier_summary_missing_row <- function(cards,
         dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
         dplyr::left_join(
           cards |>
-            dplyr::select(cards::all_ard_groups(), "gts_column") |>
+            dplyr::select(group1, group1_level, "gts_column") |>
             dplyr::filter(!is.na(.data$gts_column)) |>
             dplyr::distinct() |>
             dplyr::rename(variable = "group1", variable_level = "group1_level"),

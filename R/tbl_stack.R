@@ -159,42 +159,6 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
       hide = FALSE
     )
 
-  # remove duplicate labels from hierarchical stacks
-  if ("hierarchical" %in% names(attributes(tbls))) {
-    hierarchies <- cbind(
-      tbl_id1 = results$table_body$tbl_id1 |> unique(),
-      lapply(
-        tbls,
-        \(x) {
-          if (is.null(x$table_styling$hierarchy)) {
-            data.frame(no_hierarchy = NA)
-          } else {
-            x$table_styling$hierarchy |>
-                dplyr::mutate(dplyr::across(where(is.list), ~unlist(.x)))
-          }
-        }
-      ) |>
-        dplyr::bind_rows() |>
-        select(-any_of("no_hierarchy"))
-    )
-
-    results$table_body <- results$table_body |>
-      dplyr::left_join(hierarchies, by = "tbl_id1") |>
-      dplyr::distinct(dplyr::across(-c("variable", tbl_id1, names(hierarchies)[-(1:2)])), .keep_all = TRUE)
-
-    if (!is_empty(attr(tbls, "include"))) {
-      remove_rows <- apply(results$table_body |> select(all_stat_cols()), 1, \(x) all(is.na(x)))
-      if (!is_empty(setdiff(names(hierarchies)[-1], attr(tbls, "include")))) {
-        remove_rows <- remove_rows &
-          apply(results$table_body, 1, \(x) any(x[attr(tbls, "include")] %in% x[["var_label"]]))
-      }
-      results$table_body <- results$table_body[!remove_rows, ] |>
-        dplyr::select(-names(hierarchies[, -1]))
-    }
-
-    attributes(tbls)[c("hierarchical", "include")] <- NULL
-  }
-
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
   results$tbls <- tbls
