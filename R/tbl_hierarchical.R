@@ -220,7 +220,13 @@ internal_tbl_hierarchical <- function(data,
   # process arguments
   type <- assign_summary_type(data, c(hierarchies, if (overall_row) by), value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
-  if (!is_empty(statistic)) statistic <- as.formula(sprintf("everything() ~ \"%s\"", statistic))
+  if (!is_empty(statistic)) {
+    stat <- gsub("[\\{\\}]", "", regmatches(statistic, gregexpr("\\{.*?\\}", statistic))[[1]])
+    stat <- as.formula(sprintf("everything() ~ c('%s')", paste0(stat, collapse = "', '")))
+    statistic <- as.formula(sprintf("everything() ~ '%s'", statistic))
+  } else {
+    stat <- NULL
+  }
   include <- union(include, tail(hierarchies, 1))
   denom <- if (is_empty(denominator)) data else denominator
 
@@ -232,6 +238,7 @@ internal_tbl_hierarchical <- function(data,
     id = id,
     denominator = denom,
     include = include,
+    statistic = stat,
     overall_row = overall_row
   )
 
@@ -349,7 +356,7 @@ internal_tbl_hierarchical <- function(data,
 }
 
 # this function calculates either the counts or the rates of the events
-.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, overall_row) {
+.run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
     cards::ard_stack_hierarchical(
       data = data,
@@ -358,6 +365,7 @@ internal_tbl_hierarchical <- function(data,
       id = id,
       denominator = denominator,
       include = include,
+      statistic = statistic,
       over_variables = overall_row,
       total_n = is_empty(by)
     )
