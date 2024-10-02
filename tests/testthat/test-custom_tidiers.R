@@ -14,10 +14,13 @@ test_that("tidy_bootstrap()", {
   skip_if_not(is_pkg_installed(c("parameters", "withr"), reference_pkg = "gtsummary"))
   withr::local_seed(11235)
 
-  expect_snapshot(
-    lm(age ~ grade + marker, trial) |>
-      tidy_bootstrap(exponentiate = TRUE)
+  expect_error(
+    df <- lm(age ~ grade + marker, trial) |>
+      tidy_bootstrap(exponentiate = TRUE) |>
+      suppressWarnings(), # ignores deprecation warning out of our control present on 2024-10-02. Can later be deleted
+    NA
   )
+  expect_snapshot(df)
 })
 
 test_that("tidy_wald_test()", {
