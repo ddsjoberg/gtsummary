@@ -40,7 +40,7 @@ brdg_hierarchical <- function(cards,
   # process overall row data
   if (overall_row) {
     cards <- cards |>
-      dplyr::mutate(
+      mutate(
         variable_level = ifelse(variable == "..ard_hierarchical_overall..", label[["overall"]], variable_level),
         variable = ifelse(variable == "..ard_hierarchical_overall..", "overall", variable)
       )
@@ -87,14 +87,14 @@ brdg_hierarchical <- function(cards,
         label = .data[[groupX_lvl]]
       )
 
-    all_gps <- table_body |> select(all_ard_groups("names")) |> names()
+    all_gps <- table_body |> select(cards::all_ard_groups("names")) |> names()
     ord <- c(rbind(paste0(all_gps, "_level"), all_gps)) |> head(-1)
 
     tbl_rows <- dplyr::bind_rows(
       table_body,
       tbl_rows |> mutate(row_type = "label")
     ) |>
-      dplyr::mutate(dplyr::across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
+      mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
       dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
       dplyr::arrange(across(c(ord, var_label))) |>
       dplyr::ungroup()
@@ -206,7 +206,7 @@ pier_summary_hierarchical <- function(cards,
   }
 
   # identify 'by' groups
-  by <- setdiff(cards$group1, variables)
+  by <- setdiff(cards[["group1"]], variables)
   by <- by[!is.na(by)]
   by_cols <- (cards |> select(cards::all_ard_groups()) |> colnames())[seq_len(2 * length(by))]
 
@@ -233,7 +233,7 @@ pier_summary_hierarchical <- function(cards,
         str_statistic_pre_glue <-
           statistic[[df_groups_and_variable$variable[1]]]
 
-        dplyr::mutate(
+        mutate(
           .data = df_groups_and_variable,
           df_stats =
             dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
@@ -244,7 +244,7 @@ pier_summary_hierarchical <- function(cards,
             dplyr::group_by(variable_level) |>
             dplyr::group_map(
               function(df_variable_level_stats, df_variable_levels) {
-                dplyr::mutate(
+                mutate(
                   .data = df_variable_levels,
                   stat =
                     map(
@@ -262,7 +262,7 @@ pier_summary_hierarchical <- function(cards,
                     ),
                   label = .data$variable_level |> unlist()
                 ) |>
-                  bind_cols(
+                  dplyr::bind_cols(
                     df_variable_level_stats[1, ] |> select(cards::all_ard_groups())
                   )
               }
@@ -272,7 +272,7 @@ pier_summary_hierarchical <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows() %>%
+    dplyr::bind_rows() |>
     # this ensures the correct order when there are 10+ groups
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
@@ -291,22 +291,22 @@ pier_summary_hierarchical <- function(cards,
           .data$context %in% "attributes",
           .data$stat_name %in% "label"
         ) |>
-        dplyr::select("variable", var_label = "stat"),
+        select("variable", var_label = "stat"),
       by = "variable"
     )
 
   # add var_label
-  df_result_levels <- df_result_levels |> dplyr::mutate(var_label = NA_character_)
+  df_result_levels <- df_result_levels |> mutate(var_label = NA_character_)
 
   df_result_levels <-
     df_result_levels |>
-    dplyr::mutate(
+    mutate(
       .by = "variable",
       row_type = "level",
       var_label = unlist(.data$var_label),
       .after = 0L
     ) |>
-    dplyr::select(-cards::all_ard_groups()) |>
+    select(-cards::all_ard_groups()) |>
     tidyr::unnest(cols = "df_stats") |>
     tidyr::unnest(cols = "stat") |>
     tidyr::pivot_wider(
@@ -314,18 +314,18 @@ pier_summary_hierarchical <- function(cards,
       names_from = "gts_column",
       values_from = "stat"
     ) |>
-    tidyr::unnest(cols = all_ard_groups("levels"), keep_empty = TRUE)
+    tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE)
 
   if (length(variables) > 1 && length(include) > 1) {
-    gps <- df_result_levels |> select(all_ard_groups("names")) |> names()
+    gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
 
     df_result_levels <- df_result_levels |>
-      dplyr::mutate(dplyr::across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " ")))
+      mutate(across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " ")))
 
     for (i in seq_along(gps)) {
       df_result_levels[df_result_levels$variable == variables[i], ] <-
         df_result_levels[df_result_levels$variable == variables[i], ] |>
-        dplyr::mutate(!!paste0(gps[i], "_level") := coalesce(!!sym(paste0(gps[i], "_level")), label))
+        mutate(!!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), label))
     }
     ord <- c(rbind(paste0(gps, "_level"), gps))
     df_result_levels <- df_result_levels |>
@@ -343,7 +343,7 @@ pier_summary_hierarchical <- function(cards,
       function(variable) {
         card |>
           dplyr::filter(.data$variable %in% .env$include) |>
-          dplyr::select("stat_name", "stat_label") |>
+          select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
           {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
