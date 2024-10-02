@@ -14,6 +14,7 @@ brdg_hierarchical(
   type,
   overall_row,
   count,
+  is_ordered,
   label
 )
 
@@ -44,6 +45,9 @@ The default is \code{FALSE}.}
 
 \item{count}{(scalar \code{logical})\cr
 whether \code{tbl_hierarchical_count()} (\code{TRUE}) or \code{tbl_hierarchical()} (\code{FALSE}) is being applied.}
+
+\item{is_ordered}{(scalar \code{logical})\cr
+whether the last variable in \code{hierarchies} is ordered.}
 
 \item{label}{(named \code{list})\cr
 named list of hierarchy variable labels.}
