@@ -16,7 +16,8 @@ test_that("tidy_bootstrap()", {
 
   expect_error(
     df <- lm(age ~ grade + marker, trial) |>
-      tidy_bootstrap(exponentiate = TRUE),
+      tidy_bootstrap(exponentiate = TRUE) |>
+      suppressWarnings(), # ignores deprecation warning out of our control present on 2024-10-02. Can later be deleted
     NA
   )
   expect_snapshot(df)
