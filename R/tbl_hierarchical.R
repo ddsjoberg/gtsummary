@@ -122,7 +122,7 @@ tbl_hierarchical <- function(data,
     denominator = denominator,
     include = {{ include }},
     statistic = statistic,
-    overall_row = {{ overall_row }},
+    overall_row = overall_row,
     label = label,
     digits = digits
   )
@@ -175,7 +175,7 @@ tbl_hierarchical_count <- function(data,
     denominator = denominator,
     include = {{ include }},
     statistic = "{n}",
-    overall_row = {{ overall_row }},
+    overall_row = overall_row,
     label = label,
     digits = digits
   )
@@ -356,6 +356,7 @@ internal_tbl_hierarchical <- function(data,
     type,
     overall_row,
     count = is_empty(id),
+    is_ordered = is.ordered(data[[hierarchies |> tail(1)]]),
     label
   ) |>
     append(
@@ -370,6 +371,11 @@ internal_tbl_hierarchical <- function(data,
 # this function calculates either the counts or the rates of the events
 .run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
+    if (is.ordered(data[[hierarchies |> tail(1)]])) {
+      by <- c(by, hierarchies |> tail(1))
+      hierarchies <- hierarchies |> head(-1)
+      include <- c(intersect(include, hierarchies), hierarchies |> tail(1))
+    }
     cards::ard_stack_hierarchical(
       data = data,
       variables = hierarchies,
@@ -379,7 +385,7 @@ internal_tbl_hierarchical <- function(data,
       include = include,
       statistic = statistic,
       over_variables = overall_row,
-      total_n = TRUE#is_empty(by)
+      total_n = is_empty(by)
     )
   } else {
     cards::ard_stack_hierarchical_count(

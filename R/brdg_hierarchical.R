@@ -36,6 +36,8 @@
 #'   named list of summary types.
 #' @param count (scalar `logical`)\cr
 #'   whether `tbl_hierarchical_count()` (`TRUE`) or `tbl_hierarchical()` (`FALSE`) is being applied.
+#' @param is_ordered (scalar `logical`)\cr
+#'   whether the last variable in `hierarchies` is ordered.
 #' @param label (named `list`)\cr
 #'   named list of hierarchy variable labels.
 #' @inheritParams tbl_hierarchical
@@ -53,6 +55,7 @@ brdg_hierarchical <- function(cards,
                               type,
                               overall_row,
                               count,
+                              is_ordered,
                               label) {
   set_cli_abort_call()
 
@@ -81,6 +84,20 @@ brdg_hierarchical <- function(cards,
     )
   }
 
+  if (is_ordered) {
+    grpX <- paste0("group", n_by + 1)
+    grpX_lvl <- paste0(grpX, "_level")
+    cards[which(cards[[grpX]] == hierarchies |> tail(1)), ] <-
+      cards[which(cards[[grpX]] == hierarchies |> tail(1)), ] |>
+      dplyr::rename(
+        variable := !!grpX,
+        variable_level := !!grpX_lvl,
+        !!grpX := "variable",
+        !!grpX_lvl := "variable_level"
+      ) |>
+      cards::tidy_ard_column_order()
+  }
+
   table_body <- pier_summary_hierarchical(
     cards = cards,
     variables = hierarchies,
@@ -97,7 +114,7 @@ brdg_hierarchical <- function(cards,
 
     # create dummy rows
     tbl_rows <- table_body |>
-      dplyr::filter(across(cards::all_ard_groups("names"), ~ .x != " ")) |>
+      dplyr::filter(dplyr::if_any(cards::all_ard_groups("names"), ~ .x != " ")) |>
       select(row_type, prior_gp, prior_gp_lvl) |>
       unique() |>
       mutate(
