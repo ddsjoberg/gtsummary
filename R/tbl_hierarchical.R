@@ -6,7 +6,8 @@
 #'
 #' - `tbl_hierarchical()`: Calculates *rates* of events (e.g. adverse events)
 #'   utilizing the `denominator` and `id` arguments to identify the rows in `data`
-#'   to include in each rate calculation.
+#'   to include in each rate calculation. If the last variable in `hierarchies` is
+#'   an ordered factor, then *rates* of events by highest level will be calculated.
 #'
 #' - `tbl_hierarchical_count()`: Calculates *counts* of events utilizing
 #'   all rows for each tabulation.
@@ -183,14 +184,14 @@ tbl_hierarchical_count <- function(data,
 
 internal_tbl_hierarchical <- function(data,
                                       hierarchies,
-                                      by = NULL, # TODO
+                                      by = NULL,
                                       id = NULL,
-                                      denominator = NULL, # TODO
+                                      denominator = NULL,
                                       include = everything(),
                                       statistic = NULL,
                                       overall_row = FALSE,
                                       label = NULL,
-                                      digits = NULL) { # TODO
+                                      digits = NULL) {
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)

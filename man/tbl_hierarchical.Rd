@@ -84,7 +84,8 @@ Use these functions to generate hierarchical tables.
 \itemize{
 \item \code{tbl_hierarchical()}: Calculates \emph{rates} of events (e.g. adverse events)
 utilizing the \code{denominator} and \code{id} arguments to identify the rows in \code{data}
-to include in each rate calculation.
+to include in each rate calculation. If the last variable in \code{hierarchies} is
+an ordered factor, then \emph{rates} of events by highest level will be calculated.
 \item \code{tbl_hierarchical_count()}: Calculates \emph{counts} of events utilizing
 all rows for each tabulation.
 }
