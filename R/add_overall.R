@@ -96,6 +96,9 @@ add_overall.tbl_svysummary <- add_overall.tbl_summary
 #' @export
 add_overall.tbl_custom_summary <- add_overall.tbl_summary
 
+#' @rdname add_overall
+#' @export
+add_overall.tbl_hierarchical <- add_overall.tbl_summary
 
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
@@ -127,7 +130,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
   }
 
   # create overall table -------------------------------------------------------
-  tbl_overall <- do.call(calling_fun, args_overall)
+  tbl_overall <- do.call(calling_fun, args_overall[names(formals(calling_fun))])
 
   # merging overall results
   x <- add_overall_merge(x, tbl_overall, last, col_label, calling_fun)

@@ -15,8 +15,11 @@
 #'   named list of summary statistic names.
 #' @param type (named `list`)\cr
 #'   named list of summary types.
+#' @param count (scalar `logical`)\cr
+#'   whether `tbl_hierarchical_count()` (`TRUE`) or `tbl_hierarchical()` (`FALSE`) is being applied.
 #' @param label (named `list`)\cr
 #'   named list of hierarchy variable labels.
+#' @inheritParams tbl_hierarchical
 #'
 #' @return a gtsummary object
 #'
@@ -30,6 +33,7 @@ brdg_hierarchical <- function(cards,
                               statistic,
                               type,
                               overall_row,
+                              count,
                               label) {
   set_cli_abort_call()
 
@@ -192,18 +196,19 @@ brdg_hierarchical <- function(cards,
       all_stat_cols() ~
         ifelse(
           is_empty(by),
-          get_theme_element("tbl_summary-str:header-noby",
+          get_theme_element("tbl_hierarchical-str:header-noby",
                             default = "**N = {style_number(N)}**"),
-          get_theme_element("tbl_summary-str:header-withby",
+          get_theme_element("tbl_hierarchical-str:header-withby",
                             default = "**{level}**  \nN = {style_number(n)}")
         )
     )
 
-  # return tbl_summary table ---------------------------------------------------
-  x$call_list <- list(tbl_summary = call)
+  # return tbl_hierarchical table ---------------------------------------------------
+  x$call_list <- list(call) |>
+    setNames(if (count) "tbl_hierarchical_count" else "tbl_hierarchical")
   # running any additional mods
   x <-
-    get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) |>
+    get_theme_element("tbl_hierarchical-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
 
   x
