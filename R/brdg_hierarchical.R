@@ -33,11 +33,6 @@ brdg_hierarchical <- function(cards,
                               label) {
   set_cli_abort_call()
 
-  # overall statistics used to calculate Ns
-  overall_stats <- cards |>
-    dplyr::filter(variable %in% by) |>
-    mutate(gts_column = NA, context = "attributes")
-
   # process overall row data
   if (overall_row) {
     cards <- cards |>
