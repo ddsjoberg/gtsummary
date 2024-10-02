@@ -183,7 +183,7 @@ internal_tbl_hierarchical <- function(data,
                                       hierarchies,
                                       by = NULL, # TODO
                                       id = NULL,
-                                      denominator = NULL,
+                                      denominator = NULL, # TODO
                                       include = everything(),
                                       statistic = NULL,
                                       overall_row = FALSE,
@@ -199,7 +199,7 @@ internal_tbl_hierarchical <- function(data,
   # evaluate tidyselect
   cards::process_selectors(data[hierarchies], include = {{ include }})
 
-  # check that neither 'hierarchies' nor 'include' is empty
+  # check that 'hierarchies' is not empty
   if (is_empty(hierarchies)) {
     cli::cli_abort(
       message = "Argument {.arg hierarchies} cannot be empty.",
@@ -210,7 +210,10 @@ internal_tbl_hierarchical <- function(data,
   # check that 'include' is a subset of 'hierarchies'
   if (!is_empty(include) && !all(include %in% hierarchies)) {
     cli::cli_abort(
-      message = c("The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}.")
+      message = c(
+        "The columns selected in {.arg include} must be nested within the columns in {.arg hierarchies}.",
+        i = "Select among columns {.val {hierarchies}}"
+      )
     )
   }
 
@@ -228,7 +231,14 @@ internal_tbl_hierarchical <- function(data,
     stat <- NULL
   }
   include <- union(include, tail(hierarchies, 1))
-  denom <- if (is_empty(denominator)) data else denominator
+  denom <- if (is_empty(denominator)) {
+      data
+    } else if (is.numeric(denominator)) {
+      by_lvls <- data[[by]] |> unique()
+      data.frame(rep(denominator, length(by_lvls)) |> setNames(by_lvls))
+    } else {
+      denominator
+    }
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
@@ -238,7 +248,7 @@ internal_tbl_hierarchical <- function(data,
     id = id,
     denominator = denom,
     include = include,
-    statistic = stat,
+    statistic = NULL,
     overall_row = overall_row
   )
 
@@ -321,7 +331,7 @@ internal_tbl_hierarchical <- function(data,
     label, default_label[setdiff(names(default_label), names(label))]
   )[c(hierarchies, if ("overall" %in% names(label)) "overall")]
 
-  # define type & statistics for overall row
+  # define overall row formatting
   if (overall_row) {
     statistic[["overall"]] <- statistic[1]
     type[["overall"]] <- "categorical"
@@ -367,7 +377,7 @@ internal_tbl_hierarchical <- function(data,
       include = include,
       statistic = statistic,
       over_variables = overall_row,
-      total_n = is_empty(by)
+      total_n = TRUE#is_empty(by)
     )
   } else {
     cards::ard_stack_hierarchical_count(
