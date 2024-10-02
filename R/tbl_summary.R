@@ -559,6 +559,7 @@ tbl_summary <- function(data,
 }
 
 
+
 .get_variables_by_type <- function(x, type) {
   names(x)[unlist(x) %in% type]
 }

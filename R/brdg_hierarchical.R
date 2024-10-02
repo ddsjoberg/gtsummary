@@ -128,7 +128,7 @@ brdg_hierarchical <- function(cards,
   x <- .create_gtsummary_object(table_body)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
-  x <- .add_table_styling_stats(x, cards = cards, by = by)
+  x <- .add_table_styling_stats(x, cards = cards, by = by, hierarchical = TRUE)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
