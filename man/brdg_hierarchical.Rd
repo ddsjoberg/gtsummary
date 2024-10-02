@@ -2,6 +2,7 @@
 % Please edit documentation in R/brdg_hierarchical.R
 \name{brdg_hierarchical}
 \alias{brdg_hierarchical}
+\alias{pier_summary_hierarchical}
 \title{Hierarchy table bridge}
 \usage{
 brdg_hierarchical(
@@ -14,6 +15,8 @@ brdg_hierarchical(
   overall_row,
   label
 )
+
+pier_summary_hierarchical(cards, variables, hierarchies, statistic)
 }
 \arguments{
 \item{cards}{(\code{card})\cr
