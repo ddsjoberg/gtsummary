@@ -149,8 +149,6 @@ brdg_summary <- function(cards,
       by = "variable"
     )
 
-  browser()
-
   # construct default table_styling --------------------------------------------
   x <- .create_gtsummary_object(table_body)
 
@@ -280,10 +278,7 @@ pier_summary_categorical <- function(cards,
         ) |>
         dplyr::select("variable", var_label = "stat"),
       by = "variable"
-    )
-
-  df_result_levels <-
-    df_result_levels |>
+    ) |>
     dplyr::mutate(
       .by = "variable",
       row_type = "level",
@@ -303,8 +298,7 @@ pier_summary_categorical <- function(cards,
   df_results <-
     map(
       variables,
-      \(.x) {
-        dplyr::bind_rows(
+      ~ dplyr::bind_rows(
         df_result_levels |>
           dplyr::select("variable", "var_label", "row_type") |>
           dplyr::filter(.data$variable %in% .x) |>
@@ -316,7 +310,6 @@ pier_summary_categorical <- function(cards,
         df_result_levels |>
           dplyr::filter(.data$variable %in% .x)
       )
-      }
     ) |>
     dplyr::bind_rows()
 
@@ -599,7 +592,7 @@ pier_summary_missing_row <- function(cards,
         dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
         dplyr::left_join(
           cards |>
-            dplyr::select(group1, group1_level, "gts_column") |>
+            dplyr::select(cards::all_ard_groups(), "gts_column") |>
             dplyr::filter(!is.na(.data$gts_column)) |>
             dplyr::distinct() |>
             dplyr::rename(variable = "group1", variable_level = "group1_level"),

@@ -312,6 +312,7 @@ tbl_summary <- function(data,
     utils::modifyList(list(default_types = NULL))
   call <- match.call()
 
+
   # construct cards ------------------------------------------------------------
   cards <-
     cards::bind_ard(
@@ -557,26 +558,6 @@ tbl_summary <- function(data,
     {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
 }
 
-.construct_hierarchical_footnote <- function(card, include, statistic, type) {
-  include |>
-    lapply(
-      function(variable) {
-        card |>
-          dplyr::filter(.data$variable %in% .env$include) |>
-          dplyr::select("stat_name", "stat_label") |>
-          dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
-          glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
-          )
-      }
-    ) |>
-    stats::setNames(include) |>
-    compact() |>
-    unlist() |>
-    unique() %>%
-    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
-}
 
 .get_variables_by_type <- function(x, type) {
   names(x)[unlist(x) %in% type]
