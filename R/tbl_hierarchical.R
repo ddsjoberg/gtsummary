@@ -193,7 +193,7 @@ internal_tbl_hierarchical <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  check_length(by, 1)
+  check_length(by, 1, allow_empty = TRUE)
   check_logical(overall_row)
 
   # evaluate tidyselect
@@ -336,6 +336,7 @@ internal_tbl_hierarchical <- function(data,
     statistic,
     type,
     overall_row,
+    count = is_empty(id),
     label
   ) |>
     append(
@@ -344,7 +345,7 @@ internal_tbl_hierarchical <- function(data,
         inputs = tbl_hierarchical_inputs
       )
     ) |>
-    structure(class = c(func, "gtsummary"))
+    structure(class = c("tbl_hierarchical", "gtsummary"))
 }
 
 # this function calculates either the counts or the rates of the events
@@ -357,7 +358,8 @@ internal_tbl_hierarchical <- function(data,
       id = id,
       denominator = denominator,
       include = include,
-      over_variables = overall_row
+      over_variables = overall_row,
+      total_n = is_empty(by)
     )
   } else {
     cards::ard_stack_hierarchical_count(
@@ -366,7 +368,8 @@ internal_tbl_hierarchical <- function(data,
       by = by,
       denominator = denominator,
       include = include,
-      over_variables = overall_row
+      over_variables = overall_row,
+      total_n = is_empty(by)
     )
   }
 }
