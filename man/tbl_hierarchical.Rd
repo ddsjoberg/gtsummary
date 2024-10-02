@@ -113,7 +113,7 @@ tbl_hierarchical(
   data = data,
   hierarchies = c(AESOC, AETERM, AESEV),
   by = TRTA,
-  denominator = cards::ADSL \%>\% mutate(TRTA = ARM),
+  denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
   overall_row = TRUE
 )
@@ -122,7 +122,7 @@ tbl_hierarchical_count(
   data = data,
   hierarchies = c(AESOC, AETERM, AESEV),
   by = TRTA,
-  denominator = cards::ADSL \%>\% mutate(TRTA = ARM)
+  denominator = cards::ADSL |> mutate(TRTA = ARM)
 )
 
 }

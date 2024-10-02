@@ -70,7 +70,7 @@
 #'   data = data,
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   denominator = cards::ADSL %>% mutate(TRTA = ARM),
+#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
 #'   overall_row = TRUE
 #' )
@@ -93,6 +93,7 @@ tbl_hierarchical <- function(data,
   check_data_frame(data)
   check_not_missing(id)
   check_not_missing(denominator)
+  check_data_frame(denominator)
   check_not_missing(hierarchies)
   check_string(statistic)
 
@@ -134,7 +135,7 @@ tbl_hierarchical <- function(data,
 #'   data = data,
 #'   hierarchies = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   denominator = cards::ADSL %>% mutate(TRTA = ARM)
+#'   denominator = cards::ADSL |> mutate(TRTA = ARM)
 #' )
 #'
 #' @export
@@ -152,6 +153,7 @@ tbl_hierarchical_count <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
+  check_data_frame(denominator, allow_empty = TRUE)
 
   # evaluate tidyselect
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, by = {{ by }})

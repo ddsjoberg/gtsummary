@@ -17,7 +17,7 @@ brdg_hierarchical(
   label
 )
 
-pier_summary_hierarchical(cards, variables, hierarchies, statistic)
+pier_summary_hierarchical(cards, variables, include, statistic)
 }
 \arguments{
 \item{cards}{(\code{card})\cr
