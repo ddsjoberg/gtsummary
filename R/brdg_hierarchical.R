@@ -69,39 +69,37 @@ brdg_hierarchical <- function(cards,
     statistic = statistic
   )
 
-  # add non-summary label rows
-  for (i in seq_along(hierarchies)) {
-    if (!hierarchies[i] %in% include) {
-      prior_gp <- paste0("group", 1:i + n_by)
-      prior_gp_lvl <- paste0(prior_gp, "_level")
-      groupX <- prior_gp |> tail(1)
-      groupX_lvl <- prior_gp_lvl |> tail(1)
+  # add label rows for variables not in 'include'
+  for (i in which(!hierarchies %in% include)) {
+    prior_gp <- paste0("group", 1:i + n_by)
+    prior_gp_lvl <- paste0(prior_gp, "_level")
+    groupX <- prior_gp |> tail(1)
+    groupX_lvl <- prior_gp_lvl |> tail(1)
 
-      # create dummy rows
-      tbl_rows <- table_body |>
-        dplyr::filter(across(cards::all_ard_groups("names"), ~ .x != " ")) |>
-        select(row_type, prior_gp, prior_gp_lvl) |>
-        unique() |>
-        mutate(
-          var_label = .data[[groupX_lvl]],
-          variable = .data[[groupX]],
-          label = .data[[groupX_lvl]]
-        )
+    # create dummy rows
+    tbl_rows <- table_body |>
+      dplyr::filter(across(cards::all_ard_groups("names"), ~ .x != " ")) |>
+      select(row_type, prior_gp, prior_gp_lvl) |>
+      unique() |>
+      mutate(
+        var_label = .data[[groupX_lvl]],
+        variable = .data[[groupX]],
+        label = .data[[groupX_lvl]]
+      )
 
-      all_gps <- table_body |> select(all_ard_groups("names")) |> names()
-      ord <- c(rbind(paste0(all_gps, "_level"), all_gps)) |> head(-1)
+    all_gps <- table_body |> select(all_ard_groups("names")) |> names()
+    ord <- c(rbind(paste0(all_gps, "_level"), all_gps)) |> head(-1)
 
-      tbl_rows <- dplyr::bind_rows(
-        table_body,
-        tbl_rows |> mutate(row_type = "label")
-      ) |>
-        dplyr::mutate(dplyr::across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
-        dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
-        dplyr::arrange(across(c(ord, var_label))) |>
-        dplyr::ungroup()
+    tbl_rows <- dplyr::bind_rows(
+      table_body,
+      tbl_rows |> mutate(row_type = "label")
+    ) |>
+      dplyr::mutate(dplyr::across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
+      dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
+      dplyr::arrange(across(c(ord, var_label))) |>
+      dplyr::ungroup()
 
-      table_body <- tbl_rows
-    }
+    table_body <- tbl_rows
   }
 
   if (overall_row) {
