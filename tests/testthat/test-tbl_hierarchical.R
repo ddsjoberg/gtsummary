@@ -129,7 +129,7 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
   trial_o$grade <- factor(trial_o$grade, ordered = TRUE)
   # creates table when label is passed
   res <- tbl_hierarchical(
-    data = trial_o, hierarchies = c(stage, grade), denominator = trial_o, id = id
+    data = trial_o, hierarchies = c(stage, grade), by = trt, denominator = trial_o, id = id
   )
   expect_snapshot(res |> as.data.frame())
   expect_snapshot_value(res$table_styling$header$label[4])
