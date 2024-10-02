@@ -235,6 +235,18 @@ internal_tbl_hierarchical <- function(data,
     overall_row = overall_row
   )
 
+  cards_overall <- cards::ard_stack_hierarchical(
+    data,
+    variables = by,
+    id = id,
+    denominator = denom
+  )
+
+  # cards <- dplyr::bind_rows(
+  #   cards,
+  #   cards_overall
+  # )
+
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(

@@ -425,7 +425,7 @@ tbl_summary <- function(data,
   x
 }
 
-.add_gts_column_to_cards_summary <- function(cards, variables, by) {
+.add_gts_column_to_cards_summary <- function(cards, variables, by, hierarchical = FALSE) {
   if ("gts_column" %in% names(cards)) {
     cli::cli_inform("The {.val gts_column} column is alread present. Defining the column has been skipped.")
     return(cards)
@@ -439,6 +439,16 @@ tbl_summary <- function(data,
         "stat_0",
         NA_character_
       )
+  } else if (hierarchical) { # disregard hierarchies, only check by variable
+    cards <- cards |>
+      dplyr::group_by(group1_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
+
+    # process overall row
+    cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
+      dplyr::group_by(variable_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
+      dplyr::ungroup()
   } else {
     # styler: off
     cards <-
@@ -532,6 +542,27 @@ tbl_summary <- function(data,
         }
         card |>
           dplyr::filter(.data$variable %in% .env$variable) |>
+          dplyr::select("stat_name", "stat_label") |>
+          dplyr::distinct() %>%
+          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
+          glue::glue_data(
+            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
+          )
+      }
+    ) |>
+    stats::setNames(include) |>
+    compact() |>
+    unlist() |>
+    unique() %>%
+    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
+}
+
+.construct_hierarchical_footnote <- function(card, include, statistic, type) {
+  include |>
+    lapply(
+      function(variable) {
+        card |>
+          dplyr::filter(.data$variable %in% .env$include) |>
           dplyr::select("stat_name", "stat_label") |>
           dplyr::distinct() %>%
           {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off

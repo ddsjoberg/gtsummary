@@ -33,7 +33,6 @@ brdg_hierarchical <- function(cards,
                               label) {
   set_cli_abort_call()
 
-  # browser()
   # overall statistics used to calculate Ns
   overall_stats <- cards |>
     dplyr::filter(variable %in% by) |>
@@ -54,6 +53,15 @@ brdg_hierarchical <- function(cards,
   cards <- cards |>
     dplyr::ungroup() |>
     cards::as_card()
+
+  if (overall_row) {
+    over_row <- pier_summary_hierarchical(
+      cards = cards,
+      variables = "overall",
+      hierarchies = hierarchies,
+      statistic = statistic
+    )
+  }
 
   table_body <- list()
   for (i in seq_along(hierarchies)) {
@@ -111,6 +119,13 @@ brdg_hierarchical <- function(cards,
     table_body <- tbl_rows
   }
 
+  if (overall_row) {
+    table_body <- dplyr::bind_rows(
+      over_row,
+      table_body
+    )
+  }
+
   table_body <- table_body |>
     select(-cards::all_ard_groups())
 
@@ -148,6 +163,14 @@ brdg_hierarchical <- function(cards,
         columns = label,
         rows = variable == !!hierarchies[i],
         indent = (i - 1) * 4
+      )
+  }
+  if (overall_row) {
+    x <- x |>
+      modify_column_indent(
+        columns = label,
+        rows = variable == "overall",
+        indent = 0
       )
   }
 
