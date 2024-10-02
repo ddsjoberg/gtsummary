@@ -53,6 +53,25 @@ a gtsummary object
 }
 \description{
 Bridge function for converting \code{tbl_hierarchical()} (and similar) cards to basic gtsummary objects.
+All bridge functions begin with prefix \verb{brdg_*()}.
+
+This file also contains helper functions for constructing the bridge,
+referred to as the piers (supports for a bridge) and begin with \verb{pier_*()}.
+\itemize{
+\item \code{brdg_hierarchical()}: The bridge function ingests an ARD data frame and returns
+a gtsummary table that includes \code{.$table_body} and a basic \code{.$table_styling}.
+The \code{.$table_styling$header} data frame includes the header statistics.
+Based on context, this function adds a column to the ARD data frame named
+\code{"gts_column"}. This column is used during the reshaping in the \verb{pier_*()}
+functions defining column names.
+\item \verb{pier_*()}: these functions accept a cards tibble and returns a tibble
+that is a piece of the \code{.$table_body}. Typically these will be stacked
+to construct the final table body data frame. The ARD object passed here
+will have two primary parts: the calculated summary statistics and the
+attributes ARD. The attributes ARD is used for labeling. The ARD data frame
+passed to this function must include a \code{"gts_column"} column, which is
+added in \code{brdg_hierarchical()}.
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
