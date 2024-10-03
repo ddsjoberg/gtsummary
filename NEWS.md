@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added function `tbl_hierarchical()`, `tbl_hierarchical_count()`, `brdg_hierarchical()`, and `pier_summary_hierarchical()`. Consider these functions as a preview. We will be making changes without the full deprecation cycle in the coming releases. (#1872) 
+
 * Adding the `style_*(prefix, suffix)` and  `label_style_*(prefix, suffix)` for adding a string before or after the formatted results. These arguments have not been added to the p-value formatting functions. (#1690)
 
 * Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
