@@ -84,20 +84,6 @@ brdg_hierarchical <- function(cards,
     )
   }
 
-  if (is_ordered) {
-    grpX <- paste0("group", n_by + 1)
-    grpX_lvl <- paste0(grpX, "_level")
-    cards[which(cards[[grpX]] == hierarchies |> tail(1)), ] <-
-      cards[which(cards[[grpX]] == hierarchies |> tail(1)), ] |>
-      dplyr::rename(
-        variable := !!grpX,
-        variable_level := !!grpX_lvl,
-        !!grpX := "variable",
-        !!grpX_lvl := "variable_level"
-      ) |>
-      cards::tidy_ard_column_order()
-  }
-
   table_body <- pier_summary_hierarchical(
     cards = cards,
     variables = hierarchies,
