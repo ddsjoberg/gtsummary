@@ -72,6 +72,7 @@ a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
+\emph{This is an early release of this function, and there will likely be changes in the next release.}
 
 Use these functions to generate hierarchical tables.
 \itemize{
@@ -98,16 +99,16 @@ and \code{"Total number of events"} will be used by \code{tbl_hierarchical_count
 }
 
 \examples{
-data <- cards::ADAE |>
+ADAE_subset <- cards::ADAE |>
   dplyr::filter(
-    AESOC \%in\% unique(cards::ADAE$AESOC)[1:20],
-    AETERM \%in\% unique(cards::ADAE$AETERM)[1:20]
+    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
+    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
   )
 
-# Example 1 - Event Rates ------------------------------------
+# Example 1 - Event Rates --------------------
 
 tbl_hierarchical(
-  data = data,
+  data = ADAE_subset,
   variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
@@ -115,13 +116,13 @@ tbl_hierarchical(
   overall_row = TRUE
 )
 
-# Example 2 - Rates by Highest Severity ----------------------
+# Example 2 - Rates by Highest Severity ------
 
 # order the severity variable
 data$AESEV <- factor(data$AESEV, ordered = TRUE)
 
 tbl_hierarchical(
-  data = data,
+  data = ADAE_subset,
   variables = c(AESOC, AESEV),
   by = TRTA,
   id = USUBJID,
