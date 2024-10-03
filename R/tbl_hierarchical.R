@@ -95,7 +95,6 @@ tbl_hierarchical <- function(data,
   check_data_frame(data)
   check_not_missing(id)
   check_not_missing(denominator)
-  check_data_frame(denominator)
   check_not_missing(hierarchies)
   check_string(statistic)
 
@@ -155,7 +154,6 @@ tbl_hierarchical_count <- function(data,
   check_not_missing(data)
   check_data_frame(data)
   check_not_missing(hierarchies)
-  check_data_frame(denominator, allow_empty = TRUE)
 
   # evaluate tidyselect
   cards::process_selectors(data, hierarchies = {{ hierarchies }}, by = {{ by }})
@@ -235,14 +233,6 @@ internal_tbl_hierarchical <- function(data,
     stat <- NULL
   }
   include <- union(include, tail(hierarchies, 1))
-  denom <- if (is_empty(denominator)) {
-      data
-    } else if (is.numeric(denominator)) {
-      by_lvls <- data[[by]] |> unique()
-      data.frame(rep(denominator, length(by_lvls)) |> setNames(by_lvls))
-    } else {
-      denominator
-    }
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
@@ -250,7 +240,7 @@ internal_tbl_hierarchical <- function(data,
     hierarchies = hierarchies,
     by = by,
     id = id,
-    denominator = denom,
+    denominator = denominator,
     include = include,
     statistic = NULL,
     overall_row = overall_row
@@ -374,7 +364,7 @@ internal_tbl_hierarchical <- function(data,
 .run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
     # use overall counts as denominator instead of total counts in sub-table
-    if (!is_empty(by)) {
+    if (!is_empty(by) && is.data.frame(denominator)) {
       denominator <- denominator |> select(all_of(by))
     }
 

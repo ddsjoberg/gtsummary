@@ -196,12 +196,19 @@ brdg_hierarchical <- function(cards,
     modify_header(
       label = label_hierarchy,
       all_stat_cols() ~
-        ifelse(
-          is_empty(by),
-          get_theme_element("tbl_hierarchical-str:header-noby",
+        case_when(
+          is_empty(by) && "modify_stat_N" %in% names(x$table_styling$header) ~
+            get_theme_element("tbl_hierarchical-str:header-noby",
                             default = "**N = {style_number(N)}**"),
-          get_theme_element("tbl_hierarchical-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+          is_empty(by) ~
+            get_theme_element("tbl_hierarchical-str:header-noby-noN",
+                            default = "Overall"),
+          "modify_stat_n" %in% names(x$table_styling$header) ~
+            get_theme_element("tbl_hierarchical-str:header-withby",
+                            default = "**{level}**  \nN = {style_number(n)}"),
+          !"modify_stat_n" %in% names(x$table_styling$header) ~
+            get_theme_element("tbl_hierarchical-str:header-withby-noN",
+                              default = "**{level}**")
         )
     )
 
