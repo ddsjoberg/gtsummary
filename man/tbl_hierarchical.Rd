@@ -7,7 +7,7 @@
 \usage{
 tbl_hierarchical(
   data,
-  hierarchies,
+  variables,
   by = NULL,
   id = NULL,
   denominator = NULL,
@@ -20,7 +20,7 @@ tbl_hierarchical(
 
 tbl_hierarchical_count(
   data,
-  hierarchies,
+  variables,
   by = NULL,
   denominator = NULL,
   include = everything(),
@@ -33,7 +33,7 @@ tbl_hierarchical_count(
 \item{data}{(\code{data.frame})\cr
 a data frame.}
 
-\item{hierarchies}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+\item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
 variables in the order given.}
 
@@ -84,8 +84,8 @@ Use these functions to generate hierarchical tables.
 \itemize{
 \item \code{tbl_hierarchical()}: Calculates \emph{rates} of events (e.g. adverse events)
 utilizing the \code{denominator} and \code{id} arguments to identify the rows in \code{data}
-to include in each rate calculation. If \code{hierarchies} contains more than one
-variable and the last variable in \code{hierarchies} is an ordered factor, then
+to include in each rate calculation. If \code{variables} contains more than one
+variable and the last variable in \code{variables} is an ordered factor, then
 \emph{rates} of events by highest level will be calculated.
 \item \code{tbl_hierarchical_count()}: Calculates \emph{counts} of events utilizing
 all rows for each tabulation.
@@ -113,7 +113,7 @@ data <- cards::ADAE |>
 
 tbl_hierarchical(
   data = data,
-  hierarchies = c(AESOC, AETERM, AESEV),
+  variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
@@ -122,7 +122,7 @@ tbl_hierarchical(
 
 tbl_hierarchical_count(
   data = data,
-  hierarchies = c(AESOC, AETERM, AESEV),
+  variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM)
 )
