@@ -103,7 +103,7 @@ brdg_hierarchical <- function(cards,
     # create dummy rows
     tbl_rows <- table_body |>
       dplyr::filter(dplyr::if_any(cards::all_ard_groups("names"), ~ .x != " ")) |>
-      select("row_type", .data[[prior_gp]], .data[[prior_gp_lvl]]) |>
+      select(all_of(c("row_type", prior_gp, prior_gp_lvl))) |>
       unique() |>
       mutate(
         var_label = .data[[groupX_lvl]],
@@ -120,7 +120,7 @@ brdg_hierarchical <- function(cards,
     ) |>
       mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
       dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
-      dplyr::arrange(across(c(ord, .data$var_label))) |>
+      dplyr::arrange(across(all_of(c(ord, "var_label")))) |>
       dplyr::ungroup()
 
     table_body <- tbl_rows
