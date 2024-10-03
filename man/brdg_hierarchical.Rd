@@ -15,8 +15,7 @@ brdg_hierarchical(
   overall_row,
   count,
   is_ordered,
-  label,
-  digits
+  label
 )
 
 pier_summary_hierarchical(cards, variables, include, statistic)
@@ -52,11 +51,6 @@ whether the last variable in \code{variables} is ordered.}
 
 \item{label}{(named \code{list})\cr
 named list of hierarchy variable labels.}
-
-\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
-specifies how summary statistics are rounded. Values may be either integer(s)
-or function(s). If not specified, default formatting is assigned
-via \code{assign_summary_digits()}.}
 }
 \value{
 a gtsummary object
