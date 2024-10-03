@@ -6,8 +6,9 @@
 #'
 #' - `tbl_hierarchical()`: Calculates *rates* of events (e.g. adverse events)
 #'   utilizing the `denominator` and `id` arguments to identify the rows in `data`
-#'   to include in each rate calculation. If the last variable in `hierarchies` is
-#'   an ordered factor, then *rates* of events by highest level will be calculated.
+#'   to include in each rate calculation. If `hierarchies` contains more than one
+#'   variable and the last variable in `hierarchies` is an ordered factor, then
+#'   *rates* of events by highest level will be calculated.
 #'
 #' - `tbl_hierarchical_count()`: Calculates *counts* of events utilizing
 #'   all rows for each tabulation.
@@ -372,12 +373,51 @@ internal_tbl_hierarchical <- function(data,
 # this function calculates either the counts or the rates of the events
 .run_ard_stack_hierarchical_fun <- function(data, hierarchies, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
-    if (is.ordered(data[[hierarchies |> tail(1)]])) {
-      by <- c(by, hierarchies |> tail(1))
-      hierarchies <- hierarchies |> head(-1)
-      include <- c(intersect(include, hierarchies), hierarchies |> tail(1))
+    # use overall counts as denominator instead of total counts in sub-table
+    if (!is_empty(by)) {
+      denominator <- denominator |> select(all_of(by))
     }
-    cards::ard_stack_hierarchical(
+
+    # for ordered factor variable, move last hierarchy level to by
+    # to get rates by highest level
+    cards_ord <- list()
+    if (!is.ordered(data[[tail(hierarchies, 1)]]) || length(hierarchies) == 1) {
+      # only one hierarchy variable - ignore ordering
+      data[[tail(hierarchies, 1)]] <- factor(data[[tail(hierarchies, 1)]], ordered = FALSE)
+    } else {
+      cards_ord <- cards::ard_stack_hierarchical(
+        data = data,
+        variables = hierarchies |> head(-1),
+        by = c(by, tail(hierarchies, 1)),
+        id = id,
+        denominator = denominator,
+        include = (hierarchies |> tail(2))[1],
+        statistic = statistic,
+        total_n = (is_empty(by) && length(include) == 1)
+      )
+
+      # update structure to match results for non-ordered factor variables
+      which_var <- which(names(cards_ord) == "variable")
+      which_h <- which(names(cards_ord) == paste0("group", length(by) + 1))
+      names(cards_ord) <- names(cards_ord)[
+        c(0:(which_h - 1), which_var + 0:1, which_h:(which_var - 1), (which_var + 2):length(names(cards_ord)))
+      ]
+
+      # if no other statistics to calculate, format N data and return as is
+      # otherwise, bind to results for the remaining include variables
+      hierarchies <- head(hierarchies, -1)
+      include <- intersect(include, hierarchies)
+      if (is_empty(include)) {
+        cards_ord[cards_ord[[which_var]] %in% by, which_h + 0:1] <-
+          cards_ord[cards_ord[[which_var]] %in% by, which_var + 0:1]
+        return(cards_ord)
+      } else if (!is_empty(by)) {
+        cards_ord <- cards_ord |>
+          dplyr::filter(group1 == by[1] | context == "total_n")
+      }
+    }
+
+    cards <- cards::ard_stack_hierarchical(
       data = data,
       variables = hierarchies,
       by = by,
@@ -388,6 +428,8 @@ internal_tbl_hierarchical <- function(data,
       over_variables = overall_row,
       total_n = is_empty(by)
     )
+
+    cards::bind_ard(cards, cards_ord)
   } else {
     cards::ard_stack_hierarchical_count(
       data = data,
