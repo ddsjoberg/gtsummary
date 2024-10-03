@@ -102,7 +102,7 @@ brdg_hierarchical <- function(cards,
 
     # create dummy rows
     tbl_rows <- table_body |>
-      dplyr::filter(dplyr::if_any(cards::all_ard_groups("names"), ~ .x != " ")) |>
+      dplyr::filter(!dplyr::if_any(cards::all_ard_groups("names"), ~ .x == " ")) |>
       select(all_of(c("row_type", prior_gp, prior_gp_lvl))) |>
       unique() |>
       mutate(
@@ -345,7 +345,8 @@ pier_summary_hierarchical <- function(cards,
       names_from = "gts_column",
       values_from = "stat"
     ) |>
-    tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE)
+    tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE) |>
+    mutate(across(where(is.factor), as.character))
 
   if (length(variables) > 1 && length(include) > 1) {
     gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
