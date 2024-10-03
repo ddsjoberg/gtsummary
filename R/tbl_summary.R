@@ -473,7 +473,7 @@ tbl_summary <- function(data,
 
   obs_to_drop <- is.na(data[[by]])
   cli::cli_inform("{.val {sum(obs_to_drop)}} missing rows in the {.val {by}} column have been removed.")
-  data[!obs_to_drop, ]
+  dplyr::filter(data, !obs_to_drop)
 }
 
 .check_stats_available <- function(cards, statistic) {
