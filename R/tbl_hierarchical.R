@@ -78,7 +78,7 @@
 #'
 #' # Example 2 - Rates by Highest Severity ------
 #' tbl_hierarchical(
-#'   data = ADAE_subset,
+#'   data = ADAE_subset |> mutate(AESEV = factor(AESEV, ordered = TRUE)),
 #'   variables = c(AESOC, AESEV),
 #'   by = TRTA,
 #'   id = USUBJID,
@@ -86,7 +86,6 @@
 #'   include = AESEV,
 #'   label = list(AESEV = "Highest Severity")
 #' )
-#'
 #'
 #' # Example 3 - Event Counts -------------------
 #' tbl_hierarchical_count(
