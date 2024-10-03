@@ -56,8 +56,7 @@ brdg_hierarchical <- function(cards,
                               overall_row,
                               count,
                               is_ordered,
-                              label,
-                              digits) {
+                              label) {
   set_cli_abort_call()
 
   # process overall row data
@@ -152,7 +151,7 @@ brdg_hierarchical <- function(cards,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_hierarchical_footnote(cards, hierarchies, statistic, type)
+        .construct_hierarchical_footnote(cards, variables, statistic, type)
     )
 
   x <- x |>

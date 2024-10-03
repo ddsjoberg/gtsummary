@@ -42,10 +42,6 @@
 #'   used to override default labels in hierarchical table, e.g. `list(AESOC = "System Organ Class")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
 #'   If no label has been set, the column name is used.
-#' @param digits ([`formula-list-selector`][syntax])\cr
-#'   specifies how summary statistics are rounded. Values may be either integer(s)
-#'   or function(s). If not specified, default formatting is assigned
-#'   via `assign_summary_digits()`.
 #'
 #' @section Overall Row:
 #'
@@ -86,8 +82,7 @@ tbl_hierarchical <- function(data,
                              include = everything(),
                              statistic = "{n} ({p})",
                              overall_row = FALSE,
-                             label = NULL,
-                             digits = NULL) {
+                             label = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -124,8 +119,7 @@ tbl_hierarchical <- function(data,
     include = {{ include }},
     statistic = statistic,
     overall_row = overall_row,
-    label = label,
-    digits = digits
+    label = label
   )
 }
 
@@ -146,8 +140,7 @@ tbl_hierarchical_count <- function(data,
                                    denominator = NULL,
                                    include = everything(),
                                    overall_row = FALSE,
-                                   label = NULL,
-                                   digits = NULL) {
+                                   label = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -176,8 +169,7 @@ tbl_hierarchical_count <- function(data,
     include = {{ include }},
     statistic = "{n}",
     overall_row = overall_row,
-    label = label,
-    digits = digits
+    label = label
   )
 }
 
@@ -189,8 +181,7 @@ internal_tbl_hierarchical <- function(data,
                                       include = everything(),
                                       statistic = NULL,
                                       overall_row = FALSE,
-                                      label = NULL,
-                                      digits = NULL) {
+                                      label = NULL) {
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
@@ -269,38 +260,20 @@ internal_tbl_hierarchical <- function(data,
         .default = label
       )
   )
-  cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
-    digits =
-      case_switch(
-        missing(digits) ~ get_theme_element(paste0(func, "-arg:digits"), default = digits),
-        .default = digits
-      )
-  )
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
     scope_table_body(.list2tb(type, "var_type"), data[include]),
     statistic = get_theme_element(
       paste0(func, "-arg:statistic"), default = eval(formals(asNamespace("gtsummary")[[func]])[["statistic"]])
-    ),
-    digits = get_theme_element(
-      paste0(func, "-arg:digits"), default = eval(formals(asNamespace("gtsummary")[[func]])[["digits"]])
     )
   )
-
-  # fill each element of digits argument
-  if (!missing(digits)) {
-    digits <-
-      scope_table_body(.list2tb(type, "var_type"), data[include]) |>
-      assign_summary_digits(statistic, type, digits = digits)
-  }
 
   # check inputs ---------------------------------------------------------------
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
-    digits = digits, value = NULL, type = type, sort = NULL
+    digits = NULL, value = NULL, type = type, sort = NULL
   )
   .check_statistic_type_agreement(statistic, type)
 
@@ -347,8 +320,7 @@ internal_tbl_hierarchical <- function(data,
     overall_row,
     count = is_empty(id),
     is_ordered = is.ordered(data[[dplyr::last(variables)]]),
-    label,
-    digits
+    label
   ) |>
     append(
       list(
@@ -363,7 +335,7 @@ internal_tbl_hierarchical <- function(data,
 .run_ard_stack_hierarchical_fun <- function(data, variables, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
     # use overall counts as denominator instead of total counts in sub-table
-    if (!is_empty(by) && is.data.frame(denominator)) {
+    if (!is_empty(by) && is.data.frame(denominator) && all(by %in% names(denominator))) {
       denominator <- denominator |> select(all_of(by))
     }
 
