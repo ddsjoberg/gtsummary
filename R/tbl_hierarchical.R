@@ -64,13 +64,14 @@
 #'   dplyr::filter(
 #'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
 #'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
-#'   )
+#'   ) |>
+#'   dplyr::mutate(AESEV = factor(AESEV))
+#' attr(ADAE_subset$AESEV, "label") <- "Severity/Intensity"
 #'
 #' # Example 1 - Event Rates --------------------
-#'
 #' tbl_hierarchical(
 #'   data = ADAE_subset,
-#'   variables = c(AESOC, AETERM, AESEV),
+#'   variables = c(AESOC, AETERM),
 #'   by = TRTA,
 #'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
@@ -78,9 +79,6 @@
 #' )
 #'
 #' # Example 2 - Rates by Highest Severity ------
-#' # order the severity variable
-#' ADAE_subset$AESEV <- factor(ADAE_subset$AESEV, ordered = TRUE)
-#'
 #' tbl_hierarchical(
 #'   data = ADAE_subset,
 #'   variables = c(AESOC, AESEV),
