@@ -653,3 +653,16 @@ test_that("tbl_summary() edge case of warning condition printing", {
      as_kable()
  )
 })
+
+# addressing issue #2017
+test_that("tbl_summary() data frame column labels are not dropped", {
+  expect_equal(
+    trial |>
+      as.data.frame() |>
+      tbl_summary(by = response, include = age) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(label) |>
+      dplyr::first(),
+    "Age"
+  )
+})
