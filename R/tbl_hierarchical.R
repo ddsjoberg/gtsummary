@@ -8,7 +8,7 @@
 #'   utilizing the `denominator` and `id` arguments to identify the rows in `data`
 #'   to include in each rate calculation. If `variables` contains more than one
 #'   variable and the last variable in `variables` is an ordered factor, then
-#'   *rates* of events by highest level will be calculated.
+#'   rates of events by highest level will be calculated.
 #'
 #' - `tbl_hierarchical_count()`: Calculates *counts* of events utilizing
 #'   all rows for each tabulation.
@@ -52,7 +52,7 @@
 #'
 #' A label for this overall row can be specified by passing an `overall` element in `label`. If no `overall` label has
 #' been set and `overall_row = TRUE`, `"Total number of patients with any event"` will be used by `tbl_hierarchical()`
-#' and `"Total number of records"` will be used by `tbl_hierarchical_count()`.
+#' and `"Total number of events"` will be used by `tbl_hierarchical_count()`.
 #'
 #' @return a gtsummary table of class `"tbl_hierarchical"` (for `tbl_hierarchical()`) or `"tbl_hierarchical_count"`
 #'   (for `tbl_hierarchical_count()`).
@@ -60,9 +60,11 @@
 #' @examples
 #' data <- cards::ADAE |>
 #'   dplyr::filter(
-#'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
-#'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+#'     AESOC %in% unique(cards::ADAE$AESOC)[1:20],
+#'     AETERM %in% unique(cards::ADAE$AETERM)[1:20]
 #'   )
+#'
+#' # Example 1 - Event Rates ------------------------------------
 #'
 #' tbl_hierarchical(
 #'   data = data,
@@ -71,6 +73,21 @@
 #'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
 #'   overall_row = TRUE
+#' )
+#'
+#' # Example 2 - Rates by Highest Severity ----------------------
+#'
+#' # order the severity variable
+#' data$AESEV <- factor(data$AESEV, ordered = TRUE)
+#'
+#' tbl_hierarchical(
+#'   data = data,
+#'   variables = c(AESOC, AESEV),
+#'   by = TRTA,
+#'   id = USUBJID,
+#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'   include = AESEV,
+#'   label = list(AESEV = "Highest Severity")
 #' )
 #'
 #' @export
@@ -126,11 +143,13 @@ tbl_hierarchical <- function(data,
 #' @rdname tbl_hierarchical
 #'
 #' @examples
+#' # Example 3 - Event Counts -----------------------------------
+#'
 #' tbl_hierarchical_count(
 #'   data = data,
 #'   variables = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM)
+#'   overall_row = TRUE
 #' )
 #'
 #' @export
@@ -303,7 +322,7 @@ internal_tbl_hierarchical <- function(data,
     if (!"overall" %in% names(label)) {
       label[["overall"]] <- ifelse(
         func == "tbl_hierarchical_count",
-        "Total number of records",
+        "Total number of events",
         "Total number of patients with any event"
       )
     }
@@ -334,11 +353,6 @@ internal_tbl_hierarchical <- function(data,
 # this function calculates either the counts or the rates of the events
 .run_ard_stack_hierarchical_fun <- function(data, variables, by, id, denominator, include, statistic, overall_row) {
   if (!is_empty(id)) {
-    # use overall counts as denominator instead of total counts in sub-table
-    if (!is_empty(by) && is.data.frame(denominator) && all(by %in% names(denominator))) {
-      denominator <- denominator |> select(all_of(by))
-    }
-
     # for ordered factor variable, move last hierarchy level to by
     # to get rates by highest level
     cards_ord <- list()

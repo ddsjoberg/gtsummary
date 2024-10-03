@@ -133,30 +133,35 @@ test_that("tbl_hierarchical(label) works properly", {
 
 # tbl_hierarchical with ordered variables ------------------------------------------------------------
 test_that("tbl_hierarchical works properly when last variable of hierarchy is ordered", {
-  # unordered variable
-  expect_warning(expect_warning(
-    res_uo <- tbl_hierarchical(
-      data = trial2, variables = c(stage, grade), by = trt, denominator = trial2, id = id
+  data <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:10],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:10]
     )
-  ))
+
+  # unordered variable
+  res_uo <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
+    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV
+  )
 
   # ordered variable
-  trial_o <- trial2
-  trial_o$grade <- factor(trial_o$grade, ordered = TRUE)
-  expect_warning(expect_warning(suppressMessages(
-    res_o <- tbl_hierarchical(
-      data = trial_o, variables = c(stage, grade), by = trt, denominator = trial_o, id = id
-    )
-  )))
+  data$AESEV <- factor(data$AESEV, ordered = TRUE)
+
+  res_o <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
+    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV, label = list(AESEV = "Highest Severity")
+  ) |> suppressMessages()
   expect_snapshot(res_o |> as.data.frame())
 
   # compare ordered and unordered results
-  expect_false(all(res_uo$table_body$stat_1 == res_o$table_body$stat_1))
+  expect_true(res_uo$table_body$stat_1[9] > res_o$table_body$stat_1[10])
 
   # ordered variable, no by
-  expect_warning(
-    res <- tbl_hierarchical(data = trial_o, variables = c(stage, grade), denominator = trial_o, id = id)
-  )
+  res <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV),
+    denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
+  ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
 })
 
@@ -222,7 +227,7 @@ test_that("tbl_hierarchical_count(overall_row) works properly", {
   # value are correct when by is passed
   res <- tbl_hierarchical_count(data = trial, variables = trt, by = grade, overall_row = TRUE)
   expect_snapshot(res |> as.data.frame())
-  expect_equal((res |> as.data.frame())[1, 1], "Total number of records")
+  expect_equal((res |> as.data.frame())[1, 1], "Total number of events")
   expect_equal(
     (res |> as.data.frame())[1, -1] |> as.character(),
     (trial |> dplyr::group_by(grade) |> dplyr::summarise(n = dplyr::n()))$n |> as.character()

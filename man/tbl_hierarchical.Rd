@@ -79,7 +79,7 @@ Use these functions to generate hierarchical tables.
 utilizing the \code{denominator} and \code{id} arguments to identify the rows in \code{data}
 to include in each rate calculation. If \code{variables} contains more than one
 variable and the last variable in \code{variables} is an ordered factor, then
-\emph{rates} of events by highest level will be calculated.
+rates of events by highest level will be calculated.
 \item \code{tbl_hierarchical_count()}: Calculates \emph{counts} of events utilizing
 all rows for each tabulation.
 }
@@ -94,15 +94,17 @@ in \code{data} corresponds to one event record, this row will count the overall 
 
 A label for this overall row can be specified by passing an \code{overall} element in \code{label}. If no \code{overall} label has
 been set and \code{overall_row = TRUE}, \code{"Total number of patients with any event"} will be used by \code{tbl_hierarchical()}
-and \code{"Total number of records"} will be used by \code{tbl_hierarchical_count()}.
+and \code{"Total number of events"} will be used by \code{tbl_hierarchical_count()}.
 }
 
 \examples{
 data <- cards::ADAE |>
   dplyr::filter(
-    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
-    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
+    AESOC \%in\% unique(cards::ADAE$AESOC)[1:20],
+    AETERM \%in\% unique(cards::ADAE$AETERM)[1:20]
   )
+
+# Example 1 - Event Rates ------------------------------------
 
 tbl_hierarchical(
   data = data,
@@ -113,11 +115,28 @@ tbl_hierarchical(
   overall_row = TRUE
 )
 
+# Example 2 - Rates by Highest Severity ----------------------
+
+# order the severity variable
+data$AESEV <- factor(data$AESEV, ordered = TRUE)
+
+tbl_hierarchical(
+  data = data,
+  variables = c(AESOC, AESEV),
+  by = TRTA,
+  id = USUBJID,
+  denominator = cards::ADSL |> mutate(TRTA = ARM),
+  include = AESEV,
+  label = list(AESEV = "Highest Severity")
+)
+
+# Example 3 - Event Counts -----------------------------------
+
 tbl_hierarchical_count(
   data = data,
   variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
-  denominator = cards::ADSL |> mutate(TRTA = ARM)
+  overall_row = TRUE
 )
 
 }
