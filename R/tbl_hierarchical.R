@@ -348,11 +348,11 @@ internal_tbl_hierarchical <- function(data,
     } else {
       cards_ord <- cards::ard_stack_hierarchical(
         data = data,
-        variables = utils::head(variables, -1),
-        by = c(by, dplyr::last(variables)),
-        id = id,
+        variables = all_of(utils::head(variables, -1)),
+        by = all_of(c(by, dplyr::last(variables))),
+        id = all_of(id),
         denominator = denominator,
-        include = dplyr::nth(variables, -2),
+        include = all_of(dplyr::nth(variables, -2)),
         statistic = statistic,
         total_n = (is_empty(by) && length(include) == 1)
       )
@@ -380,11 +380,11 @@ internal_tbl_hierarchical <- function(data,
 
     cards <- cards::ard_stack_hierarchical(
       data = data,
-      variables = variables,
-      by = by,
-      id = id,
+      variables = all_of(variables),
+      by = any_of(by),
+      id = all_of(id),
       denominator = denominator,
-      include = include,
+      include = all_of(include),
       statistic = statistic,
       over_variables = overall_row,
       total_n = is_empty(by)
@@ -394,10 +394,10 @@ internal_tbl_hierarchical <- function(data,
   } else {
     cards::ard_stack_hierarchical_count(
       data = data,
-      variables = variables,
-      by = by,
+      variables = all_of(variables),
+      by = any_of(by),
       denominator = denominator,
-      include = include,
+      include = all_of(include),
       over_variables = overall_row,
       total_n = is_empty(by) && !is_empty(denominator)
     )
