@@ -57,6 +57,7 @@
 #'
 #' @return a gtsummary table of class `"tbl_hierarchical"` (for `tbl_hierarchical()`) or `"tbl_hierarchical_count"`
 #'   (for `tbl_hierarchical_count()`).
+#' @export
 #'
 #' @examples
 #' ADAE_subset <- cards::ADAE |>
@@ -77,9 +78,8 @@
 #' )
 #'
 #' # Example 2 - Rates by Highest Severity ------
-#'
 #' # order the severity variable
-#' data$AESEV <- factor(data$AESEV, ordered = TRUE)
+#' ADAE_subset$AESEV <- factor(ADAE_subset$AESEV, ordered = TRUE)
 #'
 #' tbl_hierarchical(
 #'   data = ADAE_subset,
@@ -91,7 +91,15 @@
 #'   label = list(AESEV = "Highest Severity")
 #' )
 #'
-#' @export
+#'
+#' # Example 3 - Event Counts -------------------
+#' tbl_hierarchical_count(
+#'   data = ADAE_subset,
+#'   variables = c(AESOC, AETERM, AESEV),
+#'   by = TRTA,
+#'   overall_row = TRUE
+#' )
+#'
 tbl_hierarchical <- function(data,
                              variables,
                              by = NULL,
@@ -142,17 +150,6 @@ tbl_hierarchical <- function(data,
 }
 
 #' @rdname tbl_hierarchical
-#'
-#' @examples
-#' # Example 3 - Event Counts -----------------------------------
-#'
-#' tbl_hierarchical_count(
-#'   data = data,
-#'   variables = c(AESOC, AETERM, AESEV),
-#'   by = TRTA,
-#'   overall_row = TRUE
-#' )
-#'
 #' @export
 tbl_hierarchical_count <- function(data,
                                    variables,
