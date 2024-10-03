@@ -103,9 +103,7 @@ ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
     AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
-  ) |>
-  dplyr::mutate(AESEV = factor(AESEV))
-attr(ADAE_subset$AESEV, "label") <- "Severity/Intensity"
+  )
 
 # Example 1 - Event Rates --------------------
 tbl_hierarchical(
