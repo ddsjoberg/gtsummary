@@ -126,7 +126,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
   }
 
   # create overall table -------------------------------------------------------
-  tbl_overall <- do.call(calling_fun, args_overall[names(formals(calling_fun))])
+  tbl_overall <- do.call(calling_fun, args_overall)
 
   # merging overall results
   x <- add_overall_merge(x, tbl_overall, last, col_label, calling_fun)
