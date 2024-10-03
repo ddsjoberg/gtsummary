@@ -117,9 +117,8 @@ tbl_hierarchical(
 )
 
 # Example 2 - Rates by Highest Severity ------
-
 # order the severity variable
-data$AESEV <- factor(data$AESEV, ordered = TRUE)
+ADAE_subset$AESEV <- factor(ADAE_subset$AESEV, ordered = TRUE)
 
 tbl_hierarchical(
   data = ADAE_subset,
@@ -131,10 +130,10 @@ tbl_hierarchical(
   label = list(AESEV = "Highest Severity")
 )
 
-# Example 3 - Event Counts -----------------------------------
 
+# Example 3 - Event Counts -------------------
 tbl_hierarchical_count(
-  data = data,
+  data = ADAE_subset,
   variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
   overall_row = TRUE
