@@ -1,7 +1,7 @@
 #' Hierarchical table
 #'
 #' @description `r lifecycle::badge('experimental')`\cr
-#' *This is an early release of this function, and there will likely be changes in the next release.*
+#' *This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.*
 #'
 #' Use these functions to generate hierarchical tables.
 #'
