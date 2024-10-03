@@ -540,7 +540,7 @@ pier_summary_missing_row <- function(cards,
     )
 }
 
-.add_table_styling_stats <- function(x, cards, by) {
+.add_table_styling_stats <- function(x, cards, by, hierarchical = FALSE) {
   if (is_empty(by)) {
     x$table_styling$header$modify_stat_level <- translate_string("Overall")
 
@@ -574,6 +574,7 @@ pier_summary_missing_row <- function(cards,
         .data$variable %in% .env$by,
         .data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")
       )
+    by_gps <- paste0("group", seq_along(by), c("", "_level"))
 
     # if no tabulation of the 'by' variable provided, just return the 'by' levels
     if (nrow(df_by_stats) == 0L) {
@@ -592,7 +593,7 @@ pier_summary_missing_row <- function(cards,
         dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
         dplyr::left_join(
           cards |>
-            dplyr::select(cards::all_ard_groups(), "gts_column") |>
+            dplyr::select(if (hierarchical) by_gps else cards::all_ard_groups(), "gts_column") |>
             dplyr::filter(!is.na(.data$gts_column)) |>
             dplyr::distinct() |>
             dplyr::rename(variable = "group1", variable_level = "group1_level"),
