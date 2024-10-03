@@ -345,7 +345,8 @@ pier_summary_hierarchical <- function(cards,
       names_from = "gts_column",
       values_from = "stat"
     ) |>
-    tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE)
+    tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE) |>
+    mutate(across(is.factor, as.character))
 
   if (length(variables) > 1 && length(include) > 1) {
     gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
