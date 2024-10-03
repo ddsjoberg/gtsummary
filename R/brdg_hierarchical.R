@@ -163,7 +163,7 @@ brdg_hierarchical <- function(cards,
     x <- x |>
       modify_column_indent(
         columns = label,
-        rows = variable == !!variables[i],
+        rows = .data$variable == !!variables[i],
         indent = (i - 1) * 4
       )
   }
@@ -171,7 +171,7 @@ brdg_hierarchical <- function(cards,
     x <- x |>
       modify_column_indent(
         columns = label,
-        rows = variable == "overall",
+        rows = .data$variable == "overall",
         indent = 0
       )
   }
