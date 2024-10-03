@@ -321,7 +321,6 @@ internal_tbl_hierarchical <- function(data,
     }
   }
 
-  browser()
   # call bridge function here
   brdg_hierarchical(
     cards,

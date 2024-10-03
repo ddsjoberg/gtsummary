@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' # Example 1 ----------------------------------
+#' # Example 1: Event Rates  --------------------
 #' # First, build the ARD
 #' ard <-
 #'   cards::ard_stack_hierarchical(
@@ -28,6 +28,22 @@
 #'   cards = ard,
 #'   variables = c(AESOC, AETERM),
 #'   by = TRTA
+#' )
+#'
+#' # Example 2: Event Counts  -------------------
+#' ard <-
+#'   cards::ard_stack_hierarchical_count(
+#'     data = ADAE_subset,
+#'     variables = c(AESOC, AETERM),
+#'     by = TRTA,
+#'     denominator = cards::ADSL |> mutate(TRTA = ARM)
+#'   )
+#'
+#' tbl_ard_hierarchical(
+#'   cards = ard,
+#'   variables = c(AESOC, AETERM),
+#'   by = TRTA,
+#'   statistic = "{n}"
 #' )
 tbl_ard_hierarchical <- function(cards,
                                  variables,
@@ -59,6 +75,17 @@ tbl_ard_hierarchical <- function(cards,
   # save arguments
   tbl_ard_hierarchical_inputs <- as.list(environment())
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
+
+  # fill in missing labels -----------------------------------------------------
+  label = NULL
+  default_label <- sapply(
+    variables,
+    \(x) if (!is_empty(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
+  ) |>
+    as.list()
+  label <- c(
+    label, default_label[setdiff(names(default_label), names(label))]
+  )[c(variables, if ("overall" %in% names(label)) "overall")]
 
   brdg_hierarchical(
     cards = cards,
