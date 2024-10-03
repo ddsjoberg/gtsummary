@@ -442,12 +442,12 @@ tbl_summary <- function(data,
       )
   } else if (hierarchical) { # disregard hierarchies, only check by variable
     cards <- cards |>
-      dplyr::group_by(group1_level) |>
+      dplyr::group_by(.data$group1_level) |>
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
 
     # process overall row
     cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
-      dplyr::group_by(variable_level) |>
+      dplyr::group_by(.data$variable_level) |>
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
       dplyr::ungroup()
   } else {

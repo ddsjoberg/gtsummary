@@ -7,7 +7,7 @@
 \usage{
 brdg_hierarchical(
   cards,
-  hierarchies,
+  variables,
   by,
   include,
   statistic,
@@ -15,7 +15,8 @@ brdg_hierarchical(
   overall_row,
   count,
   is_ordered,
-  label
+  label,
+  digits
 )
 
 pier_summary_hierarchical(cards, variables, include, statistic)
@@ -24,7 +25,7 @@ pier_summary_hierarchical(cards, variables, include, statistic)
 \item{cards}{(\code{card})\cr
 an ARD object of class \code{"card"} created with \code{cards::ard_hierarchical_stack()}.}
 
-\item{hierarchies}{(\code{character})\cr
+\item{variables}{(\code{character})\cr
 character list of hierarchy variables.}
 
 \item{by}{(\code{string})\cr
@@ -47,10 +48,15 @@ The default is \code{FALSE}.}
 whether \code{tbl_hierarchical_count()} (\code{TRUE}) or \code{tbl_hierarchical()} (\code{FALSE}) is being applied.}
 
 \item{is_ordered}{(scalar \code{logical})\cr
-whether the last variable in \code{hierarchies} is ordered.}
+whether the last variable in \code{variables} is ordered.}
 
 \item{label}{(named \code{list})\cr
 named list of hierarchy variable labels.}
+
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}.}
 }
 \value{
 a gtsummary object
