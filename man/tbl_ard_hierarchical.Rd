@@ -49,7 +49,13 @@ a gtsummary table of class \code{"tbl_ard_hierarchical"}
 Calculates \emph{rates} of events (e.g. adverse events).
 }
 \examples{
-# Example 1 ----------------------------------
+ADAE_subset <- cards::ADAE |>
+  dplyr::filter(
+    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
+    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
+  )
+
+# Example 1: Event Rates  --------------------
 # First, build the ARD
 ard <-
   cards::ard_stack_hierarchical(
@@ -65,5 +71,21 @@ tbl_ard_hierarchical(
   cards = ard,
   variables = c(AESOC, AETERM),
   by = TRTA
+)
+
+# Example 2: Event Counts  -------------------
+ard <-
+  cards::ard_stack_hierarchical_count(
+    data = ADAE_subset,
+    variables = c(AESOC, AETERM),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM)
+  )
+
+tbl_ard_hierarchical(
+  cards = ard,
+  variables = c(AESOC, AETERM),
+  by = TRTA,
+  statistic = "{n}"
 )
 }

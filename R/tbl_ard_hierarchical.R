@@ -12,6 +12,12 @@
 #' @export
 #'
 #' @examples
+#' ADAE_subset <- cards::ADAE |>
+#'   dplyr::filter(
+#'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+#'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+#'   )
+#'
 #' # Example 1: Event Rates  --------------------
 #' # First, build the ARD
 #' ard <-
