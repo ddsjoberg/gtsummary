@@ -96,7 +96,6 @@ add_overall.tbl_svysummary <- add_overall.tbl_summary
 #' @export
 add_overall.tbl_custom_summary <- add_overall.tbl_summary
 
-
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
   check_string(col_label, allow_empty = TRUE)
