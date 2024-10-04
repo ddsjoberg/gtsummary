@@ -1,12 +1,18 @@
 # gtsummary (development version)
 
-* Bug fix in `add_overall.tbl_custom_summary()` due to extraneous arguments being passed to primary function. (#2027)
+### New Features and Functions
 
 * Added function `tbl_hierarchical()`, `tbl_hierarchical_count()`, `tbl_ard_hierarchical()`, `brdg_hierarchical()`, and `pier_summary_hierarchical()`. Consider these functions as a preview. We will be making changes without the full deprecation cycle in the coming releases. (#1872) 
 
 * Adding the `style_*(prefix, suffix)` and  `label_style_*(prefix, suffix)` for adding a string before or after the formatted results. These arguments have not been added to the p-value formatting functions. (#1690)
 
-* Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
+* Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
+
+* Added `add_stat_label.tbl_ard_summary()` method. (#1969)
+
+### Other Updates
+
+* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
 
 * Migrated the `tbl_survfit.list(conf.level)` up to `tbl_survfit.data.frame(conf.level)` where the confidence level is passed to `survival::survfit()`.
 
@@ -14,17 +20,17 @@
 
 * Made the `oneway.test()` available in `add_p.tbl_continuous()`. (#1970)
 
-* Added argument `tbl_ard_summary(overall)`. When `TRUE`, the ARD is parsed into primary ARD and the Overall ARD and we run `tbl_ard_summary() |> add_overall()`. (#1940)
-
-* Added `add_stat_label.tbl_ard_summary()` method. (#1969)
-
-* Headers in {gt} tables being exported to PDF do not support the `\n` line breaker. Previously, line breakers were stripped from the header in the `print.gtsummary()` S3 method. But this did not apply to users utilizing `as_gt()` to further customize their tables. As a result, the line breaking strip has been migrated to `as_gt()`. (#1960)
-
-* Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
-
 * Removed the deprecated `'aov'` test from the `tests.R` file listing available tests. (#1970)
 
 * Removed documentation for the `add_overall.tbl_ard_summary(digits)` argument, which was never meant to be a part of this function. (#1975)
+
+### Bug Fixes
+
+* Bug fix in `add_overall.tbl_custom_summary()` due to extraneous argument being passed to `tbl_custom_summary()`. (#2027)
+
+* Bug fix in `add_p.tbl_survfit()` when the original call included `tbl_survfit(type)` specification. (#2002)
+
+* Removed the `"tbl_summary-arg:statistic"` theme that was incorrectly added to `tbl_continuous()`.
 
 # gtsummary 2.0.2
 
