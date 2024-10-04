@@ -3,7 +3,7 @@
 \name{tbl_hierarchical}
 \alias{tbl_hierarchical}
 \alias{tbl_hierarchical_count}
-\title{Hierarchical table}
+\title{Hierarchical Table}
 \usage{
 tbl_hierarchical(
   data,
