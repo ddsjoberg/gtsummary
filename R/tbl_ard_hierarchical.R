@@ -3,7 +3,7 @@
 #' @description `r lifecycle::badge('experimental')`\cr
 #' *This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.*
 #'
-#' Calculates *rates* of events (e.g. adverse events).
+#' Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 #'
 #' @inheritParams tbl_hierarchical
 #' @inheritParams tbl_ard_summary
@@ -83,7 +83,6 @@ tbl_ard_hierarchical <- function(cards,
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
 
   # fill in missing labels -----------------------------------------------------
-  label = NULL
   default_label <- sapply(
     variables,
     \(x) if (!is_empty(attr(data[[x]], "label"))) attr(data[[x]], "label") else x

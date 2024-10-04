@@ -46,7 +46,7 @@ a gtsummary table of class \code{"tbl_ard_hierarchical"}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 \emph{This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.}
 
-Calculates \emph{rates} of events (e.g. adverse events).
+Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 }
 \examples{
 ADAE_subset <- cards::ADAE |>

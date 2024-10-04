@@ -20,9 +20,16 @@ test_that("tbl_ard_hierarchical() event rates", {
     tbl <- tbl_ard_hierarchical(
       cards = ard,
       variables = c(AESOC, AETERM, AESEV),
-      by = TRTA
+      by = TRTA,
+      label = list(AESOC = "System Organ Class",
+                   AETERM = "Preferred Term",
+                   AESEV = "Severity")
     ),
     NA
+  )
+  expect_equal(
+    tbl$table_styling$header |> dplyr::filter(column == "label") |> dplyr::pull("label") |> gsub("[^[:alnum:]]", "", x = _),
+    "SystemOrganClassPreferredTermSeverity"
   )
 
   expect_equal(
