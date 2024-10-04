@@ -336,6 +336,7 @@ tbl_custom_summary <- function(data,
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
   tbl_custom_summary_inputs <- as.list(environment())
+  tbl_custom_summary_inputs[["default_types"]] <- NULL
   call <- match.call()
 
 
