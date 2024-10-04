@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `add_overall.tbl_custom_summary()` due to extraneous arguments being passed to primary function. (#2027)
+
 * Added function `tbl_hierarchical()`, `tbl_hierarchical_count()`, `tbl_ard_hierarchical()`, `brdg_hierarchical()`, and `pier_summary_hierarchical()`. Consider these functions as a preview. We will be making changes without the full deprecation cycle in the coming releases. (#1872) 
 
 * Adding the `style_*(prefix, suffix)` and  `label_style_*(prefix, suffix)` for adding a string before or after the formatted results. These arguments have not been added to the p-value formatting functions. (#1690)
