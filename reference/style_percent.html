@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,10 +52,12 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">style_percent</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  symbol <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  big.mark <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">decimal.mark</span> <span class="op">==</span> <span class="st">","</span>, <span class="st">" "</span>, <span class="st">","</span><span class="op">)</span>,</span>
 <span>  decimal.mark <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  suffix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">symbol</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -66,11 +68,6 @@
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>numeric vector of percentages</p></dd>
-
-
-<dt id="arg-symbol">symbol<a class="anchor" aria-label="anchor" href="#arg-symbol"></a></dt>
-<dd><p>Logical indicator to include percent symbol in output.
-Default is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
@@ -92,6 +89,21 @@ The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 
 
+<dt id="arg-prefix">prefix<a class="anchor" aria-label="anchor" href="#arg-prefix"></a></dt>
+<dd><p>(<code>string</code>)<br>
+Additional text to display before the number.</p></dd>
+
+
+<dt id="arg-suffix">suffix<a class="anchor" aria-label="anchor" href="#arg-suffix"></a></dt>
+<dd><p>(<code>string</code>)<br>
+Additional text to display after the number.</p></dd>
+
+
+<dt id="arg-symbol">symbol<a class="anchor" aria-label="anchor" href="#arg-symbol"></a></dt>
+<dd><p>Logical indicator to include percent symbol in output.
+Default is <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed on to <code><a href="https://rdrr.io/r/base/format.html" class="external-link">base::format()</a></code></p></dd>
 
@@ -110,7 +122,7 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">percent_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.0001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.10</span>, <span class="fl">0.45356</span>, <span class="fl">0.99</span>, <span class="fl">1.45</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA     "0"    "&lt;0.1" "0.5"  "1.0"  "10"   "45"   "99"   "145" </span>
-<span class="r-in"><span><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span>, symbol <span class="op">=</span> <span class="cn">TRUE</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span>, suffix <span class="op">=</span> <span class="st">"%"</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA       "0%"     "0.01%"  "0.50%"  "1.00%"  "10.0%"  "45.4%"  "99.0%" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [9] "145.0%"</span>
 </code></pre></div>
@@ -124,7 +136,7 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

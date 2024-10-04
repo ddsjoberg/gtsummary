@@ -9,7 +9,7 @@ Summarize a continuous variable by one or more categorical variables"><meta prop
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,8 @@ Summarize a continuous variable by one or more categorical variables</p>
 <span>  <span class="va">include</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  statistic <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{median} ({p25}, {p75})"</span></span>
+<span>  statistic <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{median} ({p25}, {p75})"</span>,</span>
+<span>  value <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +100,13 @@ If no label has been set, the column name is used.</p></dd>
 Specifies summary statistics to display for each variable.  The default is
 <code>everything() ~ "{median} ({p25}, {p75})"</code>.</p></dd>
 
+
+<dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
+<dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
+Supply a value to display a variable on a single row, printing the
+results for the variable associated with the value (similar to a
+<code>'dichotomous'</code> display in <code><a href="tbl_summary.html">tbl_summary()</a></code>).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -109,31 +117,21 @@ Specifies summary statistics to display for each variable.  The default is
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/cards" class="external-link">cards</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="co"># the primary ARD with the results</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">trial</span>,</span></span>
-<span class="r-in"><span>    <span class="co"># the order variables are passed here is important.</span></span></span>
-<span class="r-in"><span>    <span class="co"># 'trt' is the column stratifying variable and needs to be listed first.</span></span></span>
-<span class="r-in"><span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    variables <span class="op">=</span> <span class="va">age</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># add univariate trt tabulation</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">trial</span>,</span></span>
-<span class="r-in"><span>    variables <span class="op">=</span> <span class="va">trt</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># add missing and attributes ARD</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html" class="external-link">ard_missing</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">trial</span>,</span></span>
-<span class="r-in"><span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    variables <span class="op">=</span> <span class="va">age</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">ard_attributes</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">trial</span>,</span></span>
-<span class="r-in"><span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span>, <span class="va">age</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># the primary ARD with the results</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="co"># the order variables are passed is important for the `by` variable.</span></span></span>
+<span class="r-in"><span>  <span class="co"># 'trt' is the column stratifying variable and needs to be listed first.</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span><span class="op">)</span>, variables <span class="op">=</span> <span class="va">age</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="co"># adding OPTIONAL information about the summary variables</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="co"># add univariate trt tabulation</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="va">trt</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="co"># add missing and attributes ARD</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html" class="external-link">ard_missing</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span><span class="op">)</span>, variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">ard_attributes</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">grade</span>, <span class="va">age</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">tbl_ard_continuous</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"trt"</span>, variable <span class="op">=</span> <span class="st">"age"</span>, include <span class="op">=</span> <span class="st">"grade"</span><span class="op">)</span></span></span>
 <div class="gt-table"><div id="ihnnlpycox" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
@@ -150,13 +148,15 @@ Specifies summary statistics to display for each variable.  The default is
 <td headers="stat_1" class="gt_row gt_center" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: center;" valign="middle" align="center">51.5 (41.5, 60.5)</td>
 <td headers="stat_2" class="gt_row gt_center" style="border-style: none; padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; text-align: center;" valign="middle" align="center">45.0 (36.0, 52.0)</td></tr></tbody><tfoot class="gt_footnotes" style="border-style: none; color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3;" bgcolor="#FFFFFF"><tr style="border-style: none;"><td class="gt_footnote" colspan="3" style="border-style: none; margin: 0px; font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px;"><span class="gt_footnote_marks" style="font-size: 75%; vertical-align: 0.4em; position: initial; white-space: nowrap; font-style: italic; font-weight: normal; line-height: 0;"><sup>1</sup></span> <span class="gt_from_md">Age: Median (Q1, Q3)</span></td>
     </tr></tfoot></table></div></div><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="co"># the primary ARD with the results</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">grade</span>, variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="co"># add missing and attributes ARD</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html" class="external-link">ard_missing</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">grade</span>, variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">ard_attributes</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">grade</span>, <span class="va">age</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># the primary ARD with the results</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">grade</span>, variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="co"># adding OPTIONAL information about the summary variables</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="co"># add missing and attributes ARD</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html" class="external-link">ard_missing</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">grade</span>, variables <span class="op">=</span> <span class="va">age</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">ard_attributes</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">grade</span>, <span class="va">age</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">tbl_ard_continuous</span><span class="op">(</span>variable <span class="op">=</span> <span class="st">"age"</span>, include <span class="op">=</span> <span class="st">"grade"</span><span class="op">)</span></span></span>
 <div class="gt-table"><div id="dxfseakxnn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
@@ -178,7 +178,7 @@ Specifies summary statistics to display for each variable.  The default is
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

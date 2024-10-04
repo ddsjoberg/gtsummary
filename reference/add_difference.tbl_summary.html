@@ -11,7 +11,7 @@ to the table along with the difference's confidence interval and a p-value (when
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +67,8 @@ to the table along with the difference's confidence interval and a p-value (when
 <span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  pvalue_fun <span class="op">=</span> <span class="fu"><a href="label_style.html">label_style_pvalue</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  estimate_fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="select_helpers.html">all_categorical</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="label_style.html">label_style_sigfig</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="select_helpers.html">all_dichotomous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="cn">NA_character_</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="style_sigfig.html">style_sigfig</a></span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, <span class="st">"%"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="select_helpers.html">all_tests</a></span><span class="op">(</span><span class="st">"smd"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="label_style.html">label_style_sigfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="select_helpers.html">all_dichotomous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="label_style.html">label_style_sigfig</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">100</span>, suffix <span class="op">=</span> <span class="st">"%"</span><span class="op">)</span>, <span class="fu"><a href="select_helpers.html">all_tests</a></span><span class="op">(</span><span class="st">"smd"</span><span class="op">)</span></span>
+<span>    <span class="op">~</span> <span class="fu"><a href="label_style.html">label_style_sigfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -130,9 +130,7 @@ the rounded/formatted p-value (e.g. <code>pvalue_fun = label_style_pvalue(digits
 <dt id="arg-estimate-fun">estimate_fun<a class="anchor" aria-label="anchor" href="#arg-estimate-fun"></a></dt>
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
 List of formulas specifying the functions
-to round and format differences and confidence limits.
-Default is
-<code>list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \(x) paste0(style_sigfig(x, scale = 100), "%"))</code></p></dd>
+to round and format differences and confidence limits.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -252,7 +250,7 @@ N = 102</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
