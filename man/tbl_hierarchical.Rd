@@ -58,7 +58,7 @@ used to specify the summary statistics to display for all variables in \code{tbl
 The default is \code{"{n} ({p})"}.}
 
 \item{overall_row}{(scalar \code{logical})\cr
-whether an overall summmary row should be included at the top of the table.
+whether an overall summary row should be included at the top of the table.
 The default is \code{FALSE}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
