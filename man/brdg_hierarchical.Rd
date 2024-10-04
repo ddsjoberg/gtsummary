@@ -40,7 +40,7 @@ named list of summary statistic names.}
 named list of summary types.}
 
 \item{overall_row}{(scalar \code{logical})\cr
-whether an overall summmary row should be included at the top of the table.
+whether an overall summary row should be included at the top of the table.
 The default is \code{FALSE}.}
 
 \item{count}{(scalar \code{logical})\cr

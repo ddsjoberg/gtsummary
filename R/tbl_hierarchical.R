@@ -37,7 +37,7 @@
 #'   used to specify the summary statistics to display for all variables in `tbl_hierarchical()`.
 #'   The default is `"{n} ({p})"`.
 #' @param overall_row (scalar `logical`)\cr
-#'   whether an overall summmary row should be included at the top of the table.
+#'   whether an overall summary row should be included at the top of the table.
 #'   The default is `FALSE`.
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   used to override default labels in hierarchical table, e.g. `list(AESOC = "System Organ Class")`.
