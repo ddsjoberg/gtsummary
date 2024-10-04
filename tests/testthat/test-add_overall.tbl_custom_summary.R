@@ -1,4 +1,9 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed("withr", reference_pkg = "gtsummary"))
+
 test_that("add_overall.tbl_custom_summary() works", {
+  withr::local_options(list(width = 120))
+
   my_stats <- function(data, ...) {
     dplyr::tibble(
       marker_sum = sum(data$marker, na.rm = TRUE)
