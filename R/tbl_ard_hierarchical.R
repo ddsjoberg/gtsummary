@@ -83,11 +83,7 @@ tbl_ard_hierarchical <- function(cards,
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
 
   # fill in missing labels -----------------------------------------------------
-  default_label <- sapply(
-    variables,
-    \(x) if (!is_empty(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
-  ) |>
-    as.list()
+  default_label <- default_label <- names(data) |> as.list() |> setNames(names(data))
   label <- c(
     label, default_label[setdiff(names(default_label), names(label))]
   )[c(variables, if ("overall" %in% names(label)) "overall")]
