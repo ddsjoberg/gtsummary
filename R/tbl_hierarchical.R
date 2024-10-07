@@ -287,7 +287,6 @@ internal_tbl_hierarchical <- function(data,
     data = data, label = label, statistic = statistic,
     digits = NULL, value = NULL, type = type, sort = NULL
   )
-  .check_statistic_type_agreement(statistic, type)
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)

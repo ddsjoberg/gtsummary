@@ -32,8 +32,6 @@
 #'   character list of hierarchy variables to include summary statistics for.
 #' @param statistic (named `list`)\cr
 #'   named list of summary statistic names.
-#' @param type (named `list`)\cr
-#'   named list of summary types.
 #' @param count (scalar `logical`)\cr
 #'   whether `tbl_hierarchical_count()` (`TRUE`) or `tbl_hierarchical()` (`FALSE`) is being applied.
 #' @param is_ordered (scalar `logical`)\cr
@@ -52,7 +50,6 @@ brdg_hierarchical <- function(cards,
                               by,
                               include,
                               statistic,
-                              type,
                               overall_row,
                               count,
                               is_ordered,
@@ -151,7 +148,7 @@ brdg_hierarchical <- function(cards,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_hierarchical_footnote(cards, variables, statistic, type)
+        .construct_hierarchical_footnote(cards, variables, statistic)
     )
 
   x <- x |>
@@ -369,7 +366,7 @@ pier_summary_hierarchical <- function(cards,
   df_result_levels
 }
 
-.construct_hierarchical_footnote <- function(card, include, statistic, type) {
+.construct_hierarchical_footnote <- function(card, include, statistic) {
   include |>
     lapply(
       function(variable) {
@@ -379,7 +376,7 @@ pier_summary_hierarchical <- function(cards,
           dplyr::distinct() %>%
           {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>
