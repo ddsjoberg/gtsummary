@@ -118,7 +118,8 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
-  overall_row = TRUE
+  overall_row = TRUE,
+  digits = p ~ 2
 )
 
 # Example 2 - Rates by Highest Severity ------
