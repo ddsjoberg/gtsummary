@@ -317,7 +317,6 @@ internal_tbl_hierarchical <- function(data,
   }
 
   # check inputs ---------------------------------------------------------------
-  .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
     digits = digits, value = NULL, type = type, sort = NULL
