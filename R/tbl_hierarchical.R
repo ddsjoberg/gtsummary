@@ -296,7 +296,7 @@ internal_tbl_hierarchical <- function(data,
   cards$stat_label <- translate_vector(cards$stat_label)
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- .add_gts_column_to_cards_summary(cards, variables, by, hierarchical = TRUE)
+  cards <- .add_gts_column_to_cards_hierarchical(cards, variables, by)
 
   # fill in missing labels -----------------------------------------------------
   default_label <- sapply(
@@ -409,4 +409,28 @@ internal_tbl_hierarchical <- function(data,
       total_n = is_empty(by) && !is_empty(denominator)
     )
   }
+}
+
+.add_gts_column_to_cards_hierarchical <- function(cards, variables, by) {
+  # adding the name of the column the stats will populate
+  if (is_empty(by)) {
+    cards$gts_column <-
+      ifelse(
+        !cards$context %in% "attributes" & !cards$variable %in% "..ard_total_n..",
+        "stat_0",
+        NA_character_
+      )
+  } else {
+    cards <- cards |>
+      dplyr::group_by(.data$group1_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
+
+    # process overall row
+    cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
+      dplyr::group_by(.data$variable_level) |>
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
+      dplyr::ungroup()
+  }
+
+  cards
 }
