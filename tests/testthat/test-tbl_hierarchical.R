@@ -131,6 +131,23 @@ test_that("tbl_hierarchical(label) works properly", {
   )
 })
 
+# tbl_hierarchical(digits) ------------------------------------------------------------
+test_that("tbl_hierarchical(digits) works properly", {
+  # creates table when digits is passed
+  res <- tbl_hierarchical(
+    data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+    digits = list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
+  )
+  expect_snapshot(res |> as.data.frame())
+  expect_equal(res$table_body$stat_0[1], "36,0 (0.679)")
+
+  # errors thrown when bad digits argument passed
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, digits = "0")
+  )
+})
+
 # tbl_hierarchical with ordered variables ------------------------------------------------------------
 test_that("tbl_hierarchical works properly when last variable of hierarchy is ordered", {
   data <- cards::ADAE |>
@@ -259,5 +276,22 @@ test_that("tbl_hierarchical_count(label) works properly", {
   expect_snapshot(
     error = TRUE,
     tbl_hierarchical_count(data = trial, variables = c(stage, grade), label = "Stages")
+  )
+})
+
+# tbl_hierarchical_count(digits) ------------------------------------------------------------
+test_that("tbl_hierarchical_count(digits) works properly", {
+  # creates table when digits is passed
+  res <- tbl_hierarchical_count(
+    data = trial, variables = c(stage, grade),
+    digits = list(n = label_style_number(digits = 1, decimal.mark = ","))
+  )
+  expect_snapshot(res |> as.data.frame())
+  expect_equal(res$table_body$stat_0[1], "53,0")
+
+  # errors thrown when bad digits argument passed
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = "test")
   )
 })
