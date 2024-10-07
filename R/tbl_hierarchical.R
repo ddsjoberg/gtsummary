@@ -231,11 +231,19 @@ internal_tbl_hierarchical <- function(data,
     )
   }
 
+  # check that all of data[variables] are categorical type variables
+  type <- assign_summary_type(data, c(variables, by), value = NULL)
+  if (!all(type == "categorical")) {
+    cli::cli_abort(
+      "The columns selected in {.arg variables} and {.arg by} must all be {.cls character} or {.cls factor}.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
   # process arguments
-  type <- assign_summary_type(data, c(variables, if (overall_row) by), value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
   if (!is_empty(statistic)) {
     stat <- gsub("[\\{\\}]", "", regmatches(statistic, gregexpr("\\{.*?\\}", statistic))[[1]])
