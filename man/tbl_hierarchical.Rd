@@ -14,7 +14,8 @@ tbl_hierarchical(
   include = everything(),
   statistic = "{n} ({p})",
   overall_row = FALSE,
-  label = NULL
+  label = NULL,
+  digits = NULL
 )
 
 tbl_hierarchical_count(
@@ -24,7 +25,8 @@ tbl_hierarchical_count(
   denominator = NULL,
   include = everything(),
   overall_row = FALSE,
-  label = NULL
+  label = NULL,
+  digits = NULL
 )
 }
 \arguments{
@@ -65,6 +67,10 @@ The default is \code{FALSE}.}
 used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
+
+\item{digits}{(named \code{list})\cr
+specifies how summary statistics are rounded. Names are any of \code{"n"}, \code{"p"}, and \code{"N"}. Values may be either
+integer(s) or function(s). If not specified, default formatting is assigned via \code{assign_summary_digits()}.}
 }
 \value{
 a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical()}) or \code{"tbl_hierarchical_count"}
