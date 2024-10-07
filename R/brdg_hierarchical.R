@@ -136,7 +136,8 @@ brdg_hierarchical <- function(cards,
   x <- .create_gtsummary_object(table_body)
 
   # add info to x$table_styling$header for dynamic headers ---------------------
-  x <- .add_table_styling_stats_hierarchical(x, cards = cards, by = by)
+  noby_groups <- cards |> select(cards::all_ard_groups()) |> names() |> setdiff(by_groups)
+  x <- .add_table_styling_stats(x, cards = cards |> select(-noby_groups), by = by)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
@@ -367,97 +368,6 @@ pier_summary_hierarchical <- function(cards,
   }
 
   df_result_levels
-}
-
-.add_table_styling_stats_hierarchical <- function(x, cards, by) {
-  if (is_empty(by)) {
-    x$table_styling$header$modify_stat_level <- translate_string("Overall")
-
-    # add overall N to x$table_styling$header
-    lst_total_n <- cards::get_ard_statistics(cards, .data$variable %in% "..ard_total_n..")
-    if ("N" %in% names(lst_total_n)) {
-      x$table_styling$header <-
-        x$table_styling$header |>
-        dplyr::mutate(
-          modify_stat_N = lst_total_n[["N"]],
-          modify_stat_n = .data$modify_stat_N,
-          modify_stat_p = 1
-        )
-    }
-  }
-  # add by variable stats
-  else {
-    df_by_stats <- cards |>
-      dplyr::filter(
-        .data$variable %in% .env$by,
-        .data$stat_name %in% c("N", "n", "p")
-      )
-    by_gps <- paste0("group", seq_along(by), c("", "_level"))
-
-    # if no tabulation of the 'by' variable provided, just return the 'by' levels
-    if (nrow(df_by_stats) == 0L) {
-      df_by_stats_wide <-
-        cards |>
-        dplyr::select(column = "gts_column", modify_stat_level = "group1_level") |>
-        dplyr::distinct() |>
-        dplyr::filter(!is.na(.data$column) & !map_lgl(.data$modify_stat_level, is.null)) |>
-        dplyr::mutate(across(everything(), ~unlist(.) |> as.character()))
-    }
-    # otherwise prepare the tabulation stats
-    else {
-      df_by_stats_wide <-
-        df_by_stats |>
-        dplyr::filter(.data$stat_name %in% c("N", "n", "p")) |>
-        dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
-        dplyr::left_join(
-          cards |>
-            dplyr::select(by_gps, "gts_column") |>
-            dplyr::filter(!is.na(.data$gts_column)) |>
-            dplyr::distinct() |>
-            dplyr::rename(variable = "group1", variable_level = "group1_level"),
-          by = c("variable", "variable_level")
-        ) %>%
-        dplyr::bind_rows(
-          dplyr::select(., "variable_level", "gts_column", stat = "variable_level") |>
-            dplyr::mutate(stat_name = "level") |>
-            dplyr::distinct()
-        ) |>
-        tidyr::pivot_wider(
-          id_cols = "gts_column",
-          names_from = "stat_name",
-          values_from = "stat"
-        ) |>
-        dplyr::mutate(
-          dplyr::across(-"gts_column", unlist),
-          dplyr::across("level", as.character)
-        ) |>
-        dplyr::rename_with(
-          function(x) paste0("modify_stat_", x),
-          .cols = -"gts_column"
-        ) |>
-        dplyr::rename(column = "gts_column")
-    }
-
-    # add the stats here to the header data frame
-    x$table_styling$header <-
-      x$table_styling$header |>
-      dplyr::left_join(
-        df_by_stats_wide,
-        by = "column"
-      ) |>
-      tidyr::fill(any_of(c("modify_stat_N")), .direction = "updown")
-  }
-
-  # re-ording the columns
-  x$table_styling$header <-
-    x$table_styling$header |>
-    dplyr::relocate(
-      any_of(c("modify_stat_level", "modify_stat_N", "modify_stat_n", "modify_stat_p")),
-      .before = last_col()
-    )
-
-  # return final object
-  x
 }
 
 .construct_hierarchical_footnote <- function(card, include, statistic, type) {

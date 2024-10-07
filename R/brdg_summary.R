@@ -574,7 +574,6 @@ pier_summary_missing_row <- function(cards,
         .data$variable %in% .env$by,
         .data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")
       )
-    by_gps <- paste0("group", seq_along(by), c("", "_level"))
 
     # if no tabulation of the 'by' variable provided, just return the 'by' levels
     if (nrow(df_by_stats) == 0L) {
