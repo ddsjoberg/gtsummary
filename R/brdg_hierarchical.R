@@ -137,7 +137,7 @@ brdg_hierarchical <- function(cards,
 
   # add info to x$table_styling$header for dynamic headers ---------------------
   noby_groups <- cards |> select(cards::all_ard_groups()) |> names() |> setdiff(by_groups)
-  x <- .add_table_styling_stats(x, cards = cards |> select(-noby_groups), by = by)
+  x <- .add_table_styling_stats(x, cards = cards |> select(-all_of(noby_groups)), by = by)
 
   # adding styling -------------------------------------------------------------
   x <- x |>
