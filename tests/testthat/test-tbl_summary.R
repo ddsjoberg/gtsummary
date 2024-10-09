@@ -650,7 +650,7 @@ test_that("tbl_summary() edge case of warning condition printing", {
        type = continuous_var ~ "continuous",
        statistic = continuous_var ~ "{min}, {max}"
      ) |>
-     as_kable()
+     as_kable(format = "pipe")
  )
 })
 
