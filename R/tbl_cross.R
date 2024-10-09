@@ -73,7 +73,7 @@ tbl_cross <- function(data,
 
   # check inputs ---------------------------------------------------------------
   check_not_missing(data)
-  if (!missing(row) + !missing(col) == 1L) {
+  if (sum(!missing(row), !missing(col)) == 1L) {
     cli::cli_abort(
       "Specify both {.arg row} and {.arg col} arguments or neither.",
       call = get_cli_abort_call()

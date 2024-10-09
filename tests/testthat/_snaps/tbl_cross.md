@@ -79,9 +79,7 @@
       tbl_cross(trial, col = trt)
     Condition
       Error in `tbl_cross()`:
-      ! Error processing `type` argument.
-      ! i In argument: `all_of(row)`. Caused by error in `all_of()`: ! Can't subset elements that don't exist. x Element `trt` doesn't exist.
-      i Select among columns "..total.."
+      ! Specify both `row` and `col` arguments or neither.
 
 ---
 
