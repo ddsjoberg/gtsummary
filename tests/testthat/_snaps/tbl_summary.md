@@ -424,7 +424,7 @@
       as_kable(tbl_summary(dplyr::tibble(by_var = as.factor(c(rep("cohort_1", 3), rep(
         "cohort_2", 3))), continuous_var = c(NA, NA, NA, 1, 2, 3)), by = by_var,
       type = continuous_var ~ "continuous", statistic = continuous_var ~
-        "{min}, {max}"))
+        "{min}, {max}"), format = "pipe")
     Message
       The following warnings were returned during `as_kable()`:
       ! For variable `continuous_var` (`by_var = "cohort_1"`) and "min" statistic: no non-missing arguments to min; returning Inf
