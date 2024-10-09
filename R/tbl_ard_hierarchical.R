@@ -76,7 +76,7 @@ tbl_ard_hierarchical <- function(cards,
   cards::process_selectors(data[variables], include = {{ include }})
 
   # add the gtsummary column names to ARD data frame ---------------------------
-  cards <- .add_gts_column_to_cards_summary(cards, variables, by, hierarchical = TRUE)
+  cards <- .add_gts_column_to_cards_hierarchical(cards, variables, by)
 
   # save arguments
   tbl_ard_hierarchical_inputs <- as.list(environment())
