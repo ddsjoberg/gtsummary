@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `add_ci.tbl_svysummary()` for factor variables where order was alphabetical instead of the factor levels. (#2036)
+
 # gtsummary 2.0.3
 
 ### New Features and Functions

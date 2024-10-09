@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary") && is_pkg_installed("broom", reference_pkg = "cardx"))
+skip_if_not(is_pkg_installed(c("cardx", "survey", "withr"), reference_pkg = "gtsummary") && is_pkg_installed("broom", reference_pkg = "cardx"))
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_ci(method) with no `by`", {
@@ -740,3 +740,36 @@ test_that("add_ci() messaging for tbl_svysummary(percent)", {
     "function is meant to work with"
   )
 })
+
+test_that("add_ci.tbl_svysummary() ordering for factors", {
+  withr::local_seed(123)
+
+  # generate sample data
+  expect_error(
+    df <-
+      dplyr::tibble(factor = sample(c("A", "B", "C", NA), 100, replace = TRUE)) |>
+      dplyr::mutate(
+        factor2 = factor(factor, levels = c("C", "B", "A")),
+        factor = factor(factor),
+      ) |>
+      survey::svydesign(ids = ~ 1, data = _, weights = ~1) |>
+      tbl_svysummary(missing = "no") |>
+      add_ci() |>
+      modify_column_unhide(variable) |>
+      remove_row_type() |>
+      as.data.frame(col_label = FALSE),
+    NA
+  )
+
+  expect_equal(
+    df |>
+      dplyr::filter(variable == "factor") |>
+      dplyr::arrange(label) |>
+      dplyr::select(label, stat_0, ci_stat_0),
+    df |>
+      dplyr::filter(variable == "factor2") |>
+      dplyr::arrange(label) |>
+      dplyr::select(label, stat_0, ci_stat_0)
+  )
+})
+
