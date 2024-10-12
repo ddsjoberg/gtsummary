@@ -2,6 +2,8 @@
 
 * Bug fix in `add_ci.tbl_svysummary()` for factor variables where order was alphabetical instead of the factor levels. (#2036)
 
+* Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
+
 # gtsummary 2.0.3
 
 ### New Features and Functions
