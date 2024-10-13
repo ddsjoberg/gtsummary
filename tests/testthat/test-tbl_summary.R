@@ -666,3 +666,18 @@ test_that("tbl_summary() data frame column labels are not dropped", {
     "Age"
   )
 })
+
+# addressing issue #2038
+test_that("tbl_summary() test encoding/sorting difference between sort() and dplyr::arrange()", {
+  # before this fix, the columns would print in reverse order, e.g. stat_3, stat_2, stat_1
+  expect_equal(
+    data.frame(
+      groupe_etude = c(rep("Tem", 13), rep("TTA-", 7), rep("TTA+", 18)),
+      tympan_g_inc = rep(1,38)
+    ) |>
+      tbl_summary(by = groupe_etude, include = tympan_g_inc) |>
+      as.data.frame(col_labels = FALSE) |>
+      names(),
+    c("label", "stat_1", "stat_2", "stat_3")
+  )
+})
