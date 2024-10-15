@@ -219,7 +219,16 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
         .y
       }
     ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() %>%
+    # ensuring it appears in the original order (issue with survey data GH #2036)
+    dplyr::left_join(
+      x = x$cards$add_ci |>
+        dplyr::distinct(dplyr::pick(cards::all_ard_groups(), cards::all_ard_variables())),
+      y = .,
+      by = x$cards$add_ci |>
+        dplyr::select(cards::all_ard_groups(), cards::all_ard_variables()) |>
+        names()
+    )
 
   # format results to merge into primary table ---------------------------------
   df_prepped_for_merge <-
