@@ -452,8 +452,8 @@ tbl_summary <- function(data,
           !cards$context %in% "attributes",
         ) |>
           dplyr::select(cards::all_ard_groups(), "variable", "context") |>
-          dplyr::distinct() |>
-          dplyr::arrange(unlist(!!sym("group1_level"))) |>
+          dplyr::distinct() %>%
+          {.[order(unlist(.$group1_level)), ]} |> # styler: off
           dplyr::mutate(
             .by = cards::all_ard_groups(),
             gts_column = paste0("stat_", dplyr::cur_group_id())
