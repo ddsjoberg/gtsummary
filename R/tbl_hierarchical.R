@@ -43,6 +43,9 @@
 #'   used to override default labels in hierarchical table, e.g. `list(AESOC = "System Organ Class")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
 #'   If no label has been set, the column name is used.
+#' @param digits (named `list`)\cr
+#'   specifies how summary statistics are rounded. Names are any of `"n"`, `"p"`, and `"N"`. Values may be either
+#'   integer(s) or function(s). If not specified, default formatting is assigned via `assign_summary_digits()`.
 #'
 #' @section Overall Row:
 #'
@@ -73,7 +76,8 @@
 #'   by = TRTA,
 #'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
-#'   overall_row = TRUE
+#'   overall_row = TRUE,
+#'   digits = p ~ 2
 #' )
 #'
 #' # Example 2 - Rates by Highest Severity ------
@@ -103,7 +107,8 @@ tbl_hierarchical <- function(data,
                              include = everything(),
                              statistic = "{n} ({p})",
                              overall_row = FALSE,
-                             label = NULL) {
+                             label = NULL,
+                             digits = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -140,7 +145,8 @@ tbl_hierarchical <- function(data,
     include = {{ include }},
     statistic = statistic,
     overall_row = overall_row,
-    label = label
+    label = label,
+    digits = digits
   )
 }
 
@@ -152,7 +158,8 @@ tbl_hierarchical_count <- function(data,
                                    denominator = NULL,
                                    include = everything(),
                                    overall_row = FALSE,
-                                   label = NULL) {
+                                   label = NULL,
+                                   digits = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -181,7 +188,8 @@ tbl_hierarchical_count <- function(data,
     include = {{ include }},
     statistic = "{n}",
     overall_row = overall_row,
-    label = label
+    label = label,
+    digits = digits
   )
 }
 
@@ -193,7 +201,8 @@ internal_tbl_hierarchical <- function(data,
                                       include = everything(),
                                       statistic = NULL,
                                       overall_row = FALSE,
-                                      label = NULL) {
+                                      label = NULL,
+                                      digits = NULL) {
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
@@ -222,11 +231,19 @@ internal_tbl_hierarchical <- function(data,
     )
   }
 
+  # check that all of data[variables] are categorical type variables
+  type <- assign_summary_type(data, c(variables, by), value = NULL)
+  if (!all(type == "categorical")) {
+    cli::cli_abort(
+      "The columns selected in {.arg variables} and {.arg by} must all be {.cls character} or {.cls factor}.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
 
   # process arguments
-  type <- assign_summary_type(data, c(variables, if (overall_row) by), value = NULL)
   func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
   if (!is_empty(statistic)) {
     stat <- gsub("[\\{\\}]", "", regmatches(statistic, gregexpr("\\{.*?\\}", statistic))[[1]])
@@ -261,6 +278,14 @@ internal_tbl_hierarchical <- function(data,
     include_env = TRUE
   )
   cards::process_formula_selectors(
+    data.frame(n = NA, p = NA, N = NA),
+    digits =
+      case_switch(
+        missing(digits) ~ get_theme_element(paste0(func, "-arg:digits"), default = digits),
+        .default = digits
+      )
+  )
+  cards::process_formula_selectors(
     scope_table_body(
       .list2tb(type, "var_type"),
       data[variables] |>
@@ -281,13 +306,21 @@ internal_tbl_hierarchical <- function(data,
     )
   )
 
+  # apply digits ---------------------------------------------------------------
+  if (!is_empty(digits)) {
+    digits <- digits[names(digits) %in% c("n", "p", "N")]
+    for (i in names(digits)) {
+      cards <- cards |>
+        cards::update_ard_fmt_fn(stat_names = i, fmt_fn = digits[[i]])
+    }
+    cards <- cards |> cards::apply_fmt_fn()
+  }
+
   # check inputs ---------------------------------------------------------------
-  .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
-    digits = NULL, value = NULL, type = type, sort = NULL
+    digits = digits, value = NULL, type = type, sort = NULL
   )
-  .check_statistic_type_agreement(statistic, type)
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
@@ -328,7 +361,6 @@ internal_tbl_hierarchical <- function(data,
     by,
     include,
     statistic,
-    type,
     overall_row,
     count = is_empty(id),
     is_ordered = is.ordered(data[[dplyr::last(variables)]]),

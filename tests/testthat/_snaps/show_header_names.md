@@ -10,7 +10,7 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
 # show_header_names() works with tbl_regression
 
@@ -25,7 +25,7 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
 # show_header_names() works with tbl_uvregression
 
@@ -42,7 +42,7 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
 # show_header_names() works with tbl_survfit
 
@@ -56,7 +56,7 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
 # show_header_names() returns fallback value for unknown class
 
@@ -70,7 +70,7 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
 # show_header_names() returns single class value
 
@@ -84,5 +84,5 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
