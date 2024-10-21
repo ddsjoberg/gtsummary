@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Removed `global_pvalue_fun_tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997)
+* Updated the `theme_gtsummary_journal("jama")` theme to apply changes to `tbl_svysummary()`. (#1964; @vjcatharine)
+
+* Removed `global_pvalue_fun.tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
 
 * Bug fix in `add_ci.tbl_svysummary()` for factor variables where order was alphabetical instead of the factor levels. (#2036)
 
