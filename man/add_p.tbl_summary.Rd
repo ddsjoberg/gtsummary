@@ -73,7 +73,7 @@ The default test used in \code{add_p()} primarily depends on these factors:
 \subsection{Specified neither \code{add_p(group)} nor \code{add_p(adj.vars)}}{
 \itemize{
 \item \code{"wilcox.test"} when \code{by} variable has two levels and variable is continuous.
-\item \code{"krustkal.test"} when \code{by} variable has more than two levels and variable is continuous.
+\item \code{"kruskal.test"} when \code{by} variable has more than two levels and variable is continuous.
 \item \code{"chisq.test.no.correct"} for categorical variables with all expected cell counts >=5,
 and \code{"fisher.test"} for categorical variables with any expected cell count <5.
 }
