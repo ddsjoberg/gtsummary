@@ -84,7 +84,20 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "add_stat_label-arg:location" = "row",
         "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
                                            all_categorical() ~ "{n} ({p})"),
+        "tbl_svysummary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
+                                           all_categorical() ~ "{n} ({p})"),
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
+          add_stat_label(x) |>
+            modify_table_body(
+              \(x) {
+                if ("stat_label" %in% names(x)) {
+                  x$stat_label <- gsub("Q1 \U2013 Q3", "IQR", x = x$stat_label)
+                }
+                x
+              }
+            )
+        },
+        "tbl_svysummary-fn:addnl-fn-to-run" = function(x) {
           add_stat_label(x) |>
             modify_table_body(
               \(x) {
