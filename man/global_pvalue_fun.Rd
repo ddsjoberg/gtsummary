@@ -4,7 +4,6 @@
 \alias{global_pvalue_fun}
 \alias{global_pvalue_fun.default}
 \alias{global_pvalue_fun.geeglm}
-\alias{global_pvalue_fun.tidycrr}
 \title{Global p-value generic}
 \usage{
 global_pvalue_fun(x, type, ...)
@@ -12,8 +11,6 @@ global_pvalue_fun(x, type, ...)
 \method{global_pvalue_fun}{default}(x, type, ...)
 
 \method{global_pvalue_fun}{geeglm}(x, type, ...)
-
-\method{global_pvalue_fun}{tidycrr}(x, type, ...)
 }
 \value{
 data frame
