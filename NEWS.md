@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Updated the styling function to style tbl_svysummary() tables with JAMA theme. (#1964; @vjcatharine)
+* Updated the `theme_gtsummary_journal("jama")` theme to apply changes to `tbl_svysummary()`. (#1964; @vjcatharine)
 
 * Removed `global_pvalue_fun.tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
 
