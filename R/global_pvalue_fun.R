@@ -40,7 +40,3 @@ global_pvalue_fun.geeglm <- function(x, type, ...) {
 
   cardx::ard_aod_wald_test(x, ...)
 }
-
-#' @rdname global_pvalue_fun
-#' @export
-global_pvalue_fun.tidycrr <- global_pvalue_fun.geeglm

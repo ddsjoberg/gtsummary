@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed `global_pvalue_fun_tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997)
+
 * Bug fix in `add_ci.tbl_svysummary()` for factor variables where order was alphabetical instead of the factor levels. (#2036)
 
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
