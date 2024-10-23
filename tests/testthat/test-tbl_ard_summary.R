@@ -298,7 +298,7 @@ test_that("tbl_ard_summary() existing 'gts_column'", {
 })
 
 test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorical', etc)", {
-  skip_if_not(is_pkg_installed(c("cardx", "survival", "broom"), reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed(c("cardx", "survival", "broom")))
 
   # build non-standard ARDs
   ard <- cards::bind_ard(

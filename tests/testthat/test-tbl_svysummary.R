@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survey", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("survey"))
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 df_titanic <- as.data.frame(Titanic) |> tidyr::uncount(weights = Freq)

@@ -25,7 +25,7 @@ Merge gtsummary tables, e.g. \code{tbl_regression}, \code{tbl_uvregression}, \co
 \code{tbl_summary}, \code{tbl_svysummary}, etc.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival', reference_pkg = 'gtsummary')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Side-by-side Regression Models
 library(survival)

@@ -23,7 +23,7 @@
 #' @export
 #' @return a 'gtsummary' table
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("car", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("car")
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) |>
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))

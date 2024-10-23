@@ -17,7 +17,7 @@
 #' @return a ggplot
 #' @name plot
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("ggstats", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("ggstats")
 #' glm(response ~ marker + grade, trial, family = binomial) |>
 #'   tbl_regression(
 #'     add_estimate_to_reference_rows = TRUE,
@@ -32,7 +32,7 @@ plot.tbl_regression <- function(x,
                                 remove_header_rows = TRUE,
                                 remove_reference_rows = FALSE, ...) {
   check_dots_empty()
-  check_pkg_installed("ggstats", reference_pkg = "gtsummary")
+  check_pkg_installed("ggstats")
   check_not_missing(x)
   check_scalar_logical(remove_header_rows)
   check_scalar_logical(remove_reference_rows)

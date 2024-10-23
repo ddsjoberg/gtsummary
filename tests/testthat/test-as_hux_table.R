@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("huxtable", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("huxtable"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -31,7 +31,7 @@ test_that("as_hux_table(return_calls) works as expected", {
 })
 
 test_that("as_hux_table works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)
@@ -225,7 +225,7 @@ test_that("as_hux_table(strip_md_bold) causes defunct error", {
 # as_hux_xlsx ----
 
 test_that("as_hux_xlsx works with standard use", {
-  skip_if_not(is_pkg_installed("openxlsx", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("openxlsx"))
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf))
@@ -233,7 +233,7 @@ test_that("as_hux_xlsx works with standard use", {
 })
 
 test_that("as_hux_xlsx(bold_header_rows) works", {
-  skip_if_not(is_pkg_installed("openxlsx", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("openxlsx"))
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf, bold_header_rows = FALSE))

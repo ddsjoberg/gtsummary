@@ -88,7 +88,7 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("kableExtra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # basic gtsummary tbl to build upon
 as_kable_extra_base <-
   trial |>

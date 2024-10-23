@@ -1,9 +1,9 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-cli_call_env.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-cli_call_env.R>
 # ----------------------------------------------------------------------
 #
 # ---
-# repo: ddsjoberg/standalone
+# repo: insightsengineering/standalone
 # file: standalone-cli_call_env.R
 # last-updated: 2024-04-10
 # license: https://unlicense.org

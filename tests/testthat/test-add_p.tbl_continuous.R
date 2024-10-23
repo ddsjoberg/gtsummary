@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("cardx"))
 
 test_that("add_p.tbl_continuous() works", {
   expect_silent(
@@ -81,7 +81,7 @@ test_that("add_p.tbl_continuous(test.args) works", {
 })
 
 test_that("add_p.tbl_continuous(group) works", {
-  skip_if_not(is_pkg_installed("lme4", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("lme4"))
 
   expect_silent(
     tbl4 <- trial |>
