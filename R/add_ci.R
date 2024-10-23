@@ -40,7 +40,7 @@
 #' @return gtsummary table
 #' @name add_ci
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(

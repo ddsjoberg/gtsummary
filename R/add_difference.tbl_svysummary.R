@@ -24,7 +24,7 @@
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 add_difference.tbl_svysummary <- function(x,
                                           test = NULL,
                                           group = NULL,

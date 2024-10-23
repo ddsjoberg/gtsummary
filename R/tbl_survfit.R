@@ -119,7 +119,7 @@ tbl_survfit.survfit <- function(x, ...) {
 #' @rdname tbl_survfit
 tbl_survfit.data.frame <- function(x, y, include = everything(), conf.level = 0.95, ...) {
   set_cli_abort_call()
-  check_pkg_installed("survival")
+  check_pkg_installed("survival", ref = "cardx")
 
   # process inputs -------------------------------------------------------------
   check_scalar_range(conf.level, range = c(0, 1))

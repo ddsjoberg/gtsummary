@@ -183,7 +183,7 @@ add_p_test_mood.test <- function(data, variable, by, ...) {
 
 add_p_test_lme4 <- function(data, variable, by, group, ...) {
   check_pkg_installed("cardx")
-  check_pkg_installed("lme4")
+  check_pkg_installed("lme4", ref = "cardx")
   check_empty(c("test.args", "adj.vars"), ...)
 
   if (is_empty(group)) {
@@ -394,7 +394,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   check_empty(c("test.args"), ...)
 
   if (!is_empty(group)) check_pkg_installed("lme4")
-  if (inherits(data, "survey.design")) check_pkg_installed("survey")
+  if (inherits(data, "survey.design")) check_pkg_installed("survey", ref = "cardx")
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {

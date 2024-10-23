@@ -40,7 +40,7 @@
 #' @export
 #'
 #' @family Advanced modifiers
-#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>

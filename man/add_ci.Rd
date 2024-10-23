@@ -75,7 +75,7 @@ Must be one of
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   tbl_summary(
