@@ -76,7 +76,7 @@ calculated via \code{survey::svyciprop()} for \strong{categorical} variables
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey")) && gtsummary:::is_pkg_installed("broom",  ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(api, package = "survey")
 survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
   tbl_svysummary(

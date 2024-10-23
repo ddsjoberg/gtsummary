@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survival", reference_pkg = "survival"))
+skip_if_not(is_pkg_installed("survival", ref = "survival"))
 
 # univariate regression models
 t0 <-

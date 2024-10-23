@@ -1,8 +1,9 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-forcats.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-forcats.R>
 # ----------------------------------------------------------------------
 #
 # ---
+# repo: insightsengineering/standalone
 # file: standalone-forcats.R
 # last-updated: 2024-06-05
 # license: https://unlicense.org

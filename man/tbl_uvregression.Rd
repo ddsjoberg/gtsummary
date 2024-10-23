@@ -165,7 +165,7 @@ to print the random components.
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 tbl_uvregression(
   trial,

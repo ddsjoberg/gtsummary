@@ -22,7 +22,7 @@
 #' @return A 'flextable' object
 #'
 #' @author Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("flextable", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("flextable")
 #' trial |>
 #'   select(trt, age, grade) |>
 #'   tbl_summary(by = trt) |>
@@ -30,7 +30,7 @@
 #'   as_flex_table()
 as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) {
   set_cli_abort_call()
-  check_pkg_installed("flextable", reference_pkg = "gtsummary")
+  check_pkg_installed("flextable")
 
   # deprecated arguments -------------------------------------------------------
   dots <- rlang::dots_list(...)

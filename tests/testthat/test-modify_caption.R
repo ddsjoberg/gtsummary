@@ -12,7 +12,7 @@ test_that("modify_caption(caption) works", {
 })
 
 test_that("modify_caption() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx"), reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed(c("survey", "cardx")))
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -49,7 +49,7 @@ test_that("modify_caption() works with tbl_cross()", {
 })
 
 test_that("modify_caption() works with tbl_regression()", {
-  skip_if_not(is_pkg_installed("broom.helpers", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("broom.helpers"))
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>

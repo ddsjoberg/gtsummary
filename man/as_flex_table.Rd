@@ -40,7 +40,7 @@ To further style your table, you may convert the table to flextable with
 \code{as_flex_table()}, then utilize any of the flextable functions.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("flextable", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("flextable")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
   select(trt, age, grade) |>
   tbl_summary(by = trt) |>

@@ -8,7 +8,7 @@
 #' @return list
 #' @export
 #'
-#' @examplesIf gtsummary:::is_pkg_installed('cardx', reference_pkg = 'gtsummary')
+#' @examplesIf gtsummary:::is_pkg_installed('cardx')
 #' tbl_summary(trial, by = trt, include = age) |>
 #'   add_overall() |>
 #'   add_p() |>
@@ -28,7 +28,7 @@ gather_ard <- function(x) {
 
   # the ARD for regression models is an additional calculation, so we don't do it by default
   if (inherits(x, "tbl_regression")) {
-    check_pkg_installed("cardx", reference_pkg = "gtsummary")
+    check_pkg_installed("cardx")
     return(cardx::ard_regression(x$inputs$x))
   }
 

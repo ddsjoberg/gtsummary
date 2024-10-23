@@ -161,7 +161,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))

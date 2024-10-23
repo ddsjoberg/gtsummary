@@ -52,7 +52,7 @@
 #' @return A \{kableExtra\} table
 #'
 #' @author Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("kableExtra", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("kableExtra")
 #' # basic gtsummary tbl to build upon
 #' as_kable_extra_base <-
 #'   trial |>
@@ -89,7 +89,7 @@ as_kable_extra <- function(x,
                            addtl_fmt = TRUE,
                            return_calls = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed(c("kableExtra", "knitr"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("kableExtra", "knitr"))
 
   # process inputs -------------------------------------------------------------
   check_class(x, "gtsummary")

@@ -15,7 +15,7 @@
 #'
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
-#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-
 #'   trial |>

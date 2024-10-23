@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "broom"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("broom.helpers", "broom")))
 
 test_that("add_n.tbl_uvregression() works", {
   expect_silent(

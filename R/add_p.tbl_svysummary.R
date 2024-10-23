@@ -16,7 +16,7 @@
 #' @return a gtsummary table of class `"tbl_svysummary"`
 #' @export
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"), reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -48,7 +48,7 @@ add_p.tbl_svysummary <- function(x,
                               test.args = NULL,
                               ...) {
   set_cli_abort_call()
-  check_pkg_installed("survey", reference_pkg = "gtsummary")
+  check_pkg_installed("survey")
 
   # check/process inputs -------------------------------------------------------
   check_dots_empty()

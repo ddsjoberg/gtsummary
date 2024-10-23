@@ -69,7 +69,7 @@
 #' @name tbl_regression
 #' @return A `tbl_regression` object
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' glm(response ~ age + grade, trial, family = binomial()) |>
 #'   tbl_regression(exponentiate = TRUE)
@@ -78,7 +78,7 @@ NULL
 #' @rdname tbl_regression
 #' @export
 tbl_regression <- function(x, ...) {
-  check_pkg_installed(c("broom", "broom.helpers"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("broom", "broom.helpers"))
   check_not_missing(x)
   UseMethod("tbl_regression")
 }

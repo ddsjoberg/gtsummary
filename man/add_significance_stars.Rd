@@ -45,7 +45,7 @@ a 'gtsummary' table
 Add significance stars to estimates with small p-values
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("car", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("car")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) |>
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))

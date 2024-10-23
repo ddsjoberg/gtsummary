@@ -7,7 +7,7 @@
 #' @param ... Not used
 #' @export
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("survival")
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)

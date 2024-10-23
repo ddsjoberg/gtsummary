@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
 
 test_that("remove_row_type(type) works", {
   tbl1 <- tbl_summary(trial, include = c(response, age, grade))

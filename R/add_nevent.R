@@ -3,7 +3,7 @@
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("broom.helpers", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("broom.helpers")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(response, trt, grade) |>

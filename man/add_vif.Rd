@@ -20,7 +20,7 @@ generalized VIF (GVIF) to the regression table.
 Function uses \code{car::vif()} to calculate the VIF.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "car"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "car"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 lm(age ~ grade + marker, trial) |>
   tbl_regression() |>

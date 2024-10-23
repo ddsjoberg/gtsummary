@@ -51,7 +51,7 @@
 #'
 #' @return A `tbl_uvregression` object
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' tbl_uvregression(
 #'   trial,
@@ -80,7 +80,7 @@ NULL
 #' @name tbl_uvregression
 tbl_uvregression <- function(data, ...) {
   check_not_missing(data)
-  check_pkg_installed("cardx", reference_pkg = "gtsummary")
+  check_pkg_installed("cardx")
   UseMethod("tbl_uvregression")
 }
 

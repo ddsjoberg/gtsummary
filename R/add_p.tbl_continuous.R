@@ -11,7 +11,7 @@
 #' @export
 #' @return 'tbl_continuous' object
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx")
 #' trial |>
 #'   tbl_continuous(variable = age, by = trt, include = grade) |>
 #'   add_p()

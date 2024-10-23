@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("flextable", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("flextable"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -28,7 +28,7 @@ test_that("as_flex_table works with standard use", {
 })
 
 test_that("as_flex_table works with tbl_survfit", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
   tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
 
@@ -43,7 +43,7 @@ test_that("as_flex_table works with tbl_survfit", {
 })
 
 test_that("as_flex_table works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)

@@ -94,7 +94,7 @@ Function takes a \code{survfit} object as an argument, and provides a
 formatted summary table of the results
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------

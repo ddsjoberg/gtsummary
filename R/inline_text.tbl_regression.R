@@ -37,7 +37,7 @@
 #'
 #' @export
 #' @return A string reporting results from a gtsummary table
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
