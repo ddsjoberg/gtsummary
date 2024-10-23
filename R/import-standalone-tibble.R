@@ -1,8 +1,9 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-tibble.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-tibble.R>
 # ----------------------------------------------------------------------
 #
 # ---
+# repo: insightsengineering/standalone
 # file: standalone-tibble.R
 # last-updated: 2024-05-07
 # license: https://unlicense.org

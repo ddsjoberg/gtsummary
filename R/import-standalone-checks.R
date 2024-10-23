@@ -1,9 +1,9 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-checks.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-checks.R>
 # ----------------------------------------------------------------------
 #
 # ---
-# repo: ddsjoberg/standalone
+# repo: insightsengineering/standalone
 # file: standalone-checks.R
 # last-updated: 2024-05-04
 # license: https://unlicense.org
@@ -528,20 +528,76 @@ check_scalar_integerish <- function(x,
 #' @inheritParams check_class
 #' @keywords internal
 #' @noRd
-check_na_factor_levels <- function(x,
-                                   message =
-                                     "Factors with {.val {NA}} levels are not allowed,
-                                      which are present in column {.val {variable}}.",
-                                   arg_name = rlang::caller_arg(x),
-                                   class = "na_factor_levels",
-                                   call = get_cli_abort_call(),
-                                   envir = rlang::current_env()) {
+check_no_na_factor_levels <- function(x,
+                                      message =
+                                        "Factors with {.val {NA}} levels are not allowed,
+                                         which are present in column {.val {variable}}.",
+                                      arg_name = rlang::caller_arg(x),
+                                      class = "na_factor_levels",
+                                      call = get_cli_abort_call(),
+                                      envir = rlang::current_env()) {
   check_data_frame(x, arg_name = arg_name, class = class, call = call, envir = envir)
 
   for (variable in names(x)) {
     if (is.factor(x[[variable]]) && any(is.na(levels(x[[variable]])))) {
       cli::cli_abort(message = message, class = c(class, "standalone-checks"), call = call, .envir = envir)
     }
+  }
+
+  invisible(x)
+}
+
+#' Check for levels attribute exists for factor
+#'
+#' @param x (`data.frame`)\cr
+#'   a data frame
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_factor_has_levels <- function(x,
+                                    message =
+                                      "Factors with empty {.val levels} attribute are not allowed,
+                                       which was identified in column {.val {variable}}.",
+                                    arg_name = rlang::caller_arg(x),
+                                    class = "na_factor_levels",
+                                    call = get_cli_abort_call(),
+                                    envir = rlang::current_env()) {
+  check_data_frame(x, arg_name = arg_name, class = class, call = call, envir = envir)
+
+  for (variable in names(x)) {
+    if (is.factor(x[[variable]]) && rlang::is_empty(levels(x[[variable]]))) {
+      cli::cli_abort(message = message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+    }
+  }
+
+  invisible(x)
+}
+
+
+#' Check is Numeric
+#'
+#' @inheritParams check_class
+#' @keywords internal
+#' @noRd
+check_numeric <- function(x,
+                          allow_empty = FALSE,
+                          message =
+                            ifelse(
+                              allow_empty,
+                              "The {.arg {arg_name}} argument must be numeric or empty.",
+                              "The {.arg {arg_name}} argument must be numeric."
+                            ),
+                          arg_name = rlang::caller_arg(x),
+                          class = "check_numeric",
+                          call = get_cli_abort_call(),
+                          envir = rlang::current_env()) {
+  # if empty, skip test
+  if (isTRUE(allow_empty) && rlang::is_empty(x)) {
+    return(invisible(x))
+  }
+
+  if (!is.numeric(x)) {
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
 
   invisible(x)
