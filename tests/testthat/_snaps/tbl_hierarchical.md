@@ -236,6 +236,39 @@
       ! The `label` argument must be a named list, list of formulas, a single formula, or empty.
       i Review ?syntax (`?cards::syntax()`) for examples and details.
 
+# tbl_hierarchical(digits) works properly
+
+    Code
+      as.data.frame(res)
+    Output
+         **T Stage**  \n    **Grade**  **N = 200**
+      1                            T1 36,0 (0.679)
+      2                             I 14,0 (0.824)
+      3                            II 20,0 (0.870)
+      4                           III 12,0 (0.923)
+      5                            T2 37,0 (0.685)
+      6                             I 16,0 (0.889)
+      7                            II 15,0 (0.882)
+      8                           III 17,0 (0.895)
+      9                            T3 32,0 (0.744)
+      10                            I 16,0 (0.889)
+      11                           II  9,0 (0.818)
+      12                          III 14,0 (1.000)
+      13                           T4 35,0 (0.700)
+      14                            I 14,0 (0.933)
+      15                           II 14,0 (0.824)
+      16                          III 18,0 (1.000)
+
+---
+
+    Code
+      tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2,
+      id = id, digits = "0")
+    Condition
+      Error in `internal_tbl_hierarchical()`:
+      ! The `digits` argument must be a named list, list of formulas, a single formula, or empty.
+      i Review ?syntax (`?cards::syntax()`) for examples and details.
+
 # tbl_hierarchical works properly when last variable of hierarchy is ordered
 
     Code
@@ -526,5 +559,37 @@
     Condition
       Error in `internal_tbl_hierarchical()`:
       ! The `label` argument must be a named list, list of formulas, a single formula, or empty.
+      i Review ?syntax (`?cards::syntax()`) for examples and details.
+
+# tbl_hierarchical_count(digits) works properly
+
+    Code
+      as.data.frame(res)
+    Output
+         **T Stage**  \n    **Grade** Overall
+      1                            T1    53,0
+      2                             I    17,0
+      3                            II    23,0
+      4                           III    13,0
+      5                            T2    54,0
+      6                             I    18,0
+      7                            II    17,0
+      8                           III    19,0
+      9                            T3    43,0
+      10                            I    18,0
+      11                           II    11,0
+      12                          III    14,0
+      13                           T4    50,0
+      14                            I    15,0
+      15                           II    17,0
+      16                          III    18,0
+
+---
+
+    Code
+      tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = "test")
+    Condition
+      Error in `internal_tbl_hierarchical()`:
+      ! The `digits` argument must be a named list, list of formulas, a single formula, or empty.
       i Review ?syntax (`?cards::syntax()`) for examples and details.
 
