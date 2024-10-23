@@ -79,7 +79,7 @@ add_glance_table <- function(x,
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
-  check_pkg_installed("broom", reference_pkg = "gtsummary")
+  check_pkg_installed("broom")
   check_not_missing(x)
   check_class(x, "tbl_regression")
 
@@ -134,7 +134,7 @@ add_glance_source_note <- function(x,
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
-  check_pkg_installed("broom", reference_pkg = "gtsummary")
+  check_pkg_installed("broom")
   check_not_missing(x)
   check_class(x, "tbl_regression")
   text_interpret <- arg_match(text_interpret)

@@ -20,7 +20,7 @@
 #' @return A \{huxtable\} object
 #'
 #' @author David Hugh-Jones, Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("huxtable")
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>
 #'   add_p() |>
@@ -33,7 +33,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
-  check_pkg_installed("huxtable", reference_pkg = "gtsummary")
+  check_pkg_installed("huxtable")
   check_scalar_logical(return_calls)
 
   if (!isFALSE(strip_md_bold)) {
@@ -86,7 +86,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
-  check_pkg_installed(c("huxtable", "openxlsx"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("huxtable", "openxlsx"))
   check_scalar_logical(bold_header_rows)
 
   # save list of expressions to run --------------------------------------------

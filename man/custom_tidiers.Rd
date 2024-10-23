@@ -122,7 +122,7 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)
 

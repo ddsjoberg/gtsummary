@@ -7,7 +7,7 @@
 #' @param ... Not used
 #' @export
 #' @family tbl_survfit tools
-#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -21,7 +21,7 @@ add_nevent.tbl_survfit <- function(x, ...) {
   set_cli_abort_call()
   check_dots_empty()
   updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
-  check_pkg_installed("broom", reference_pkg = "gtsummary")
+  check_pkg_installed("broom")
 
   # checking survfit is a standard (not multi-state)
   if (some(x$inputs$x, ~ !rlang::is_empty(setdiff(class(.x), c("survfit", "survfit2"))))) {

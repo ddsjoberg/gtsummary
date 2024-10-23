@@ -50,7 +50,7 @@ The file is saved using \code{huxtable::quick_xlsx()}.
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("huxtable")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   add_p() |>

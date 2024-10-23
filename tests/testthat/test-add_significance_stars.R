@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("broom.helpers")))
 
 tbl1 <-
   lm(time ~ sex + ph.ecog, survival::lung) |>

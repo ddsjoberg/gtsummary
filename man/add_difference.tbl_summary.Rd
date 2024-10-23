@@ -70,7 +70,7 @@ The difference between two groups (typically mean or rate difference) is added
 to the table along with the difference's confidence interval and a p-value (when applicable).
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(trt, age, marker, response, death) \%>\%
