@@ -393,7 +393,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
 
-  if (!is_empty(group)) check_pkg_installed("lme4")
+  if (!is_empty(group)) check_pkg_installed("lme4", ref = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", ref = "cardx")
 
   # checking inputs
