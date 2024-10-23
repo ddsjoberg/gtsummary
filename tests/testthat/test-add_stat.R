@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("cardx"))
 
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value

@@ -61,7 +61,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examplesIf gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
 #'
@@ -92,7 +92,7 @@ tidy_standardize <- function(x,
                              ...,
                              quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed(c("parameters", "effectsize"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("parameters", "effectsize"))
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -136,7 +136,7 @@ tidy_bootstrap <- function(x,
                            ...,
                            quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed("parameters", reference_pkg = "gtsummary")
+  check_pkg_installed("parameters")
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -182,7 +182,7 @@ tidy_robust <- function(x,
                         ...,
                         quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed(c("parameters", "insight"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("parameters", "insight"))
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -238,7 +238,7 @@ tidy_robust <- function(x,
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed("mice", reference_pkg = "gtsummary")
+  check_pkg_installed("mice")
 
   if (!missing(quiet)) {
     lifecycle::deprecate_stop(
@@ -285,7 +285,7 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
 #' @export
 tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
   set_cli_abort_call()
-  check_pkg_installed(c("aod", "broom.helpers"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("aod", "broom.helpers"))
 
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
 

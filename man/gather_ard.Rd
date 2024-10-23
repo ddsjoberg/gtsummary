@@ -17,7 +17,7 @@ Extract the ARDs from a gtsummary table. If needed, results may be combined
 with \code{cards::bind_ard()}.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed('cardx', reference_pkg = 'gtsummary')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed('cardx')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl_summary(trial, by = trt, include = age) |>
   add_overall() |>
   add_p() |>

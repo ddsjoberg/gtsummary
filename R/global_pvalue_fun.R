@@ -14,7 +14,7 @@
 #' @return data frame
 #' @keywords internal
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car"))
 #' lm(age ~ stage + grade, trial) |>
 #'   global_pvalue_fun(type = "III")
 NULL
@@ -28,7 +28,7 @@ global_pvalue_fun <- function(x, type, ...) {
 #' @rdname global_pvalue_fun
 #' @export
 global_pvalue_fun.default <- function(x, type, ...) {
-  check_pkg_installed(c("cardx"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("cardx"))
 
   cardx::ard_car_anova(x, type = type, ...)
 }
@@ -36,11 +36,7 @@ global_pvalue_fun.default <- function(x, type, ...) {
 #' @rdname global_pvalue_fun
 #' @export
 global_pvalue_fun.geeglm <- function(x, type, ...) {
-  check_pkg_installed(c("cardx"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("cardx"))
 
   cardx::ard_aod_wald_test(x, ...)
 }
-
-#' @rdname global_pvalue_fun
-#' @export
-global_pvalue_fun.tidycrr <- global_pvalue_fun.geeglm

@@ -68,7 +68,7 @@ add_p <- function(x, ...) {
 #' #### Specified neither `add_p(group)` nor `add_p(adj.vars)`
 #'
 #' - `"wilcox.test"` when `by` variable has two levels and variable is continuous.
-#' - `"krustkal.test"` when `by` variable has more than two levels and variable is continuous.
+#' - `"kruskal.test"` when `by` variable has more than two levels and variable is continuous.
 #' - `"chisq.test.no.correct"` for categorical variables with all expected cell counts >=5,
 #'    and `"fisher.test"` for categorical variables with any expected cell count <5.
 #'
@@ -83,7 +83,7 @@ add_p <- function(x, ...) {
 #'
 #'  - `"ancova"` when variable is continuous and `by` variable has two levels.
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>

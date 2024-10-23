@@ -41,7 +41,7 @@ add_difference <- function(x, ...) {
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")
+#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(trt, age, marker, response, death) %>%

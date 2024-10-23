@@ -55,7 +55,7 @@
 #' @name tbl_survfit
 #'
 #' @author Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("survival", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("survival")
 #' library(survival)
 #'
 #' # Example 1 ----------------------------------
@@ -119,7 +119,7 @@ tbl_survfit.survfit <- function(x, ...) {
 #' @rdname tbl_survfit
 tbl_survfit.data.frame <- function(x, y, include = everything(), conf.level = 0.95, ...) {
   set_cli_abort_call()
-  check_pkg_installed("survival", reference_pkg = "cardx")
+  check_pkg_installed("survival", ref = "cardx")
 
   # process inputs -------------------------------------------------------------
   check_scalar_range(conf.level, range = c(0, 1))
@@ -190,7 +190,7 @@ tbl_survfit.list <- function(x,
   }
 
   # check inputs ---------------------------------------------------------------
-  check_pkg_installed("survival", reference_pkg = "gtsummary")
+  check_pkg_installed("survival")
   check_class(x, "list")
   cards::check_list_elements(
     x,

@@ -1,8 +1,9 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-stringr.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-stringr.R>
 # ----------------------------------------------------------------------
 #
 # ---
+# repo: insightsengineering/standalone
 # file: standalone-stringr.R
 # last-updated: 2024-06-05
 # license: https://unlicense.org
@@ -29,8 +30,8 @@ str_squish <- function(string, fixed = FALSE, perl = !fixed) {
   return(string)
 }
 
-str_remove <- function (string, pattern, fixed = FALSE, perl = !fixed) {
-  sub (x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
+str_remove <- function(string, pattern, fixed = FALSE, perl = !fixed) {
+  sub(x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
 }
 
 str_remove_all <- function(string, pattern, fixed = FALSE, perl = !fixed) {
@@ -57,7 +58,7 @@ str_replace <- function(string, pattern, replacement, fixed = FALSE, perl = !fix
   sub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
-str_replace_all <- function (string, pattern, replacement, fixed = FALSE, perl = !fixed){
+str_replace_all <- function(string, pattern, replacement, fixed = FALSE, perl = !fixed) {
   gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
@@ -88,7 +89,7 @@ word <- function(string, start, end = start, sep = " ", fixed = TRUE, perl = !fi
   }
 }
 
-str_sub <- function(string, start = 1L, end = -1L){
+str_sub <- function(string, start = 1L, end = -1L) {
   str_length <- nchar(string)
 
   # Adjust start and end indices for negative values
@@ -102,11 +103,11 @@ str_sub <- function(string, start = 1L, end = -1L){
   substr(x = string, start = start, stop = end)
 }
 
-str_sub_all <- function(string, start = 1L, end = -1L){
+str_sub_all <- function(string, start = 1L, end = -1L) {
   lapply(string, function(x) substr(x, start = start, stop = end))
 }
 
-str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE){
+str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
   side <- match.arg(side, c("left", "right", "both"))
 
   if (side == "both") {
@@ -131,7 +132,7 @@ str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
     parts <- strsplit(string, split = pattern, fixed = fixed, perl = perl)
     lapply(parts, function(x) {
       if (length(x) > n) {
-        x <- c(x[1:(n-1)], paste(x[n:length(x)], collapse = pattern))
+        x <- c(x[1:(n - 1)], paste(x[n:length(x)], collapse = pattern))
       }
       return(x)
     })

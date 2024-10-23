@@ -4,7 +4,6 @@
 \alias{global_pvalue_fun}
 \alias{global_pvalue_fun.default}
 \alias{global_pvalue_fun.geeglm}
-\alias{global_pvalue_fun.tidycrr}
 \title{Global p-value generic}
 \usage{
 global_pvalue_fun(x, type, ...)
@@ -12,8 +11,6 @@ global_pvalue_fun(x, type, ...)
 \method{global_pvalue_fun}{default}(x, type, ...)
 
 \method{global_pvalue_fun}{geeglm}(x, type, ...)
-
-\method{global_pvalue_fun}{tidycrr}(x, type, ...)
 }
 \value{
 data frame
@@ -29,7 +26,7 @@ using \code{aod::wald.test()} (via \code{\link[cardx:ard_aod_wald_test]{cardx::a
 the \code{type} argument is not used.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "car"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "car"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 lm(age ~ stage + grade, trial) |>
   global_pvalue_fun(type = "III")
 \dontshow{\}) # examplesIf}
