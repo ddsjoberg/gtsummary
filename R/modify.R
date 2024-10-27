@@ -82,7 +82,8 @@ NULL
 #' @name modify
 #' @export
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
-                          quiet, update) {
+                          quiet, update,
+                          glue_open="{", glue_close="}") {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
@@ -109,7 +110,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
   )
 
   # evaluate the strings with glue
-  dots <- .evaluate_string_with_glue(x, dots)
+  dots <- .evaluate_string_with_glue(x, dots, glue_open=glue_open, glue_close=glue_close)
 
   # updated header meta data
   x <-
@@ -318,7 +319,7 @@ show_header_names <- function(x, include_example, quiet) {
 }
 
 
-.evaluate_string_with_glue <- function(x, dots) {
+.evaluate_string_with_glue <- function(x, dots, glue_open="{", glue_close="}") {
   # only keep values that are in the table_body
   dots <- dots[intersect(names(dots), x$table_styling$header$column)]
 
@@ -342,7 +343,7 @@ show_header_names <- function(x, include_example, quiet) {
         cards::eval_capture_conditions(
           case_switch(
             is.na(value) ~ NA_character_,
-            .default = expr(glue::glue(value))
+            .default = expr(glue::glue(value, .open=glue_open, .close=glue_close))
           ),
           data = df_header_subset
         )
