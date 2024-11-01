@@ -15,6 +15,7 @@
 # of programming.
 #
 # ## Changelog
+# 2024-11-1 - `str_pad()` was updated to use `strrep()` instead of `sprintf()` (accommodates escape characters).
 #
 # nocov start
 # styler: off
@@ -108,21 +109,27 @@ str_sub_all <- function(string, start = 1L, end = -1L) {
 }
 
 str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
-  side <- match.arg(side, c("left", "right", "both"))
+  side <- match.arg(side)
 
-  if (side == "both") {
-    pad_left <- (width - nchar(string)) %/% 2
-    pad_right <- width - nchar(string) - pad_left
-    padded_string <- paste0(strrep(pad, pad_left), string, strrep(pad, pad_right))
-  } else {
-    format_string <- ifelse(side == "right", paste0("%-", width, "s"),
-                            ifelse(side == "left", paste0("%", width, "s"),
-                                   paste0("%", width, "s")))
+  # allow vectorized input
+  padded_strings <- sapply(string, function(s) {
+    current_length <- nchar(s)
+    pad_length <- width - current_length
 
-    padded_string <- sprintf(format_string, string)
-  }
+    if (side == "both") {
+      pad_left <- pad_length %/% 2
+      pad_right <- pad_length - pad_left
+      padded_string <- paste0(strrep(pad, pad_left), s, strrep(pad, pad_right))
+    } else if (side == "right") {
+      padded_string <- paste0(s, strrep(pad, pad_length))
+    } else { # side == "left"
+      padded_string <- paste0(strrep(pad, pad_length), s)
+    }
 
-  return(padded_string)
+    return(padded_string)
+  })
+
+  return(unname(padded_strings))
 }
 
 str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
