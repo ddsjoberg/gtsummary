@@ -63,3 +63,17 @@ test_that("show_header_names() returns single class value", {
     test_table |> show_header_names()
   )
 })
+
+
+test_that("show_header_names() has all values aligned", {
+  test_table <- tbl_hierarchical(
+    data = cards::ADAE,
+    variables = c(AESOC, AETERM),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    id = USUBJID
+  )
+  expect_snapshot(
+    test_table |> show_header_names()
+  )
+})
