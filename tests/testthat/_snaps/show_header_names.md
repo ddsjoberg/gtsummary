@@ -86,3 +86,18 @@
       * These values may be dynamically placed into headers (and other locations).
       i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 
+# show_header_names() has all values aligned
+
+    Code
+      show_header_names(test_table)
+    Output
+      Column Name   Header                                                                            level*                       N*          n*         p*             
+      label         "**Primary System Organ Class**  \n    **Reported Term for the Adverse Event**"                                254 <int>                             
+      stat_1        "**Placebo**  \nN = 86"                                                                        Placebo <chr>   254 <int>   86 <int>   0.339 <dbl>    
+      stat_2        "**Xanomeline High Dose**  \nN = 84"                                              Xanomeline High Dose <chr>   254 <int>   84 <int>   0.331 <dbl>    
+      stat_3        "**Xanomeline Low Dose**  \nN = 84"                                                Xanomeline Low Dose <chr>   254 <int>   84 <int>   0.331 <dbl>    
+      
+    Message
+      * These values may be dynamically placed into headers (and other locations).
+      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+
