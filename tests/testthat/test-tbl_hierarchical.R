@@ -261,3 +261,26 @@ test_that("tbl_hierarchical_count(label) works properly", {
     tbl_hierarchical_count(data = trial, variables = c(stage, grade), label = "Stages")
   )
 })
+
+# tbl_hierarchical_count with 10+ hierarchy variables --------------------------------------
+test_that("tbl_hierarchical_count with 10+ hierarchy variables", {
+  withr::local_options(list(width = 250))
+  set.seed(1)
+  data <- data.frame(
+    x1 = sample(LETTERS[1:2], 30, replace = TRUE),
+    x2 = sample(LETTERS[3:4], 30, replace = TRUE),
+    x3 = sample(LETTERS[5:6], 30, replace = TRUE),
+    x4 = sample(LETTERS[7:8], 30, replace = TRUE),
+    x5 = sample(LETTERS[9:10], 30, replace = TRUE),
+    x6 = sample(LETTERS[11:12], 30, replace = TRUE),
+    x7 = sample(LETTERS[13:14], 30, replace = TRUE),
+    x8 = sample(LETTERS[15:16], 30, replace = TRUE),
+    x9 = sample(LETTERS[17:18], 30, replace = TRUE),
+    x10 = sample(LETTERS[19:20], 30, replace = TRUE)
+  )
+
+  res <- expect_silent(
+    tbl_hierarchical_count(data = data, variables = names(data), include = "x10")
+  )
+  expect_snapshot(res |> as.data.frame())
+})
