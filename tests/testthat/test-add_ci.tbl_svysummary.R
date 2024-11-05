@@ -723,7 +723,7 @@ test_that("add_ci() correctly handles dichotomous variables", {
 
   expect_equal(
     tbl$inputs$value |> lapply(as.character),
-    tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe()
+    tbl$cards$add_ci[c("variable", "variable_level")] |> unique() |> deframe() |> lapply(as.character)
   )
 })
 
@@ -770,6 +770,31 @@ test_that("add_ci.tbl_svysummary() ordering for factors", {
       dplyr::filter(variable == "factor2") |>
       dplyr::arrange(label) |>
       dplyr::select(label, stat_0, ci_stat_0)
+  )
+
+
+  # check for issue #2052
+  data(api, package = "survey")
+  dclus1 <-
+    survey::svydesign(
+      id = ~dnum,
+      weights = ~pw,
+      data = apiclus1 |> dplyr::mutate(both2 = factor(both, levels = c("Yes", "No"))),
+      fpc = ~fpc
+    )
+
+  # checks the order of the CI columns matches the primary column
+  expect_equal(
+    dclus1 |>
+      tbl_svysummary(by = "both", include = stype) |>
+      add_ci() |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(ci_stat_1),
+    dclus1 |>
+      tbl_svysummary(by = "both2", include = stype) |>
+      add_ci() |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(ci_stat_2)
   )
 })
 
