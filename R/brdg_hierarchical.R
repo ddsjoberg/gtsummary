@@ -301,8 +301,8 @@ pier_summary_hierarchical <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows() |>
-    # this ensures the correct order when there are 10+ groups
+    dplyr::bind_rows() %>%
+    # this ensures the correct order when there are 10+ hierarchy levels
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
       .,

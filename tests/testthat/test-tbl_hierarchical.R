@@ -94,7 +94,7 @@ test_that("tbl_hierarchical(overall_row) works properly", {
   expect_equal((res |> as.data.frame())[1, 1], "Total number of patients with any event")
   expect_equal(
     (res |> as.data.frame())[1, -1] |> as.character(),
-    c("40 (58.8)", "38 (55.9)", "39 (60.9)")
+    c("40 (58.8%)", "38 (55.9%)", "39 (60.9%)")
   )
 
   # overall row labeling works
@@ -139,7 +139,7 @@ test_that("tbl_hierarchical(digits) works properly", {
     digits = grade ~ list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
   )
   expect_snapshot(res |> as.data.frame())
-  expect_equal(res$table_body$stat_0[1], "36,0 (0.679)")
+  expect_equal(res$table_body$stat_0[1], "36 (67.9%)")
 
   # errors thrown when bad digits argument passed
   expect_snapshot(
@@ -294,4 +294,27 @@ test_that("tbl_hierarchical_count(digits) works properly", {
     error = TRUE,
     tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = n ~ 2)
   )
+})
+
+# tbl_hierarchical_count with 10+ hierarchy variables --------------------------------------
+test_that("tbl_hierarchical_count with 10+ hierarchy variables", {
+  withr::local_options(list(width = 250))
+  set.seed(1)
+  data <- data.frame(
+    x1 = sample(LETTERS[1:2], 30, replace = TRUE),
+    x2 = sample(LETTERS[3:4], 30, replace = TRUE),
+    x3 = sample(LETTERS[5:6], 30, replace = TRUE),
+    x4 = sample(LETTERS[7:8], 30, replace = TRUE),
+    x5 = sample(LETTERS[9:10], 30, replace = TRUE),
+    x6 = sample(LETTERS[11:12], 30, replace = TRUE),
+    x7 = sample(LETTERS[13:14], 30, replace = TRUE),
+    x8 = sample(LETTERS[15:16], 30, replace = TRUE),
+    x9 = sample(LETTERS[17:18], 30, replace = TRUE),
+    x10 = sample(LETTERS[19:20], 30, replace = TRUE)
+  )
+
+  res <- expect_silent(
+    tbl_hierarchical_count(data = data, variables = names(data), include = "x10")
+  )
+  expect_snapshot(res |> as.data.frame())
 })
