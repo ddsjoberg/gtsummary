@@ -49,7 +49,7 @@
 #'   cards = ard,
 #'   variables = c(AESOC, AETERM),
 #'   by = TRTA,
-#'   statistic = "{n}"
+#'   statistic = ~"{n}"
 #' )
 tbl_ard_hierarchical <- function(cards,
                                  variables,

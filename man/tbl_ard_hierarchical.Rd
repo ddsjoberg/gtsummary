@@ -9,7 +9,7 @@ tbl_ard_hierarchical(
   variables,
   by = NULL,
   include = everything(),
-  statistic = "{n} ({p})",
+  statistic = ~"{n} ({p}\%)",
   label = NULL
 )
 }
@@ -86,6 +86,6 @@ tbl_ard_hierarchical(
   cards = ard,
   variables = c(AESOC, AETERM),
   by = TRTA,
-  statistic = "{n}"
+  statistic = ~"{n}"
 )
 }
