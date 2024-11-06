@@ -88,8 +88,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       columns = any_of("estimate"),
       label = glue("**{estimate_column_labels$label}**") %>% as.character(),
       hide = !"estimate" %in% tidy_columns_to_report,
-      footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character()#,
-      #fmt_fun = estimate_fun
+      footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character()
     ) |>
     modify_table_styling(
       columns = any_of("estimate"),
