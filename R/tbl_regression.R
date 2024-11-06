@@ -92,7 +92,7 @@ tbl_regression.default <- function(x,
                                    show_single_row = NULL,
                                    conf.level = 0.95,
                                    intercept = FALSE,
-                                   estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+                                   estimate_fun = list( ~ ifelse(exponentiate, label_style_ratio(), label_style_sigfig())),
                                    pvalue_fun = label_style_pvalue(digits = 1),
                                    tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
                                    add_estimate_to_reference_rows = FALSE,
@@ -108,11 +108,17 @@ tbl_regression.default <- function(x,
   pvalue_fun <- as_function(pvalue_fun, arg = "pvalue_fun")
 
   check_scalar_logical(exponentiate)
+
+  if (rlang::is_function(estimate_fun)) {
+    lifecycle::deprecate_stop(
+      "1.4.0",
+      "gtsummary::add_difference(estimate_fun = 'must be a list of forumulas')"
+    )
+  }
   if (missing(estimate_fun)) {
     estimate_fun <-
       get_theme_element("tbl_regression-arg:estimate_fun", default = estimate_fun)
   }
-  estimate_fun <- as_function(estimate_fun, arg = "estimate_fun")
 
   if (missing(conf.level)) {
     conf.level <- get_theme_element("tbl_regression-arg:conf.level", default = conf.level)
@@ -155,6 +161,17 @@ tbl_regression.default <- function(x,
     ) |>
     dplyr::relocate(any_of(c("conf.low", "conf.high", "p.value")), .after = last_col())
 
+  # process `estimate_fun` argument -------------------
+  cards::process_formula_selectors(
+    scope_table_body(table_body),
+    estimate_fun = estimate_fun
+  )
+  print(eval(formals(asNamespace("gtsummary")[["tbl_regression"]])[["estimate_fun"]]))
+  cards::fill_formula_selectors(
+    data = scope_table_body(table_body),
+    estimate_fun = eval(~ ifelse(exponentiate, label_style_ratio(), label_style_sigfig()))
+  )
+
   # saving evaluated `label`, `show_single_row`, and `include` -----------------
   cards::process_selectors(
     data = scope_table_body(table_body),
@@ -165,6 +182,7 @@ tbl_regression.default <- function(x,
     data = scope_table_body(table_body),
     label = label
   )
+
   func_inputs <-
     utils::modifyList(
       func_inputs,

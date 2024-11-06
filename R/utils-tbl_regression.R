@@ -88,8 +88,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       columns = any_of("estimate"),
       label = glue("**{estimate_column_labels$label}**") %>% as.character(),
       hide = !"estimate" %in% tidy_columns_to_report,
-      footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character(),
-      fmt_fun = estimate_fun
+      footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character()#,
+      #fmt_fun = estimate_fun
     ) |>
     modify_table_styling(
       columns = any_of("estimate"),
@@ -138,8 +138,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   x <-
     modify_table_styling(x,
-      columns = any_of(c("conf.low", "conf.high")),
-      fmt_fun = estimate_fun
+      columns = any_of(c("conf.low", "conf.high"))
     )
 
   # the "ci" column was deprecated in v2.0
@@ -153,7 +152,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
               .data$reference_row == TRUE & is.na(.data$conf.low) ~
                 get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"),
               !is.na(.data$conf.low) ~
-                glue::glue("{estimate_fun(conf.low)}{get_theme_element('pkgwide-str:ci.sep', default = ', ')} {estimate_fun(conf.high)}"),
+                glue::glue("{conf.low}{get_theme_element('pkgwide-str:ci.sep', default = ', ')} {conf.high}"),
               TRUE ~ NA_character_
             )
           )
@@ -163,6 +162,19 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
         modify_header(., ci = x$table_styling$header$label[x$table_styling$header$column == "conf.low"]) |>
           modify_column_hide("ci")
       )}
+  }
+
+  # add the specified formatting functions
+  for (i in seq_along(estimate_fun)) {
+    x <-
+      rlang::inject(
+        modify_table_styling(
+          x,
+          columns = any_of(c("estimate", "conf.low", "conf.high")),
+          rows = .data$variable %in% !!names(estimate_fun[i]),
+          fmt_fun = !!(estimate_fun[[i]] %||% label_style_sigfig())
+        )
+      )
   }
 
   # p.value --------------------------------------------------------------------
