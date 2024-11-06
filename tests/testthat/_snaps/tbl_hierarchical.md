@@ -5,8 +5,8 @@
         id = id))
     Output
         **Chemotherapy Treatment** **N = 200**
-      1                     Drug A   45 (45.9)
-      2                     Drug B   44 (43.1)
+      1                     Drug A  45 (45.9%)
+      2                     Drug B  44 (43.1%)
 
 ---
 
@@ -35,10 +35,10 @@
       i Percentages/Denominators are not correct.
     Output
         **T Stage** **Drug A**  \nN = 98 **Drug B**  \nN = 102
-      1          T1            22 (78.6)             22 (88.0)
-      2          T2            20 (80.0)             22 (75.9)
-      3          T3            20 (90.9)             18 (85.7)
-      4          T4            21 (91.3)             21 (77.8)
+      1          T1           22 (78.6%)            22 (88.0%)
+      2          T2           20 (80.0%)            22 (75.9%)
+      3          T3           20 (90.9%)            18 (85.7%)
+      4          T4           21 (91.3%)            21 (77.8%)
 
 ---
 
@@ -77,21 +77,21 @@
     Output
          **T Stage**  \n    **Grade** **N = 200**
       1                            T1        <NA>
-      2                             I   14 (82.4)
-      3                            II   20 (87.0)
-      4                           III   12 (92.3)
+      2                             I  14 (82.4%)
+      3                            II  20 (87.0%)
+      4                           III  12 (92.3%)
       5                            T2        <NA>
-      6                             I   16 (88.9)
-      7                            II   15 (88.2)
-      8                           III   17 (89.5)
+      6                             I  16 (88.9%)
+      7                            II  15 (88.2%)
+      8                           III  17 (89.5%)
       9                            T3        <NA>
-      10                            I   16 (88.9)
-      11                           II    9 (81.8)
-      12                          III  14 (100.0)
+      10                            I  16 (88.9%)
+      11                           II   9 (81.8%)
+      12                          III 14 (100.0%)
       13                           T4        <NA>
-      14                            I   14 (93.3)
-      15                           II   14 (82.4)
-      16                          III  18 (100.0)
+      14                            I  14 (93.3%)
+      15                           II  14 (82.4%)
+      16                          III 18 (100.0%)
 
 ---
 
@@ -105,21 +105,21 @@
     Output
          **T Stage**  \n    **Grade** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1                            T1                 <NA>                  <NA>
-      2                             I             7 (87.5)              8 (88.9)
-      3                            II            12 (85.7)             9 (100.0)
-      4                           III            6 (100.0)              6 (85.7)
+      2                             I            7 (87.5%)             8 (88.9%)
+      3                            II           12 (85.7%)            9 (100.0%)
+      4                           III           6 (100.0%)             6 (85.7%)
       5                            T2                 <NA>                  <NA>
-      6                             I             7 (87.5)            10 (100.0)
-      7                            II            8 (100.0)              7 (77.8)
-      8                           III             8 (88.9)              9 (90.0)
+      6                             I            7 (87.5%)           10 (100.0%)
+      7                            II           8 (100.0%)             7 (77.8%)
+      8                           III            8 (88.9%)             9 (90.0%)
       9                            T3                 <NA>                  <NA>
-      10                            I            10 (90.9)             7 (100.0)
-      11                           II            5 (100.0)             6 (100.0)
-      12                          III            6 (100.0)             8 (100.0)
+      10                            I           10 (90.9%)            7 (100.0%)
+      11                           II           5 (100.0%)            6 (100.0%)
+      12                          III           6 (100.0%)            8 (100.0%)
       13                           T4                 <NA>                  <NA>
-      14                            I            8 (100.0)             7 (100.0)
-      15                           II            5 (100.0)             10 (83.3)
-      16                          III           10 (100.0)             8 (100.0)
+      14                            I           8 (100.0%)            7 (100.0%)
+      15                           II           5 (100.0%)            10 (83.3%)
+      16                          III          10 (100.0%)            8 (100.0%)
 
 ---
 
@@ -136,7 +136,7 @@
 
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade),
-      denominator = trial2, id = id, statistic = "{n}, {N}, {p}"))
+      denominator = trial2, id = id, statistic = ~"{n}, {N}, {p}"))
     Output
          **T Stage**  \n    **Grade**   **N = 200**
       1                            T1  36, 53, 67.9
@@ -160,10 +160,10 @@
 
     Code
       tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2,
-      id = id, statistic = list(stage = "{n}"))
+      id = id, statistic = ~ list(stage = "{n}"))
     Condition
       Error in `tbl_hierarchical()`:
-      ! The `statistic` argument must be a string, not a list.
+      ! Values passed in the `statistic` argument must be strings.
 
 # tbl_hierarchical(overall_row) works properly
 
@@ -172,9 +172,9 @@
         id = id, overall_row = TRUE))
     Output
                      **Chemotherapy Treatment** **N = 200**
-      1 Total number of patients with any event   50 (25.0)
-      2                                  Drug A   45 (45.9)
-      3                                  Drug B   44 (43.1)
+      1 Total number of patients with any event  50 (25.0%)
+      2                                  Drug A  45 (45.9%)
+      3                                  Drug B  44 (43.1%)
 
 ---
 
@@ -182,13 +182,13 @@
       as.data.frame(res)
     Output
                      **Chemotherapy Treatment** **I**  \nN = 68 **II**  \nN = 68
-      1 Total number of patients with any event       40 (58.8)        38 (55.9)
-      2                                  Drug A       25 (71.4)        27 (84.4)
-      3                                  Drug B       24 (72.7)        26 (72.2)
+      1 Total number of patients with any event      40 (58.8%)       38 (55.9%)
+      2                                  Drug A      25 (71.4%)       27 (84.4%)
+      3                                  Drug B      24 (72.7%)       26 (72.2%)
         **III**  \nN = 64
-      1         39 (60.9)
-      2         23 (74.2)
-      3         26 (78.8)
+      1        39 (60.9%)
+      2        23 (74.2%)
+      3        26 (78.8%)
 
 ---
 
@@ -205,22 +205,22 @@
       as.data.frame(res)
     Output
          **My Stage**  \n    **My Grade** **N = 200**
-      1                                T1   36 (67.9)
-      2                                 I   14 (82.4)
-      3                                II   20 (87.0)
-      4                               III   12 (92.3)
-      5                                T2   37 (68.5)
-      6                                 I   16 (88.9)
-      7                                II   15 (88.2)
-      8                               III   17 (89.5)
-      9                                T3   32 (74.4)
-      10                                I   16 (88.9)
-      11                               II    9 (81.8)
-      12                              III  14 (100.0)
-      13                               T4   35 (70.0)
-      14                                I   14 (93.3)
-      15                               II   14 (82.4)
-      16                              III  18 (100.0)
+      1                                T1  36 (67.9%)
+      2                                 I  14 (82.4%)
+      3                                II  20 (87.0%)
+      4                               III  12 (92.3%)
+      5                                T2  37 (68.5%)
+      6                                 I  16 (88.9%)
+      7                                II  15 (88.2%)
+      8                               III  17 (89.5%)
+      9                                T3  32 (74.4%)
+      10                                I  16 (88.9%)
+      11                               II   9 (81.8%)
+      12                              III 14 (100.0%)
+      13                               T4  35 (70.0%)
+      14                                I  14 (93.3%)
+      15                               II  14 (82.4%)
+      16                              III 18 (100.0%)
 
 ---
 
@@ -241,23 +241,23 @@
     Code
       as.data.frame(res)
     Output
-         **T Stage**  \n    **Grade**  **N = 200**
-      1                            T1 36,0 (0.679)
-      2                             I 14,0 (0.824)
-      3                            II 20,0 (0.870)
-      4                           III 12,0 (0.923)
-      5                            T2 37,0 (0.685)
-      6                             I 16,0 (0.889)
-      7                            II 15,0 (0.882)
-      8                           III 17,0 (0.895)
-      9                            T3 32,0 (0.744)
-      10                            I 16,0 (0.889)
-      11                           II  9,0 (0.818)
-      12                          III 14,0 (1.000)
-      13                           T4 35,0 (0.700)
-      14                            I 14,0 (0.933)
-      15                           II 14,0 (0.824)
-      16                          III 18,0 (1.000)
+         **T Stage**  \n    **Grade**     **N = 200**
+      1                            T1      36 (67.9%)
+      2                             I  14,0 (82.353%)
+      3                            II  20,0 (86.957%)
+      4                           III  12,0 (92.308%)
+      5                            T2      37 (68.5%)
+      6                             I  16,0 (88.889%)
+      7                            II  15,0 (88.235%)
+      8                           III  17,0 (89.474%)
+      9                            T3      32 (74.4%)
+      10                            I  16,0 (88.889%)
+      11                           II   9,0 (81.818%)
+      12                          III 14,0 (100.000%)
+      13                           T4      35 (70.0%)
+      14                            I  14,0 (93.333%)
+      15                           II  14,0 (82.353%)
+      16                          III 18,0 (100.000%)
 
 ---
 
@@ -297,46 +297,46 @@
       20                                                     SEVERE
          **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
       1                   <NA>                               <NA>
-      2                2 (2.3)                            1 (1.2)
-      3                0 (0.0)                            2 (2.4)
-      4                1 (1.2)                            0 (0.0)
+      2              2 (2.33%)                          1 (1.19%)
+      3                 0 (0%)                          2 (2.38%)
+      4              1 (1.16%)                             0 (0%)
       5                   <NA>                               <NA>
-      6               9 (10.5)                            2 (2.4)
-      7                1 (1.2)                            2 (2.4)
-      8                0 (0.0)                            0 (0.0)
+      6              9 (10.5%)                          2 (2.38%)
+      7              1 (1.16%)                          2 (2.38%)
+      8                 0 (0%)                             0 (0%)
       9                   <NA>                               <NA>
-      10               8 (9.3)                          15 (17.9)
-      11               1 (1.2)                          13 (15.5)
-      12               0 (0.0)                            0 (0.0)
+      10             8 (9.30%)                         15 (17.9%)
+      11             1 (1.16%)                         13 (15.5%)
+      12                0 (0%)                             0 (0%)
       13                  <NA>                               <NA>
-      14               4 (4.7)                            2 (2.4)
-      15               2 (2.3)                            1 (1.2)
-      16               0 (0.0)                            0 (0.0)
+      14             4 (4.65%)                          2 (2.38%)
+      15             2 (2.33%)                          1 (1.19%)
+      16                0 (0%)                             0 (0%)
       17                  <NA>                               <NA>
-      18               5 (5.8)                          11 (13.1)
-      19               4 (4.7)                            4 (4.8)
-      20               0 (0.0)                            0 (0.0)
+      18             5 (5.81%)                         11 (13.1%)
+      19             4 (4.65%)                          4 (4.76%)
+      20                0 (0%)                             0 (0%)
          **Xanomeline Low Dose**  \nN = 84
       1                               <NA>
-      2                            0 (0.0)
-      3                            0 (0.0)
-      4                            0 (0.0)
+      2                             0 (0%)
+      3                             0 (0%)
+      4                             0 (0%)
       5                               <NA>
-      6                            5 (6.0)
-      7                            0 (0.0)
-      8                            0 (0.0)
+      6                          5 (5.95%)
+      7                             0 (0%)
+      8                             0 (0%)
       9                               <NA>
-      10                         14 (16.7)
-      11                         11 (13.1)
-      12                           2 (2.4)
+      10                        14 (16.7%)
+      11                        11 (13.1%)
+      12                         2 (2.38%)
       13                              <NA>
-      14                           1 (1.2)
-      15                           0 (0.0)
-      16                           0 (0.0)
+      14                         1 (1.19%)
+      15                            0 (0%)
+      16                            0 (0%)
       17                              <NA>
-      18                           6 (7.1)
-      19                          9 (10.7)
-      20                           0 (0.0)
+      18                         6 (7.14%)
+      19                         9 (10.7%)
+      20                            0 (0%)
 
 ---
 
@@ -344,26 +344,26 @@
       as.data.frame(res)
     Output
               **Primary System Organ Class**  \n    **AESEV** **N = 254**
-      1                                     CARDIAC DISORDERS     6 (2.4)
-      2                                                  MILD     3 (1.2)
-      3                                              MODERATE     2 (0.8)
-      4                                                SEVERE     1 (0.4)
-      5                            GASTROINTESTINAL DISORDERS    19 (7.5)
-      6                                                  MILD    16 (6.3)
-      7                                              MODERATE     3 (1.2)
-      8                                                SEVERE     0 (0.0)
-      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS   64 (25.2)
-      10                                                 MILD   37 (14.6)
-      11                                             MODERATE    25 (9.8)
-      12                                               SEVERE     2 (0.8)
-      13                          INFECTIONS AND INFESTATIONS    10 (3.9)
-      14                                                 MILD     7 (2.8)
-      15                                             MODERATE     3 (1.2)
-      16                                               SEVERE     0 (0.0)
-      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS   39 (15.4)
-      18                                                 MILD    22 (8.7)
-      19                                             MODERATE    17 (6.7)
-      20                                               SEVERE     0 (0.0)
+      1                                     CARDIAC DISORDERS   6 (2.36%)
+      2                                                  MILD   3 (1.18%)
+      3                                              MODERATE   2 (0.79%)
+      4                                                SEVERE   1 (0.39%)
+      5                            GASTROINTESTINAL DISORDERS  19 (7.48%)
+      6                                                  MILD  16 (6.30%)
+      7                                              MODERATE   3 (1.18%)
+      8                                                SEVERE      0 (0%)
+      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  64 (25.2%)
+      10                                                 MILD  37 (14.6%)
+      11                                             MODERATE  25 (9.84%)
+      12                                               SEVERE   2 (0.79%)
+      13                          INFECTIONS AND INFESTATIONS  10 (3.94%)
+      14                                                 MILD   7 (2.76%)
+      15                                             MODERATE   3 (1.18%)
+      16                                               SEVERE      0 (0%)
+      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS  39 (15.4%)
+      18                                                 MILD  22 (8.66%)
+      19                                             MODERATE  17 (6.69%)
+      20                                               SEVERE      0 (0%)
 
 # tbl_hierarchical_count(data) works properly
 
@@ -587,9 +587,11 @@
 ---
 
     Code
-      tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = "test")
+      tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = n ~
+      2)
     Condition
-      Error in `internal_tbl_hierarchical()`:
-      ! The `digits` argument must be a named list, list of formulas, a single formula, or empty.
-      i Review ?syntax (`?cards::syntax()`) for examples and details.
+      Error in `tbl_hierarchical_count()`:
+      ! Error processing `digits` argument.
+      ! Can't select columns that don't exist. x Column `n` doesn't exist.
+      i Select among columns "stage" and "grade"
 
