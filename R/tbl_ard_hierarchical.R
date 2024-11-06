@@ -55,7 +55,7 @@ tbl_ard_hierarchical <- function(cards,
                                  variables,
                                  by = NULL,
                                  include = everything(),
-                                 statistic = "{n} ({p})",
+                                 statistic = ~"{n} ({p}%)",
                                  label = NULL) {
   set_cli_abort_call()
 
@@ -67,13 +67,26 @@ tbl_ard_hierarchical <- function(cards,
                 i = "Some operations cause a {.cls {'card'}} data frame to lose its class; use {.fun cards::as_card} to restore it as needed.")
   )
   check_not_missing(variables)
-  check_string(statistic)
 
   # define a data frame based on the context of `card` -------------------------
   data <- bootstrap_df_from_cards(cards)
 
   cards::process_selectors(data, variables = {{ variables }}, by = {{ by }})
   cards::process_selectors(data[variables], include = {{ include }})
+  cards::process_formula_selectors(data[intersect(variables, unique(cards$variable))], statistic = statistic)
+
+  # check that all statistics passed are strings
+  cards::check_list_elements(
+    x = statistic,
+    predicate = \(x) is_string(x),
+    error_msg = "Values passed in the {.arg statistic} argument must be strings."
+  )
+
+  # fill in unspecified variables
+  cards::fill_formula_selectors(
+    data[intersect(variables, unique(cards$variable))],
+    statistic = eval(formals(gtsummary::tbl_ard_hierarchical)[["statistic"]])
+  )
 
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_hierarchical(cards, variables, by)
@@ -81,6 +94,24 @@ tbl_ard_hierarchical <- function(cards,
   # save arguments
   tbl_ard_hierarchical_inputs <- as.list(environment())
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
+
+  # define digits defaults
+  digits <- list(c(
+    c("n", "N") |> rep_named(list(label_style_number())),
+    c("p") |>
+      rep_named(list(get_theme_element("tbl_summary-fn:percent_fun", default = label_style_percent(digits = 1))))
+  )) |> rep(length(variables)) |>
+    stats::setNames(variables)
+
+  # apply digits ---------------------------------------------------------------
+  names(digits)[names(digits) == by] <- "..ard_hierarchical_overall.."
+  for (v in names(digits)) {
+    for (stat in lapply(statistic, function(x) .extract_glue_elements(x) |> unlist())[[v]]) {
+      cards <- cards |>
+        cards::update_ard_fmt_fn(variables = all_of(v), stat_names = stat, fmt_fn = digits[[v]][[stat]])
+    }
+  }
+  cards <- cards |> cards::apply_fmt_fn()
 
   # fill in missing labels -----------------------------------------------------
   default_label <- default_label <- names(data) |> as.list() |> stats::setNames(names(data))
@@ -93,7 +124,7 @@ tbl_ard_hierarchical <- function(cards,
     variables = variables,
     by = by,
     include = include,
-    statistic = rep_named(include, list(statistic)),
+    statistic = statistic,
     overall_row = FALSE,
     count = FALSE,
     is_ordered = is.ordered(data[[dplyr::last(variables)]]),

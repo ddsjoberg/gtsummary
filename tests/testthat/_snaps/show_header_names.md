@@ -99,5 +99,5 @@
       
     Message
       * These values may be dynamically placed into headers (and other locations).
-      i Review the `modify_header()` (`?gtsummary::modify()`) help for examples.
+      i Review the `modify_header()` (`?gtsummary::modify_header()`) help for examples.
 

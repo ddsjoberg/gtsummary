@@ -473,11 +473,12 @@ internal_tbl_hierarchical <- function(data,
     # process overall row
     cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
       dplyr::group_by(.data$variable_level) |>
-      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
-      dplyr::ungroup()
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
   }
 
-  cards
+  cards |>
+    dplyr::ungroup() |>
+    cards::as_card()
 }
 
 .assign_hierarchical_digits <- function(data, statistic, digits = NULL) {
