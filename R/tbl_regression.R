@@ -109,12 +109,6 @@ tbl_regression.default <- function(x,
 
   check_scalar_logical(exponentiate)
 
-  if (rlang::is_function(estimate_fun)) {
-    lifecycle::deprecate_stop(
-      "1.4.0",
-      "gtsummary::add_difference(estimate_fun = 'must be a list of forumulas')"
-    )
-  }
   if (missing(estimate_fun)) {
     estimate_fun <-
       get_theme_element("tbl_regression-arg:estimate_fun", default = estimate_fun)
@@ -166,7 +160,6 @@ tbl_regression.default <- function(x,
     scope_table_body(table_body),
     estimate_fun = estimate_fun
   )
-  print(eval(formals(asNamespace("gtsummary")[["tbl_regression"]])[["estimate_fun"]]))
   cards::fill_formula_selectors(
     data = scope_table_body(table_body),
     estimate_fun = eval(~ ifelse(exponentiate, label_style_ratio(), label_style_sigfig()))
