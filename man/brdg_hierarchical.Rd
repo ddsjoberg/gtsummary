@@ -11,7 +11,6 @@ brdg_hierarchical(
   by,
   include,
   statistic,
-  type,
   overall_row,
   count,
   is_ordered,
@@ -35,9 +34,6 @@ character list of hierarchy variables to include summary statistics for.}
 
 \item{statistic}{(named \code{list})\cr
 named list of summary statistic names.}
-
-\item{type}{(named \code{list})\cr
-named list of summary types.}
 
 \item{overall_row}{(scalar \code{logical})\cr
 whether an overall summary row should be included at the top of the table.
