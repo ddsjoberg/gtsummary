@@ -12,9 +12,10 @@ tbl_hierarchical(
   id = NULL,
   denominator = NULL,
   include = everything(),
-  statistic = "{n} ({p})",
+  statistic = ~"{n} ({p}\%)",
   overall_row = FALSE,
-  label = NULL
+  label = NULL,
+  digits = NULL
 )
 
 tbl_hierarchical_count(
@@ -24,7 +25,8 @@ tbl_hierarchical_count(
   denominator = NULL,
   include = everything(),
   overall_row = FALSE,
-  label = NULL
+  label = NULL,
+  digits = NULL
 )
 }
 \arguments{
@@ -53,9 +55,9 @@ variables from \code{hierarchy} for which summary statistics should be returned 
 the last element of \code{hierarchy} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
-\item{statistic}{(\code{string})\cr
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to specify the summary statistics to display for all variables in \code{tbl_hierarchical()}.
-The default is \code{"{n} ({p})"}.}
+The default is \code{everything() ~ "{n} ({p})"}.}
 
 \item{overall_row}{(scalar \code{logical})\cr
 whether an overall summary row should be included at the top of the table.
@@ -65,6 +67,11 @@ The default is \code{FALSE}.}
 used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
+
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s) or function(s). If not specified,
+default formatting is assigned via \code{label_style_number()} for statistics \code{n} and \code{N}, and
+\code{label_style_percent(digits=1)} for statistic \code{p}.}
 }
 \value{
 a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical()}) or \code{"tbl_hierarchical_count"}
@@ -112,7 +119,8 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
-  overall_row = TRUE
+  overall_row = TRUE,
+  digits = everything() ~ list(p = 2)
 )
 
 # Example 2 - Rates by Highest Severity ------

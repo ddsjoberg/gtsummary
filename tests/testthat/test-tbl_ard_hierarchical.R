@@ -59,7 +59,7 @@ test_that("tbl_ard_hierarchical() counts", {
       cards = ard,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      statistic = "{n}"
+      statistic = ~"{n}"
     ),
     NA
   )
