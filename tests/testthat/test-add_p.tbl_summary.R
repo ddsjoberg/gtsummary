@@ -437,6 +437,8 @@ test_that("no error with missing data", {
 })
 
 test_that("add_p.tbl_summary() can be run after add_difference()", {
+  skip_if_not(is_pkg_installed("parameters"))
+
   expect_error(
     trial |>
       select(age, trt) |>
