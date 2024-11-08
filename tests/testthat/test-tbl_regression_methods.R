@@ -59,7 +59,7 @@ test_that("tbl_regression.mira()", {
 })
 
 test_that("tbl_regression.lmerMod()", {
-  skip_if_not(is_pkg_installed("lme4"))
+  skip_if_not(is_pkg_installed(c("lme4", "broom.mixed")))
 
   expect_snapshot(
     lme4::lmer(mpg ~ hp + (1 | cyl), mtcars) |>
