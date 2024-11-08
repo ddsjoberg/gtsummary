@@ -51,6 +51,8 @@ test_that("combine_terms(label) works as expected", {
 })
 
 test_that("combine_terms works with add_global_p", {
+  skip_if_not(is_pkg_installed("parameters"))
+
   expect_silent(
     tbl <- lmod |>
       tbl_regression() |>
