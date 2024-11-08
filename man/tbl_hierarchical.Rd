@@ -8,11 +8,11 @@
 tbl_hierarchical(
   data,
   variables,
+  id,
+  denominator,
   by = NULL,
-  id = NULL,
-  denominator = NULL,
   include = everything(),
-  statistic = ~"{n} ({p}\%)",
+  statistic = everything() ~ "{n} ({p}\%)",
   overall_row = FALSE,
   label = NULL,
   digits = NULL
@@ -21,8 +21,8 @@ tbl_hierarchical(
 tbl_hierarchical_count(
   data,
   variables,
-  by = NULL,
   denominator = NULL,
+  by = NULL,
   include = everything(),
   overall_row = FALSE,
   label = NULL,
@@ -37,10 +37,6 @@ a data frame.}
 character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
 variables in the order given.}
 
-\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-a single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}.}
-
 \item{id}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 argument used to subset \code{data} to identify rows in \code{data} to calculate
 event rates in \code{tbl_hierarchical()}.}
@@ -49,6 +45,10 @@ event rates in \code{tbl_hierarchical()}.}
 used to define the denominator and enhance the output.
 The argument is required for \code{tbl_hierarchical()} and optional for \code{tbl_hierarchical_count()}.
 The \code{denominator} argument must be specified when \code{id} is used to calculate event rates.}
+
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+a single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables from \code{hierarchy} for which summary statistics should be returned (on the variable label rows) Including
@@ -100,12 +100,13 @@ in \code{data} corresponds to one event record, this row will count the overall 
 \code{tbl_hierarchical_count()}, or the overall number of patients recorded with any event when used in
 \code{tbl_hierarchical()}.
 
-A label for this overall row can be specified by passing an \code{overall} element in \code{label}. If no \code{overall} label has
-been set and \code{overall_row = TRUE}, \code{"Total number of patients with any event"} will be used by \code{tbl_hierarchical()}
-and \code{"Total number of events"} will be used by \code{tbl_hierarchical_count()}.
+A label for this overall row can be specified by passing an \code{'..ard_hierarchical_overall..'} element in \code{label}.
+Similarly, the rounding for statistics in the overall row can be modified using the \code{digits} argument and
+again referencing the \code{'..ard_hierarchical_overall..'} name.
 }
 
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
@@ -119,8 +120,9 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
+  digits = everything() ~ list(p = 1),
   overall_row = TRUE,
-  digits = everything() ~ list(p = 2)
+  label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
 )
 
 # Example 2 - Rates by Highest Severity ------
@@ -141,5 +143,5 @@ tbl_hierarchical_count(
   by = TRTA,
   overall_row = TRUE
 )
-
+\dontshow{\}) # examplesIf}
 }

@@ -11,7 +11,7 @@
 #' @return a gtsummary table of class `"tbl_ard_hierarchical"`
 #' @export
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' ADAE_subset <- cards::ADAE |>
 #'   dplyr::filter(
 #'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
@@ -95,22 +95,7 @@ tbl_ard_hierarchical <- function(cards,
   tbl_ard_hierarchical_inputs <- as.list(environment())
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
 
-  # define digits defaults
-  digits <- list(c(
-    c("n", "N") |> rep_named(list(label_style_number())),
-    c("p") |>
-      rep_named(list(get_theme_element("tbl_summary-fn:percent_fun", default = label_style_percent(digits = 1))))
-  )) |> rep(length(variables)) |>
-    stats::setNames(variables)
-
-  # apply digits ---------------------------------------------------------------
-  names(digits)[names(digits) == by] <- "..ard_hierarchical_overall.."
-  for (v in names(digits)) {
-    for (stat in lapply(statistic, function(x) .extract_glue_elements(x) |> unlist())[[v]]) {
-      cards <- cards |>
-        cards::update_ard_fmt_fn(variables = all_of(v), stat_names = stat, fmt_fn = digits[[v]][[stat]])
-    }
-  }
+  # apply formatting fns -------------------------------------------------------
   cards <- cards |> cards::apply_fmt_fn()
 
   # fill in missing labels -----------------------------------------------------
