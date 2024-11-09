@@ -271,6 +271,18 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
     c(fn1[2], fn2[2]), # correct labels
     c("another new footnote", "replace old footnote")
   )
+
+  # testing one footnote passed to multiple columns and rows, addesses issue #2062
+  expect_silent(
+    my_tbl_summary |>
+      modify_footnote(stat_0 = NA) |>
+      modify_table_styling(
+        columns = c(label, stat_0),
+        rows = (variable %in% "trt") & (row_type == "level"),
+        footnote = "my footnote"
+      ) |>
+      as_flex_table()
+  )
 })
 
 test_that("as_flex_table passes table indentation correctly", {

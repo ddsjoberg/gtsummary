@@ -230,7 +230,17 @@ table_styling_to_flextable_calls <- function(x, ...) {
     tidyr::nest(location_ids = c("row_numbers", "column_id")) %>%
     dplyr::mutate(
       row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers") |> unique()),
-      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") |> unique())
+      column_id =
+        pmap(
+          list(.data$location_ids,
+               .data$tab_location,
+               .data$row_numbers),
+          \(location_ids, tab_location, row_numbers) {
+            col_ids <- getElement(location_ids, "column_id") |> unique()
+            if (tab_location == "body") col_ids <- rep(col_ids, length(row_numbers)) # styler: off
+            col_ids
+          }
+        )
     )
 
   flextable_calls[["footnote"]] <-
