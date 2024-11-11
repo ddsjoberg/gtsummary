@@ -49,6 +49,7 @@ a gtsummary table of class \code{"tbl_ard_hierarchical"}
 Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
@@ -88,4 +89,5 @@ tbl_ard_hierarchical(
   by = TRTA,
   statistic = ~"{n}"
 )
+\dontshow{\}) # examplesIf}
 }

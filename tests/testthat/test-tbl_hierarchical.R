@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed("withr"))
 
 trial2 <- trial |>
   mutate(id = rep(1:50, length.out = nrow(trial)))
@@ -39,7 +40,7 @@ test_that("tbl_hierarchical(denominator) works properly", {
   # errors thrown when bad denominator argument passed
   expect_snapshot(
     error = TRUE,
-    tbl_hierarchical(data = trial2, variables = trt, denominator = "test")
+    tbl_hierarchical(data = trial2, variables = trt, denominator = "test", id = id)
   )
 })
 
@@ -82,6 +83,8 @@ test_that("tbl_hierarchical(statistic) works properly", {
 
 # tbl_hierarchical(overall_row) ------------------------------------------------------------
 test_that("tbl_hierarchical(overall_row) works properly", {
+  withr::local_options(list(width = 120))
+
   # creates table when overall_row is passed
   expect_snapshot(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2, id = id, overall_row = TRUE) |> as.data.frame())
 
@@ -91,10 +94,10 @@ test_that("tbl_hierarchical(overall_row) works properly", {
       tbl_hierarchical(data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE)
   ))
   expect_snapshot(res |> as.data.frame())
-  expect_equal((res |> as.data.frame())[1, 1], "Total number of patients with any event")
+  expect_equal((res |> as.data.frame())[1, 1], "Number of patients with event")
   expect_equal(
     (res |> as.data.frame())[1, -1] |> as.character(),
-    c("40 (58.8%)", "38 (55.9%)", "39 (60.9%)")
+    c("40 (59%)", "38 (56%)", "39 (61%)")
   )
 
   # overall row labeling works
@@ -102,7 +105,7 @@ test_that("tbl_hierarchical(overall_row) works properly", {
     res <-
       tbl_hierarchical(
         data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE,
-        label = list(overall = "Total patients")
+        label = list(..ard_hierarchical_overall.. = "Total patients")
       )
   ))
   expect_equal((res |> as.data.frame())[1, 1], "Total patients")
@@ -139,7 +142,7 @@ test_that("tbl_hierarchical(digits) works properly", {
     digits = grade ~ list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
   )
   expect_snapshot(res |> as.data.frame())
-  expect_equal(res$table_body$stat_0[1], "36 (67.9%)")
+  expect_equal(res$table_body$stat_0[1], "36 (68%)")
 
   # errors thrown when bad digits argument passed
   expect_snapshot(
@@ -252,7 +255,7 @@ test_that("tbl_hierarchical_count(overall_row) works properly", {
 
   # overall row labeling works
   res <- tbl_hierarchical_count(
-    data = trial, variables = trt, by = grade, overall_row = TRUE, label = list(overall = "Total rows")
+    data = trial, variables = trt, by = grade, overall_row = TRUE, label = list(..ard_hierarchical_overall.. = "Total rows")
   )
   expect_equal((res |> as.data.frame())[1, 1], "Total rows")
 

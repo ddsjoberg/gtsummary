@@ -61,11 +61,9 @@ brdg_hierarchical <- function(cards,
     cards <- cards |>
       mutate(
         variable_level = ifelse(
-          .data$variable == "..ard_hierarchical_overall..", label[["overall"]], .data$variable_level
+          .data$variable == "..ard_hierarchical_overall..", label[["..ard_hierarchical_overall.."]], .data$variable_level
         ),
-        variable = ifelse(.data$variable == "..ard_hierarchical_overall..", "overall", .data$variable)
       )
-    label[["overall"]] <- NULL
   }
 
   n_by <- length(by)
@@ -77,7 +75,7 @@ brdg_hierarchical <- function(cards,
   if (overall_row) {
     over_row <- pier_summary_hierarchical(
       cards = cards,
-      variables = "overall",
+      variables = "..ard_hierarchical_overall..",
       include = include,
       statistic = statistic
     )
@@ -169,7 +167,7 @@ brdg_hierarchical <- function(cards,
     x <- x |>
       modify_column_indent(
         columns = label,
-        rows = .data$variable == "overall",
+        rows = .data$variable == "..ard_hierarchical_overall..",
         indent = 0
       )
   }
@@ -177,7 +175,7 @@ brdg_hierarchical <- function(cards,
   # formulate top-left label for the label column
   indent <- 4 * (seq_along(variables) - 1)
   label_hierarchy <- sapply(
-    seq_along(label),
+    seq_along(label[variables]),
     function(x) {
       paste0(
         paste(rep("\U00A0", indent[x]), collapse = ""),
