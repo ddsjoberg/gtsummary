@@ -56,7 +56,7 @@
 #' `tbl_hierarchical()`.
 #'
 #' A label for this overall row can be specified by passing an `'..ard_hierarchical_overall..'` element in `label`.
-#' Similarly, the rounding for statistics in the overall row can be modified using the `digits` argument and
+#' Similarly, the rounding for statistics in the overall row can be modified using the `digits` argument,
 #' again referencing the `'..ard_hierarchical_overall..'` name.
 #'
 #' @return a gtsummary table of class `"tbl_hierarchical"` (for `tbl_hierarchical()`) or `"tbl_hierarchical_count"`
