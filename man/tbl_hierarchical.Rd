@@ -101,7 +101,7 @@ in \code{data} corresponds to one event record, this row will count the overall 
 \code{tbl_hierarchical()}.
 
 A label for this overall row can be specified by passing an \code{'..ard_hierarchical_overall..'} element in \code{label}.
-Similarly, the rounding for statistics in the overall row can be modified using the \code{digits} argument and
+Similarly, the rounding for statistics in the overall row can be modified using the \code{digits} argument,
 again referencing the \code{'..ard_hierarchical_overall..'} name.
 }
 
