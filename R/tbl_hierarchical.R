@@ -98,7 +98,8 @@
 #'   data = ADAE_subset,
 #'   variables = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   overall_row = TRUE
+#'   overall_row = TRUE,
+#'   label = list(..ard_hierarchical_overall.. = "Total Number of AEs")
 #' )
 tbl_hierarchical <- function(data,
                              variables,
