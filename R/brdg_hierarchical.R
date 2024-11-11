@@ -63,7 +63,6 @@ brdg_hierarchical <- function(cards,
         variable_level = ifelse(
           .data$variable == "..ard_hierarchical_overall..", label[["..ard_hierarchical_overall.."]], .data$variable_level
         ),
-        variable = ifelse(.data$variable == "..ard_hierarchical_overall..", "..ard_hierarchical_overall..", .data$variable)
       )
   }
 
