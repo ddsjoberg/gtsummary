@@ -293,11 +293,15 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
     mutate(grade = factor(grade, levels = c("I")))
 
   out <- trial_reduced |>
-    tbl_summary(by = trt,
-                include = grade) |>
-    modify_table_styling(columns = stat_1,
-                         rows = (variable %in% "grade") & (row_type == "level"),
-                         footnote = "Cell-level foonotes here.") |>
+    tbl_summary(
+      by = trt,
+      include = grade
+    ) |>
+    modify_table_styling(
+      columns = stat_1,
+      rows = (variable %in% "grade") & (row_type == "level"),
+      footnote = "Cell-level foonotes here."
+    ) |>
     modify_table_styling(
       columns = label,
       rows = label == "grade",
@@ -318,7 +322,12 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
   dchunk <- flextable::information_data_chunk(out)
   cell_1 <- dchunk |> filter(.part %in% "footer")
 
-  expect_equal(cell_1$txt, c("1", "n (%)", "", "2", "i.e. Grade", "", "3", "i.e. 1", "", "4", "Cell-level foonotes here.", ""))
+  expect_equal(cell_1$txt, c(
+    "1", "n (%)", "",
+    "2", "i.e. Grade", "",
+    "3", "i.e. 1", "",
+    "4", "Cell-level foonotes here.", ""
+  ))
 })
 
 test_that("as_flex_table passes table indentation correctly", {
