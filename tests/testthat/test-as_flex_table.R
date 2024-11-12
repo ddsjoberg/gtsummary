@@ -272,7 +272,7 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
     c("another new footnote", "replace old footnote")
   )
 
-  # testing one footnote passed to multiple columns and rows, addesses issue #2062
+  # testing one footnote passed to multiple columns and rows, addresses issue #2062
   expect_silent(
     my_tbl_summary |>
       modify_footnote(stat_0 = NA) |>
@@ -283,6 +283,42 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
       ) |>
       as_flex_table()
   )
+})
+
+test_that("as_flex_table passes multiple table footnotes correctly", {
+  trial_reduced <- trial |>
+    select(age, grade, stage, trt) |>
+    filter(trt %in% "Drug A") |>
+    filter(grade %in% "I") |>
+    mutate(grade = factor(grade, levels = c("I")))
+
+  out <- trial_reduced |>
+    tbl_summary(by = trt,
+                include = grade) |>
+    modify_table_styling(columns = stat_1,
+                         rows = (variable %in% "grade") & (row_type == "level"),
+                         footnote = "Cell-level foonotes here.") |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "grade",
+      footnote = "i.e. Grade"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "Characteristic",
+      footnote = "i.e. char"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "I",
+      footnote = "i.e. 1"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+  cell_1 <- dchunk |> filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c("1", "n (%)", "", "2", "i.e. Grade", "", "3", "i.e. 1", "", "4", "Cell-level foonotes here.", ""))
 })
 
 test_that("as_flex_table passes table indentation correctly", {
