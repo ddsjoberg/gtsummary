@@ -60,7 +60,8 @@ add_overall(x, ...)
 \method{add_overall}{tbl_hierarchical_count}(
   x,
   last = FALSE,
-  col_label = "**Overall**  \\nN = {style_number(N)}",
+  col_label = ifelse(rlang::is_empty(x$inputs$denominator), "**Overall**",
+    "**Overall**  \\nN = {style_number(N)}"),
   statistic = NULL,
   digits = NULL,
   ...
