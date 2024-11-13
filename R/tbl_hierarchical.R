@@ -280,6 +280,8 @@ internal_tbl_hierarchical <- function(data,
   tbl_hierarchical_inputs$anl_vars <- NULL
   tbl_hierarchical_inputs$df_anl_vars <- NULL
   tbl_hierarchical_inputs$df_variables <- NULL
+  tbl_hierarchical_inputs$calling_fun <- NULL
+  tbl_hierarchical_inputs$digits_default <- NULL
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(

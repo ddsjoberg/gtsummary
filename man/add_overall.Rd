@@ -6,6 +6,7 @@
 \alias{add_overall.tbl_continuous}
 \alias{add_overall.tbl_svysummary}
 \alias{add_overall.tbl_custom_summary}
+\alias{add_overall.tbl_hierarchical}
 \title{Add overall column}
 \usage{
 add_overall(x, ...)
@@ -38,6 +39,15 @@ add_overall(x, ...)
 )
 
 \method{add_overall}{tbl_custom_summary}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+\method{add_overall}{tbl_hierarchical}(
   x,
   last = FALSE,
   col_label = "**Overall**  \\nN = {style_number(N)}",
