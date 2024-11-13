@@ -1,24 +1,59 @@
 skip_on_cran()
 skip_if_not(is_pkg_installed("withr"))
 
-test_that("add_overall.tbl_custom_summary() works", {
+ADAE_subset <- cards::ADAE |>
+  dplyr::filter(
+    AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+    AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+  )
+
+test_that("add_overall.tbl_hierarchical() works", {
   withr::local_options(list(width = 120))
 
-  my_stats <- function(data, ...) {
-    dplyr::tibble(
-      marker_sum = sum(data$marker, na.rm = TRUE)
-    )
-  }
+  expect_silent(
+    tbl <-
+      tbl_hierarchical(
+        data = ADAE_subset,
+        variables = c(AESOC, AETERM),
+        by = TRTA,
+        denominator = cards::ADSL |> mutate(TRTA = ARM),
+        id = USUBJID,
+        digits = everything() ~ list(p = 1),
+        overall_row = TRUE,
+        label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+      )
+  )
+
+  # vanilla output looks as expected
   expect_snapshot(
-    trial |>
-      tbl_custom_summary(
-        include = c("stage", "grade"),
-        by = "trt",
-        stat_fns = everything() ~ my_stats,
-        type = everything() ~ "continuous2", #new
-        statistic = everything() ~ "S: {marker_sum}"
-      ) |>
-      add_overall() |>
+    add_overall(tbl) |>
       as.data.frame()
+  )
+
+  # the overall column will go to the end
+  expect_equal(
+    add_overall(tbl, last = TRUE) |>
+      as.data.frame(col_labels = FALSE) |>
+      names() |>
+      dplyr::last(),
+    "stat_0"
+  )
+
+  # the new column label can change
+  expect_equal(
+    add_overall(tbl, last = TRUE, col_label = "That's All") |>
+      as.data.frame(col_labels = TRUE) |>
+      names() |>
+      dplyr::last(),
+    "That's All"
+  )
+
+  # we can modify the statistic and rounding
+  expect_equal(
+    add_overall(tbl, statistic = ~"{p}%", digits = everything() ~ list(p = 2)) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("stat_0") |>
+      getElement(1L),
+    "42.52%"
   )
 })
