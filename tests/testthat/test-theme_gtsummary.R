@@ -308,4 +308,16 @@ test_that("with_gtsummary_theme()", {
     )
     reset_gtsummary_theme()
   })
+
+  # check that the theme is reset and a message about the resetting of the theme does not appear
+  expect_snapshot({
+    theme_gtsummary_language("es")
+    with_gtsummary_theme(
+      theme_gtsummary_eda(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_kable()
+    )
+    tbl_summary(trial, include = age) |>
+      as_kable()
+    reset_gtsummary_theme()
+  })
 })
