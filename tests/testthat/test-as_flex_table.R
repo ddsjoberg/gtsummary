@@ -287,10 +287,10 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
 
 test_that("as_flex_table passes multiple table footnotes correctly", {
   trial_reduced <- trial |>
-    select(grade, trt) |>
-    filter(trt %in% "Drug A") |>
-    filter(grade %in% "I") |>
-    mutate(grade = factor(grade, levels = c("I")))
+    dplyr::select(grade, trt) |>
+    dplyr::filter(trt == "Drug A") |>
+    dplyr::filter(grade == "I") |>
+    dplyr::mutate(grade = factor(grade, levels = c("I")))
 
   out <- trial_reduced |>
     tbl_summary(
@@ -320,7 +320,7 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
     as_flex_table()
 
   dchunk <- flextable::information_data_chunk(out)
-  cell_1 <- dchunk |> filter(.part %in% "footer")
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
 
   expect_equal(cell_1$txt, c(
     "1", "n (%)", "",
