@@ -287,7 +287,7 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
 
 test_that("as_flex_table passes multiple table footnotes correctly", {
   trial_reduced <- trial |>
-    select(age, grade, stage, trt) |>
+    select(grade, trt) |>
     filter(trt %in% "Drug A") |>
     filter(grade %in% "I") |>
     mutate(grade = factor(grade, levels = c("I")))
