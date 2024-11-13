@@ -37,5 +37,5 @@ glance_fun_s3.default <- function(x, ...) {
 glance_fun_s3.mira <- function(x, ...) {
   check_pkg_installed(c("broom",  "mice"))
   check_dots_empty()
-  \(x) broom::glance(mice::pool(x))
+  \(x) suppressWarnings(broom::glance(mice::pool(x)))
 }
