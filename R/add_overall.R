@@ -96,6 +96,24 @@ add_overall.tbl_svysummary <- add_overall.tbl_summary
 #' @export
 add_overall.tbl_custom_summary <- add_overall.tbl_summary
 
+#' @rdname add_overall
+#' @export
+add_overall.tbl_hierarchical <- add_overall.tbl_summary
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_hierarchical_count <- function(x,
+                                               last = FALSE,
+                                               col_label = ifelse(rlang::is_empty(x$inputs$denominator),
+                                                                  "**Overall**",
+                                                                  "**Overall**  \nN = {style_number(N)}"),
+                                               statistic = NULL,
+                                               digits = NULL, ...) {
+
+  add_overall.tbl_summary(x = x, last = last, col_label = col_label,
+                          statistic = statistic, digits = digits, ...)
+}
+
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
   check_string(col_label, allow_empty = TRUE)
@@ -113,7 +131,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
     utils::modifyList(list(by = NULL), keep.null = TRUE)
 
   # if overall row, already included in data -----------------------------------
-  if (isTRUE(args_overall$overall_row)) {
+  if (calling_fun == "tbl_custom_summary" && isTRUE(args_overall$overall_row)) {
     args_overall$overall_row <- FALSE
   }
 
