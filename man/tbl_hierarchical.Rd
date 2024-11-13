@@ -25,6 +25,7 @@ tbl_hierarchical_count(
   by = NULL,
   include = everything(),
   overall_row = FALSE,
+  statistic = everything() ~ "{n}",
   label = NULL,
   digits = NULL
 )

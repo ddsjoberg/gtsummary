@@ -160,6 +160,7 @@ tbl_hierarchical_count <- function(data,
                                    by = NULL,
                                    include = everything(),
                                    overall_row = FALSE,
+                                   statistic = everything() ~ "{n}",
                                    label = NULL,
                                    digits = NULL) {
   set_cli_abort_call()
@@ -188,7 +189,7 @@ tbl_hierarchical_count <- function(data,
     id = NULL,
     denominator = denominator,
     include = {{ include }},
-    statistic = ~"{n}",
+    statistic = statistic,
     overall_row = overall_row,
     label = label,
     digits = digits,
@@ -282,6 +283,9 @@ internal_tbl_hierarchical <- function(data,
   tbl_hierarchical_inputs$df_variables <- NULL
   tbl_hierarchical_inputs$calling_fun <- NULL
   tbl_hierarchical_inputs$digits_default <- NULL
+  if (calling_fun == "tbl_hierarchical_count") {
+    tbl_hierarchical_inputs$id <- NULL
+  }
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
