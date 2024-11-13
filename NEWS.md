@@ -10,6 +10,8 @@
 
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
 
+* Added S3 methods `add_overall.tbl_hierarchical()` and `add_overall.tbl_hierarchical_count()`.
+
 # gtsummary 2.0.3
 
 ### New Features and Functions
