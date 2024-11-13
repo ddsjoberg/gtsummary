@@ -11,7 +11,7 @@ tbl_custom_summary()."><meta property="og:image" content="https://www.danieldsjo
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,27 @@ created by <code><a href="tbl_summary.html">tbl_summary()</a></code>, <code><a h
 <span>  <span class="va">x</span>,</span>
 <span>  last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  col_label <span class="op">=</span> <span class="st">"**Overall**  \nN = {style_number(N)}"</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'tbl_hierarchical'</span></span>
+<span><span class="fu">add_overall</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  col_label <span class="op">=</span> <span class="st">"**Overall**  \nN = {style_number(N)}"</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'tbl_hierarchical_count'</span></span>
+<span><span class="fu">add_overall</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  col_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/is_empty.html" class="external-link">is_empty</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">denominator</span><span class="op">)</span>, <span class="st">"**Overall**"</span>,</span>
+<span>    <span class="st">"**Overall**  \nN = {style_number(N)}"</span><span class="op">)</span>,</span>
 <span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
