@@ -271,21 +271,24 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
     c(fn1[2], fn2[2]), # correct labels
     c("another new footnote", "replace old footnote")
   )
-
-  # testing one footnote passed to multiple columns and rows, addresses issue #2062
-  expect_silent(
-    my_tbl_summary |>
-      modify_footnote(stat_0 = NA) |>
-      modify_table_styling(
-        columns = c(label, stat_0),
-        rows = (variable %in% "trt") & (row_type == "level"),
-        footnote = "my footnote"
-      ) |>
-      as_flex_table()
-  )
 })
 
 test_that("as_flex_table passes multiple table footnotes correctly", {
+  # testing one footnote passed to multiple columns and rows, addresses issue #2062
+  out <- my_tbl_summary |>
+    modify_footnote(stat_0 = NA) |>
+    modify_table_styling(
+      columns = c(label, stat_0),
+      rows = (variable %in% "trt") & (row_type == "level"),
+      footnote = "my footnote"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c("1", "my footnote", ""))
+
   trial_reduced <- trial |>
     dplyr::select(grade, trt) |>
     dplyr::filter(trt == "Drug A") |>
