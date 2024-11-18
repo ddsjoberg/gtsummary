@@ -3,8 +3,6 @@
     Code
       as.data.frame(with_gtsummary_theme(theme_gtsummary_eda(), expr = tbl_summary(
         trial, include = c(age, grade))))
-    Message
-      Setting theme "Exploratory Data Analysis"
     Output
         **Characteristic** **N = 200**
       1                Age        <NA>
@@ -23,8 +21,6 @@
       with_gtsummary_theme(theme_gtsummary_journal("lancet"), expr = as.data.frame(
         modify_column_hide(add_difference(tbl_summary(trial, by = trt, include = marker,
           label = marker ~ "marker", missing = "no")), c("stat_2"))))
-    Message
-      Setting theme "The Lancet"
     Output
         **Characteristic** **Drug A**  \nN = 98 **Difference**    **95% CI**
       1             marker   0·84 (0·23 – 1·60)           0·20 -0·05 to 0·44
@@ -37,8 +33,6 @@
       with_gtsummary_theme(theme_gtsummary_journal("nejm"), expr = as.data.frame(
         modify_column_hide(add_difference(tbl_summary(trial, by = trt, include = age,
           label = age ~ "Age", missing = "no")), c("stat_2"))))
-    Message
-      Setting theme "New England Journal of Medicine"
     Output
         **Characteristic** **Drug A**  \nN = 98 **Difference**  **95% CI**
       1                Age         46 (37 – 60)          -0.44 -4.6 to 3.7
@@ -51,8 +45,6 @@
       with_gtsummary_theme(theme_gtsummary_journal("jama"), expr = as.data.frame(
         modify_column_hide(add_difference(tbl_summary(trial, by = trt, include = age,
           label = age ~ "Age", missing = "no")), c("stat_2"))))
-    Message
-      Setting theme "JAMA"
     Output
         **Characteristic** **Drug A**  \nN = 98 **Difference** **(****95% CI****)**
       1  Age, Median (IQR)         46 (37 – 60)                 -0.44 (-4.6 to 3.7)
@@ -64,8 +56,6 @@
     Code
       with_gtsummary_theme(theme_gtsummary_journal("jama"), expr = as.data.frame(
         tbl_regression(lm(hp ~ am, mtcars))))
-    Message
-      Setting theme "JAMA"
     Output
         **Characteristic** **Beta** **(95% CI)** **p-value**
       1                 am       -33 (-83 to 16)        0.18
@@ -76,8 +66,6 @@
       with_gtsummary_theme(theme_gtsummary_journal("jama"), expr = as.data.frame(
         modify_column_hide(add_difference(tbl_svysummary(svy_trial, by = trt,
           include = age, label = age ~ "Age", missing = "no")), c("stat_2"))))
-    Message
-      Setting theme "JAMA"
     Output
         **Characteristic** **Drug A**  \nN = 98 **Difference** **(****95% CI****)**
       1  Age, Median (IQR)         46 (37 – 60)                  0.44 (-3.7 to 4.6)
@@ -89,8 +77,6 @@
     Code
       with_gtsummary_theme(theme_gtsummary_journal("qjecon"), expr = as.data.frame(
         tbl_regression(lm(mpg ~ factor(cyl) + hp, mtcars))))
-    Message
-      Setting theme "The Quarterly Journal of Economics"
     Output
         **Characteristic** **Beta**  \n**(SE)**
       1        factor(cyl)                 <NA>
@@ -133,10 +119,43 @@
         1L, 1L), msg_ignored_elements = "The following theme elements are temporarilty overwritten: {.val {elements}}.")
     Message
       The following theme elements are temporarilty overwritten: "pkgwide-str:theme_name".
-      Setting theme "My new theme"
-      Setting theme "Compact"
     Output
       [1] TRUE
+    Code
+      reset_gtsummary_theme()
+
+---
+
+    Code
+      theme_gtsummary_language("es")
+    Message
+      Setting theme "language: es"
+    Code
+      with_gtsummary_theme(theme_gtsummary_eda(), expr = as_kable(tbl_summary(trial,
+        include = c(age, grade))))
+    Output
+      
+      
+      |**Característica** | **N = 200** |
+      |:------------------|:-----------:|
+      |Age                |             |
+      |Mediana (Q1, Q3)   | 47 (38, 57) |
+      |Media (DE)         |   47 (14)   |
+      |Min, Max           |    6, 83    |
+      |Desconocido        |     11      |
+      |Grade              |             |
+      |I                  | 68 (34.0%)  |
+      |II                 | 68 (34.0%)  |
+      |III                | 64 (32.0%)  |
+    Code
+      as_kable(tbl_summary(trial, include = age))
+    Output
+      
+      
+      |**Característica** | **N = 200** |
+      |:------------------|:-----------:|
+      |Age                | 47 (38, 57) |
+      |Desconocido        |     11      |
     Code
       reset_gtsummary_theme()
 
