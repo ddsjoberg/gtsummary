@@ -327,9 +327,7 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
 
   expect_equal(cell_1$txt, c(
     "1", "n (%)", "",
-    "2", "i.e. Grade", "",
-    "3", "i.e. 1", "",
-    "4", "Cell-level foonotes here.", ""
+    "2", "my footnote", ""
   ))
 })
 
