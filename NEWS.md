@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when placing a footnote for flextable tables on multiple columns and rows. (#2062)
+
 * The `with_gtsummary_theme()` has been updated to no longer print theme names when the applied, nor when the original theme is re-applied. (#2031)
 
 * Updated the `theme_gtsummary_journal("jama")` theme to apply changes to `tbl_svysummary()`. (#1964; @vjcatharine)

@@ -303,22 +303,22 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
     modify_table_styling(
       columns = stat_1,
       rows = (variable %in% "grade") & (row_type == "level"),
-      footnote = "Cell-level foonotes here."
+      footnote = "my footnote"
     ) |>
     modify_table_styling(
       columns = label,
       rows = label == "grade",
-      footnote = "i.e. Grade"
+      footnote = "my footnote"
     ) |>
     modify_table_styling(
       columns = label,
       rows = label == "Characteristic",
-      footnote = "i.e. char"
+      footnote = "my footnote"
     ) |>
     modify_table_styling(
       columns = label,
       rows = label == "I",
-      footnote = "i.e. 1"
+      footnote = "my footnote"
     ) |>
     as_flex_table()
 

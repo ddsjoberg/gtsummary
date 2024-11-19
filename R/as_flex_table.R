@@ -238,7 +238,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
           \(location_ids, tab_location, row_numbers) {
             col_ids <- getElement(location_ids, "column_id") |> unique()
             if (tab_location == "body") col_ids <- rep(col_ids, length(row_numbers)) # styler: off
-            col_ids
+            sort(col_ids)
           }
         )
     )
