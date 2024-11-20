@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Bug fix when placing a footnote for flextable tables on multiple columns and rows. (#2062)
+* Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (#2062)
 
 * The `with_gtsummary_theme()` has been updated to no longer print theme names when the applied, nor when the original theme is re-applied. (#2031)
 
