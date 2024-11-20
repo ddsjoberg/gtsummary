@@ -321,3 +321,27 @@ test_that("tbl_hierarchical_count with 10+ hierarchy variables", {
   )
   expect_snapshot(res |> as.data.frame())
 })
+
+# tbl_hierarchical_count table_body enables sorting ----------------------------------------
+test_that("tbl_hierarchical_count table_body enables sorting", {
+  withr::local_options(list(width = 250))
+
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(SEX, AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      id = USUBJID,
+      overall_row = TRUE
+    )
+  )
+
+  expect_snapshot(res$table_body)
+})
