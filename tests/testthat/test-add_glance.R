@@ -132,9 +132,8 @@ test_that("add_glance_table(glance_fun) for mice models", {
   tbl <- mice::mice(mice::nhanes2, print = FALSE, maxit = 1) |>
     with(lm(bmi ~ age)) |>
     tbl_regression()
-  glance <- tbl$inputs$x |>
-    mice::pool() |>
-    broom::glance() |>
+  glance <- tbl$inputs$x %>%
+    {suppressWarnings(broom::glance(mice::pool(.)))} |>
     dplyr::mutate(
       across(c(nimp, nobs), label_style_number()),
       across(c(r.squared, adj.r.squared), label_style_number(digits = 3))
