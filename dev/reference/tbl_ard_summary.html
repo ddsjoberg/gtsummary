@@ -138,6 +138,19 @@ Default is <code>FALSE</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a gtsummary table of class <code>"tbl_ard_summary"</code></p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>There are three types of additional data that can be included in the ARD to
+improve the default appearance of the table.</p><ol><li><p><strong>Attributes</strong>: When attributes are included, the default labels will be
+the variable labels, when available. Attributes can be included in an ARD
+with <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html" class="external-link">cards::ard_attributes()</a></code> or <code>ard_stack(.attributes = TRUE)</code>.</p></li>
+<li><p><strong>Missing</strong>: When missing results are included, users can include
+missing counts or rates for variables with <code>tbl_ard_summary(missing = c("ifany", "always"))</code>.
+The missing statistics can be included in an ARD with
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html" class="external-link">cards::ard_missing()</a></code> or <code>ard_stack(.missing = TRUE)</code>.</p></li>
+<li><p><strong>Total N</strong>: The total N is saved internally when available, and it can
+be calculated with <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html" class="external-link">cards::ard_total_n()</a></code> or <code>ard_stack(.total_n = TRUE)</code>.</p></li>
+</ol></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
