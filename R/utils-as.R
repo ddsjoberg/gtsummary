@@ -71,6 +71,11 @@
     dplyr::select("column", "row_numbers", everything()) %>%
     dplyr::ungroup()
 
+  # source_note ----------------------------------------------------------------
+  x$table_styling$source_note <-
+    x$table_styling$source_note |>
+    dplyr::filter(.data$remove == FALSE)
+
   # indentation ----------------------------------------------------------------
   x$table_styling$indent <-
     x$table_styling$indent %>%

@@ -302,7 +302,7 @@ test_that("as_gt passes appended glance statistics correctly", {
     ignore_attr = "class"
   )
   expect_equal(
-    tbl$table_styling$source_note,
+    tbl$table_styling$source_note$source_note,
     gt_tbl$`_source_notes`[[1]],
     ignore_attr = "class"
   )

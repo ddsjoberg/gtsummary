@@ -206,14 +206,15 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   }
 
   # source note ----------------------------------------------------------------
-  if (!is.null(x$table_styling$source_note)) {
-    huxtable_calls[["add_footnote"]] <- append(
-      huxtable_calls[["add_footnote"]],
-      expr(
-        huxtable::add_footnote(text = !!x$table_styling$source_note)
-      )
+  huxtable_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          huxtable::add_footnote(text = !!x$table_styling$source_note$source_note[i])
+        )
+      }
     )
-  }
 
   # bold -----------------------------------------------------------------------
   df_bold <-

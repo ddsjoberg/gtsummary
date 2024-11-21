@@ -140,6 +140,7 @@ add_glance_source_note <- function(x,
   text_interpret <- arg_match(text_interpret)
   check_string(sep1)
   check_string(sep2)
+  text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
 
   # calculate and prepare the glance function results --------------------------
   lst_prep_glance <-
@@ -161,9 +162,13 @@ add_glance_source_note <- function(x,
   }
 
   # compile stats into source note ---------------------------------------------
-  x$table_styling$source_note <-
-    paste(lst_prep_glance$df_glance$label, lst_prep_glance$df_glance$estimate_fmt, sep = sep1, collapse = sep2)
-  attr(x$table_styling$source_note, "text_interpret") <- match.arg(text_interpret)
+  x <-
+    modify_source_note(
+      x,
+      source_note =
+        paste(lst_prep_glance$df_glance$label, lst_prep_glance$df_glance$estimate_fmt, sep = sep1, collapse = sep2),
+      text_interpret = text_interpret
+    )
 
   # returning gtsummary table --------------------------------------------------
   x$call_list <- updated_call_list
