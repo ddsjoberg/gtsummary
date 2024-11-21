@@ -36,6 +36,22 @@
 #'   Default is `FALSE`.
 #' @inheritParams tbl_summary
 #'
+#' @details
+#' There are three types of additional data that can be included in the ARD to
+#' improve the default appearance of the table.
+#'
+#' 1. **Attributes**: When attributes are included, the default labels will be
+#'   the variable labels, when available. Attributes can be included in an ARD
+#'   with `cards::ard_attributes()` or `ard_stack(.attributes = TRUE)`.
+#'
+#' 2. **Missing**: When missing results are included, users can include
+#'   missing counts or rates for variables with `tbl_ard_summary(missing = c("ifany", "always"))`.
+#'   The missing statistics can be included in an ARD with
+#'   `cards::ard_missing()` or `ard_stack(.missing = TRUE)`.
+#'
+#' 3. **Total N**: The total N is saved internally when available, and it can
+#'   be calculated with `cards::ard_total_n()` or `ard_stack(.total_n = TRUE)`.
+#'
 #' @return a gtsummary table of class `"tbl_ard_summary"`
 #' @export
 #'
