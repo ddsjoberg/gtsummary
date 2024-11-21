@@ -111,3 +111,11 @@ test_that("add_p.tbl_continuous(group) works", {
     unlist(compare)
   )
 })
+
+test_that("add_p.tbl_continuous() messaging", {
+  expect_message(
+    tbl_continuous(trial, variable = age, include = grade) |>
+      add_p(test = ~"lme4"),
+    "*argument cannot be missing*"
+  )
+})

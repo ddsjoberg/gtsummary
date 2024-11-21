@@ -269,7 +269,7 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
         if (!is.null(lst_captured_results[["result"]])) return(lst_captured_results[["result"]]) # styler: off
         # otherwise, construct a {cards}-like object with error
         dplyr::tibble(
-          group1 = x$inputs$by,
+          group1 = switch(!is_empty(x$inputs$by), x$inputs$by),
           variable = variable,
           stat_name = switch(calling_fun,
                              "add_p" = "p.value",
