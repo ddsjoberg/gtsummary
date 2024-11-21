@@ -129,8 +129,7 @@ trial |>
         modify_header(stat_0 = "**Rate (95\% CI)**") |>
         modify_footnote(stat_0 = NA),
     .combine_with = "tbl_stack",
-    .combine_args = list(group_header = NULL),
-    .quiet = TRUE
+    .combine_args = list(group_header = NULL)
   ) |>
   modify_caption("**Response Rate by Grade**")
 }
