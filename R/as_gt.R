@@ -325,14 +325,18 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # tab_source_note  -----------------------------------------------------------
   # adding other calls from x$table_styling$source_note
-  if (!is.null(x$table_styling$source_note)) {
-    source_note <-
-      rlang::call2(
-        get(attr(x$table_styling$source_note, "text_interpret"), envir = asNamespace("gt")),
-        x$table_styling$source_note
-      )
-    gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!source_note))
-  }
+  gt_calls[["tab_source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          gt::tab_source_note(source_note =
+                                !!do.call(eval(rlang::parse_expr(x$table_styling$source_note$text_interpret[i])),
+                                          args = list(x$table_styling$source_note$source_note[i])))
+        )
+      }
+    )
+
 
   # cols_hide ------------------------------------------------------------------
   gt_calls[["cols_hide"]] <-
