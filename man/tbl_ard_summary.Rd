@@ -70,6 +70,21 @@ The \code{tbl_ard_summary()} function tables descriptive statistics for
 continuous, categorical, and dichotomous variables.
 The functions accepts an ARD object.
 }
+\details{
+There are three types of additional data that can be included in the ARD to
+improve the default appearance of the table.
+\enumerate{
+\item \strong{Attributes}: When attributes are included, the default labels will be
+the variable labels, when available. Attributes can be included in an ARD
+with \code{cards::ard_attributes()} or \code{ard_stack(.attributes = TRUE)}.
+\item \strong{Missing}: When missing results are included, users can include
+missing counts or rates for variables with \code{tbl_ard_summary(missing = c("ifany", "always"))}.
+The missing statistics can be included in an ARD with
+\code{cards::ard_missing()} or \code{ard_stack(.missing = TRUE)}.
+\item \strong{Total N}: The total N is saved internally when available, and it can
+be calculated with \code{cards::ard_total_n()} or \code{ard_stack(.total_n = TRUE)}.
+}
+}
 \examples{
 library(cards)
 
