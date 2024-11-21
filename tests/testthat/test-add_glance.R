@@ -8,6 +8,7 @@ test_that("add_glance_source_note(x)", {
       tbl_regression() |>
       add_glance_source_note() |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note"),
     "R² = 0.000; Adjusted R² = -0.005; Sigma = 14.3; Statistic = 0.044; p-value = 0.8; df = 1; Log-likelihood = -771; AIC = 1,547; BIC = 1,557; Deviance = 38,499; Residual df = 187; No. Obs. = 189",
     ignore_attr = TRUE
@@ -20,6 +21,7 @@ test_that("add_glance_source_note(include,label)", {
       tbl_regression() |>
       add_glance_source_note(include = r.squared, label = r.squared ~ "R * R") |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note"),
     "R * R = 0.000",
     ignore_attr = TRUE
@@ -32,6 +34,7 @@ test_that("add_glance_source_note(fmt_fn)", {
       tbl_regression() |>
       add_glance_source_note(fmt_fun = ~label_style_sigfig(digits = 5), include = 1:3) |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note"),
     "R² = 0.00024; Adjusted R² = -0.00511; Sigma = 14.348",
     ignore_attr = TRUE
@@ -44,11 +47,13 @@ test_that("add_glance_source_note(glance_fun)", {
       tbl_regression() |>
       add_glance_source_note(glance_fun = \(x, ...) broom::glance(x, ...) |> dplyr::select(1:3)) |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note"),
     lm(age ~ trt, trial) |>
       tbl_regression() |>
       add_glance_source_note(include = 1:3) |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note")
   )
 })
@@ -60,8 +65,8 @@ test_that("add_glance_source_note(text_interpret)", {
       add_glance_source_note(text_interpret = "html") |>
       getElement("table_styling") |>
       getElement("source_note") |>
-      attr("text_interpret"),
-    "html"
+      getElement("text_interpret"),
+    "gt::html"
   )
 })
 
@@ -71,7 +76,8 @@ test_that("add_glance_source_note(sep1,sep2)", {
       tbl_regression() |>
       add_glance_source_note(include = 1:3, sep1 = "==", sep2 = " | ") |>
       getElement("table_styling") |>
-      getElement("source_note") ,
+      getElement("source_note") |>
+      getElement("source_note"),
     "R²==0.000 | Adjusted R²==-0.005 | Sigma==14.3",
     ignore_attr = TRUE
   )
@@ -155,6 +161,7 @@ test_that("add_glance_table(glance_fun) for mice models", {
         label = names(glance) |> as.list() |> setNames(names(glance))
       ) |>
       getElement("table_styling") |>
+      getElement("source_note") |>
       getElement("source_note"),
     imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
     ignore_attr = TRUE

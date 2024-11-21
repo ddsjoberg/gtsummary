@@ -355,7 +355,7 @@ test_that("as_flex_table passes appended glance statistics correctly", {
     ignore_attr = c("class", "names")
   )
   expect_equal(
-    tbl$table_styling$source_note[1],
+    tbl$table_styling$source_note$source_note,
     ft_tbl$footer$content$data[2, ]$label$txt
   )
   expect_equal(length(ft_tbl$body$hrule), 3)

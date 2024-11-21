@@ -39,6 +39,13 @@
       column = character(), rows = list(),
       text_interpret = character(), footnote = character()
     )
+  x$table_styling$source_note <-
+    dplyr::tibble(
+      id = integer(),
+      source_note = character(),
+      text_interpret = character(),
+      remove = logical()
+    )
   x$table_styling$text_format <-
     dplyr::tibble(
       column = character(), rows = list(),
