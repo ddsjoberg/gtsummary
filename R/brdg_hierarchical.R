@@ -127,6 +127,7 @@ brdg_hierarchical <- function(cards,
 
   # add hierarchy levels to table_body for sorting & filtering -----------------
   table_body <- table_body |>
+    dplyr::relocate(cards::all_ard_groups(), .after = "row_type") |>
     mutate(across(cards::all_ard_groups(), .fns = ~str_replace(., "^ $", NA)))
   if (n_by > 0 && length(variables) > 1) {
     which_gps <- which(names(table_body) %in% (table_body |> select(cards::all_ard_groups()) |> names()))

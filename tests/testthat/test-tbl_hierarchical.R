@@ -125,7 +125,7 @@ test_that("tbl_hierarchical(label) works properly", {
     label = list(stage = "My Stage", grade = "My Grade")
   )
   expect_snapshot(res |> as.data.frame())
-  expect_snapshot_value(res$table_styling$header$label[4])
+  expect_snapshot_value(res$table_styling$header$label[6])
 
   # errors thrown when bad label argument passed
   expect_snapshot(
@@ -273,7 +273,7 @@ test_that("tbl_hierarchical_count(label) works properly", {
     data = trial, variables = c(stage, grade), label = list(stage = "My Stage", grade = "My Grade")
   )
   expect_snapshot(res |> as.data.frame())
-  expect_snapshot_value(res$table_styling$header$label[4])
+  expect_snapshot_value(res$table_styling$header$label[6])
 
   # errors thrown when bad label argument passed
   expect_snapshot(
