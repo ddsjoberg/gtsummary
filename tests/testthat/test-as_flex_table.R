@@ -273,6 +273,84 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
   )
 })
 
+test_that("as_flex_table passes multiple table footnotes correctly", {
+  # testing one footnote passed to multiple columns and rows, addresses issue #2062
+  out <- my_tbl_summary |>
+    modify_footnote(stat_0 = NA) |>
+    modify_table_styling(
+      columns = c(label, stat_0),
+      rows = (variable %in% "trt") & (row_type == "level"),
+      footnote = "my footnote"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+
+  # Checking footer's footnotes
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c("1", "my footnote", ""))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% "body") |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_true(all(sapply(cell_notations, function(x) x$txt[nrow(x)]) == "1"))
+
+  trial_reduced <- trial |>
+    dplyr::select(grade, trt) |>
+    dplyr::filter(trt == "Drug A") |>
+    dplyr::filter(grade == "I") |>
+    dplyr::mutate(grade = factor(grade, levels = c("I")))
+
+  out <- trial_reduced |>
+    tbl_summary(
+      by = trt,
+      include = grade
+    ) |>
+    modify_table_styling(
+      columns = stat_1,
+      rows = (variable %in% "grade") & (row_type == "level"),
+      footnote = "my footnote"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "grade",
+      footnote = "my footnote"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "I",
+      footnote = "my footnote"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c(
+    "1", "n (%)", "",
+    "2", "my footnote", ""
+  ))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% c("body", "header")) |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_equal(
+    sapply(cell_notations, function(x) x$txt[nrow(x)]),
+    c("2", "1", "2", "2")
+  )
+})
+
 test_that("as_flex_table passes table indentation correctly", {
   expect_equal(
     ft_tbl_summary$body$styles$pars$padding.left$data[, 1],
