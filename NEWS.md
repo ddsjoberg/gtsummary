@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the `tidy_wald_testvcov)` argument to allow for the  calculation of p-values via alternative variance-covariance structure (e.g. for robust SEs). (#2076; @aghaynes)
+ 
 * Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (#2062)
 
 * Fix for setting default formatting functions in `tbl_svysummary()`. Previously, defaults were assigned similarly to those in `tbl_summary()`, which led to survey-only statistics being assigned sub-optimal defaults. (#2078)
