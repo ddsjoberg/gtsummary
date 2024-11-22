@@ -226,9 +226,29 @@ dplyr::tribble(
 
 **`source_note`**
 
-String that is made a table source note.
-The attribute `"text_interpret"` is either `c("md", "html")`.
+A tibble with the source notes to include.
+Each source note is assigned an ID based on the order it is added to the table.
 
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~Column, ~Description,
+  "id", "ID of the source note",
+  "sounrce_note", "string containing the source note", 
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+  "remove", "logical indicating whether the source note should be removed from the table"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
 **`caption`**
 
 String that is made into the table caption.
