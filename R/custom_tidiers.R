@@ -48,8 +48,9 @@
 #'   Named list of arguments passed to `mice::pool()` in
 #'   `pool_and_tidy_mice()`. Default is `NULL`
 #' @param vcov,vcov_args
-#'  Arguments passed to `parameters::model_parameters()`.
-#'  At least one of these arguments **must** be specified.
+#'  - `tidy_robust()`: Arguments passed to `parameters::model_parameters()`.
+#'                     At least one of these arguments **must** be specified.
+#'  - `tidy_wald_test()`: `vcov` is the covariance matrix of the model with default `stats::vcov()`.
 #' @param quiet `r lifecycle::badge("deprecated")`
 #' @param ...
 #' Arguments passed to method;
