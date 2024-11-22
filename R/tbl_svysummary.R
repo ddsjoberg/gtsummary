@@ -234,7 +234,7 @@ tbl_svysummary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      svyselect(data, all_of(include)) |>
+      data |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -375,7 +375,3 @@ tbl_svysummary <- function(data,
   x
 }
 
-svyselect <- function(.data, ...) {
-  .data$variables <- dplyr::select(.data$variables, ...)
-  .data
-}
