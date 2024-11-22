@@ -588,3 +588,15 @@ test_that("tbl_svysummary(percent)", {
     tbl_svysummary(svy_trial, by = trt, include = grade, percent = letters, statistic = ~"{p}%")
   )
 })
+
+# Fix for default formatting function issue reported in #2078
+test_that("tbl_svysummary() default fmt fn", {
+  expect_equal(
+    svy_trial |>
+      tbl_svysummary(include = age, missing_stat = "{N_miss_unweighted} ({p_miss_unweighted}%)") |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(stat_0) |>
+      getElement(2L),
+    "11 (5.5%)"
+  )
+})
