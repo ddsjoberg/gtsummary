@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("flextable"))
+skip_if_not_installed("flextable")
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -285,9 +285,21 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
     as_flex_table()
 
   dchunk <- flextable::information_data_chunk(out)
+
+  # Checking footer's footnotes
   cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
 
   expect_equal(cell_1$txt, c("1", "my footnote", ""))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% "body") |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_true(all(sapply(cell_notations, function(x) x$txt[nrow(x)]) == "1"))
 
   trial_reduced <- trial |>
     dplyr::select(grade, trt) |>
@@ -324,6 +336,19 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
     "1", "n (%)", "",
     "2", "my footnote", ""
   ))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% c("body", "header")) |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_equal(
+    sapply(cell_notations, function(x) x$txt[nrow(x)]),
+    c("2", "1", "2", "2")
+  )
 })
 
 test_that("as_flex_table passes table indentation correctly", {
