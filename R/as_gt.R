@@ -245,13 +245,11 @@ table_styling_to_gt_calls <- function(x, ...) {
         x$table_styling$footnote,
         x$table_styling$footnote_abbrev
       ) |>
-      tidyr::nest(data = c("column", "row_numbers")) %>%
-      dplyr::rowwise() %>%
+      tidyr::nest(row_numbers = "row_numbers") %>%
       dplyr::mutate(
-        columns = .data$data %>% dplyr::pull("column") %>% unique() %>% list(),
-        rows = .data$data %>% dplyr::pull("row_numbers") %>% unique() %>% list()
-      ) |>
-      dplyr::ungroup()
+        # columns = .data$data %>% dplyr::pull("column") %>% list(),
+        rows = map(.data$row_numbers, \(x) unlist(x) |> unname())
+      )
     df_footnotes$footnote_exp <-
       map2(
         df_footnotes$text_interpret,
@@ -264,14 +262,14 @@ table_styling_to_gt_calls <- function(x, ...) {
       pmap(
         list(
           df_footnotes$tab_location, df_footnotes$footnote_exp,
-          df_footnotes$columns, df_footnotes$rows
+          df_footnotes$column, df_footnotes$rows
         ),
-        function(tab_location, footnote, columns, rows) {
+        function(tab_location, footnote, column, rows) {
           if (tab_location == "header") {
             return(expr(
               gt::tab_footnote(
                 footnote = !!footnote,
-                locations = gt::cells_column_labels(columns = !!columns)
+                locations = gt::cells_column_labels(columns = !!column)
               )
             ))
           }
@@ -279,7 +277,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             return(expr(
               gt::tab_footnote(
                 footnote = !!footnote,
-                locations = gt::cells_body(columns = !!columns, rows = !!rows)
+                locations = gt::cells_body(columns = !!column, rows = !!rows)
               )
             ))
           }

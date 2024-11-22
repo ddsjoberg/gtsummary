@@ -229,8 +229,8 @@ table_styling_to_flextable_calls <- function(x, ...) {
     ) |>
     tidyr::nest(location_ids = c("row_numbers", "column_id")) %>%
     dplyr::mutate(
-      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers") |> unique()),
-      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") |> unique())
+      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers")),
+      column_id = map(.data$location_ids, ~ getElement(.x, "column_id"))
     )
 
   flextable_calls[["footnote"]] <-

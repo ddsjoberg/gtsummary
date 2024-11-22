@@ -265,6 +265,21 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
     gt_tbl$`_footnotes`$footnotes |> unlist(),
     c("replace old footnote", "another new footnote")
   )
+
+  # footnotes in the body of the table
+  expect_equal(
+    tbl_summary(trial, include = "age") |>
+      modify_table_styling(columns = label, rows = TRUE, footnote = "my footnote") |>
+      modify_table_styling(columns = stat_0, rows = row_type == "label", footnote = "my footnote") |>
+      as_gt() |>
+      getElement("_footnotes") |>
+      dplyr::filter(footnotes == "my footnote") |>
+      dplyr::select(colname, rownum),
+    data.frame(
+      colname = c("label", "label", "stat_0"),
+      rownum = c(1, 2, 1)
+    )
+  )
 })
 
 test_that("as_gt passes table indentation correctly", {
