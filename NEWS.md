@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix for setting default formatting functions in `tbl_svysummary()`. Previously, defaults were assigned similarly to those in `tbl_summary()`, which led to survey-only statistics being assigned sub-optimal defaults. (#2078)
+
 * The `with_gtsummary_theme()` has been updated to no longer print theme names when the applied, nor when the original theme is re-applied. (#2031)
 
 * Updated the `theme_gtsummary_journal("jama")` theme to apply changes to `tbl_svysummary()`. (#1964; @vjcatharine)
