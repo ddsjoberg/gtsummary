@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("flextable")
+skip_if_not(is_pkg_installed("flextable"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
