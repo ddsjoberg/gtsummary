@@ -78,7 +78,7 @@ test_that("tbl_svysummary(statistic)", {
       ) |>
       as.data.frame(col_labels = FALSE) |>
       dplyr::pull(stat_0),
-    "n=61 | N=193 | p=32 | N_obs=200 | N_miss=7 | N_nonmiss=193 | p_miss=3.5 | p_nonmiss=97 | p.std.error=0.0 | deff=Inf | n_unweighted=61 | N_unweighted=193 | p_unweighted=31.6"
+    "n=61 | N=193 | p=32 | N_obs=200 | N_miss=7 | N_nonmiss=193 | p_miss=3.5 | p_nonmiss=97 | p.std.error=0.034 | deff=Inf | n_unweighted=61 | N_unweighted=193 | p_unweighted=32"
   )
 
   # continuous summary when there is no "continuous" stats (just missingness stats)

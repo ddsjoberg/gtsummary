@@ -48,62 +48,65 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   # extract the statistics
   statistic <- lapply(statistic, function(x) .extract_glue_elements(x) |> unlist())
 
-  lapply(
-    names(statistic),
-    function(variable) {
-      # if user passed digits AND they've specified every statistic, use the passed value
-      # otherwise, we need to calculate the defaults, and later we can update with the pieces the user passed
-      if (!is.null(digits[[variable]])) {
-        # if a scalar or vector passed, convert it to a list
-        if (!is.list(digits[[variable]]) && is_vector(digits[[variable]])) {
-          digits[[variable]] <- as.list(digits[[variable]])
+  digits_final <-
+    lapply(
+      names(statistic),
+      function(variable) {
+        # if user passed digits AND they've specified every statistic, use the passed value
+        # otherwise, we need to calculate the defaults, and later we can update with the pieces the user passed
+        if (!is.null(digits[[variable]])) {
+          # if a scalar or vector passed, convert it to a list
+          if (!is.list(digits[[variable]]) && is_vector(digits[[variable]])) {
+            digits[[variable]] <- as.list(digits[[variable]])
+          }
+
+          # if user-passed value is not named, repeat the passed value to the length of 'statistic'
+          if (!is_named(digits[[variable]])) {
+            if (!is_function(digits[[variable]])) digits[[variable]] <- rep_named(statistic[[variable]], digits[[variable]])
+            else digits[[variable]] <- rep_named(statistic[[variable]], digits[variable])
+          }
+
+          # convert integers to a proper function
+          digits[[variable]] <- .convert_integer_to_fmt_fn(digits[[variable]])
+
+          # check value is a function
+          if (!is_list(digits[[variable]]) || some(digits[[variable]], \(.x) !is_function(.x))) {
+            cli::cli_abort(
+              c("Error in {.arg digits} argument for variable {.val {variable}},",
+                i = "Passed values must be either a {.cls function} or {.cls integer}."),
+              call = get_cli_abort_call()
+            )
+          }
+
+          # if the passed value fully specifies the formatting for each 'statistic',
+          # then return it. Otherwise, the remaining stat will be filled below
+          if (setequal(statistic[[variable]], names(digits[[variable]]))) {
+            return(lst_all_fmt_fns |> utils::modifyList(digits[[variable]]))
+          }
         }
 
-        # if user-passed value is not named, repeat the passed value to the length of 'statistic'
-        if (!is_named(digits[[variable]])) {
-          if (!is_function(digits[[variable]])) digits[[variable]] <- rep_named(statistic[[variable]], digits[[variable]])
-          else digits[[variable]] <- rep_named(statistic[[variable]], digits[variable])
-        }
-
-        # convert integers to a proper function
-        digits[[variable]] <- .convert_integer_to_fmt_fn(digits[[variable]])
-
-        # check value is a function
-        if (!is_list(digits[[variable]]) || some(digits[[variable]], \(.x) !is_function(.x))) {
-          cli::cli_abort(
-            c("Error in {.arg digits} argument for variable {.val {variable}},",
-              i = "Passed values must be either a {.cls function} or {.cls integer}."),
-            call = get_cli_abort_call()
+        if (type[[variable]] %in% c("categorical", "dichotomous")) {
+          return(
+            c(lst_cat_summary_fns, lst_all_fmt_fns) |>
+              utils::modifyList(digits[[variable]] %||% list())
           )
         }
 
-        # if the passed value fully specifies the formatting for each 'statistic',
-        # then return it. Otherwise, the remaining stat will be filled below
-        if (setequal(statistic[[variable]], names(digits[[variable]]))) {
-          return(lst_all_fmt_fns |> utils::modifyList(digits[[variable]]))
+        if (type[[variable]] %in% c("continuous", "continuous2")) {
+          return(
+            rep_named(
+              statistic[[variable]],
+              list(.guess_continuous_summary_digits(data, variable))
+            ) |>
+              utils::modifyList(lst_all_fmt_fns) |>
+              utils::modifyList(digits[[variable]] %||% list())
+          )
         }
       }
-
-      if (type[[variable]] %in% c("categorical", "dichotomous")) {
-        return(
-          c(lst_cat_summary_fns, lst_all_fmt_fns) |>
-            utils::modifyList(digits[[variable]] %||% list())
-        )
-      }
-
-      if (type[[variable]] %in% c("continuous", "continuous2")) {
-        return(
-          rep_named(
-            statistic[[variable]],
-            list(.guess_continuous_summary_digits(data, variable))
-          ) |>
-            utils::modifyList(lst_all_fmt_fns) |>
-            utils::modifyList(digits[[variable]] %||% list())
-        )
-      }
-    }
-  ) |>
+    ) |>
     stats::setNames(names(statistic))
+
+  digits_final
 }
 
 .convert_integer_to_fmt_fn <- function(x) {
@@ -152,21 +155,22 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         inherits(data, "survey.design") ~
           cardx::ard_continuous(data, variables = all_of(variable), statistic = ~ c("p5", "p95")) |>
           dplyr::pull("stat") |>
-          reduce(\(.x, .y) .y - .x)
+          reduce(\(.x, .y) .y - .x) %>%
+          {ifelse(is_empty(.), Inf, .)} # styler: off
       )
 
-      label_style_number(
-        digits =
-          dplyr::case_when(
-            var_spread < 0.01 ~ 4L,
-            var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
-            var_spread >= 0.1 & var_spread < 10 ~ 2L,
-            var_spread >= 10 & var_spread < 20 ~ 1L,
-            var_spread >= 20 ~ 0L
-          )
-      )
-    },
-    error = function(e) 0L
+    label_style_number(
+      digits =
+        dplyr::case_when(
+          var_spread < 0.01 ~ 4L,
+          var_spread >= 0.01 & var_spread < 0.1 ~ 3L,
+          var_spread >= 0.1 & var_spread < 10 ~ 2L,
+          var_spread >= 10 & var_spread < 20 ~ 1L,
+          var_spread >= 20 ~ 0L
+        )
+    )
+  },
+  error = function(e) 0L
   )
   # styler: on
 }

@@ -234,7 +234,7 @@ tbl_svysummary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      scope_table_body(.list2tb(type, "var_type"), as.data.frame(data)[include]) |>
+      svyselect(data, all_of(include)) |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -373,4 +373,9 @@ tbl_svysummary <- function(data,
     do.call(list(x))
 
   x
+}
+
+svyselect <- function(.data, ...) {
+  .data$variables <- dplyr::select(.data$variables, ...)
+  .data
 }
