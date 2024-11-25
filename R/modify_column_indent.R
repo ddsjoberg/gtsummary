@@ -31,7 +31,7 @@ modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
 
   # if deprecated arguments passed ---------------------------------------------
   if (!missing(double_indent) || !missing(undo)) {
-    check_pkg_installed("withr", reference_pkg = "gtsummary")
+    check_pkg_installed("withr")
     if (!missing(double_indent)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",

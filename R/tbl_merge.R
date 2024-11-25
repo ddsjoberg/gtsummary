@@ -16,7 +16,7 @@
 #' @export
 #' @return A `'tbl_merge'` object
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival', reference_pkg = 'gtsummary')
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival')
 #' # Example 1 ----------------------------------
 #' # Side-by-side Regression Models
 #' library(survival)

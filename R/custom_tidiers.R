@@ -48,8 +48,9 @@
 #'   Named list of arguments passed to `mice::pool()` in
 #'   `pool_and_tidy_mice()`. Default is `NULL`
 #' @param vcov,vcov_args
-#'  Arguments passed to `parameters::model_parameters()`.
-#'  At least one of these arguments **must** be specified.
+#'  - `tidy_robust()`: Arguments passed to `parameters::model_parameters()`.
+#'                     At least one of these arguments **must** be specified.
+#'  - `tidy_wald_test()`: `vcov` is the covariance matrix of the model with default `stats::vcov()`.
 #' @param quiet `r lifecycle::badge("deprecated")`
 #' @param ...
 #' Arguments passed to method;
@@ -61,7 +62,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examplesIf gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"), reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
 #'
@@ -92,7 +93,7 @@ tidy_standardize <- function(x,
                              ...,
                              quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed(c("parameters", "effectsize"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("parameters", "effectsize"))
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -136,7 +137,7 @@ tidy_bootstrap <- function(x,
                            ...,
                            quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed("parameters", reference_pkg = "gtsummary")
+  check_pkg_installed("parameters")
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -182,7 +183,7 @@ tidy_robust <- function(x,
                         ...,
                         quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed(c("parameters", "insight"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("parameters", "insight"))
   check_scalar_logical(exponentiate)
   check_scalar_logical(conf.int)
   check_scalar_range(conf.level, range = c(0, 1))
@@ -238,7 +239,7 @@ tidy_robust <- function(x,
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   set_cli_abort_call()
-  check_pkg_installed("mice", reference_pkg = "gtsummary")
+  check_pkg_installed("mice")
 
   if (!missing(quiet)) {
     lifecycle::deprecate_stop(
@@ -283,9 +284,9 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
 
 #' @rdname custom_tidiers
 #' @export
-tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
+tidy_wald_test <- function(x, tidy_fun = NULL, vcov = stats::vcov(x), ...) {
   set_cli_abort_call()
-  check_pkg_installed(c("aod", "broom.helpers"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("aod", "broom.helpers"))
 
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
 
@@ -306,7 +307,7 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
       model_terms_id = rlang::set_names(.data$data[["term_id"]]) %>% list(),
       wald_test =
         aod::wald.test(
-          Sigma = stats::vcov(x),
+          Sigma = vcov,
           b = stats::coef(x),
           Terms = .data$model_terms_id
         ) %>%

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("cardx", "broom", "smd")))
 
 test_that("separate_p_footnotes()", {
   tbl <- trial |>
@@ -43,6 +43,8 @@ test_that("separate_p_footnotes() messaging", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("separate_p_footnotes() with tbl_svysummary()", {
+  skip_if_not(is_pkg_installed("survey"))
+
   expect_error(
     survey::svydesign(~1, data = trial, weights = ~1) |>
       tbl_svysummary(by = trt, include = c(age, grade)) |>

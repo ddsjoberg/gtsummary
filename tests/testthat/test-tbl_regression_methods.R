@@ -1,8 +1,8 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "withr"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("broom.helpers", "withr")))
 
 test_that("tbl_regression.model_fit()", {
-  skip_if_not(is_pkg_installed("parsnip", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("parsnip"))
 
   expect_snapshot(
     parsnip::linear_reg() |>
@@ -15,7 +15,7 @@ test_that("tbl_regression.model_fit()", {
 })
 
 test_that("tbl_regression.workflow()", {
-  skip_if_not(is_pkg_installed(c("workflows", "parsnip"), reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed(c("workflows", "parsnip")))
 
   expect_snapshot(
     workflows::workflow() |>
@@ -28,7 +28,7 @@ test_that("tbl_regression.workflow()", {
 })
 
 test_that("tbl_regression.survreg()", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
 
   expect_snapshot(
     survival::survreg(survival::Surv(time, status) ~ age + ph.ecog, data = survival::lung) |>
@@ -39,7 +39,7 @@ test_that("tbl_regression.survreg()", {
 
 test_that("tbl_regression.mira()", {
   withr::local_seed(11235)
-  skip_if_not(is_pkg_installed("mice", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("mice"))
 
   expect_snapshot(
     suppressWarnings(mice::mice(trial, m = 2)) |>
@@ -59,7 +59,7 @@ test_that("tbl_regression.mira()", {
 })
 
 test_that("tbl_regression.lmerMod()", {
-  skip_if_not(is_pkg_installed("lme4", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed(c("lme4", "broom.mixed")))
 
   expect_snapshot(
     lme4::lmer(mpg ~ hp + (1 | cyl), mtcars) |>
@@ -69,7 +69,7 @@ test_that("tbl_regression.lmerMod()", {
 })
 
 test_that("tbl_regression.gam()", {
-  skip_if_not(is_pkg_installed("mgcv", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("mgcv"))
   withr::local_package("mgcv")
 
   expect_snapshot(
@@ -80,7 +80,7 @@ test_that("tbl_regression.gam()", {
 })
 
 test_that("tbl_regression.crr()", {
-  skip_if_not(is_pkg_installed("cmprsk", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("cmprsk"))
   withr::local_package("cmprsk")
   withr::local_seed(10)
 
@@ -98,7 +98,7 @@ test_that("tbl_regression.crr()", {
 })
 
 test_that("tbl_regression.multinom()", {
-  skip_if_not(is_pkg_installed("nnet", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("nnet"))
 
   expect_snapshot(
     nnet::multinom(cyl ~ am, mtcars) |>

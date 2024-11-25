@@ -1,10 +1,11 @@
 # Standalone file: do not edit by hand
-# Source: <https://github.com/ddsjoberg/standalone/blob/main/R/standalone-stringr.R>
+# Source: <https://github.com/insightsengineering/standalone/blob/main/R/standalone-stringr.R>
 # ----------------------------------------------------------------------
 #
 # ---
+# repo: insightsengineering/standalone
 # file: standalone-stringr.R
-# last-updated: 2024-06-05
+# last-updated: 2024-11-01
 # license: https://unlicense.org
 # imports: rlang
 # ---
@@ -14,6 +15,8 @@
 # of programming.
 #
 # ## Changelog
+# 2024-11-01
+#   - `str_pad()` was updated to use `strrep()` instead of `sprintf()` (accommodates escape characters).
 #
 # nocov start
 # styler: off
@@ -29,8 +32,8 @@ str_squish <- function(string, fixed = FALSE, perl = !fixed) {
   return(string)
 }
 
-str_remove <- function (string, pattern, fixed = FALSE, perl = !fixed) {
-  sub (x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
+str_remove <- function(string, pattern, fixed = FALSE, perl = !fixed) {
+  sub(x = string, pattern = pattern, replacement = "", fixed = fixed, perl = perl)
 }
 
 str_remove_all <- function(string, pattern, fixed = FALSE, perl = !fixed) {
@@ -57,7 +60,7 @@ str_replace <- function(string, pattern, replacement, fixed = FALSE, perl = !fix
   sub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
-str_replace_all <- function (string, pattern, replacement, fixed = FALSE, perl = !fixed){
+str_replace_all <- function(string, pattern, replacement, fixed = FALSE, perl = !fixed) {
   gsub(x = string, pattern = pattern, replacement = replacement, fixed = fixed, perl = perl)
 }
 
@@ -88,7 +91,7 @@ word <- function(string, start, end = start, sep = " ", fixed = TRUE, perl = !fi
   }
 }
 
-str_sub <- function(string, start = 1L, end = -1L){
+str_sub <- function(string, start = 1L, end = -1L) {
   str_length <- nchar(string)
 
   # Adjust start and end indices for negative values
@@ -102,26 +105,32 @@ str_sub <- function(string, start = 1L, end = -1L){
   substr(x = string, start = start, stop = end)
 }
 
-str_sub_all <- function(string, start = 1L, end = -1L){
+str_sub_all <- function(string, start = 1L, end = -1L) {
   lapply(string, function(x) substr(x, start = start, stop = end))
 }
 
-str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE){
-  side <- match.arg(side, c("left", "right", "both"))
+str_pad <- function(string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE) {
+  side <- match.arg(side)
 
-  if (side == "both") {
-    pad_left <- (width - nchar(string)) %/% 2
-    pad_right <- width - nchar(string) - pad_left
-    padded_string <- paste0(strrep(pad, pad_left), string, strrep(pad, pad_right))
-  } else {
-    format_string <- ifelse(side == "right", paste0("%-", width, "s"),
-                            ifelse(side == "left", paste0("%", width, "s"),
-                                   paste0("%", width, "s")))
+  # allow vectorized input
+  padded_strings <- sapply(string, function(s) {
+    current_length <- nchar(s)
+    pad_length <- width - current_length
 
-    padded_string <- sprintf(format_string, string)
-  }
+    if (side == "both") {
+      pad_left <- pad_length %/% 2
+      pad_right <- pad_length - pad_left
+      padded_string <- paste0(strrep(pad, pad_left), s, strrep(pad, pad_right))
+    } else if (side == "right") {
+      padded_string <- paste0(s, strrep(pad, pad_length))
+    } else { # side == "left"
+      padded_string <- paste0(strrep(pad, pad_length), s)
+    }
 
-  return(padded_string)
+    return(padded_string)
+  })
+
+  return(unname(padded_strings))
 }
 
 str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
@@ -131,7 +140,7 @@ str_split <- function(string, pattern, n = Inf, fixed = FALSE, perl = !fixed) {
     parts <- strsplit(string, split = pattern, fixed = fixed, perl = perl)
     lapply(parts, function(x) {
       if (length(x) > n) {
-        x <- c(x[1:(n-1)], paste(x[n:length(x)], collapse = pattern))
+        x <- c(x[1:(n - 1)], paste(x[n:length(x)], collapse = pattern))
       }
       return(x)
     })

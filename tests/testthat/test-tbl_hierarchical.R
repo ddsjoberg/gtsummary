@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed("withr"))
 
 trial2 <- trial |>
   mutate(id = rep(1:50, length.out = nrow(trial)))
@@ -39,7 +40,7 @@ test_that("tbl_hierarchical(denominator) works properly", {
   # errors thrown when bad denominator argument passed
   expect_snapshot(
     error = TRUE,
-    tbl_hierarchical(data = trial2, variables = trt, denominator = "test")
+    tbl_hierarchical(data = trial2, variables = trt, denominator = "test", id = id)
   )
 })
 
@@ -67,7 +68,7 @@ test_that("tbl_hierarchical(statistic) works properly", {
   # creates table when statistic is passed
   expect_snapshot(tbl_hierarchical(
     data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
-    statistic = "{n}, {N}, {p}"
+    statistic = ~"{n}, {N}, {p}"
   ) |> as.data.frame())
 
   # errors thrown when bad statistic argument passed
@@ -75,13 +76,15 @@ test_that("tbl_hierarchical(statistic) works properly", {
     error = TRUE,
     tbl_hierarchical(
       data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
-      statistic = list(stage = "{n}")
+      statistic = ~list(stage = "{n}")
     )
   )
 })
 
 # tbl_hierarchical(overall_row) ------------------------------------------------------------
 test_that("tbl_hierarchical(overall_row) works properly", {
+  withr::local_options(list(width = 120))
+
   # creates table when overall_row is passed
   expect_snapshot(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2, id = id, overall_row = TRUE) |> as.data.frame())
 
@@ -91,10 +94,10 @@ test_that("tbl_hierarchical(overall_row) works properly", {
       tbl_hierarchical(data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE)
   ))
   expect_snapshot(res |> as.data.frame())
-  expect_equal((res |> as.data.frame())[1, 1], "Total number of patients with any event")
+  expect_equal((res |> as.data.frame())[1, 1], "Number of patients with event")
   expect_equal(
     (res |> as.data.frame())[1, -1] |> as.character(),
-    c("40 (58.8)", "38 (55.9)", "39 (60.9)")
+    c("40 (59%)", "38 (56%)", "39 (61%)")
   )
 
   # overall row labeling works
@@ -102,7 +105,7 @@ test_that("tbl_hierarchical(overall_row) works properly", {
     res <-
       tbl_hierarchical(
         data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE,
-        label = list(overall = "Total patients")
+        label = list(..ard_hierarchical_overall.. = "Total patients")
       )
   ))
   expect_equal((res |> as.data.frame())[1, 1], "Total patients")
@@ -128,6 +131,23 @@ test_that("tbl_hierarchical(label) works properly", {
   expect_snapshot(
     error = TRUE,
     tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, label = "Stages")
+  )
+})
+
+# tbl_hierarchical(digits) ------------------------------------------------------------
+test_that("tbl_hierarchical(digits) works properly", {
+  # creates table when digits is passed
+  res <- tbl_hierarchical(
+    data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+    digits = grade ~ list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
+  )
+  expect_snapshot(res |> as.data.frame())
+  expect_equal(res$table_body$stat_0[1], "36 (68%)")
+
+  # errors thrown when bad digits argument passed
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, digits = "0")
   )
 })
 
@@ -235,7 +255,7 @@ test_that("tbl_hierarchical_count(overall_row) works properly", {
 
   # overall row labeling works
   res <- tbl_hierarchical_count(
-    data = trial, variables = trt, by = grade, overall_row = TRUE, label = list(overall = "Total rows")
+    data = trial, variables = trt, by = grade, overall_row = TRUE, label = list(..ard_hierarchical_overall.. = "Total rows")
   )
   expect_equal((res |> as.data.frame())[1, 1], "Total rows")
 
@@ -260,4 +280,44 @@ test_that("tbl_hierarchical_count(label) works properly", {
     error = TRUE,
     tbl_hierarchical_count(data = trial, variables = c(stage, grade), label = "Stages")
   )
+})
+
+# tbl_hierarchical_count(digits) ------------------------------------------------------------
+test_that("tbl_hierarchical_count(digits) works properly", {
+  # creates table when digits is passed
+  res <- tbl_hierarchical_count(
+    data = trial, variables = c(stage, grade),
+    digits = everything() ~ list(n = label_style_number(digits = 1, decimal.mark = ","))
+  )
+  expect_snapshot(res |> as.data.frame())
+  expect_equal(res$table_body$stat_0[1], "53,0")
+
+  # errors thrown when bad digits argument passed
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical_count(data = trial, variables = c(stage, grade), digits = n ~ 2)
+  )
+})
+
+# tbl_hierarchical_count with 10+ hierarchy variables --------------------------------------
+test_that("tbl_hierarchical_count with 10+ hierarchy variables", {
+  withr::local_options(list(width = 250))
+  set.seed(1)
+  data <- data.frame(
+    x1 = sample(LETTERS[1:2], 30, replace = TRUE),
+    x2 = sample(LETTERS[3:4], 30, replace = TRUE),
+    x3 = sample(LETTERS[5:6], 30, replace = TRUE),
+    x4 = sample(LETTERS[7:8], 30, replace = TRUE),
+    x5 = sample(LETTERS[9:10], 30, replace = TRUE),
+    x6 = sample(LETTERS[11:12], 30, replace = TRUE),
+    x7 = sample(LETTERS[13:14], 30, replace = TRUE),
+    x8 = sample(LETTERS[15:16], 30, replace = TRUE),
+    x9 = sample(LETTERS[17:18], 30, replace = TRUE),
+    x10 = sample(LETTERS[19:20], 30, replace = TRUE)
+  )
+
+  res <- expect_silent(
+    tbl_hierarchical_count(data = data, variables = names(data), include = "x10")
+  )
+  expect_snapshot(res |> as.data.frame())
 })

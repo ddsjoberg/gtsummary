@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survey", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("survey"))
 
 tbl_ard <- cards::ard_stack(
   data = cards::ADSL |> dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))),

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("cardx"))
 
 test_that("add_p.tbl_continuous() works", {
   expect_silent(
@@ -81,7 +81,7 @@ test_that("add_p.tbl_continuous(test.args) works", {
 })
 
 test_that("add_p.tbl_continuous(group) works", {
-  skip_if_not(is_pkg_installed("lme4", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("lme4"))
 
   expect_silent(
     tbl4 <- trial |>
@@ -109,5 +109,13 @@ test_that("add_p.tbl_continuous(group) works", {
   expect_equal(
     tbl4$table_body$p.value[1],
     unlist(compare)
+  )
+})
+
+test_that("add_p.tbl_continuous() messaging", {
+  expect_message(
+    tbl_continuous(trial, variable = age, include = grade) |>
+      add_p(test = ~"lme4"),
+    "*argument cannot be missing*"
   )
 })

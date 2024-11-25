@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("cardx"))
 
 test_that("add_p.tbl_cross() works", {
   expect_silent(
@@ -19,8 +19,7 @@ test_that("add_p.tbl_cross(source_note) works", {
   expect_equal(round(out$table_body$p.value[1], 4), 0.8662)
 
   source_nt <- "Pearson's Chi-squared test, p=0.9"
-  attr(source_nt, "text_interpret") <- "md"
-  expect_equal(out$table_styling$source_note, source_nt)
+  expect_equal(out$table_styling$source_note$source_note, source_nt)
 })
 
 test_that("add_p.tbl_cross(source_note) errors properly", {

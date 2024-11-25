@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("flextable", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("flextable"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -28,7 +28,7 @@ test_that("as_flex_table works with standard use", {
 })
 
 test_that("as_flex_table works with tbl_survfit", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
   tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months")
 
@@ -43,7 +43,7 @@ test_that("as_flex_table works with tbl_survfit", {
 })
 
 test_that("as_flex_table works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)
@@ -273,6 +273,84 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
   )
 })
 
+test_that("as_flex_table passes multiple table footnotes correctly", {
+  # testing one footnote passed to multiple columns and rows, addresses issue #2062
+  out <- my_tbl_summary |>
+    modify_footnote(stat_0 = NA) |>
+    modify_table_styling(
+      columns = c(label, stat_0),
+      rows = (variable %in% "trt") & (row_type == "level"),
+      footnote = "my footnote"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+
+  # Checking footer's footnotes
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c("1", "my footnote", ""))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% "body") |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_true(all(sapply(cell_notations, function(x) x$txt[nrow(x)]) == "1"))
+
+  trial_reduced <- trial |>
+    dplyr::select(grade, trt) |>
+    dplyr::filter(trt == "Drug A") |>
+    dplyr::filter(grade == "I") |>
+    dplyr::mutate(grade = factor(grade, levels = c("I")))
+
+  out <- trial_reduced |>
+    tbl_summary(
+      by = trt,
+      include = grade
+    ) |>
+    modify_table_styling(
+      columns = stat_1,
+      rows = (variable %in% "grade") & (row_type == "level"),
+      footnote = "my footnote"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "grade",
+      footnote = "my footnote"
+    ) |>
+    modify_table_styling(
+      columns = label,
+      rows = label == "I",
+      footnote = "my footnote"
+    ) |>
+    as_flex_table()
+
+  dchunk <- flextable::information_data_chunk(out)
+  cell_1 <- dchunk |> dplyr::filter(.part %in% "footer")
+
+  expect_equal(cell_1$txt, c(
+    "1", "n (%)", "",
+    "2", "my footnote", ""
+  ))
+
+  # Checking table notation (it is .chunk_index 2 after the normal txt)
+  notation_ind <- which(dchunk$.chunk_index > 1)
+  cell_notations <- dchunk[sort(c(notation_ind - 1, notation_ind)), ] |>
+    dplyr::filter(.part %in% c("body", "header")) |>
+    dplyr::select(.row_id, .col_id, .chunk_index, txt) |>
+    dplyr::group_by(.row_id, .col_id) |>
+    dplyr::group_split()
+
+  expect_equal(
+    sapply(cell_notations, function(x) x$txt[nrow(x)]),
+    c("2", "1", "2", "2")
+  )
+})
+
 test_that("as_flex_table passes table indentation correctly", {
   expect_equal(
     ft_tbl_summary$body$styles$pars$padding.left$data[, 1],
@@ -302,7 +380,7 @@ test_that("as_flex_table passes appended glance statistics correctly", {
     ignore_attr = c("class", "names")
   )
   expect_equal(
-    tbl$table_styling$source_note[1],
+    tbl$table_styling$source_note$source_note,
     ft_tbl$footer$content$data[2, ]$label$txt
   )
   expect_equal(length(ft_tbl$body$hrule), 3)

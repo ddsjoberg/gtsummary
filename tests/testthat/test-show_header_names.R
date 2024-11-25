@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
 
 test_that("show_header_names() works with tbl_summary()", {
   expect_snapshot(
@@ -62,4 +62,20 @@ test_that("show_header_names() returns single class value", {
   expect_snapshot(
     test_table |> show_header_names()
   )
+})
+
+
+test_that("show_header_names() has all values aligned", {
+  withr::local_options(list(width = 120))
+    test_table <- tbl_hierarchical(
+      data = cards::ADAE,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      id = USUBJID
+    )
+
+    expect_snapshot(
+      test_table |> show_header_names()
+    )
 })

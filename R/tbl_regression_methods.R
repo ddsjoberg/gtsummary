@@ -25,7 +25,7 @@ tbl_regression.model_fit <- function(x, ...) {
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.workflow <- function(x, ...) {
-  check_pkg_installed("workflows", reference_pkg = "gtsummary")
+  check_pkg_installed("workflows")
 
   if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
     cli::cli_inform(
@@ -72,7 +72,7 @@ tbl_regression.mipo <- function(x, ...) {
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.lmerMod <- function(x, tidy_fun = \(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"), ...) {
-  check_pkg_installed("broom.mixed", reference_pkg = "gtsummary")
+  check_pkg_installed("broom.mixed")
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
 

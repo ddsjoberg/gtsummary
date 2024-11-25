@@ -63,7 +63,7 @@ for model covariates.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "car"), reference_pkg = "gtsummary")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "broom", "car", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 lm(marker ~ age + grade, trial) |>
   tbl_regression() |>

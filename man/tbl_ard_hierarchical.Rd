@@ -9,7 +9,7 @@ tbl_ard_hierarchical(
   variables,
   by = NULL,
   include = everything(),
-  statistic = "{n} ({p})",
+  statistic = ~"{n} ({p}\%)",
   label = NULL
 )
 }
@@ -30,9 +30,9 @@ variables from \code{hierarchy} for which summary statistics should be returned 
 the last element of \code{hierarchy} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
-\item{statistic}{(\code{string})\cr
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to specify the summary statistics to display for all variables in \code{tbl_hierarchical()}.
-The default is \code{"{n} ({p})"}.}
+The default is \code{everything() ~ "{n} ({p})"}.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
@@ -49,6 +49,7 @@ a gtsummary table of class \code{"tbl_ard_hierarchical"}
 Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
@@ -86,6 +87,7 @@ tbl_ard_hierarchical(
   cards = ard,
   variables = c(AESOC, AETERM),
   by = TRTA,
-  statistic = "{n}"
+  statistic = ~"{n}"
 )
+\dontshow{\}) # examplesIf}
 }

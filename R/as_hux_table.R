@@ -20,7 +20,7 @@
 #' @return A \{huxtable\} object
 #'
 #' @author David Hugh-Jones, Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("huxtable", reference_pkg = "gtsummary")
+#' @examplesIf gtsummary:::is_pkg_installed("huxtable")
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>
 #'   add_p() |>
@@ -33,7 +33,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
-  check_pkg_installed("huxtable", reference_pkg = "gtsummary")
+  check_pkg_installed("huxtable")
   check_scalar_logical(return_calls)
 
   if (!isFALSE(strip_md_bold)) {
@@ -86,7 +86,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
-  check_pkg_installed(c("huxtable", "openxlsx"), reference_pkg = "gtsummary")
+  check_pkg_installed(c("huxtable", "openxlsx"))
   check_scalar_logical(bold_header_rows)
 
   # save list of expressions to run --------------------------------------------
@@ -206,14 +206,15 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   }
 
   # source note ----------------------------------------------------------------
-  if (!is.null(x$table_styling$source_note)) {
-    huxtable_calls[["add_footnote"]] <- append(
-      huxtable_calls[["add_footnote"]],
-      expr(
-        huxtable::add_footnote(text = !!x$table_styling$source_note)
-      )
+  huxtable_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          huxtable::add_footnote(text = !!x$table_styling$source_note$source_note[i])
+        )
+      }
     )
-  }
 
   # bold -----------------------------------------------------------------------
   df_bold <-

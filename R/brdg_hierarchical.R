@@ -32,8 +32,6 @@
 #'   character list of hierarchy variables to include summary statistics for.
 #' @param statistic (named `list`)\cr
 #'   named list of summary statistic names.
-#' @param type (named `list`)\cr
-#'   named list of summary types.
 #' @param count (scalar `logical`)\cr
 #'   whether `tbl_hierarchical_count()` (`TRUE`) or `tbl_hierarchical()` (`FALSE`) is being applied.
 #' @param is_ordered (scalar `logical`)\cr
@@ -52,7 +50,6 @@ brdg_hierarchical <- function(cards,
                               by,
                               include,
                               statistic,
-                              type,
                               overall_row,
                               count,
                               is_ordered,
@@ -64,11 +61,9 @@ brdg_hierarchical <- function(cards,
     cards <- cards |>
       mutate(
         variable_level = ifelse(
-          .data$variable == "..ard_hierarchical_overall..", label[["overall"]], .data$variable_level
+          .data$variable == "..ard_hierarchical_overall..", label[["..ard_hierarchical_overall.."]], .data$variable_level
         ),
-        variable = ifelse(.data$variable == "..ard_hierarchical_overall..", "overall", .data$variable)
       )
-    label[["overall"]] <- NULL
   }
 
   n_by <- length(by)
@@ -80,7 +75,7 @@ brdg_hierarchical <- function(cards,
   if (overall_row) {
     over_row <- pier_summary_hierarchical(
       cards = cards,
-      variables = "overall",
+      variables = "..ard_hierarchical_overall..",
       include = include,
       statistic = statistic
     )
@@ -152,7 +147,7 @@ brdg_hierarchical <- function(cards,
     modify_table_styling(
       columns = all_stat_cols(),
       footnote =
-        .construct_hierarchical_footnote(cards, variables, statistic, type)
+        .construct_hierarchical_footnote(cards, variables, statistic)
     )
 
   x <- x |>
@@ -172,7 +167,7 @@ brdg_hierarchical <- function(cards,
     x <- x |>
       modify_column_indent(
         columns = label,
-        rows = .data$variable == "overall",
+        rows = .data$variable == "..ard_hierarchical_overall..",
         indent = 0
       )
   }
@@ -180,7 +175,7 @@ brdg_hierarchical <- function(cards,
   # formulate top-left label for the label column
   indent <- 4 * (seq_along(variables) - 1)
   label_hierarchy <- sapply(
-    seq_along(label),
+    seq_along(label[variables]),
     function(x) {
       paste0(
         paste(rep("\U00A0", indent[x]), collapse = ""),
@@ -304,8 +299,8 @@ pier_summary_hierarchical <- function(cards,
         )
       }
     ) |>
-    dplyr::bind_rows() |>
-    # this ensures the correct order when there are 10+ groups
+    dplyr::bind_rows() %>%
+    # this ensures the correct order when there are 10+ hierarchy levels
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
       .,
@@ -370,7 +365,7 @@ pier_summary_hierarchical <- function(cards,
   df_result_levels
 }
 
-.construct_hierarchical_footnote <- function(card, include, statistic, type) {
+.construct_hierarchical_footnote <- function(card, include, statistic) {
   include |>
     lapply(
       function(variable) {
@@ -380,7 +375,7 @@ pier_summary_hierarchical <- function(cards,
           dplyr::distinct() %>%
           {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>

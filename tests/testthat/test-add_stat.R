@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("cardx"))
 
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
@@ -228,6 +228,8 @@ test_that("add_stat(location) for 'tbl_continuous'", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("add_stat() with tbl_svysummary()", {
+  skip_if_not(is_pkg_installed("survey"))
+
   return_three_10s <- function(...) rep_len(10, 3)
   expect_equal(
     survey::svydesign(~1, data = trial, weights = ~1) |>

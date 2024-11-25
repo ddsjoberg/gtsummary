@@ -25,7 +25,7 @@ to round the existing \code{'p.value'} column.}
 Adjustments to p-values are performed with \code{\link[stats:p.adjust]{stats::p.adjust()}}.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("cardx", reference_pkg = "gtsummary") && gtsummary:::is_pkg_installed("broom", reference_pkg = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 add_q_ex1 <-
   trial |>

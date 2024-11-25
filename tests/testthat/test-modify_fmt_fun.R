@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "cardx"), reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
 
 test_that("modify_fmt_fun() works", {
   expect_error(

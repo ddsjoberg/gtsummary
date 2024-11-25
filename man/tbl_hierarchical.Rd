@@ -8,23 +8,26 @@
 tbl_hierarchical(
   data,
   variables,
+  id,
+  denominator,
   by = NULL,
-  id = NULL,
-  denominator = NULL,
   include = everything(),
-  statistic = "{n} ({p})",
+  statistic = everything() ~ "{n} ({p}\%)",
   overall_row = FALSE,
-  label = NULL
+  label = NULL,
+  digits = NULL
 )
 
 tbl_hierarchical_count(
   data,
   variables,
-  by = NULL,
   denominator = NULL,
+  by = NULL,
   include = everything(),
   overall_row = FALSE,
-  label = NULL
+  statistic = everything() ~ "{n}",
+  label = NULL,
+  digits = NULL
 )
 }
 \arguments{
@@ -35,10 +38,6 @@ a data frame.}
 character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
 variables in the order given.}
 
-\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-a single column from \code{data}. Summary statistics will be stratified by this variable.
-Default is \code{NULL}.}
-
 \item{id}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 argument used to subset \code{data} to identify rows in \code{data} to calculate
 event rates in \code{tbl_hierarchical()}.}
@@ -48,14 +47,18 @@ used to define the denominator and enhance the output.
 The argument is required for \code{tbl_hierarchical()} and optional for \code{tbl_hierarchical_count()}.
 The \code{denominator} argument must be specified when \code{id} is used to calculate event rates.}
 
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+a single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}.}
+
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables from \code{hierarchy} for which summary statistics should be returned (on the variable label rows) Including
 the last element of \code{hierarchy} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
-\item{statistic}{(\code{string})\cr
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to specify the summary statistics to display for all variables in \code{tbl_hierarchical()}.
-The default is \code{"{n} ({p})"}.}
+The default is \code{everything() ~ "{n} ({p})"}.}
 
 \item{overall_row}{(scalar \code{logical})\cr
 whether an overall summary row should be included at the top of the table.
@@ -65,6 +68,11 @@ The default is \code{FALSE}.}
 used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
 The default for each variable is the column label attribute, \code{attr(., 'label')}.
 If no label has been set, the column name is used.}
+
+\item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s) or function(s). If not specified,
+default formatting is assigned via \code{label_style_number()} for statistics \code{n} and \code{N}, and
+\code{label_style_percent(digits=1)} for statistic \code{p}.}
 }
 \value{
 a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical()}) or \code{"tbl_hierarchical_count"}
@@ -93,12 +101,13 @@ in \code{data} corresponds to one event record, this row will count the overall 
 \code{tbl_hierarchical_count()}, or the overall number of patients recorded with any event when used in
 \code{tbl_hierarchical()}.
 
-A label for this overall row can be specified by passing an \code{overall} element in \code{label}. If no \code{overall} label has
-been set and \code{overall_row = TRUE}, \code{"Total number of patients with any event"} will be used by \code{tbl_hierarchical()}
-and \code{"Total number of events"} will be used by \code{tbl_hierarchical_count()}.
+A label for this overall row can be specified by passing an \code{'..ard_hierarchical_overall..'} element in \code{label}.
+Similarly, the rounding for statistics in the overall row can be modified using the \code{digits} argument,
+again referencing the \code{'..ard_hierarchical_overall..'} name.
 }
 
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
@@ -112,7 +121,9 @@ tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
-  overall_row = TRUE
+  digits = everything() ~ list(p = 1),
+  overall_row = TRUE,
+  label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
 )
 
 # Example 2 - Rates by Highest Severity ------
@@ -131,7 +142,8 @@ tbl_hierarchical_count(
   data = ADAE_subset,
   variables = c(AESOC, AETERM, AESEV),
   by = TRTA,
-  overall_row = TRUE
+  overall_row = TRUE,
+  label = list(..ard_hierarchical_overall.. = "Total Number of AEs")
 )
-
+\dontshow{\}) # examplesIf}
 }

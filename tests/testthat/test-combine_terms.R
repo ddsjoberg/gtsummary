@@ -51,6 +51,8 @@ test_that("combine_terms(label) works as expected", {
 })
 
 test_that("combine_terms works with add_global_p", {
+  skip_if_not(is_pkg_installed("parameters"))
+
   expect_silent(
     tbl <- lmod |>
       tbl_regression() |>
@@ -97,7 +99,7 @@ test_that("combine_terms works with logistic regression models", {
 })
 
 test_that("combine_terms works with Cox models", {
-  skip_if_not(is_pkg_installed("survival", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("survival"))
 
   mod <- survival::coxph(
     survival::Surv(ttdeath, death) ~ age + stage,
@@ -121,7 +123,7 @@ test_that("combine_terms works with Cox models", {
 })
 
 test_that("combine_terms works with GEE models", {
-  skip_if_not(is_pkg_installed("geepack", reference_pkg = "gtsummary"))
+  skip_if_not(is_pkg_installed("geepack"))
 
   mod <- geepack::geeglm(
     as.formula("weight ~ Diet + Time"),

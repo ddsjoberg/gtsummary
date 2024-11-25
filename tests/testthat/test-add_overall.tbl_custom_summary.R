@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("withr", reference_pkg = "gtsummary"))
+skip_if_not(is_pkg_installed("withr"))
 
 test_that("add_overall.tbl_custom_summary() works", {
   withr::local_options(list(width = 120))
