@@ -43,7 +43,7 @@ pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
 
 tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
 
-tidy_wald_test(x, tidy_fun = NULL, ...)
+tidy_wald_test(x, tidy_fun = NULL, vcov = stats::vcov(x), ...)
 }
 \arguments{
 \item{x}{(\code{model})\cr
@@ -70,8 +70,11 @@ interval in the output. Default is \code{TRUE}.}
 
 \item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{vcov, vcov_args}{Arguments passed to \code{parameters::model_parameters()}.
-At least one of these arguments \strong{must} be specified.}
+\item{vcov, vcov_args}{\itemize{
+\item \code{tidy_robust()}: Arguments passed to \code{parameters::model_parameters()}.
+At least one of these arguments \strong{must} be specified.
+\item \code{tidy_wald_test()}: \code{vcov} is the covariance matrix of the model with default \code{stats::vcov()}.
+}}
 
 \item{pool.args}{(named \code{list})\cr
 Named list of arguments passed to \code{mice::pool()} in
