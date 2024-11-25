@@ -9,7 +9,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below."><me
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below.</p>
 <span></span>
 <span><span class="fu">tidy_gam</span><span class="op">(</span><span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span>, exponentiate <span class="op">=</span> <span class="cn">FALSE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tidy_wald_test</span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">tidy_wald_test</span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="cn">NULL</span>, vcov <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -128,8 +128,10 @@ interval in the output. Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-vcov-vcov-args">vcov, vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-vcov-args"></a></dt>
-<dd><p>Arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.
-At least one of these arguments <strong>must</strong> be specified.</p></dd>
+<dd><ul><li><p><code>tidy_robust()</code>: Arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.
+At least one of these arguments <strong>must</strong> be specified.</p></li>
+<li><p><code>tidy_wald_test()</code>: <code>vcov</code> is the covariance matrix of the model with default <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">stats::vcov()</a></code>.</p></li>
+</ul></dd>
 
 
 <dt id="arg-pool-args">pool.args<a class="anchor" aria-label="anchor" href="#arg-pool-args"></a></dt>

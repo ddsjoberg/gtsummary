@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2062" class="external-link">#2062</a>)</p></li>
+<ul><li><p>Added the <code>tidy_wald_test(vcov)</code> argument to allow for the calculation of p-values via alternative variance-covariance structure (e.g. for robust SEs). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2076" class="external-link">#2076</a>; <a href="https://github.com/aghaynes" class="external-link">@aghaynes</a>)</p></li>
+<li><p>Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2062" class="external-link">#2062</a>)</p></li>
 <li><p>Fix for setting default formatting functions in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. Previously, defaults were assigned similarly to those in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, which led to survey-only statistics being assigned sub-optimal defaults. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2078" class="external-link">#2078</a>)</p></li>
 <li><p>The <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code> has been updated to no longer print theme names when the applied, nor when the original theme is re-applied. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2031" class="external-link">#2031</a>)</p></li>
 <li><p>Updated the <code>theme_gtsummary_journal("jama")</code> theme to apply changes to <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1964" class="external-link">#1964</a>; <a href="https://github.com/vjcatharine" class="external-link">@vjcatharine</a>)</p></li>
