@@ -1,0 +1,125 @@
+---
+title: "Building Tables using tbl_ard*()"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+For most tables built using {gtsummary}, ARDs for quality control or table summaries can be extracted. However, there are instances where an ARD first approach is beneficial as building more complex tables may require analysis of the data structures prior to table construction. For this ARD first approach, {gtsummary} has `tbl_ard*()` functions that will generate a tables.
+
+-   `tbl_ard_continuous()` - for ARDs summarizing continuous variables.
+-   `tbl_ard_hierarchical()` - for ARDs containing nested or hierarchical data structures.
+-   `tbl_ard_summary()` - for ARDs with descriptive statistics for continuous, categorical and dichotomous variables.
+-   `tbl_ard_wide_summary()` - for ARD statistics represented in a wide table format - in separate columns.
+
+### Building a basic demographics table
+
+In this example, we will build a simple demographics and baseline characteristics table as outlined in the FDA Standard Safety Tables Guidelines.
+
+This table has three types of data summaries: a continuous variable summary for AGE, a categorical variable summary for AGEGR1, RACE, and ETHNIC and a dichotomous variable summary for SEX.
+
+```{r}
+library(gtsummary)
+library(cards)
+
+# summarizing both continuous and categorical variables, consolidate using ard_stack call
+ard_stack(
+  data = cards::ADSL,
+  .by = ARM,
+  ard_categorical(variables = c("AGEGR1", "RACE", "SEX", "ETHNIC")),
+  ard_continuous(variables = "AGE"),
+  .attributes = TRUE,
+  .missing = TRUE,
+  .total_n = TRUE,
+  .overall = TRUE # generate ard with overall column included
+  ) |> # pass to tbl_ard_summary to generate a table.
+  tbl_ard_summary(by = ARM, overall = TRUE) # pass ard to table building function with the overall argument.
+
+```
+
+Notice this ARD first approach builds an equivalent table to one built with `tbl_summary()`
+
+```{r}
+
+cards::ADSL |>
+  select(c("AGEGR1", "RACE", "SEX", "ETHNIC", "AGE", "ARM")) |>
+  tbl_summary(by = ARM) |>
+  add_overall() 
+
+```
+The ARD for this table can be extracted using the `gather_ard()` function.
+
+### Building a disposition table
+Here, we use tbl_ard_wide_summary to build a Pooled disposition table. 
+
+```{r}
+# all variables within tbl_ard_wide_summary must be the same summary type
+ard_stack(
+  trial,
+  ard_dichotomous(variables = response),
+  ard_categorical(variables = grade),
+  .missing = TRUE,
+  .attributes = TRUE,
+  .total_n = TRUE
+) |>
+  tbl_ard_wide_summary()
+```
+
+### Building an Adverse Events table
+
+For tables that require hierarchical or nested analysis, `ard_stack_hierarchical()` is recommended for building an ARD. The companion function for rendering the table using the ARD is `tbl_ard_hierarchical()`
+
+```{r}
+# Adverse Events Rates Table
+
+ADAE_subset <- cards::ADAE |>
+  dplyr::filter(
+    AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+    AETERM %in% unique(cards::ADAE$AETERM)[1:5])
+
+ard <- cards::ard_stack_hierarchical(
+  data = ADAE_subset,
+  variables = c(AESOC, AETERM),
+  by = TRTA,
+  denominator = cards::ADSL|> mutate(TRT01A = ARM),
+  id = USUBJID
+  )
+
+tbl_ard_hierarchical(
+   cards = ard,
+   variables = c(AESOC, AETERM),
+   by = TRTA
+ )
+
+```
+
+### Complex Analysis Tables
+
+The ARD to Table pipeline is most convenient when trying to consolidate multiple analysis steps into an ARD to feed only the relevant stats to the table building machinery. In the example below, we create ARDs that compute the survival probabilities of both treatment groups, and also conduct a one sample t-test on the survival estimates. The resulting ARD is filtered to only contain the relevant estimate values which can be used generate the table we want. Note that in this pipeline, all the survival analysis stats such as confidence intervals and and standard error are retained in the ARD object - enabling reuse of this object to generate other tables. 
+
+```{r setup}
+
+library(gtsummary)
+library(cardx)
+
+ard <- cards::bind_ard(
+    survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial) |>
+      cardx::ard_survival_survfit(times = c(12, 24)) |>
+      dplyr::filter(stat_name %in% c("estimate")) |> # filtering only the survival probability values.
+      dplyr::mutate( # apply custom formatting to these values - 1 decimal place
+        fmt_fn = list("xx.x%"),
+        group1_level = unlist(group1_level) |> as.character() |> as.list()
+      ),
+    # run a one sample t-test between the means of the survival probability for each treatment group
+    cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |> 
+      dplyr::filter(stat_name %in% c("estimate"))
+  ) |>
+    dplyr::select(-cards::all_missing_columns())
+
+tbl_ard_summary(ard, by = trt, statistic = ~ "{estimate}")
+
+```
