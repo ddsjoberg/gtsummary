@@ -975,3 +975,23 @@
       188    <NA>
       189       1
 
+# tbl_hierarchical_count table_body enables sorting
+
+    Code
+      res$table_body
+    Output
+      # A tibble: 21 x 11
+         row_type group1                       group1_level group2 group2_level                                         var_label variable                     label                                                stat_1   stat_2   stat_3  
+         <chr>    <chr>                        <chr>        <chr>  <chr>                                                <chr>     <chr>                        <chr>                                                <chr>    <chr>    <chr>   
+       1 level    ..ard_hierarchical_overall.. <NA>         <NA>   <NA>                                                 <NA>      ..ard_hierarchical_overall.. Number of patients with event                        26 (30%) 42 (50%) 40 (48%)
+       2 level    SEX                          F            <NA>   <NA>                                                 <NA>      SEX                          F                                                    13 (25%) 18 (45%) 23 (46%)
+       3 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AESOC                        CARDIAC DISORDERS                                    0 (0%)   1 (2.5%) 0 (0%)  
+       4 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AETERM                       ATRIOVENTRICULAR BLOCK SECOND DEGREE                 0 (0%)   1 (2.5%) 0 (0%)  
+       5 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AESOC                        GASTROINTESTINAL DISORDERS                           3 (5.7%) 0 (0%)   3 (6.0%)
+       6 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AETERM                       DIARRHOEA                                            3 (5.7%) 0 (0%)   3 (6.0%)
+       7 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AESOC                        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS 5 (9.4%) 11 (28%) 13 (26%)
+       8 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE ERYTHEMA                            2 (3.8%) 5 (13%)  5 (10%) 
+       9 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE PRURITUS                            4 (7.5%) 10 (25%) 12 (24%)
+      10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
+      # i 11 more rows
+
