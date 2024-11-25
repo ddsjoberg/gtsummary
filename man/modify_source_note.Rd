@@ -32,6 +32,9 @@ Add and remove source notes from a table.
 Source notes are similar to footnotes, expect they are not linked to a cell in
 the table.
 }
+\details{
+Source notes are not supported by \code{as_kable_extra()}.
+}
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
