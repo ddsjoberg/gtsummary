@@ -46,7 +46,7 @@
 #'   modify_table_body(~.x %>% arrange(row_type == "glance_statistic"))
 #' ````
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")
 #' mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 #'
 #' # Example 1 ----------------------------------

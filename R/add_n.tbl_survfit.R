@@ -7,7 +7,7 @@
 #' @param ... Not used
 #' @export
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("survival")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survival")
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
