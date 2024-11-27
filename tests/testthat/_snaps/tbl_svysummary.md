@@ -24,7 +24,7 @@
       as.data.frame(tbl_svysummary(data = svy_mtcars))
     Output
          **Characteristic**           **N = 32**
-      1                 mpg    19.2 (15.2, 22.8)
+      1                 mpg          19 (15, 23)
       2                 cyl                 <NA>
       3                   4             11 (34%)
       4                   6              7 (22%)
@@ -78,7 +78,7 @@
       as.data.frame(tbl_svysummary(data = svy_mtcars, by = am))
     Output
          **Characteristic**      **0**  \nN = 19      **1**  \nN = 13
-      1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)
+      1                 mpg          17 (15, 19)          23 (21, 30)
       2                 cyl                 <NA>                 <NA>
       3                   4              3 (16%)              8 (62%)
       4                   6              4 (21%)              3 (23%)
@@ -134,12 +134,12 @@
     Code
       as.data.frame(tbl)
     Output
-        **Characteristic**   **0**  \nN = 19   **1**  \nN = 13
-      1            New mpg 17.3 (14.7, 19.2) 22.8 (21.0, 30.4)
-      2            New cyl              <NA>              <NA>
-      3                  4           3 (16%)           8 (62%)
-      4                  6           4 (21%)           3 (23%)
-      5                  8          12 (63%)           2 (15%)
+        **Characteristic** **0**  \nN = 19 **1**  \nN = 13
+      1            New mpg     17 (15, 19)     23 (21, 30)
+      2            New cyl            <NA>            <NA>
+      3                  4         3 (16%)         8 (62%)
+      4                  6         4 (21%)         3 (23%)
+      5                  8        12 (63%)         2 (15%)
 
 # tbl_svysummary(label) errors properly
 

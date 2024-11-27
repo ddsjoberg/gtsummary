@@ -229,8 +229,8 @@ table_styling_to_flextable_calls <- function(x, ...) {
     ) |>
     tidyr::nest(location_ids = c("row_numbers", "column_id")) %>%
     dplyr::mutate(
-      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers") |> unique()),
-      column_id = map(.data$location_ids, ~ getElement(.x, "column_id") |> unique())
+      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers")),
+      column_id = map(.data$location_ids, ~ getElement(.x, "column_id"))
     )
 
   flextable_calls[["footnote"]] <-
@@ -317,12 +317,15 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # source note ----------------------------------------------------------------
   # in flextable, this is just a footnote associated without column or symbol
-  if (!is.null(x$table_styling$source_note)) {
-    flextable_calls[["source_note"]] <-
-      expr(
-        flextable::add_footer_lines(value = flextable::as_paragraph(!!x$table_styling$source_note))
-      )
-  }
+  flextable_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          flextable::add_footer_lines(value = flextable::as_paragraph(!!x$table_styling$source_note$source_note[i]))
+        )
+      }
+    )
 
   # border ---------------------------------------------------------------------
   flextable_calls[["border"]] <-

@@ -39,7 +39,8 @@ test_that("tbl_ard_hierarchical() event rates", {
       variables = c(AESOC, AETERM, AESEV),
       by = TRTA,
       denominator = cards::ADSL |> mutate(TRTA = ARM),
-      id = USUBJID
+      id = USUBJID,
+      digits = ~list(p = 1L)
     ) |>
       as.data.frame(col_labels = FALSE)
   )
@@ -59,7 +60,7 @@ test_that("tbl_ard_hierarchical() counts", {
       cards = ard,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      statistic = "{n}"
+      statistic = ~"{n}"
     ),
     NA
   )

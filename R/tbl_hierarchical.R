@@ -33,9 +33,9 @@
 #'   variables from `hierarchy` for which summary statistics should be returned (on the variable label rows) Including
 #'   the last element of `hierarchy` has no effect since each level has its own row for this variable.
 #'   The default is `everything()`.
-#' @param statistic (`string`)\cr
+#' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   used to specify the summary statistics to display for all variables in `tbl_hierarchical()`.
-#'   The default is `"{n} ({p})"`.
+#'   The default is `everything() ~ "{n} ({p})"`.
 #' @param overall_row (scalar `logical`)\cr
 #'   whether an overall summary row should be included at the top of the table.
 #'   The default is `FALSE`.
@@ -43,6 +43,10 @@
 #'   used to override default labels in hierarchical table, e.g. `list(AESOC = "System Organ Class")`.
 #'   The default for each variable is the column label attribute, `attr(., 'label')`.
 #'   If no label has been set, the column name is used.
+#' @param digits ([`formula-list-selector`][syntax])\cr
+#'  Specifies how summary statistics are rounded. Values may be either integer(s) or function(s). If not specified,
+#'  default formatting is assigned via `label_style_number()` for statistics `n` and `N`, and
+#'  `label_style_percent(digits=1)` for statistic `p`.
 #'
 #' @section Overall Row:
 #'
@@ -51,15 +55,15 @@
 #' `tbl_hierarchical_count()`, or the overall number of patients recorded with any event when used in
 #' `tbl_hierarchical()`.
 #'
-#' A label for this overall row can be specified by passing an `overall` element in `label`. If no `overall` label has
-#' been set and `overall_row = TRUE`, `"Total number of patients with any event"` will be used by `tbl_hierarchical()`
-#' and `"Total number of events"` will be used by `tbl_hierarchical_count()`.
+#' A label for this overall row can be specified by passing an `'..ard_hierarchical_overall..'` element in `label`.
+#' Similarly, the rounding for statistics in the overall row can be modified using the `digits` argument,
+#' again referencing the `'..ard_hierarchical_overall..'` name.
 #'
 #' @return a gtsummary table of class `"tbl_hierarchical"` (for `tbl_hierarchical()`) or `"tbl_hierarchical_count"`
 #'   (for `tbl_hierarchical_count()`).
 #' @export
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' ADAE_subset <- cards::ADAE |>
 #'   dplyr::filter(
 #'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
@@ -73,7 +77,9 @@
 #'   by = TRTA,
 #'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
-#'   overall_row = TRUE
+#'   digits = everything() ~ list(p = 1),
+#'   overall_row = TRUE,
+#'   label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
 #' )
 #'
 #' # Example 2 - Rates by Highest Severity ------
@@ -92,18 +98,19 @@
 #'   data = ADAE_subset,
 #'   variables = c(AESOC, AETERM, AESEV),
 #'   by = TRTA,
-#'   overall_row = TRUE
+#'   overall_row = TRUE,
+#'   label = list(..ard_hierarchical_overall.. = "Total Number of AEs")
 #' )
-#'
 tbl_hierarchical <- function(data,
                              variables,
+                             id,
+                             denominator,
                              by = NULL,
-                             id = NULL,
-                             denominator = NULL,
                              include = everything(),
-                             statistic = "{n} ({p})",
+                             statistic = everything() ~ "{n} ({p}%)",
                              overall_row = FALSE,
-                             label = NULL) {
+                             label = NULL,
+                             digits = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -112,7 +119,6 @@ tbl_hierarchical <- function(data,
   check_not_missing(id)
   check_not_missing(denominator)
   check_not_missing(variables)
-  check_string(statistic)
 
   # evaluate tidyselect
   cards::process_selectors(data, variables = {{ variables }}, id = {{ id }}, by = {{ by }})
@@ -138,9 +144,11 @@ tbl_hierarchical <- function(data,
     id = id,
     denominator = denominator,
     include = {{ include }},
-    statistic = statistic,
+    statistic = {{ statistic }},
     overall_row = overall_row,
-    label = label
+    label = label,
+    digits = {{ digits }},
+    calling_fun = "tbl_hierarchical"
   )
 }
 
@@ -148,11 +156,13 @@ tbl_hierarchical <- function(data,
 #' @export
 tbl_hierarchical_count <- function(data,
                                    variables,
-                                   by = NULL,
                                    denominator = NULL,
+                                   by = NULL,
                                    include = everything(),
                                    overall_row = FALSE,
-                                   label = NULL) {
+                                   statistic = everything() ~ "{n}",
+                                   label = NULL,
+                                   digits = NULL) {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -179,9 +189,11 @@ tbl_hierarchical_count <- function(data,
     id = NULL,
     denominator = denominator,
     include = {{ include }},
-    statistic = "{n}",
+    statistic = statistic,
     overall_row = overall_row,
-    label = label
+    label = label,
+    digits = digits,
+    calling_fun = "tbl_hierarchical_count"
   )
 }
 
@@ -193,49 +205,87 @@ internal_tbl_hierarchical <- function(data,
                                       include = everything(),
                                       statistic = NULL,
                                       overall_row = FALSE,
-                                      label = NULL) {
+                                      label = NULL,
+                                      digits = NULL,
+                                      calling_fun) {
   # process and check inputs ---------------------------------------------------
   check_not_missing(data)
   check_data_frame(data)
-  check_not_missing(variables)
-  check_length(by, 1, allow_empty = TRUE)
+  check_length(by, length = 1L, allow_empty = TRUE)
   check_logical(overall_row)
+  if ("..ard_hierarchical_overall.." %in% variables) {
+    cli::cli_abort("The {.arg variables} argument cannot include a column named {.val ..ard_hierarchical_overall..}.")
+  }
 
   # evaluate tidyselect
   cards::process_selectors(data[variables], include = {{ include }})
-
-  # check that 'variables' is not empty
-  if (is_empty(variables)) {
+  include <- union(include, dplyr::last(variables))
+  anl_vars <- c(include, if (overall_row) "..ard_hierarchical_overall..")
+  df_anl_vars <- data[include] |> dplyr::mutate(..ard_hierarchical_overall.. = data[[include[1]]]) # this df will be used for selecting below
+  df_variables <- data[variables] |> dplyr::mutate(..ard_hierarchical_overall.. = data[[include[1]]]) # this df will be used for selecting below
+  # check that 'include' is not empty, ie we must summarize at least one variable
+  if (is_empty(include)) {
     cli::cli_abort(
-      message = "Argument {.arg variables} cannot be empty.",
+      message = "Argument {.arg include} cannot be empty.",
       call = get_cli_abort_call()
     )
   }
-
-  # check that 'include' is a subset of 'variables'
-  if (!is_empty(include) && !all(include %in% variables)) {
-    cli::cli_abort(
-      message = c(
-        "The columns selected in {.arg include} must be nested within the columns in {.arg variables}.",
-        i = "Select among columns {.val {variables}}"
+  # add a default label to the overall variable
+  if (overall_row) {
+    attr(df_variables[["..ard_hierarchical_overall.."]], "label") <-
+      switch(
+        calling_fun,
+        "tbl_hierarchical_count" = "Total number of events",
+        "tbl_hierarchical" = "Number of patients with event"
       )
+  }
+
+  cards::process_formula_selectors(df_anl_vars, statistic = statistic, digits = digits) # statistic and label are defined for all vars that we summarize
+  cards::process_formula_selectors(df_variables, label = label) # labels are only defined for the hierarchy variables
+
+  # fill in unspecified variables
+  cards::fill_formula_selectors(
+    df_anl_vars,
+    statistic = eval(formals(gtsummary::tbl_hierarchical)[["statistic"]])
+  )
+  cards::fill_formula_selectors(
+    df_variables,
+    label = lapply(names(df_variables), \(x) attr(df_variables[[x]], "label") %||% x) |> stats::setNames(names(df_variables))
+  )
+
+  digits_default <-
+    switch(
+      calling_fun,
+      "tbl_hierarchical" =
+        ~list(n = label_style_number(),
+              N = label_style_number(),
+              p = get_theme_element("tbl_hierarchical-fn:percent_fun", default = label_style_percent())),
+      "tbl_hierarchical_count" =
+        ~list(n = label_style_number())
+    )
+
+  digits <- map(digits, .convert_integer_to_fmt_fn)
+  cards::fill_formula_selectors(df_anl_vars, digits = digits_default)
+
+  # check that all statistics passed are strings
+  if (calling_fun == "tbl_hierarchical") {
+    cards::check_list_elements(
+      x = statistic,
+      predicate = \(x) is_string(x) && all(.extract_glue_elements(x) %in% c("n", "N", "p")),
+      error_msg = "Values passed in the {.arg statistic} argument must be strings with glue elements containing one or more of {.val {c('n', 'N', 'p')}}."
     )
   }
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
-
-  # process arguments
-  type <- assign_summary_type(data, c(variables, if (overall_row) by), value = NULL)
-  func <- if (!is_empty(id)) "tbl_hierarchical" else "tbl_hierarchical_count"
-  if (!is_empty(statistic)) {
-    stat <- gsub("[\\{\\}]", "", regmatches(statistic, gregexpr("\\{.*?\\}", statistic))[[1]])
-    stat <- stats::as.formula(sprintf("everything() ~ c('%s')", paste0(stat, collapse = "', '")))
-    statistic <- stats::as.formula(sprintf("everything() ~ '%s'", statistic))
-  } else {
-    stat <- NULL
+  tbl_hierarchical_inputs$anl_vars <- NULL
+  tbl_hierarchical_inputs$df_anl_vars <- NULL
+  tbl_hierarchical_inputs$df_variables <- NULL
+  tbl_hierarchical_inputs$calling_fun <- NULL
+  tbl_hierarchical_inputs$digits_default <- NULL
+  if (calling_fun == "tbl_hierarchical_count") {
+    tbl_hierarchical_inputs$id <- NULL
   }
-  include <- union(include, dplyr::last(variables))
 
   # get ARDs -------------------------------------------------------------------
   cards <- .run_ard_stack_hierarchical_fun(
@@ -249,45 +299,20 @@ internal_tbl_hierarchical <- function(data,
     overall_row = overall_row
   )
 
-  # evaluate the remaining list-formula arguments ------------------------------
-  # processed arguments are saved into this env
-  cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
-    statistic =
-      case_switch(
-        missing(statistic) ~ get_theme_element(paste0(func, "-arg:statistic"), default = statistic),
-        .default = statistic
-      ),
-    include_env = TRUE
-  )
-  cards::process_formula_selectors(
-    scope_table_body(
-      .list2tb(type, "var_type"),
-      data[variables] |>
-        mutate(overall = if (overall_row) NA else NULL)
-    ),
-    label =
-      case_switch(
-        missing(label) ~ get_theme_element(paste0(func, "-arg:label"), default = label),
-        .default = label
-      )
-  )
-
-  # fill in unspecified variables
-  cards::fill_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
-    statistic = get_theme_element(
-      paste0(func, "-arg:statistic"), default = eval(formals(asNamespace("gtsummary")[[func]])[["statistic"]])
-    )
-  )
-
-  # check inputs ---------------------------------------------------------------
-  .check_haven_labelled(data[c(include, by)])
-  .check_tbl_summary_args(
-    data = data, label = label, statistic = statistic,
-    digits = NULL, value = NULL, type = type, sort = NULL
-  )
-  .check_statistic_type_agreement(statistic, type)
+  # apply digits ---------------------------------------------------------------
+  cards <-
+    cards |>
+    dplyr::rows_update(
+      imap(
+        digits,
+        ~ enframe(.x, "stat_name", "fmt_fn") |>
+          dplyr::mutate(variable = .y)
+      ) |>
+        dplyr::bind_rows(),
+      by = c("variable", "stat_name"),
+      unmatched = "ignore"
+    ) |>
+    cards::apply_fmt_fn()
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
@@ -298,49 +323,25 @@ internal_tbl_hierarchical <- function(data,
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_hierarchical(cards, variables, by)
 
-  # fill in missing labels -----------------------------------------------------
-  default_label <- sapply(
-    variables,
-    \(x) if (!is_empty(attr(data[[x]], "label"))) attr(data[[x]], "label") else x
-  ) |>
-    as.list()
-  label <- c(
-    label, default_label[setdiff(names(default_label), names(label))]
-  )[c(variables, if ("overall" %in% names(label)) "overall")]
-
-  # define overall row formatting
-  if (overall_row) {
-    statistic[["overall"]] <- statistic[1]
-    type[["overall"]] <- "categorical"
-    if (!"overall" %in% names(label)) {
-      label[["overall"]] <- ifelse(
-        func == "tbl_hierarchical_count",
-        "Total number of events",
-        "Total number of patients with any event"
-      )
-    }
-  }
-
   # call bridge function here
   brdg_hierarchical(
-    cards,
-    variables,
-    by,
-    include,
-    statistic,
-    type,
-    overall_row,
+    cards = cards,
+    variables = variables,
+    by = by,
+    include = include,
+    statistic = statistic,
+    overall_row = overall_row,
     count = is_empty(id),
     is_ordered = is.ordered(data[[dplyr::last(variables)]]),
-    label
+    label = label
   ) |>
     append(
       list(
-        cards = list(cards) |> stats::setNames(func),
+        cards = list(cards) |> stats::setNames(calling_fun),
         inputs = tbl_hierarchical_inputs
       )
     ) |>
-    structure(class = c("tbl_hierarchical", "gtsummary"))
+    structure(class = c(calling_fun, "gtsummary"))
 }
 
 # this function calculates either the counts or the rates of the events
@@ -428,9 +429,10 @@ internal_tbl_hierarchical <- function(data,
     # process overall row
     cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
       dplyr::group_by(.data$variable_level) |>
-      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id())) |>
-      dplyr::ungroup()
+      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
   }
 
-  cards
+  cards |>
+    dplyr::ungroup() |>
+    cards::as_card()
 }

@@ -194,6 +194,8 @@ test_that("theme_gtsummary_journal('nejm') works", {
 })
 
 test_that("theme_gtsummary_journal('jama') works", {
+  skip_if_not(is_pkg_installed("survey"))
+
   # check that we get
   #  - IQR separated with emdash in table
   #  - pvalues are rounded to 2 places
@@ -304,6 +306,18 @@ test_that("with_gtsummary_theme()", {
       expr = identical(1L, 1L),
       msg_ignored_elements = "The following theme elements are temporarilty overwritten: {.val {elements}}."
     )
+    reset_gtsummary_theme()
+  })
+
+  # check that the theme is reset and a message about the resetting of the theme does not appear
+  expect_snapshot({
+    theme_gtsummary_language("es")
+    with_gtsummary_theme(
+      theme_gtsummary_eda(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_kable()
+    )
+    tbl_summary(trial, include = age) |>
+      as_kable()
     reset_gtsummary_theme()
   })
 })
