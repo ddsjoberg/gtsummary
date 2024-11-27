@@ -9,18 +9,25 @@ knitr::opts_chunk$set(
 )
 ```
 
-For most tables built using {gtsummary}, ARDs for quality control or table summaries can be extracted. However, there are instances where an ARD first approach is beneficial as building more complex tables may require analysis of the data structures prior to table construction. For this ARD first approach, {gtsummary} has `tbl_ard*()` functions that will generate a tables.
+For most tables built using {gtsummary}, ARDs for quality control or table summaries can be extracted. 
+However, there are instances where an ARD first approach is beneficial as building more complex tables may require analysis of the data structures prior to table construction. 
+For this ARD first approach, {gtsummary} has `tbl_ard*()` functions that will generate a tables.
 
 -   `tbl_ard_continuous()` - for ARDs summarizing continuous variables.
--   `tbl_ard_hierarchical()` - for ARDs containing nested or hierarchical data structures.
 -   `tbl_ard_summary()` - for ARDs with descriptive statistics for continuous, categorical and dichotomous variables.
 -   `tbl_ard_wide_summary()` - for ARD statistics represented in a wide table format - in separate columns.
+-   `tbl_ard_hierarchical()` - for ARDs containing nested or hierarchical data structures.
 
 ### Building a basic demographics table
 
 In this example, we will build a simple demographics and baseline characteristics table as outlined in the FDA Standard Safety Tables Guidelines.
 
 This table has three types of data summaries: a continuous variable summary for AGE, a categorical variable summary for AGEGR1, RACE, and ETHNIC and a dichotomous variable summary for SEX.
+
+There are three additional arguments that can be specified to improve the appearance of the table.
+- `.attributes` the default labels will be the variable labels if attributes are included.
+- `.missing` when missing results are included, users can include missing counts or rates for the variables.
+- `.total_n` the total N is saved internally when available.
 
 ```{r}
 library(gtsummary)
@@ -67,7 +74,16 @@ ard_stack(
   .total_n = TRUE
 ) |>
   tbl_ard_wide_summary()
+
 ```
+Notice the extracted ARD from `tbl_ard_summary()` (using `gather_ard()`) is equivalent to the ARD built using `tbl_ard_wide_summary()`.
+```{r}
+trial |>
+  select(response, grade) |>
+tbl_summary(missing = 'no') |>
+  gather_ard()
+```
+
 
 ### Building an Adverse Events table
 
@@ -99,7 +115,10 @@ tbl_ard_hierarchical(
 
 ### Complex Analysis Tables
 
-The ARD to Table pipeline is most convenient when trying to consolidate multiple analysis steps into an ARD to feed only the relevant stats to the table building machinery. In the example below, we create ARDs that compute the survival probabilities of both treatment groups, and also conduct a one sample t-test on the survival estimates. The resulting ARD is filtered to only contain the relevant estimate values which can be used generate the table we want. Note that in this pipeline, all the survival analysis stats such as confidence intervals and and standard error are retained in the ARD object - enabling reuse of this object to generate other tables. 
+The ARD to Table pipeline is most convenient when trying to consolidate multiple analysis steps into an ARD to feed only the relevant stats to the table building machinery. 
+In the example below, we create ARDs that compute the survival probabilities of both treatment groups, and also conduct a one sample t-test on the survival estimates. 
+The resulting ARD is filtered to only contain the relevant estimate values which can be used generate the table we want. 
+Note that in this pipeline, all the survival analysis stats such as confidence intervals and and standard error are retained in the ARD object - enabling reuse of this object to generate other tables. 
 
 ```{r setup}
 
