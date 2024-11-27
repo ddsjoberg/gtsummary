@@ -18,7 +18,8 @@ A string to add as a source note.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
+Applies to tables printed with \code{{gt}}.}
 
 \item{source_note_id}{(\code{integers})\cr
 Integers specifying the ID of the source note to remove.

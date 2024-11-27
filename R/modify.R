@@ -13,20 +13,18 @@
 #' @param x (`gtsummary`)\cr
 #'   A gtsummary object
 #' @param ... [`dynamic-dots`][rlang::dyn-dots]\cr
-#'   Used to assign updates to headers,
-#'   spanning headers, and footnotes.
+#'   Used to assign updates to headers and spanning headers.
 #'
-#'   Use `modify_*(colname='new header/footnote')` to update a single column. Using a
+#'   Use `modify_*(colname='new header')` to update a single column. Using a
 #'   formula will invoke tidyselect, e.g. `modify_*(all_stat_cols() ~ "**{level}**")`.
 #'   The dynamic dots allow syntax like `modify_header(x, !!!list(label = "Variable"))`.
 #'   See examples below.
 #'
 #'   Use the `show_header_names()` to see the column names that can be modified.
-#' @param abbreviation (scalar `logical`)\cr
-#'   Logical indicating if an abbreviation is being updated.
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
+#'   Applies to tables printed with `{gt}`.
 #' @param update,quiet `r lifecycle::badge("deprecated")`
 #' @param include_example `r lifecycle::badge("deprecated")`
 #'
@@ -36,7 +34,7 @@
 #' @name modify
 #'
 #' @section `tbl_summary()`, `tbl_svysummary()`, and `tbl_cross()`:
-#' When assigning column headers, footnotes, and spanning headers,
+#' When assigning column headers and spanning headers,
 #' you may use `{N}` to insert the number of observations.
 #' `tbl_svysummary` objects additionally have `{N_unweighted}` available.
 #'
@@ -122,60 +120,6 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
     )
 
   # return object
-  x$call_list <- updated_call_list
-  x
-}
-
-#' @name modify
-#' @export
-modify_footnote <- function(x, ..., abbreviation = FALSE,
-                            text_interpret = c("md", "html"),
-                            update, quiet) {
-  set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
-
-  # checking inputs ------------------------------------------------------------
-  check_class(x, "gtsummary")
-  text_interpret <- arg_match(text_interpret)
-
-  # process inputs -------------------------------------------------------------
-  dots <- rlang::dots_list(...)
-  dots <- .deprecate_modify_update_and_quiet_args(dots, update, quiet, calling_fun = "modify_footnote")
-
-  # process arguments ----------------------------------------------------------
-  text_interpret <- rlang::arg_match(text_interpret)
-  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
-  cards::check_list_elements(
-    x = dots,
-    predicate = function(x) is_string(x) || is.na(x),
-    error_msg =
-      c("All values passed in {.arg ...} must be strings.",
-        "i" = "For example, {.code label='Results as of June 26, 2015'}"
-      )
-  )
-
-  # evaluate the strings with glue
-  dots <- .evaluate_string_with_glue(x, dots)
-
-  # updating footnotes ---------------------------------------------------------
-  x <-
-    if (!abbreviation) {
-      modify_table_styling(
-        x = x,
-        columns = names(dots),
-        footnote = unlist(dots),
-        text_interpret = text_interpret
-      )
-    } else {
-      modify_table_styling(
-        x = x,
-        columns = names(dots),
-        footnote_abbrev = unlist(dots),
-        text_interpret = text_interpret
-      )
-    }
-
-  # returning gtsummary object -------------------------------------------------
   x$call_list <- updated_call_list
   x
 }
