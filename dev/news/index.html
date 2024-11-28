@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9008</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.3.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,6 +65,7 @@
 <li><p>Fix for setting default formatting functions in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. Previously, defaults were assigned similarly to those in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, which led to survey-only statistics being assigned sub-optimal defaults. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2078" class="external-link">#2078</a>)</p></li>
 <li><p>Bug fix in <code><a href="../reference/add_ci.tbl_svysummary.html">add_ci.tbl_svysummary()</a></code> for factor variables where order was alphabetical instead of the factor levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2036" class="external-link">#2036</a>)</p></li>
 <li><p>Addressing encoding issue where <code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">dplyr::arrange()</a></code> sorted differently, and the order of the <code>by</code> levels was inconsistent in the resulting table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2038" class="external-link">#2038</a>)</p></li>
+<li><p>Users may now pass a vector of integers to <code>tbl_hierarchical*(digits)</code>, as is possible in other summary functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2080" class="external-link">#2080</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
