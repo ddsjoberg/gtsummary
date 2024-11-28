@@ -253,20 +253,6 @@ internal_tbl_hierarchical <- function(data,
     label = lapply(names(df_variables), \(x) attr(df_variables[[x]], "label") %||% x) |> stats::setNames(names(df_variables))
   )
 
-  digits_default <-
-    switch(
-      calling_fun,
-      "tbl_hierarchical" =
-        ~list(n = label_style_number(),
-              N = label_style_number(),
-              p = get_theme_element("tbl_hierarchical-fn:percent_fun", default = label_style_percent())),
-      "tbl_hierarchical_count" =
-        ~list(n = label_style_number())
-    )
-
-  digits <- map(digits, .convert_integer_to_fmt_fn)
-  cards::fill_formula_selectors(df_anl_vars, digits = digits_default)
-
   # check that all statistics passed are strings
   if (calling_fun == "tbl_hierarchical") {
     cards::check_list_elements(
@@ -275,6 +261,21 @@ internal_tbl_hierarchical <- function(data,
       error_msg = "Values passed in the {.arg statistic} argument must be strings with glue elements containing one or more of {.val {c('n', 'N', 'p')}}."
     )
   }
+
+  digits <-
+    assign_summary_digits(
+      data = data,
+      statistic = statistic,
+      type = rep_named(names(statistic), list("categorical")),
+      digits = digits
+    )
+  digits <-
+    case_switch(
+      calling_fun == "tbl_hierarchical" ~
+        lapply(digits, FUN = \(x) x[c("n", "N", "p")]),
+      calling_fun == "tbl_hierarchical_count" ~
+        lapply(digits, FUN = \(x) x["n"]),
+    )
 
   # save arguments
   tbl_hierarchical_inputs <- as.list(environment())
