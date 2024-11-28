@@ -272,9 +272,9 @@ internal_tbl_hierarchical <- function(data,
   digits <-
     case_switch(
       calling_fun == "tbl_hierarchical" ~
-        lapply(digits, FUN = \(x) x[c("n", "N", "p")]),
+        lapply(digits, FUN = \(x) x[intersect(names(x), c("n", "N", "p"))]),
       calling_fun == "tbl_hierarchical_count" ~
-        lapply(digits, FUN = \(x) x["n"]),
+        lapply(digits, FUN = \(x) x[intersect(names(x), "n")]),
     )
 
   # save arguments
@@ -283,7 +283,6 @@ internal_tbl_hierarchical <- function(data,
   tbl_hierarchical_inputs$df_anl_vars <- NULL
   tbl_hierarchical_inputs$df_variables <- NULL
   tbl_hierarchical_inputs$calling_fun <- NULL
-  tbl_hierarchical_inputs$digits_default <- NULL
   if (calling_fun == "tbl_hierarchical_count") {
     tbl_hierarchical_inputs$id <- NULL
   }
