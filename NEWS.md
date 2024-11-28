@@ -26,6 +26,8 @@
 
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
 
+* Users may now pass a vector of integers to `tbl_hierarchical*(digits)`, as is possible in other summary functions. (#2080)
+
 # gtsummary 2.0.3
 
 ### New Features and Functions
