@@ -16,5 +16,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
         fantome.appendChild(tabwid_link.cloneNode(true));
       }
   });
-});
 
+  const shadowHosts = document.querySelectorAll('.flextable-shadow-host:not(:has(div > table.no-shadow-dom))');
+  shadowHosts.forEach(host => {
+    if (host.shadowRoot) {
+      const spanElements = host.shadowRoot.querySelector('div > table > caption > span[id]');
+      if (spanElements) {
+        const id = spanElements.getAttribute("id");
+        host.setAttribute("id", id);
+      }
+    }
+  });
+
+});
