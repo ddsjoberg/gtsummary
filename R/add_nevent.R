@@ -3,7 +3,7 @@
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("broom.helpers")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(response, trt, grade) |>
