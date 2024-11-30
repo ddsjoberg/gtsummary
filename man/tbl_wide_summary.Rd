@@ -65,6 +65,7 @@ All included variables must be of the same summary type, e.g. all continuous
 summaries or all categorical summaries (which encompasses dichotomous variables).
 }
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial |>
   tbl_wide_summary(include = c(response, grade))
 
@@ -73,4 +74,5 @@ trial |>
     strata = trt,
     ~tbl_wide_summary(.x, include = c(age, marker))
   )
+\dontshow{\}) # examplesIf}
 }

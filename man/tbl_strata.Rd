@@ -99,6 +99,7 @@ each stratum's summary table.
 }
 
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(age, grade, stage, trt) |>
@@ -132,6 +133,7 @@ trial |>
     .combine_args = list(group_header = NULL)
   ) |>
   modify_caption("**Response Rate by Grade**")
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg
