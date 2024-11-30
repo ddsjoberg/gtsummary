@@ -14,7 +14,7 @@
 
 ### Lifecycle Updates
 
-* Removed `global_pvalue_fun.tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
+* Removed `global_pvalue_fun.tidycrr()`, which was previously migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
 
 ### Bug Fixes
 
