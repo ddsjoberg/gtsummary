@@ -239,28 +239,39 @@ modify_table_styling <- function(x,
 
   # footnote -------------------------------------------------------------------
   if (!is_empty(footnote)) {
-    x$table_styling$footnote <-
-      dplyr::bind_rows(
-        x$table_styling$footnote,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          text_interpret = text_interpret,
-          footnote = footnote
+    # header footnotes
+    if (tryCatch(is.null(rows), error = \(x) FALSE)) {
+      x$table_styling$footnote_header <- x$table_styling$footnote_header |>
+        dplyr::bind_rows(
+          dplyr::tibble(
+            column = columns,
+            footnote = footnote,
+            text_interpret = paste0("gt::", text_interpret),
+            remove = is.na(footnote)
+          )
         )
-      )
+    }
+    else {
+      x$table_styling$footnote_body <- x$table_styling$footnote_body |>
+        dplyr::bind_rows(
+          dplyr::tibble(
+            column = columns,
+            rows = list(rows),
+            footnote = footnote,
+            text_interpret = paste0("gt::", text_interpret),
+            remove = is.na(footnote)
+          )
+        )
+    }
   }
 
   # footnote_abbrev ------------------------------------------------------------
   if (!is_empty(footnote_abbrev)) {
-    x$table_styling$footnote_abbrev <-
+    x$table_styling$abbreviation <- x$table_styling$abbreviation |>
       dplyr::bind_rows(
-        x$table_styling$footnote_abbrev,
         dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          text_interpret = text_interpret,
-          footnote = footnote_abbrev
+          abbreviation = footnote_abbrev,
+          text_interpret = paste0("gt::", text_interpret)
         )
       )
   }

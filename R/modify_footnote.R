@@ -20,7 +20,7 @@ NULL
 #' @rdname modify_footnote
 modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md", "html")) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
+  updated_call_list <- c(x$call_list, list(modify_footnote_header = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
@@ -36,20 +36,25 @@ modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md"
   # evaluate the strings with glue ---------------------------------------------
   lst_footnotes <- .evaluate_string_with_glue(x, rep_named(columns, list(footnote)))
 
-  # add updates to `x$table_styling$footnote_header` and return table ----------
-  .modify_footnote_header(
-    x,
-    lst_footnotes = lst_footnotes,
-    text_interpret = text_interpret,
-    remove = FALSE
-  )
+  # add updates to `x$table_styling$footnote_header` ---------------------------
+  x <-
+    .modify_footnote_header(
+      x,
+      lst_footnotes = lst_footnotes,
+      text_interpret = text_interpret,
+      remove = FALSE
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export
 #' @rdname modify_footnote
 modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c("md", "html")) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
+  updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
@@ -66,21 +71,26 @@ modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c(
   # evaluate the strings with glue ---------------------------------------------
   lst_footnotes <- .evaluate_string_with_glue(x, rep_named(columns, list(footnote)))
 
-  # add updates to `x$table_styling$footnote_body` and return table ------------
-  .modify_footnote_body(
-    x,
-    lst_footnotes = lst_footnotes,
-    rows = {{ rows }},
-    text_interpret = text_interpret,
-    remove = FALSE
-  )
+  # add updates to `x$table_styling$footnote_body` -----------------------------
+  x <-
+    .modify_footnote_body(
+      x,
+      lst_footnotes = lst_footnotes,
+      rows = {{ rows }},
+      text_interpret = text_interpret,
+      remove = FALSE
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export
 #' @rdname modify_footnote
 remove_footnote_header <- function(x, column) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
+  updated_call_list <- c(x$call_list, list(remove_footnote_header = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
@@ -90,13 +100,25 @@ remove_footnote_header <- function(x, column) {
     scope_header(x$table_body, x$table_styling$header),
     columns = {{ columns }}
   )
+
+  # add updates to `x$table_styling$footnote_header` ---------------------------
+  x <-
+    .modify_footnote_header(
+      x,
+      lst_footnotes = rep_named(columns, list(NA_character_)),
+      remove = FALSE
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export
 #' @rdname modify_footnote
 remove_footnote_body <- function(x, columns, rows) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
+  updated_call_list <- c(x$call_list, list(remove_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
@@ -108,6 +130,18 @@ remove_footnote_body <- function(x, columns, rows) {
     columns = {{ columns }}
   )
 
+  # add updates to `x$table_styling$footnote_body` -----------------------------
+  x <-
+    .modify_footnote_body(
+      x,
+      lst_footnotes = rep_named(columns, list(NA_character_)),
+      rows = {{ rows }},
+      remove = TRUE
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }
 
 # this checks the rows argument evaluates to a lgl in `x$table_body`

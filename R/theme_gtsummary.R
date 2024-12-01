@@ -190,8 +190,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                                            all_categorical() ~ "{n} ({p})"),
         "pkgwide-str:ci.sep" = " to ",
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
-          x$table_styling$footnote$footnote <-
-            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x$table_styling$footnote_header$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote_header$footnote)
           x
         }
       )
@@ -258,8 +258,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to ",
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
-          x$table_styling$footnote$footnote <-
-            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x$table_styling$footnote_header$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote_header$footnote)
           x
         }
       )

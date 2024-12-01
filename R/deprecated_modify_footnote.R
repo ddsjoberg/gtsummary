@@ -1,7 +1,7 @@
 #' Deprecated Footnote
 #'
 #' `r lifecycle::badge("deprecated")`\cr
-#' Use [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`] instead.
+#' Use [`modify_footnote_header()`] and [`modify_abbreviation()`] instead.
 #'
 #' @inheritParams modify
 #' @param abbreviation (scalar `logical`)\cr
