@@ -2,7 +2,7 @@
 #'
 #' @description
 #'
-#' \lifecycle{deprecated}\cr
+#' `r lifecycle::badge('deprecated')`\cr
 #' # Overview
 #'
 #' When the gtsummary package was first written, the gt package was not on CRAN
