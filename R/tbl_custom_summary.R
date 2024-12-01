@@ -1,6 +1,6 @@
 #' Create a table of summary statistics using a custom summary function
 #'
-#' \lifecycle{experimental}\cr
+#' `r lifecycle::badge('experimental')`\cr
 #' The `tbl_custom_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' This function is similar to [tbl_summary()] but allows you to provide

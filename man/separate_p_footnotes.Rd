@@ -11,7 +11,7 @@ separate_p_footnotes(x)
 Object with class \code{"tbl_summary"} or \code{"tbl_svysummary"}}
 }
 \description{
-\lifecycle{questioning}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}\cr
 The usual presentation of footnotes for p-values on a gtsummary table is
 to have a single footnote that lists all statistical tests that were used to
 compute p-values on a given table. The \code{separate_p_footnotes()} function

@@ -86,7 +86,6 @@ If an error occurs, the tidying of the model is attempted with
 \code{parameters::model_parameters()}, if installed.}
 }
 \description{
-\lifecycle{maturing}
 Collection of tidiers that can be utilized in gtsummary. See details below.
 }
 \section{Regression Model Tidiers}{
