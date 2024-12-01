@@ -1,6 +1,6 @@
 #' Summarize a continuous variable
 #'
-#' \lifecycle{deprecated}
+#' `r lifecycle::badge('deprecated')`\cr
 #' This helper, to be used with [`tbl_custom_summary()`], creates a function
 #' summarizing a continuous variable.
 #'
@@ -30,7 +30,7 @@ continuous_summary <- function(variable) {
 
 #' Summarize the ratio of two variables
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing the ratio of two continuous variables and its confidence interval.
 #'
@@ -102,7 +102,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 
 #' Summarize a proportion
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing a proportion and its confidence interval.
 #'

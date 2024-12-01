@@ -1,6 +1,5 @@
 #' Stratified gtsummary tables
 #'
-#' \lifecycle{maturing}\cr
 #' Build a stratified gtsummary table. Any gtsummary table that accepts
 #' a data frame as its first argument can be stratified.
 #' - In `tbl_strata()`, the stratified or subset data frame is passed to the
