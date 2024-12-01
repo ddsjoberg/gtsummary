@@ -72,7 +72,6 @@ The evaluated value of \code{.header} is also available within \code{tbl_strata2
 \item{.quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-\lifecycle{maturing}\cr
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 \itemize{
