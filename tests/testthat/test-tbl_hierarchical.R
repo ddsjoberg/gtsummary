@@ -125,7 +125,7 @@ test_that("tbl_hierarchical(label) works properly", {
     label = list(stage = "My Stage", grade = "My Grade")
   )
   expect_snapshot(res |> as.data.frame())
-  expect_snapshot_value(res$table_styling$header$label[4])
+  expect_snapshot_value(res$table_styling$header$label[6])
 
   # errors thrown when bad label argument passed
   expect_snapshot(
@@ -143,6 +143,29 @@ test_that("tbl_hierarchical(digits) works properly", {
   )
   expect_snapshot(res |> as.data.frame())
   expect_equal(res$table_body$stat_0[1], "36 (68%)")
+
+  # testing passing vector
+  expect_equal(
+    tbl_hierarchical(
+      data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+      digits = grade ~ 2
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "18.00 (100.00%)"
+  )
+  expect_equal(
+    tbl_hierarchical(
+      data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+      digits = grade ~ c(0, 2)
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "18 (100.00%)"
+  )
+
 
   # errors thrown when bad digits argument passed
   expect_snapshot(
@@ -273,7 +296,7 @@ test_that("tbl_hierarchical_count(label) works properly", {
     data = trial, variables = c(stage, grade), label = list(stage = "My Stage", grade = "My Grade")
   )
   expect_snapshot(res |> as.data.frame())
-  expect_snapshot_value(res$table_styling$header$label[4])
+  expect_snapshot_value(res$table_styling$header$label[6])
 
   # errors thrown when bad label argument passed
   expect_snapshot(
@@ -320,4 +343,28 @@ test_that("tbl_hierarchical_count with 10+ hierarchy variables", {
     tbl_hierarchical_count(data = data, variables = names(data), include = "x10")
   )
   expect_snapshot(res |> as.data.frame())
+})
+
+# tbl_hierarchical_count table_body enables sorting ----------------------------------------
+test_that("tbl_hierarchical_count table_body enables sorting", {
+  withr::local_options(list(width = 250))
+
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(SEX, AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      id = USUBJID,
+      overall_row = TRUE
+    )
+  )
+
+  expect_snapshot(res$table_body)
 })

@@ -125,7 +125,29 @@ brdg_hierarchical <- function(cards,
     table_body <- dplyr::bind_rows(over_row, table_body)
   }
 
-  table_body <- table_body |> select(-cards::all_ard_groups())
+  # add hierarchy levels to table_body for sorting & filtering -----------------
+  table_body <- table_body |>
+    dplyr::relocate(cards::all_ard_groups(), .after = "row_type") |>
+    mutate(across(cards::all_ard_groups(), .fns = ~str_replace(., "^ $", NA)))
+  if (n_by > 0 && length(variables) > 1) {
+    which_gps <- which(names(table_body) %in% (table_body |> select(cards::all_ard_groups()) |> names()))
+    if (n_by > 0) {
+      names(table_body)[which_gps] <- sapply(
+        names(table_body)[which_gps],
+        function(x) {
+          n <- as.numeric(gsub(".*([0-9]+).*", "\\1", x)) - n_by
+          gsub("[0-9]+", n, x)
+        }
+      )
+    }
+    for (i in which_gps[c(TRUE, FALSE)]) {
+      lbl_row <- which(is.na(table_body[i]) & !is.na(table_body[i + 1]))
+      table_body[lbl_row, i] <- table_body$variable[lbl_row]
+    }
+  }
+  if (overall_row && "group1" %in% names(table_body)) {
+    table_body$group1[table_body$variable == "..ard_hierarchical_overall.."] <- "..ard_hierarchical_overall.."
+  }
 
   # construct default table_styling --------------------------------------------
   x <- .create_gtsummary_object(table_body)

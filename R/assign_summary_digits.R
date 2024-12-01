@@ -27,7 +27,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   # stats returned for all variables
   lst_cat_summary_fns <-
     case_switch(
-      inherits(data, "data.frame") ~ .categorical_summary_functions(c("n", "p")),
+      inherits(data, "data.frame") ~ .categorical_summary_functions(c("n", "N", "p")),
       inherits(data, "survey.design") ~
         .categorical_summary_functions(c("n", "N", "p",
                                          "n_unweighted", "N_unweighted", "p_unweighted",

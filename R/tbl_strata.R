@@ -54,7 +54,7 @@
 #' @author Daniel D. Sjoberg
 #' @name tbl_strata
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom"))
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(age, grade, stage, trt) |>

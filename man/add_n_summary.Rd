@@ -74,7 +74,7 @@ For each variable in a \code{tbl_summary} table, the \code{add_n} function adds 
 total number of non-missing (or missing) observations
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("survey", "cardx"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("survey", "cardx"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   tbl_summary(by = trt, include = c(trt, age, grade, response)) |>

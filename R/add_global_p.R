@@ -29,7 +29,7 @@
 #' @author Daniel D. Sjoberg
 #' @name add_global_p
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "car", "parameters"))
 #' # Example 1 ----------------------------------
 #' lm(marker ~ age + grade, trial) |>
 #'   tbl_regression() |>
