@@ -1,6 +1,6 @@
 #' Deprecated functions
 #'
-#' \lifecycle{deprecated}\cr
+#' `r lifecycle::badge('deprecated')`\cr
 #' Some functions have been deprecated and are no longer being actively
 #' supported.
 #'

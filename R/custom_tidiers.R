@@ -1,7 +1,6 @@
 #' Custom tidiers
 #'
 #' @description
-#' \lifecycle{maturing}
 #' Collection of tidiers that can be utilized in gtsummary. See details below.
 #'
 #' # Regression Model Tidiers

@@ -4,7 +4,7 @@
 \alias{deprecated_ci_column}
 \title{Column \code{"ci"} Deprecated}
 \description{
-\lifecycle{deprecated}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}\cr
 }
 \section{Overview}{
 When the gtsummary package was first written, the gt package was not on CRAN

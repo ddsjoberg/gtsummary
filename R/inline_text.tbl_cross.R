@@ -1,6 +1,5 @@
 #' Report statistics from cross table inline
 #'
-#' \lifecycle{maturing}
 #' Extracts and returns statistics from a `tbl_cross` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
