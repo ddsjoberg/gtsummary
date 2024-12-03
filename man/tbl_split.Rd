@@ -26,7 +26,7 @@ will be separated after each of these variables)}
 \code{tbl_split} object
 }
 \description{
-\lifecycle{experimental}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 The \code{tbl_split} function splits a single gtsummary table into multiple tables.
 Updates to the print method are expected.
 }
