@@ -9,25 +9,24 @@ test_that("pkgwide-fn:prependpvalue_fun works", {
       "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 3, prepend_p = TRUE)
     )
 
-  # Set the theme
-  set_gtsummary_theme(my_theme_1)
-
-  # Store the table#
+  # Create a summary table#
   gts_1 <-
     trial |>
     tbl_summary(
       by = trt,
-      include = c(trt, age),
+      include = c(trt, age)
     ) |>
     add_p()
 
+  # Apply the theme to the table and pull out the p-value#
+  gts_1_pvalue <-
+    with_gtsummary_theme(
+      x = my_theme_1,
+      expr = inline_text(x = gts_1, variable = age, column = "p.value")
+    )
+
   # Test that the p-value has 3 digits#
-  expect_true(
-    inline_text(gts_1, variable = age, column = "p.value") |>
-      grepl(pattern = "p=0.\\d{3}", x = _)
-  )
-  # Reset the theming#
-  reset_gtsummary_theme()
+  expect_equal(gts_1_pvalue, "p=0.718")
 }
 )
 
@@ -35,35 +34,33 @@ test_that("pkgwide-fn:prependpvalue_fun works", {
 # Create a theme#
 my_theme_2 <-
   list(
-    # Prepend p value, with 3 place digits
-    "pkgwide-fn:pvalue_fun" = label_style_pvalue(digits = 1, prefix = "Totally Awesome P Value = ", "OutDec" = ","),
+    # Pvalue with 2 place digits and custom decimal mark
+    "pkgwide-fn:pvalue_fun" = label_style_pvalue(digits = 2, decimal.mark = "++"),
     # set messaging to quiet
     "pkgwide-lgl:quiet" = TRUE,
     # configurar el idioma en español#
     "pkgwide-str:language" = "es"
   )
 
-# Set the theme
-set_gtsummary_theme(my_theme_2)
 
-# Store the table#
-gts_2 <-
-  trial |>
-  tbl_summary(
-    by = trt,
-    statistic = age ~ "{mean} ({sd})",
-    include = c(trt, age),
-  ) |>
-  add_p()
+# Apply the theme to the table and pull out the p-vale#
+gts_2_pvalue <-
+  with_gtsummary_theme(
+    x = my_theme_2,
+    expr = trial |>
+      tbl_summary(
+        by = trt,
+        include = c(trt, age),
+      ) |>
+      add_p() |>
+      inline_text.gtsummary(x = _, variable = age, column = "p.value")
+  )
 
-### pkgwide-fn:pvalue_fun--------------------------------------------------------
+### pkgwide-fn:pvalue_fun-------------------------------------------------------
 test_that("pkgwide-fn:pvalue_fun works", {
 
-  # Test that the p-value has the correct digits and prefix#
-  expect_true(
-    inline_text.gtsummary(gts_2, variable = age, column = "p.value") |>
-      grepl(pattern = "Totally Awesome P Value = 0.\\d{1}", x = _)
-  )
+  # Test that the p-value has the decimal mark#
+  expect_equal(gts_2_pvalue, "0++72")
 
 }
 )
@@ -72,8 +69,11 @@ test_that("pkgwide-fn:pvalue_fun works", {
 test_that("pkgwide-lgl:quiet works", {
 
   # Test that the lgl value can be found#
-  expect_true(
-    get_theme_element("pkgwide-lgl:quiet")
+  expect_silent(
+    with_gtsummary_theme(
+      x = my_theme_2,
+      expr = get_theme_element("pkgwide-lgl:quiet")
+    )
   )
 }
 )
@@ -81,16 +81,23 @@ test_that("pkgwide-lgl:quiet works", {
 ## pkgwide-str:language---------------------------------------------------------
 test_that("pkgwide-str:language works", {
 
-  # Test that the CI has the correct pattern somewhere#
-  expect_snapshot(
-    show_header_names(gts_2)
-  )
+  # Pull out the headers to see if the language changed#
+  vec_gts2_headers <-
+    with_gtsummary_theme(
+      x = my_theme_2,
+      expr = trial |>
+        tbl_summary(
+          by = trt,
+          include = c(trt, age)
+        ) |>
+        add_p()
+    )[["table_styling"]][["header"]][["label"]]
 
+  # Test that some of the headers were translated to Spanish#
+  expect_contains(vec_gts2_headers, "**Característica**")
 }
 )
 
-# Reset the theme
-reset_gtsummary_theme()
 
 ## pkgwide-str:ci.sep-----------------------------------------------------------
 test_that("pkgwide-str:ci.sep works", {
@@ -98,37 +105,25 @@ test_that("pkgwide-str:ci.sep works", {
   # Create a theme#
   my_theme_3 <-
     list(
-      # Set CI sep to be something *cute*
-      "pkgwide-str:ci.sep" = "~*~",
-      # Have the print engine be kable
-      "pkgwide-str:print_engine" = "kable"
+      # Set CI sep to be something *cute*#
+      "pkgwide-str:ci.sep" = " ~*~"
     )
 
-  # Set the theme
-  set_gtsummary_theme(my_theme_3)
-
-  gts_3 <-
+  # Apply the theme to the table and grab the CI value for age#
+  gts_ci_value <-
     with_gtsummary_theme(
-      my_theme_3,
-      glm(response ~ age + stage, trial, family = binomial) |>
-        tbl_regression(x = _, exponentiate = TRUE),
+      x = my_theme_3,
+      expr = glm(response ~ age + stage, trial, family = binomial) |>
+        tbl_regression(x = _, exponentiate = TRUE) |>
+        inline_text.gtsummary(x = _, variable = age, column = "ci")
     )
 
-  # Test that the CI has the correct pattern somewhere#
-  expect_true(
-    gts_3$table_body$ci |>
-      grepl("~*~", x = _) |>
-      any()
+  # Test that the CI has the correct pattern#
+  expect_equal(
+    gts_ci_value, "1.00 ~*~ 1.04"
   )
-
-  # Reset the theme
-  reset_gtsummary_theme()
-
 }
 )
-
-# Reset the theming#
-reset_gtsummary_theme()
 
 ## pkgwide-str:print_engine-----------------------------------------------------
 test_that("pkgwide-str:print_engine works", {
@@ -136,29 +131,29 @@ test_that("pkgwide-str:print_engine works", {
   # Create a theme#
   my_theme_4 <-
     list(
-      # Have the print engine be kable
+      # Have the print engine be kable#
       "pkgwide-str:print_engine" = "kable"
     )
 
-  # set the theme
-  set_gtsummary_theme(my_theme_4)
-
-  # Set the theme to check that table is in kable format
-  gts_4 <-
+  # Set the theme to check that table is in kable format#
+  gts_4_w_theme <-
     with_gtsummary_theme(
-      my_theme_4,
-      trial |>
+      x = my_theme_4,
+      expr = trial |>
         dplyr::select(death, trt) |>
-        tbl_summary(by = trt)
+        tbl_summary(by = trt) |>
+        print()
     )
 
-  # This only works when a theme is set explicitly
-  # And not when it is just temporarily set with 'with_gtsummary_theme'
-  # Is this intentional behavior?
-  expect_true(grepl("|:-", gts_4) |> any())
+  # Create the same table with as_kable instead#
+  gts_4_w_kable <-
+    trial |>
+    dplyr::select(death, trt) |>
+    tbl_summary(by = trt) |>
+    as_kable()
 
-  # Reset the theme
-  reset_gtsummary_theme()
+  # Test that the print engine output matches the kable version of the table#
+  expect_equal(gts_4_w_theme, gts_4_w_kable)
 }
 )
 
@@ -168,16 +163,19 @@ test_that("pkgwide-str:theme_name works", {
   # Create a theme#
   my_theme_5 <-
     list(
-      # Set a theme name
+      # Set a theme name#
       "pkgwide-str:theme_name" = "Super Cool Themey Theme"
     )
 
-  expect_snapshot(
-    set_gtsummary_theme(my_theme_5)
-  )
+  # Grab the theme name#
+  gts_5_theme_name <-
+    with_gtsummary_theme(
+      x = my_theme_5,
+      expr = get_gtsummary_theme()
+    )[["pkgwide-str:theme_name"]]
 
-  # Reset the theme
-  reset_gtsummary_theme()
+  # Test that the theme name matches as expected#
+  expect_equal(gts_5_theme_name, "Super Cool Themey Theme")
 }
 )
 
@@ -188,25 +186,26 @@ test_that("pkgwide-fun:pre_conversion works", {
   # Create a theme#
   my_theme_6 <-
     list(
-      # Set a fx to use in pre conversion
-      "pkgwide-fun:pre_conversion" = add_ci
+      # Set a fx to use in pre conversion#
+      "pkgwide-fun:pre_conversion" = add_ci,
+      # Have the print engine be kable#
+      "pkgwide-str:print_engine" = "kable"
     )
 
-  # Set the theme
-  set_gtsummary_theme(my_theme_6)
+  # Apply the theme to the table and print it to see pre conversions#
   gts_6 <-
-    trial |>
-    dplyr::select(death, trt) |>
-    tbl_summary(by = trt)
+    with_gtsummary_theme(
+      x = my_theme_6,
+      expr = trial |>
+        dplyr::select(death, trt) |>
+        tbl_summary(by = trt) |>
+        print()
+    )
 
-  # This only works when a theme is set explicitly
-  # And not when it is just temporarily set with 'with_gtsummary_theme'
-  # Is this intentional behavior?
+  # Test that the table includes the CI column#
   expect_snapshot(
     gts_6
   )
 
-  # Reset the theme
-  reset_gtsummary_theme()
 }
 )
