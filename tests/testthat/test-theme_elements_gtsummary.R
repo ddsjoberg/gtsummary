@@ -119,9 +119,7 @@ test_that("pkgwide-str:ci.sep works", {
     )
 
   # Test that the CI has the correct pattern#
-  expect_equal(
-    gts_ci_value, "1.00 ~*~ 1.04"
-  )
+  expect_equal(gts_ci_value, "1.00 ~*~ 1.04")
 }
 )
 
