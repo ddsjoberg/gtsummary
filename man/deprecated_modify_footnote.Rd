@@ -3,7 +3,7 @@
 \name{deprecated_modify_footnote}
 \alias{deprecated_modify_footnote}
 \alias{modify_footnote}
-\title{Deprecated Footnote}
+\title{DEPRECATED Footnote}
 \usage{
 modify_footnote(
   x,
@@ -37,7 +37,7 @@ Updated gtsummary object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}\cr
-Use \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_abbreviation]{modify_abbreviation()}} instead.
+Use \code{\link[=modify_footnote_header]{modify_footnote_header()}} and \code{\link[=modify_abbreviation]{modify_abbreviation()}} instead.
 }
 \examples{
 # Use `modify_footnote_header()`, `modify_footnote_body()`, `modify_abbreviation()` instead.

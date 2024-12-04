@@ -127,13 +127,25 @@
     dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     dplyr::ungroup()
 
-  # footnote -------------------------------------------------------------------
-  x$table_styling$footnote <-
-    .table_styling_expr_to_row_number_footnote(x, "footnote")
+  # footnote_header ------------------------------------------------------------
+  x$table_styling$footnote_header <-
+    x$table_styling$footnote_header |>
+    dplyr::slice_tail(n = 1L, by = "column") |>
+    dplyr::filter(!remove)
 
-  # footnote_abbrev ------------------------------------------------------------
-  x$table_styling$footnote_abbrev <-
-    .table_styling_expr_to_row_number_footnote(x, "footnote_abbrev")
+  # footnote_body --------------------------------------------------------------
+  x$table_styling$footnote_body <-
+    .table_styling_expr_to_row_number_footnote(x, "footnote_body")
+
+  # abbreviation ---------------------------------------------------------------
+  abbreviation_cols <-
+    x$table_styling$header$column[!x$table_styling$header$hide] |>
+    union(discard(x$table_styling$cols_merge$pattern, is.na) |> .extract_glue_elements()) |>
+    union(NA_character_)
+  x$table_styling$abbreviation <-
+    x$table_styling$abbreviation |>
+    dplyr::filter(.data$column %in% .env$abbreviation_cols) |>
+    dplyr::slice_tail(n = 1L, by = "abbreviation")
 
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-

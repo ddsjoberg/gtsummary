@@ -33,7 +33,7 @@ test_that("modify_footnote(...) works", {
     tbl |>
       modify_footnote(label = "Variable") |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::filter(column %in% "label") |>
       dplyr::pull("footnote"),
     "Variable",
@@ -73,7 +73,7 @@ test_that("modify_footnote(...) dynamic headers work with `tbl_summary()`", {
     tbl |>
       modify_footnote(!!!list(label = "Variable", stat_0 = "Overall")) |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::slice_tail(by = "column", n = 1) |>
       dplyr::filter(column %in% c("label", "stat_0")) |>
       dplyr::pull("footnote"),
@@ -134,7 +134,7 @@ test_that("modify_footnote(text_interpret) works", {
     tbl_summary(trial, include = marker) |>
       modify_footnote(label = "Variable", text_interpret = "html") |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::slice_tail(by = "column", n = 1) |>
       dplyr::filter(column %in% "label") |>
       dplyr::pull(text_interpret),
@@ -147,7 +147,7 @@ test_that("modify_footnote() with tbl_svysummary()", {
     tbl_summary(trial, include = marker) |>
       modify_footnote(label = "Variable", text_interpret = "html") |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::slice_tail(by = "column", n = 1) |>
       dplyr::filter(column %in% "label") |>
       dplyr::pull(text_interpret),
@@ -164,7 +164,7 @@ test_that("modify_footnote() works with tbl_svysummary()", {
       add_overall() |>
       modify_footnote(all_stat_cols() ~ "{level} | N = {N} | n = {n} | p = {style_percent(p)}%") |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::slice_tail(by = "column", n = 1) |>
       dplyr::filter(startsWith(column, "stat_")) |>
       dplyr::pull("footnote"),
@@ -179,7 +179,7 @@ test_that("modify_footnote() works with tbl_continuous()", {
                  add_overall() |>
                  modify_footnote(all_stat_cols() ~ "{level} | N = {N} | n = {n} | p = {style_percent(p)}%") |>
                  getElement("table_styling") |>
-                 getElement("footnote") |>
+                 getElement("footnote_header") |>
                  dplyr::slice_tail(by = "column", n = 1) |>
                  dplyr::filter(startsWith(column, "stat_")) |>
                  dplyr::pull("footnote"),
@@ -194,7 +194,7 @@ test_that("modify_footnote() works with tbl_cross()", {
   expect_equal(tbl_cross(data = trial, row = trt, col = response) |>
                  modify_footnote(stat_0 = "Total Response") |>
                  getElement("table_styling") |>
-                 getElement("footnote") |>
+                 getElement("footnote_header") |>
                  dplyr::slice_tail(by = "column", n = 1) |>
                  dplyr::filter(column == "stat_0") |>
                  dplyr::pull("footnote"),
@@ -209,7 +209,7 @@ test_that("modify_footnote() works with tbl_regression()", {
                  tbl_regression(exponentiate = TRUE) |>
                  modify_footnote(estimate = "Estimate") |>
                  getElement("table_styling") |>
-                 getElement("footnote") |>
+                 getElement("footnote_header") |>
                  dplyr::slice_tail(by = "column", n = 1) |>
                  dplyr::filter(column == "estimate") |>
                  dplyr::pull("footnote"),
@@ -222,7 +222,7 @@ test_that("modify_footnote() works with tbl_uvregression()", {
                                 exponentiate = TRUE, include = c("age", "grade")) |>
                  modify_footnote(estimate = "Estimate") |>
                  getElement("table_styling") |>
-                 getElement("footnote") |>
+                 getElement("footnote_header") |>
                  dplyr::slice_tail(by = "column", n = 1) |>
                  dplyr::filter(column == "estimate") |>
                  dplyr::pull("footnote"),

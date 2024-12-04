@@ -88,7 +88,7 @@ modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c(
 
 #' @export
 #' @rdname modify_footnote
-remove_footnote_header <- function(x, column) {
+remove_footnote_header <- function(x, columns) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_header = match.call()))
 

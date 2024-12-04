@@ -239,7 +239,7 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
   )
 
   tbl_fa <- tbl_fn |>
-    modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
+    modify_abbreviation("N = number of observations")
   ft_tbl_fa <- tbl_fa |> as_flex_table()
 
   # footnote_abbrev
@@ -256,10 +256,8 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
 
   # customized footnotes
   tbl <- my_tbl_summary |>
-    modify_footnote(
-      all_stat_cols() ~ "replace old footnote",
-      label = "another new footnote"
-    )
+    modify_footnote_header("replace old footnote", columns = all_stat_cols()) |>
+    modify_footnote_header("another new footnote", columns = label)
   ft_tbl <- tbl |> as_flex_table()
 
   fn1 <- ft_tbl$footer$content$data[1, ]$label$txt
@@ -276,7 +274,7 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
 test_that("as_flex_table passes multiple table footnotes correctly", {
   # testing one footnote passed to multiple columns and rows, addresses issue #2062
   out <- my_tbl_summary |>
-    modify_footnote(stat_0 = NA) |>
+    remove_footnote_header(stat_0) |>
     modify_table_styling(
       columns = c(label, stat_0),
       rows = (variable %in% "trt") & (row_type == "level"),

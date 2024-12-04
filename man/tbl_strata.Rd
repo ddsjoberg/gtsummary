@@ -127,7 +127,7 @@ trial |>
         ) |>
         add_ci(pattern = "{stat} ({ci})") |>
         modify_header(stat_0 = "**Rate (95\% CI)**") |>
-        modify_footnote(stat_0 = NA),
+        remove_footnote(stat_0),
     .combine_with = "tbl_stack",
     .combine_args = list(group_header = NULL)
   ) |>

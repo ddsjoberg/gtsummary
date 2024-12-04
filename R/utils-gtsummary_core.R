@@ -28,12 +28,6 @@
       hide = ifelse(.data$column %in% "label", FALSE, .data$hide),
       align = ifelse(.data$column %in% "label", "left", .data$align)
     )
-
-  x$table_styling$footnote <-
-    dplyr::tibble(
-      column = character(), rows = list(),
-      text_interpret = character(), footnote = character()
-    )
   x$table_styling$footnote_header <-
     dplyr::tibble(
       column = character(), footnote = character(),
@@ -46,13 +40,9 @@
     )
   x$table_styling$abbreviation <-
     dplyr::tibble(
+      column = character(),
       abbreviation = character(),
       text_interpret = character()
-    )
-  x$table_styling$footnote_abbrev <-
-    dplyr::tibble(
-      column = character(), rows = list(),
-      text_interpret = character(), footnote = character()
     )
   x$table_styling$source_note <-
     dplyr::tibble(

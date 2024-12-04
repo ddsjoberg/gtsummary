@@ -4,7 +4,7 @@
 \alias{modify_abbreviation}
 \title{Modify Abbreviations}
 \usage{
-modify_abbreviation(x, abbreviation)
+modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -12,6 +12,11 @@ A gtsummary object}
 
 \item{abbreviation}{(\code{string})\cr
 a string}
+
+\item{text_interpret}{(\code{string})\cr
+String indicates whether text will be interpreted with
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
+Applies to tables printed with \code{{gt}}.}
 }
 \value{
 Updated gtsummary object
@@ -21,5 +26,12 @@ All abbreviations will be coalesced when printing the final table into
 a single source note.
 }
 \examples{
-# TODO: Add examples
+tbl_summary(
+  trial,
+  by = trt,
+  include = age,
+  type = age ~ "continuous2"
+) |>
+  modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
+  modify_abbreviation("IQR = Interquartile Range")
 }

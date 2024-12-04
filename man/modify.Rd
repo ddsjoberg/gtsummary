@@ -43,7 +43,6 @@ Updated gtsummary object
 These functions assist with modifying the aesthetics/style of a table.
 \itemize{
 \item \code{modify_header()} update column headers
-\item \code{modify_footnote()} update/add table footnotes
 \item \code{modify_spanning_header()} update/add spanning headers
 }
 
@@ -80,23 +79,21 @@ tbl <- trial |>
 show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers and footnote
+# updating column headers
 tbl |>
-  modify_header(label = "**Variable**", p.value = "**P**") |>
-  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade")
+  modify_header(label = "**Variable**", p.value = "**P**")
 
 # Example 2 ----------------------------------
-# updating headers, remove all footnotes, add spanning header
+# updating headers add spanning header
 tbl |>
   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") |>
-  modify_footnote(everything() ~ NA) |>
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
 
 # Example 3 ----------------------------------
 # updating an abbreviation in table footnote
 glm(response ~ age + grade, trial, family = binomial) |>
   tbl_regression(exponentiate = TRUE) |>
-  modify_footnote(conf.low = "CI = Credible Interval", abbreviation = TRUE)
+  modify_abbreviation("CI = Credible Interval")
 }
 \author{
 Daniel D. Sjoberg

@@ -229,7 +229,7 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
   )
 
   tbl_fa <- tbl_fn |>
-    modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
+    modify_abbreviation("N = number of observations")
   gt_tbl_fa <- tbl_fa |> as_gt()
 
   # footnote_abbrev
@@ -251,10 +251,8 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
 
   # customized footnotes
   tbl <- my_tbl_summary |>
-    modify_footnote(
-      all_stat_cols() ~ "replace old footnote",
-      label = "another new footnote"
-    )
+    modify_footnote_header("replace old footnote", columns = all_stat_cols()) |>
+    modify_footnote_header("another new footnote", columns = label)
   gt_tbl <- tbl |> as_gt()
 
   expect_equal(
@@ -318,7 +316,7 @@ test_that("as_gt passes appended glance statistics correctly", {
   )
   expect_equal(
     tbl$table_styling$source_note$source_note,
-    gt_tbl$`_source_notes`[[1]],
+    gt_tbl$`_source_notes`[[2]],
     ignore_attr = "class"
   )
   expect_equal(

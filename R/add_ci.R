@@ -59,7 +59,7 @@
 #'     include = c(response, grade)
 #'   ) |>
 #'   add_ci(pattern = "{stat} ({ci})") |>
-#'   modify_footnote(everything() ~ NA)
+#'   remove_footnote_header(everything())
 NULL
 
 #' @rdname add_ci
@@ -293,10 +293,7 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
       modify_header(
         matches("^ci_stat_\\d+$") ~ paste0("**", conf.level * 100, "% ", translate_string("CI"), "**")
       ) |>
-      modify_footnote(
-        matches("^ci_stat_\\d+$") ~ translate_string("CI = Confidence Interval"),
-        abbreviation = TRUE
-      )
+      modify_abbreviation(translate_string("CI = Confidence Interval"))
   }
   else {
     # get the stat column index numbers, eg get the 1 and 2 from stat_1 and stat_2
@@ -327,10 +324,7 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
     x <-
       cols_merge_expr |>
       reduce(\(.x, .y) inject(!!.x %>% !!.y), .init = x) |>
-      modify_footnote(
-        all_stat_cols() ~ translate_string("CI = Confidence Interval"),
-        abbreviation = TRUE
-      )
+      modify_abbreviation(translate_string("CI = Confidence Interval"))
 
     # updating header using `pattern=` argument
     x$table_styling$header <-

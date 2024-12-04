@@ -236,54 +236,42 @@ table_styling_to_gt_calls <- function(x, ...) {
 
 
   # tab_footnote ---------------------------------------------------------------
-  if (nrow(x$table_styling$footnote) == 0 &&
-    nrow(x$table_styling$footnote_abbrev) == 0) {
-    gt_calls[["tab_footnote"]] <- list()
-  } else {
-    df_footnotes <-
-      dplyr::bind_rows(
-        x$table_styling$footnote,
-        x$table_styling$footnote_abbrev
-      ) |>
-      tidyr::nest(row_numbers = "row_numbers") %>%
-      dplyr::mutate(
-        # columns = .data$data %>% dplyr::pull("column") %>% list(),
-        rows = map(.data$row_numbers, \(x) unlist(x) |> unname())
-      )
-    df_footnotes$footnote_exp <-
-      map2(
-        df_footnotes$text_interpret,
-        df_footnotes$footnote,
-        ~ call2(parse_expr(.x), .y)
-      )
-
-
-    gt_calls[["tab_footnote"]] <-
-      pmap(
-        list(
-          df_footnotes$tab_location, df_footnotes$footnote_exp,
-          df_footnotes$column, df_footnotes$rows
-        ),
-        function(tab_location, footnote, column, rows) {
-          if (tab_location == "header") {
-            return(expr(
-              gt::tab_footnote(
-                footnote = !!footnote,
-                locations = gt::cells_column_labels(columns = !!column)
-              )
-            ))
-          }
-          if (tab_location == "body") {
-            return(expr(
-              gt::tab_footnote(
-                footnote = !!footnote,
-                locations = gt::cells_body(columns = !!column, rows = !!rows)
-              )
-            ))
-          }
+  gt_calls[["tab_footnote"]] <-
+    c(
+      # header footnotes
+      map(
+        seq_len(nrow(x$table_styling$footnote_header)),
+        function(i) {
+          expr(
+            gt::tab_footnote(
+              footnote =
+                !!call2(
+                  parse_expr(x$table_styling$footnote_header$text_interpret[i]),
+                  x$table_styling$footnote_header$footnote[i]
+                ),
+              locations = gt::cells_column_labels(columns = !!x$table_styling$footnote_header$column[i])
+            )
+          )
+        }
+      ),
+      # body footnotes
+      map(
+        seq_len(nrow(x$table_styling$footnote_body)),
+        function(i) {
+          expr(
+            gt::tab_footnote(
+              footnote =
+                !!call2(
+                  parse_expr(x$table_styling$footnote_body$text_interpret[i]),
+                  x$table_styling$footnote_body$footnote[i]
+                ),
+              locations = gt::cells_column_labels(columns = !!x$table_styling$footnote_body$column[i],
+                                                  rows = !!x$table_styling$footnote_body$rows[i])
+            )
+          )
         }
       )
-  }
+    )
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
@@ -321,9 +309,32 @@ table_styling_to_gt_calls <- function(x, ...) {
       )
   }
 
+  # abbreviation  --------------------------------------------------------------
+  gt_calls[["abbreviations"]] <-
+    case_switch(
+      nrow(x$table_styling$abbreviation) > 0L ~
+        expr(
+          gt::tab_source_note(
+            source_note =
+              !!call2(
+                parse_expr(dplyr::last(x$table_styling$abbreviation$text_interpret)),
+                x$table_styling$abbreviation$abbreviation |>
+                  paste(collapse = ", ") %>%
+                  paste0(
+                    ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
+                    ": ", .
+                  )
+              )
+          )
+        ),
+      .default = list()
+    )
+
+
   # tab_source_note  -----------------------------------------------------------
   # adding other calls from x$table_styling$source_note
   gt_calls[["tab_source_note"]] <-
+    # source notes
     map(
       seq_len(nrow(x$table_styling$source_note)),
       \(i) {
@@ -334,7 +345,6 @@ table_styling_to_gt_calls <- function(x, ...) {
         )
       }
     )
-
 
   # cols_hide ------------------------------------------------------------------
   gt_calls[["cols_hide"]] <-

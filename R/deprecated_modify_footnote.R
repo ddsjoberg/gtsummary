@@ -1,4 +1,4 @@
-#' Deprecated Footnote
+#' DEPRECATED Footnote
 #'
 #' `r lifecycle::badge("deprecated")`\cr
 #' Use [`modify_footnote_header()`] and [`modify_abbreviation()`] instead.
