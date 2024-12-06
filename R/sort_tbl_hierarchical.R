@@ -12,8 +12,8 @@
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'`.
 #' @param sort (`string`)\cr
 #'   Specifies sorting to perform. Values must be one of `c("alphanumeric", "frequency")`. Default is `"frequency"`.
-#' @param ascending (`logical`)\cr
-#'   Whether to sort rows in ascending or descending order. Default is descending (`ascending = FALSE`).
+#' @param desc (scalar `logical`)\cr
+#'   Whether to sort rows in ascending or descending order. Default is descending (`desc = TRUE`).
 #' @param .stat (`string`)\cr
 #'   Statistic to use for sorting when `sort = "frequency"`. This statistic must be present in the table for all
 #'   hierarchy levels.
@@ -33,11 +33,10 @@
 #'   by = TRTA,
 #'   denominator = cards::ADSL |> mutate(TRTA = ARM),
 #'   id = USUBJID,
-#'   include = AETERM,
 #'   overall_row = TRUE
 #' )
 #'
-#' tbl_sort(tbl, .stat = "N")
+#' tbl_sort(tbl)
 NULL
 
 #' @rdname sort_tbl_hierarchical
@@ -51,11 +50,11 @@ tbl_sort <- function(x, ...) {
 
 #' @rdname sort_tbl_hierarchical
 #' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", ascending = FALSE, .stat = "n") {
+tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat = "n") {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
-  check_logical(ascending)
+  check_scalar_logical(desc)
 
   if (!sort %in% c("frequency", "alphanumeric")) {
     cli::cli_abort(
@@ -71,7 +70,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", ascending = FALSE, 
     )
 
     x$table_body <- x$table_body |>
-      arrange(across(sort_cols, ~ if (!ascending) desc(.x) else .x))
+      arrange(across(sort_cols, ~ if (desc) desc(.x) else .x))
   } else {
     x <- .append_sort_counts(x, .stat)
     u_cols <- x$table_body |> select(cards::all_ard_groups("names")) |> unlist() |> unique()
@@ -101,7 +100,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", ascending = FALSE, 
     ), "inner_var", "count_total", "label")
 
     x$table_body <- x$table_body |>
-      arrange(across(sort_cols, ~ if (is.numeric(.x) && !ascending) desc(.x) else .x))
+      arrange(across(sort_cols, ~ if (is.numeric(.x) && desc) desc(.x) else .x))
   }
 
   x
