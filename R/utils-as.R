@@ -131,7 +131,11 @@
   x$table_styling$footnote_header <-
     x$table_styling$footnote_header |>
     dplyr::slice_tail(n = 1L, by = "column") |>
-    dplyr::filter(!remove)
+    dplyr::filter(
+      !.data$remove,
+      !is.na(.data$footnote),
+      .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]
+    )
 
   # footnote_body --------------------------------------------------------------
   x$table_styling$footnote_body <-
@@ -219,22 +223,11 @@
     dplyr::group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
     dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
     # keeping the most recent addition
-    dplyr::filter(!is.na(.data$footnote)) # keep non-missing additions
-
-  if (footnote_type == "footnote_abbrev") {
-    # order the footnotes by where they first appear in the table,
-    df_clean <-
-      df_clean %>%
-      dplyr::inner_join(
-        x$table_styling$header %>%
-          select("column") %>%
-          mutate(column_id = dplyr::row_number()),
-        by = "column"
-      ) %>%
-      dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(footnote = paste(unique(.data$footnote), collapse = ", "))
-  }
+    dplyr::filter(
+      !.data$remove,
+      !is.na(.data$footnote),
+      .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]
+    )
 
   df_clean %>%
     dplyr::select(all_of(c("column", "tab_location", "row_numbers", "text_interpret", "footnote")))

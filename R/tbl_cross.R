@@ -178,7 +178,7 @@ tbl_cross <- function(data,
     x <- x |>
       add_overall(last = TRUE) |>
       modify_header(stat_0 = margin_text) |>
-      remove_footnote_header(stat_0)
+      remove_footnote_header("stat_0")
   }
 
   # returning results ----------------------------------------------------------

@@ -2,9 +2,12 @@
 % Please edit documentation in R/modify_abbreviation.R
 \name{modify_abbreviation}
 \alias{modify_abbreviation}
+\alias{remove_abbreviation}
 \title{Modify Abbreviations}
 \usage{
 modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
+
+remove_abbreviation(x, abbreviation)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr

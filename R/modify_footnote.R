@@ -10,14 +10,14 @@
 #'   Review [rows argument details][rows_argument].
 #'
 #' @return Updated gtsummary object
-#' @name modify_footnote
+#' @name modify_footnote2
 #'
 #' @examples
 #' # TODO: Add examples
 NULL
 
 #' @export
-#' @rdname modify_footnote
+#' @rdname modify_footnote2
 modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md", "html")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_header = match.call()))
@@ -51,7 +51,7 @@ modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md"
 }
 
 #' @export
-#' @rdname modify_footnote
+#' @rdname modify_footnote2
 modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c("md", "html")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
@@ -87,7 +87,7 @@ modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c(
 }
 
 #' @export
-#' @rdname modify_footnote
+#' @rdname modify_footnote2
 remove_footnote_header <- function(x, columns) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_header = match.call()))
@@ -115,7 +115,7 @@ remove_footnote_header <- function(x, columns) {
 }
 
 #' @export
-#' @rdname modify_footnote
+#' @rdname modify_footnote2
 remove_footnote_body <- function(x, columns, rows) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_body = match.call()))

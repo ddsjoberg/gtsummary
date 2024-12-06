@@ -3,7 +3,7 @@
 #' All abbreviations will be coalesced when printing the final table into
 #' a single source note.
 #'
-#' @inheritParams modify_footnote
+#' @inheritParams modify_footnote2
 #' @param abbreviation (`string`)\cr
 #'   a string
 #'
@@ -42,7 +42,7 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
 }
 
 #' @export
-#' @rdname modify_footnote
+#' @rdname modify_abbreviation
 remove_abbreviation <- function(x, abbreviation) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
@@ -51,7 +51,7 @@ remove_abbreviation <- function(x, abbreviation) {
   check_class(x, "gtsummary")
   check_string(abbreviation)
   if (nrow(x$table_styling$abbreviation) == 0L) {
-    cli::isTRUE("There are no abbreviations to remove.", call = get_cli_abort_call())
+    cli::cli_abort("There are no abbreviations to remove.", call = get_cli_abort_call())
   }
   if (!isTRUE(abbreviation %in% x$table_styling$abbreviation$abbreviation)) {
     cli::cli_abort(
