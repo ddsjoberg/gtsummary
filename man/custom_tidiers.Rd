@@ -86,7 +86,6 @@ If an error occurs, the tidying of the model is attempted with
 \code{parameters::model_parameters()}, if installed.}
 }
 \description{
-\lifecycle{maturing}
 Collection of tidiers that can be utilized in gtsummary. See details below.
 }
 \section{Regression Model Tidiers}{
@@ -125,7 +124,7 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)
 

@@ -3,7 +3,7 @@
 #' The `plot()` function extracts `x$table_body` and passes the it to
 #' `ggstats::ggcoef_plot()` along with formatting options.
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`\cr
 #' @param x (`tbl_regression`, `tbl_uvregression`)\cr
 #'   A 'tbl_regression' or 'tbl_uvregression' object
 #' @param remove_header_rows (scalar `logical`)\cr

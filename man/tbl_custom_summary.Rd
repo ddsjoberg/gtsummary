@@ -87,7 +87,7 @@ String indicating the overall row label. Default is \code{"Overall"}.}
 A \code{tbl_custom_summary} object
 }
 \description{
-\lifecycle{experimental}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide

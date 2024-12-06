@@ -41,7 +41,7 @@
 #'   string with text for spanning header
 #' @param missing_symbol (`string`)\cr
 #'   string indicating how missing values are formatted.
-#' @param cols_merge_pattern (`string`) \lifecycle{experimental}\cr
+#' @param cols_merge_pattern (`string`)\cr
 #'   glue-syntax string indicating how to merge
 #'   columns in `x$table_body`. For example, to construct a confidence interval
 #'   use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
