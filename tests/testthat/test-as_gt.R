@@ -220,33 +220,31 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
 
   # footnote
   expect_equal(
-    tbl_fn$table_styling$footnote$column,
+    tbl_fn$table_styling$footnote_header$column |>
+      append(tbl_fn$table_styling$footnote_body$column) |>
+      unique(),
     gt_tbl_fn$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    tbl_fn$table_styling$footnote$footnote,
-    gt_tbl_fn$`_footnotes`$footnotes |> unlist() |> unique()
+    tbl_fn$table_styling$footnote_header$footnote,
+    gt_tbl_fn$`_footnotes`$footnotes[[1]],
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    tbl_fn$table_styling$footnote_body$footnote,
+    gt_tbl_fn$`_footnotes`$footnotes[-1] |> unlist() |> unique(),
+    ignore_attr = TRUE
   )
 
   tbl_fa <- tbl_fn |>
     modify_abbreviation("N = number of observations")
   gt_tbl_fa <- tbl_fa |> as_gt()
 
-  # footnote_abbrev
+  # abbreviation
   expect_equal(
-    gt_tbl_fa$`_footnotes` |>
-      dplyr::distinct(pick(!any_of("rownum"))) |>
-      dplyr::arrange(locnum) |>
-      dplyr::pull(colname),
-    c("stat_0", "stat_0", "label")
-  )
-  expect_equal(
-    gt_tbl_fa$`_footnotes` |>
-      dplyr::distinct(pick(!any_of("rownum"))) |>
-      dplyr::arrange(locnum) |>
-      dplyr::pull(footnotes) |>
+    gt_tbl_fa$`_source_notes` |>
       unlist(),
-    c("n (%); Median (Q1, Q3)", "N = number of observations", "test footnote")
+    "Abbreviation: N = number of observations"
   )
 
   # customized footnotes

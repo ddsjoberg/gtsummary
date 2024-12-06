@@ -186,7 +186,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
 
   # footnote -------------------------------------------------------------------
   vct_footnote <-
-    .number_footnotes(x) %>%
+    dplyr::bind_rows(
+      .number_footnotes(x, "footnote_header"),
+      .number_footnotes(x, "footnote_body")
+    ) |>
     dplyr::pull("footnote") %>%
     unique()
   border <- rep_len(0, length(vct_footnote))
@@ -204,6 +207,24 @@ table_styling_to_huxtable_calls <- function(x, ...) {
         )
       )
   }
+
+  # abbreviation ---------------------------------------------------------------
+  huxtable_calls[["abbreviations"]] <-
+    case_switch(
+      nrow(x$table_styling$abbreviation) > 0L ~
+        expr(
+          huxtable::add_footnote(
+            text =
+              !!(x$table_styling$abbreviation$abbreviation |>
+              paste(collapse = ", ") %>%
+              paste0(
+                ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
+                ": ", .
+              ))
+          )
+        ),
+      .default = list()
+    )
 
   # source note ----------------------------------------------------------------
   huxtable_calls[["source_note"]] <-

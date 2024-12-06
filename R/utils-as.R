@@ -145,7 +145,8 @@
   x$table_styling$abbreviation <-
     x$table_styling$abbreviation |>
     dplyr::filter(.data$column %in% .env$abbreviation_cols) |>
-    dplyr::slice_tail(n = 1L, by = "abbreviation")
+    dplyr::slice_tail(n = 1L, by = "abbreviation") |>
+    dplyr::arrange(.data$abbreviation)
 
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
@@ -241,34 +242,69 @@
 
 # this function orders the footnotes by where they first appear in the table,
 # and assigns them an sequential ID
-.number_footnotes <- function(x) {
-  if (nrow(x$table_styling$footnote) == 0 &&
-    nrow(x$table_styling$footnote_abbrev) == 0) {
+.number_footnotes <- function(x, type, start_with = 0L) {
+  # if empty, return empty data frame
+  if (nrow(x$table_styling[[type]]) == 0L) {
     return(dplyr::tibble(
       footnote_id = integer(), footnote = character(), column = character(),
-      tab_location = character(), row_numbers = integer()
+      column_id = integer(), row_numbers = integer()
     ))
   }
-  dplyr::bind_rows(
-    x$table_styling$footnote,
-    x$table_styling$footnote_abbrev
-  ) %>%
-    dplyr::inner_join(
-      x$table_styling$header %>%
-        select("column") %>%
-        mutate(column_id = dplyr::row_number()),
-      by = "column"
-    ) %>%
-    dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
-    dplyr::group_by(.data$footnote) %>%
-    tidyr::nest() %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(footnote_id = dplyr::row_number()) %>%
-    tidyr::unnest(cols = "data") %>%
-    dplyr::select(
-      "footnote_id", "footnote", "column",
-      "tab_location", "row_numbers"
-    )
+
+  # adding the footnote number to assign to each of the footnotes
+  dplyr::inner_join(
+    x$table_styling$header |>
+      select("column", column_id = "id") |>
+      dplyr::filter(!is.na(.data$column_id)),
+    x$table_styling[[type]],
+    by = "column"
+  ) |>
+    dplyr::arrange(dplyr::pick(any_of(c("column_id", "row_numbers")))) |>
+    dplyr::group_by(.data$footnote) |>
+    tidyr::nest() |>
+    dplyr::ungroup() |>
+    dplyr::mutate(footnote_id = dplyr::row_number() + .env$start_with) |>
+    tidyr::unnest(cols = "data") |>
+    dplyr::select(any_of(c("footnote_id", "footnote", "column", "column_id", "row_numbers")))
+
+
+
+
+
+  # # stacking the header and body footnotes into the structure from the older structure
+  # # will need to update this after we implement footnotes for spanning headers
+  # x$table_styling$footnote <-
+  #   dplyr::bind_rows(
+  #     x$table_styling$footnote_header |> dplyr::mutate(tab_location = "header"),
+  #     x$table_styling$footnote_body |> dplyr::mutate(tab_location = "body")
+  #   )
+  #
+  # if (nrow(x$table_styling$footnote) == 0) {
+  #   return(dplyr::tibble(
+  #     footnote_id = integer(), footnote = character(), column = character(),
+  #     tab_location = character(), row_numbers = integer()
+  #   ))
+  # }
+  # dplyr::bind_rows(
+  #   x$table_styling$footnote,
+  #   x$table_styling$footnote_abbrev
+  # ) %>%
+  #   dplyr::inner_join(
+  #     x$table_styling$header %>%
+  #       select("column") %>%
+  #       mutate(column_id = dplyr::row_number()),
+  #     by = "column"
+  #   ) %>%
+  #   dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
+  #   dplyr::group_by(.data$footnote) %>%
+  #   tidyr::nest() %>%
+  #   dplyr::ungroup() %>%
+  #   dplyr::mutate(footnote_id = dplyr::row_number()) %>%
+  #   tidyr::unnest(cols = "data") %>%
+  #   dplyr::select(
+  #     "footnote_id", "footnote", "column",
+  #     "tab_location", "row_numbers"
+  #   )
 }
 
 

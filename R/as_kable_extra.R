@@ -349,8 +349,11 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # footnote -------------------------------------------------------------------
   vct_footnote <-
-    .number_footnotes(x) |>
-    dplyr::pull("footnote") |>
+    dplyr::bind_rows(
+      .number_footnotes(x, "footnote_header"),
+      .number_footnotes(x, "footnote_body")
+    ) |>
+    dplyr::pull("footnote") %>%
     unique()
 
   if (length(vct_footnote > 0)) {
@@ -358,6 +361,36 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       expr(kableExtra::footnote(number = !!vct_footnote, escape = !!escape))
   }
 
+  # abbreviation ---------------------------------------------------------------
+  kable_extra_calls[["abbreviations"]] <-
+    case_switch(
+      nrow(x$table_styling$abbreviation) > 0L ~
+        expr(
+          kableExtra::footnote(
+            number = !!(x$table_styling$abbreviation$abbreviation |>
+                          paste(collapse = ", ") %>%
+                          paste0(
+                            ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
+                            ": ", .
+                          )),
+            escape = !!escape
+          )
+        ),
+      .default = list()
+    )
+
+  # source note ----------------------------------------------------------------
+  kable_extra_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          kableExtra::footnote(number = !!x$table_styling$source_note$source_note[i], escape = !!escape)
+        )
+      }
+    )
+
+  # return list of calls -------------------------------------------------------
   kable_extra_calls
 }
 
@@ -492,12 +525,20 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     )
 
   # removing line breaks from footnotes
-  x$table_styling$footnote$footnote <-
-    gsub("\\n", " ", x$table_styling$footnote$footnote) %>%
+  x$table_styling$footnote_header$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_header$footnote) %>%
     .escape_latex2(newlines = FALSE) %>%
     .markdown_to_latex2()
-  x$table_styling$footnote_abbrev$footnote <-
-    gsub("\\n", " ", x$table_styling$footnote_abbrev$footnote) %>%
+  x$table_styling$footnote_body$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_body$footnote) %>%
+    .escape_latex2(newlines = FALSE) %>%
+    .markdown_to_latex2()
+  x$table_styling$abbreviation$abbreviation <-
+    gsub("\\n", " ", x$table_styling$abbreviation$abbreviation) %>%
+    .escape_latex2(newlines = FALSE) %>%
+    .markdown_to_latex2()
+  x$table_styling$source_note$source_note <-
+    gsub("\\n", " ", x$table_styling$source_note$source_note) %>%
     .escape_latex2(newlines = FALSE) %>%
     .markdown_to_latex2()
 
@@ -523,11 +564,17 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     .escape_html()
 
   # removing line breaks from footnotes
-  x$table_styling$footnote$footnote <-
-    gsub("\\n", " ", x$table_styling$footnote$footnote) %>%
+  x$table_styling$footnote_header$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_header$footnote) %>%
     .escape_html()
-  x$table_styling$footnote_abbrev$footnote <-
-    gsub("\\n", " ", x$table_styling$footnote_abbrev$footnote) %>%
+  x$table_styling$footnote_body$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_body$footnote) %>%
+    .escape_html()
+  x$table_styling$abbreviation$abbreviation <-
+    gsub("\\n", " ", x$table_styling$abbreviation$abbreviation) %>%
+    .escape_html()
+  x$table_styling$source_note$source_note <-
+    gsub("\\n", " ", x$table_styling$source_note$source_note) %>%
     .escape_html()
 
   if (!is.null(x$table_styling$caption)) {

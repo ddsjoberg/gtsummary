@@ -265,8 +265,8 @@ table_styling_to_gt_calls <- function(x, ...) {
                   parse_expr(x$table_styling$footnote_body$text_interpret[i]),
                   x$table_styling$footnote_body$footnote[i]
                 ),
-              locations = gt::cells_column_labels(columns = !!x$table_styling$footnote_body$column[i],
-                                                  rows = !!x$table_styling$footnote_body$rows[i])
+              locations = gt::cells_body(columns = !!x$table_styling$footnote_body$column[i],
+                                         rows = !!x$table_styling$footnote_body$row_numbers[i])
             )
           )
         }

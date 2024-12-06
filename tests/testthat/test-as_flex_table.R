@@ -234,8 +234,12 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
   expect_equal(nrow(ft_tbl_fn$footer$content$data), 2) # correct number of footnotes
   expect_equal(c(fn1[1], fn2[1]), c("1", "2")) # correct ordering
   expect_equal(
-    tbl_fn$table_styling$footnote$footnote, # correct labels
-    c(fn1[2], fn2[2])
+    tbl_fn$table_styling$footnote_header$footnote, # correct labels
+    fn1[2]
+  )
+  expect_equal(
+    tbl_fn$table_styling$footnote_body$footnote, # correct labels
+    fn2[2]
   )
 
   tbl_fa <- tbl_fn |>
@@ -248,11 +252,7 @@ test_that("as_flex_table passes table footnotes & footnote abbreviations correct
   fn3 <- ft_tbl_fa$footer$content$data[3, ]$label$txt
 
   expect_equal(nrow(ft_tbl_fa$footer$content$data), 3) # correct number of footnotes
-  expect_equal(c(fn1[1], fn2[1], fn3[1]), c("1", "2", "3")) # correct ordering
-  expect_equal(
-    c("n (%); Median (Q1, Q3)", "N = number of observations", "test footnote"), # correct labels
-    c(fn1[2], fn2[2], fn3[2])
-  )
+  expect_equal(c(fn1[1], fn2[1], fn3[1]), c("1", "2", "Abbreviation: N = number of observations")) # correct ordering and label for abbreviation is correct
 
   # customized footnotes
   tbl <- my_tbl_summary |>

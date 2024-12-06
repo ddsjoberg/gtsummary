@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("huxtable"))
+skip_if_not(is_pkg_installed(c("huxtable", "withr")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -25,13 +25,15 @@ test_that("as_hux_table(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(ht),
-    c("tibble", "fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding", "add_footnote", "source_note",
-      "set_bold", "set_italic", "fmt_missing", "insert_row", "set_markdown", "align", "set_number_format")
+    c("tibble", "fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
+      "add_footnote", "abbreviations", "source_note", "set_bold", "set_italic",
+      "fmt_missing", "insert_row", "set_markdown", "align", "set_number_format")
   )
 })
 
 test_that("as_hux_table works with tbl_merge", {
   skip_if_not(is_pkg_installed("survival"))
+  withr::local_options(list(width = 120))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)
@@ -124,13 +126,13 @@ test_that("as_hux_table passes table footnotes & footnote abbreviations correctl
   )
 
   tbl_fa <- tbl_fn |>
-    modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
+    modify_abbreviation("N = number of observations")
   ht_fa <- tbl_fa |> as_hux_table()
 
   # footnote_abbrev
   expect_equal(
-    ht_fa[9, 1] |> unlist(use.names = FALSE),
-    "N = number of observations"
+    ht_fa[10, 1] |> unlist(use.names = FALSE),
+    "Abbreviation: N = number of observations"
   )
 
   # customized footnotes
@@ -162,7 +164,7 @@ test_that("as_hux_table passes appended glance statistics correctly", {
   # correct row ordering
   expect_equal(
     ht$label,
-    c("**Characteristic**", "Age", "R²", "BIC", "CI = Confidence Interval", "R² = 0.000; BIC = 471")
+    c("**Characteristic**", "Age", "R²", "BIC", "Abbreviation: CI = Confidence Interval", "R² = 0.000; BIC = 471")
   )
 })
 

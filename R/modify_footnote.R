@@ -106,7 +106,7 @@ remove_footnote_header <- function(x, columns) {
     .modify_footnote_header(
       x,
       lst_footnotes = rep_named(columns, list(NA_character_)),
-      remove = FALSE
+      remove = TRUE
     )
 
   # update call list and return table ------------------------------------------
@@ -174,7 +174,7 @@ remove_footnote_body <- function(x, columns, rows) {
         column = names(lst_footnotes),
         footnote = unlist(lst_footnotes) |> unname(),
         text_interpret = paste0("gt::", text_interpret),
-        remove = FALSE
+        remove = remove
       )
     )
 
@@ -191,7 +191,7 @@ remove_footnote_body <- function(x, columns, rows) {
         rows = list(enquo(rows)),
         footnote = unlist(lst_footnotes) |> unname(),
         text_interpret = paste0("gt::", text_interpret),
-        remove = FALSE
+        remove = remove
       )
     )
 
