@@ -8,7 +8,7 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", ascending = FALSE, .stat = "n")
+\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = FALSE, .stat = "n")
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical})\cr
@@ -17,8 +17,8 @@ A hierarchical gtsummary table of class \code{'tbl_hierarchical'}.}
 \item{sort}{(\code{string})\cr
 Specifies sorting to perform. Values must be one of \code{c("alphanumeric", "frequency")}. Default is \code{"frequency"}.}
 
-\item{ascending}{(\code{logical})\cr
-Whether to sort rows in ascending or descending order. Default is descending (\code{ascending = FALSE}).}
+\item{desc}{(scalar \code{logical})\cr
+Whether to sort rows in ascending or descending order. Default is descending (\code{desc = TRUE}).}
 
 \item{.stat}{(\code{string})\cr
 Statistic to use for sorting when \code{sort = "frequency"}. This statistic must be present in the table for all
@@ -47,9 +47,8 @@ tbl <- tbl_hierarchical(
   by = TRTA,
   denominator = cards::ADSL |> mutate(TRTA = ARM),
   id = USUBJID,
-  include = AETERM,
   overall_row = TRUE
 )
 
-tbl_sort(tbl, .stat = "N")
+tbl_sort(tbl)
 }
