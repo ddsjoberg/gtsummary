@@ -36,7 +36,11 @@
 #'   overall_row = TRUE
 #' )
 #'
+#' # Example 1 - Decreasing Frequency Sort ------
 #' tbl_sort(tbl)
+#'
+#' # Example 2 - Reverse Alphanumeric Sort ------
+#' tbl_sort(tbl, sort = "alphanumeric")
 NULL
 
 #' @rdname sort_tbl_hierarchical
@@ -50,7 +54,7 @@ tbl_sort <- function(x, ...) {
 
 #' @rdname sort_tbl_hierarchical
 #' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat = "n") {
+tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat = "n") {
   set_cli_abort_call()
 
   # process and check inputs ---------------------------------------------------
@@ -63,18 +67,35 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
     )
   }
 
+  u_cols <- x$table_body |> select(cards::all_ard_groups("names")) |> unlist() |> unique()
+
   if (sort == "alphanumeric") {
-    sort_cols <- c(
-      x$table_body |> select(cards::all_ard_groups("names")) |> names(),
-      "label"
-    )
+    sort_cols <- c(x$table_body |> select(cards::all_ard_groups("levels")) |> names(), "inner_var", "label")
+    rep_str <- if (desc) "zzzz" else " "
+
+    # overall row always appears first
+    if (desc && "..ard_hierarchical_overall.." %in% x$table_body$variable) {
+      ovrl_row <- x$table_body[1, ]
+      x$table_body <- x$table_body[-1,]
+    }
 
     x$table_body <- x$table_body |>
-      arrange(across(sort_cols, ~ if (desc) desc(.x) else .x))
+      dplyr::rowwise() |>
+      dplyr::mutate(inner_var = if (.data$variable %in% u_cols) rep_str else .data$variable) |>
+      dplyr::ungroup() |>
+      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., rep_str))) |>
+      dplyr::arrange(across(sort_cols, ~ if (desc) dplyr::desc(.x) else .x)) |>
+      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~str_replace(., paste0("^", rep_str, "$"), NA))) |>
+      select(-"inner_var")
+
+    if (desc) x$table_body <- dplyr::bind_rows(ovrl_row, x$table_body)
   } else {
-    x <- .append_sort_counts(x, .stat)
-    u_cols <- x$table_body |> select(cards::all_ard_groups("names")) |> unlist() |> unique()
+    x <- .append_hierarchy_row_sums(x, .stat)
     g_cols <- sapply(x$table_body |> select(cards::all_ard_groups("names")), function(x) tail(unique(na.omit(x)), 1))
+
+    # sort summary rows first
+    x$table_body <- x$table_body |>
+      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " ")))
 
     # assign counts for each hierarchy level
     for (g in names(g_cols)) {
@@ -82,14 +103,14 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
         dplyr::group_by(across(c(g, paste0(g, "_level"))), .add = TRUE)
 
       x$table_body <- x$table_body |>
-        left_join(
-          summarise(x$table_body, !!paste0("count_", g) := first(count_total)),
+        dplyr::left_join(
+          dplyr::summarize(x$table_body, !!paste0("count_", g) := dplyr::first(count_total)),
           by = x$table_body |> dplyr::group_vars()
         )
     }
     x$table_body <- x$table_body |>
       dplyr::rowwise() |>
-      mutate(inner_var = if (.data$variable %in% u_cols) " " else .data$variable) |>
+      dplyr::mutate(inner_var = if (.data$variable %in% u_cols) " " else .data$variable) |>
       dplyr::ungroup()
 
     # sort by counts ------------------------------------------------------------------------------
@@ -100,13 +121,15 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
     ), "inner_var", "count_total", "label")
 
     x$table_body <- x$table_body |>
-      arrange(across(sort_cols, ~ if (is.numeric(.x) && desc) desc(.x) else .x))
+      dplyr::arrange(across(sort_cols, ~ if (is.numeric(.x) && desc) dplyr::desc(.x) else .x)) |>
+      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~str_replace(., "^ $", NA))) |>
+      dplyr::select(-starts_with("count_"), -"inner_var")
   }
 
   x
 }
 
-.append_sort_counts <- function(x, .stat) {
+.append_hierarchy_row_sums <- function(x, .stat) {
   if (!.stat %in% x$cards$tbl_hierarchical$stat_name) {
     cli::cli_abort(
       "The {.arg .stat} argument is {.val {(.stat)}} but this statistic is not present in {.arg x}. For all valid
@@ -147,9 +170,9 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
     dplyr::rowwise() |>
     dplyr::mutate(across(
       cards::all_ard_groups(),
-      ~ if (is.na(.x) && !grepl("_level", cur_column()) && variable == g_cols[cur_column()]) {
+      ~ if (is.na(.x) && !grepl("_level", dplyr::cur_column()) && variable == g_cols[dplyr::cur_column()]) {
         variable
-      } else if (is.na(.x) && variable %in% g_cols[gsub("_level", "", cur_column())]) {
+      } else if (is.na(.x) && variable %in% g_cols[gsub("_level", "", dplyr::cur_column())]) {
         label
       } else {
         .x
@@ -159,12 +182,11 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
   # calculate total group sums for any variables not in include ---------------------------------
   if (!all(g_cols %in% cards$variable)) {
     gp_vars <- g_cols[g_cols %in% setdiff(g_cols, cards$variable)]
-    cli::cli_warn(
+    cli::cli_inform(
       "Not all hierarchy variables present in the table were included in the {.arg include} argument.
       These variables ({gp_vars}) do not have event rate data available so the total sum of the event
-      rates for this hierarchy section will be used instead. To use event rates to sort all sections of the table,
-      set {.code include = everything()} when creating your table via {.fun tbl_hierarchical}.",
-      call = get_cli_abort_call()
+      rates for this hierarchy section will be used instead. To use event rates for all sections of the table,
+      set {.code include = everything()} when creating your table via {.fun tbl_hierarchical}."
     )
 
     gp_cols <- names(gp_vars)
@@ -172,10 +194,10 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
       cards <- cards |>
         dplyr::bind_rows(
           cards |>
-            filter(variable != "..ard_hierarchical_overall..") |>
-            group_by(across(c(gp_cols[1:i], paste0(gp_cols[1:i], "_level")))) |>
-            summarize(count_total = sum(count_total)) |>
-            mutate(
+            dplyr::filter(variable != "..ard_hierarchical_overall..") |>
+            dplyr::group_by(across(c(gp_cols[1:i], paste0(gp_cols[1:i], "_level")))) |>
+            dplyr::summarize(count_total = sum(count_total)) |>
+            dplyr::mutate(
               variable = .data[[gp_cols[i]]],
               label = .data[[paste0(gp_cols[i], "_level")]]
             )
@@ -188,8 +210,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = FALSE, .stat
     dplyr::left_join(
       cards,
       by = c(cards |> select(-"count_total") |> names())
-    ) |>
-    dplyr::mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " ")))
+    )
 
   x
 }

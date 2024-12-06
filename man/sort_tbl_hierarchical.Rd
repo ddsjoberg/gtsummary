@@ -8,7 +8,7 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = FALSE, .stat = "n")
+\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = TRUE, .stat = "n")
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical})\cr
@@ -50,5 +50,9 @@ tbl <- tbl_hierarchical(
   overall_row = TRUE
 )
 
+# Example 1 - Decreasing Frequency Sort ------
 tbl_sort(tbl)
+
+# Example 2 - Reverse Alphanumeric Sort ------
+tbl_sort(tbl, sort = "alphanumeric")
 }
