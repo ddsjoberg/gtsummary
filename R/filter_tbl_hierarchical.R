@@ -14,8 +14,7 @@
 #'   Whether to include the value of `t` in the filtered range, i.e. whether to use exclusive comparators (`>`, `<`) or
 #'   inclusive comparators (`>=`, `<=`) when filtering. Default is `FALSE`.
 #' @param .stat (`string`)\cr
-#'   Statistic to use for sorting when `sort = "frequency"`. This statistic must be present in the table for all
-#'   hierarchy levels.
+#'   Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
 #' @name filter_tbl_hierarchical
 #'
 #' @examples
@@ -59,6 +58,7 @@ tbl_filter.tbl_hierarchical <- function(x, t, gt = TRUE, eq = FALSE, .stat = "n"
   check_numeric(t)
   check_scalar_logical(gt)
   check_scalar_logical(eq)
+  check_string(.stat)
 
   x <- .append_hierarchy_row_sums(x, .stat)
   g_cols <- sapply(x$table_body |> select(cards::all_ard_groups("names")), function(x) tail(unique(na.omit(x)), 1))
