@@ -15,8 +15,8 @@
 #' @param desc (scalar `logical`)\cr
 #'   Whether to sort rows in ascending or descending order. Default is descending (`desc = TRUE`).
 #' @param .stat (`string`)\cr
-#'   Statistic to use for sorting when `sort = "frequency"`. This statistic must be present in the table for all
-#'   hierarchy levels.
+#'   Statistic to use to calculate row sums when `sort = "frequency"`. This statistic must be present in the table for
+#'   all hierarchy levels.
 #'
 #' @name sort_tbl_hierarchical
 #'
@@ -59,6 +59,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
 
   # process and check inputs ---------------------------------------------------
   check_scalar_logical(desc)
+  check_string(.stat)
 
   if (!sort %in% c("frequency", "alphanumeric")) {
     cli::cli_abort(

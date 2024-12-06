@@ -21,8 +21,8 @@ Specifies sorting to perform. Values must be one of \code{c("alphanumeric", "fre
 Whether to sort rows in ascending or descending order. Default is descending (\code{desc = TRUE}).}
 
 \item{.stat}{(\code{string})\cr
-Statistic to use for sorting when \code{sort = "frequency"}. This statistic must be present in the table for all
-hierarchy levels.}
+Statistic to use to calculate row sums when \code{sort = "frequency"}. This statistic must be present in the table for
+all hierarchy levels.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr

@@ -25,8 +25,7 @@ Whether to include the value of \code{t} in the filtered range, i.e. whether to 
 inclusive comparators (\code{>=}, \code{<=}) when filtering. Default is \code{FALSE}.}
 
 \item{.stat}{(\code{string})\cr
-Statistic to use for sorting when \code{sort = "frequency"}. This statistic must be present in the table for all
-hierarchy levels.}
+Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
