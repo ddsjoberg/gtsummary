@@ -58,7 +58,7 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 \itemize{
 \item Use \code{modify_header()} to update the column headers
 \item Use \code{modify_fmt_fun()} to update the functions that format the statistics
-\item Use \code{modify_footnote()} to add a explanatory footnote
+\item Use \code{modify_footnote_header()} to add a explanatory footnote
 }
 
 If you return a tibble with column names \code{p.value} or \code{q.value}, default

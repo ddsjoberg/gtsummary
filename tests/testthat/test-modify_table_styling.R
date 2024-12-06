@@ -152,7 +152,7 @@ test_that("modify_table_styling(footnote)", {
         footnote = "testing footnote"
       ) |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_header") |>
       dplyr::filter(column == "stat_0") |>
       dplyr::slice_tail(n = 1L) |>
       dplyr::pull(footnote),
@@ -169,10 +169,8 @@ test_that("modify_table_styling(footnote_abbrev)", {
         footnote_abbrev = "testing footnote_abbrev"
       ) |>
       getElement("table_styling") |>
-      getElement("footnote_abbrev") |>
-      dplyr::filter(column == "stat_0") |>
-      dplyr::slice_tail(n = 1L) |>
-      dplyr::pull(footnote),
+      getElement("abbreviation") |>
+      dplyr::pull(abbreviation),
     "testing footnote_abbrev"
   )
 })

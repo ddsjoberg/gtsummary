@@ -54,7 +54,7 @@ trial |>
     overall_row_label = "All stages & grades"
   ) |>
   bold_labels() |>
-  modify_footnote(all_stat_cols() ~ "Ratio [95\% CI] (n/N)")
+  modify_footnote_header("Ratio [95\% CI] (n/N)", columns = all_stat_cols())
 }
 \author{
 Joseph Larmarange

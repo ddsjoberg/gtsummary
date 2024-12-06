@@ -214,7 +214,8 @@ The {gtsummary} package comes with functions specifically made to modify and for
 dplyr::tribble(
   ~Function,                     ~Description,
   "`modify_header()`",           "update column headers",
-  "`modify_footnote()`",         "update column footnote",
+  "`modify_footnote_header()`",  "update column header footnote",
+  "`modify_footnote_body()`",    "update table body footnote",
   "`modify_spanning_header()`",  "update spanning headers",
   "`modify_caption()`",          "update table caption/title",
   "`bold_labels()`",             "bold variable labels",
@@ -238,9 +239,7 @@ trial2 |>
   add_n() |>
   modify_header(label ~ "**Variable**") |>
   modify_spanning_header(c("stat_1", "stat_2") ~ "**Treatment Received**") |>
-  modify_footnote(
-    all_stat_cols() ~ "Median (IQR) or Frequency (%)"
-  ) |>
+  modify_footnote_header("Median (IQR) or Frequency (%)", columns = all_stat_cols()) |>
   modify_caption("**Table 1. Patient Characteristics**") |>
   bold_labels()
 ```

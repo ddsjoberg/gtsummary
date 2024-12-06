@@ -132,7 +132,7 @@ test_that("theme_gtsummary_journal('lancet') works", {
       expr = trial |>
         tbl_summary(by = trt, include = marker, label = marker ~ "marker", missing = "no") |>
         getElement("table_styling") |>
-        getElement("footnote") |>
+        getElement("footnote_header") |>
         dplyr::filter(.by = "column", dplyr::n() == dplyr::row_number(), column %in% c("stat_1", "stat_2")) |>
         dplyr::pull("footnote") |>
         unique()
@@ -174,7 +174,7 @@ test_that("theme_gtsummary_journal('nejm') works", {
       expr = trial |>
         tbl_summary(by = trt, include = age, label = age ~ "Age", missing = "no") |>
         getElement("table_styling") |>
-        getElement("footnote") |>
+        getElement("footnote_header") |>
         getElement("footnote") |>
         dplyr::last()
     ),
@@ -215,7 +215,7 @@ test_that("theme_gtsummary_journal('jama') works", {
   # check that we get
   #  - pvalues are rounded to 2 places
   #  - CI separator is " to "
-  #  - estimate and CI are in the same cell with approriate header
+  #  - estimate and CI are in the same cell with appropriate header
   expect_snapshot(
     with_gtsummary_theme(
       theme_gtsummary_journal("jama"),
