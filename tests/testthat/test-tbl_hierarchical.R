@@ -144,6 +144,29 @@ test_that("tbl_hierarchical(digits) works properly", {
   expect_snapshot(res |> as.data.frame())
   expect_equal(res$table_body$stat_0[1], "36 (68%)")
 
+  # testing passing vector
+  expect_equal(
+    tbl_hierarchical(
+      data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+      digits = grade ~ 2
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "18.00 (100.00%)"
+  )
+  expect_equal(
+    tbl_hierarchical(
+      data = trial2, variables = c(stage, grade), denominator = trial2, id = id,
+      digits = grade ~ c(0, 2)
+    ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0) |>
+      dplyr::last(),
+    "18 (100.00%)"
+  )
+
+
   # errors thrown when bad digits argument passed
   expect_snapshot(
     error = TRUE,

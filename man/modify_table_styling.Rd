@@ -71,7 +71,7 @@ Must be one of \code{"md"} or \code{"html"} and indicates the processing functio
 as \code{gt::md()} or \code{gt::html()}. Use this in conjunction with arguments for
 header and footnotes.}
 
-\item{cols_merge_pattern}{(\code{string}) \lifecycle{experimental}\cr
+\item{cols_merge_pattern}{(\code{string})\cr
 glue-syntax string indicating how to merge
 columns in \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}. The first column listed in the pattern

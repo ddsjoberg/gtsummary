@@ -53,7 +53,6 @@ the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits
 A string reporting results from a gtsummary table
 }
 \description{
-\lifecycle{maturing}\cr
 Extracts and returns statistics from a \code{tbl_survfit} object for
 inline reporting in an R markdown document. Detailed examples in the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}

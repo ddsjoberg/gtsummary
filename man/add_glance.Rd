@@ -86,6 +86,7 @@ To re-order the rows with glance statistics on bottom, use the script below:
 }
 
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 
 # Example 1 ----------------------------------
@@ -101,4 +102,5 @@ mod |>
     label = list(sigma = "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
+\dontshow{\}) # examplesIf}
 }

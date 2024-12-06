@@ -8,7 +8,7 @@
 modify_cols_merge(...)
 }
 \description{
-\lifecycle{deprecated}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}\cr
 Some functions have been deprecated and are no longer being actively
 supported.
 }
