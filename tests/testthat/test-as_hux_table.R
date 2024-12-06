@@ -137,10 +137,9 @@ test_that("as_hux_table passes table footnotes & footnote abbreviations correctl
 
   # customized footnotes
   tbl <- my_tbl_summary |>
-    modify_footnote(
-      all_stat_cols() ~ "replace old footnote",
-      label = "another new footnote"
-    )
+    modify_footnote_header("replace old footnote", columns = all_stat_cols()) |>
+    modify_footnote_header("another new footnote", columns = label)
+
   ht <- tbl |> as_hux_table()
 
   expect_equal(
