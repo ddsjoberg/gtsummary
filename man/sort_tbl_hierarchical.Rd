@@ -15,31 +15,29 @@ tbl_sort(x, ...)
 A hierarchical gtsummary table of class \code{'tbl_hierarchical'}.}
 
 \item{sort}{(\code{string})\cr
-Specifies sorting to perform. Values must be one of \code{c("alphanumeric", "frequency")}. Default is \code{"frequency"}.}
+Specifies sorting to perform. Values must be one of \code{c("frequency", "alphanumeric")}. Default is \code{"frequency"}.}
 
 \item{desc}{(scalar \code{logical})\cr
 Whether to sort rows in ascending or descending order. Default is descending (\code{desc = TRUE}).}
 
 \item{.stat}{(\code{string})\cr
 Statistic to use to calculate row sums when \code{sort = "frequency"}. This statistic must be present in the table for
-all hierarchy levels.}
+all hierarchy levels. Default is \code{"n"}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 
 This function is used to sort hierarchical tables. Options for sorting criteria are:
 \enumerate{
-\item Alphanumeric - rows are ordered alphanumerically by label text (default).
 \item Frequency - within each section of the hierarchy table, frequency sums are calculated for each row and rows are
-ordered accordingly.
+ordered accordingly (default).
+\item Alphanumeric - rows are ordered alphanumerically by label text. By default, \code{\link[=tbl_hierarchical]{tbl_hierarchical()}} sorts tables
+in ascending alphanumeric order (i.e. A to Z).
 }
 }
 \examples{
 ADAE_subset <- cards::ADAE |>
-  dplyr::filter(
-    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
-    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
-  )
+  dplyr::filter(AETERM \%in\% unique(cards::ADAE$AETERM)[1:5])
 
 tbl <- tbl_hierarchical(
   data = ADAE_subset,
@@ -50,9 +48,12 @@ tbl <- tbl_hierarchical(
   overall_row = TRUE
 )
 
-# Example 1 - Decreasing Frequency Sort ------
+# Example 1 - Decreasing Frequency Sort ------------------
 tbl_sort(tbl)
 
-# Example 2 - Reverse Alphanumeric Sort ------
+# Example 2 - Ascending Alphanumeric Sort (Z to A) -------
 tbl_sort(tbl, sort = "alphanumeric")
+}
+\seealso{
+\code{\link[=tbl_filter]{tbl_filter()}}
 }
