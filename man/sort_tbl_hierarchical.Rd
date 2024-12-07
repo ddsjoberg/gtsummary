@@ -8,11 +8,13 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = TRUE, .stat = "n")
+\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = TRUE, .stat = "n", ...)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical})\cr
-A hierarchical gtsummary table of class \code{'tbl_hierarchical'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
+A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{sort}{(\code{string})\cr
 Specifies sorting to perform. Values must be one of \code{c("frequency", "alphanumeric")}. Default is \code{"frequency"}.}
@@ -23,6 +25,9 @@ Whether to sort rows in ascending or descending order. Default is descending (\c
 \item{.stat}{(\code{string})\cr
 Statistic to use to calculate row sums when \code{sort = "frequency"}. This statistic must be present in the table for
 all hierarchy levels. Default is \code{"n"}.}
+}
+\value{
+A \code{gtsummary} of the same class as \code{x}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -36,6 +41,7 @@ in ascending alphanumeric order (i.e. A to Z).
 }
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(AETERM \%in\% unique(cards::ADAE$AETERM)[1:5])
 
@@ -53,6 +59,7 @@ tbl_sort(tbl)
 
 # Example 2 - Ascending Alphanumeric Sort (Z to A) -------
 tbl_sort(tbl, sort = "alphanumeric")
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tbl_filter]{tbl_filter()}}

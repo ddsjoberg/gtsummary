@@ -8,11 +8,13 @@
 \usage{
 tbl_filter(x, ...)
 
-\method{tbl_filter}{tbl_hierarchical}(x, t, gt = TRUE, eq = FALSE, .stat = "n")
+\method{tbl_filter}{tbl_hierarchical}(x, t, gt = TRUE, eq = FALSE, .stat = "n", ...)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical})\cr
-A hierarchical gtsummary table of class \code{'tbl_hierarchical'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
+A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{t}{(scalar \code{numeric})\cr
 Threshold used to determine which rows will be retained.}
@@ -28,12 +30,16 @@ inclusive comparators (\code{>=}, \code{<=}) when filtering. Default is \code{FA
 Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
 Default is \code{"n"}.}
 }
+\value{
+A \code{gtsummary} of the same class as \code{x}.
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 
-This function is used to filter hierarchical tables by frequency row sum.
+This function is used to filter hierarchical table rows by frequency row sum.
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(AETERM \%in\% unique(cards::ADAE$AETERM)[1:5])
 
@@ -51,6 +57,7 @@ tbl_filter(tbl, t = 10)
 
 # Example 2 - Row Sums <= 5 ------------------
 tbl_filter(tbl, t = 10, gt = FALSE, eq = TRUE)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tbl_sort]{tbl_sort()}}
