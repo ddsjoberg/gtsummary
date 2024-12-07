@@ -14,7 +14,8 @@
 #' @param sort (`string`)\cr
 #'   Specifies sorting to perform. Values must be one of `c("frequency", "alphanumeric")`. Default is `"frequency"`.
 #' @param desc (scalar `logical`)\cr
-#'   Whether to sort rows in ascending or descending order. Default is descending (`desc = TRUE`).
+#'   Whether to sort rows in ascending or descending order. Default is descending (`TRUE`) when `sort = "frequency"`
+#'   and ascending (`FALSE`) when `sort = "alphanumeric"`.
 #' @param .stat (`string`)\cr
 #'   Statistic to use to calculate row sums when `sort = "frequency"`. This statistic must be present in the table for
 #'   all hierarchy levels. Default is `"n"`.
@@ -38,11 +39,11 @@
 #'   overall_row = TRUE
 #' )
 #'
-#' # Example 1 - Decreasing Frequency Sort ------------------
+#' # Example 1 - Descending Frequency Sort ------------------
 #' tbl_sort(tbl)
 #'
-#' # Example 2 - Ascending Alphanumeric Sort (Z to A) -------
-#' tbl_sort(tbl, sort = "alphanumeric")
+#' # Example 2 - Descending Alphanumeric Sort (Z to A) ------
+#' tbl_sort(tbl, sort = "alphanumeric", desc = TRUE)
 NULL
 
 #' @rdname sort_tbl_hierarchical
@@ -56,7 +57,7 @@ tbl_sort <- function(x, ...) {
 
 #' @rdname sort_tbl_hierarchical
 #' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat = "n", ...) {
+tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "frequency"), .stat = "n", ...) {
   set_cli_abort_call()
 
   # process and check inputs ----------------------------------------------------------------------
@@ -71,7 +72,6 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
   }
 
   overall <- "..ard_hierarchical_overall.." %in% x$table_body$variable
-
   outer_cols <- sapply(
     x$table_body |> select(cards::all_ard_groups("names")),
     function(x) dplyr::last(unique(stats::na.omit(x)))
@@ -86,7 +86,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
     rep_str <- if (desc) "zzzz" else " "
 
     # overall row always appears first
-    if (desc && "..ard_hierarchical_overall.." %in% x$table_body$variable) {
+    if (desc && overall) {
       ovrl_row <- x$table_body[1, ]
       x$table_body <- x$table_body[-1, ]
     }
@@ -96,21 +96,21 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
 
     x$table_body <- x$table_body |>
       dplyr::rowwise() |>
-      dplyr::mutate(inner_var = if (!.data$variable == inner_col) rep_str else .data$variable) |>
+      dplyr::mutate(inner_var = if (!.data$variable %in% inner_col) rep_str else .data$variable) |>
       dplyr::ungroup() |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ tidyr::replace_na(., rep_str))) |>
-      dplyr::arrange(across(sort_cols, ~ if (desc) dplyr::desc(.x) else .x)) |>
+      dplyr::arrange(across(all_of(sort_cols), ~ if (desc) dplyr::desc(.x) else .x)) |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ str_replace(., paste0("^", rep_str, "$"), NA))) |>
       select(-"inner_var")
 
-    if (desc) x$table_body <- dplyr::bind_rows(ovrl_row, x$table_body)
+    if (desc && overall) x$table_body <- dplyr::bind_rows(ovrl_row, x$table_body)
   } else {
     # get row sums --------------------------------------------------------------------------------
     x <- .append_hierarchy_row_sums(x, .stat)
 
     # append outer hierarchy level sums in each row to sort at all levels -------------------------
     for (g in names(outer_cols)) {
-      x$table_body <- x$table_body |> dplyr::group_by(across(c(g, paste0(g, "_level"))), .add = TRUE)
+      x$table_body <- x$table_body |> dplyr::group_by(across(all_of(c(g, paste0(g, "_level")))), .add = TRUE)
       x$table_body <- x$table_body |>
         dplyr::left_join(
           x$table_body |>
@@ -124,7 +124,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
       dplyr::ungroup() |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ tidyr::replace_na(., " "))) |>
       dplyr::rowwise() |>
-      dplyr::mutate(inner_var = if (!.data$variable == inner_col) " " else .data$variable) |>
+      dplyr::mutate(inner_var = if (!.data$variable %in% inner_col) " " else .data$variable) |>
       dplyr::ungroup()
 
     # sort by row sum -----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
     ), "inner_var", "sum_row", "label")
 
     x$table_body <- x$table_body |>
-      dplyr::arrange(across(sort_cols, ~ if (is.numeric(.x) && desc) dplyr::desc(.x) else .x)) |>
+      dplyr::arrange(across(all_of(sort_cols), ~ if (is.numeric(.x) && desc) dplyr::desc(.x) else .x)) |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ str_replace(., "^ $", NA))) |>
       select(-starts_with("sum_"), -"inner_var")
   }
@@ -169,7 +169,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = TRUE, .stat 
   # extract row sums ------------------------------------------------------------------------------
   cards <- cards |>
     dplyr::filter(.data$stat_name == .stat, .data$variable %in% x$table_body$variable) |>
-    dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -by_cols))) |>
+    dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
     dplyr::summarise(sum_row = sum(unlist(.data$stat))) |>
     dplyr::ungroup() |>
     dplyr::rename(label = "variable_level") |>
