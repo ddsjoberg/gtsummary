@@ -8,7 +8,7 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = TRUE, .stat = "n", ...)
+\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = (sort == "frequency"), .stat = "n", ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
@@ -20,7 +20,8 @@ A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_
 Specifies sorting to perform. Values must be one of \code{c("frequency", "alphanumeric")}. Default is \code{"frequency"}.}
 
 \item{desc}{(scalar \code{logical})\cr
-Whether to sort rows in ascending or descending order. Default is descending (\code{desc = TRUE}).}
+Whether to sort rows in ascending or descending order. Default is descending (\code{TRUE}) when \code{sort = "frequency"}
+and ascending (\code{FALSE}) when \code{sort = "alphanumeric"}.}
 
 \item{.stat}{(\code{string})\cr
 Statistic to use to calculate row sums when \code{sort = "frequency"}. This statistic must be present in the table for
@@ -54,11 +55,11 @@ tbl <- tbl_hierarchical(
   overall_row = TRUE
 )
 
-# Example 1 - Decreasing Frequency Sort ------------------
+# Example 1 - Descending Frequency Sort ------------------
 tbl_sort(tbl)
 
-# Example 2 - Ascending Alphanumeric Sort (Z to A) -------
-tbl_sort(tbl, sort = "alphanumeric")
+# Example 2 - Descending Alphanumeric Sort (Z to A) ------
+tbl_sort(tbl, sort = "alphanumeric", desc = TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
