@@ -2,12 +2,12 @@
 #'
 #' @description `r lifecycle::badge('experimental')`\cr
 #'
-#' This function is used to filter hierarchical tables by total row frequencies.
+#' This function is used to filter hierarchical tables by frequency row sum.
 #'
 #' @param x (`tbl_hierarchical`)\cr
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'`.
 #' @param t (scalar `numeric`)\cr
-#'   Threshold used to determine which values will be retained.
+#'   Threshold used to determine which rows will be retained.
 #' @param gt (scalar `logical`)\cr
 #'   Whether to filter for row sums greater than `t` or less than `t`. Default is greater than (`gt = TRUE`).
 #' @param eq (scalar `logical`)\cr
@@ -15,14 +15,14 @@
 #'   inclusive comparators (`>=`, `<=`) when filtering. Default is `FALSE`.
 #' @param .stat (`string`)\cr
 #'   Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
+#'   Default is `"n"`.
+#'
 #' @name filter_tbl_hierarchical
+#' @seealso [tbl_sort()]
 #'
 #' @examples
 #' ADAE_subset <- cards::ADAE |>
-#'   dplyr::filter(
-#'     AESOC %in% unique(cards::ADAE$AESOC)[1:5],
-#'     AETERM %in% unique(cards::ADAE$AETERM)[1:5]
-#'   )
+#'   dplyr::filter(AETERM %in% unique(cards::ADAE$AETERM)[1:5])
 #'
 #' tbl <- tbl_hierarchical(
 #'   data = ADAE_subset,
@@ -54,18 +54,23 @@ tbl_filter <- function(x, ...) {
 tbl_filter.tbl_hierarchical <- function(x, t, gt = TRUE, eq = FALSE, .stat = "n") {
   set_cli_abort_call()
 
-  # process and check inputs ---------------------------------------------------
+  # process and check inputs ----------------------------------------------------------------------
   check_numeric(t)
   check_scalar_logical(gt)
   check_scalar_logical(eq)
   check_string(.stat)
 
-  x <- .append_hierarchy_row_sums(x, .stat)
-  g_cols <- sapply(x$table_body |> select(cards::all_ard_groups("names")), function(x) tail(unique(na.omit(x)), 1))
-  if (!gt) x$table_body$count_total[x$table_body$variable %in% g_cols] <- t - 1
+  outer_cols <- sapply(x$table_body |> select(cards::all_ard_groups("names")), function(x) tail(unique(na.omit(x)), 1))
 
+  # get row sums ----------------------------------------------------------------------------------
+  x <- .append_hierarchy_row_sums(x, .stat)
+
+  # keep all summary rows (removed later if no sub-rows are kept)
+  if (!gt) x$table_body$sum_row[x$table_body$variable %in% outer_cols] <- t - 1
+
+  # create and apply filtering expression ---------------------------------------------------------
   filt_expr <- paste(
-    "count_total",
+    "sum_row",
     dplyr::case_when(
       gt && eq ~ ">=",
       !gt && eq ~ "<=",
@@ -74,41 +79,39 @@ tbl_filter.tbl_hierarchical <- function(x, t, gt = TRUE, eq = FALSE, .stat = "n"
     ),
     t
   )
-
   x$table_body <- x$table_body |>
     dplyr::filter(!!parse_expr(filt_expr))
 
-  # remove summary rows with no sub-rows still present -------------------------
+  # remove any summary rows with no sub-rows still present ----------------------------------------
   if (!gt) {
-    for (i in rev(seq_along(g_cols))) {
-      empty_gps <- x$table_body |>
-        dplyr::group_by(across(c(names(g_cols[1:i]), paste0(names(g_cols[1:i]), "_level")))) |>
-        dplyr::summarize(empty_gp := dplyr::n() == 1) |>
+    for (i in rev(seq_along(outer_cols))) {
+      gp_empty <- x$table_body |>
+        dplyr::group_by(across(c(names(outer_cols[1:i]), paste0(names(outer_cols[1:i]), "_level")))) |>
+        dplyr::summarize(is_empty := dplyr::n() == 1) |>
         na.omit()
 
-      if (!all(!empty_gps$empty_gp)) {
-        cli::cli_inform(
-          "For readability, any summary row that supercedes a row that meets the filtering criteria will be kept
-          regardless of whether it meets the filtering criteria itself.",
-          .frequency = "once",
-          .frequency_id = "hierarchy_filter_lt"
-        )
-
+      if (!all(!gp_empty$is_empty)) {
         x$table_body <- x$table_body |>
           dplyr::left_join(
-            empty_gps,
-            by = empty_gps |> select(cards::all_ard_groups()) |> names()
+            gp_empty,
+            by = gp_empty |> select(cards::all_ard_groups()) |> names()
           ) |>
-          dplyr::filter(!empty_gp | is.na(empty_gp)) |>
-          dplyr::select(-"empty_gp")
+          dplyr::filter(!is_empty | is.na(is_empty)) |>
+          dplyr::select(-"is_empty")
       } else {
         break
       }
     }
+    if (nrow(x$table_body) > 0) {
+      cli::cli_inform(
+        "For readability, all summary rows preceding at least one row that meets the filtering criteria are kept
+        regardless of whether they meet the filtering criteria themselves."
+      )
+    }
   }
 
   x$table_body <- x$table_body |>
-    dplyr::select(-"count_total")
+    dplyr::select(-"sum_row")
 
   x
 }

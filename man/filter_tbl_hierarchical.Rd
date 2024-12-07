@@ -15,7 +15,7 @@ tbl_filter(x, ...)
 A hierarchical gtsummary table of class \code{'tbl_hierarchical'}.}
 
 \item{t}{(scalar \code{numeric})\cr
-Threshold used to determine which values will be retained.}
+Threshold used to determine which rows will be retained.}
 
 \item{gt}{(scalar \code{logical})\cr
 Whether to filter for row sums greater than \code{t} or less than \code{t}. Default is greater than (\code{gt = TRUE}).}
@@ -25,19 +25,17 @@ Whether to include the value of \code{t} in the filtered range, i.e. whether to 
 inclusive comparators (\code{>=}, \code{<=}) when filtering. Default is \code{FALSE}.}
 
 \item{.stat}{(\code{string})\cr
-Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.}
+Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
+Default is \code{"n"}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 
-This function is used to filter hierarchical tables by total row frequencies.
+This function is used to filter hierarchical tables by frequency row sum.
 }
 \examples{
 ADAE_subset <- cards::ADAE |>
-  dplyr::filter(
-    AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
-    AETERM \%in\% unique(cards::ADAE$AETERM)[1:5]
-  )
+  dplyr::filter(AETERM \%in\% unique(cards::ADAE$AETERM)[1:5])
 
 tbl <- tbl_hierarchical(
   data = ADAE_subset,
@@ -53,4 +51,7 @@ tbl_filter(tbl, t = 10)
 
 # Example 2 - Row Sums <= 5 ------------------
 tbl_filter(tbl, t = 10, gt = FALSE, eq = TRUE)
+}
+\seealso{
+\code{\link[=tbl_sort]{tbl_sort()}}
 }
