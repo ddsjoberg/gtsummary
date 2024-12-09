@@ -28,7 +28,7 @@ test_that("tbl_filter.tbl_hierarchical(gt) works", {
   expect_silent(tbl_gt <- tbl_filter(tbl, t = 10))
 
   # gt = FALSE
-  expect_silent(tbl_lt <- tbl_filter(tbl, t = 10, gt = FALSE))
+  expect_message(tbl_lt <- tbl_filter(tbl, t = 10, gt = FALSE))
 
   expect_equal(
     dplyr::inner_join(
