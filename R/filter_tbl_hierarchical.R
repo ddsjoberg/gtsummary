@@ -111,7 +111,9 @@ tbl_filter.tbl_hierarchical <- function(x, t, gt = TRUE, eq = FALSE, .stat = "n"
     if (nrow(x$table_body) > 0) {
       cli::cli_inform(
         "For readability, all summary rows preceding at least one row that meets the filtering criteria are kept
-        regardless of whether they meet the filtering criteria themselves."
+        regardless of whether they meet the filtering criteria themselves.",
+        .frequency = "once",
+        .frequency_id = "sum_rows_lt"
       )
     }
   }

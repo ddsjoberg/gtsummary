@@ -14,6 +14,7 @@ tbl <- tbl_hierarchical(
 
 test_that("tbl_sort.tbl_hierarchical() works", {
   withr::local_options(width = 200)
+
   # no errors
   expect_silent(tbl <- tbl_sort(tbl))
   expect_snapshot(tbl |> as.data.frame())
@@ -36,7 +37,6 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'frequency') works", {
       dplyr::filter(variable == "RACE") |>
       dplyr::pull(label),
     c("WHITE", "BLACK OR AFRICAN AMERICAN", "WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE")
-
   )
   expect_equal(
     tbl$table_body |>
@@ -98,7 +98,7 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'alphanumeric') works", {
       dplyr::pull(label),
     c(
       "ERYTHEMA", "DIARRHOEA", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "APPLICATION SITE PRURITUS",
-      "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA","APPLICATION SITE PRURITUS", "ERYTHEMA", "ERYTHEMA",
+      "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA", "APPLICATION SITE PRURITUS", "ERYTHEMA", "ERYTHEMA",
       "DIARRHOEA", "APPLICATION SITE PRURITUS", "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA",
       "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "APPLICATION SITE PRURITUS"
     )
@@ -178,7 +178,7 @@ test_that("tbl_sort.tbl_hierarchical() works when some variables not included in
     by = TRTA,
     denominator = cards::ADSL |> mutate(TRTA = ARM),
     id = USUBJID,
-    include =  c(SEX, AETERM),
+    include = c(SEX, AETERM),
     overall_row = TRUE
   )
 
