@@ -8,13 +8,20 @@
 \alias{remove_footnote_body}
 \title{Modify Footnotes}
 \usage{
-modify_footnote_header(x, footnote, columns, text_interpret = c("md", "html"))
+modify_footnote_header(
+  x,
+  footnote,
+  columns,
+  replace = TRUE,
+  text_interpret = c("md", "html")
+)
 
 modify_footnote_body(
   x,
   footnote,
   columns,
   rows,
+  replace = TRUE,
   text_interpret = c("md", "html")
 )
 
@@ -31,6 +38,12 @@ a string}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 columns to add footnote}
+
+\item{replace}{(scalar \code{logical})\cr
+Logical indicating whether to replace any existing footnotes in the specified
+location with the specified footnote, or whether the specified should
+be added to the existing footnote(s) in the header/cell. Default
+is to replace existing footnotes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with

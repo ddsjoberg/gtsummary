@@ -30,13 +30,15 @@
     )
   x$table_styling$footnote_header <-
     dplyr::tibble(
-      column = character(), footnote = character(),
-      text_interpret = character(), remove = logical()
+      column = character(),
+      footnote = character(), text_interpret = character(),
+      replace = logical(), remove = logical()
     )
   x$table_styling$footnote_body <-
     dplyr::tibble(
       column = character(), rows = list(),
-      footnote = character(), text_interpret = character(), remove = logical()
+      footnote = character(), text_interpret = character(),
+      replace = logical(), remove = logical()
     )
   x$table_styling$abbreviation <-
     dplyr::tibble(

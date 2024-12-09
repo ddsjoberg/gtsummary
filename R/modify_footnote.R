@@ -8,6 +8,11 @@
 #' @param rows (predicate `expression`)\cr
 #'   Predicate expression to select rows in `x$table_body`.
 #'   Review [rows argument details][rows_argument].
+#' @param replace (scalar `logical`)\cr
+#'   Logical indicating whether to replace any existing footnotes in the specified
+#'   location with the specified footnote, or whether the specified should
+#'   be added to the existing footnote(s) in the header/cell. Default
+#'   is to replace existing footnotes.
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
@@ -18,13 +23,14 @@ NULL
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md", "html")) {
+modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_interpret = c("md", "html")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_header = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
   check_string(footnote)
+  check_scalar_logical(replace)
   text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
 
   # process columns ------------------------------------------------------------
@@ -42,6 +48,7 @@ modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md"
       x,
       lst_footnotes = lst_footnotes,
       text_interpret = text_interpret,
+      replace = replace,
       remove = FALSE
     )
 
@@ -52,13 +59,14 @@ modify_footnote_header <- function(x, footnote, columns, text_interpret = c("md"
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c("md", "html")) {
+modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, text_interpret = c("md", "html")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
   check_string(footnote)
+  check_scalar_logical(replace)
   text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
   .check_rows_input(x, {{ rows }})
 
@@ -78,6 +86,7 @@ modify_footnote_body <- function(x, footnote, columns, rows, text_interpret = c(
       lst_footnotes = lst_footnotes,
       rows = {{ rows }},
       text_interpret = text_interpret,
+      replace = replace,
       remove = FALSE
     )
 
@@ -166,7 +175,8 @@ remove_footnote_body <- function(x, columns, rows) {
 }
 
 # modify_footnote_*() for internal use (no checking of inputs) -----------------
-.modify_footnote_header <- function(x, lst_footnotes, text_interpret = "md", remove = FALSE) {
+.modify_footnote_header <- function(x, lst_footnotes, text_interpret = "md",
+                                    replace = TRUE, remove = FALSE) {
   # add updates to `x$table_styling$footnote_header` ---------------------------
   x$table_styling$footnote_header <- x$table_styling$footnote_header |>
     dplyr::bind_rows(
@@ -174,6 +184,7 @@ remove_footnote_body <- function(x, columns, rows) {
         column = names(lst_footnotes),
         footnote = unlist(lst_footnotes) |> unname(),
         text_interpret = paste0("gt::", text_interpret),
+        replace = replace,
         remove = remove
       )
     )
@@ -182,7 +193,8 @@ remove_footnote_body <- function(x, columns, rows) {
   x
 }
 
-.modify_footnote_body <- function(x, lst_footnotes, rows, text_interpret = "md", remove = FALSE) {
+.modify_footnote_body <- function(x, lst_footnotes, rows, text_interpret = "md",
+                                  replace = TRUE, remove = FALSE) {
   # add updates to `x$table_styling$footnote_body` -----------------------------
   x$table_styling$footnote_body <- x$table_styling$footnote_body |>
     dplyr::bind_rows(
@@ -191,6 +203,7 @@ remove_footnote_body <- function(x, columns, rows) {
         rows = list(enquo(rows)),
         footnote = unlist(lst_footnotes) |> unname(),
         text_interpret = paste0("gt::", text_interpret),
+        replace = replace,
         remove = remove
       )
     )

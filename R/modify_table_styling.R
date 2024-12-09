@@ -247,6 +247,7 @@ modify_table_styling <- function(x,
             column = columns,
             footnote = footnote,
             text_interpret = text_interpret,
+            replace = TRUE,
             remove = is.na(footnote)
           )
         )
@@ -259,6 +260,7 @@ modify_table_styling <- function(x,
             rows = list(rows),
             footnote = footnote,
             text_interpret = text_interpret,
+            replace = TRUE,
             remove = is.na(footnote)
           )
         )

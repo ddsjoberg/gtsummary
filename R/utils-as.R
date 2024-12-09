@@ -130,16 +130,48 @@
   # footnote_header ------------------------------------------------------------
   x$table_styling$footnote_header <-
     x$table_styling$footnote_header |>
-    dplyr::slice_tail(n = 1L, by = "column") |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed footnotes.
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
+    ) |>
+    # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
     dplyr::filter(
-      !.data$remove,
-      !is.na(.data$footnote),
-      .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]
-    )
+      .by = "column",
+      !ifelse(
+        dplyr::row_number() == dplyr::n(),
+        FALSE,
+        as.logical(rev(cummax(rev(max(.data$replace, .data$remove)))))
+      )
+    ) |>
+    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
   # footnote_body --------------------------------------------------------------
   x$table_styling$footnote_body <-
-    .table_styling_expr_to_row_number_footnote(x, "footnote_body")
+    x$table_styling$footnote_body |>
+    dplyr::mutate(
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove), # this is a hold-over from pre-v2.0.0 syntax where NA removed footnotes.
+      # convert rows predicate expression to row numbers
+      row_numbers =
+        map(
+          .data$rows,
+          \(rows) .rows_expr_to_row_numbers(x$table_body, rows)
+        )
+    ) |>
+    tidyr::unnest(cols = "row_numbers") |>
+    # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    dplyr::filter(
+      .by = c("column", "row_numbers"),
+      !ifelse(
+        dplyr::row_number() == dplyr::n(),
+        FALSE,
+        as.logical(rev(cummax(rev(max(.data$replace, .data$remove)))))
+      )
+    ) |>
+    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
+    dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
+    dplyr::mutate(row_numbers = as.integer(.data$row_numbers)) # when there are no body footnotes, this ensures expected type/class
 
   # abbreviation ---------------------------------------------------------------
   abbreviation_cols <-
@@ -196,43 +228,6 @@
   x
 }
 
-.table_styling_expr_to_row_number_footnote <- function(x, footnote_type) {
-  df_clean <-
-    x$table_styling[[footnote_type]] %>%
-    dplyr::filter(.data$column %in% .cols_to_show(x))
-  if (nrow(df_clean) == 0) {
-    return(dplyr::tibble(
-      column = character(0), tab_location = character(0), row_numbers = logical(0),
-      text_interpret = character(0), footnote = character(0)
-    ))
-  }
-
-  df_clean <-
-    df_clean %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
-      tab_location = ifelse(identical(.data$row_numbers, NA), "header", "body")
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest(cols = "row_numbers") %>%
-    dplyr::group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    # keeping the most recent addition
-    dplyr::filter(
-      !.data$remove,
-      !is.na(.data$footnote),
-      .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]
-    )
-
-  df_clean %>%
-    dplyr::select(all_of(c("column", "tab_location", "row_numbers", "text_interpret", "footnote")))
-}
-
 # this function orders the footnotes by where they first appear in the table,
 # and assigns them an sequential ID
 .number_footnotes <- function(x, type, start_with = 0L) {
@@ -259,45 +254,6 @@
     dplyr::mutate(footnote_id = dplyr::row_number() + .env$start_with) |>
     tidyr::unnest(cols = "data") |>
     dplyr::select(any_of(c("footnote_id", "footnote", "column", "column_id", "row_numbers")))
-
-
-
-
-
-  # # stacking the header and body footnotes into the structure from the older structure
-  # # will need to update this after we implement footnotes for spanning headers
-  # x$table_styling$footnote <-
-  #   dplyr::bind_rows(
-  #     x$table_styling$footnote_header |> dplyr::mutate(tab_location = "header"),
-  #     x$table_styling$footnote_body |> dplyr::mutate(tab_location = "body")
-  #   )
-  #
-  # if (nrow(x$table_styling$footnote) == 0) {
-  #   return(dplyr::tibble(
-  #     footnote_id = integer(), footnote = character(), column = character(),
-  #     tab_location = character(), row_numbers = integer()
-  #   ))
-  # }
-  # dplyr::bind_rows(
-  #   x$table_styling$footnote,
-  #   x$table_styling$footnote_abbrev
-  # ) %>%
-  #   dplyr::inner_join(
-  #     x$table_styling$header %>%
-  #       select("column") %>%
-  #       mutate(column_id = dplyr::row_number()),
-  #     by = "column"
-  #   ) %>%
-  #   dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
-  #   dplyr::group_by(.data$footnote) %>%
-  #   tidyr::nest() %>%
-  #   dplyr::ungroup() %>%
-  #   dplyr::mutate(footnote_id = dplyr::row_number()) %>%
-  #   tidyr::unnest(cols = "data") %>%
-  #   dplyr::select(
-  #     "footnote_id", "footnote", "column",
-  #     "tab_location", "row_numbers"
-  #   )
 }
 
 

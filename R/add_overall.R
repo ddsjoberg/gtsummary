@@ -205,6 +205,12 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
       tbl_overall$table_styling$footnote_header %>%
         dplyr::filter(.data$column %in% "stat_0")
     )
+  x$table_styling$footnote_body <-
+    dplyr::bind_rows(
+      x$table_styling$footnote_body,
+      tbl_overall$table_styling$footnote_body %>%
+        dplyr::filter(.data$column %in% "stat_0")
+    )
 
   # Add header to overall column
   x <- modify_header(x, stat_0 = col_label)
