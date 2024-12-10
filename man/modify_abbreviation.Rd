@@ -29,6 +29,7 @@ All abbreviations will be coalesced when printing the final table into
 a single source note.
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 tbl_summary(
   trial,
@@ -43,4 +44,5 @@ tbl_summary(
 lm(marker ~ trt, trial) |>
   tbl_regression() |>
   remove_abbreviation("CI = Confidence Interval")
+\dontshow{\}) # examplesIf}
 }

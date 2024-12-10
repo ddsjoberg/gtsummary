@@ -353,7 +353,11 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       seq_len(nrow(x$table_styling$source_note)),
       \(i) {
         expr(
-          kableExtra::footnote(number = !!x$table_styling$source_note$source_note[i], escape = !!escape)
+          kableExtra::footnote(
+            general = !!x$table_styling$source_note$source_note[i],
+            escape = !!escape,
+            general_title = ""
+          )
         )
       }
     )
@@ -371,8 +375,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
                              ": ", .
                            )),
             escape = !!escape,
-            general_title = "",
-            footnote_order = c("number", "alphabet", "symbol", "general")
+            general_title = ""
           )
         ),
       .default = list()
