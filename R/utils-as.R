@@ -135,14 +135,7 @@
       remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
     ) |>
     # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
-    dplyr::filter(
-      .by = "column",
-      !ifelse(
-        dplyr::row_number() == dplyr::n(),
-        FALSE,
-        as.logical(rev(cummax(rev(max(.data$replace, .data$remove)))))
-      )
-    ) |>
+    .filter_row_with_subsequent_replace_or_removal() |>
     #finally, remove the row if it's marked for removal or if the column is not printed in final table
     dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
@@ -159,15 +152,8 @@
         )
     ) |>
     tidyr::unnest(cols = "row_numbers") |>
-    # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
-    dplyr::filter(
-      .by = c("column", "row_numbers"),
-      !ifelse(
-        dplyr::row_number() == dplyr::n(),
-        FALSE,
-        as.logical(rev(cummax(rev(max(.data$replace, .data$remove)))))
-      )
-    ) |>
+    # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    .filter_row_with_subsequent_replace_or_removal() |>
     #finally, remove the row if it's marked for removal or if the column is not printed in final table
     dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
     dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
@@ -226,6 +212,32 @@
     dplyr::select(-"rows", rows = "row_numbers")
 
   x
+}
+
+
+# this function processes the footnotes and removes footnotes that have
+# later been replaced or removed from the table
+.filter_row_with_subsequent_replace_or_removal <- function(x) {
+  if (nrow(x) == 0L) return(x)
+
+  # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+  dplyr::filter(
+    .data = x,
+    .by = any_of(c("column", "row_numbers")),
+    !unlist(
+      pmap(
+        list(.data$replace, .data$remove, dplyr::row_number()),
+        function(row_replace, row_remove, row_number) {
+          # if this is the last row in the group, there will be now removal indications below
+          if (row_number == dplyr::n()) return(FALSE)
+          # if a subsequent call to replace or remove a footnote appear below,
+          # then the current row can be deleted.
+          any(.data$replace[seq(row_number + 1L, dplyr::n())]) ||
+            any(.data$remove[seq(row_number + 1L, dplyr::n())])
+        }
+      )
+    )
+  )
 }
 
 # this function orders the footnotes by where they first appear in the table,

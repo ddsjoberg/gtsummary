@@ -167,9 +167,9 @@ test_that("as_kable_extra passes table column alignment correctly", {
   )
 })
 
-test_that("as_kable_extra passes table footnotes & footnote abbreviations correctly", {
+test_that("as_kable_extra passes table footnotes & abbreviations correctly", {
   tbl_fn <- my_tbl_summary |>
-    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+    modify_footnote_body(columns = label, footnote = "test footnote", rows = variable == "age")
   kbl_fn <- tbl_fn |> as_kable_extra()
 
   # footnote

@@ -213,9 +213,9 @@ test_that("as_gt passes table text interpreters correctly", {
   expect_true(attr(gt_tbl$`_spanners`$spanner_label[[1]], "html"))
 })
 
-test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
+test_that("as_gt passes table footnotes & abbreviations correctly", {
   tbl_fn <- my_tbl_summary |>
-    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+    modify_footnote_body(footnote = "test footnote", columns = label,rows = variable == "age")
   gt_tbl_fn <- tbl_fn |> as_gt()
 
   # footnote
@@ -265,8 +265,8 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
   # footnotes in the body of the table
   expect_equal(
     tbl_summary(trial, include = "age") |>
-      modify_table_styling(columns = label, rows = TRUE, footnote = "my footnote") |>
-      modify_table_styling(columns = stat_0, rows = row_type == "label", footnote = "my footnote") |>
+      modify_footnote_body(columns = label, rows = TRUE, footnote = "my footnote") |>
+      modify_footnote_body(columns = stat_0, rows = row_type == "label", footnote = "my footnote") |>
       as_gt() |>
       getElement("_footnotes") |>
       dplyr::filter(footnotes == "my footnote") |>

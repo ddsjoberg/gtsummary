@@ -34,7 +34,7 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
 
   # add updates to `x$table_styling$abbreviation` ------------------------------
   x <- x |>
-    .modify_abbreviation(abbreviation = abbreviation, text_interpret = paste0("gt::", text_interpret))
+    .modify_abbreviation(abbreviation = abbreviation, text_interpret = text_interpret)
 
   # update call list and return table ------------------------------------------
   x$call_list <- updated_call_list
@@ -80,7 +80,7 @@ remove_abbreviation <- function(x, abbreviation) {
       dplyr::tibble(
         column = column,
         abbreviation = abbreviation,
-        text_interpret = text_interpret
+        text_interpret = paste0("gt::", text_interpret)
       )
     )
   x

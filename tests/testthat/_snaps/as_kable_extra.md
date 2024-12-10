@@ -97,7 +97,7 @@
       [13] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Patient Died </td>\n   <td style=\"text-align:center;\"> 60 (59%) </td>\n "                        
       [14] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> Median (Q1, Q3); n (%)</td></tr></tfoot>\n</table>"                                                    
 
-# as_kable_extra passes table footnotes & footnote abbreviations correctly
+# as_kable_extra passes table footnotes & abbreviations correctly
 
     "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
 

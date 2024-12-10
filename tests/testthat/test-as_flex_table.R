@@ -222,9 +222,9 @@ test_that("as_flex_table passes table column alignment correctly", {
   )
 })
 
-test_that("as_flex_table passes table footnotes & footnote abbreviations correctly", {
+test_that("as_flex_table passes table footnotes & abbreviations correctly", {
   tbl_fn <- my_tbl_summary |>
-    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+    modify_footnote_body(columns = label, footnote = "test footnote", rows = variable == "age")
   ft_tbl_fn <- tbl_fn |> as_flex_table()
 
   # footnote
@@ -275,7 +275,7 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
   # testing one footnote passed to multiple columns and rows, addresses issue #2062
   out <- my_tbl_summary |>
     remove_footnote_header(stat_0) |>
-    modify_table_styling(
+    modify_footnote_body(
       columns = c(label, stat_0),
       rows = (variable %in% "trt") & (row_type == "level"),
       footnote = "my footnote"
@@ -310,17 +310,17 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
       by = trt,
       include = grade
     ) |>
-    modify_table_styling(
+    modify_footnote_body(
       columns = stat_1,
       rows = (variable %in% "grade") & (row_type == "level"),
       footnote = "my footnote"
     ) |>
-    modify_table_styling(
+    modify_footnote_body(
       columns = label,
       rows = label == "grade",
       footnote = "my footnote"
     ) |>
-    modify_table_styling(
+    modify_footnote_body(
       columns = label,
       rows = label == "I",
       footnote = "my footnote"
