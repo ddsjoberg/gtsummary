@@ -29,6 +29,7 @@ All abbreviations will be coalesced when printing the final table into
 a single source note.
 }
 \examples{
+# Example 1 ----------------------------------
 tbl_summary(
   trial,
   by = trt,
@@ -37,4 +38,9 @@ tbl_summary(
 ) |>
   modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
   modify_abbreviation("IQR = Interquartile Range")
+
+# Example 2 ----------------------------------
+lm(marker ~ trt, trial) |>
+  tbl_regression() |>
+  remove_abbreviation("CI = Confidence Interval")
 }

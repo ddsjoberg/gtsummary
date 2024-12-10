@@ -10,7 +10,8 @@
 #' @return Updated gtsummary object
 #' @name modify_abbreviation
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' # Example 1 ----------------------------------
 #' tbl_summary(
 #'   trial,
 #'   by = trt,
@@ -19,6 +20,11 @@
 #' ) |>
 #'   modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
 #'   modify_abbreviation("IQR = Interquartile Range")
+#'
+#' # Example 2 ----------------------------------
+#' lm(marker ~ trt, trial) |>
+#'   tbl_regression() |>
+#'   remove_abbreviation("CI = Confidence Interval")
 NULL
 
 #' @export
@@ -55,7 +61,7 @@ remove_abbreviation <- function(x, abbreviation) {
   }
   if (!isTRUE(abbreviation %in% x$table_styling$abbreviation$abbreviation)) {
     cli::cli_abort(
-      "The {.arg abbreviation} must be one of {.val {unique(x$table_styling$abbreviation$abbreviation)}}.",
+      "The {.arg abbreviation} argument must be one of {.val {unique(x$table_styling$abbreviation$abbreviation)}}.",
       call = get_cli_abort_call()
     )
   }

@@ -347,6 +347,37 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       )
   }
 
+  # source note ----------------------------------------------------------------
+  kable_extra_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          kableExtra::footnote(number = !!x$table_styling$source_note$source_note[i], escape = !!escape)
+        )
+      }
+    )
+
+  # abbreviation ---------------------------------------------------------------
+  kable_extra_calls[["abbreviations"]] <-
+    case_switch(
+      nrow(x$table_styling$abbreviation) > 0L ~
+        expr(
+          kableExtra::footnote(
+            general = !!(x$table_styling$abbreviation$abbreviation |>
+                           paste(collapse = ", ") %>%
+                           paste0(
+                             ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
+                             ": ", .
+                           )),
+            escape = !!escape,
+            general_title = "",
+            footnote_order = c("number", "alphabet", "symbol", "general")
+          )
+        ),
+      .default = list()
+    )
+
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     dplyr::bind_rows(
@@ -360,35 +391,6 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     kable_extra_calls[["footnote"]] <-
       expr(kableExtra::footnote(number = !!vct_footnote, escape = !!escape))
   }
-
-  # abbreviation ---------------------------------------------------------------
-  kable_extra_calls[["abbreviations"]] <-
-    case_switch(
-      nrow(x$table_styling$abbreviation) > 0L ~
-        expr(
-          kableExtra::footnote(
-            number = !!(x$table_styling$abbreviation$abbreviation |>
-                          paste(collapse = ", ") %>%
-                          paste0(
-                            ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                            ": ", .
-                          )),
-            escape = !!escape
-          )
-        ),
-      .default = list()
-    )
-
-  # source note ----------------------------------------------------------------
-  kable_extra_calls[["source_note"]] <-
-    map(
-      seq_len(nrow(x$table_styling$source_note)),
-      \(i) {
-        expr(
-          kableExtra::footnote(number = !!x$table_styling$source_note$source_note[i], escape = !!escape)
-        )
-      }
-    )
 
   # return list of calls -------------------------------------------------------
   kable_extra_calls

@@ -20,7 +20,7 @@
 #' @return a gtsummary table
 #' @export
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' tbl_continuous(
 #'   data = trial,
