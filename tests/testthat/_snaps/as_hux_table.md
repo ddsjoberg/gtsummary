@@ -3,31 +3,23 @@
     Code
       ht_merge
     Output
-                           Tumor Response               Time to Death           
-              Characte    OR     95% CI    p-value    HR     95% CI    p-value  
-              ristic                                                            
-            ────────────────────────────────────────────────────────────────────
-              Chemothe                                                          
-              rapy                                                              
-              Treatmen                                                          
-              t                                                                 
-              Drug A      —        —                  —        —                
-              Drug B     1.13    0.60,       0.7     1.30    0.88,       0.2    
-                                  2.13                        1.92              
-              Grade                                                             
-              I           —        —                  —        —                
-              II         0.85    0.39,       0.7     1.21    0.73,       0.5    
-                                  1.85                        1.99              
-              III        1.01    0.47,      >0.9     1.79    1.12,      0.014   
-                                  2.15                        2.86              
-              Age        1.02    1.00,      0.10     1.01    0.99,       0.3    
-                                  1.04                        1.02              
-            ────────────────────────────────────────────────────────────────────
-              OR = Odds Ratio, CI = Confidence Interval, HR                     
-              = Hazard Ratio                                                    
+                                                 Tumor Response                 Time to Death            
+                             Characteristic    OR      95% CI     p-value    HR      95% CI     p-value  
+                           ──────────────────────────────────────────────────────────────────────────────
+                             Chemotherapy                                                                
+                             Treatment                                                                   
+                             Drug A            —         —                   —         —                 
+                             Drug B           1.13   0.60, 2.13     0.7     1.30   0.88, 1.92     0.2    
+                             Grade                                                                       
+                             I                 —         —                   —         —                 
+                             II               0.85   0.39, 1.85     0.7     1.21   0.73, 1.99     0.5    
+                             III              1.01   0.47, 2.15    >0.9     1.79   1.12, 2.86    0.014   
+                             Age              1.02   1.00, 1.04    0.10     1.01   0.99, 1.02     0.3    
+                           ──────────────────────────────────────────────────────────────────────────────
+                             Abbreviations: CI = Confidence Interval, HR = Hazard                        
+                             Ratio, OR = Odds Ratio                                                      
       
-      Column names: label, estimate_1, conf.low_1, p.value_1, estimate_2, conf.low_2,
-      p.value_2
+      Column names: label, estimate_1, conf.low_1, p.value_1, estimate_2, conf.low_2, p.value_2
 
 # as_hux_table works with tbl_stack
 

@@ -127,13 +127,48 @@
     dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     dplyr::ungroup()
 
-  # footnote -------------------------------------------------------------------
-  x$table_styling$footnote <-
-    .table_styling_expr_to_row_number_footnote(x, "footnote")
+  # footnote_header ------------------------------------------------------------
+  x$table_styling$footnote_header <-
+    x$table_styling$footnote_header |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed footnotes.
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
+    ) |>
+    # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    .filter_row_with_subsequent_replace_or_removal() |>
+    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
-  # footnote_abbrev ------------------------------------------------------------
-  x$table_styling$footnote_abbrev <-
-    .table_styling_expr_to_row_number_footnote(x, "footnote_abbrev")
+  # footnote_body --------------------------------------------------------------
+  x$table_styling$footnote_body <-
+    x$table_styling$footnote_body |>
+    dplyr::mutate(
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove), # this is a hold-over from pre-v2.0.0 syntax where NA removed footnotes.
+      # convert rows predicate expression to row numbers
+      row_numbers =
+        map(
+          .data$rows,
+          \(rows) .rows_expr_to_row_numbers(x$table_body, rows)
+        )
+    ) |>
+    tidyr::unnest(cols = "row_numbers") |>
+    # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    .filter_row_with_subsequent_replace_or_removal() |>
+    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
+    dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
+    dplyr::mutate(row_numbers = as.integer(.data$row_numbers)) # when there are no body footnotes, this ensures expected type/class
+
+  # abbreviation ---------------------------------------------------------------
+  abbreviation_cols <-
+    x$table_styling$header$column[!x$table_styling$header$hide] |>
+    union(discard(x$table_styling$cols_merge$pattern, is.na) |> .extract_glue_elements()) |>
+    union(NA_character_)
+  x$table_styling$abbreviation <-
+    x$table_styling$abbreviation |>
+    dplyr::filter(.data$column %in% .env$abbreviation_cols) |>
+    dplyr::slice_tail(n = 1L, by = "abbreviation") |>
+    dplyr::arrange(.data$abbreviation)
 
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
@@ -179,84 +214,58 @@
   x
 }
 
-.table_styling_expr_to_row_number_footnote <- function(x, footnote_type) {
-  df_clean <-
-    x$table_styling[[footnote_type]] %>%
-    dplyr::filter(.data$column %in% .cols_to_show(x))
-  if (nrow(df_clean) == 0) {
-    return(dplyr::tibble(
-      column = character(0), tab_location = character(0), row_numbers = logical(0),
-      text_interpret = character(0), footnote = character(0)
-    ))
-  }
 
-  df_clean <-
-    df_clean %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
-      tab_location = ifelse(identical(.data$row_numbers, NA), "header", "body")
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest(cols = "row_numbers") %>%
-    dplyr::group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    # keeping the most recent addition
-    dplyr::filter(!is.na(.data$footnote)) # keep non-missing additions
+# this function processes the footnotes and removes footnotes that have
+# later been replaced or removed from the table
+.filter_row_with_subsequent_replace_or_removal <- function(x) {
+  if (nrow(x) == 0L) return(x)
 
-  if (footnote_type == "footnote_abbrev") {
-    # order the footnotes by where they first appear in the table,
-    df_clean <-
-      df_clean %>%
-      dplyr::inner_join(
-        x$table_styling$header %>%
-          select("column") %>%
-          mutate(column_id = dplyr::row_number()),
-        by = "column"
-      ) %>%
-      dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(footnote = paste(unique(.data$footnote), collapse = ", "))
-  }
-
-  df_clean %>%
-    dplyr::select(all_of(c("column", "tab_location", "row_numbers", "text_interpret", "footnote")))
+  # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+  dplyr::filter(
+    .data = x,
+    .by = any_of(c("column", "row_numbers")),
+    !unlist(
+      pmap(
+        list(.data$replace, .data$remove, dplyr::row_number()),
+        function(row_replace, row_remove, row_number) {
+          # if this is the last row in the group, there will be now removal indications below
+          if (row_number == dplyr::n()) return(FALSE)
+          # if a subsequent call to replace or remove a footnote appear below,
+          # then the current row can be deleted.
+          any(.data$replace[seq(row_number + 1L, dplyr::n())]) ||
+            any(.data$remove[seq(row_number + 1L, dplyr::n())])
+        }
+      )
+    )
+  )
 }
 
 # this function orders the footnotes by where they first appear in the table,
 # and assigns them an sequential ID
-.number_footnotes <- function(x) {
-  if (nrow(x$table_styling$footnote) == 0 &&
-    nrow(x$table_styling$footnote_abbrev) == 0) {
+.number_footnotes <- function(x, type, start_with = 0L) {
+  # if empty, return empty data frame
+  if (nrow(x$table_styling[[type]]) == 0L) {
     return(dplyr::tibble(
       footnote_id = integer(), footnote = character(), column = character(),
-      tab_location = character(), row_numbers = integer()
+      column_id = integer(), row_numbers = integer()
     ))
   }
-  dplyr::bind_rows(
-    x$table_styling$footnote,
-    x$table_styling$footnote_abbrev
-  ) %>%
-    dplyr::inner_join(
-      x$table_styling$header %>%
-        select("column") %>%
-        mutate(column_id = dplyr::row_number()),
-      by = "column"
-    ) %>%
-    dplyr::arrange(dplyr::desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
-    dplyr::group_by(.data$footnote) %>%
-    tidyr::nest() %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(footnote_id = dplyr::row_number()) %>%
-    tidyr::unnest(cols = "data") %>%
-    dplyr::select(
-      "footnote_id", "footnote", "column",
-      "tab_location", "row_numbers"
-    )
+
+  # adding the footnote number to assign to each of the footnotes
+  dplyr::inner_join(
+    x$table_styling$header |>
+      select("column", column_id = "id") |>
+      dplyr::filter(!is.na(.data$column_id)),
+    x$table_styling[[type]],
+    by = "column"
+  ) |>
+    dplyr::arrange(dplyr::pick(any_of(c("column_id", "row_numbers")))) |>
+    dplyr::group_by(.data$footnote) |>
+    tidyr::nest() |>
+    dplyr::ungroup() |>
+    dplyr::mutate(footnote_id = dplyr::row_number() + .env$start_with) |>
+    tidyr::unnest(cols = "data") |>
+    dplyr::select(any_of(c("footnote_id", "footnote", "column", "column_id", "row_numbers")))
 }
 
 

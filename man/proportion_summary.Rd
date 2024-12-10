@@ -79,7 +79,7 @@ Titanic |>
     overall_row_last = TRUE
   ) |>
   bold_labels() |>
-  modify_footnote(all_stat_cols() ~ "Proportion (\%) of survivors (n/N) [95\% CI]")
+  modify_footnote_header("Proportion (\%) of survivors (n/N) [95\% CI]", columns = all_stat_cols())
 }
 \author{
 Joseph Larmarange

@@ -43,7 +43,7 @@
 #'
 #' - Use `modify_header()` to update the column headers
 #' - Use `modify_fmt_fun()` to update the functions that format the statistics
-#' - Use `modify_footnote()` to add a explanatory footnote
+#' - Use `modify_footnote_header()` to add a explanatory footnote
 #'
 #' If you return a tibble with column names `p.value` or `q.value`, default
 #' p-value formatting will be applied, and you may take advantage of subsequent

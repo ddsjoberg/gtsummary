@@ -20,7 +20,7 @@
 #' @return a gtsummary table
 #' @export
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' tbl_continuous(
 #'   data = trial,
@@ -199,14 +199,14 @@ tbl_continuous <- function(data,
     )
 
   # prepend the footnote with information about the variable -------------------
-  x$table_styling$footnote$footnote <-
+  x$table_styling$footnote_header$footnote <-
     paste0(
       cards |>
         dplyr::filter(.data$context == "attributes", .data$variable == .env$variable, .data$stat_name == "label") |>
         dplyr::pull("stat") |>
         unlist(),
       ": ",
-      x$table_styling$footnote$footnote
+      x$table_styling$footnote_header$footnote
     )
 
   x |>

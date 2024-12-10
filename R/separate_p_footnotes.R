@@ -34,7 +34,7 @@ separate_p_footnotes <- function(x) {
   }
 
   # remove p-value column footnote ---------------------------------------------
-  x <- modify_footnote(x, any_of(c("p.value", "estimate", "conf.low", "conf.high")) ~ NA_character_)
+  x <- remove_footnote_header(x, columns = any_of(c("p.value", "estimate", "conf.low", "conf.high")))
 
   # extract footnote next for each variable ------------------------------------
   calling_fun <- names(x$call_list) |> intersect(c("add_p", "add_difference"))

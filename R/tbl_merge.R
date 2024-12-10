@@ -231,7 +231,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     ) %>%
     reduce(.rows_update_table_styling_header, .init = x$table_styling$header)
 
-  for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "indent", "text_format", "fmt_missing", "cols_merge")) {
+  for (style_type in c("footnote_header", "footnote_body", "abbreviation", "source_note",
+                       "fmt_fun", "indent", "text_format", "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map(
         rev(seq_along(tbls)),
@@ -244,13 +245,15 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           }
 
           # renaming column variable
-          style_updated$column <-
-            ifelse(
-              style_updated$column %in% c("label", "variable", "var_label", "row_type"),
-              style_updated$column,
-              paste0(style_updated$column, "_", i)
-            ) %>%
-            as.character()
+          if ("column" %in% names(style_updated)) {
+            style_updated$column <-
+              ifelse(
+                style_updated$column %in% c("label", "variable", "var_label", "row_type") | is.na(style_updated$column),
+                style_updated$column,
+                paste0(style_updated$column, "_", i)
+              ) %>%
+              as.character()
+          }
 
           # updating column names in rows expr/quo
           if ("rows" %in% names(style_updated)) {
@@ -277,7 +280,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   # take the first non-NULL element from tbls[[.]]
-  for (style_type in c("caption", "source_note")) {
+  for (style_type in c("caption")) {
     x$table_styling[[style_type]] <-
       map(seq_along(tbls), ~ getElement(tbls, .x) |> getElement("table_styling") |> getElement(style_type)) %>%
       reduce(.f = \(.x, .y) .x %||% .y)

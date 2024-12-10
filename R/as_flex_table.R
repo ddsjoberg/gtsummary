@@ -206,45 +206,82 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # autofit --------------------------------------------------------------------
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
-  # footnote -------------------------------------------------------------------
+  # footnote_header ------------------------------------------------------------
+  df_footnote_header <-
+    .number_footnotes(x, "footnote_header") |>
+    tidyr::nest(df_location = c("column", "column_id")) |>
+    dplyr::mutate(
+      column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
+    )
   header_i_index <- ifelse(any_spanning_header == TRUE, 2L, 1L)
 
-  df_footnote <-
-    .number_footnotes(x) |>
-    dplyr::inner_join(
-      x$table_styling$header |>
-        dplyr::select("column", column_id = "id"),
-      by = "column"
-    ) |>
-    dplyr::mutate(
-      row_numbers =
-        ifelse(.data$tab_location == "header",
-               header_i_index,
-               .data$row_numbers
-        )
-    ) |>
-    dplyr::select(
-      "footnote_id", "footnote", "tab_location",
-      "row_numbers", "column_id"
-    ) |>
-    tidyr::nest(location_ids = c("row_numbers", "column_id")) %>%
-    dplyr::mutate(
-      row_numbers = map(.data$location_ids, ~ getElement(.x, "row_numbers")),
-      column_id = map(.data$location_ids, ~ getElement(.x, "column_id"))
-    )
-
-  flextable_calls[["footnote"]] <-
+  flextable_calls[["footnote_header"]] <-
     map(
-      seq_len(nrow(df_footnote)),
+      seq_len(nrow(df_footnote_header)),
       ~ expr(
         flextable::footnote(
-          i = !!df_footnote$row_numbers[[.x]],
-          j = !!df_footnote$column_id[[.x]],
-          value = flextable::as_paragraph(!!df_footnote$footnote[[.x]]),
-          part = !!df_footnote$tab_location[[.x]],
-          ref_symbols = !!df_footnote$footnote_id[[.x]]
+          i = !!header_i_index,
+          j = !!df_footnote_header$column_id[[.x]],
+          value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
+          part = "header",
+          ref_symbols = !!df_footnote_header$footnote_id[[.x]]
         )
       )
+    )
+
+  # footnote_body --------------------------------------------------------------
+  df_footnote_body <-
+    .number_footnotes(x, "footnote_body", start_with = nrow(df_footnote_header)) |>
+    tidyr::nest(df_location = c("column", "column_id", "row_numbers")) |>
+    dplyr::mutate(
+      row_numbers = map(.data$df_location, ~ getElement(.x, "row_numbers")),
+      column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
+    )
+
+  flextable_calls[["footnote_body"]] <-
+    map(
+      seq_len(nrow(df_footnote_body)),
+      ~ expr(
+        flextable::footnote(
+          i = !!df_footnote_body$row_numbers[[.x]],
+          j = !!df_footnote_body$column_id[[.x]],
+          value = flextable::as_paragraph(!!df_footnote_body$footnote[[.x]]),
+          part = "body",
+          ref_symbols = !!df_footnote_body$footnote_id[[.x]]
+        )
+      )
+    )
+
+
+  # abbreviation ---------------------------------------------------------------
+  flextable_calls[["abbreviations"]] <-
+    case_switch(
+      nrow(x$table_styling$abbreviation) > 0L ~
+        expr(
+          flextable::add_footer_lines(
+            value = flextable::as_paragraph(
+              !!(x$table_styling$abbreviation$abbreviation |>
+                paste(collapse = ", ") %>%
+                paste0(
+                  ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
+                  ": ", .
+                ))
+            )
+          )
+        ),
+      .default = list()
+    )
+
+  # source note ----------------------------------------------------------------
+  # in flextable, this is just a footnote associated without column or symbol
+  flextable_calls[["source_note"]] <-
+    map(
+      seq_len(nrow(x$table_styling$source_note)),
+      \(i) {
+        expr(
+          flextable::add_footer_lines(value = flextable::as_paragraph(!!x$table_styling$source_note$source_note[i]))
+        )
+      }
     )
 
   # fmt_missing ----------------------------------------------------------------
@@ -315,17 +352,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
       ))
     )
 
-  # source note ----------------------------------------------------------------
-  # in flextable, this is just a footnote associated without column or symbol
-  flextable_calls[["source_note"]] <-
-    map(
-      seq_len(nrow(x$table_styling$source_note)),
-      \(i) {
-        expr(
-          flextable::add_footer_lines(value = flextable::as_paragraph(!!x$table_styling$source_note$source_note[i]))
-        )
-      }
-    )
+
 
   # border ---------------------------------------------------------------------
   flextable_calls[["border"]] <-

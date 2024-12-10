@@ -16,7 +16,7 @@ test_that("tbl_custom_summary() basics", {
         digits = ~1
       ) |>
       add_overall(last = TRUE) |>
-      modify_footnote(all_stat_cols() ~ "Mean age") |>
+      modify_footnote_header("Mean age", columns = all_stat_cols()) |>
       modify_column_unhide(everything()) |>
       as.data.frame(col_labels = FALSE),
     NA

@@ -275,7 +275,7 @@ trial |>
     missing = "no"
   ) |> 
   modify_header(stat_0 = "**Mean (SD)**") |> 
-  modify_footnote(stat_0 = NA) |> 
+  remove_footnote_header(stat_0) |> 
   add_ci()
 ```
 
@@ -341,7 +341,7 @@ gt_t1 <- trial |>
   tbl_summary(include = c(trt, grade), missing = "no") |> 
   add_n() |> 
   modify_header(stat_0 = "**n (%)**") |> 
-  modify_footnote(stat_0 = NA_character_)
+  remove_footnote_header(stat_0)
 
 theme_gtsummary_compact()
 tbl_merge(
@@ -387,7 +387,7 @@ trial |>
   ) |> 
   modify_header(label = "**Model Outcome**",
                 estimate = "**Treatment Coef.**") |> 
-  modify_footnote(estimate = "Values larger than 0 indicate larger values in the Drug B group.")
+  modify_footnote_header("Values larger than 0 indicate larger values in the Drug B group.", columns = estimate)
 ```
 
 <hr>
