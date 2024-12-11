@@ -75,7 +75,7 @@
        [9] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> II </td>\n   <td style=\"text-align:center;\"> 0.85 </td>\n   <td style=\"text-align:center;\"> 0.39, 1.85 </td>\n   <td style=\"text-align:center;\"> 0.7 </td>\n   <td style=\"text-align:center;\"> 1.21 </td>\n   <td style=\"text-align:center;\"> 0.73, 1.99 </td>\n   <td style=\"text-align:center;\"> 0.5 </td>\n "                                                                                                                                                                                     
       [10] "<tr>\n   <td style=\"text-align:left;padding-left: 2em;\" indentlevel=\"1\"> III </td>\n   <td style=\"text-align:center;\"> 1.01 </td>\n   <td style=\"text-align:center;\"> 0.47, 2.15 </td>\n   <td style=\"text-align:center;\"> &gt;0.9 </td>\n   <td style=\"text-align:center;\"> 1.79 </td>\n   <td style=\"text-align:center;\"> 1.12, 2.86 </td>\n   <td style=\"text-align:center;\"> 0.014 </td>\n "                                                                                                                                                                              
       [11] "<tr>\n   <td style=\"text-align:left;\"> Age </td>\n   <td style=\"text-align:center;\"> 1.02 </td>\n   <td style=\"text-align:center;\"> 1.00, 1.04 </td>\n   <td style=\"text-align:center;\"> 0.10 </td>\n   <td style=\"text-align:center;\"> 1.01 </td>\n   <td style=\"text-align:center;\"> 0.99, 1.02 </td>\n   <td style=\"text-align:center;\"> 0.3 </td>\n "                                                                                                                                                                                                                       
-      [12] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> OR = Odds Ratio, CI = Confidence Interval, HR = Hazard Ratio</td></tr></tfoot>\n</table>"                                                                                                                                                                                                                                                                                                                                                                                                                     
+      [12] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup></sup> Abbreviations: CI = Confidence Interval, HR = Hazard Ratio, OR = Odds Ratio</td></tr></tfoot>\n</table>"                                                                                                                                                                                                                                                                                                                                                                                                       
 
 # as_kable_extra works with tbl_stack
 
@@ -97,13 +97,13 @@
       [13] "<tr>\n   <td style=\"text-align:left;\">  </td>\n   <td style=\"text-align:left;\"> Patient Died </td>\n   <td style=\"text-align:center;\"> 60 (59%) </td>\n "                        
       [14] "</tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1</sup> Median (Q1, Q3); n (%)</td></tr></tfoot>\n</table>"                                                    
 
-# as_kable_extra passes table footnotes & footnote abbreviations correctly
+# as_kable_extra passes table footnotes & abbreviations correctly
 
     "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
 
 ---
 
-    "<\/tbody>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> N = number of observations<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>3<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
+    "<\/tbody>\n<tfoot><tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup><\/sup> Abbreviation: N = number of observations<\/td><\/tr><\/tfoot>\n<tfoot>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>1<\/sup> n (%); Median (Q1, Q3)<\/td><\/tr>\n<tr><td style=\"padding: 0; \" colspan=\"100%\">\n<sup>2<\/sup> test footnote<\/td><\/tr>\n<\/tfoot>\n<\/table>"
 
 ---
 

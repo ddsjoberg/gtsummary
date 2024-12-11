@@ -120,14 +120,6 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                   "**)**"
                 )
 
-              # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
-              estimate_footnote <-
-                x$table_styling$footnote_abbrev |>
-                dplyr::filter(.data$column %in% "estimate") |>
-                dplyr::filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) |>
-                dplyr::pull("footnote") |>
-                c("CI = Confidence Interval") |>
-                paste(collapse = ", ")
               x %>%
                 # merge estimate and CI into one cell
                 modify_column_merge(
@@ -136,9 +128,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                   pattern = "{estimate} ({conf.low} to {conf.high})"
                 ) |>
                 # update column header
-                modify_header(estimate = new_header_text) |>
-                # add CI abbreviation footnote
-                modify_footnote(estimate = estimate_footnote, abbreviation = TRUE)
+                modify_header(estimate = new_header_text)
             },
             error = function(e) x
           )
@@ -153,14 +143,6 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                   " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
                 )
 
-              # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
-              estimate_footnote <-
-                x$table_styling$footnote_abbrev |>
-                dplyr::filter(.data$column %in% "estimate") |>
-                dplyr::filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) |>
-                dplyr::pull("footnote") |>
-                c("CI = Confidence Interval") |>
-                paste(collapse = ", ")
               x %>%
                 # merge estimate and CI into one cell
                 modify_column_merge(
@@ -170,9 +152,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                   pattern = "{estimate} ({conf.low} to {conf.high})"
                 ) |>
                 # update column header
-                modify_header(estimate = new_header_text) |>
-                # add CI abbreviation footnote
-                modify_footnote(estimate = estimate_footnote, abbreviation = TRUE)
+                modify_header(estimate = new_header_text)
             },
             error = function(e) x
           )
@@ -190,8 +170,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                                            all_categorical() ~ "{n} ({p})"),
         "pkgwide-str:ci.sep" = " to ",
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
-          x$table_styling$footnote$footnote <-
-            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x$table_styling$footnote_header$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote_header$footnote)
           x
         }
       )
@@ -258,8 +238,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to ",
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
-          x$table_styling$footnote$footnote <-
-            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote$footnote)
+          x$table_styling$footnote_header$footnote <-
+            gsub("Q1 \U2013 Q3", "IQR", x = x$table_styling$footnote_header$footnote)
           x
         }
       )
@@ -277,23 +257,13 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
               sep = "  \n"
             )
 
-          estimate_footnote <-
-            x$table_styling$footnote_abbrev |>
-            dplyr::filter(.data$column %in% "estimate") |>
-            dplyr::filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) |>
-            dplyr::pull("footnote") |>
-            c("SE = Standard Error") |>
-            paste(collapse = ", ")
-
           x |>
             add_significance_stars(
               pattern = "{estimate}{stars}  \n({std.error})",
               hide_se = TRUE
             ) |>
             # update column header
-            modify_header(estimate = new_header_text) |>
-            # add SE abbreviation footnote
-            modify_footnote(estimate = estimate_footnote, abbreviation = TRUE)
+            modify_header(estimate = new_header_text)
         },
         "as_gt-lst:addl_cmds" = list(
           tab_spanner = list(

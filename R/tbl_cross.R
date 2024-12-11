@@ -170,7 +170,7 @@ tbl_cross <- function(data,
       type = list(all_of(row) ~ "categorical", any_of("..total..") ~ "dichotomous")
     ) |>
     modify_header(all_stat_cols(FALSE) ~ "{level}", label = "") |>
-    modify_footnote(everything() ~ NA_character_) |>
+    remove_footnote_header(everything()) |>
     modify_spanning_header(all_stat_cols(FALSE) ~ label[[col]])
 
   # adding column margin
@@ -178,7 +178,7 @@ tbl_cross <- function(data,
     x <- x |>
       add_overall(last = TRUE) |>
       modify_header(stat_0 = margin_text) |>
-      modify_footnote(stat_0 = NA_character_)
+      remove_footnote_header("stat_0")
   }
 
   # returning results ----------------------------------------------------------

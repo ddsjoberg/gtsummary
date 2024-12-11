@@ -199,10 +199,16 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   }
 
   # updating table_style with footnote and column header
-  x$table_styling$footnote <-
+  x$table_styling$footnote_header <-
     dplyr::bind_rows(
-      x$table_styling$footnote,
-      tbl_overall$table_styling$footnote %>%
+      x$table_styling$footnote_header,
+      tbl_overall$table_styling$footnote_header %>%
+        dplyr::filter(.data$column %in% "stat_0")
+    )
+  x$table_styling$footnote_body <-
+    dplyr::bind_rows(
+      x$table_styling$footnote_body,
+      tbl_overall$table_styling$footnote_body %>%
         dplyr::filter(.data$column %in% "stat_0")
     )
 
