@@ -17,7 +17,7 @@
 #' @return Updated gtsummary object
 #' @name modify_footnote2
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
