@@ -61,5 +61,24 @@ Updated gtsummary object
 Modify Footnotes
 }
 \examples{
-# TODO: Add examples
+# Example 1 ----------------------------------
+tbl <- trial |>
+  tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
+  modify_footnote_header(
+    footnote = "All but four subjects received both treatments in a crossover design",
+    columns = all_stat_cols(),
+    replace = FALSE
+  ) |>
+  modify_footnote_body(
+    footnote = "Tumor grade was assessed _before_ treatment began",
+    columns = "label",
+    rows = variable == "grade" & row_type == "label"
+  )
+tbl
+
+# Example 2 ----------------------------------
+# remove all footnotes
+tbl |>
+  remove_footnote_header(columns = all_stat_cols()) |>
+  remove_footnote_body(columns = label, rows = variable == "grade" & row_type == "label")
 }
