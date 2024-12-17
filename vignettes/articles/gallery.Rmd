@@ -401,8 +401,11 @@ my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
   dplyr::bind_cols(
     broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
     # calculate the confidence intervals, and save them in a tibble
-    confint.default(x) |> 
-      dplyr::as_tibble() |> 
+    dplyr::case_when(
+      exponentiate ~ exp(confint.default(x)),
+      .default = confint.default(x)
+    ) |> 
+      dplyr::as_tibble(.name_repair = "minimal") |> 
       rlang::set_names(c("conf.low", "conf.high"))
   )
 }
