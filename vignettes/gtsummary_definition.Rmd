@@ -27,14 +27,13 @@ Here, we review those characteristics, and provide instructions on how to constr
 library(gtsummary)
 
 tbl_regression_ex <-
-  lm(age ~ grade + marker, trial) %>%
-  tbl_regression() %>%
+  lm(age ~ grade + marker, trial) |> 
+  tbl_regression() |> 
   bold_p(t = 0.5)
 
 tbl_summary_ex <-
-  trial %>%
-  select(trt, age, grade, response) %>%
-  tbl_summary(by = trt)
+  trial |> 
+  tbl_summary(by = trt, include = c(trt, age, grade, response))
 ```
 
 ## Structure of a {gtsummary} object
@@ -58,7 +57,7 @@ tbl_summary_ex$table_body
 #### table_styling
 
 The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
-The list contains the following data frames `header`, `footnote`, `footnote_abbrev`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `source_note`, `caption`, `horizontal_line_above`.
+The list contains the following data frames `header`, `footnote_header`, `footnote_body`, `abbreviation`, `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `caption` and `horizontal_line_above`.
 
 **`header`**
 
@@ -91,19 +90,98 @@ dplyr::tribble(
   )
 ```
 
-**`footnote` & `footnote_abbrev`**
+**`footnote_header`**
 
-Each {gtsummary} table may contain a single footnote per header and cell within the table.
-Footnotes and footnote abbreviations are handled separately. 
+Each {gtsummary} table may contain footnotes in the column headers.
 Updates/changes to footnote are appended to the bottom of the tibble.
-A footnote of `NA_character_` deletes an existing footnote.
+
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "footnote", "string containing footnote to add to column/row",
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+  "replace", "logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)",
+  "remove", "logical indicating whether to remove all footnotes in the column header"
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`footnote_body`**
+
+Each {gtsummary} table may include footnotes in the body of the table.
+Updates/changes to footnote are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
 dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
-  "footnote", "string containing footnote to add to column/row"
+  "footnote", "string containing footnote to add to column/row",
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+  "replace", "logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)",
+  "remove", "logical indicating whether to remove all footnotes in the column header",
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`abbreviation`**
+
+Abbreviations are added one at a time, and at the time of table rendering, the are coalesced into a single source note.
+
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~Column, ~Description,
+  "column", "Optional column name from `.$table_body`. When present, the abbreviation is only printed when the column appears in the rendered table",
+  "abbreviation", "string containing the abbreviation to add",
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`source_note`**
+
+A tibble with the source notes to include.
+Each source note is assigned an ID based on the order it is added to the table.
+Source notes are added one at a time and present much like footnotes, but are not linked to a header or cell in the table.
+
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~Column, ~Description,
+  "id", "Integer idenitfying the source note",
+  "source_note", "string containing the abbreviation to add",
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+  "remove", "logical indicating whether the source note should be included or removed from final table"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = everything()) %>%
@@ -224,31 +302,6 @@ dplyr::tribble(
   )
 ``` 
 
-**`source_note`**
-
-A tibble with the source notes to include.
-Each source note is assigned an ID based on the order it is added to the table.
-
-```{r, echo=FALSE}
-dplyr::tribble(
-  ~Column, ~Description,
-  "id", "ID of the source note",
-  "sounrce_note", "string containing the source note", 
-  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
-  "remove", "logical indicating whether the source note should be removed from the table"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = everything()) %>%
-  gt::tab_options(
-    table.font.size = "small",
-    data_row.padding = gt::px(1),
-    summary_row.padding = gt::px(1),
-    grand_summary_row.padding = gt::px(1),
-    footnotes.padding = gt::px(1),
-    source_notes.padding = gt::px(1),
-    row_group.padding = gt::px(1)
-  )
-``` 
 **`caption`**
 
 String that is made into the table caption.

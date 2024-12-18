@@ -1,7 +1,8 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom", "smd")))
+skip_if_not(is_pkg_installed(c("cardx", "broom", "smd", "withr")))
 
 test_that("separate_p_footnotes()", {
+  withr::local_options(list(width = 130))
   tbl <- trial |>
     tbl_summary(
       by = trt,
@@ -13,7 +14,7 @@ test_that("separate_p_footnotes()", {
     add_p(tbl, test = list(age = \(data, variable, by, ...) t.test(data[[variable]] ~ data[[by]]) |> broom::tidy())) |>
       separate_p_footnotes() |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% c(dplyr::n(), dplyr::n() - 1L)) |>
       dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()
@@ -23,7 +24,7 @@ test_that("separate_p_footnotes()", {
     add_difference(tbl) |>
       separate_p_footnotes() |>
       getElement("table_styling") |>
-      getElement("footnote") |>
+      getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% seq(dplyr::n(), dplyr::n() - 4L)) |>
       dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()

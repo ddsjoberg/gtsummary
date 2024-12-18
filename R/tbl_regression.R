@@ -69,7 +69,7 @@
 #' @name tbl_regression
 #' @return A `tbl_regression` object
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' glm(response ~ age + grade, trial, family = binomial()) |>
 #'   tbl_regression(exponentiate = TRUE)

@@ -99,7 +99,7 @@ add_p.tbl_cross <- function(x,
   # report p-value as source note ----------------------------------------------
   if (source_note == TRUE) {
     test_name <-
-      x$table_styling$footnote |>
+      x$table_styling$footnote_header |>
       dplyr::filter(.data$column %in% "p.value") |>
       dplyr::pull("footnote")
 
