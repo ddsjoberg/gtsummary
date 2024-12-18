@@ -22,7 +22,12 @@
 #' @name modify_source_note
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' # Example 1 ----------------------------------
+#' tbl <- tbl_summary(trial, include = c(marker, grade), missing = "no") |>
+#'   modify_source_note("Results as of June 26, 2015")
 #'
+#' # Example 2 ----------------------------------
+#' remove_source_note(tbl, source_note_id = 1)
 NULL
 
 #' @export

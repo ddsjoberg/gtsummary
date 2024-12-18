@@ -61,7 +61,7 @@ tbl |>
     hide_ci = TRUE, hide_se = TRUE
   ) |>
   modify_header(estimate = "**Beta (95\% CI)**") |>
-  modify_footnote(estimate = "CI = Confidence Interval", abbreviation = TRUE)
+  modify_abbreviation("CI = Confidence Interval")
 
 # Example 3 ----------------------------------
 # Use '  \n' to put a line break between beta and SE
@@ -71,7 +71,7 @@ tbl |>
     pattern = "{estimate}{stars}  \n({std.error})"
   ) |>
   modify_header(estimate = "**Beta  \n(SE)**") |>
-  modify_footnote(estimate = "SE = Standard Error", abbreviation = TRUE) |>
+  modify_abbreviation("SE = Standard Error") |>
   as_gt() |>
   gt::fmt_markdown(columns = everything()) |>
   gt::tab_style(

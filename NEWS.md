@@ -1,5 +1,15 @@
 # gtsummary (development version)
 
+* Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
+  
+  In this update, we now export separate user-facing functions for each of these with clearer names and scope: `modify_footnote_header()`, `modify_footnote_body()`, and `modify_abbreviation()`. As the names indicate, the `modify_footnote_header()` and `modify_footnote_body()` functions place footnotes in the header and table body. Abbreviations are now treated like source notes and do not have footnote markers associated with them. We also export functions `remove_footnote_header()`, `remove_footnote_body()`, and `remove_abbreviation()` to remove previously assigned footnotes and abbreviations.
+
+  Also, multiple footnotes may now reference the same cell in the table or column header by utilizing the `modify_footnote_header(replace=FALSE)`, `modify_footnote_body(replace=FALSE)` argument.
+
+* Previously, source notes were an undocumented feature and only a single source note could be included in a table. We now export `modify_source_note()` and `remove_source_note()` to add and remove any number of source notes. Also, when merging and stacking tables, previously due to the one source note limit, only the first source note was retained. Now all source notes will be included below the resulting table. _This is different behavior compared to previous versions of the package and in rare cases may result in a different source note._ Moreover, `kableExtra` output now supports source notes, where previously they were omitted.
+
+* Language translations have been updated with a handful of missing translations. (#2100)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
