@@ -8,6 +8,8 @@
 
 * Previously, source notes were an undocumented feature and only a single source note could be included in a table. We now export `modify_source_note()` and `remove_source_note()` to add and remove any number of source notes. Also, when merging and stacking tables, previously due to the one source note limit, only the first source note was retained. Now all source notes will be included below the resulting table. _This is different behavior compared to previous versions of the package and in rare cases may result in a different source note._ Moreover, `kableExtra` output now supports source notes, where previously they were omitted.
 
+* Language translations have been updated with a handful of missing translations. (#2100)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
