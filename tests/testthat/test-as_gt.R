@@ -211,6 +211,29 @@ test_that("as_gt passes table text interpreters correctly", {
 
   # spanning header
   expect_true(attr(gt_tbl$`_spanners`$spanner_label[[2]], "html"))
+
+  # checking the placement of a second spanning header
+  expect_silent(
+    tbl2 <-
+      my_spanning_tbl |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_gt()
+  )
+
+  expect_equal(
+    tbl2$`_spanners` |>
+      dplyr::select(vars, spanner_label, spanner_level) |>
+      dplyr::mutate(
+        vars = map_chr(vars, ~paste(.x, collapse = ", ")),
+        spanner_label = map_chr(spanner_label, as.character)
+      ),
+    data.frame(
+      stringsAsFactors = FALSE,
+      vars = c("stat_1, stat_3", "stat_1, stat_2, stat_3"),
+      spanner_label = c("**Testing**", "**Tumor Grade**"),
+      spanner_level = c(1L, 2L)
+    )
+  )
 })
 
 test_that("as_gt passes table footnotes & abbreviations correctly", {
