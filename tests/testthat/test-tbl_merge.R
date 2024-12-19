@@ -70,11 +70,11 @@ test_that("tbl_merge works with standard use", {
 
   # correct spanning headers
   expect_equal(
-    t4$table_styling$header |>
-      dplyr::filter(!hide) |>
-      dplyr::pull(spanning_header),
-    c(NA,
-      rep("UVA Tumor Response", 4),
+    t4$table_styling$spanning_header |>
+      dplyr::filter(column %in% t4$table_styling$header$column[!t4$table_styling$header$hide]) |>
+      dplyr::pull(spanning_header) |>
+      rev(),
+    c(rep("UVA Tumor Response", 4),
       rep("MVA Tumor Response", 3),
       rep("MVA Time to Death", 3),
       rep("TTD Adjusted for grade", 3))
@@ -132,8 +132,8 @@ test_that("tbl_merge works with a single table", {
 
   # correct spanning header
   expect_equal(
-    tbl$table_styling$header$spanning_header,
-    c(rep(NA, 4), rep("**Table 1**", 3))
+    tbl$table_styling$spanning_header$spanning_header,
+    rep("**Table 1**", 3)
   )
 })
 

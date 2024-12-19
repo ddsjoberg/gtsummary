@@ -41,7 +41,7 @@ test_that("tbl_cross(label) works", {
     )
   )
   expect_identical(out$table_body$var_label[1], "TRT")
-  expect_identical(unique(out$table_styling$header$spanning_header)[2], "STAGE")
+  expect_identical(unique(out$table_styling$spanning_header$spanning_header), "STAGE")
 })
 
 test_that("tbl_cross(label) errors properly", {

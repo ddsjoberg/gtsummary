@@ -216,11 +216,12 @@ modify_table_styling <- function(x,
 
   # spanning_header ------------------------------------------------------------
   if (!is_empty(spanning_header)) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_spanning_header = paste0("gt::", text_interpret), spanning_header = spanning_header),
-        by = "column"
+    x <-
+      .modify_spanning_header(
+        x = x,
+        columns = columns,
+        spanning_header = spanning_header,
+        text_interpret = text_interpret
       )
   }
 

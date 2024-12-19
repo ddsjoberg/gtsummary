@@ -127,6 +127,29 @@
     dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     dplyr::ungroup()
 
+  # spanning_header ------------------------------------------------------------
+  x$table_styling$spanning_header <-
+    x$table_styling$spanning_header |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed headers
+      remove = ifelse(is.na(.data$spanning_header), TRUE, .data$remove),
+    ) |>
+    # within a column and level, utilize the most recently added
+    dplyr::filter(.by = c("column", "level"), dplyr::n() == dplyr::row_number()) |>
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
+    dplyr::arrange(.data$level)
+
+  if (nrow(x$table_styling$spanning_header) > 0L &&
+      !setequal(unique(x$table_styling$spanning_header$level),
+               seq_len(max(x$table_styling$spanning_header$level)))) {
+    cli::cli_abort(
+      c("There is an error in the spanning headers structure.",
+        "i" = "Each spanning header level must be defined, that is, no skipping levels."),
+      call = get_cli_abort_call()
+    )
+  }
+
   # footnote_header ------------------------------------------------------------
   x$table_styling$footnote_header <-
     x$table_styling$footnote_header |>
@@ -136,7 +159,7 @@
     ) |>
     # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
     .filter_row_with_subsequent_replace_or_removal() |>
-    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
     dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
   # footnote_body --------------------------------------------------------------

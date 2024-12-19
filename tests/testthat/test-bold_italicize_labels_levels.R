@@ -107,7 +107,7 @@ test_that("bold_labels.tbl_cross()", {
   expect_equal(
     tbl |>
       getElement("table_styling") |>
-      getElement("header") |>
+      getElement("spanning_header") |>
       dplyr::filter(startsWith(column, "stat_"), column != "stat_0") |>
       dplyr::pull(spanning_header) |>
       unique(),
@@ -158,7 +158,7 @@ test_that("italicize_labels.tbl_cross()", {
   expect_equal(
     tbl |>
       getElement("table_styling") |>
-      getElement("header") |>
+      getElement("spanning_header") |>
       dplyr::filter(startsWith(column, "stat_"), column != "stat_0") |>
       dplyr::pull(spanning_header) |>
       unique(),
