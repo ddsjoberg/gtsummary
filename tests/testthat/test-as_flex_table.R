@@ -177,6 +177,25 @@ test_that("as_flex_table passes table header labels correctly", {
       dplyr::pull(column),
     which(nchar(apply(ft_spanning_tbl$header$content$data, c(1, 2), \(x) x[[1]]$txt[1])[1, ]) > 1) |> names()
   )
+
+  # checking the placement of a second spanning header
+  expect_silent(
+    tbl2 <-
+      my_spanning_tbl |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_flex_table()
+  )
+
+  expect_equal(
+    tbl2$header$dataset,
+    data.frame(
+      stringsAsFactors = FALSE,
+      label = c(" ", " ", "label"),
+      stat_1 = c("**Tumor Grade**", "**Testing**", "stat_1"),
+      stat_2 = c("**Tumor Grade**", " ", "stat_2"),
+      stat_3 = c("**Tumor Grade**", "**Testing**", "stat_3")
+    )
+  )
 })
 
 test_that("as_flex_table passes table column visibility correctly", {
