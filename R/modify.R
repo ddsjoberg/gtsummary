@@ -51,7 +51,7 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # create summary table
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
@@ -70,12 +70,6 @@
 #' tbl |>
 #'   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") |>
 #'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
-#'
-#' # Example 3 ----------------------------------
-#' # updating an abbreviation in table footnote
-#' glm(response ~ age + grade, trial, family = binomial) |>
-#'   tbl_regression(exponentiate = TRUE) |>
-#'   modify_abbreviation("CI = Credible Interval")
 NULL
 
 #' @name modify
