@@ -185,3 +185,78 @@ test_that("modify_spanning_header() works with tbl_uvregression()", {
     c("Estimate")
   )
 })
+
+test_that("modify_spanning_header() works with multiple spanning headers", {
+  expect_silent(
+    tbl <- trial |>
+      tbl_summary(
+        by = trt,
+        include = age
+      ) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 1) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 2)
+  )
+
+  expect_equal(
+    tbl$table_styling$spanning_header$spanning_header,
+    rep_len("**Treatments**", 4L)
+  )
+})
+
+test_that("remove_spanning_header() works", {
+  expect_silent(
+    tbl <- trial |>
+      tbl_summary(
+        by = trt,
+        include = age
+      ) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 1) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 2) |>
+      remove_spanning_header(columns = everything(), level = 2)
+  )
+
+  expect_true(
+    tbl$table_styling$spanning_header |>
+      dplyr::filter(
+        .by = c("level", "column"),
+        dplyr::n() == dplyr::row_number(),
+        level == 2L,
+        column %in% c("stat_1", "stat_2")
+      ) |>
+      dplyr::pull(spanning_header) |>
+      is.na() |>
+      all()
+  )
+})
+
+test_that("modify_spanning_header() messaging with missing level", {
+  # one missing level
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(
+        by = trt,
+        include = age
+      ) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 1) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 2) |>
+      remove_spanning_header(columns = everything(), level = 1) |>
+      as_gt()
+  )
+
+  # two missing level
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(
+        by = trt,
+        include = age
+      ) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 1) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 2) |>
+      modify_spanning_header(all_stat_cols() ~ "**Treatments**", level = 3) |>
+      remove_spanning_header(columns = everything(), level = 1) |>
+      remove_spanning_header(columns = everything(), level = 2) |>
+      as_gt()
+  )
+})

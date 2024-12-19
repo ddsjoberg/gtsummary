@@ -143,9 +143,16 @@
   if (nrow(x$table_styling$spanning_header) > 0L &&
       !setequal(unique(x$table_styling$spanning_header$level),
                seq_len(max(x$table_styling$spanning_header$level)))) {
+    max_level <- max(x$table_styling$spanning_header$level)
+    missing_lvls <- seq_len(max_level) |>
+      setdiff(unique(x$table_styling$spanning_header$level))
+
     cli::cli_abort(
-      c("There is an error in the spanning headers structure.",
-        "i" = "Each spanning header level must be defined, that is, no skipping levels."),
+      c("!" = "There is an error in the spanning headers structure.",
+        "!" = "Each spanning header level must be defined, that is, no levels may be skipped.",
+        "i" = "The {cli::qty(length(missing_lvls))} spanning header{?s} for level{?s}
+        {.val {missing_lvls}} {cli::qty(length(missing_lvls))} {?is/are} not present,
+        but level {.val {max_level}} is present."),
       call = get_cli_abort_call()
     )
   }
