@@ -28,7 +28,8 @@ test_that("as_kable_extra(return_calls) works as expected", {
   expect_equal(
     names(kbl),
     c("tibble", "fmt", "cols_merge", "fmt_missing", "cols_hide", "remove_line_breaks",
-      "escape_table_body", "bold_italic", "kable", "add_indent", "source_note", "abbreviations", "footnote")
+      "escape_table_body", "bold_italic", "kable", "add_indent",
+      "add_header_above", "source_note", "abbreviations", "footnote")
   )
 })
 

@@ -118,51 +118,60 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # add_header_row -------------------------------------------------------------
   # this is the spanning rows
-  any_spanning_header <- any(!is.na(x$table_styling$header$spanning_header))
+  any_spanning_header <- nrow(x$table_styling$spanning_header) > 0L
   if (any_spanning_header == FALSE) {
     flextable_calls[["add_header_row"]] <- list()
   } else {
-    df_header0 <-
-      x$table_styling$header |>
-      dplyr::filter(.data$hide == FALSE) |>
-      dplyr::select("spanning_header") |>
+    flextable_calls[["add_header_row"]] <-
+      tidyr::expand_grid(
+        level = unique(x$table_styling$spanning_header$level),
+        column = x$table_styling$header$column[!x$table_styling$header$hide]
+      ) |>
+      dplyr::left_join(
+        x$table_styling$spanning_header[c("level", "column", "spanning_header")],
+        by = c("level", "column")
+      ) |>
       dplyr::mutate(
-        spanning_header = ifelse(is.na(.data$spanning_header),
-                                 " ", .data$spanning_header
-        ),
+        .by = "level",
+        spanning_header =
+          ifelse(is.na(.data$spanning_header), " ", .data$spanning_header),
         spanning_header_id = dplyr::row_number()
-      )
-    # assigning an ID for each spanning header group
-    for (i in seq(2, nrow(df_header0))) {
-      if (df_header0$spanning_header[i] == df_header0$spanning_header[i - 1]) {
-        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i - 1]
-      }
-    }
+      ) |>
+      dplyr::group_by(.data$level) |>
+      dplyr::group_map(
+        \(df_values, df_group) {
+          # assigning an ID for each spanning header group
+          for (i in seq(2, nrow(df_values))) {
+            if (df_values$spanning_header[i] == df_values$spanning_header[i - 1]) {
+              df_values$spanning_header_id[i] <- df_values$spanning_header_id[i - 1]
+            }
+          }
 
-    df_header <-
-      df_header0 |>
-      dplyr::group_by(.data$spanning_header_id) |>
-      dplyr::mutate(width = dplyr::n()) |>
-      dplyr::distinct() |>
-      dplyr::ungroup() |>
-      dplyr::mutate(
-        column_id = map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
-      )
+          df_header <-
+            dplyr::bind_cols(df_group, df_values) |>
+            dplyr::select(-"column") |>
+            dplyr::group_by(.data$spanning_header_id) |>
+            dplyr::mutate(width = dplyr::n()) |>
+            dplyr::distinct() |>
+            dplyr::ungroup() |>
+            dplyr::mutate(
+              column_id = map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
+            )
 
-    flextable_calls[["add_header_row"]] <- list(
-      expr(
-        # add the header row with the spanning headers
-        flextable::add_header_row(
-          values = !!df_header$spanning_header,
-          colwidths = !!df_header$width
-        )
-      )
-    )
-
-    flextable_calls[["compose_header_row"]] <-
-      .chr_with_md_to_ft_compose(
-        x = df_header$spanning_header,
-        j = df_header$column_id
+          c(
+            list(expr(
+              # add the header row with the spanning headers
+              flextable::add_header_row(
+                values = !!df_header$spanning_header,
+                colwidths = !!df_header$width
+              )
+            )),
+            .chr_with_md_to_ft_compose(
+              x = df_header$spanning_header,
+              j = df_header$column_id
+            )
+          )
+        }
       )
   }
 
@@ -213,7 +222,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     dplyr::mutate(
       column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
     )
-  header_i_index <- ifelse(any_spanning_header == TRUE, 2L, 1L)
+  header_i_index <- length(unique(x$table_styling$spanning_header$level)) + 1L
 
   flextable_calls[["footnote_header"]] <-
     map(

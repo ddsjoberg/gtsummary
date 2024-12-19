@@ -114,7 +114,7 @@ test_that("as_gt passes table header labels correctly", {
 
   # spanning_tbl - spanning header
   expect_equal(
-    my_spanning_tbl$table_styling$header |>
+    my_spanning_tbl$table_styling$spanning_header |>
       dplyr::filter(!is.na(spanning_header)) |>
       dplyr::pull(column),
     gt_spanning_tbl$`_spanners`$vars[[1]]
@@ -185,9 +185,9 @@ test_that("as_gt passes table text interpreters correctly", {
   # spanning header
   expect_equal(
     sapply(
-      my_spanning_tbl$table_styling$header |>
+      my_spanning_tbl$table_styling$spanning_header |>
         dplyr::filter(!is.na(spanning_header)) |>
-        dplyr::pull(interpret_spanning_header),
+        dplyr::pull(text_interpret),
       \(x) do.call(eval(parse(text = x)), list("")) |> class()
     ),
     gt_spanning_tbl$`_spanners`$spanner_label[[1]] |> class() |>
@@ -210,7 +210,7 @@ test_that("as_gt passes table text interpreters correctly", {
   )
 
   # spanning header
-  expect_true(attr(gt_tbl$`_spanners`$spanner_label[[1]], "html"))
+  expect_true(attr(gt_tbl$`_spanners`$spanner_label[[2]], "html"))
 })
 
 test_that("as_gt passes table footnotes & abbreviations correctly", {

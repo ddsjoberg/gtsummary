@@ -172,7 +172,7 @@ test_that("as_flex_table passes table header labels correctly", {
   # spanning header placed correctly
   vis_cols <- which(!my_spanning_tbl$table_styling$header$hide)
   expect_equal(
-    my_spanning_tbl$table_styling$header |>
+    my_spanning_tbl$table_styling$spanning_header |>
       dplyr::filter(!is.na(spanning_header)) |>
       dplyr::pull(column),
     which(nchar(apply(ft_spanning_tbl$header$content$data, c(1, 2), \(x) x[[1]]$txt[1])[1, ]) > 1) |> names()

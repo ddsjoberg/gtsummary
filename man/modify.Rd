@@ -4,12 +4,22 @@
 \alias{modify}
 \alias{modify_header}
 \alias{modify_spanning_header}
+\alias{remove_spanning_header}
 \alias{show_header_names}
 \title{Modify column headers, footnotes, and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
-modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
+modify_spanning_header(
+  x,
+  ...,
+  text_interpret = c("md", "html"),
+  level = 1L,
+  quiet,
+  update
+)
+
+remove_spanning_header(x, columns, level = 1L)
 
 show_header_names(x, include_example, quiet)
 }
@@ -33,6 +43,12 @@ String indicates whether text will be interpreted with
 Applies to tables printed with \code{{gt}}.}
 
 \item{update, quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+
+\item{level}{(\code{integer})\cr
+An integer specifying which level to place the spanning header.}
+
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Columns from which to remove spanning headers.}
 
 \item{include_example}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
