@@ -126,6 +126,22 @@ test_that("as_kable_extra works with tbl_stack", {
   expect_snapshot(kbl_stack)
 })
 
+test_that("as_kable_extra checking the placement of a second spanning header", {
+  expect_silent(
+    tbl2 <-
+      trial |>
+      tbl_summary(by = grade, include = age) |>
+      modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**") |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_kable_extra()
+  )
+
+  # this isn't a great test, but it's something!
+  expect_true(as.character(tbl2) |> str_detect("Testing"))
+  expect_true(as.character(tbl2) |> str_detect("Tumor Grade"))
+})
+
+
 test_that("as_kable_extra works with bold/italics", {
   tbl <- my_tbl_summary |>
     bold_labels() |>
