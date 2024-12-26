@@ -288,6 +288,44 @@ test_that("as_flex_table passes table footnotes & abbreviations correctly", {
     c(fn1[2], fn2[2]), # correct labels
     c("another new footnote", "replace old footnote")
   )
+
+  # footnotes in spanning headers
+  expect_equal(
+    my_spanning_tbl |>
+      modify_footnote_spanning_header(
+        footnote = "spanning footnote",
+        columns = stat_1
+      ) |>
+      as_flex_table() |>
+      getElement("footer") |>
+      getElement("content") |>
+      getElement("data") %>%
+      `[`(1,) |>
+      getElement("label") |>
+      getElement("txt"),
+    c("1", "spanning footnote")
+  )
+  expect_equal(
+    my_spanning_tbl |>
+      modify_spanning_header(stat_1 = "**2 levels**", level = 2L) |>
+      modify_footnote_spanning_header(
+        footnote = "spanning footnote",
+        columns = stat_1
+      ) |>
+      modify_footnote_spanning_header(
+      footnote = "spanning footnote 2",
+      columns = stat_1,
+      level = 2
+    ) |>
+    as_flex_table() |>
+    getElement("footer") |>
+    getElement("content") |>
+    getElement("data") %>%
+    `[`(1,) |>
+    getElement("label") |>
+    getElement("txt"),
+    c("1", "spanning footnote 2")
+  )
 })
 
 test_that("as_flex_table passes multiple table footnotes correctly", {

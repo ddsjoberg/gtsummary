@@ -286,7 +286,7 @@
 # and assigns them an sequential ID
 .number_footnotes <- function(x, type, start_with = 0L) {
   # if empty, return empty data frame
-  if (nrow(x$table_styling[[type]]) == 0L) {
+  if (nrow(type) == 0L) {
     return(dplyr::tibble(
       footnote_id = integer(), footnote = character(), column = character(),
       column_id = integer(), row_numbers = integer()
@@ -298,7 +298,7 @@
     x$table_styling$header |>
       select("column", column_id = "id") |>
       dplyr::filter(!is.na(.data$column_id)),
-    x$table_styling[[type]],
+    type,
     by = "column"
   ) |>
     dplyr::arrange(dplyr::pick(any_of(c("column_id", "row_numbers")))) |>

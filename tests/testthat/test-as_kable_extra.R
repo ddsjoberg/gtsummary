@@ -212,6 +212,13 @@ test_that("as_kable_extra passes table footnotes & abbreviations correctly", {
   expect_snapshot_value(
     strsplit(kbl[1], "* </?tr>\n *")[[1]][10]
   )
+
+  expect_true(
+    my_tbl_summary |>
+      modify_footnote_spanning_header("footnote test", columns = all_stat_cols()) |>
+      as_kable_extra(format = "html") |>
+      str_detect("footnote test")
+  )
 })
 
 test_that("as_kable_extra passes appended glance statistics correctly", {

@@ -171,6 +171,15 @@ test_that("as_hux_table passes table footnotes & abbreviations correctly", {
     ht[8:9, 1] |> unlist(use.names = FALSE),
     c("another new footnote", "replace old footnote")
   )
+
+  expect_equal(
+    my_tbl_summary |>
+      modify_footnote_spanning_header("footnote test", columns = all_stat_cols()) |>
+      as_hux_table() %>%
+      `[`(8,) |>
+      unlist(),
+    c("footnote test", "footnote test")
+  )
 })
 
 test_that("as_hux_table passes appended glance statistics correctly", {

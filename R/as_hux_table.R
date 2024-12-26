@@ -187,8 +187,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     dplyr::bind_rows(
-      .number_footnotes(x, "footnote_header"),
-      .number_footnotes(x, "footnote_body")
+      .number_footnotes(x, x$table_styling$footnote_spanning_header),
+      .number_footnotes(x, x$table_styling$footnote_header),
+      .number_footnotes(x, x$table_styling$footnote_body)
     ) |>
     dplyr::pull("footnote") %>%
     unique()
