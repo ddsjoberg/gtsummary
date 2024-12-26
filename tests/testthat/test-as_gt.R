@@ -299,6 +299,34 @@ test_that("as_gt passes table footnotes & abbreviations correctly", {
       rownum = c(1, 2, 1)
     )
   )
+
+  # footnotes in spanning headers
+  expect_equal(
+    my_spanning_tbl |>
+      modify_footnote_spanning_header(
+        footnote = "Testing 1 Footnote",
+        columns = stat_1
+      ) |>
+      as_gt() |>
+      getElement("_footnotes") |>
+      dplyr::filter(footnotes == "Testing 1 Footnote") |>
+      dplyr::pull(locname),
+    "columns_groups"
+  )
+  expect_equal(
+    my_spanning_tbl |>
+      modify_spanning_header(c(stat_1, stat_2) ~ "**Another Span**", level = 2L) |>
+      modify_footnote_spanning_header(
+        footnote = "Testing 1 Footnote",
+        columns = stat_1,
+        level = 2L
+      ) |>
+      as_gt() |>
+      getElement("_footnotes") |>
+      dplyr::filter(footnotes == "Testing 1 Footnote") |>
+      dplyr::pull(locname),
+    "columns_groups"
+  )
 })
 
 test_that("as_gt passes table indentation correctly", {

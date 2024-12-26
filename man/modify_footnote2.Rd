@@ -52,8 +52,9 @@ a string}
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 columns to add footnote.
 
-For \code{modify_footnote_spanning_header()}, this must be a single column name
-of the \emph{first} column in the spanning header.}
+For \code{modify_footnote_spanning_header()}, pass a single column name where
+the spanning header begins. If multiple column names are passed, only
+the first is used.}
 
 \item{replace}{(scalar \code{logical})\cr
 Logical indicating whether to replace any existing footnotes in the specified
