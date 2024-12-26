@@ -177,7 +177,8 @@ test_that("as_hux_table passes table footnotes & abbreviations correctly", {
       modify_footnote_spanning_header("footnote test", columns = all_stat_cols()) |>
       as_hux_table() %>%
       `[`(8,) |>
-      unlist(),
+      unlist() |>
+      unname(),
     c("footnote test", "footnote test")
   )
 })
