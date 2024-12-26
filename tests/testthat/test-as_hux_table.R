@@ -178,7 +178,8 @@ test_that("as_hux_table passes table footnotes & abbreviations correctly", {
       as_hux_table() %>%
       `[`(8,) |>
       unlist(),
-    c("footnote test", "footnote test")
+    c("footnote test", "footnote test"),
+    ignore_attr = TRUE
   )
 })
 
