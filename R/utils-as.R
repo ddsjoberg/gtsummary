@@ -189,6 +189,18 @@
     dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
     dplyr::mutate(row_numbers = as.integer(.data$row_numbers)) # when there are no body footnotes, this ensures expected type/class
 
+  # footnote_spanning_header ---------------------------------------------------
+  x$table_styling$footnote_spanning_header <-
+    x$table_styling$footnote_spanning_header |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed footnotes.
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
+    ) |>
+    # within a column/level, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    .filter_row_with_subsequent_replace_or_removal() |>
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
+
   # abbreviation ---------------------------------------------------------------
   abbreviation_cols <-
     x$table_styling$header$column[!x$table_styling$header$hide] |>
@@ -253,7 +265,7 @@
   # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
   dplyr::filter(
     .data = x,
-    .by = any_of(c("column", "row_numbers")),
+    .by = any_of(c("column", "level", "row_numbers")),
     !unlist(
       pmap(
         list(.data$replace, .data$remove, dplyr::row_number()),
@@ -274,7 +286,7 @@
 # and assigns them an sequential ID
 .number_footnotes <- function(x, type, start_with = 0L) {
   # if empty, return empty data frame
-  if (nrow(x$table_styling[[type]]) == 0L) {
+  if (nrow(type) == 0L) {
     return(dplyr::tibble(
       footnote_id = integer(), footnote = character(), column = character(),
       column_id = integer(), row_numbers = integer()
@@ -286,7 +298,7 @@
     x$table_styling$header |>
       select("column", column_id = "id") |>
       dplyr::filter(!is.na(.data$column_id)),
-    x$table_styling[[type]],
+    type,
     by = "column"
   ) |>
     dplyr::arrange(dplyr::pick(any_of(c("column_id", "row_numbers")))) |>

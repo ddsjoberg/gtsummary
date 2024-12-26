@@ -105,7 +105,8 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
     dplyr::filter(.by = "column", dplyr::row_number() == 1)
 
   # cycle over each of the styling tibbles and stack them in reverse order -----
-  for (style_type in c("spanning_header", "footnote_header", "footnote_body", "abbreviation", "source_note",
+  for (style_type in c("spanning_header", "footnote_header", "footnote_body",
+                       "footnote_spanning_header", "abbreviation", "source_note",
                        "fmt_fun", "text_format", "indent", "fmt_missing", "cols_merge")) {
     results$table_styling[[style_type]] <-
       map(

@@ -216,20 +216,28 @@ table_styling_to_flextable_calls <- function(x, ...) {
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
   # footnote_header ------------------------------------------------------------
+  spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()
   df_footnote_header <-
-    .number_footnotes(x, "footnote_header") |>
-    tidyr::nest(df_location = c("column", "column_id")) |>
+    dplyr::bind_rows(
+      x$table_styling$footnote_header |> dplyr::mutate(level = 0L),
+      x$table_styling$footnote_spanning_header
+    ) |>
     dplyr::mutate(
+      row_numbers = .env$spanning_header_lvls - .data$level + 1L
+    ) %>%
+    .number_footnotes(x, type = .) |>
+    tidyr::nest(df_location = c("column", "column_id", "row_numbers")) |>
+    dplyr::mutate(
+      row_numbers = map(.data$df_location, ~ getElement(.x, "row_numbers")),
       column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
     )
-  header_i_index <- length(unique(x$table_styling$spanning_header$level)) + 1L
 
   flextable_calls[["footnote_header"]] <-
     map(
       seq_len(nrow(df_footnote_header)),
       ~ expr(
         flextable::footnote(
-          i = !!header_i_index,
+          i = !!df_footnote_header$row_numbers[[.x]],
           j = !!df_footnote_header$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
           part = "header",
@@ -240,7 +248,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # footnote_body --------------------------------------------------------------
   df_footnote_body <-
-    .number_footnotes(x, "footnote_body", start_with = nrow(df_footnote_header)) |>
+    .number_footnotes(x, type = x$table_styling$footnote_body, start_with = nrow(df_footnote_header)) |>
     tidyr::nest(df_location = c("column", "column_id", "row_numbers")) |>
     dplyr::mutate(
       row_numbers = map(.data$df_location, ~ getElement(.x, "row_numbers")),
@@ -260,7 +268,6 @@ table_styling_to_flextable_calls <- function(x, ...) {
         )
       )
     )
-
 
   # abbreviation ---------------------------------------------------------------
   flextable_calls[["abbreviations"]] <-

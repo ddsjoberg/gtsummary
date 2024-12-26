@@ -129,7 +129,13 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_integerish(level)
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
   text_interpret <- arg_match(text_interpret)
 
   # process inputs -------------------------------------------------------------
@@ -173,7 +179,13 @@ remove_spanning_header <- function(x, columns, level = 1L) {
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_integerish(level)
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # process inputs -------------------------------------------------------------
   cards::process_selectors(data = scope_header(x$table_body, x$table_styling$header), columns = {{ columns }})
