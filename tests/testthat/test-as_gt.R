@@ -213,48 +213,44 @@ test_that("as_gt passes table text interpreters correctly", {
   expect_true(attr(gt_tbl$`_spanners`$spanner_label[[1]], "html"))
 })
 
-test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
+test_that("as_gt passes table footnotes & abbreviations correctly", {
   tbl_fn <- my_tbl_summary |>
-    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+    modify_footnote_body(footnote = "test footnote", columns = label,rows = variable == "age")
   gt_tbl_fn <- tbl_fn |> as_gt()
 
   # footnote
   expect_equal(
-    tbl_fn$table_styling$footnote$column,
+    tbl_fn$table_styling$footnote_header$column |>
+      append(tbl_fn$table_styling$footnote_body$column) |>
+      unique(),
     gt_tbl_fn$`_footnotes`$colname |> unique()
   )
   expect_equal(
-    tbl_fn$table_styling$footnote$footnote,
-    gt_tbl_fn$`_footnotes`$footnotes |> unlist() |> unique()
+    tbl_fn$table_styling$footnote_header$footnote,
+    gt_tbl_fn$`_footnotes`$footnotes[[1]],
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    tbl_fn$table_styling$footnote_body$footnote,
+    gt_tbl_fn$`_footnotes`$footnotes[-1] |> unlist() |> unique(),
+    ignore_attr = TRUE
   )
 
   tbl_fa <- tbl_fn |>
-    modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
+    modify_abbreviation("N = number of observations")
   gt_tbl_fa <- tbl_fa |> as_gt()
 
-  # footnote_abbrev
+  # abbreviation
   expect_equal(
-    gt_tbl_fa$`_footnotes` |>
-      dplyr::distinct(pick(!any_of("rownum"))) |>
-      dplyr::arrange(locnum) |>
-      dplyr::pull(colname),
-    c("stat_0", "stat_0", "label")
-  )
-  expect_equal(
-    gt_tbl_fa$`_footnotes` |>
-      dplyr::distinct(pick(!any_of("rownum"))) |>
-      dplyr::arrange(locnum) |>
-      dplyr::pull(footnotes) |>
+    gt_tbl_fa$`_source_notes` |>
       unlist(),
-    c("n (%); Median (Q1, Q3)", "N = number of observations", "test footnote")
+    "Abbreviation: N = number of observations"
   )
 
   # customized footnotes
   tbl <- my_tbl_summary |>
-    modify_footnote(
-      all_stat_cols() ~ "replace old footnote",
-      label = "another new footnote"
-    )
+    modify_footnote_header("replace old footnote", columns = all_stat_cols()) |>
+    modify_footnote_header("another new footnote", columns = label)
   gt_tbl <- tbl |> as_gt()
 
   expect_equal(
@@ -269,8 +265,8 @@ test_that("as_gt passes table footnotes & footnote abbreviations correctly", {
   # footnotes in the body of the table
   expect_equal(
     tbl_summary(trial, include = "age") |>
-      modify_table_styling(columns = label, rows = TRUE, footnote = "my footnote") |>
-      modify_table_styling(columns = stat_0, rows = row_type == "label", footnote = "my footnote") |>
+      modify_footnote_body(columns = label, rows = TRUE, footnote = "my footnote") |>
+      modify_footnote_body(columns = stat_0, rows = row_type == "label", footnote = "my footnote") |>
       as_gt() |>
       getElement("_footnotes") |>
       dplyr::filter(footnotes == "my footnote") |>
@@ -318,7 +314,7 @@ test_that("as_gt passes appended glance statistics correctly", {
   )
   expect_equal(
     tbl$table_styling$source_note$source_note,
-    gt_tbl$`_source_notes`[[1]],
+    gt_tbl$`_source_notes`[[2]],
     ignore_attr = "class"
   )
   expect_equal(

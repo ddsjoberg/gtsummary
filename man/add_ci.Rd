@@ -94,6 +94,6 @@ trial |>
     include = c(response, grade)
   ) |>
   add_ci(pattern = "{stat} ({ci})") |>
-  modify_footnote(everything() ~ NA)
+  remove_footnote_header(everything())
 \dontshow{\}) # examplesIf}
 }

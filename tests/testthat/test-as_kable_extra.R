@@ -28,7 +28,7 @@ test_that("as_kable_extra(return_calls) works as expected", {
   expect_equal(
     names(kbl),
     c("tibble", "fmt", "cols_merge", "fmt_missing", "cols_hide", "remove_line_breaks",
-      "escape_table_body", "bold_italic", "kable", "add_indent", "footnote")
+      "escape_table_body", "bold_italic", "kable", "add_indent", "source_note", "abbreviations", "footnote")
   )
 })
 
@@ -167,9 +167,9 @@ test_that("as_kable_extra passes table column alignment correctly", {
   )
 })
 
-test_that("as_kable_extra passes table footnotes & footnote abbreviations correctly", {
+test_that("as_kable_extra passes table footnotes & abbreviations correctly", {
   tbl_fn <- my_tbl_summary |>
-    modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age")
+    modify_footnote_body(columns = label, footnote = "test footnote", rows = variable == "age")
   kbl_fn <- tbl_fn |> as_kable_extra()
 
   # footnote
@@ -178,7 +178,7 @@ test_that("as_kable_extra passes table footnotes & footnote abbreviations correc
   )
 
   tbl_fa <- tbl_fn |>
-    modify_footnote(stat_0 = "N = number of observations", abbreviation = TRUE)
+    modify_abbreviation("N = number of observations")
   kbl_fa <- tbl_fa |> as_kable_extra()
 
   # footnote_abbrev
@@ -188,10 +188,8 @@ test_that("as_kable_extra passes table footnotes & footnote abbreviations correc
 
   # customized footnotes
   tbl <- my_tbl_summary |>
-    modify_footnote(
-      all_stat_cols() ~ "replace old footnote",
-      label = "another new footnote"
-    )
+    modify_footnote_header("replace old footnote", columns = all_stat_cols()) |>
+    modify_footnote_header("another new footnote", columns = label)
   kbl <- tbl |> as_kable_extra()
 
   expect_snapshot_value(

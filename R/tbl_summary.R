@@ -611,7 +611,7 @@ tbl_summary <- function(data,
 
     c(
       "!" = "Column(s) {.val {haven_labelled_vars}} are class {.val haven_labelled}.",
-      "i" = "This is an intermediate datastructure not meant for analysis.",
+      "i" = "This is an intermediate data structure not meant for analysis.",
       "i" = "Convert columns with {.fun {cnvt_funs}}. Failure to convert may have unintended consequences or result in error.",
       paste0("{.url ", hyperlinks, "}")
     ) |>
