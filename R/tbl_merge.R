@@ -231,7 +231,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     ) %>%
     reduce(.rows_update_table_styling_header, .init = x$table_styling$header)
 
-  for (style_type in c("spanning_header", "footnote_header", "footnote_body", "abbreviation", "source_note",
+  for (style_type in c("spanning_header", "footnote_header", "footnote_body",
+                       "footnote_spanning_header", "abbreviation", "source_note",
                        "fmt_fun", "indent", "text_format", "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map(

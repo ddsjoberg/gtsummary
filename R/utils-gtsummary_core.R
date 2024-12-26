@@ -50,6 +50,13 @@
       replace = logical(), remove = logical()
     )
 
+  x$table_styling$footnote_spanning_header <-
+    dplyr::tibble(
+      column = character(), footnote = character(),
+      level = integer(), text_interpret = character(),
+      replace = logical(), remove = logical()
+    )
+
   x$table_styling$abbreviation <-
     dplyr::tibble(
       column = character(),
