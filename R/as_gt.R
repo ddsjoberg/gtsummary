@@ -285,7 +285,7 @@ table_styling_to_gt_calls <- function(x, ...) {
               columns = !!.x$column,
               label = !!call2(parse_expr(.y$text_interpret), .y$spanning_header),
               level = !!.y$level,
-              id = !!paste0(.y$level, .x$column[1]),
+              id = !!paste0("level ", .y$level, "; ", .x$column[1]),
               gather = FALSE
             ))
           }
