@@ -206,11 +206,12 @@ tbl_survfit.list <- function(x,
     )
   }
   if (missing(statistic)) {
-    get_theme_element(
-      "tbl_survfit-arg:statistic",
-      default =
-        paste0("{estimate} ({conf.low}", get_theme_element("pkgwide-str:ci.sep", default = ", "), "{conf.high})")
-    )
+    statistic <-
+      get_theme_element(
+        "tbl_survfit-arg:statistic",
+        default =
+          paste0("{estimate} ({conf.low}", get_theme_element("pkgwide-str:ci.sep", default = ", "), "{conf.high})")
+      )
   }
   check_string(statistic)
   if (is_string(label)) label <- inject(everything() ~ !!label)
