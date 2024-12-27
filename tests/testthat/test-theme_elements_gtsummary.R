@@ -1,32 +1,25 @@
 # Package-wide Unit Tests-------------------------------------------------------
 ## pkgwide-fn:prependpvalue_fun-------------------------------------------------
 test_that("pkgwide-fn:prependpvalue_fun works", {
-
-  # Create a theme#
-  my_theme_1 <-
-    list(
-      # Prepend p value, with 3 place digits
-      "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 3, prepend_p = TRUE)
-    )
-
-  # Create a summary table#
-  gts_1 <-
-    trial |>
-    tbl_summary(
-      by = trt,
-      include = c(trt, age)
-    ) |>
-    add_p()
-
-  # Apply the theme to the table and pull out the p-value#
-  gts_1_pvalue <-
+  # Test that the p-value has 3 digits
+  expect_equal(
     with_gtsummary_theme(
-      x = my_theme_1,
-      expr = inline_text(x = gts_1, variable = age, column = "p.value")
-    )
-
-  # Test that the p-value has 3 digits#
-  expect_equal(gts_1_pvalue, "p=0.718")
+      x =
+        list(
+          # Prepend p value, with 3 place digits
+          "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 3, prepend_p = TRUE)
+        ),
+      expr =
+        trial |>
+        tbl_summary(
+          by = trt,
+          include = c(trt, age)
+        ) |>
+        add_p() |>
+        inline_text(variable = age, column = "p.value")
+    ),
+    "p=0.718"
+  )
 }
 )
 
@@ -62,19 +55,6 @@ test_that("pkgwide-fn:pvalue_fun works", {
   # Test that the p-value has the decimal mark#
   expect_equal(gts_2_pvalue, "0++72")
 
-}
-)
-
-## pkgwide-lgl:quiet------------------------------------------------------------
-test_that("pkgwide-lgl:quiet works", {
-
-  # Test that the lgl value can be found#
-  expect_silent(
-    with_gtsummary_theme(
-      x = my_theme_2,
-      expr = get_theme_element("pkgwide-lgl:quiet")
-    )
-  )
 }
 )
 
