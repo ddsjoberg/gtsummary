@@ -59,7 +59,7 @@ tbl_summary_ex$table_body
 #### table_styling
 
 The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
-The list contains the following data frames `header`, `footnote_header`, `footnote_body`, `abbreviation`, `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `caption` and `horizontal_line_above`.
+The list contains the following data frames `header`, `footnote_header`, `footnote_body`, `footnote_spanning_header`, `abbreviation`, `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `caption` and `horizontal_line_above`.
 
 **`header`**
 
@@ -129,6 +129,34 @@ dplyr::tribble(
   ~Column, ~Description,
   "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
+  "footnote", "string containing footnote to add to column/row",
+  "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
+  "replace", "logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)",
+  "remove", "logical indicating whether to remove all footnotes in the column header",
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    summary_row.padding = gt::px(1),
+    grand_summary_row.padding = gt::px(1),
+    footnotes.padding = gt::px(1),
+    source_notes.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
+``` 
+
+**`footnote_spanning_header`**
+
+Each {gtsummary} table may include footnotes in the spanning headers of the table.
+Updates/changes to footnote are appended to the bottom of the tibble.
+
+```{r, echo=FALSE}
+dplyr::tribble(
+  ~Column, ~Description,
+  "level", "Integer specifying the spanning header level, similar to `gt::tab_spanner(level)`",
+  "column", "Column name from `.$table_body`",
   "footnote", "string containing footnote to add to column/row",
   "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
   "replace", "logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)",
