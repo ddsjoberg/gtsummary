@@ -39,7 +39,7 @@ Confidence interval method. Must be one of
 See \code{add_ci()} for details.}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 This helper, to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}}, creates a function
 computing a proportion and its confidence interval.
 }
@@ -79,7 +79,7 @@ Titanic |>
     overall_row_last = TRUE
   ) |>
   bold_labels() |>
-  modify_footnote(all_stat_cols() ~ "Proportion (\%) of survivors (n/N) [95\% CI]")
+  modify_footnote_header("Proportion (\%) of survivors (n/N) [95\% CI]", columns = all_stat_cols())
 }
 \author{
 Joseph Larmarange

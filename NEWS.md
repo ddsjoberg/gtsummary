@@ -1,22 +1,44 @@
 # gtsummary (development version)
 
+* Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
+  
+  In this update, we now export separate user-facing functions for each of these with clearer names and scope: `modify_footnote_header()`, `modify_footnote_body()`, and `modify_abbreviation()`. As the names indicate, the `modify_footnote_header()` and `modify_footnote_body()` functions place footnotes in the header and table body. Abbreviations are now treated like source notes and do not have footnote markers associated with them. We also export functions `remove_footnote_header()`, `remove_footnote_body()`, and `remove_abbreviation()` to remove previously assigned footnotes and abbreviations.
+
+  Also, multiple footnotes may now reference the same cell in the table or column header by utilizing the `modify_footnote_header(replace=FALSE)`, `modify_footnote_body(replace=FALSE)` argument.
+
+* Previously, source notes were an undocumented feature and only a single source note could be included in a table. We now export `modify_source_note()` and `remove_source_note()` to add and remove any number of source notes. Also, when merging and stacking tables, previously due to the one source note limit, only the first source note was retained. Now all source notes will be included below the resulting table. _This is different behavior compared to previous versions of the package and in rare cases may result in a different source note._ Moreover, `kableExtra` output now supports source notes, where previously they were omitted.
+
+* Language translations have been updated with a handful of missing translations. (#2100)
+
+# gtsummary 2.0.4
+
+### New Features and Functions
+
+* Added S3 methods `add_overall.tbl_hierarchical()` and `add_overall.tbl_hierarchical_count()`.
+
 * Added the `tidy_wald_test(vcov)` argument to allow for the  calculation of p-values via alternative variance-covariance structure (e.g. for robust SEs). (#2076; @aghaynes)
  
-* Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (#2062)
-
-* Fix for setting default formatting functions in `tbl_svysummary()`. Previously, defaults were assigned similarly to those in `tbl_summary()`, which led to survey-only statistics being assigned sub-optimal defaults. (#2078)
+### Other Updates
 
 * The `with_gtsummary_theme()` has been updated to no longer print theme names when the applied, nor when the original theme is re-applied. (#2031)
 
 * Updated the `theme_gtsummary_journal("jama")` theme to apply changes to `tbl_svysummary()`. (#1964; @vjcatharine)
 
-* Removed `global_pvalue_fun.tidycrr()` as already been migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
+### Lifecycle Updates
+
+* Removed `global_pvalue_fun.tidycrr()`, which was previously migrated to the {tidycmprsk} package. (#1997; @jwoolfolk)
+
+### Bug Fixes
+
+* Bug fix for footnote markers when placing a footnote for flextable and gt tables on multiple columns and rows in the table body. (#2062)
+
+* Fix for setting default formatting functions in `tbl_svysummary()`. Previously, defaults were assigned similarly to those in `tbl_summary()`, which led to survey-only statistics being assigned sub-optimal defaults. (#2078)
 
 * Bug fix in `add_ci.tbl_svysummary()` for factor variables where order was alphabetical instead of the factor levels. (#2036)
 
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
 
-* Added S3 methods `add_overall.tbl_hierarchical()` and `add_overall.tbl_hierarchical_count()`.
+* Users may now pass a vector of integers to `tbl_hierarchical*(digits)`, as is possible in other summary functions. (#2080)
 
 # gtsummary 2.0.3
 

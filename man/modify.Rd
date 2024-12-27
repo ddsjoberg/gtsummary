@@ -3,21 +3,11 @@
 \name{modify}
 \alias{modify}
 \alias{modify_header}
-\alias{modify_footnote}
 \alias{modify_spanning_header}
 \alias{show_header_names}
 \title{Modify column headers, footnotes, and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
-
-modify_footnote(
-  x,
-  ...,
-  abbreviation = FALSE,
-  text_interpret = c("md", "html"),
-  update,
-  quiet
-)
 
 modify_spanning_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
@@ -28,10 +18,9 @@ show_header_names(x, include_example, quiet)
 A gtsummary object}
 
 \item{...}{\code{\link[rlang:dyn-dots]{dynamic-dots}}\cr
-Used to assign updates to headers,
-spanning headers, and footnotes.
+Used to assign updates to headers and spanning headers.
 
-Use \code{modify_*(colname='new header/footnote')} to update a single column. Using a
+Use \code{modify_*(colname='new header')} to update a single column. Using a
 formula will invoke tidyselect, e.g. \code{modify_*(all_stat_cols() ~ "**{level}**")}.
 The dynamic dots allow syntax like \code{modify_header(x, !!!list(label = "Variable"))}.
 See examples below.
@@ -40,12 +29,10 @@ Use the \code{show_header_names()} to see the column names that can be modified.
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
+Applies to tables printed with \code{{gt}}.}
 
 \item{update, quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
-
-\item{abbreviation}{(scalar \code{logical})\cr
-Logical indicating if an abbreviation is being updated.}
 
 \item{include_example}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
@@ -56,7 +43,6 @@ Updated gtsummary object
 These functions assist with modifying the aesthetics/style of a table.
 \itemize{
 \item \code{modify_header()} update column headers
-\item \code{modify_footnote()} update/add table footnotes
 \item \code{modify_spanning_header()} update/add spanning headers
 }
 
@@ -65,7 +51,7 @@ Run \code{show_header_names()} to print the column names to the console.
 }
 \section{\code{tbl_summary()}, \code{tbl_svysummary()}, and \code{tbl_cross()}}{
 
-When assigning column headers, footnotes, and spanning headers,
+When assigning column headers and spanning headers,
 you may use \code{{N}} to insert the number of observations.
 \code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
 
@@ -93,23 +79,21 @@ tbl <- trial |>
 show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers and footnote
+# updating column headers
 tbl |>
-  modify_header(label = "**Variable**", p.value = "**P**") |>
-  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade")
+  modify_header(label = "**Variable**", p.value = "**P**")
 
 # Example 2 ----------------------------------
-# updating headers, remove all footnotes, add spanning header
+# updating headers add spanning header
 tbl |>
   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") |>
-  modify_footnote(everything() ~ NA) |>
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
 
 # Example 3 ----------------------------------
 # updating an abbreviation in table footnote
 glm(response ~ age + grade, trial, family = binomial) |>
   tbl_regression(exponentiate = TRUE) |>
-  modify_footnote(conf.low = "CI = Credible Interval", abbreviation = TRUE)
+  modify_abbreviation("CI = Credible Interval")
 }
 \author{
 Daniel D. Sjoberg

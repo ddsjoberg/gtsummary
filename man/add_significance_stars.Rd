@@ -45,7 +45,7 @@ a 'gtsummary' table
 Add significance stars to estimates with small p-values
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("car")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("car")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) |>
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -61,7 +61,7 @@ tbl |>
     hide_ci = TRUE, hide_se = TRUE
   ) |>
   modify_header(estimate = "**Beta (95\% CI)**") |>
-  modify_footnote(estimate = "CI = Confidence Interval", abbreviation = TRUE)
+  modify_abbreviation("CI = Confidence Interval")
 
 # Example 3 ----------------------------------
 # Use '  \n' to put a line break between beta and SE
@@ -71,7 +71,7 @@ tbl |>
     pattern = "{estimate}{stars}  \n({std.error})"
   ) |>
   modify_header(estimate = "**Beta  \n(SE)**") |>
-  modify_footnote(estimate = "SE = Standard Error", abbreviation = TRUE) |>
+  modify_abbreviation("SE = Standard Error") |>
   as_gt() |>
   gt::fmt_markdown(columns = everything()) |>
   gt::tab_style(

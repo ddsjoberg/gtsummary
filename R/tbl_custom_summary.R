@@ -1,6 +1,6 @@
 #' Create a table of summary statistics using a custom summary function
 #'
-#' \lifecycle{experimental}\cr
+#' `r lifecycle::badge('experimental')`\cr
 #' The `tbl_custom_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' This function is similar to [tbl_summary()] but allows you to provide
@@ -86,13 +86,13 @@
 #' to the total number, number missing and number non missing observations
 #' in the denominator, not at each level of the categorical variable.
 #'
-#' It is recommended to use [`modify_footnote()`] to properly describe the
+#' It is recommended to use [`modify_footnote_header()`] to properly describe the
 #' displayed statistics (see examples).
 #'
 #' @section Caution:
 #'
 #' The returned table is compatible with all `gtsummary` features applicable
-#' to a `tbl_summary` object, like [`add_overall()`], [`modify_footnote()`] or
+#' to a `tbl_summary` object, like [`add_overall()`], [`modify_footnote_header()`] or
 #' [`bold_labels()`].
 #'
 #' However, some of them could be inappropriate in such case. In particular,
@@ -129,8 +129,9 @@
 #'     overall_row_label = "All stages & grades"
 #'   ) |>
 #'   add_overall(last = TRUE) |>
-#'   modify_footnote(
-#'     all_stat_cols() ~ "A: mean age - S: sum of marker"
+#'   modify_footnote_header(
+#'     footnote = "A: mean age - S: sum of marker",
+#'     columns = all_stat_cols()
 #'   ) |>
 #'   bold_labels()
 #'
@@ -153,8 +154,9 @@
 #'     statistic = ~ "{mean} [{conf.low}; {conf.high}]"
 #'   ) |>
 #'   add_overall(last = TRUE) |>
-#'   modify_footnote(
-#'     all_stat_cols() ~ "mean [95% CI]"
+#'   modify_footnote_header(
+#'     footnote = "mean [95% CI]",
+#'     columns = all_stat_cols()
 #'   )
 #'
 #' # Example 3 ----------------------------------

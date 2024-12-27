@@ -51,7 +51,7 @@
 #'
 #' @return A `tbl_uvregression` object
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' tbl_uvregression(
 #'   trial,

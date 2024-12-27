@@ -72,7 +72,6 @@ The evaluated value of \code{.header} is also available within \code{tbl_strata2
 \item{.quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \description{
-\lifecycle{maturing}\cr
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 \itemize{
@@ -99,6 +98,7 @@ each stratum's summary table.
 }
 
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(age, grade, stage, trt) |>
@@ -127,11 +127,12 @@ trial |>
         ) |>
         add_ci(pattern = "{stat} ({ci})") |>
         modify_header(stat_0 = "**Rate (95\% CI)**") |>
-        modify_footnote(stat_0 = NA),
+        remove_footnote_header(stat_0),
     .combine_with = "tbl_stack",
     .combine_args = list(group_header = NULL)
   ) |>
   modify_caption("**Response Rate by Grade**")
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg

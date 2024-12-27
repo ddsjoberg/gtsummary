@@ -24,7 +24,7 @@ Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 This helper, to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}}, creates a function
 computing the ratio of two continuous variables and its confidence interval.
 }
@@ -54,7 +54,7 @@ trial |>
     overall_row_label = "All stages & grades"
   ) |>
   bold_labels() |>
-  modify_footnote(all_stat_cols() ~ "Ratio [95\% CI] (n/N)")
+  modify_footnote_header("Ratio [95\% CI] (n/N)", columns = all_stat_cols())
 }
 \author{
 Joseph Larmarange

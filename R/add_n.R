@@ -55,7 +55,7 @@ add_n <- function(x, ...) {
 #' @name add_n_summary
 #'
 #' @return A table of class `c('tbl_summary', 'gtsummary')`
-#' @examplesIf gtsummary:::is_pkg_installed(c("survey", "cardx"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("survey", "cardx"))
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(by = trt, include = c(trt, age, grade, response)) |>

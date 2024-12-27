@@ -11,7 +11,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "car"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car"))
 #' # Example 1 ----------------------------------
 #' lm(age ~ grade + marker, trial) |>
 #'   tbl_regression() |>

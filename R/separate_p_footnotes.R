@@ -1,6 +1,6 @@
 #' Create footnotes for individual p-values
 #'
-#' \lifecycle{questioning}\cr
+#' `r lifecycle::badge('questioning')`\cr
 #' The usual presentation of footnotes for p-values on a gtsummary table is
 #' to have a single footnote that lists all statistical tests that were used to
 #' compute p-values on a given table. The `separate_p_footnotes()` function
@@ -34,7 +34,7 @@ separate_p_footnotes <- function(x) {
   }
 
   # remove p-value column footnote ---------------------------------------------
-  x <- modify_footnote(x, any_of(c("p.value", "estimate", "conf.low", "conf.high")) ~ NA_character_)
+  x <- remove_footnote_header(x, columns = any_of(c("p.value", "estimate", "conf.low", "conf.high")))
 
   # extract footnote next for each variable ------------------------------------
   calling_fun <- names(x$call_list) |> intersect(c("add_p", "add_difference"))

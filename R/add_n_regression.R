@@ -13,7 +13,7 @@
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @name add_n_regression
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(response, age, grade) |>

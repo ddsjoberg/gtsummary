@@ -1,10 +1,19 @@
 #' Modify Table Styling
 #'
+#' @description
+#' This function is for developers.
+#' If you are not a developer, it's recommended that you use the following
+#' functions to make modifications to your table. [`modify_header()`],
+#' [`modify_spanning_header()`], `[modify_column_hide()]`, [`modify_column_unhide()`],
+#' [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
+#' [`modify_column_alignment()`], [`modify_fmt_fun()`], `[modify_column_indent()]`,
+#' [`modify_column_merge()`].
+#'
+#'
 #' This is a function meant for advanced users to gain
 #' more control over the characteristics of the resulting
 #' gtsummary table by directly modifying `.$table_styling`.
-#' *This function is primarily used in the development of other gtsummary
-#' functions, and very little checking of the passed arguments is performed.*
+#' *This function has very little checking of the passed arguments.*
 #'
 #' Review the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
@@ -41,7 +50,7 @@
 #'   string with text for spanning header
 #' @param missing_symbol (`string`)\cr
 #'   string indicating how missing values are formatted.
-#' @param cols_merge_pattern (`string`) \lifecycle{experimental}\cr
+#' @param cols_merge_pattern (`string`)\cr
 #'   glue-syntax string indicating how to merge
 #'   columns in `x$table_body`. For example, to construct a confidence interval
 #'   use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
@@ -101,7 +110,7 @@ modify_table_styling <- function(x,
                                  text_format = NULL,
                                  undo_text_format = NULL,
                                  indent = NULL,
-                                 text_interpret = c("md", "html"),
+                                 text_interpret = "md",
                                  cols_merge_pattern = NULL) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
@@ -175,8 +184,6 @@ modify_table_styling <- function(x,
     )
   }
 
-  text_interpret <- paste0("gt::", arg_match(text_interpret))
-
   if (!is_empty(text_format)) {
     text_format <- arg_match(text_format, values = c("bold", "italic"), multiple = TRUE)
   }
@@ -202,7 +209,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_label = text_interpret, label = label),
+        dplyr::tibble(column = columns, interpret_label = paste0("gt::", text_interpret), label = label),
         by = "column"
       )
   }
@@ -212,7 +219,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_spanning_header = text_interpret, spanning_header = spanning_header),
+        dplyr::tibble(column = columns, interpret_spanning_header = paste0("gt::", text_interpret), spanning_header = spanning_header),
         by = "column"
       )
   }
@@ -239,29 +246,38 @@ modify_table_styling <- function(x,
 
   # footnote -------------------------------------------------------------------
   if (!is_empty(footnote)) {
-    x$table_styling$footnote <-
-      dplyr::bind_rows(
-        x$table_styling$footnote,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
+    # header footnotes
+    if (tryCatch(is.null(eval_tidy(rows)), error = \(x) FALSE)) {
+      x <-
+        .modify_footnote_header(
+          x = x,
+          lst_footnotes =
+            rep_named(columns, as.list(footnote)),
           text_interpret = text_interpret,
-          footnote = footnote
+          replace = TRUE,
+          remove = is.na(footnote)
         )
-      )
+    }
+    else {
+      x <-
+        .modify_footnote_body(
+          x = x,
+          lst_footnotes = rep_named(columns, as.list(footnote)),
+          rows = !!rows,
+          text_interpret = text_interpret,
+          replace = TRUE,
+          remove = is.na(footnote)
+        )
+    }
   }
 
   # footnote_abbrev ------------------------------------------------------------
   if (!is_empty(footnote_abbrev)) {
-    x$table_styling$footnote_abbrev <-
-      dplyr::bind_rows(
-        x$table_styling$footnote_abbrev,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          text_interpret = text_interpret,
-          footnote = footnote_abbrev
-        )
+    x <- x |>
+      .modify_abbreviation(
+        abbreviation = footnote_abbrev,
+        text_interpret = text_interpret,
+        column = columns
       )
   }
 

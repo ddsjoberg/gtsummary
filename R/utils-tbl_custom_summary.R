@@ -1,6 +1,6 @@
 #' Summarize a continuous variable
 #'
-#' \lifecycle{deprecated}
+#' `r lifecycle::badge('deprecated')`\cr
 #' This helper, to be used with [`tbl_custom_summary()`], creates a function
 #' summarizing a continuous variable.
 #'
@@ -30,7 +30,7 @@ continuous_summary <- function(variable) {
 
 #' Summarize the ratio of two variables
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing the ratio of two continuous variables and its confidence interval.
 #'
@@ -76,7 +76,7 @@ continuous_summary <- function(variable) {
 #'     overall_row_label = "All stages & grades"
 #'   ) |>
 #'   bold_labels() |>
-#'   modify_footnote(all_stat_cols() ~ "Ratio [95% CI] (n/N)")
+#'   modify_footnote_header("Ratio [95% CI] (n/N)", columns = all_stat_cols())
 ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.95) {
   function(data, ...) {
     num <- sum(data[[numerator]], na.rm = na.rm)
@@ -102,7 +102,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 
 #' Summarize a proportion
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing a proportion and its confidence interval.
 #'
@@ -162,7 +162,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'     overall_row_last = TRUE
 #'   ) |>
 #'   bold_labels() |>
-#'   modify_footnote(all_stat_cols() ~ "Proportion (%) of survivors (n/N) [95% CI]")
+#'   modify_footnote_header("Proportion (%) of survivors (n/N) [95% CI]", columns = all_stat_cols())
 proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE, conf.level = 0.95,
                                method = c("wilson", "wilson.no.correct", "wald", "wald.no.correct", "exact", "agresti.coull", "jeffreys")) {
   # process arguments ----------------------------------------------------------

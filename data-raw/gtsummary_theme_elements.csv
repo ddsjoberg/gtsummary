@@ -26,7 +26,6 @@ FALSE,as_kable,as_kable-arg:dots,TRUE,"named list of arguments passed to `knitr:
 FALSE,as_kable_extra,as_kable_extra-lst:addl_cmds,FALSE,"named list of expressions of {kableExtra} package commands inserted in the `as_kable_extra()` call; do not include the `data=` argument; the list of expressions is inserted after the named call, e.g. if the named list element is `""tab_spanner""` the expressions will be inserted after expressions named `""tab_spanner""`; to see the names of the expressions run `as_kable_extra(x, return_calls = TRUE)` and check the names.",
 FALSE,Package-wide,pkgwide-fn:prependpvalue_fun,FALSE,"function to style p-values throughout package that include a ""p"" prefix, e.g. ""p<0.001"" or ""p=0.12""; this is common in the `inline_text()` functions; default is `function(x) style_pvalue(x, prepend_p = TRUE)`","function(x) style_pvalue(x, digits = 2, prepend_p = TRUE)"
 FALSE,Package-wide,pkgwide-fn:pvalue_fun,FALSE,function to style p-values throughout package; default is `style_pvalue`,"function(x) style_pvalue(x, digits = 2)"
-FALSE,Package-wide,pkgwide-lgl:quiet,FALSE,logical indicating whether to suppress messages or not; default is `FALSE`,
 FALSE,Package-wide,pkgwide-str:ci.sep,FALSE,"string indicating separator between upper and lower bounds of confidence intervals. Default is `"", ""`",""" to """
 FALSE,Package-wide,pkgwide-str:language,FALSE,"string indicating language; default is `""en""`","""es"""
 FALSE,Package-wide,pkgwide-str:print_engine,FALSE,"string indicating the default print engine; default is `""gt""`","""flextable"""
@@ -82,4 +81,3 @@ FALSE,tbl_custom_summary,tbl_custom_summary-arg:missing,TRUE,,
 FALSE,tbl_custom_summary,tbl_custom_summary-arg:missing_text,TRUE,,
 FALSE,tbl_custom_summary,tbl_custom_summary-arg:type,TRUE,,
 FALSE,tbl_custom_summary,tbl_custom_summary-arg:value,TRUE,,
-FALSE,tbl_hierarchical,tbl_hierarchical-fn:percent_fun,FALSE,function to style percentages; default is `label_style_percent()`,"label_style_number(digits = 1, scale = 100)"

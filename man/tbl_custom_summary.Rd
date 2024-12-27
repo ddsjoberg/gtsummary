@@ -87,7 +87,7 @@ String indicating the overall row label. Default is \code{"Overall"}.}
 A \code{tbl_custom_summary} object
 }
 \description{
-\lifecycle{experimental}\cr
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide
@@ -159,7 +159,7 @@ Note that for categorical variables, \code{{N_obs}}, \code{{N_miss}} and \code{{
 to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
 
-It is recommended to use \code{\link[=modify_footnote]{modify_footnote()}} to properly describe the
+It is recommended to use \code{\link[=modify_footnote_header]{modify_footnote_header()}} to properly describe the
 displayed statistics (see examples).
 }
 
@@ -167,7 +167,7 @@ displayed statistics (see examples).
 
 
 The returned table is compatible with all \code{gtsummary} features applicable
-to a \code{tbl_summary} object, like \code{\link[=add_overall]{add_overall()}}, \code{\link[=modify_footnote]{modify_footnote()}} or
+to a \code{tbl_summary} object, like \code{\link[=add_overall]{add_overall()}}, \code{\link[=modify_footnote_header]{modify_footnote_header()}} or
 \code{\link[=bold_labels]{bold_labels()}}.
 
 However, some of them could be inappropriate in such case. In particular,
@@ -201,8 +201,9 @@ trial |>
     overall_row_label = "All stages & grades"
   ) |>
   add_overall(last = TRUE) |>
-  modify_footnote(
-    all_stat_cols() ~ "A: mean age - S: sum of marker"
+  modify_footnote_header(
+    footnote = "A: mean age - S: sum of marker",
+    columns = all_stat_cols()
   ) |>
   bold_labels()
 
@@ -225,8 +226,9 @@ trial |>
     statistic = ~ "{mean} [{conf.low}; {conf.high}]"
   ) |>
   add_overall(last = TRUE) |>
-  modify_footnote(
-    all_stat_cols() ~ "mean [95\% CI]"
+  modify_footnote_header(
+    footnote = "mean [95\% CI]",
+    columns = all_stat_cols()
   )
 
 # Example 3 ----------------------------------

@@ -27,8 +27,10 @@ It's provided so various regression model classes can have their own default
 functions for returning statistics.
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mod <- lm(age ~ trt, trial)
 
 glance_fun_s3(mod)
+\dontshow{\}) # examplesIf}
 }
 \keyword{internal}

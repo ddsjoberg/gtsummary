@@ -16,7 +16,7 @@
 #' @return a gtsummary table of class 'tbl_wide_summary'
 #' @export
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' trial |>
 #'   tbl_wide_summary(include = c(response, grade))
 #'
