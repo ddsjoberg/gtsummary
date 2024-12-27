@@ -113,6 +113,8 @@ groups.</p>
 </h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
 <span></span>
 <span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -2691,11 +2693,6 @@ function arguments.</p>
 <td headers="Package-wide  example" class="gt_row gt_left"><span class="gt_from_md"><code>function(x) style_pvalue(x, digits = 2)</code></span></td>
 </tr>
 <tr>
-<td headers="Package-wide  name" class="gt_row gt_left"><span class="gt_from_md"><code>pkgwide-lgl:quiet</code></span></td>
-<td headers="Package-wide  desc" class="gt_row gt_left"><span class="gt_from_md">logical indicating whether to suppress messages or not; default is <code>FALSE</code></span></td>
-<td headers="Package-wide  example" class="gt_row gt_left"><br></td>
-</tr>
-<tr>
 <td headers="Package-wide  name" class="gt_row gt_left"><span class="gt_from_md"><code>pkgwide-str:ci.sep</code></span></td>
 <td headers="Package-wide  desc" class="gt_row gt_left"><span class="gt_from_md">string indicating separator between upper and lower bounds of confidence intervals. Default is <code>", "</code></span></td>
 <td headers="Package-wide  example" class="gt_row gt_left"><span class="gt_from_md"><code>" to "</code></span></td>
@@ -2912,23 +2909,23 @@ function arguments.</p>
 <p>The second type of theme elements set function argument defaults. The
 values of these theme elements must align with the functions’ accepted
 input for the argument.</p>
-<div id="hmulxtlvmd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hmulxtlvmd table {
+<div id="yrdehmulxt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yrdehmulxt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hmulxtlvmd thead, #hmulxtlvmd tbody, #hmulxtlvmd tfoot, #hmulxtlvmd tr, #hmulxtlvmd td, #hmulxtlvmd th {
+#yrdehmulxt thead, #yrdehmulxt tbody, #yrdehmulxt tfoot, #yrdehmulxt tr, #yrdehmulxt td, #yrdehmulxt th {
   border-style: none;
 }
 
-#hmulxtlvmd p {
+#yrdehmulxt p {
   margin: 0;
   padding: 0;
 }
 
-#hmulxtlvmd .gt_table {
+#yrdehmulxt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2954,12 +2951,12 @@ input for the argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_caption {
+#yrdehmulxt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hmulxtlvmd .gt_title {
+#yrdehmulxt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2971,7 +2968,7 @@ input for the argument.</p>
   border-bottom-width: 0;
 }
 
-#hmulxtlvmd .gt_subtitle {
+#yrdehmulxt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2983,7 +2980,7 @@ input for the argument.</p>
   border-top-width: 0;
 }
 
-#hmulxtlvmd .gt_heading {
+#yrdehmulxt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2995,13 +2992,13 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_bottom_border {
+#yrdehmulxt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_col_headings {
+#yrdehmulxt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3016,7 +3013,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_col_heading {
+#yrdehmulxt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3036,7 +3033,7 @@ input for the argument.</p>
   overflow-x: hidden;
 }
 
-#hmulxtlvmd .gt_column_spanner_outer {
+#yrdehmulxt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3048,15 +3045,15 @@ input for the argument.</p>
   padding-right: 4px;
 }
 
-#hmulxtlvmd .gt_column_spanner_outer:first-child {
+#yrdehmulxt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hmulxtlvmd .gt_column_spanner_outer:last-child {
+#yrdehmulxt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hmulxtlvmd .gt_column_spanner {
+#yrdehmulxt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3068,11 +3065,11 @@ input for the argument.</p>
   width: 100%;
 }
 
-#hmulxtlvmd .gt_spanner_row {
+#yrdehmulxt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hmulxtlvmd .gt_group_heading {
+#yrdehmulxt .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3098,7 +3095,7 @@ input for the argument.</p>
   text-align: left;
 }
 
-#hmulxtlvmd .gt_empty_group_heading {
+#yrdehmulxt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3113,15 +3110,15 @@ input for the argument.</p>
   vertical-align: middle;
 }
 
-#hmulxtlvmd .gt_from_md > :first-child {
+#yrdehmulxt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hmulxtlvmd .gt_from_md > :last-child {
+#yrdehmulxt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hmulxtlvmd .gt_row {
+#yrdehmulxt .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3140,7 +3137,7 @@ input for the argument.</p>
   overflow-x: hidden;
 }
 
-#hmulxtlvmd .gt_stub {
+#yrdehmulxt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3153,7 +3150,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#hmulxtlvmd .gt_stub_row_group {
+#yrdehmulxt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3167,15 +3164,15 @@ input for the argument.</p>
   vertical-align: top;
 }
 
-#hmulxtlvmd .gt_row_group_first td {
+#yrdehmulxt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hmulxtlvmd .gt_row_group_first th {
+#yrdehmulxt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hmulxtlvmd .gt_summary_row {
+#yrdehmulxt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3185,16 +3182,16 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#hmulxtlvmd .gt_first_summary_row {
+#yrdehmulxt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_first_summary_row.thick {
+#yrdehmulxt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hmulxtlvmd .gt_last_summary_row {
+#yrdehmulxt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3204,7 +3201,7 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_grand_summary_row {
+#yrdehmulxt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3214,7 +3211,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#hmulxtlvmd .gt_first_grand_summary_row {
+#yrdehmulxt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3224,7 +3221,7 @@ input for the argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_last_grand_summary_row_top {
+#yrdehmulxt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3234,11 +3231,11 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_striped {
+#yrdehmulxt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hmulxtlvmd .gt_table_body {
+#yrdehmulxt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3247,7 +3244,7 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_footnotes {
+#yrdehmulxt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3261,7 +3258,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_footnote {
+#yrdehmulxt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3270,7 +3267,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#hmulxtlvmd .gt_sourcenotes {
+#yrdehmulxt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3284,7 +3281,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#hmulxtlvmd .gt_sourcenote {
+#yrdehmulxt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3292,72 +3289,72 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#hmulxtlvmd .gt_left {
+#yrdehmulxt .gt_left {
   text-align: left;
 }
 
-#hmulxtlvmd .gt_center {
+#yrdehmulxt .gt_center {
   text-align: center;
 }
 
-#hmulxtlvmd .gt_right {
+#yrdehmulxt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hmulxtlvmd .gt_font_normal {
+#yrdehmulxt .gt_font_normal {
   font-weight: normal;
 }
 
-#hmulxtlvmd .gt_font_bold {
+#yrdehmulxt .gt_font_bold {
   font-weight: bold;
 }
 
-#hmulxtlvmd .gt_font_italic {
+#yrdehmulxt .gt_font_italic {
   font-style: italic;
 }
 
-#hmulxtlvmd .gt_super {
+#yrdehmulxt .gt_super {
   font-size: 65%;
 }
 
-#hmulxtlvmd .gt_footnote_marks {
+#yrdehmulxt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hmulxtlvmd .gt_asterisk {
+#yrdehmulxt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hmulxtlvmd .gt_indent_1 {
+#yrdehmulxt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hmulxtlvmd .gt_indent_2 {
+#yrdehmulxt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hmulxtlvmd .gt_indent_3 {
+#yrdehmulxt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hmulxtlvmd .gt_indent_4 {
+#yrdehmulxt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hmulxtlvmd .gt_indent_5 {
+#yrdehmulxt .gt_indent_5 {
   text-indent: 25px;
 }
 
-#hmulxtlvmd .katex-display {
+#yrdehmulxt .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#hmulxtlvmd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#yrdehmulxt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
