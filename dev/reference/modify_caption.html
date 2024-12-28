@@ -19,7 +19,7 @@ knitr::kable(caption=)
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,8 +78,10 @@ A gtsummary object</p></dd>
 
 
 <dt id="arg-caption">caption<a class="anchor" aria-label="anchor" href="#arg-caption"></a></dt>
-<dd><p>(<code>string</code>)<br>
-A string for the table caption/title</p></dd>
+<dd><p>(<code>string</code>/<code>character</code>)<br>
+A string for the table caption/title. NOTE: The <code>gt</code> print engine supports a
+vector of captions. But not every print engine supports this feature, and
+for those outputs, only a string is accepted.</p></dd>
 
 
 <dt id="arg-text-interpret">text_interpret<a class="anchor" aria-label="anchor" href="#arg-text-interpret"></a></dt>

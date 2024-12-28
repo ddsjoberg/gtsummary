@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
 </li>
 <li><p>Previously, source notes were an undocumented feature and only a single source note could be included in a table. We now export <code><a href="../reference/modify_source_note.html">modify_source_note()</a></code> and <code><a href="../reference/modify_source_note.html">remove_source_note()</a></code> to add and remove any number of source notes. Also, when merging and stacking tables, previously due to the one source note limit, only the first source note was retained. Now all source notes will be included below the resulting table. <em>This is different behavior compared to previous versions of the package and in rare cases may result in a different source note.</em> Moreover, <code>kableExtra</code> output now supports source notes, where previously they were omitted.</p></li>
 <li><p>Language translations have been updated with a handful of missing translations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2100" class="external-link">#2100</a>)</p></li>
+<li><p>The <code>modify_caption(caption)</code> argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2107" class="external-link">#2107</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.4" id="gtsummary-204">gtsummary 2.0.4<a class="anchor" aria-label="anchor" href="#gtsummary-204"></a></h2><p class="text-muted">CRAN release: 2024-11-30</p>
