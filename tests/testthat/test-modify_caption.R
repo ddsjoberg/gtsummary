@@ -71,3 +71,19 @@ test_that("modify_caption() works with tbl_uvregression()", {
                  structure(text_interpret = "html")
   )
 })
+
+test_that("modify_caption() works with vector of input", {
+  expect_silent(
+    tbl <- tbl_summary(trial, include = age) |>
+      modify_caption(c("row one", "row two"))
+  )
+  expect_equal(
+    as_gt(tbl) |>
+      getElement("_options") |>
+      dplyr::filter(parameter == "table_caption") |>
+      dplyr::pull("value") |>
+      getElement(1L),
+    c("row one", "row two"),
+    ignore_attr = TRUE
+  )
+})

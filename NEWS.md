@@ -10,6 +10,8 @@
 
 * Language translations have been updated with a handful of missing translations. (#2100)
 
+* The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
