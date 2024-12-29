@@ -12,6 +12,8 @@
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
 
+* Swapped out `dplyr::rows_update()` with a base R implementation in `tbl_merge()` that allows for tables with mixed types in `x$table_styling$header$modify_*` columns. For example, `tbl_summary()` has integer Ns and `tbl_svysummary()` has double Ns that can now be combined. (#1626)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
