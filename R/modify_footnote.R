@@ -4,7 +4,11 @@
 #' @param footnote (`string`)\cr
 #'   a string
 #' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   columns to add footnote
+#'   columns to add footnote.
+#'
+#'   For `modify_footnote_spanning_header()`, pass a single column name where
+#'   the spanning header begins. If multiple column names are passed, only
+#'   the first is used.
 #' @param rows (predicate `expression`)\cr
 #'   Predicate expression to select rows in `x$table_body`.
 #'   Review [rows argument details][rows_argument].
@@ -13,6 +17,8 @@
 #'   location with the specified footnote, or whether the specified should
 #'   be added to the existing footnote(s) in the header/cell. Default
 #'   is to replace existing footnotes.
+#' @param level (`integer`)\cr
+#'   An integer specifying which level to place the spanning header footnote.
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
@@ -116,6 +122,53 @@ modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, tex
 
 #' @export
 #' @rdname modify_footnote2
+modify_footnote_spanning_header <- function(x, footnote, columns,
+                                            level = 1L, replace = TRUE,
+                                            text_interpret = c("md", "html")) {
+  set_cli_abort_call()
+  updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
+
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
+  check_string(footnote)
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
+  check_scalar_logical(replace)
+  text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
+
+  # process columns ------------------------------------------------------------
+  cards::process_selectors(
+    scope_header(x$table_body, x$table_styling$header),
+    columns = {{ columns }}
+  )
+  if (!is_empty(columns)) columns <- columns[1]
+  check_scalar(columns)
+
+  # evaluate the strings with glue ---------------------------------------------
+  lst_footnotes <- .evaluate_string_with_glue(x, list(footnote) |> stats::setNames(columns))
+
+  # add updates to `x$table_styling$footnote_body` -----------------------------
+  x <-
+    .modify_footnote_spanning_header(
+      x,
+      lst_footnotes = lst_footnotes,
+      level = level,
+      text_interpret = text_interpret,
+      replace = replace
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
+}
+
+#' @export
+#' @rdname modify_footnote2
 remove_footnote_header <- function(x, columns) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_header = match.call()))
@@ -164,6 +217,44 @@ remove_footnote_body <- function(x, columns, rows) {
       x,
       lst_footnotes = rep_named(columns, list(NA_character_)),
       rows = {{ rows }},
+      remove = TRUE
+    )
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
+}
+
+#' @export
+#' @rdname modify_footnote2
+remove_footnote_spanning_header <- function(x, columns, level) {
+  set_cli_abort_call()
+  updated_call_list <- c(x$call_list, list(remove_footnote_body = match.call()))
+
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # process columns ------------------------------------------------------------
+  cards::process_selectors(
+    scope_header(x$table_body, x$table_styling$header),
+    columns = {{ columns }}
+  )
+  if (!is_empty(columns)) columns <- columns[1]
+  check_scalar(columns)
+
+  # add updates to `x$table_styling$footnote_body` -----------------------------
+  x <-
+    .modify_footnote_spanning_header(
+      x,
+      lst_footnotes = list(NA_character_) |> stats::setNames(columns),
+      level = level,
       remove = TRUE
     )
 
@@ -221,6 +312,28 @@ remove_footnote_body <- function(x, columns, rows) {
         column = names(lst_footnotes),
         rows = list(enquo(rows)),
         footnote = unlist(lst_footnotes) |> unname(),
+        text_interpret = paste0("gt::", text_interpret),
+        replace = replace,
+        remove = remove
+      )
+    )
+
+  # return table ---------------------------------------------------------------
+  x
+}
+
+
+.modify_footnote_spanning_header <- function(x, lst_footnotes, level = 1L,
+                                             text_interpret = "md",
+                                             replace = TRUE, remove = FALSE) {
+  # add updates to `x$table_styling$footnote_spanning_header` ------------------
+  x$table_styling$footnote_spanning_header <-
+    x$table_styling$footnote_spanning_header |>
+    dplyr::bind_rows(
+      dplyr::tibble(
+        column = names(lst_footnotes),
+        footnote = unlist(lst_footnotes) |> unname(),
+        level = as.integer(level),
         text_interpret = paste0("gt::", text_interpret),
         replace = replace,
         remove = remove

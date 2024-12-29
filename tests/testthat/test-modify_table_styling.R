@@ -120,7 +120,7 @@ test_that("modify_table_styling(spanning_header)", {
         spanning_header = "**Treatment Assignment**"
       ) |>
       getElement("table_styling") |>
-      getElement("header") |>
+      getElement("spanning_header") |>
       dplyr::filter(startsWith(column, "stat_")) |>
       dplyr::pull(spanning_header),
     c("**Treatment Assignment**", "**Treatment Assignment**")
@@ -307,7 +307,7 @@ test_that("modify_table_styling(text_interpret)", {
         text_interpret = "html"
       ) |>
       getElement("table_styling") |>
-      getElement("header") |>
+      getElement("spanning_header") |>
       dplyr::filter(startsWith(column, "stat_")) |>
       dplyr::pull(spanning_header),
     c("my big header", "my big header")

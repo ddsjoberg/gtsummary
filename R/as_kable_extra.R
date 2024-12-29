@@ -181,12 +181,10 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # only removing from header and spanning header, as this is where default markdown
   # formatting is placed in a gtsummary object
   else {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::mutate(
-        label = .strip_markdown(.data$label),
-        spanning_header = .strip_markdown(.data$spanning_header)
-      )
+    x$table_styling$header$label <-
+      .strip_markdown(x$table_styling$header$label)
+    x$table_styling$spanning_header$spanning_header <-
+      .strip_markdown(x$table_styling$spanning_header$spanning_header)
   }
 
   # getting kable calls
@@ -304,35 +302,55 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   }
 
   # add_header_above -----------------------------------------------------------
-  if (any(!is.na(x$table_styling$header$spanning_header))) {
-    df_header0 <-
-      x$table_styling$header |>
-      dplyr::filter(.data$hide == FALSE) |>
-      dplyr::select("spanning_header") |>
-      dplyr::mutate(
-        spanning_header = ifelse(is.na(.data$spanning_header),
-                                 " ", .data$spanning_header
-        ),
-        spanning_header_id = dplyr::row_number()
-      )
-    # assigning an ID for each spanning header group
-    for (i in seq(2, nrow(df_header0))) {
-      if (df_header0$spanning_header[i] == df_header0$spanning_header[i - 1]) {
-        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i - 1]
-      }
-    }
-
-    df_header <-
-      df_header0 |>
-      dplyr::group_by(.data$spanning_header_id) %>%
-      dplyr::mutate(width = dplyr::n()) %>%
-      dplyr::distinct() %>%
-      dplyr::ungroup()
-
-    header <- df_header$width |> set_names(df_header$spanning_header)
-
+  # this is the spanning rows
+  any_spanning_header <- nrow(x$table_styling$spanning_header) > 0L
+  if (any_spanning_header == FALSE) {
+    kable_extra_calls[["add_header_above"]] <- list()
+  } else {
     kable_extra_calls[["add_header_above"]] <-
-      expr(kableExtra::add_header_above(header = !!header, escape = !!escape))
+      tidyr::expand_grid(
+        level = unique(x$table_styling$spanning_header$level),
+        column = x$table_styling$header$column[!x$table_styling$header$hide]
+      ) |>
+      dplyr::left_join(
+        x$table_styling$spanning_header[c("level", "column", "spanning_header")],
+        by = c("level", "column")
+      ) |>
+      dplyr::mutate(
+        .by = "level",
+        spanning_header =
+          ifelse(is.na(.data$spanning_header), " ", .data$spanning_header),
+        spanning_header_id = dplyr::row_number()
+      ) |>
+      dplyr::group_by(.data$level) |>
+      dplyr::group_map(
+        \(df_values, df_group) {
+          # assigning an ID for each spanning header group
+          for (i in seq(2, nrow(df_values))) {
+            if (df_values$spanning_header[i] == df_values$spanning_header[i - 1]) {
+              df_values$spanning_header_id[i] <- df_values$spanning_header_id[i - 1]
+            }
+          }
+
+          df_header <-
+            dplyr::bind_cols(df_group, df_values) |>
+            dplyr::select(-"column") |>
+            dplyr::group_by(.data$spanning_header_id) |>
+            dplyr::mutate(width = dplyr::n()) |>
+            dplyr::distinct() |>
+            dplyr::ungroup() |>
+            dplyr::mutate(
+              column_id = map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
+            )
+
+          expr(
+            kableExtra::add_header_above(
+              header = !!(df_header$width |> stats::setNames(df_header$spanning_header)),
+              escape = !!escape
+            )
+          )
+        }
+      )
   }
 
   # horizontal_line_above ------------------------------------------------------
@@ -384,8 +402,9 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     dplyr::bind_rows(
-      .number_footnotes(x, "footnote_header"),
-      .number_footnotes(x, "footnote_body")
+      .number_footnotes(x, x$table_styling$footnote_spanning_header),
+      .number_footnotes(x, x$table_styling$footnote_header),
+      .number_footnotes(x, x$table_styling$footnote_body)
     ) |>
     dplyr::pull("footnote") %>%
     unique()
@@ -520,8 +539,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       linebreaker = linebreaker
     )
 
-  x$table_styling$header$spanning_header <-
-    .escape_latex2(x$table_styling$header$spanning_header, newlines = FALSE) %>%
+  x$table_styling$spanning_header$spanning_header <-
+    .escape_latex2(x$table_styling$spanning_header$spanning_header, newlines = FALSE) %>%
     .markdown_to_latex2() %>%
     kableExtra::linebreak(
       align = "c",
@@ -564,8 +583,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   x$table_styling$header$label <-
     .strip_markdown(x$table_styling$header$label) %>%
     .escape_html()
-  x$table_styling$header$spanning_header <-
-    .strip_markdown(x$table_styling$header$spanning_header) %>%
+  x$table_styling$spanning_header$spanning_header <-
+    .strip_markdown(x$table_styling$spanning_header$spanning_header) %>%
     .escape_html()
 
   # removing line breaks from footnotes
