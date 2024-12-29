@@ -360,29 +360,6 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       )
   }
 
-  # any_spanning_header <- sum(!is.na(x$table_styling$header$spanning_header)) > 0
-  # if (any_spanning_header) {
-  #   header_content <- x$table_styling$header$spanning_header[x$table_styling$header$hide == FALSE]
-  #   huxtable_calls[["insert_row"]] <- append(
-  #     huxtable_calls[["insert_row"]],
-  #     expr(huxtable::insert_row(after = 0, !!!header_content))
-  #   )
-  #
-  #   header_colspans <- rle(header_content)$lengths
-  #   header_colspan_cols <- cumsum(c(
-  #     1,
-  #     header_colspans[-length(header_colspans)]
-  #   ))
-  #   huxtable_calls[["insert_row"]] <- append(
-  #     huxtable_calls[["insert_row"]],
-  #     expr(
-  #       huxtable::set_colspan(
-  #         row = 1, col = !!header_colspan_cols,
-  #         value = !!header_colspans
-  #       )
-  #     )
-  #   )
-  # }
   header_bottom_row <- length(unique(x$table_styling$spanning_header$level)) + 1L
   huxtable_calls[["insert_row"]] <- append(
     huxtable_calls[["insert_row"]],

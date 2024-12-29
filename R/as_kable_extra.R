@@ -181,12 +181,10 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # only removing from header and spanning header, as this is where default markdown
   # formatting is placed in a gtsummary object
   else {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::mutate(
-        label = .strip_markdown(.data$label),
-        spanning_header = .strip_markdown(.data$spanning_header)
-      )
+    x$table_styling$header$label <-
+      .strip_markdown(x$table_styling$header$label)
+    x$table_styling$spanning_header$spanning_header <-
+      .strip_markdown(x$table_styling$spanning_header$spanning_header)
   }
 
   # getting kable calls
@@ -354,37 +352,6 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
         }
       )
   }
-
-  # if (any(!is.na(x$table_styling$header$spanning_header))) {
-  #   df_header0 <-
-  #     x$table_styling$header |>
-  #     dplyr::filter(.data$hide == FALSE) |>
-  #     dplyr::select("spanning_header") |>
-  #     dplyr::mutate(
-  #       spanning_header = ifelse(is.na(.data$spanning_header),
-  #                                " ", .data$spanning_header
-  #       ),
-  #       spanning_header_id = dplyr::row_number()
-  #     )
-  #   # assigning an ID for each spanning header group
-  #   for (i in seq(2, nrow(df_header0))) {
-  #     if (df_header0$spanning_header[i] == df_header0$spanning_header[i - 1]) {
-  #       df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i - 1]
-  #     }
-  #   }
-  #
-  #   df_header <-
-  #     df_header0 |>
-  #     dplyr::group_by(.data$spanning_header_id) %>%
-  #     dplyr::mutate(width = dplyr::n()) %>%
-  #     dplyr::distinct() %>%
-  #     dplyr::ungroup()
-  #
-  #   header <- df_header$width |> set_names(df_header$spanning_header)
-  #
-  #   kable_extra_calls[["add_header_above"]] <-
-  #     expr(kableExtra::add_header_above(header = !!header, escape = !!escape))
-  # }
 
   # horizontal_line_above ------------------------------------------------------
   if (!is.null(x$table_styling$horizontal_line_above)) {

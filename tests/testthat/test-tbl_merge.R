@@ -104,7 +104,7 @@ test_that("tbl_merge works with no spanning header", {
   expect_silent(tbl <- tbl_merge(list(t0, t1, t2, t3), tab_spanner = FALSE))
 
   expect_true(
-    tbl$table_styling$header$spanning_header |> is.na() |> all()
+    tbl$table_styling$spanning_header$spanning_header |> is_empty()
   )
 })
 
