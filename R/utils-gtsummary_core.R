@@ -153,7 +153,7 @@
 
   x %>%
     # updating rows in header
-    dplyr::rows_update(
+    .rows_update_base(
       y %>% dplyr::select(all_of(common_columns)),
       by = "column"
     ) %>%
@@ -162,4 +162,25 @@
       y %>% dplyr::select(-all_of(setdiff(common_columns, "column"))),
       by = "column"
     )
+}
+
+# a base R version of `dplyr::update_rows()` that allows for combining mixed-type columns
+.rows_update_base <- function(x, y, by) {
+  # convert to data frame so the `[` tibble methods are not used
+  x <- as.data.frame(x)
+  y <- as.data.frame(y)
+
+  # Create a combined key for x and y
+  key_x <- paste(x[, by])
+  key_y <- paste(y[, by])
+
+  # Find matching indices
+  indices <- match(key_y, key_x)
+
+  # Update values for matching rows
+  for (col in setdiff(names(y), by)) {
+    x[indices[!is.na(indices)], col] <- y[!is.na(indices), col]
+  }
+
+  return(dplyr::as_tibble(x))
 }

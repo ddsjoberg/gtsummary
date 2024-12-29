@@ -210,3 +210,32 @@ test_that("tbl_merge throws expected errors", {
     error = TRUE
   )
 })
+
+test_that("tbl_merge() merges mixed-type from .$table_styling$header$modify_* columns", {
+  skip_if_not(is_pkg_installed(c("survey", "cardx", "broom", "withr")))
+  withr::local_seed(123)
+
+  num_rows <- 10
+  toy_data <-
+    data.frame(
+      item1 = sample(c("Never", "Sometimes", "All the time"), num_rows, replace = TRUE),
+      gender = sample(c("Male", "Female"), num_rows, replace = TRUE),
+      weight = rnorm(num_rows, mean = 0, sd = 5) |> abs()
+    )
+  # Create a survey object
+  toy_dataw <- survey::svydesign(data = toy_data, weights = ~weight, ids = ~1)
+  t1 <- tbl_summary(toy_data, by = gender)
+  t2 <- tbl_svysummary(toy_dataw, by = gender)
+  t3 <- tbl_summary(toy_data, include = item1)
+  t4 <- tbl_svysummary(toy_dataw, include = item1)
+
+  # confirm these columns are a mix of integers and non-integers
+  expect_true(t1$table_styling$header$modify_stat_N |> is("integer"))
+  expect_true(t3$table_styling$header$modify_stat_N |> is("integer"))
+  expect_false(t2$table_styling$header$modify_stat_N |> is("integer"))
+  expect_false(t4$table_styling$header$modify_stat_N |> is("integer"))
+
+  # no errors when mixing these variables during the merge
+  expect_silent(tbl_merge(tbls = list(t1, t2)))
+  expect_silent(tbl_merge(tbls = list(t3, t4)))
+})
