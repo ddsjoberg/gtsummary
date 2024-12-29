@@ -216,6 +216,9 @@ internal_tbl_hierarchical <- function(data,
   if ("..ard_hierarchical_overall.." %in% variables) {
     cli::cli_abort("The {.arg variables} argument cannot include a column named {.val ..ard_hierarchical_overall..}.")
   }
+  if (!all(variables == unique(variables))) {
+    cli::cli_abort("The {.arg variables} argument cannot contain repeated variables.")
+  }
 
   # evaluate tidyselect
   cards::process_selectors(data[variables], include = {{ include }})
