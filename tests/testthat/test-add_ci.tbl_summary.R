@@ -801,3 +801,126 @@ test_that("add_ci() correctly handles dichotomous variables", {
   )
 })
 
+test_that("add_ci() correctly handles tbl_summary(percent='row')", {
+  expect_silent(
+    df <-
+      trial |>
+      tbl_summary(include = c(response, grade), percent='row', statistic = ~"{n} / {N} ({p}%)") |>
+      add_ci(
+        statistic = ~"{conf.low} {conf.high}",
+        style_fun = ~label_style_number(scale = 100, digits = 1)
+      ) |>
+      as_tibble(col_labels = FALSE)
+  )
+
+  # check the CIs are correct for response
+  expect_equal(
+    df[1, "ci_stat_0"] |>
+      dplyr::pull("ci_stat_0"),
+    cardx::proportion_ci_wilson(
+      x = rep_len(TRUE, table(trial$response) |> as.data.frame() |> dplyr::filter(Var1 == 1) |> dplyr::pull(Freq)),
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+
+  # check the CIs are correct for grade II
+  expect_equal(
+    df |>
+      dplyr::filter(label == "II") |>
+      dplyr::pull("ci_stat_0"),
+    cardx::proportion_ci_wilson(
+      x = rep_len(TRUE, table(trial$grade) |> as.data.frame() |> dplyr::filter(Var1 == "II") |> dplyr::pull(Freq)),
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+
+  # now with a by variable
+  expect_equal(
+    trial |>
+      tbl_summary(by = trt, include = response, percent='row', statistic = ~"{n} / {N} ({p}%)", missing = "no") |>
+      add_ci(
+        statistic = ~"{conf.low} {conf.high}",
+        style_fun = ~label_style_number(scale = 100, digits = 1)
+      ) |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull("ci_stat_1"),
+    cardx::proportion_ci_wilson(
+      x = (trial$trt == "Drug A")[trial$response == 1],
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+})
+
+
+test_that("add_ci() correctly handles tbl_summary(percent='cell')", {
+  expect_silent(
+    df <-
+      trial |>
+      tbl_summary(include = c(response, grade), percent='cell', statistic = ~"{n} / {N} ({p}%)") |>
+      add_ci(
+        statistic = ~"{conf.low} {conf.high}",
+        style_fun = ~label_style_number(scale = 100, digits = 1)
+      ) |>
+      as_tibble(col_labels = FALSE)
+  )
+
+  # check the CIs are correct for response
+  expect_equal(
+    df[1, "ci_stat_0"] |>
+      dplyr::pull("ci_stat_0"),
+    cardx::proportion_ci_wilson(
+      x = trial$response == 1,
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+
+  # check the CIs are correct for grade II
+  expect_equal(
+    df |>
+      dplyr::filter(label == "II") |>
+      dplyr::pull("ci_stat_0"),
+    cardx::proportion_ci_wilson(
+      x = trial$grade == "II",
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+
+  # now with a by variable
+  expect_equal(
+    trial |>
+      tbl_summary(by = trt, include = response, percent='cell', statistic = ~"{n} / {N} ({p}%)", missing = "no") |>
+      add_ci(
+        statistic = ~"{conf.low} {conf.high}",
+        style_fun = ~label_style_number(scale = 100, digits = 1)
+      ) |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull("ci_stat_1"),
+    cardx::proportion_ci_wilson(
+      x =
+        with(
+          tidyr::drop_na(trial, c(trt, response)),
+          trt == "Drug A" & response == 1
+        ),
+      correct = TRUE
+    )[c("conf.low", "conf.high")] |>
+      map_chr(label_style_number(scale = 100, digits = 1)) |>
+      unlist() |>
+      paste(collapse = " ")
+  )
+})
+
