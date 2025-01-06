@@ -14,6 +14,8 @@
 
 * Swapped out `dplyr::rows_update()` with a base R implementation in `tbl_merge()` that allows for tables with mixed types in `x$table_styling$header$modify_*` columns. For example, `tbl_summary()` has integer Ns and `tbl_svysummary()` has double Ns that can now be combined. (#1626)
 
+* The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
