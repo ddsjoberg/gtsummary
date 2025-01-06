@@ -9,8 +9,10 @@
 #'
 #' @param x (`gtsummary`)\cr
 #'   A gtsummary object
-#' @param caption (`string`)\cr
-#'   A string for the table caption/title
+#' @param caption (`string`/`character`)\cr
+#'   A string for the table caption/title. NOTE: The `gt` print engine supports a
+#'   vector of captions. But not every print engine supports this feature, and
+#'   for those outputs, only a string is accepted.
 #' @inheritParams modify
 #'
 #' @export
@@ -26,12 +28,12 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_string(caption)
+  check_class(caption, "character")
   text_interpret <- arg_match(text_interpret)
 
   # evaluating update with glue ------------------------------------------------
   if ("label" %in% x$table_styling$header$column) {
-    caption <- .evaluate_string_with_glue(x, list(label = caption)) |>
+    caption <- map(caption, ~.evaluate_string_with_glue(x, list(label = .x))) |>
       unlist() |>
       unname()
   }
