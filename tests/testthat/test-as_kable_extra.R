@@ -28,7 +28,8 @@ test_that("as_kable_extra(return_calls) works as expected", {
   expect_equal(
     names(kbl),
     c("tibble", "fmt", "cols_merge", "fmt_missing", "cols_hide", "remove_line_breaks",
-      "escape_table_body", "bold_italic", "kable", "add_indent", "source_note", "abbreviations", "footnote")
+      "escape_table_body", "bold_italic", "kable", "add_indent",
+      "add_header_above", "source_note", "abbreviations", "footnote")
   )
 })
 
@@ -125,6 +126,22 @@ test_that("as_kable_extra works with tbl_stack", {
   expect_snapshot(kbl_stack)
 })
 
+test_that("as_kable_extra checking the placement of a second spanning header", {
+  expect_silent(
+    tbl2 <-
+      trial |>
+      tbl_summary(by = grade, include = age) |>
+      modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**") |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_kable_extra()
+  )
+
+  # this isn't a great test, but it's something!
+  expect_true(as.character(tbl2) |> str_detect("Testing"))
+  expect_true(as.character(tbl2) |> str_detect("Tumor Grade"))
+})
+
+
 test_that("as_kable_extra works with bold/italics", {
   tbl <- my_tbl_summary |>
     bold_labels() |>
@@ -194,6 +211,13 @@ test_that("as_kable_extra passes table footnotes & abbreviations correctly", {
 
   expect_snapshot_value(
     strsplit(kbl[1], "* </?tr>\n *")[[1]][10]
+  )
+
+  expect_true(
+    my_tbl_summary |>
+      modify_footnote_spanning_header("footnote test", columns = all_stat_cols()) |>
+      as_kable_extra(format = "html") |>
+      str_detect("footnote test")
   )
 })
 

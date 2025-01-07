@@ -1,5 +1,6 @@
 #' Create gtsummary table
 #'
+#' USE `as_gtsummary()` INSTEAD!
 #' This function ingests a data frame and adds the infrastructure around it
 #' to make it a gtsummary object.
 #'
@@ -66,9 +67,7 @@
       hide = TRUE,
       align = "center",
       interpret_label = "gt::md",
-      label = names(x$table_body),
-      interpret_spanning_header = "gt::md",
-      spanning_header = NA_character_
+      label = names(x$table_body)
     ) %>%
     .rows_update_table_styling_header(x$table_styling$header)
 

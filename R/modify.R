@@ -24,6 +24,10 @@
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
 #'   Applies to tables printed with `{gt}`.
+#' @param level (`integer`)\cr
+#'   An integer specifying which level to place the spanning header.
+#' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Columns from which to remove spanning headers.
 #' @param update,quiet `r lifecycle::badge("deprecated")`
 #' @param include_example `r lifecycle::badge("deprecated")`
 #'
@@ -47,7 +51,7 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' # create summary table
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
@@ -66,12 +70,6 @@
 #' tbl |>
 #'   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") |>
 #'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
-#'
-#' # Example 3 ----------------------------------
-#' # updating an abbreviation in table footnote
-#' glm(response ~ age + grade, trial, family = binomial) |>
-#'   tbl_regression(exponentiate = TRUE) |>
-#'   modify_abbreviation("CI = Credible Interval")
 NULL
 
 #' @name modify
@@ -124,12 +122,20 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
 #' @name modify
 #' @export
 modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
+                                   level = 1L,
                                    quiet, update) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
+  updated_call_list <- c(x$call_list, list(modify_spanning_header = match.call()))
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
   text_interpret <- arg_match(text_interpret)
 
   # process inputs -------------------------------------------------------------
@@ -151,15 +157,69 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
 
   # updated header meta data
   x <-
-    modify_table_styling(
+    .modify_spanning_header(
       x = x,
+      level = level,
       columns = names(dots),
       spanning_header = unlist(dots),
-      text_interpret = text_interpret
+      text_interpret = text_interpret,
+      remove = FALSE
     )
 
   # return object
   x$call_list <- updated_call_list
+  x
+}
+
+#' @name modify
+#' @export
+remove_spanning_header <- function(x, columns, level = 1L) {
+  set_cli_abort_call()
+  updated_call_list <- c(x$call_list, list(remove_spanning_header = match.call()))
+
+  # checking inputs ------------------------------------------------------------
+  check_class(x, "gtsummary")
+  check_scalar_integerish(level)
+  if (level < 1) {
+    cli::cli_abort(
+      "The {.arg level} argument must be a positive integer.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # process inputs -------------------------------------------------------------
+  cards::process_selectors(data = scope_header(x$table_body, x$table_styling$header), columns = {{ columns }})
+
+  # updated header meta data
+  x <-
+    .modify_spanning_header(
+      x = x,
+      level = level,
+      columns = columns,
+      spanning_header = rep_len(NA_character_, length.out = length(columns)),
+      remove = TRUE
+    )
+
+  # return object
+  x$call_list <- updated_call_list
+  x
+}
+
+.modify_spanning_header <- function(x, columns, spanning_header, level = 1L, text_interpret = "md", remove = FALSE) {
+  # add updates to `x$table_styling$spanning_header` ---------------------------
+  x$table_styling$spanning_header <-
+    x$table_styling$spanning_header |>
+    dplyr::bind_rows(
+      dplyr::tibble(
+        level = level,
+        column = columns,
+        spanning_header = unname(spanning_header),
+        text_interpret = paste0("gt::", text_interpret),
+        remove = remove
+      )
+    )
+
+  # return table ---------------------------------------------------------------
   x
 }
 
