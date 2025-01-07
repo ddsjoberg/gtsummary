@@ -50,6 +50,31 @@ test_that("as_hux_table works with tbl_merge", {
   expect_snapshot(ht_merge)
 })
 
+test_that("as_hux_table checking the placement of a second spanning header", {
+  expect_silent(
+    tbl2 <-
+      trial |>
+      tbl_summary(by = grade, include = age) |>
+      modify_spanning_header(c(stat_1, stat_3) ~ "**Testing**") |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_hux_table()
+  )
+
+  expect_equal(
+    map(tbl2, ~.x[1:3]) |>
+      dplyr::bind_cols() |>
+      as.data.frame(),
+    data.frame(
+      stringsAsFactors = FALSE,
+      label = c(NA, NA, "**Characteristic**"),
+      stat_1 = c("**Tumor Grade**", "**Testing**", "**I**  \nN = 68"),
+      stat_2 = c("**Tumor Grade**", NA, "**II**  \nN = 68"),
+      stat_3 = c("**Tumor Grade**", "**Testing**", "**III**  \nN = 64")
+    )
+  )
+})
+
+
 test_that("as_hux_table works with tbl_stack", {
   t1 <- trial |>
     dplyr::filter(trt == "Drug A") |>
@@ -145,6 +170,16 @@ test_that("as_hux_table passes table footnotes & abbreviations correctly", {
   expect_equal(
     ht[8:9, 1] |> unlist(use.names = FALSE),
     c("another new footnote", "replace old footnote")
+  )
+
+  expect_equal(
+    my_tbl_summary |>
+      modify_footnote_spanning_header("footnote test", columns = all_stat_cols()) |>
+      as_hux_table() %>%
+      `[`(8,) |>
+      unlist() |>
+      unname(),
+    c("footnote test", "footnote test")
   )
 })
 

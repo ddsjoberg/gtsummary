@@ -201,7 +201,7 @@ test_that("tbl_strata(.combine_args) works as expected", {
   )
 
   # no spanning header added
-  expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
+  expect_true(tbl$table_styling$spanning_header$spanning_header |> is_empty())
 })
 
 test_that("tbl_strata2 works with standard use", {
