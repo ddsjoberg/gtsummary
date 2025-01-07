@@ -127,6 +127,36 @@
     dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     dplyr::ungroup()
 
+  # spanning_header ------------------------------------------------------------
+  x$table_styling$spanning_header <-
+    x$table_styling$spanning_header |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed headers
+      remove = ifelse(is.na(.data$spanning_header), TRUE, .data$remove),
+    ) |>
+    # within a column and level, utilize the most recently added
+    dplyr::filter(.by = c("column", "level"), dplyr::n() == dplyr::row_number()) |>
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
+    dplyr::arrange(.data$level)
+
+  if (nrow(x$table_styling$spanning_header) > 0L &&
+      !setequal(unique(x$table_styling$spanning_header$level),
+               seq_len(max(x$table_styling$spanning_header$level)))) {
+    max_level <- max(x$table_styling$spanning_header$level)
+    missing_lvls <- seq_len(max_level) |>
+      setdiff(unique(x$table_styling$spanning_header$level))
+
+    cli::cli_abort(
+      c("!" = "There is an error in the spanning headers structure.",
+        "!" = "Each spanning header level must be defined, that is, no levels may be skipped.",
+        "i" = "The {cli::qty(length(missing_lvls))} spanning header{?s} for level{?s}
+        {.val {missing_lvls}} {cli::qty(length(missing_lvls))} {?is/are} not present,
+        but level {.val {max_level}} is present."),
+      call = get_cli_abort_call()
+    )
+  }
+
   # footnote_header ------------------------------------------------------------
   x$table_styling$footnote_header <-
     x$table_styling$footnote_header |>
@@ -136,7 +166,7 @@
     ) |>
     # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
     .filter_row_with_subsequent_replace_or_removal() |>
-    #finally, remove the row if it's marked for removal or if the column is not printed in final table
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
     dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
   # footnote_body --------------------------------------------------------------
@@ -158,6 +188,18 @@
     dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide]) |>
     dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
     dplyr::mutate(row_numbers = as.integer(.data$row_numbers)) # when there are no body footnotes, this ensures expected type/class
+
+  # footnote_spanning_header ---------------------------------------------------
+  x$table_styling$footnote_spanning_header <-
+    x$table_styling$footnote_spanning_header |>
+    dplyr::mutate(
+      # this is a hold-over from old syntax where NA removed footnotes.
+      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
+    ) |>
+    # within a column/level, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+    .filter_row_with_subsequent_replace_or_removal() |>
+    # finally, remove the row if it's marked for removal or if the column is not printed in final table
+    dplyr::filter(!remove, .data$column %in% x$table_styling$header$column[!x$table_styling$header$hide])
 
   # abbreviation ---------------------------------------------------------------
   abbreviation_cols <-
@@ -223,7 +265,7 @@
   # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
   dplyr::filter(
     .data = x,
-    .by = any_of(c("column", "row_numbers")),
+    .by = any_of(c("column", "level", "row_numbers")),
     !unlist(
       pmap(
         list(.data$replace, .data$remove, dplyr::row_number()),
@@ -244,7 +286,7 @@
 # and assigns them an sequential ID
 .number_footnotes <- function(x, type, start_with = 0L) {
   # if empty, return empty data frame
-  if (nrow(x$table_styling[[type]]) == 0L) {
+  if (nrow(type) == 0L) {
     return(dplyr::tibble(
       footnote_id = integer(), footnote = character(), column = character(),
       column_id = integer(), row_numbers = integer()
@@ -256,7 +298,7 @@
     x$table_styling$header |>
       select("column", column_id = "id") |>
       dplyr::filter(!is.na(.data$column_id)),
-    x$table_styling[[type]],
+    type,
     by = "column"
   ) |>
     dplyr::arrange(dplyr::pick(any_of(c("column_id", "row_numbers")))) |>

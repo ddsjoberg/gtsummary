@@ -148,22 +148,31 @@ bold_labels.tbl_cross <- function(x) {
 
   cols_to_style <-
     select(x$table_body, all_stat_cols(FALSE)) %>%
-    names()
+    names() |>
+    # remove hidden columns
+    setdiff(x$table_styling$header$column[x$table_styling$header$hide])
+
+  x$table_styling$spanning_header <-
+    x$table_styling$spanning_header |>
+    dplyr::mutate(
+      spanning_header =
+        ifelse(
+          .data$column %in% .env$cols_to_style & !is.na(.data$spanning_header),
+          paste0("**", .data$spanning_header, "**"),
+          .data$spanning_header
+        )
+    )
 
   x$table_styling$header <-
-    dplyr::mutate(x$table_styling$header,
-           spanning_header =
-             dplyr::case_when(
-               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
-                 paste0("**", spanning_header, "**"),
-               TRUE ~ spanning_header
-             )
-    ) %>%
-    dplyr::mutate(label = dplyr::case_when(
-      .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
-        paste0("**", label, "**"),
-      TRUE ~ label
-    ))
+    x$table_styling$header |>
+    dplyr::mutate(
+      label =
+        dplyr::case_when(
+          .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
+            paste0("**", label, "**"),
+          TRUE ~ label
+        )
+    )
 
   x
 }
@@ -199,22 +208,30 @@ italicize_labels.tbl_cross <- function(x) {
 
   cols_to_style <-
     dplyr::select(x$table_body, all_stat_cols(FALSE)) %>%
-    names()
+    names() |>
+    # remove hidden columns
+    setdiff(x$table_styling$header$column[x$table_styling$header$hide])
+
+  x$table_styling$spanning_header <-
+    x$table_styling$spanning_header |>
+    dplyr::mutate(
+      spanning_header =
+        ifelse(
+          .data$column %in% .env$cols_to_style & !is.na(.data$spanning_header),
+          paste0("*", .data$spanning_header, "*"),
+          .data$spanning_header
+        )
+    )
 
   x$table_styling$header <-
-    dplyr::mutate(x$table_styling$header,
-           spanning_header =
-             dplyr::case_when(
-               .data$hide == FALSE & (.data$column %in% cols_to_style) ~
-                 paste0("*", spanning_header, "*"),
-               TRUE ~ spanning_header
-             )
-    ) |>
-    dplyr::mutate(label = dplyr::case_when(
-      .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
-        paste0("*", label, "*"),
-      TRUE ~ label
-    ))
+    x$table_styling$header |>
+    dplyr::mutate(
+      label = dplyr::case_when(
+        .data$hide == FALSE & (.data$column %in% c("stat_0", "p.value")) ~
+          paste0("*", label, "*"),
+        TRUE ~ label
+      )
+    )
 
   x
 }

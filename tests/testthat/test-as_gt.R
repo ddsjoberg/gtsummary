@@ -114,7 +114,7 @@ test_that("as_gt passes table header labels correctly", {
 
   # spanning_tbl - spanning header
   expect_equal(
-    my_spanning_tbl$table_styling$header |>
+    my_spanning_tbl$table_styling$spanning_header |>
       dplyr::filter(!is.na(spanning_header)) |>
       dplyr::pull(column),
     gt_spanning_tbl$`_spanners`$vars[[1]]
@@ -185,9 +185,9 @@ test_that("as_gt passes table text interpreters correctly", {
   # spanning header
   expect_equal(
     sapply(
-      my_spanning_tbl$table_styling$header |>
+      my_spanning_tbl$table_styling$spanning_header |>
         dplyr::filter(!is.na(spanning_header)) |>
-        dplyr::pull(interpret_spanning_header),
+        dplyr::pull(text_interpret),
       \(x) do.call(eval(parse(text = x)), list("")) |> class()
     ),
     gt_spanning_tbl$`_spanners`$spanner_label[[1]] |> class() |>
@@ -210,7 +210,30 @@ test_that("as_gt passes table text interpreters correctly", {
   )
 
   # spanning header
-  expect_true(attr(gt_tbl$`_spanners`$spanner_label[[1]], "html"))
+  expect_true(attr(gt_tbl$`_spanners`$spanner_label[[2]], "html"))
+
+  # checking the placement of a second spanning header
+  expect_silent(
+    tbl2 <-
+      my_spanning_tbl |>
+      modify_spanning_header(all_stat_cols() ~ "**Tumor Grade**", level = 2) |>
+      as_gt()
+  )
+
+  expect_equal(
+    tbl2$`_spanners` |>
+      dplyr::select(vars, spanner_label, spanner_level) |>
+      dplyr::mutate(
+        vars = map_chr(vars, ~paste(.x, collapse = ", ")),
+        spanner_label = map_chr(spanner_label, as.character)
+      ),
+    data.frame(
+      stringsAsFactors = FALSE,
+      vars = c("stat_1, stat_3", "stat_1, stat_2, stat_3"),
+      spanner_label = c("**Testing**", "**Tumor Grade**"),
+      spanner_level = c(1L, 2L)
+    )
+  )
 })
 
 test_that("as_gt passes table footnotes & abbreviations correctly", {
@@ -275,6 +298,34 @@ test_that("as_gt passes table footnotes & abbreviations correctly", {
       colname = c("label", "label", "stat_0"),
       rownum = c(1, 2, 1)
     )
+  )
+
+  # footnotes in spanning headers
+  expect_equal(
+    my_spanning_tbl |>
+      modify_footnote_spanning_header(
+        footnote = "Testing 1 Footnote",
+        columns = stat_1
+      ) |>
+      as_gt() |>
+      getElement("_footnotes") |>
+      dplyr::filter(footnotes == "Testing 1 Footnote") |>
+      dplyr::pull(locname),
+    "columns_groups"
+  )
+  expect_equal(
+    my_spanning_tbl |>
+      modify_spanning_header(c(stat_1, stat_2) ~ "**Another Span**", level = 2L) |>
+      modify_footnote_spanning_header(
+        footnote = "Testing 1 Footnote",
+        columns = stat_1,
+        level = 2L
+      ) |>
+      as_gt() |>
+      getElement("_footnotes") |>
+      dplyr::filter(footnotes == "Testing 1 Footnote") |>
+      dplyr::pull(locname),
+    "columns_groups"
   )
 })
 

@@ -8,6 +8,10 @@
 
 * Previously, source notes were an undocumented feature and only a single source note could be included in a table. We now export `modify_source_note()` and `remove_source_note()` to add and remove any number of source notes. Also, when merging and stacking tables, previously due to the one source note limit, only the first source note was retained. Now all source notes will be included below the resulting table. _This is different behavior compared to previous versions of the package and in rare cases may result in a different source note._ Moreover, `kableExtra` output now supports source notes, where previously they were omitted.
 
+* The `modify_spanning_header(level)` argument has been added to allow for multiple levels of spanning headers in the resulting tables. The `remove_spanning_header()` function has also been added to ease the removal of spanning headers. (#2099)
+
+* The `modify_footnote_spanning_header()` function has been added to ease adding footnotes to spanning headers. A companion function, `remove_footnote_spanning_header()`, has been added to remove spanning headers.
+
 * Language translations have been updated with a handful of missing translations. (#2100)
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
