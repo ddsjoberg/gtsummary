@@ -16,6 +16,7 @@ a data frame that will be added as the gtsummary object's \code{table_body}}
 gtsummary object
 }
 \description{
+USE \code{as_gtsummary()} INSTEAD!
 This function ingests a data frame and adds the infrastructure around it
 to make it a gtsummary object.
 }

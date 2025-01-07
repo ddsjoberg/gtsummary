@@ -30,31 +30,49 @@ as_gtsummary <- function(table_body, ...) {
       hide = FALSE,
       align = "center",
       interpret_label = "gt::md",
-      label = names(x$table_body),
-      interpret_spanning_header = "gt::md",
-      spanning_header = NA_character_
+      label = names(x$table_body)
     ) %>%
     dplyr::mutate(
       align = ifelse(.data$column %in% "label", "left", .data$align)
     )
+
+  x$table_styling$spanning_header <-
+    dplyr::tibble(
+      level = integer(),
+      column = character(),
+      spanning_header = character(),
+      text_interpret = character(),
+      remove = logical()
+    )
+
   x$table_styling$footnote_header <-
     dplyr::tibble(
       column = character(),
       footnote = character(), text_interpret = character(),
       replace = logical(), remove = logical()
     )
+
   x$table_styling$footnote_body <-
     dplyr::tibble(
       column = character(), rows = list(),
       footnote = character(), text_interpret = character(),
       replace = logical(), remove = logical()
     )
+
+  x$table_styling$footnote_spanning_header <-
+    dplyr::tibble(
+      column = character(), footnote = character(),
+      level = integer(), text_interpret = character(),
+      replace = logical(), remove = logical()
+    )
+
   x$table_styling$abbreviation <-
     dplyr::tibble(
       column = character(),
       abbreviation = character(),
       text_interpret = character()
     )
+
   x$table_styling$source_note <-
     dplyr::tibble(
       id = integer(),
@@ -62,6 +80,7 @@ as_gtsummary <- function(table_body, ...) {
       text_interpret = character(),
       remove = logical()
     )
+
   x$table_styling$text_format <-
     dplyr::tibble(
       column = character(), rows = list(),
@@ -69,7 +88,7 @@ as_gtsummary <- function(table_body, ...) {
     )
 
   x$table_styling$indent <-
-    # if there is a label column, make it idnent 0 (which makes it easier to modify later)
+    # if there is a label column, make it indent 0 (which makes it easier to modify later)
     if ("label" %in% x$table_styling$header$column) {
       dplyr::tibble(
         column = "label",
