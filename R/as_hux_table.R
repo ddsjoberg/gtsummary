@@ -187,8 +187,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     dplyr::bind_rows(
-      .number_footnotes(x, "footnote_header"),
-      .number_footnotes(x, "footnote_body")
+      .number_footnotes(x, x$table_styling$footnote_spanning_header),
+      .number_footnotes(x, x$table_styling$footnote_header),
+      .number_footnotes(x, x$table_styling$footnote_body)
     ) |>
     dplyr::pull("footnote") %>%
     unique()
@@ -331,30 +332,35 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     expr(huxtable::insert_row(after = 0, !!!col_labels))
   )
 
-  any_spanning_header <- sum(!is.na(x$table_styling$header$spanning_header)) > 0
-  if (any_spanning_header) {
-    header_content <- x$table_styling$header$spanning_header[x$table_styling$header$hide == FALSE]
-    huxtable_calls[["insert_row"]] <- append(
-      huxtable_calls[["insert_row"]],
-      expr(huxtable::insert_row(after = 0, !!!header_content))
-    )
+  if (nrow(x$table_styling$spanning_header) > 0L) {
+    huxtable_calls[["insert_row"]] <-
+      huxtable_calls[["insert_row"]] |>
+      append(
+        tidyr::expand_grid(
+          level = unique(x$table_styling$spanning_header$level),
+          column = x$table_styling$header$column[!x$table_styling$header$hide]
+        ) |>
+          dplyr::left_join(
+            x$table_styling$spanning_header[c("level", "column", "spanning_header")],
+            by = c("level", "column")
+          ) |>
+          dplyr::group_by(.data$level) |>
+          dplyr::group_map(
+            \(df_values, df_group) {
+              header_content <-  df_values$spanning_header
+              header_colspans <- rle(header_content)$lengths
+              header_colspan_cols <- cumsum(c(1, header_colspans[-length(header_colspans)]))
 
-    header_colspans <- rle(header_content)$lengths
-    header_colspan_cols <- cumsum(c(
-      1,
-      header_colspans[-length(header_colspans)]
-    ))
-    huxtable_calls[["insert_row"]] <- append(
-      huxtable_calls[["insert_row"]],
-      expr(
-        huxtable::set_colspan(
-          row = 1, col = !!header_colspan_cols,
-          value = !!header_colspans
-        )
+              list(
+                expr(huxtable::insert_row(after = 0, !!!header_content)),
+                expr(huxtable::set_colspan(row = 1, col = !!header_colspan_cols, value = !!header_colspans))
+              )
+            }
+          )
       )
-    )
   }
-  header_bottom_row <- if (any_spanning_header) 2 else 1
+
+  header_bottom_row <- length(unique(x$table_styling$spanning_header$level)) + 1L
   huxtable_calls[["insert_row"]] <- append(
     huxtable_calls[["insert_row"]],
     expr(
@@ -366,7 +372,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_markdown ---------------------------------------------------------------
-  header_rows <- switch(any_spanning_header, 1:2) %||% 1L # styler: off
+  header_rows <- seq_len(length(unique(x$table_styling$spanning_header$level)) + 1L) # styler: off
   huxtable_calls[["set_markdown"]] <-
     list(
       set_markdown =

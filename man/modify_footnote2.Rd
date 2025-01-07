@@ -4,8 +4,10 @@
 \alias{modify_footnote2}
 \alias{modify_footnote_header}
 \alias{modify_footnote_body}
+\alias{modify_footnote_spanning_header}
 \alias{remove_footnote_header}
 \alias{remove_footnote_body}
+\alias{remove_footnote_spanning_header}
 \title{Modify Footnotes}
 \usage{
 modify_footnote_header(
@@ -25,9 +27,20 @@ modify_footnote_body(
   text_interpret = c("md", "html")
 )
 
+modify_footnote_spanning_header(
+  x,
+  footnote,
+  columns,
+  level = 1L,
+  replace = TRUE,
+  text_interpret = c("md", "html")
+)
+
 remove_footnote_header(x, columns)
 
 remove_footnote_body(x, columns, rows)
+
+remove_footnote_spanning_header(x, columns, level)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -37,7 +50,11 @@ A gtsummary object}
 a string}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-columns to add footnote}
+columns to add footnote.
+
+For \code{modify_footnote_spanning_header()}, pass a single column name where
+the spanning header begins. If multiple column names are passed, only
+the first is used.}
 
 \item{replace}{(scalar \code{logical})\cr
 Logical indicating whether to replace any existing footnotes in the specified
@@ -53,6 +70,9 @@ Applies to tables printed with \code{{gt}}.}
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
 Review \link[=rows_argument]{rows argument details}.}
+
+\item{level}{(\code{integer})\cr
+An integer specifying which level to place the spanning header footnote.}
 }
 \value{
 Updated gtsummary object
