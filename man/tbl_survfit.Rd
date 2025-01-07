@@ -91,7 +91,9 @@ Must be one of the following:\tabular{ll}{
 }
 \description{
 Function takes a \code{survfit} object as an argument, and provides a
-formatted summary table of the results
+formatted summary table of the results.
+
+No more than one stratifying variable is allowed in each model.
 }
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
