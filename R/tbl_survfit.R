@@ -1,7 +1,10 @@
 #' Survival table
 #'
+#' @description
 #' Function takes a `survfit` object as an argument, and provides a
-#' formatted summary table of the results
+#' formatted summary table of the results.
+#'
+#' No more than one stratifying variable is allowed in each model.
 #'
 #' @param x (`survfit`, `list`, `data.frame`)\cr
 #'   a survfit object, list of survfit objects, or a data frame.
@@ -286,6 +289,7 @@ brdg_survfit <- function(cards,
                          statistic = "{estimate} ({conf.low}, {conf.high})",
                          label = NULL,
                          label_header) {
+  set_cli_abort_call()
   # grab information for the headers -------------------------------------------
   df_header_survfit <- cards[[1]] |>
     dplyr::filter(!.data$context %in% "attributes") |>
@@ -307,7 +311,8 @@ brdg_survfit <- function(cards,
     if (length(cards_names[[i]]) > 1L) {
       cli::cli_abort(
         c("The {.fun tbl_survfit} function supports {.fun survival::survfit} objects with no more than one stratifying variable.",
-          i = "The model is stratified by {.val {cards_names[[i]]}}.")
+          i = "The model is stratified by {.val {cards_names[[i]]}}."),
+        call = get_cli_abort_call()
       )
     }
   }
@@ -413,7 +418,7 @@ brdg_survfit <- function(cards,
 .default_survfit_labels <- function(x) {
   label <- list()
   for (i in seq_along(x)) {
-    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars()
+    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars() |> dplyr::first() |> discard(is.na)
     if (!is_empty(variable_i)) {
       label[[variable_i]] <-
         tryCatch(
