@@ -418,7 +418,7 @@ brdg_survfit <- function(cards,
 .default_survfit_labels <- function(x) {
   label <- list()
   for (i in seq_along(x)) {
-    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars() |> dplyr::first()
+    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars() |> dplyr::first() |> discard(is.na)
     if (!is_empty(variable_i)) {
       label[[variable_i]] <-
         tryCatch(
