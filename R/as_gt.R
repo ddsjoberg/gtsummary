@@ -234,6 +234,25 @@ table_styling_to_gt_calls <- function(x, ...) {
         expr(gt::cols_label_with(fn = function(x) gsub(x = x, pattern = "\\n(?!\\\\)", replacement = "", fixed = FALSE, perl = TRUE)))
     )
 
+  # spanning_header ------------------------------------------------------------
+  gt_calls[["tab_spanner"]] <-
+    case_switch(
+      nrow(x$table_styling$spanning_header) > 0L ~
+        x$table_styling$spanning_header |>
+        dplyr::group_by(.data$level, .data$spanning_header, .data$text_interpret) |>
+        dplyr::group_map(
+          \(.x, .y) {
+            expr(gt::tab_spanner(
+              columns = !!.x$column,
+              label = !!call2(parse_expr(.y$text_interpret), .y$spanning_header),
+              level = !!.y$level,
+              id = !!paste0("level ", .y$level, "; ", .x$column[1]),
+              gather = FALSE
+            ))
+          }
+        ),
+      .default = list()
+    )
 
   # tab_footnote ---------------------------------------------------------------
   gt_calls[["tab_footnote"]] <-
@@ -270,32 +289,27 @@ table_styling_to_gt_calls <- function(x, ...) {
             )
           )
         }
-      )
-    )
-
-  # spanning_header ------------------------------------------------------------
-  df_spanning_header <-
-    x$table_styling$header |>
-    dplyr::select("column", "interpret_spanning_header", "spanning_header") |>
-    dplyr::filter(!is.na(.data$spanning_header)) |>
-    tidyr::nest(cols = "column") |>
-    dplyr::mutate(
-      spanning_header = map2(
-        .data$interpret_spanning_header, .data$spanning_header,
-        ~ call2(parse_expr(.x), .y)
       ),
-      cols = map(.data$cols, ~ dplyr::pull(.x))
-    ) |>
-    dplyr::select("spanning_header", "cols")
-
-  gt_calls[["tab_spanner"]] <-
-    map(
-      seq_len(nrow(df_spanning_header)),
-      ~ expr(gt::tab_spanner(
-        columns = !!df_spanning_header$cols[[.x]],
-        label = gt::md(!!df_spanning_header$spanning_header[[.x]]),
-        gather = FALSE
-      ))
+      # spanning header footnotes
+      map(
+        seq_len(nrow(x$table_styling$footnote_spanning_header)),
+        function(i) {
+          expr(
+            gt::tab_footnote(
+              footnote =
+                !!call2(
+                  parse_expr(x$table_styling$footnote_spanning_header$text_interpret[i]),
+                  x$table_styling$footnote_spanning_header$footnote[i]
+                ),
+              locations =
+                gt::cells_column_spanners(
+                  spanners = !!paste0("level ", x$table_styling$footnote_spanning_header$level[i], "; ", x$table_styling$footnote_spanning_header$column[i]),
+                  levels = !!x$table_styling$footnote_spanning_header$level[i]
+                )
+            )
+          )
+        }
+      )
     )
 
   # horizontal_line ------------------------------------------------------------
