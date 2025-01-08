@@ -94,6 +94,8 @@ Function takes a \code{survfit} object as an argument, and provides a
 formatted summary table of the results.
 
 No more than one stratifying variable is allowed in each model.
+If you're experiencing unexpected errors using \code{tbl_survfit()},
+please review \link[=tbl_survfit_errors]{?tbl_survfit_errors} for a possible explanation.
 }
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

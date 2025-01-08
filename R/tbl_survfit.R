@@ -5,6 +5,8 @@
 #' formatted summary table of the results.
 #'
 #' No more than one stratifying variable is allowed in each model.
+#' If you're experiencing unexpected errors using `tbl_survfit()`,
+#' please review [?tbl_survfit_errors][tbl_survfit_errors] for a possible explanation.
 #'
 #' @param x (`survfit`, `list`, `data.frame`)\cr
 #'   a survfit object, list of survfit objects, or a data frame.
