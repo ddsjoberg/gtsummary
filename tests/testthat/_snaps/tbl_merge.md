@@ -37,7 +37,7 @@
       tbl_merge(tbls = list(t0, t1), tab_spanner = 1)
     Condition
       Error in `tbl_merge()`:
-      ! The `tab_spanner` argument must be , FALSE, or class <character>.
+      ! The `tab_spanner` argument must be `NULL`, FALSE, or class <character>.
 
 ---
 
@@ -53,5 +53,22 @@
       tbl_merge(list(tbl, tbl))
     Condition
       Error in `tbl_merge()`:
-      ! All objects in the `tbls` list must have columns "variable", "row_type", "var_label", and "label" in `.$table_body` for merging
+      ! The tables in the `tbls` argument do not share any columns specified in `merge_vars` argument and merge cannot be performed.
+
+# tbl_merge() works with tbl_hierarchical()
+
+    Code
+      as.data.frame(tbl_merge(tbl_hierarchical(dplyr::filter(cards::ADAE, AESOC %in%
+        unique(cards::ADAE$AESOC)[1:3], AETERM %in% unique(cards::ADAE$AETERM)[1:3]),
+      variables = c(AESOC, AETERM), denominator = cards::ADSL, id = USUBJID, digits = everything() ~
+        list(p = 1), overall_row = TRUE, label = list(..ard_hierarchical_overall.. = "Any Adverse Event")) %>%
+        list(., .)), col_labels = FALSE)
+    Output
+                                                       label   stat_0_1   stat_0_2
+      1                                    Any Adverse Event 70 (27.6%) 70 (27.6%)
+      2                           GASTROINTESTINAL DISORDERS  18 (7.1%)  18 (7.1%)
+      3 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS 57 (22.4%) 57 (22.4%)
+      4                                            DIARRHOEA  18 (7.1%)  18 (7.1%)
+      5                            APPLICATION SITE ERYTHEMA 30 (11.8%) 30 (11.8%)
+      6                            APPLICATION SITE PRURITUS 50 (19.7%) 50 (19.7%)
 
