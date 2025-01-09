@@ -158,16 +158,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     reduce(.f = dplyr::full_join, by = merge_vars) |>
     dplyr::relocate(all_of(merge_vars), .before = 1L)
 
-  # if `variable` is a merge var, then grouping the variables together in the result
-  if ("variable" %in% merge_vars) {
-    table_body <-
-      dplyr::left_join(
-        dplyr::distinct(table_body, .data$variable),
-        table_body,
-        by = "variable"
-      )
-  }
-
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(table_body = table_body,
                                 tbls = tbls,

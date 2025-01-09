@@ -273,11 +273,12 @@ test_that("tbl_merge(merge_vars)", {
 
 test_that("tbl_merge() works with tbl_hierarchical()", {
   # check that AE table can be merged
-  expect_snapshot(
-    cards::ADAE |>
+  expect_silent(
+    tbl <-
+      cards::ADAE |>
       dplyr::filter(
-        AESOC %in% unique(cards::ADAE$AESOC)[1:3],
-        AETERM %in% unique(cards::ADAE$AETERM)[1:3]
+        AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+        AETERM %in% unique(cards::ADAE$AETERM)[1:5]
       ) |>
       tbl_hierarchical(
         variables = c(AESOC, AETERM),
@@ -286,12 +287,15 @@ test_that("tbl_merge() works with tbl_hierarchical()", {
         digits = everything() ~ list(p = 1),
         overall_row = TRUE,
         label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
-      ) %>%
-      list(., .) |>
-      tbl_merge() |>
-      as.data.frame(col_labels = FALSE)
+      )
   )
-
-
-
+  expect_equal(
+    list(tbl, tbl) |>
+      tbl_merge() |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("label"),
+    tbl |>
+    as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("label")
+  )
 })
