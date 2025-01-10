@@ -172,7 +172,7 @@ test_that("as_kable works with tbl_stack", {
 test_that("as_kable passes missing symbols correctly", {
   tbl <- my_tbl_summary |>
     modify_table_body(~ .x |> mutate(stat_0 = NA_character_)) |>
-    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
+    modify_missing_symbol(stat_0, rows = !is.na(label), symbol = "n / a")
   kbl <- tbl |> as_kable()
 
   expect_true(
