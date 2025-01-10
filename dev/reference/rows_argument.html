@@ -3,6 +3,9 @@
 rows to apply formatting. The expression must evaluate to a logical when
 evaluated in x$table_body. For example, to apply formatting to the age rows
 pass rows = variable == "age". A vector of row numbers is NOT acceptable.
+The x$table_body contains columns that are hidden in the final print of
+a table that are often useful for defining these expressions; print the table
+to view all column available.
 A couple of things to note when using the rows argument.
 You can use saved objects to create the predicate argument, e.g.
 rows = variable == letters[1].
@@ -10,12 +13,15 @@ The saved object cannot share a name with a column in x$table_body.
 The reason for this is that in tbl_merge() the columns are renamed,
 and the renaming process cannot disambiguate the variable column from
 an external object named variable in the following expression
-rows = .data$variable = .env$variable.
+rows = .data$variable == .env$variable.
 
 '><meta property="og:description" content='The rows argument accepts a predicate expression that is used to specify
 rows to apply formatting. The expression must evaluate to a logical when
 evaluated in x$table_body. For example, to apply formatting to the age rows
 pass rows = variable == "age". A vector of row numbers is NOT acceptable.
+The x$table_body contains columns that are hidden in the final print of
+a table that are often useful for defining these expressions; print the table
+to view all column available.
 A couple of things to note when using the rows argument.
 You can use saved objects to create the predicate argument, e.g.
 rows = variable == letters[1].
@@ -23,7 +29,7 @@ The saved object cannot share a name with a column in x$table_body.
 The reason for this is that in tbl_merge() the columns are renamed,
 and the renaming process cannot disambiguate the variable column from
 an external object named variable in the following expression
-rows = .data$variable = .env$variable.
+rows = .data$variable == .env$variable.
 
 '><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +39,7 @@ rows = .data$variable = .env$variable.
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9008</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,13 +81,16 @@ rows = .data$variable = .env$variable.
 rows to apply formatting. The expression must evaluate to a logical when
 evaluated in <code>x$table_body</code>. For example, to apply formatting to the age rows
 pass <code>rows = variable == "age"</code>. A vector of row numbers is NOT acceptable.</p>
+<p>The <code>x$table_body</code> contains columns that are hidden in the final print of
+a table that are often useful for defining these expressions; print the table
+to view all column available.</p>
 <p>A couple of things to note when using the <code>rows</code> argument.</p><ol><li><p>You can use saved objects to create the predicate argument, e.g.
 <code>rows = variable == letters[1]</code>.</p></li>
 <li><p>The saved object cannot share a name with a column in <code>x$table_body</code>.
 The reason for this is that in <code><a href="tbl_merge.html">tbl_merge()</a></code> the columns are renamed,
 and the renaming process cannot disambiguate the <code>variable</code> column from
 an external object named <code>variable</code> in the following expression
-<code>rows = .data$variable = .env$variable</code>.</p></li>
+<code>rows = .data$variable == .env$variable</code>.</p></li>
 </ol></div>
 
 

@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9008</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,9 +110,7 @@ the model results if needed.</p>
 <p>Before going through the tutorial, install and load {gtsummary}.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("gtsummary")</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-data-set">Example data set<a class="anchor" aria-label="anchor" href="#example-data-set"></a>
@@ -4788,6 +4786,10 @@ below.</p>
 <td headers="notes" class="gt_row gt_left"><span class="gt_from_md"><code>broom.mixed</code> package required</span></td>
 </tr>
 <tr>
+<td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code>glmtoolbox::glmgee()</code></span></td>
+<td headers="notes" class="gt_row gt_left"><span class="gt_from_md"></span></td>
+</tr>
+<tr>
 <td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code>lavaan::lavaan()</code></span></td>
 <td headers="notes" class="gt_row gt_left"><span class="gt_from_md">Limited support for categorical variables</span></td>
 </tr>
@@ -4825,7 +4827,7 @@ below.</p>
 </tr>
 <tr>
 <td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://amices.org/mice/reference/mira.html" class="external-link">mice::mira</a></code></span></td>
-<td headers="notes" class="gt_row gt_left"><span class="gt_from_md">Limited support. If <code>mod</code> is a <code>mira</code> object, use <code>tidy_fun = function(x, ...) {mice::pool(x) %&gt;% mice::tidy(...)}</code></span></td>
+<td headers="notes" class="gt_row gt_left"><span class="gt_from_md">Limited support. If <code>mod</code> is a <code>mira</code> object, use <code>tidy_fun = function(x, ...) {mice::pool(x) |&gt; mice::tidy(...)}</code></span></td>
 </tr>
 <tr>
 <td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code>mmrm::mmrm()</code></span></td>
