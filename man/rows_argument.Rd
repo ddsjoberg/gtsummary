@@ -9,6 +9,10 @@ rows to apply formatting. The expression must evaluate to a logical when
 evaluated in \code{x$table_body}. For example, to apply formatting to the age rows
 pass \code{rows = variable == "age"}. A vector of row numbers is NOT acceptable.
 
+The \code{x$table_body} contains columns that are hidden in the final print of
+a table that are often useful for defining these expressions; print the table
+to view all column available.
+
 A couple of things to note when using the \code{rows} argument.
 \enumerate{
 \item You can use saved objects to create the predicate argument, e.g.
@@ -17,7 +21,7 @@ A couple of things to note when using the \code{rows} argument.
 The reason for this is that in \code{tbl_merge()} the columns are renamed,
 and the renaming process cannot disambiguate the \code{variable} column from
 an external object named \code{variable} in the following expression
-\code{rows = .data$variable = .env$variable}.
+\code{rows = .data$variable == .env$variable}.
 }
 }
 \keyword{internal}

@@ -399,7 +399,7 @@ test_that("as_gt passes missing symbols correctly", {
 
   # specify missing symbol
   tbl <- tbl |>
-    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
+    modify_missing_symbol(stat_0, rows = !is.na(label), symbol = "n / a")
   gt_tbl <- tbl |> as_gt()
 
   # correct substitution for missing values

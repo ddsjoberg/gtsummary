@@ -12,6 +12,8 @@
 
 * The `modify_footnote_spanning_header()` function has been added to ease adding footnotes to spanning headers. A companion function, `remove_footnote_spanning_header()`, has been added to remove spanning headers.
 
+* Added new function `modify_missing_symbol()` to update how a missing value is displayed in a table. (#2121)
+
 * Language translations have been updated with a handful of missing translations. (#2100)
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
