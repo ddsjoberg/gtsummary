@@ -338,14 +338,12 @@ modify_table_styling <- function(x,
 
   # missing_symbol -------------------------------------------------------------
   if (!is_empty(missing_symbol)) {
-    x$table_styling$fmt_missing <-
-      list(
-        column = columns,
-        rows = list(rows),
-        symbol = missing_symbol
-      ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # styler: off
-      {dplyr::bind_rows(x$table_styling$fmt_missing, .)} # styler: off
+    x <- x |>
+      .modify_missing_symbol(
+        symbol = missing_symbol,
+        columns = columns,
+        rows = !!rows
+      )
   }
 
   # cols_merge_pattern ---------------------------------------------------------

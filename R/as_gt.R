@@ -7,7 +7,7 @@
 #' available via the [gt package](https://gt.rstudio.com/index.html).
 #'
 #' @param x (`gtsummary`)\cr
-#'   An object of class `"gtsummary"
+#'   An object of class `"gtsummary"`
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
