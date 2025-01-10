@@ -7,7 +7,7 @@
 #' [`modify_spanning_header()`], `[modify_column_hide()]`, [`modify_column_unhide()`],
 #' [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
 #' [`modify_column_alignment()`], [`modify_fmt_fun()`], `[modify_column_indent()]`,
-#' [`modify_column_merge()`].
+#' [`modify_column_merge()`], [`modify_missing_symbol()`].
 #'
 #'
 #' This is a function meant for advanced users to gain
