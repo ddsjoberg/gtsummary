@@ -91,10 +91,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character(),
       fmt_fun = estimate_fun
     ) |>
-    modify_table_styling(
+    modify_missing_symbol(
       columns = any_of("estimate"),
       rows = .data$reference_row == TRUE,
-      missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
     )
 
   # N --------------------------------------------------------------------------
@@ -124,10 +124,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
           translate_string("CI = Confidence Interval")
         )
     ) |>
-    modify_table_styling(
+    modify_missing_symbol(
       columns = any_of("conf.low"),
       rows = .data$reference_row == TRUE,
-      missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
     ) |>
     modify_table_styling(
       columns = any_of("conf.low"),
@@ -184,10 +184,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       fmt_fun = label_style_sigfig(digits = 3),
       hide = !"std.error" %in% tidy_columns_to_report
     ) |>
-    modify_table_styling(
+    modify_missing_symbol(
       columns = any_of("std.error"),
       rows = .data$reference_row == TRUE,
-      missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
     )
 
   # statistic ------------------------------------------------------------------
@@ -199,10 +199,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       fmt_fun = label_style_sigfig(digits = 3),
       hide = !"statistic" %in% tidy_columns_to_report
     ) |>
-    modify_table_styling(
+    modify_missing_symbol(
       columns = any_of("statistic"),
       rows = .data$reference_row == TRUE,
-      missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
     )
 
   # finally adding style_sigfig(x, digits = 3) as default for all other columns

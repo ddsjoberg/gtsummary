@@ -16,7 +16,7 @@ as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
-An object of class `"gtsummary"}
+An object of class \code{"gtsummary"}}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper

@@ -7,7 +7,7 @@
 #' [`modify_spanning_header()`], `[modify_column_hide()]`, [`modify_column_unhide()`],
 #' [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
 #' [`modify_column_alignment()`], [`modify_fmt_fun()`], `[modify_column_indent()]`,
-#' [`modify_column_merge()`].
+#' [`modify_column_merge()`], [`modify_missing_symbol()`].
 #'
 #'
 #' This is a function meant for advanced users to gain
@@ -338,14 +338,12 @@ modify_table_styling <- function(x,
 
   # missing_symbol -------------------------------------------------------------
   if (!is_empty(missing_symbol)) {
-    x$table_styling$fmt_missing <-
-      list(
-        column = columns,
-        rows = list(rows),
-        symbol = missing_symbol
-      ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # styler: off
-      {dplyr::bind_rows(x$table_styling$fmt_missing, .)} # styler: off
+    x <- x |>
+      .modify_missing_symbol(
+        symbol = missing_symbol,
+        columns = columns,
+        rows = !!rows
+      )
   }
 
   # cols_merge_pattern ---------------------------------------------------------
