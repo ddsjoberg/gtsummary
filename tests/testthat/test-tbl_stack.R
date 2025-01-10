@@ -225,7 +225,7 @@ test_that("tbl_stack works with missing symbols", {
     modify_table_body(
       ~ .x |> mutate(stat_0 = NA_character_)
     ) |>
-    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a")
+    modify_missing_symbol(stat_0, rows = !is.na(label), symbol = "n / a")
 
   t2 <- t2_summary |>
     modify_table_body(
@@ -249,7 +249,7 @@ test_that("tbl_stack works with missing symbols", {
   )
 
   t2 <- t2 |>
-    modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "miss")
+    modify_missing_symbol(stat_0, rows = !is.na(label), symbol = "miss")
 
   expect_silent(tbl <- tbl_stack(list(t1, t2)))
 
