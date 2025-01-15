@@ -22,6 +22,10 @@
 
 * The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
 
+* Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)
+
+  This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
+
 # gtsummary 2.0.4
 
 ### New Features and Functions

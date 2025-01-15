@@ -42,8 +42,8 @@
 #' To re-order the rows with glance statistics on bottom, use the script below:
 #'
 #' ```r
-#' tbl_merge(list(tbl1, tbl2)) %>%
-#'   modify_table_body(~.x %>% arrange(row_type == "glance_statistic"))
+#' tbl_merge(list(tbl1, tbl2)) |>
+#'   modify_table_body(~.x |> dplyr::arrange(row_type == "glance_statistic"))
 #' ````
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")
