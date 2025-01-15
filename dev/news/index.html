@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9009</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9010</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,10 @@
 <li><p>The <code>modify_caption(caption)</code> argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2107" class="external-link">#2107</a>)</p></li>
 <li><p>Swapped out <code><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">dplyr::rows_update()</a></code> with a base R implementation in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> that allows for tables with mixed types in <code>x$table_styling$header$modify_*</code> columns. For example, <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has integer Ns and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> has double Ns that can now be combined. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1626" class="external-link">#1626</a>)</p></li>
 <li><p>The <code><a href="../reference/add_ci.html">add_ci.tbl_summary()</a></code> function now works with categorical variables that were summarized using <code>tbl_summary(percent = c('row', 'cell'))</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1929" class="external-link">#1929</a>)</p></li>
+<li>
+<p>Adding the <code>tbl_merge(merge_vars)</code> argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/selectors.html" class="external-link">cards::all_ard_groups()</a></code> have been added to the default merging columns, which provides the functionality for merging the results from <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> and <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical_count()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1861" class="external-link">#1861</a>)</p>
+<p>This does, however, introduce one change in behavior from the previous version of <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users’ expectations.</p>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.4" id="gtsummary-204">gtsummary 2.0.4<a class="anchor" aria-label="anchor" href="#gtsummary-204"></a></h2><p class="text-muted">CRAN release: 2024-11-30</p>
