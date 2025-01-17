@@ -63,3 +63,10 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 is_date_time <- function(x) {
   inherits(x, c("Date", "POSIXct", "POSIXlt"))
 }
+
+.first_unhidden_column <- function(x) {
+  x$table_styling$header |>
+    dplyr::filter(!.data$hide) |>
+    dplyr::pull("column") |>
+    dplyr::first()
+}

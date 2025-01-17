@@ -201,7 +201,7 @@ test_that("tbl_stack works with formatting functions", {
 
   t2 <- t2_regression |>
     modify_fmt_fun(
-      estimate ~ function(x) style_ratio(x, digits = 2, decimal.mark = "..")
+      estimate ~ function(x) style_ratio(x, digits = 2, decimal.mark = "*")
     )
 
   expect_silent(tbl <- tbl_stack(list(t1, t2)))
@@ -210,7 +210,7 @@ test_that("tbl_stack works with formatting functions", {
     tbl |>
       as_tibble(col_labels = FALSE) |>
       dplyr::pull(estimate),
-    c(NA, NA, "1,2148", NA, NA, "1..48")
+    c(NA, NA, "1,2148", NA, NA, "1*48")
   )
   expect_equal(
     tbl |>

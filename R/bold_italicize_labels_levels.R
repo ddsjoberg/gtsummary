@@ -55,7 +55,7 @@ bold_labels.gtsummary <- function(x) {
 
   # bold labels ----------------------------------------------------------------
   x <-
-    modify_table_styling(
+    .modify_text_format(
       x,
       columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
@@ -79,7 +79,7 @@ bold_levels.gtsummary <- function(x) {
 
   # bold levels ----------------------------------------------------------------
   x <-
-    modify_table_styling(
+    .modify_text_format(
       x,
       columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
@@ -104,7 +104,7 @@ italicize_labels.gtsummary <- function(x) {
 
   # italicize labels -----------------------------------------------------------
   x <-
-    modify_table_styling(
+    .modify_text_format(
       x,
       columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
@@ -128,7 +128,7 @@ italicize_levels.gtsummary <- function(x) {
 
   # italicize levels -----------------------------------------------------------
   x <-
-    modify_table_styling(
+    .modify_text_format(
       x,
       columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
@@ -261,9 +261,4 @@ italicize_levels.tbl_cross <- function(x) {
 }
 
 
-.first_unhidden_column <- function(x) {
-  x$table_styling$header |>
-    dplyr::filter(!.data$hide) |>
-    dplyr::pull("column") |>
-    dplyr::first()
-}
+

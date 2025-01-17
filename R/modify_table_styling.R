@@ -7,7 +7,8 @@
 #' [`modify_spanning_header()`], `[modify_column_hide()]`, [`modify_column_unhide()`],
 #' [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
 #' [`modify_column_alignment()`], [`modify_fmt_fun()`], `[modify_column_indent()]`,
-#' [`modify_column_merge()`], [`modify_missing_symbol()`].
+#' [`modify_column_merge()`], [`modify_missing_symbol()`], [`modify_bold()`],
+#' [`modify_italic()`].
 #'
 #'
 #' This is a function meant for advanced users to gain
@@ -298,26 +299,22 @@ modify_table_styling <- function(x,
 
   # text_format ----------------------------------------------------------------
   if (!is_empty(text_format)) {
-    x$table_styling$text_format <-
-      list(
-        column = columns,
-        rows = list(rows),
-        format_type = text_format,
-        undo_text_format = FALSE
-      ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # styler: off
-      {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
+    x <- x |>
+      .modify_text_format(
+        columns = columns,
+        rows = !!rows,
+        text_format = text_format,
+        undo = FALSE
+      )
   }
   if (!is_empty(undo_text_format)) {
-    x$table_styling$text_format <-
-      list(
-        column = columns,
-        rows = list(rows),
-        format_type = undo_text_format,
-        undo_text_format = TRUE
-      ) %>%
-      {tidyr::expand_grid(!!!.)} %>% # styler: off
-      {dplyr::bind_rows(x$table_styling$text_format, .)} # styler: off
+    x <- x |>
+      .modify_text_format(
+        columns = columns,
+        rows = !!rows,
+        text_format = undo_text_format,
+        undo = TRUE
+      )
   }
 
   # indent ---------------------------------------------------------------------

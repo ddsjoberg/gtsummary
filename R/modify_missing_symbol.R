@@ -39,11 +39,12 @@ modify_missing_symbol <- function(x, symbol, columns, rows) {
     columns = {{ columns }}
   )
 
+  x$call_list <- c(x$call_list, list(modify_missing_symbol = match.call()))
   .modify_missing_symbol(x = x, symbol = symbol, columns = columns, rows = {{ rows }})
 }
 
 .modify_missing_symbol <- function(x, symbol, columns, rows) {
-  # add updates to `x$table_styling$fmt_missing` -----------------------------
+  # add updates to `x$table_styling$fmt_missing` -------------------------------
   x$table_styling$fmt_missing <- x$table_styling$fmt_missing |>
     dplyr::bind_rows(
       tidyr::expand_grid(

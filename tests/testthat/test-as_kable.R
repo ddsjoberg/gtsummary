@@ -78,8 +78,7 @@ test_that("as_kable works with bold/italics", {
     "|_Unknown_                  |     11      |"
   )
 
-  tbl <- tbl |>
-    modify_table_styling(columns = label, undo_text_format = "bold")
+  tbl <- tbl |> remove_bold(columns = label, rows = TRUE)
   kbl <- tbl |> as_kable()
 
   # formatting removed
