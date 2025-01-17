@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding functions `modify_bold()`, `modify_italic()`, `remove_bold()`, and `remove_italic()` for adding or remove bold or italic styling to cells in the table. (#2125)
+
 * Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
   
   In this update, we now export separate user-facing functions for each of these with clearer names and scope: `modify_footnote_header()`, `modify_footnote_body()`, and `modify_abbreviation()`. As the names indicate, the `modify_footnote_header()` and `modify_footnote_body()` functions place footnotes in the header and table body. Abbreviations are now treated like source notes and do not have footnote markers associated with them. We also export functions `remove_footnote_header()`, `remove_footnote_body()`, and `remove_abbreviation()` to remove previously assigned footnotes and abbreviations.

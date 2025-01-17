@@ -46,9 +46,9 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
   # update table_styling -------------------------------------------------------
   # modifying table_styling with bold threshold
   x <-
-    modify_table_styling(
+    .modify_text_format(
       x,
-      columns = all_of(col_name),
+      columns = col_name,
       rows = !!expr(!!sym(col_name) <= !!t),
       text_format = "bold"
     )
