@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9010</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9011</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li>
+<ul><li><p>Adding functions <code><a href="../reference/modify_bold_italic.html">modify_bold()</a></code>, <code><a href="../reference/modify_bold_italic.html">modify_italic()</a></code>, <code><a href="../reference/modify_bold_italic.html">remove_bold()</a></code>, and <code><a href="../reference/modify_bold_italic.html">remove_italic()</a></code> for adding or remove bold or italic styling to cells in the table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2125" class="external-link">#2125</a>)</p></li>
+<li>
 <p>Updates to the handling of footnotes. Previously, header footnotes were handled with <code><a href="../reference/deprecated_modify_footnote.html">modify_footnote()</a></code> and <code>modify_table_styling(footnote)</code>. It was possible to also include footnotes in the table body with <code>modify_table_styling(footnote)</code>, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with <code>modify_footnote(abbreviation=TRUE)</code>.</p>
 <p>In this update, we now export separate user-facing functions for each of these with clearer names and scope: <code><a href="../reference/modify_footnote2.html">modify_footnote_header()</a></code>, <code><a href="../reference/modify_footnote2.html">modify_footnote_body()</a></code>, and <code><a href="../reference/modify_abbreviation.html">modify_abbreviation()</a></code>. As the names indicate, the <code><a href="../reference/modify_footnote2.html">modify_footnote_header()</a></code> and <code><a href="../reference/modify_footnote2.html">modify_footnote_body()</a></code> functions place footnotes in the header and table body. Abbreviations are now treated like source notes and do not have footnote markers associated with them. We also export functions <code><a href="../reference/modify_footnote2.html">remove_footnote_header()</a></code>, <code><a href="../reference/modify_footnote2.html">remove_footnote_body()</a></code>, and <code><a href="../reference/modify_abbreviation.html">remove_abbreviation()</a></code> to remove previously assigned footnotes and abbreviations.</p>
 <p>Also, multiple footnotes may now reference the same cell in the table or column header by utilizing the <code>modify_footnote_header(replace=FALSE)</code>, <code>modify_footnote_body(replace=FALSE)</code> argument.</p>
