@@ -442,50 +442,55 @@ dat <- trial |>
   mutate(subject_id = dplyr::row_number(), .by = trt)
 lmod <- lm(response ~ trt + grade, data = dat)
 
-library(sandwich)
-cov <- vcovCL(lmod, cluster = ~ subject_id, vcov_type = "HC0")
+cov <- sandwich::vcovCL(lmod, cluster = ~ subject_id, vcov_type = "HC0")
 ```
 
 Once you have the robust variance-covariance matrix, you can use it with `tidy_robust` to calculate adjusted confidence intervals and p-values. 
 
-Robust errors generally have only a small impact on the confidence intervals and p-values. For demonstration purposes, we therefore edit the default gtsummary theme to show 3 digits for confidence intervals and p-values.
+Robust errors generally have only a small impact on the confidence intervals and p-values. For demonstration purposes, we therefore show 3 digits for confidence intervals and p-values.
+
+A standard, non-robust regression table can be made as follows:
 
 ```{r}
-my_theme <-
-  list(
-    # round large p-values to three places
-    "pkgwide-fn:pvalue_fun" = label_style_pvalue(digits = 3),
-    "pkgwide-fn:prependpvalue_fun" = label_style_pvalue(digits = 3, prepend_p = TRUE),
-    # show more digits in summary statistics
-    "tbl_regression-arg:estimate_fun" = label_style_sigfig(digits = 3)
+tbl_standard <- 
+  tbl_regression(
+    lmod,
+    estimate_fun = label_style_sigfig(digits = 3),
+    pvalue_fun = label_style_pvalue(digits = 3)
   )
-set_gtsummary_theme(my_theme)
+tbl_standard
 ```
 
-In order to use the robust errors, pass the variance-covariance matrix to the `tidy_robust` function, as shown below. The example below shows the non-robust approach, as well as the robust approach so that the values can be compared.
+In order to use the robust errors, pass the variance-covariance matrix to the `tidy_robust` function, as shown below. 
 
 ```{r}
-tbl_merge(
-  list(
-    tbl_regression(lmod),
-    tbl_regression(lmod, 
-                   tidy_fun = \(x, ...) tidy_robust(x, vcov = cov))
-  ), 
-  tab_spanner = c("Standard errors", "Robust errors")
-)
+tbl_robust <- 
+  tbl_regression(
+    lmod,
+    estimate_fun = label_style_sigfig(digits = 3),
+    pvalue_fun = label_style_pvalue(digits = 3),
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = cov))
+tbl_robust
 ```
 
 Note that depending on your model, you may also need to set other arguments in `tidy_robust` (e.g. exponentiate). 
+
+Comparing the tables side-by-side, we see that the confidence intervals and p-values are very similar.
+
+```{r}
+tbl_merge(
+  list(tbl_standard, tbl_robust), 
+  tab_spanner = c("**Standard errors**", "**Robust errors**")
+)
+```
 
 Global p-values can also be calculated with robust errors in the same manner via the `tidy_wald_test` function. Again, the following example demonstrates the non-robust approach and the robust approach side-by-side.
 
 ```{r}
 tbl_merge(
   list(
-    tbl_regression(lmod) |> 
-      add_global_p(anova_fun = tidy_wald_test),
-    tbl_regression(lmod, 
-                   tidy_fun = \(x, ...) tidy_robust(x, vcov = cov)) |>
+    tbl_standard |> add_global_p(anova_fun = tidy_wald_test),
+    tbl_robust |>
       add_global_p(anova_fun = \(x, ...) tidy_wald_test(x, vcov = cov))
   ), 
   tab_spanner = c("Standard errors", "Robust errors")
