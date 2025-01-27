@@ -440,14 +440,14 @@ To use robust standard errors in a regression model, the model is prepared use u
 ```{r}
 dat <- trial |> 
   mutate(subject_id = dplyr::row_number(), .by = trt)
-lmod <- lm(response ~ trt + grade, data = dat)
+lmod <- glm(response ~ trt + grade, data = dat, family = binomial(link = "logit"))
 
 cov <- sandwich::vcovCL(lmod, cluster = ~ subject_id, vcov_type = "HC0")
 ```
 
 Once you have the robust variance-covariance matrix, you can use it with `tidy_robust` to calculate adjusted confidence intervals and p-values. 
 
-Robust errors generally have only a small impact on the confidence intervals and p-values. For demonstration purposes, we therefore show 3 digits for confidence intervals and p-values.
+Robust errors generally have only a small impact on the confidence intervals and p-values. For demonstration purposes, we therefore show 2 digits for p-values.
 
 A standard, non-robust regression table can be made as follows:
 
@@ -455,8 +455,8 @@ A standard, non-robust regression table can be made as follows:
 tbl_standard <- 
   tbl_regression(
     lmod,
-    estimate_fun = label_style_sigfig(digits = 3),
-    pvalue_fun = label_style_pvalue(digits = 3)
+    pvalue_fun = label_style_pvalue(digits = 2),
+    exponentiate = TRUE
   )
 tbl_standard
 ```
@@ -467,13 +467,11 @@ In order to use the robust errors, pass the variance-covariance matrix to the `t
 tbl_robust <- 
   tbl_regression(
     lmod,
-    estimate_fun = label_style_sigfig(digits = 3),
-    pvalue_fun = label_style_pvalue(digits = 3),
-    tidy_fun = \(x, ...) tidy_robust(x, vcov = cov))
+    pvalue_fun = label_style_pvalue(digits = 2),
+    exponentiate = TRUE,
+    tidy_fun = \(x, ...) tidy_robust(x, vcov = cov, ...))
 tbl_robust
 ```
-
-Note that depending on your model, you may also need to set other arguments in `tidy_robust` (e.g. exponentiate). 
 
 Comparing the tables side-by-side, we see that the confidence intervals and p-values are very similar.
 
