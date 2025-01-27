@@ -77,8 +77,15 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
       )
     }
   }
-  check_length(group_header, length = length(tbls), allow_empty = TRUE)
+
   if (header_type == "grouped") {
+    check_length(
+      group_header,
+      length = length(tbls),
+      message = "When {.code header_type='grouped'}, the {.arg {arg_name}}
+       argument must be the same length as the number of tables passed
+      in the {.arg tbls} argument, that is, length {.val {length(tbls)}}."
+    )
     check_class(
       group_header,
       cls = "character",
@@ -197,7 +204,9 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
 .create_a_nested_stack <- function(tbls, group_header, call, quiet) {
   # first non-hidden column
   first_non_hidden_col <- .first_unhidden_column(tbls[[1]])
-  depth <- length(group_header[[1]]) # TODO: check consistency of header depths for all tbls
+  depth <- length(group_header[[1]])
+
+  lst_df_group_headers <- .create_list_of_header_dfs(tbls, group_header)
 
   # add headers with their associated `tbl_indent_id`
   for (i in seq_along(tbls)) {
@@ -210,10 +219,12 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
     # add nesting header rows
     tbls[[i]]$table_body <-
       dplyr::bind_rows(
-        dplyr::tibble(
-          tbl_indent_id = seq_len(depth),
-          "{first_non_hidden_col}" := group_header[[i]]
-        ),
+        lst_df_group_headers[[i]]
+        # dplyr::tibble(
+        #   tbl_indent_id = seq_len(depth),
+        #   "{first_non_hidden_col}" := group_header[[i]]
+        # )
+        ,
         tbls[[i]]$table_body
       )
   }
@@ -249,12 +260,6 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
           call = get_cli_abort_call()
         )
       }
-      if (length(group_header[[i]]) != length(group_header[[1]])) {
-        cli::cli_abort(
-          "When {.code header_type='nested'}, the {.arg group_header} must be a list of {.cls character} vectors of all the same length.",
-          call = get_cli_abort_call()
-        )
-      }
       if (.first_unhidden_column(tbls[[i]]) != .first_unhidden_column(tbls[[1]])) {
         cli::cli_abort(
           c("When {.code header_type='nested'}, the first column shown in each table must be the same.",
@@ -275,8 +280,18 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
         )
       }
     }
-
   )
+
+  # check the lengths of the group_headers
+  total_length <- map_int(group_header, length) |> reduce(.f = `*`)
+  if (total_length != length(tbls)) {
+      cli::cli_abort(
+        "When {.code header_type='nested'}, the {.arg group_header} must be a list
+         of {.cls character} vectors where the product of each of the lengths is
+        equal to the number of tables passed in the {.arg tbls} argument.",
+        call = get_cli_abort_call()
+      )
+  }
 }
 
 
@@ -360,4 +375,36 @@ tbl_stack <- function(tbls, group_header = NULL, header_type = c("auto", "groupe
     max()
 
   return(paste0("tbl_id", tbl_max_id + 1L))
+}
+
+# for nested stacking, this function returns a list of data frames to be used as the headers
+.create_list_of_header_dfs <- function(tbls, group_header) {
+  # create a data frame of all combinations of the grouping levels
+  df_group_header <-
+    tidyr::expand_grid(!!!setNames(group_header, as.character(1:2)))
+
+  # remove the levels that do not need to be printed
+  for (i in rev(seq_along(group_header))) {
+    df_group_header <-
+      df_group_header |>
+      dplyr::mutate(
+        .by = seq_len(i),
+        "{i}" := ifelse(dplyr::row_number() == 1L, .data[[as.character(i)]], NA_character_)
+      )
+  }
+
+  # return a list of data frames with the headers that will appear above each stacked tbl
+  map(
+    seq_len(nrow(df_group_header)),
+    \(i) {
+      df_group_header[i,] |>
+        unlist() |>
+        discard(is.na) %>%
+        {dplyr::tibble(
+          tbl_indent_id = names(.) |> as.integer(),
+          "{.first_unhidden_column(tbls[[1]])}" := .
+
+        )}
+    }
+  )
 }
