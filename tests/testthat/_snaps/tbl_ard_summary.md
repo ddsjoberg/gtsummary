@@ -131,6 +131,7 @@
     Condition
       Error in `tbl_ard_summary()`:
       ! Summary type for variable "AGE" must be one of "continuous" and "continuous2", not "categorical".
+      i If your variable has "variable_level" values, you may need `type = list("AGE"="dichotomous")`.
 
 ---
 

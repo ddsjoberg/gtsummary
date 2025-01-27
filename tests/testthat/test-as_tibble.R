@@ -207,7 +207,7 @@ test_that("as_tibble(fmt_missing) works", {
       modify_table_body(
         ~ .x |> mutate(stat_0 = NA_character_)
       ) |>
-      modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "n / a") |>
+      modify_missing_symbol(stat_0, rows = !is.na(label), symbol = "n / a") |>
       as_tibble(fmt_missing = TRUE, col_labels = FALSE) |>
       dplyr::pull(stat_0),
     c("n / a", "n / a")

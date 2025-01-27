@@ -84,7 +84,8 @@ functions to make modifications to your table. \code{\link[=modify_header]{modif
 \code{\link[=modify_spanning_header]{modify_spanning_header()}}, \verb{[modify_column_hide()]}, \code{\link[=modify_column_unhide]{modify_column_unhide()}},
 \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_abbreviation]{modify_abbreviation()}},
 \code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \verb{[modify_column_indent()]},
-\code{\link[=modify_column_merge]{modify_column_merge()}}.
+\code{\link[=modify_column_merge]{modify_column_merge()}}, \code{\link[=modify_missing_symbol]{modify_missing_symbol()}}, \code{\link[=modify_bold]{modify_bold()}},
+\code{\link[=modify_italic]{modify_italic()}}.
 
 This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
