@@ -237,3 +237,14 @@ test_that("tbl_survfit(conf.level)", {
       style_number()
   )
 })
+
+
+test_that("tbl_survfit(x) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_survfit(
+      survival::survfit(survival::Surv(ttdeath, death) ~ trt + grade, trial),
+      times = c(12, 24)
+    )
+  )
+})

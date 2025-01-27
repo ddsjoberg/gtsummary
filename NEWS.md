@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding functions `modify_bold()`, `modify_italic()`, `remove_bold()`, and `remove_italic()` for adding or remove bold or italic styling to cells in the table. (#2125)
+
 * Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
   
   In this update, we now export separate user-facing functions for each of these with clearer names and scope: `modify_footnote_header()`, `modify_footnote_body()`, and `modify_abbreviation()`. As the names indicate, the `modify_footnote_header()` and `modify_footnote_body()` functions place footnotes in the header and table body. Abbreviations are now treated like source notes and do not have footnote markers associated with them. We also export functions `remove_footnote_header()`, `remove_footnote_body()`, and `remove_abbreviation()` to remove previously assigned footnotes and abbreviations.
@@ -12,6 +14,8 @@
 
 * The `modify_footnote_spanning_header()` function has been added to ease adding footnotes to spanning headers. A companion function, `remove_footnote_spanning_header()`, has been added to remove spanning headers.
 
+* Added new function `modify_missing_symbol()` to update how a missing value is displayed in a table. (#2121)
+
 * Language translations have been updated with a handful of missing translations. (#2100)
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
@@ -19,6 +23,10 @@
 * Swapped out `dplyr::rows_update()` with a base R implementation in `tbl_merge()` that allows for tables with mixed types in `x$table_styling$header$modify_*` columns. For example, `tbl_summary()` has integer Ns and `tbl_svysummary()` has double Ns that can now be combined. (#1626)
 
 * The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
+
+* Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)
+
+  This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
 
 # gtsummary 2.0.4
 

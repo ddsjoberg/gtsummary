@@ -9,4 +9,4 @@
 library(testthat)
 library(gtsummary)
 
-test_check("gtsummary")
+test_check("gtsummary", stop_on_warning = TRUE)

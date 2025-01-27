@@ -37,7 +37,7 @@
       tbl_merge(tbls = list(t0, t1), tab_spanner = 1)
     Condition
       Error in `tbl_merge()`:
-      ! The `tab_spanner` argument must be , FALSE, or class <character>.
+      ! The `tab_spanner` argument must be `NULL`, FALSE, or class <character>.
 
 ---
 
@@ -53,5 +53,5 @@
       tbl_merge(list(tbl, tbl))
     Condition
       Error in `tbl_merge()`:
-      ! All objects in the `tbls` list must have columns "variable", "row_type", "var_label", and "label" in `.$table_body` for merging
+      ! The tables in the `tbls` argument do not share any columns specified in `merge_vars` argument and merge cannot be performed.
 

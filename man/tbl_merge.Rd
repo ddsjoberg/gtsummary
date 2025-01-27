@@ -4,7 +4,7 @@
 \alias{tbl_merge}
 \title{Merge tables}
 \usage{
-tbl_merge(tbls, tab_spanner = NULL)
+tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -16,6 +16,13 @@ Must be the same length as \code{tbls}. The
 strings are interpreted with \code{gt::md}.
 Must be same length as \code{tbls} argument. Default is \code{NULL}, and places
 a default spanning header. If \code{FALSE}, no header will be placed.}
+
+\item{merge_vars}{(\code{character})\cr
+Column names that are used as the merge IDs.
+The default is \code{NULL}, which merges on
+\verb{c(any_of(c("variable", "row_type", "var_label", "label"), cards::all_ard_groups())}.
+Any column name included here that does not appear in all tables, will
+be removed.}
 }
 \value{
 A \code{'tbl_merge'} object

@@ -2,12 +2,13 @@
 % Please edit documentation in R/utils-gtsummary_core.R
 \name{.create_gtsummary_object}
 \alias{.create_gtsummary_object}
-\title{Function uses \code{table_body} to create a gtsummary object}
+\title{Create gtsummary table}
 \usage{
 .create_gtsummary_object(table_body, ...)
 }
 \arguments{
-\item{table_body}{the table_body tibble}
+\item{table_body}{(\code{data.frame})\cr
+a data frame that will be added as the gtsummary object's \code{table_body}}
 
 \item{...}{other objects that will be added to the gtsummary object list}
 }
@@ -15,6 +16,11 @@
 gtsummary object
 }
 \description{
+USE \code{as_gtsummary()} INSTEAD!
+This function ingests a data frame and adds the infrastructure around it
+to make it a gtsummary object.
+}
+\details{
 Function uses \code{table_body} to create a gtsummary object
 }
 \keyword{internal}

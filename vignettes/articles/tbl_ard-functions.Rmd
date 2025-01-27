@@ -1,0 +1,251 @@
+---
+title: "Building Summary Tables using ARDs"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(gtsummary)
+library(cards)
+theme_gtsummary_compact()
+```
+
+## Introduction
+
+Analysis Results Datasets (ARDs) are part of the [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard), which aims to facilitate automation, reproducibility, reusability, and traceability of analysis results data (ARD).
+ARDs are highly structured and generalized data frame objects in which store the results of both simple and complex statistical results.
+The {gtsummary} package utilizes ARDs (via the {cards} and {cardx} packages) to perform all calculations.
+
+In this tutorial, we will review how to use the native {gtsummary} functions to build standard and highly customized tables.
+There are two basic approaches to creating summary tables utilizing ARDs: 
+
+1. As ARDs power every calculation and tabulation in the {gtsummary}, ARDs can be extracted from any table created with the `tbl_*()` functions (and their add-ons).
+2. One can also create ARDs first, then pass the ARD to a `tbl_ard_*()` function that will convert the ARD to a summary table.
+
+Both methods will be covered in this tutorial.
+
+## Extract ARD summary table
+
+Many standard tables are simple to create with `tbl_*()` functions, such as, demographics tables, adverse event summary tables, and more.
+After the table is created, the ARD can be extracted using the `gather_ard()` function.
+
+#### Demographics Summary
+
+Begin by building the summary table with `tbl_summary()`.
+
+```{r}
+tbl_demo <-
+  ADSL |> 
+  dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))) |> 
+  # building summary table by treatment arm
+  tbl_summary(
+    by = ARM, 
+    include = c(AGE, AGEGR1, SEX),
+    type = list(AGE = "continuous2"),
+    statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min}, {max}"),
+    label = list(AGEGR1 = "Age Group")
+  ) |> 
+  # add an overall column with all treatments combined
+  add_overall() |> 
+  add_stat_label()
+tbl_demo
+```
+
+Now that we have a summary table, we can extract and save the ARD.
+
+```{r}
+gather_ard(tbl_demo) |> bind_ard()
+```
+
+#### Adverse Event Summary
+
+The adverse event example is similar to the example above; instead of using `tbl_summary()` we use `tbl_hierarchical()`.
+
+```{r}
+tbl_ae <-
+  ADAE |>
+  # filter the data frame to print fewer AEs
+  dplyr::filter(
+    AESOC %in% unique(cards::ADAE$AESOC)[1:3],
+    AETERM %in% unique(cards::ADAE$AETERM)[1:3]
+  ) |> 
+  # create AE summary table
+  tbl_hierarchical(
+    variables = c(AESOC, AETERM),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    id = USUBJID,
+    overall_row = TRUE,
+    label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+  ) |> 
+  # add a column with overall estimates
+  add_overall()
+tbl_ae
+
+# return ARDs
+gather_ard(tbl_ae) |> bind_ard()
+```
+
+#### Other summaries
+
+Other summary functions available include 
+
+- `tbl_cross()` for cross tabulations
+- `tbl_continuous()` for summaries of continuous variables stratified by two other categorical variables
+- `tbl_wide_summary()` for statistics represented in a wide table format, that is statistics in separate columns
+- `tbl_survfit()` for survival endpoint summaries
+- `tbl_regression()` for regression model summaries
+- `tbl_likert()` for Likert-scale summaries
+
+## ARD-first summary tables
+
+While the above examples are simple, there are cases when we must use a two step process of building our ARD, then converting the ARD to a summary table.
+Two common instances where one would want to create a table from an ARD are 1. for tables that include more complex statistical results, 2. for re-use purposes (e.g. extract an ARD from a previously built table, and modify it for another purpose).
+For this ARD-first approach, {gtsummary} has `tbl_ard_*()` functions to generate summary tables.
+
+-   `tbl_ard_summary()` for ARDs with descriptive statistics for continuous, categorical and dichotomous variables
+-   `tbl_ard_continuous()` for ARDs summarizing continuous variables
+-   `tbl_ard_wide_summary()` for ARD statistics represented in a wide table format - in separate columns
+-   `tbl_ard_hierarchical()` for ARDs containing nested or hierarchical data structures
+
+#### Demographics Summary
+
+In this example, we will build a simple demographics and baseline characteristics table as outlined in the FDA Standard Safety Tables Guidelines.
+This table has variables: a continuous variable summary for AGE, a categorical variable summaries for AGEGR1 and SEX.
+
+**Data ➡ ARD**
+
+The {cards} package can be utilized to create the ARD from a data frame.
+The package includes functions `ard_continuous()` for continuous summaries, `ard_categorical()` for categorical summaries, and `ard_dichotomous()` for dichotomous variables (and more).
+
+The package also exports a helper function, `ard_stack()` to simultaneously build these summaries along with optional ancillary results for a nicer display.
+
+```{r}
+ard_demo <-
+  ADSL |> 
+  dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))) |> 
+  ard_stack(
+    # stratify all results by ARM
+    .by = ARM, 
+    # these are the results that will be calculated
+    ard_continuous(variables = "AGE"),
+    ard_categorical(variables = c("AGEGR1","SEX")),
+    # optional arguments for additional results
+    .attributes = TRUE,
+    .total_n = TRUE,
+    .overall = TRUE
+  )
+ard_demo
+```
+
+The optional arguments that can be specified to improve the appearance of the table.
+- `.attributes` summary table will utilize the column label attributes, if available
+- `.total_n` the total N is saved internally, and will be used in the printed table.
+- `.overall` the operations will be repeated without `.by` variable
+- `.missing` when missing results are included, users can include missing counts or rates for the variables.
+
+**ARD ➡ Table**
+
+After the ARD has been created, we can now create the summary table with `tbl_ard_summary()`.
+
+```{r}
+ard_demo |> 
+  tbl_ard_summary(
+    by = ARM, 
+    overall = TRUE,
+    type = AGE ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min}, {max}"),
+    label = list(AGEGR1 = "Age Group")
+  ) |> 
+  add_stat_label() |> 
+  modify_header(all_stat_cols() ~ "**{level}**  \nN= {n}")
+```
+
+#### Complex Summaries
+
+The ARD to Table pipeline is most convenient when trying to consolidate multiple analysis steps into an ARD to feed only the relevant stats to the table building machinery. 
+In the example below, create a table that mixing three types of analysis for assessing outcomes after treatment: Kaplan-Meier estimate of survival, mean marker levels with confidence intervals, and rate of tumor response with confidence intervals.
+
+First, we will create an ARD for each of these analyses, then combine them with `cards::bind_ard()`.
+
+```{r setup}
+# ARD with the Kaplan-Meier survival estimates
+ard_survival <-
+  trial |> 
+  cardx::ard_survival_survfit(
+    y = survival::Surv(ttdeath, death),
+    variables = "trt",
+    times = c(12, 24)
+  ) |> 
+  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = "xx%")
+
+# ARD with the mean post-treatment marker level with 95%CI
+ard_marker_level <-
+  cardx::ard_stats_t_test_onesample(trial, variables = marker, by = trt) |> 
+  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = label_style_sigfig(digits = 2))
+
+# ARD with the post-treatment response rate with 95%CI
+ard_tumor_response <-
+  cardx::ard_categorical_ci(trial, by = trt, variables = response, method = "wilson") |> 
+  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = "xx%")
+
+
+# combine all the ARDs into a single ARD for the outcomes
+ard_outcomes <- 
+  cards::bind_ard(
+    ard_survival,
+    ard_marker_level, 
+    ard_tumor_response
+  )
+```
+
+If you inspect the ARDs, you'll see that these analytic results have a similar structure to the simple ARDs we extracted from the `tbl_summary()` results above.
+
+- The `cardx::ard_survival_survfit()` ARD looks like the `ard_categorical()` result.
+- The `cardx::ard_stats_t_test_onesample()` ARD looks like the `ard_continuous()` result.
+- The `cardx::ard_categorical_ci()` ARD looks like the `ard_dichotomous()` result.
+
+With the created ARD, we can now build a summary table.
+
+```{r}
+ard_outcomes |> 
+  tbl_ard_summary(
+    by = trt, 
+    type = response ~ "dichotomous",
+    statistic =
+      list(
+        c(time, response) ~ "{estimate}% (95% CI {conf.low}%, {conf.high}%)",
+        marker ~ "{estimate} (95% CI {conf.low}, {conf.high})"
+      ),
+    label = 
+      list(time = "Overal Survival, months",
+           marker = "Tumor Marker",
+           response = "Tumor Response")
+  ) |> 
+  remove_footnote_header(columns = everything()) |> 
+  modify_abbreviation(abbreviation = "CI = Confidence Interval") |> 
+  modify_footnote_body(
+    footnote = "Kaplan-Meier estimate", 
+    columns = label, 
+    rows = variable == "time" & row_type == "label"
+  ) |> 
+  modify_footnote_body("t-distribution based mean and CI", columns = "label", rows = variable == "marker") |> 
+  modify_footnote_body("Wilson CI", columns = "label", rows = variable == "response")
+```
+
+#### Final Thoughts
+
+When creating the a custom summary table, you will want to utilize the functions with the `tbl_ard_*()` prefix.
+It will be important to familiarize yourself with the table structures that each of these functions produce, so you know which to use to build your table.
+
+If your table is a combination or mix of table types structures, you can build each part of your table separately and use `tbl_stack()` and `tbl_merge()` to cobble together your final table.
+
+Finally, some tables are entirely unique and would be difficult to create under any framework.
+In these cases, it's often much easier to build a data frame and then convert it to a gtsummary table with `as_gtsummary()`.
+Once converted, you can take advantage of styling that is available for all gtsummary tables.
+

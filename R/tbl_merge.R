@@ -11,6 +11,12 @@
 #'   strings are interpreted with `gt::md`.
 #'   Must be same length as `tbls` argument. Default is `NULL`, and places
 #'   a default spanning header. If `FALSE`, no header will be placed.
+#' @param merge_vars (`character`)\cr
+#'   Column names that are used as the merge IDs.
+#'   The default is `NULL`, which merges on
+#'   `c(any_of(c("variable", "row_type", "var_label", "label"), cards::all_ard_groups())`.
+#'   Any column name included here that does not appear in all tables, will
+#'   be removed.
 #'
 #' @author Daniel D. Sjoberg
 #' @export
@@ -51,7 +57,7 @@
 #'
 #' tbl_merge(tbls = list(t3, t4)) %>%
 #'   modify_spanning_header(everything() ~ NA_character_)
-tbl_merge <- function(tbls, tab_spanner = NULL) {
+tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   set_cli_abort_call()
 
   # input checks ---------------------------------------------------------------
@@ -67,30 +73,41 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     predicate = \(x) inherits(x, "gtsummary"),
     error_msg = "All objects in {.arg tbls} list must be class {.cls gtsummary}."
   )
+  check_class(merge_vars, cls = "character", allow_empty = TRUE)
 
-  # check all tbls have the merging columns
-  if (some(tbls, ~ any(!c("variable", "row_type", "var_label", "label") %in% names(.x$table_body)))) {
+  if (!is_empty(tab_spanner) && !isFALSE(tab_spanner) && !is.character(tab_spanner)) {
     cli::cli_abort(
-      "All objects in the {.arg tbls} list must have columns
-       {.val {c('variable', 'row_type', 'var_label', 'label')}}
-       in {.code .$table_body} for merging",
+      "The {.arg tab_spanner} argument must be {.code NULL}, {.val {FALSE}}, or class {.cls character}.",
       call = get_cli_abort_call()
     )
   }
 
-  if (!is_empty(tab_spanner) && !isFALSE(tab_spanner) && !is.character(tab_spanner)) {
+  # setting the merging columns ------------------------------------------------
+  if (is_empty(merge_vars)) {
+    merge_vars <-
+      dplyr::select(tbls[[1]]$table_body,
+                    any_of(c("variable", "row_type", "var_label", "label")),
+                    cards::all_ard_groups()) |>
+      names()
+  }
+  # merge columns will be those that appear in all tbls
+  merge_vars <-
+    map(tbls, ~names(.x$table_body)) |>
+    reduce(.f = intersect, .init = merge_vars)
+
+  if (is_empty(merge_vars)) {
     cli::cli_abort(
-      "The {.arg tab_spanner} argument must be {.val {NULL}}, {.val {FALSE}}, or class {.cls character}.",
+      "The tables in the {.arg tbls} argument do not share any columns specified in {.arg merge_vars} argument and merge cannot be performed.",
       call = get_cli_abort_call()
     )
   }
 
   tbls_length <- length(tbls)
 
-  # adding tab spanners if requested
+  # adding tab spanners if requested -------------------------------------------
   if (!isFALSE(tab_spanner)) {
     # if tab spanner is null, default is Table 1, Table 2, etc....
-    if (is.null(tab_spanner)) {
+    if (is_empty(tab_spanner)) {
       tab_spanner <- paste0(c("**Table "), seq_len(tbls_length), "**")
     }
 
@@ -106,124 +123,63 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     tbls <-
       map2(
         tbls, seq_along(tbls),
-        ~ modify_spanning_header(
-          .x, c(
-            everything(),
-            # TODO: Use of the "ci" column was deprecated in v2.0 and it can be removed from here in the future
-            -any_of(c("variable", "row_type", "var_label", "label", "ci"))
-          ) ~ tab_spanner[.y]
-        )
+        ~ modify_spanning_header(.x, -all_of(merge_vars) ~ tab_spanner[.y])
       )
   }
 
 
   # merging tables -------------------------------------------------------------
-  # nesting data by variable (one line per variable), and renaming columns with number suffix
-  nested_table <- map2(
-    tbls, seq_along(tbls),
-    function(x, y) {
-      # creating a column that is the variable label
-      dplyr::group_by(x$table_body, .data$variable) %>%
-        dplyr::mutate(
-          var_label = ifelse(.data$row_type == "label", .data$label, NA)
-        ) %>%
-        tidyr::fill("var_label", .direction = "downup") %>%
-        dplyr::ungroup() %>%
-        dplyr::rename_at(
-          vars(-c("variable", "row_type", "var_label", "label")),
-          ~ glue("{.}_{y}")
-        )
-    }
-  )
-
-  # checking that merging rows are unique --------------------------------------
-  nested_table %>%
-    some(
-      ~ nrow(.x) !=
-        dplyr::select(.x, all_of(c("variable", "row_type", "var_label", "label"))) %>%
-        dplyr::distinct() %>%
-        nrow()
-    ) %>%
-    switch(
-      cli::cli_inform(
-        "The merging columns (variable name, variable label, row type, and label column)
-         are not unique and the merge may fail or result in a malformed table.
-         If you previously called {.fun tbl_stack} on your tables,
-         then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
-      )
+  # first renaming columns with index suffix
+  lst_table_body <-
+    map(
+      seq_along(tbls),
+      \(i) {
+        tbls[[i]]$table_body |>
+          dplyr::rename_with(
+            .fn = ~paste(., i, sep = "_"),
+            .cols = -all_of(merge_vars)
+          )
+      }
     )
 
-  # nesting results within variable
-  nested_table <- map(
-    nested_table,
-    ~ tidyr::nest(.x, data = -any_of(c("variable", "var_label")))
-  )
-
-  # merging formatted objects together
-  merged_table <-
-    nested_table[[1]] %>%
-    dplyr::rename(table = "data")
-
-  if (tbls_length > 1) {
-    # cycling through all tbls, merging results into a column tibble
-    for (i in 2:tbls_length) {
-      merged_table <-
-        merged_table %>%
-        dplyr::full_join(
-          nested_table[[i]],
-          by = c("variable", "var_label")
-        ) %>%
-        dplyr::mutate(
-          table = map2(
-            .data$table, .data$data,
-            function(table, data) {
-              if (is.null(table)) {
-                return(data)
-              }
-              if (is.null(data)) {
-                return(table)
-              }
-              dplyr::full_join(table, data, by = c("row_type", "label"))
-            }
-          )
-        ) %>%
-        select(-c("data", "table"), "table")
-    }
+  # check that the merge variables are unique in all table bodies
+  if (some(lst_table_body, ~anyDuplicated(.x[merge_vars]) > 0L)) {
+    cli::cli_inform(c(
+      "The merging columns ({.val {merge_vars}}) do not uniquely identify rows for
+       each table in {.arg tbls}, and the merge may fail or result in a malformed table.",
+      "i" = "If you previously called {.fun tbl_stack} on your tables,
+         then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
+    ))
   }
 
-  # unnesting results from within variable column tibbles
-  ends_with_selectors <-
-    map(seq_len(tbls_length), ~ rlang::expr(ends_with(!!paste0("_", .x))))
+  # now merge all the table bodies together
   table_body <-
-    merged_table %>%
-    tidyr::unnest("table") %>%
-    dplyr::select(
-      "variable", "var_label", "row_type", "label",
-      !!!ends_with_selectors, everything()
-    )
+    lst_table_body |>
+    reduce(.f = dplyr::full_join, by = merge_vars) |>
+    dplyr::relocate(all_of(merge_vars), .before = 1L)
 
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(table_body = table_body,
                                 tbls = tbls,
                                 call_list = list(tbl_merge = match.call()))
 
-  x <- .tbl_merge_update_table_styling(x, tbls)
+  x <- .tbl_merge_update_table_styling(x = x, tbls = tbls, merge_vars = merge_vars)
 
-  # returning results
+  # returning results ----------------------------------------------------------
   class(x) <- c("tbl_merge", "gtsummary")
   x
 }
 
-.tbl_merge_update_table_styling <- function(x, tbls) {
+.tbl_merge_update_table_styling <- function(x, tbls, merge_vars) {
   # update table_styling$header
   x$table_styling$header <-
     map2(
       tbls, seq_along(tbls),
       ~ .x$table_styling$header %>%
-        dplyr::filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & .y != 1)) %>%
+        dplyr::filter(!(.data$column %in% .env$merge_vars & .y != 1)) %>%
         dplyr::mutate(
           column = ifelse(
-            .data$column %in% c("label", "variable", "var_label", "row_type") & .y == 1,
+            .data$column %in% .env$merge_vars & .y == 1,
             .data$column,
             paste0(.data$column, "_", .y)
           )
@@ -249,7 +205,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           if ("column" %in% names(style_updated)) {
             style_updated$column <-
               ifelse(
-                style_updated$column %in% c("label", "variable", "var_label", "row_type") | is.na(style_updated$column),
+                style_updated$column %in% merge_vars | is.na(style_updated$column),
                 style_updated$column,
                 paste0(style_updated$column, "_", i)
               ) %>%

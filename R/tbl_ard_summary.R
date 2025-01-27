@@ -215,18 +215,29 @@ tbl_ard_summary <- function(cards,
         if (isTRUE(default_types[[variable]] %in% "continuous") &&
             !type[[variable]] %in% c("continuous", "continuous2")) {
           cli::cli_abort(
-            "Summary type for variable {.val {variable}} must be one of
+            c("Summary type for variable {.val {variable}} must be one of
              {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
+              "i" = "If your variable has {.val variable_level} values, you may need {.code type = list({.val {variable}}={.val dichotomous})}."),
             call = get_cli_abort_call()
           )
-        } else if (isTRUE(default_types[[variable]] %in% c("categorical", "dichotomous")) &&
-                   !identical(type[[variable]], default_types[[variable]])) {
+        }
+        else if (isTRUE(default_types[[variable]] %in% c("categorical", "dichotomous")) &&
+                   !isTRUE(type[[variable]] %in% c("categorical", "dichotomous"))) {
           cli::cli_abort(
             "Summary type for variable {.val {variable}} must be
              {.val {default_types[[variable]]}}, not {.val {type[[variable]]}}.",
             call = get_cli_abort_call()
           )
         }
+        else if (type[[variable]] == "dichotomous" &&
+                 length(unique(stats::na.omit(unlist(dplyr::filter(cards, .data$variable %in% .env$variable)$variable_level)))) > 1L) {
+          cli::cli_abort(
+            "The summary type for variable {.val {variable}} is {.val dichotomous},
+             but there are mutiple {.val variable_level} values present, i.e. {.val {unique(stats::na.omit(unlist(dplyr::filter(cards, .data$variable %in% .env$variable)$variable_level)))}}."
+          )
+
+        }
+
       }
     )
   }
@@ -314,7 +325,7 @@ tbl_ard_summary <- function(cards,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
-  # construct initial tbl_ard_summary object --------------------------------------
+  # construct initial tbl_ard_summary object -----------------------------------
   x <-
     brdg_summary(
       cards = cards,
