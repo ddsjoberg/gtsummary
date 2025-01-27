@@ -491,7 +491,7 @@ tbl_merge(
     tbl_robust |>
       add_global_p(anova_fun = \(x, ...) tidy_wald_test(x, vcov = cov))
   ), 
-  tab_spanner = c("Standard errors", "Robust errors")
+  tab_spanner = c("**Standard errors**", "**Robust errors**")
 )
 ```
 
