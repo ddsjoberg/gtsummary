@@ -5090,10 +5090,11 @@ instructions for these columns is stored in
 <p>There are a few internal {gtsummary} functions to assist in
 constructing and modifying a <code>.$table_header</code> data frame.</p>
 <ol style="list-style-type: decimal">
-<li><p><code>.create_gtsummary_object(table_body)</code> After a user
-creates a <code>table_body</code>, pass it to this function and the
-skeleton of a gtsummary object is created and returned (including the
-full <code>table_styling</code> list of tables).</p></li>
+<li><p><code><a href="../reference/as_gtsummary.html">as_gtsummary()</a></code> /
+<code>.create_gtsummary_object(table_body)</code> After a user creates a
+<code>table_body</code>, pass it to this function and the skeleton of a
+gtsummary object is created and returned (including the full
+<code>table_styling</code> list of tables).</p></li>
 <li><p><code>.update_table_styling()</code> After columns are added or
 removed from <code>table_body</code>, run this function to update
 <code>.$table_styling</code> to include or remove styling instructions
