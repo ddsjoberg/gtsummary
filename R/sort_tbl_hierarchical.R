@@ -4,20 +4,17 @@
 #'
 #' This function is used to sort hierarchical tables. Options for sorting criteria are:
 #'
-#' 1. Frequency - within each section of the hierarchy table, frequency sums are calculated for each row and rows are
-#'    ordered accordingly (default).
+#' 1. Descending - within each section of the hierarchy table, frequency sums are calculated for each row and rows are
+#'    sorted in descending order by sum (default).
 #' 2. Alphanumeric - rows are ordered alphanumerically by label text. By default, [tbl_hierarchical()] sorts tables
 #'    in ascending alphanumeric order (i.e. A to Z).
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
 #' @param sort (`string`)\cr
-#'   Specifies sorting to perform. Values must be one of `c("frequency", "alphanumeric")`. Default is `"frequency"`.
-#' @param desc (scalar `logical`)\cr
-#'   Whether to sort rows in ascending or descending order. Default is descending (`TRUE`) when `sort = "frequency"`
-#'   and ascending (`FALSE`) when `sort = "alphanumeric"`.
+#'   Specifies sorting to perform. Values must be one of `c("alphanumeric", "descending")`. Default is `"descending"`.
 #' @param .stat (`string`)\cr
-#'   Statistic to use to calculate row sums when `sort = "frequency"`. This statistic must be present in the table for
+#'   Statistic to use to calculate row sums when `sort = "descending"`. This statistic must be present in the table for
 #'   all hierarchy levels. Default is `"n"`.
 #' @inheritParams rlang::args_dots_empty
 #'
@@ -40,10 +37,12 @@
 #' )
 #'
 #' # Example 1 - Descending Frequency Sort ------------------
-#' tbl_sort(tbl)
+#' tbl <- tbl_sort(tbl)
+#' tbl
 #'
-#' # Example 2 - Descending Alphanumeric Sort (Z to A) ------
-#' tbl_sort(tbl, sort = "alphanumeric", desc = TRUE)
+#' # Example 2 - Alphanumeric Sort --------------------------
+#' tbl <- tbl_sort(tbl, sort = "alphanumeric")
+#' tbl
 NULL
 
 #' @rdname sort_tbl_hierarchical
@@ -57,16 +56,15 @@ tbl_sort <- function(x, ...) {
 
 #' @rdname sort_tbl_hierarchical
 #' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "frequency"), .stat = "n", ...) {
+tbl_sort.tbl_hierarchical <- function(x, sort = "descending", .stat = "n", ...) {
   set_cli_abort_call()
 
   # process and check inputs ----------------------------------------------------------------------
-  check_scalar_logical(desc)
   check_string(.stat)
 
-  if (!sort %in% c("frequency", "alphanumeric")) {
+  if (!sort %in% c("descending", "alphanumeric")) {
     cli::cli_abort(
-      "The {.arg sort} argument must be either {.val frequency} or {.val alphanumeric}.",
+      "The {.arg sort} argument must be either {.val descending} or {.val alphanumeric}.",
       call = get_cli_abort_call()
     )
   }
@@ -81,16 +79,10 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "fr
     x$table_body |> select(cards::all_ard_groups("names")) |> unlist() |> unique()
   )
 
+  # keep summary rows at the top of each sub-section
+  rep_str <- " "
+
   if (sort == "alphanumeric") {
-    # summary rows remain at the top of each sub-section
-    rep_str <- if (desc) "zzzz" else " "
-
-    # overall row always appears first
-    if (desc && overall) {
-      ovrl_row <- x$table_body[1, ]
-      x$table_body <- x$table_body[-1, ]
-    }
-
     # sort by label -------------------------------------------------------------------------------
     sort_cols <- c(x$table_body |> select(cards::all_ard_groups("levels")) |> names(), "inner_var", "label")
 
@@ -99,11 +91,9 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "fr
       dplyr::mutate(inner_var = if (!.data$variable %in% inner_col) rep_str else .data$variable) |>
       dplyr::ungroup() |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ tidyr::replace_na(., rep_str))) |>
-      dplyr::arrange(across(all_of(sort_cols), ~ if (desc) dplyr::desc(.x) else .x)) |>
+      dplyr::arrange(across(all_of(sort_cols), ~ .x)) |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ str_replace(., paste0("^", rep_str, "$"), NA))) |>
       select(-"inner_var")
-
-    if (desc && overall) x$table_body <- dplyr::bind_rows(ovrl_row, x$table_body)
   } else {
     # get row sums --------------------------------------------------------------------------------
     x <- .append_hierarchy_row_sums(x, .stat)
@@ -122,9 +112,9 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "fr
     # summary rows remain at the top of each sub-section
     x$table_body <- x$table_body |>
       dplyr::ungroup() |>
-      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ tidyr::replace_na(., " "))) |>
+      dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ tidyr::replace_na(., rep_str))) |>
       dplyr::rowwise() |>
-      dplyr::mutate(inner_var = if (!.data$variable %in% inner_col) " " else .data$variable) |>
+      dplyr::mutate(inner_var = if (!.data$variable %in% inner_col) rep_str else .data$variable) |>
       dplyr::ungroup()
 
     # sort by row sum -----------------------------------------------------------------------------
@@ -135,7 +125,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "frequency", desc = (sort == "fr
     ), "inner_var", "sum_row", "label")
 
     x$table_body <- x$table_body |>
-      dplyr::arrange(across(all_of(sort_cols), ~ if (is.numeric(.x) && desc) dplyr::desc(.x) else .x)) |>
+      dplyr::arrange(across(all_of(sort_cols), ~ if (is.numeric(.x)) dplyr::desc(.x) else .x)) |>
       dplyr::mutate(across(cards::all_ard_groups(), .fns = ~ str_replace(., "^ $", NA))) |>
       select(-starts_with("sum_"), -"inner_var")
   }
