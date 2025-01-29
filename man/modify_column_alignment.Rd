@@ -13,7 +13,7 @@ gtsummary object}
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Selector of columns in \code{x$table_body}}
 
-\item{align}{(\code{string})
+\item{align}{(\code{string})\cr
 String indicating alignment of column, must be one of \code{c("left", "right", "center")}}
 }
 \description{

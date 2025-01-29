@@ -37,7 +37,7 @@
 #' _the planned change will be go unnoticed_.
 #'
 #' @return gtsummary table
-#' @export
+#' @name modify_column_merge
 #'
 #' @family Advanced modifiers
 #' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
@@ -56,6 +56,10 @@
 #'     pattern = "{estimate} ({conf.low}, {conf.high})",
 #'     rows = !is.na(estimate)
 #'   )
+NULL
+
+#' @export
+#' @name modify_column_merge
 modify_column_merge <- function(x, pattern, rows = NULL) {
   set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
@@ -87,20 +91,63 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   # merge columns --------------------------------------------------------------
   x <- x |>
     # remove prior merging for the specified columns
-    modify_table_styling(
-      columns = all_of(columns),
-      rows = {{ rows }},
-      cols_merge_pattern = NA,
-    ) |>
+    .remove_column_merge(columns = columns) |>
     # add the newly specified pattern of merging
-    modify_table_styling(
-      columns = columns[1],
+    .modify_column_merge(
+      # columns = columns,
       rows = {{ rows }},
-      hide = FALSE,
-      cols_merge_pattern = pattern,
+      pattern = pattern,
     )
 
   # return gtsummary table -----------------------------------------------------
   x$call_list <- updated_call_list
+  x
+}
+
+#' @export
+#' @name modify_column_merge
+remove_column_merge <- function(x, columns) {
+  set_cli_abort_call()
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
+  cards::process_selectors(x$table_body, columns = {{ columns }})
+
+  # remove instructions for the indicated columns ------------------------------
+  x <- .remove_column_merge(x, columns)
+
+  # return gtsummary table -----------------------------------------------------
+  x$call_list <- c(x$call_list, list(modify_column_hide = match.call()))
+  x
+}
+
+.remove_column_merge <- function(x, columns) {
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge[!x$table_styling$cols_merge$column %in% columns,]
+
+  x
+}
+
+# function to add merging columns instructions
+.modify_column_merge <- function(x, columns = .extract_glue_elements(pattern), rows, pattern) {
+  rows <- enquo(rows)
+
+  # remove previous merging for specified column
+  x <- .remove_column_merge(x, columns = columns)
+
+  # append new merge instructions
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge |>
+    dplyr::bind_rows(
+      dplyr::tibble(
+        column = columns[1],
+        rows = list(rows),
+        pattern = pattern
+      )
+    )
+
+  # hiding all but the first column
+  x <- .modify_column_hide(x, columns = columns[-1], hide = TRUE)
+
+  # return gtsummary table
   x
 }
