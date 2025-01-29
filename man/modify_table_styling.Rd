@@ -78,19 +78,21 @@ use \code{"{conf.low}, {conf.high}"}. The first column listed in the pattern
 string must match the single column name passed in \verb{columns=}.}
 }
 \description{
-This function is for developers.
+\strong{This function is for developers.}
+\emph{This function has very little checking of the passed arguments, by design.}
+
 If you are not a developer, it's recommended that you use the following
-functions to make modifications to your table. \code{\link[=modify_header]{modify_header()}},
-\code{\link[=modify_spanning_header]{modify_spanning_header()}}, \verb{[modify_column_hide()]}, \code{\link[=modify_column_unhide]{modify_column_unhide()}},
+functions to make modifications to your table:
+
+\code{\link[=modify_header]{modify_header()}},
+\code{\link[=modify_spanning_header]{modify_spanning_header()}}, \code{\link[=modify_column_hide]{modify_column_hide()}}, \code{\link[=modify_column_unhide]{modify_column_unhide()}},
 \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_abbreviation]{modify_abbreviation()}},
-\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \verb{[modify_column_indent()]},
+\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \code{\link[=modify_column_indent]{modify_column_indent()}},
 \code{\link[=modify_column_merge]{modify_column_merge()}}, \code{\link[=modify_missing_symbol]{modify_missing_symbol()}}, \code{\link[=modify_bold]{modify_bold()}},
 \code{\link[=modify_italic]{modify_italic()}}.
 
-This is a function meant for advanced users to gain
-more control over the characteristics of the resulting
+This is a function provides control over the characteristics of the resulting
 gtsummary table by directly modifying \code{.$table_styling}.
-\emph{This function has very little checking of the passed arguments.}
 
 Review the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}

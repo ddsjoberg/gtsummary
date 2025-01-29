@@ -56,3 +56,13 @@ modify_column_unhide <- function(x, columns) {
   x$call_list <- updated_call_list
   x
 }
+
+.modify_column_hide <- function(x, columns, hide = FALSE) {
+  # update hidden status -------------------------------------------------------
+  x$table_styling$header <-
+    x$table_styling$header |>
+    dplyr::mutate(hide = ifelse(.data$column %in% .env$columns, .env$hide, .data$hide))
+
+  # return gtsummary table -----------------------------------------------------
+  x
+}
