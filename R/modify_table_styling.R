@@ -339,14 +339,18 @@ modify_table_styling <- function(x,
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is_empty(cols_merge_pattern)) {
-    if (!is.na(cols_merge_pattern)) check_string(cols_merge_pattern)
-    x <-
-      .modify_cols_merge(
-        x,
-        column = columns,
-        rows = !!rows,
-        pattern = cols_merge_pattern
-      )
+    if (!is.na(cols_merge_pattern)) {
+      x <-
+        .modify_column_merge(
+          x,
+          rows = !!rows,
+          pattern = cols_merge_pattern
+        )
+    }
+    else {
+      x <- .remove_column_merge(x, columns = columns)
+    }
+
   }
 
   # return x -------------------------------------------------------------------
@@ -370,45 +374,3 @@ modify_table_styling <- function(x,
 }
 
 
-# function to add merging columns instructions
-.modify_cols_merge <- function(x, column, rows, pattern) {
-  rows <- enquo(rows)
-  all_columns <- .extract_glue_elements(pattern)
-
-  if (!is_empty(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
-    cli::cli_abort(
-      c("All columns specified in {.arg cols_merge_pattern} argument must be present in {.code x$table_body}",
-        "i" = "The following columns are not present: {.val {setdiff(all_columns, x$table_styling$header$column)}}"),
-      call = get_cli_abort_call()
-    )
-  }
-
-  if (!is.na(pattern) && !identical(column, all_columns[1])) {
-    cli::cli_abort(
-      c("A single column must be specified in the {.arg columns} argument when
-         using {.arg cols_merge_pattern}, and that column must be the first to
-         appear in the pattern argument.",
-        i = "For example, {.code modify_table_styling(columns={.val {all_columns[1]}}, cols_merge_pattern={.val {pattern}})}"),
-      call = get_cli_abort_call()
-    )
-  }
-
-  x$table_styling$cols_merge <-
-    x$table_styling$cols_merge %>%
-    # remove previous merging for specified column
-    dplyr::filter(!.data$column %in% .env$column) %>%
-    # append new merge instructions
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = column,
-        rows = list(rows),
-        pattern = pattern
-      )
-    )
-
-  # hiding all but the first column
-  x <- modify_column_hide(x, columns = all_columns[-1])
-
-  # return gtsummary table
-  x
-}

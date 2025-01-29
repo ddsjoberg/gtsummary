@@ -41,7 +41,7 @@ Character vector of column label(s). Must be the same length as \code{columns}.}
 \item{spanning_header}{(\code{string})\cr
 string with text for spanning header}
 
-\item{hide}{(scalar \code{logical})
+\item{hide}{(scalar \code{logical})\cr
 Logical indicating whether to hide column from output}
 
 \item{footnote}{(\code{string})\cr
@@ -50,7 +50,7 @@ string with text for footnote}
 \item{footnote_abbrev}{(\code{string})\cr
 string with abbreviation definition, e.g. \code{"CI = Confidence Interval"}}
 
-\item{align}{(\code{string})
+\item{align}{(\code{string})\cr
 String indicating alignment of column, must be one of \code{c("left", "right", "center")}}
 
 \item{missing_symbol}{(\code{string})\cr

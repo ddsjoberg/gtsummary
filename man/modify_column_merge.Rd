@@ -2,9 +2,12 @@
 % Please edit documentation in R/modify_column_merge.R
 \name{modify_column_merge}
 \alias{modify_column_merge}
+\alias{remove_column_merge}
 \title{Modify Column Merging}
 \usage{
 modify_column_merge(x, pattern, rows = NULL)
+
+remove_column_merge(x, columns)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -18,6 +21,9 @@ use \code{"{conf.low}, {conf.high}"}.}
 Predicate expression to select rows in \code{x$table_body}.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is \code{NULL}. See details below.}
+
+\item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Selector of columns in \code{x$table_body}}
 }
 \value{
 gtsummary table

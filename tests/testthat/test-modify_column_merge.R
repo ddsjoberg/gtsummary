@@ -41,4 +41,14 @@ test_that("modify_column_merge() messaging", {
         rows = !is.na(estimate)
       )
   )
+
+  expect_snapshot(
+    error = TRUE,
+    lm(mpg ~ factor(am), mtcars) |>
+      tbl_regression() |>
+      modify_column_merge(
+        rows = !is.na(conf.low),
+        pattern = "{conf.low}:::{not_in_table}"
+      )
+  )
 })
