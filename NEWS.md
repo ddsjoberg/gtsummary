@@ -16,6 +16,8 @@
 
 * Added new function `modify_missing_symbol()` to update how a missing value is displayed in a table. (#2121)
 
+* Added new function `remove_column_merge()` to undo a column merge. (#2130)
+
 * Language translations have been updated with a handful of missing translations. (#2100)
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
