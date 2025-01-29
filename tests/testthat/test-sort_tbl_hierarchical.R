@@ -49,60 +49,10 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'frequency') works", {
       "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "ERYTHEMA"
     )
   )
-
-  # ascending frequency
-  expect_silent(tbl <- tbl_sort(tbl, desc = FALSE))
-  expect_equal(
-    tbl$table_body |>
-      dplyr::filter(variable == "SEX") |>
-      dplyr::pull(label),
-    c("F", "M") # F and M have equal numbers
-  )
-  expect_equal(
-    tbl$table_body |>
-      dplyr::filter(variable == "RACE") |>
-      dplyr::pull(label),
-    c("BLACK OR AFRICAN AMERICAN", "WHITE", "AMERICAN INDIAN OR ALASKA NATIVE", "BLACK OR AFRICAN AMERICAN", "WHITE")
-  )
-  expect_equal(
-    tbl$table_body |>
-      dplyr::filter(variable == "AETERM") |>
-      dplyr::pull(label),
-    c(
-      "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "ERYTHEMA", "APPLICATION SITE PRURITUS", "DIARRHOEA",
-      "APPLICATION SITE ERYTHEMA", "APPLICATION SITE PRURITUS", "ERYTHEMA", "ERYTHEMA", "APPLICATION SITE PRURITUS",
-      "DIARRHOEA", "ERYTHEMA", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "ERYTHEMA",
-      "APPLICATION SITE ERYTHEMA", "APPLICATION SITE PRURITUS"
-    )
-  )
 })
 
 test_that("tbl_sort.tbl_hierarchical(sort = 'alphanumeric') works", {
-  # descending (Z to A)
-  expect_silent(result <- tbl_sort(tbl, sort = "alphanumeric", desc = TRUE))
-  expect_equal(
-    result$table_body |>
-      dplyr::filter(variable == "SEX") |>
-      dplyr::pull(label),
-    c("M", "F")
-  )
-  expect_equal(
-    result$table_body |>
-      dplyr::filter(variable == "RACE") |>
-      dplyr::pull(label),
-    c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "WHITE", "BLACK OR AFRICAN AMERICAN")
-  )
-  expect_equal(
-    result$table_body |>
-      dplyr::filter(variable == "AETERM") |>
-      dplyr::pull(label),
-    c(
-      "ERYTHEMA", "DIARRHOEA", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "APPLICATION SITE PRURITUS",
-      "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA", "APPLICATION SITE PRURITUS", "ERYTHEMA", "ERYTHEMA",
-      "DIARRHOEA", "APPLICATION SITE PRURITUS", "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA",
-      "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "APPLICATION SITE PRURITUS"
-    )
-  )
+  expect_silent(result <- tbl_sort(tbl))
 
   # ascending (A to Z)
   expect_silent(result <- tbl_sort(result, sort = "alphanumeric"))

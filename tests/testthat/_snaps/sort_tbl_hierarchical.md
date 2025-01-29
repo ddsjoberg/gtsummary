@@ -44,7 +44,7 @@
       tbl_sort(tbl, sort = "no_sorting")
     Condition
       Error in `tbl_sort()`:
-      ! The `sort` argument must be either "frequency" or "alphanumeric".
+      ! The `sort` argument must be either "descending" or "alphanumeric".
 
 ---
 
