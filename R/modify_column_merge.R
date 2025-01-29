@@ -110,7 +110,7 @@ remove_column_merge <- function(x, columns) {
   set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  cards::process_selectors(scope_table_body(x$table_body), columns = {{ columns }})
+  cards::process_selectors(x$table_body, columns = {{ columns }})
 
   # remove instructions for the indicated columns ------------------------------
   x <- .remove_column_merge(x, columns)
