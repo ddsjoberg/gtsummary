@@ -146,3 +146,4 @@ Other Advanced modifiers:
 \code{\link{modify_column_merge}()}
 }
 \concept{Advanced modifiers}
+\keyword{internal}
