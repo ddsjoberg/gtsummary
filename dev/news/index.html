@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9011</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <li><p>The <code>modify_spanning_header(level)</code> argument has been added to allow for multiple levels of spanning headers in the resulting tables. The <code><a href="../reference/modify.html">remove_spanning_header()</a></code> function has also been added to ease the removal of spanning headers. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2099" class="external-link">#2099</a>)</p></li>
 <li><p>The <code><a href="../reference/modify_footnote2.html">modify_footnote_spanning_header()</a></code> function has been added to ease adding footnotes to spanning headers. A companion function, <code><a href="../reference/modify_footnote2.html">remove_footnote_spanning_header()</a></code>, has been added to remove spanning headers.</p></li>
 <li><p>Added new function <code><a href="../reference/modify_missing_symbol.html">modify_missing_symbol()</a></code> to update how a missing value is displayed in a table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2121" class="external-link">#2121</a>)</p></li>
+<li><p>Added new function <code><a href="../reference/modify_column_merge.html">remove_column_merge()</a></code> to undo a column merge. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2130" class="external-link">#2130</a>)</p></li>
 <li><p>Language translations have been updated with a handful of missing translations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2100" class="external-link">#2100</a>)</p></li>
 <li><p>The <code>modify_caption(caption)</code> argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2107" class="external-link">#2107</a>)</p></li>
 <li><p>Swapped out <code><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">dplyr::rows_update()</a></code> with a base R implementation in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> that allows for tables with mixed types in <code>x$table_styling$header$modify_*</code> columns. For example, <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has integer Ns and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> has double Ns that can now be combined. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1626" class="external-link">#1626</a>)</p></li>

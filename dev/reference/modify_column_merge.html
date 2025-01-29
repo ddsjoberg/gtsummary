@@ -9,7 +9,7 @@ Use show_header_names() to print underlying column names."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9011</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,9 @@ Use <code><a href="modify.html">show_header_names()</a></code> to print underlyi
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_column_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_column_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">remove_column_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,6 +78,11 @@ use <code>"{conf.low}, {conf.high}"</code>.</p></dd>
 Predicate expression to select rows in <code>x$table_body</code>.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is <code>NULL</code>. See details below.</p></dd>
+
+
+<dt id="arg-columns">columns<a class="anchor" aria-label="anchor" href="#arg-columns"></a></dt>
+<dd><p>(<code><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a></code>)<br>
+Selector of columns in <code>x$table_body</code></p></dd>
 
 </dl></div>
     <div class="section level2">
