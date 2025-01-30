@@ -681,3 +681,37 @@ test_that("tbl_summary() test encoding/sorting difference between sort() and dpl
     c("label", "stat_1", "stat_2", "stat_3")
   )
 })
+
+# addressing issue #2123
+test_that("tbl_summary(statistic) double curly bracket escaping", {
+  expect_equal(
+    tbl_summary(trial, include = ttdeath, statistic = ~"{{{mean}}}", missing = "no") |>
+      as_tibble() |>
+      dplyr::pull(last_col()),
+    glue("{{{style_number(mean(trial$ttdeath), 1)}}}")
+  )
+  expect_equal(
+    tbl_summary(trial, include = ttdeath, statistic = ~"{{{{{mean}}}}}", missing = "no") |>
+      as_tibble() |>
+      dplyr::pull(last_col()),
+    glue("{{{{{style_number(mean(trial$ttdeath), 1)}}}}}")
+  )
+  expect_equal(
+    tbl_summary(trial, include = ttdeath, statistic = ~"{mean} }}", missing = "no") |>
+      as_tibble() |>
+      dplyr::pull(last_col()),
+    glue("{style_number(mean(trial$ttdeath), 1)} }}")
+  )
+  expect_equal(
+    tbl_summary(trial, include = ttdeath, statistic = ~"{{{{{mean}}}}}}", missing = "no") |>
+      as_tibble() |>
+      dplyr::pull(last_col()),
+    glue("{{{{{style_number(mean(trial$ttdeath), 1)}}}}}}")
+  )
+  expect_equal(
+    tbl_summary(trial, include = ttdeath, statistic = ~"Me{{an: {{{mean}}}", missing = "no") |>
+      as_tibble() |>
+      dplyr::pull(last_col()),
+    glue("Me{{an: {{{style_number(mean(trial$ttdeath), 1)}}}")
+  )
+})
