@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9012</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,7 @@
 <li><p>Bug fix in <code><a href="../reference/add_ci.tbl_svysummary.html">add_ci.tbl_svysummary()</a></code> for factor variables where order was alphabetical instead of the factor levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2036" class="external-link">#2036</a>)</p></li>
 <li><p>Addressing encoding issue where <code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">dplyr::arrange()</a></code> sorted differently, and the order of the <code>by</code> levels was inconsistent in the resulting table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2038" class="external-link">#2038</a>)</p></li>
 <li><p>Users may now pass a vector of integers to <code>tbl_hierarchical*(digits)</code>, as is possible in other summary functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2080" class="external-link">#2080</a>)</p></li>
+<li><p>The <code>tbl_summary(statistic)</code> argument now allows users to pass curly brackets that appear in the final table. Just like in <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> double curly brackets are escaped to a single bracket. For example, <code>tbl_summary(statistic=~"{{{mean}}}")</code> results in <code>"{&lt;mean value&gt;}"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2123" class="external-link">#2123</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
