@@ -177,6 +177,26 @@ Must be one of the following:</p><table class="table table"><tr><td>type</td><td
 
 </dl></div>
     <div class="section level2">
+    <h2 id="formula-specification">Formula Specification<a class="anchor" aria-label="anchor" href="#formula-specification"></a></h2>
+
+
+<p>When passing a <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survival::survfit()</a></code> object to <code>tbl_survfit()</code>,
+the <code><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit()</a></code> call must use an evaluated formula and not a stored formula.
+Including a proper formula in the call allows the function to accurately
+identify all variables included in the estimation. See below for examples:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># include formula in `survfit()` call</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>, <span class="va">lung</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span>times <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># you can also pass a data frame to `tbl_survfit()` as well.</span></span>
+<span><span class="va">lung</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"sex"</span>, times <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>You <strong>cannot</strong>, however, pass a stored formula, e.g. <code>survfit(my_formula, lung)</code>,
+but you can use stored formulas with <code>rlang::inject(survfit(!!my_formula, lung))</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Daniel D. Sjoberg</p>
     </div>
