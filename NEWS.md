@@ -60,6 +60,8 @@
 
 * Users may now pass a vector of integers to `tbl_hierarchical*(digits)`, as is possible in other summary functions. (#2080)
 
+* The `tbl_summary(statistic)` argument now allows users to pass curly brackets that appear in the final table. Just like in `glue::glue()` double curly brackets are escaped to a single bracket. For example, `tbl_summary(statistic=~"{{{mean}}}")` results in `"{<mean value>}"`. (#2123)
+
 # gtsummary 2.0.3
 
 ### New Features and Functions
