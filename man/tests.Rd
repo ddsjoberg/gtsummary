@@ -67,7 +67,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{\code{tbl_continuous() \%>\% add_p()}}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
-   \code{'anova_2way'} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
+   \code{'anova_2way'} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable) \%>\% broom::glance()} \cr
    \code{'t.test'} \tab t-test \tab \code{t.test(continuous_variable ~ as.factor(variable), data = data, conf.level = 0.95, ...)} \cr
    \code{'oneway.test'} \tab One-way ANOVA \tab \code{oneway.test(continuous_variable ~ as.factor(variable), data = data)} \cr
    \code{'kruskal.test'} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[continuous_variable]], as.factor(data[[variable]]))} \cr
