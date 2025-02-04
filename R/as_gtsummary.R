@@ -29,10 +29,10 @@ as_gtsummary <- function(table_body, ...) {
       column = names(x$table_body),
       hide = FALSE,
       align = "center",
-      interpret_label = "gt::md",
-      label = names(x$table_body)
+      interpret_label = "gt::md"
     ) %>%
     dplyr::mutate(
+      label = map_chr(.data$column, ~attr(table_body[[.x]], "label") %||% .x),
       align = ifelse(.data$column %in% "label", "left", .data$align)
     )
 
