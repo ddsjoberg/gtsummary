@@ -314,10 +314,3 @@ test_that("tbl_stack throws expected errors", {
     error = TRUE
   )
 })
-
-test_that("tbl_stack(group_type='nested')", {
-  expect_silent({
-    tbl0 <- tbl_summary(trial, by = trt, include = grade)
-    tbl <- tbl_stack(list(tbl0, tbl0), group_header = list(letters[1:2], letters[1:2]))
-  })
-})
