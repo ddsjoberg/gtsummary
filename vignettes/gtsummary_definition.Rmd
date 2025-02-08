@@ -368,7 +368,7 @@ Formatting and printing instructions for these columns is stored in `.$table_sty
 
 There are a few internal {gtsummary} functions to assist in constructing and modifying a `.$table_header` data frame.
 
-1. `.create_gtsummary_object(table_body)` After a user creates a `table_body`, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full `table_styling` list of tables).
+1. `as_gtsummary()` / `.create_gtsummary_object(table_body)` After a user creates a `table_body`, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full `table_styling` list of tables).
 
 1. `.update_table_styling()` After columns are added or removed from `table_body`, run this function to update `.$table_styling` to include or remove styling instructions for the columns. FYI the default styling for each new column is to hide it.
 

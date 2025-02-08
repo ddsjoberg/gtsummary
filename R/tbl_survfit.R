@@ -59,6 +59,26 @@
 #' @export
 #' @name tbl_survfit
 #'
+#' @section Formula Specification:
+#' When passing a [`survival::survfit()`] object to `tbl_survfit()`,
+#' the `survfit()` call must use an evaluated formula and not a stored formula.
+#' Including a proper formula in the call allows the function to accurately
+#' identify all variables included in the estimation. See below for examples:
+#'
+#' ```r
+#' library(gtsummary)
+#' library(survival)
+#'
+#' # include formula in `survfit()` call
+#' survfit(Surv(time, status) ~ sex, lung) |> tbl_survfit(times = 500)
+#'
+#' # you can also pass a data frame to `tbl_survfit()` as well.
+#' lung |>
+#'   tbl_survfit(y = Surv(time, status), include = "sex", times = 500)
+#' ```
+#' You **cannot**, however, pass a stored formula, e.g. `survfit(my_formula, lung)`,
+#' but you can use stored formulas with `rlang::inject(survfit(!!my_formula, lung))`.
+#'
 #' @author Daniel D. Sjoberg
 #' @examplesIf gtsummary:::is_pkg_installed("survival")
 #' library(survival)
@@ -420,7 +440,11 @@ brdg_survfit <- function(cards,
 .default_survfit_labels <- function(x) {
   label <- list()
   for (i in seq_along(x)) {
-    variable_i <- x[[i]]$call$formula |> rlang::f_rhs() |> all.vars() |> dplyr::first() |> discard(is.na)
+    variable_i <-
+      tryCatch(
+        x[[i]]$call$formula |> rlang::f_rhs() |> all.vars() |> dplyr::first() |> discard(is.na),
+        error = \(e) character(0)
+      )
     if (!is_empty(variable_i)) {
       label[[variable_i]] <-
         tryCatch(

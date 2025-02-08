@@ -16,6 +16,8 @@
 
 * Added new function `modify_missing_symbol()` to update how a missing value is displayed in a table. (#2121)
 
+* Added new function `remove_column_merge()` to undo a column merge. (#2130)
+
 * Language translations have been updated with a handful of missing translations. (#2100)
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
@@ -57,6 +59,8 @@
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
 
 * Users may now pass a vector of integers to `tbl_hierarchical*(digits)`, as is possible in other summary functions. (#2080)
+
+* The `tbl_summary(statistic)` argument now allows users to pass curly brackets that appear in the final table. Just like in `glue::glue()` double curly brackets are escaped to a single bracket. For example, `tbl_summary(statistic=~"{{{mean}}}")` results in `"{<mean value>}"`. (#2123)
 
 # gtsummary 2.0.3
 
