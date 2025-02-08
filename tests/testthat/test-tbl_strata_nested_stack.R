@@ -79,6 +79,32 @@ test_that("tbl_strata_nested_stack() works", {
   )
 })
 
+test_that("tbl_strata_nested_stack() works with unobserved factor levels", {
+  expect_silent(
+    tbl <-
+      tbl_strata_nested_stack(
+        trial |> dplyr::mutate(trt = factor(trt, levels = c("Drug A", "Drug B", "Drug C"))),
+        strata = trt,
+        ~ .x |>
+          tbl_summary(include = c(age, grade), missing = "no") |>
+          modify_header(all_stat_cols() ~ "**Summary Statistics**")
+      )
+  )
+
+  # check there are only two rows that are not indented (i.e. the two observed levels of trt)
+  expect_equal(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label") |>
+      dplyr::pull(row_numbers) |>
+      setdiff(x = seq_len(nrow(tbl$table_body)), y = _),
+    c(1L, 7L)
+  )
+})
+
 test_that("tbl_strata_nested_stack() messaging", {
   # check for protected names are not allowed in strata argument
   expect_snapshot(
