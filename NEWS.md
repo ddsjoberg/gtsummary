@@ -30,6 +30,8 @@
 
   This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
 
+* Corrected the `?tests` documentation file to reflect that, as of v2.0, we no longer perform pre-processing (such as, converting a column to a factor) on variables before computing tests. (#2135)
+
 # gtsummary 2.0.4
 
 ### New Features and Functions
