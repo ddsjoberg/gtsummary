@@ -73,12 +73,6 @@ trial |>
 head(trial)
 ```
 
-For brevity, in this tutorial we'll use a subset of the variables from the trial data set.
-
-```{r}
-trial2 <- trial |> select(trt, age, grade)
-```
-
 ## Basic Usage
 
 The default output from `tbl_summary()` is meant to be **publication ready**. 
@@ -88,7 +82,7 @@ The `tbl_summary()` function can take, at minimum, a data frame as the only inpu
 
 
 ```{r, message=FALSE}
-trial2 |> tbl_summary()
+trial |> tbl_summary(include = c(trt, age, grade))
 ```
 
 Note the sensible defaults with this basic usage; each of the defaults may be customized.
@@ -106,7 +100,7 @@ To compare two or more groups, include [`add_p()`](https://www.danieldsjoberg.co
 
 ```{r}
 trial2 |>
-  tbl_summary(by = trt) |>
+  tbl_summary(by = trt, include = c(age, grade)) |>
   add_p()
 ```
 
@@ -126,15 +120,16 @@ The `tbl_summary()` function includes many input options for modifying the appea
 ```{r echo=FALSE}
 dplyr::tribble(
   ~Argument, ~Description,
-  "`label=`", "specify the variable labels printed in table",
-  "`type=`", "specify the variable type (e.g. continuous, categorical, etc.)",
-  "`statistic=`", "change the summary statistics presented",
-  "`digits=`", "number of digits the summary statistics will be rounded to",
-  "`missing=`", "whether to display a row with the number of missing observations",
-  "`missing_text=`", "text label for the missing number row",
-  "`sort=`", "change the sorting of categorical levels by frequency",
-  "`percent=`", "print column, row, or cell percentages",
-  "`include=`", "list of variables to include in summary table"
+  "`label`", "specify the variable labels printed in table",
+  "`type`", "specify the variable type (e.g. continuous, categorical, etc.)",
+  "`statistic`", "change the summary statistics presented",
+  "`digits`", "number of digits the summary statistics will be rounded to",
+  "`missing`", "whether to display a row with the number of missing observations",
+  "`missing_text`", "text label for the missing number row",
+  "`missing_stat`", "statistic(s) to show on the missing row",
+  "`sort`", "change the sorting of categorical levels by frequency",
+  "`percent`", "print column, row, or cell percentages",
+  "`include`", "list of variables to include in summary table"
 ) |>
   gt::gt() |>
   gt::fmt_markdown(columns = Argument) |>
@@ -152,7 +147,7 @@ trial2 |>
       all_categorical() ~ "{n} / {N} ({p}%)"
     ),
     digits = all_continuous() ~ 2,
-    label = grade ~ "Tumor Grade",
+    label = list(grade = "Tumor Grade"),
     missing_text = "(Missing)"
   )
 ```
@@ -253,8 +248,8 @@ To use the {gt} package functions with {gtsummary} tables, the summary table mus
 To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
 
 ```{r}
-trial2 |>
-  tbl_summary(by = trt, missing = "no") |>
+trial |>
+  tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
   add_n() |>
   as_gt() |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
@@ -288,10 +283,10 @@ Continuous variables may also be summarized on multiple lines---a common format 
 To update the continuous variables to summarize on multiple lines, update the summary type to `"continuous2"` (for summaries on two or more lines).
 
 ```{r}
-trial2 |>
-  select(age, trt) |>
+trial |>
   tbl_summary(
     by = trt,
+    include = age,
     type = all_continuous() ~ "continuous2",
     statistic = all_continuous() ~ c(
       "{N_nonmiss}",
