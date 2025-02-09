@@ -99,7 +99,7 @@ For this study data the summary statistics should be **split by treatment group*
 To compare two or more groups, include [`add_p()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate statistical test.
 
 ```{r}
-trial2 |>
+trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   add_p()
 ```
@@ -139,9 +139,10 @@ dplyr::tribble(
 Example modifying `tbl_summary()` arguments.
 
 ```{r, eval = TRUE}
-trial2 |>
+trial |>
   tbl_summary(
     by = trt,
+    include = c(age, grade),
     statistic = list(
       all_continuous() ~ "{mean} ({sd})",
       all_categorical() ~ "{n} / {N} ({p}%)"
@@ -227,8 +228,8 @@ dplyr::tribble(
 Example adding `tbl_summary()`-family functions
 
 ```{r, eval = TRUE}
-trial2 |>
-  tbl_summary(by = trt) |>
+trial |>
+  tbl_summary(by = trt, includ = c(age, grade)) |>
   add_p(pvalue_fun = label_style_pvalue(digits = 2)) |>
   add_overall() |>
   add_n() |>
@@ -320,7 +321,7 @@ The default printer converts the {gtsummary} object to a {gt} object with `as_gt
 Here's an example of the first few calls saved with `tbl_summary()`:
 
 ```{r}
-tbl_summary(trial2) |>
+tbl_summary(trial) |>
   as_gt(return_calls = TRUE) |>
   head(n = 4)
 ```
@@ -334,7 +335,7 @@ After the `as_gt()` function is run, additional formatting may be added to the t
 In the example below, a source note is added to the table.
 
 ```{r as_gt2}
-tbl_summary(trial2, by = trt) |>
+tbl_summary(trial, by = trt, include = c(age, grade)) |>
   as_gt(include = -cols_align) |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
 ```
