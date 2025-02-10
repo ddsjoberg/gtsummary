@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -687,13 +687,13 @@ ARD.</p>
 <span><span class="co">#&gt; 1     ARM      Placebo   AGEGR1            &lt;65         n          n    14</span></span>
 <span><span class="co">#&gt; 2     ARM      Placebo   AGEGR1            &lt;65         N          N    86</span></span>
 <span><span class="co">#&gt; 3     ARM      Placebo   AGEGR1            &lt;65         p          % 0.163</span></span>
-<span><span class="co">#&gt; 4     ARM    Xanomeli…   AGEGR1            &lt;65         n          n    11</span></span>
-<span><span class="co">#&gt; 5     ARM    Xanomeli…   AGEGR1            &lt;65         N          N    84</span></span>
-<span><span class="co">#&gt; 6     ARM    Xanomeli…   AGEGR1            &lt;65         p          % 0.131</span></span>
-<span><span class="co">#&gt; 7     ARM    Xanomeli…   AGEGR1            &lt;65         n          n     8</span></span>
-<span><span class="co">#&gt; 8     ARM    Xanomeli…   AGEGR1            &lt;65         N          N    84</span></span>
-<span><span class="co">#&gt; 9     ARM    Xanomeli…   AGEGR1            &lt;65         p          % 0.095</span></span>
-<span><span class="co">#&gt; 10    ARM      Placebo   AGEGR1          65-80         n          n    42</span></span>
+<span><span class="co">#&gt; 4     ARM      Placebo   AGEGR1          65-80         n          n    42</span></span>
+<span><span class="co">#&gt; 5     ARM      Placebo   AGEGR1          65-80         N          N    86</span></span>
+<span><span class="co">#&gt; 6     ARM      Placebo   AGEGR1          65-80         p          % 0.488</span></span>
+<span><span class="co">#&gt; 7     ARM      Placebo   AGEGR1            &gt;80         n          n    30</span></span>
+<span><span class="co">#&gt; 8     ARM      Placebo   AGEGR1            &gt;80         N          N    86</span></span>
+<span><span class="co">#&gt; 9     ARM      Placebo   AGEGR1            &gt;80         p          % 0.349</span></span>
+<span><span class="co">#&gt; 10    ARM      Placebo      SEX              F         n          n    53</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">157 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">5 more variables: context, fmt_fn, warning, error, gts_column</span></span></span></code></pre></div>
@@ -1250,28 +1250,28 @@ N = 84</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <span><span class="co"># return ARDs</span></span>
 <span><span class="fu"><a href="../reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="va">tbl_ae</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 82 x 15</span></span></span>
-<span><span class="co">#&gt;    group1 group1_level group2 group2_level variable variable_level stat_name</span></span>
-<span><span class="co">#&gt; 1    TRTA      Placebo   &lt;NA&gt;                 AESOC      GASTROIN…         n</span></span>
-<span><span class="co">#&gt; 2    TRTA      Placebo   &lt;NA&gt;                 AESOC      GASTROIN…         N</span></span>
-<span><span class="co">#&gt; 3    TRTA      Placebo   &lt;NA&gt;                 AESOC      GASTROIN…         p</span></span>
-<span><span class="co">#&gt; 4    TRTA      Placebo   &lt;NA&gt;                 AESOC      GENERAL …         n</span></span>
-<span><span class="co">#&gt; 5    TRTA      Placebo   &lt;NA&gt;                 AESOC      GENERAL …         N</span></span>
-<span><span class="co">#&gt; 6    TRTA      Placebo   &lt;NA&gt;                 AESOC      GENERAL …         p</span></span>
-<span><span class="co">#&gt; 7    TRTA    Xanomeli…   &lt;NA&gt;                 AESOC      GASTROIN…         n</span></span>
-<span><span class="co">#&gt; 8    TRTA    Xanomeli…   &lt;NA&gt;                 AESOC      GASTROIN…         N</span></span>
-<span><span class="co">#&gt; 9    TRTA    Xanomeli…   &lt;NA&gt;                 AESOC      GASTROIN…         p</span></span>
-<span><span class="co">#&gt; 10   TRTA    Xanomeli…   &lt;NA&gt;                 AESOC      GENERAL …         n</span></span>
-<span><span class="co">#&gt;    stat_label  stat stat_fmt</span></span>
-<span><span class="co">#&gt; 1           n     9        9</span></span>
-<span><span class="co">#&gt; 2           N    86       86</span></span>
-<span><span class="co">#&gt; 3           % 0.105       10</span></span>
-<span><span class="co">#&gt; 4           n     8        8</span></span>
-<span><span class="co">#&gt; 5           N    86       86</span></span>
-<span><span class="co">#&gt; 6           % 0.093      9.3</span></span>
-<span><span class="co">#&gt; 7           n     4        4</span></span>
-<span><span class="co">#&gt; 8           N    84       84</span></span>
-<span><span class="co">#&gt; 9           % 0.048      4.8</span></span>
-<span><span class="co">#&gt; 10          n    25       25</span></span>
+<span><span class="co">#&gt;    group1 group1_level group2 group2_level                     variable</span></span>
+<span><span class="co">#&gt; 1    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 2    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 3    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 4    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 5    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 6    TRTA      Placebo   &lt;NA&gt;                                     AESOC</span></span>
+<span><span class="co">#&gt; 7    TRTA      Placebo   &lt;NA&gt;              ..ard_hierarchical_overall..</span></span>
+<span><span class="co">#&gt; 8    TRTA      Placebo   &lt;NA&gt;              ..ard_hierarchical_overall..</span></span>
+<span><span class="co">#&gt; 9    TRTA      Placebo   &lt;NA&gt;              ..ard_hierarchical_overall..</span></span>
+<span><span class="co">#&gt; 10   TRTA      Placebo  AESOC    GASTROIN…                       AETERM</span></span>
+<span><span class="co">#&gt;    variable_level stat_name stat_label  stat stat_fmt</span></span>
+<span><span class="co">#&gt; 1       GASTROIN…         n          n     9        9</span></span>
+<span><span class="co">#&gt; 2       GASTROIN…         N          N    86       86</span></span>
+<span><span class="co">#&gt; 3       GASTROIN…         p          % 0.105       10</span></span>
+<span><span class="co">#&gt; 4       GENERAL …         n          n     8        8</span></span>
+<span><span class="co">#&gt; 5       GENERAL …         N          N    86       86</span></span>
+<span><span class="co">#&gt; 6       GENERAL …         p          % 0.093      9.3</span></span>
+<span><span class="co">#&gt; 7            TRUE         n          n    16       16</span></span>
+<span><span class="co">#&gt; 8            TRUE         N          N    86       86</span></span>
+<span><span class="co">#&gt; 9            TRUE         p          % 0.186       19</span></span>
+<span><span class="co">#&gt; 10      DIARRHOEA         n          n     9        9</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">72 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">5 more variables: context, fmt_fn, warning, error, gts_column</span></span></span></code></pre></div>
@@ -1365,8 +1365,8 @@ results for a nicer display.</p>
 <span><span class="co">#&gt; 6     ARM      Placebo      AGE                      p75         Q3     82</span></span>
 <span><span class="co">#&gt; 7     ARM      Placebo      AGE                      min        Min     52</span></span>
 <span><span class="co">#&gt; 8     ARM      Placebo      AGE                      max        Max     89</span></span>
-<span><span class="co">#&gt; 9     ARM    Xanomeli…      AGE                        N          N     84</span></span>
-<span><span class="co">#&gt; 10    ARM    Xanomeli…      AGE                     mean       Mean 74.381</span></span>
+<span><span class="co">#&gt; 9     ARM      Placebo   AGEGR1            &lt;65         n          n     14</span></span>
+<span><span class="co">#&gt; 10    ARM      Placebo   AGEGR1            &lt;65         N          N     86</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">101 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">4 more variables: context, fmt_fn, warning, error</span></span></span></code></pre></div>

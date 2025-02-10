@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@
 <li><p>The <code><a href="../reference/modify_footnote2.html">modify_footnote_spanning_header()</a></code> function has been added to ease adding footnotes to spanning headers. A companion function, <code><a href="../reference/modify_footnote2.html">remove_footnote_spanning_header()</a></code>, has been added to remove spanning headers.</p></li>
 <li><p>Added new function <code><a href="../reference/modify_missing_symbol.html">modify_missing_symbol()</a></code> to update how a missing value is displayed in a table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2121" class="external-link">#2121</a>)</p></li>
 <li><p>Added new function <code><a href="../reference/modify_column_merge.html">remove_column_merge()</a></code> to undo a column merge. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2130" class="external-link">#2130</a>)</p></li>
+<li><p>Added function <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code>. The function is similar to <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>, but this function nests the resulting tables, indented under each of the strata headers. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2006" class="external-link">#2006</a>)</p></li>
 <li><p>The <code><a href="../reference/add_ci.html">add_ci.tbl_summary()</a></code> function now works with categorical variables that were summarized using <code>tbl_summary(percent = c('row', 'cell'))</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1929" class="external-link">#1929</a>)</p></li>
 <li>
 <p>Adding the <code>tbl_merge(merge_vars)</code> argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/selectors.html" class="external-link">cards::all_ard_groups()</a></code> have been added to the default merging columns, which provides the functionality for merging the results from <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> and <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical_count()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1861" class="external-link">#1861</a>)</p>
