@@ -9,7 +9,7 @@
 #' @param data (`data.frame`)\cr
 #'   a data frame
 #' @param row_header (`string`)\cr
-#'   string indicating the the row headers that appear in the table.
+#'   string indicating the row headers that appear in the table.
 #'   The argument uses `glue::glue()` syntax to insert values into the
 #'   row headers. Elements available to insert are `strata`, `n`, `N` and `p`.
 #'   The `strata` element is the variable level of the strata variables.
