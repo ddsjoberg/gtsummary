@@ -27,5 +27,5 @@
       })
     Condition
       Error in `tbl_strata_nested_stack()`:
-      ! The `tbl_strata_nested_stack()` function can only be run once on a table. One of the tables already contains a column named "tbl_indent_id" indicating the function was previsouly executed.
+      ! The `tbl_strata_nested_stack()` function can only be run once on a table. One of the tables already contains a column named "tbl_indent_id" indicating the function was previously executed.
 
