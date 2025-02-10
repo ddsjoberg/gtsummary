@@ -58,21 +58,12 @@ We'll be using the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/
 * This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
 The outcomes are tumor response and death.
 
-For brevity in the tutorial, let's keep a subset of the variables from the trial data set.
-
-```{r}
-trial2 <-
-  trial %>%
-  select(trt, marker, stage)
-```
-
-
 ## Inline results from tbl_summary() {#inline_text_tbl_summary}
 
 First create a basic summary table using [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) (review [`tbl_summary()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) for detailed overview of this function if needed).
 
 ```{r}
-tab1 <- tbl_summary(trial2, by = trt)
+tab1 <- tbl_summary(trial, by = trt, include = c(marker, stage))
 tab1
 ```
 
@@ -104,7 +95,7 @@ Let's first create a regression model.
 
 ```{r}
 # build logistic regression model
-m1 <- glm(response ~ age + stage, trial, family = binomial(link = "logit"))
+m1 <- glm(response ~ age + stage, data = trial, family = binomial(link = "logit"))
 ```
 
 Now summarize the results with `tbl_regression()`; exponentiate to get the odds ratios.
@@ -144,8 +135,6 @@ dplyr::tribble(
 
 > Age was not significantly associated with tumor response `` `r
 inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
-
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
 
 If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = stage, level = "T3")` resolves to "`r inline_text(tbl_m1, variable = stage, level = "T3")`".  
 
