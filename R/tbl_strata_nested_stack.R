@@ -196,7 +196,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
         cli::cli_abort(
           "The {.fun tbl_strata_nested_stack} function can only be run once on a table.
            One of the tables already contains a column named {.val tbl_indent_id}
-           indicating the function was previsouly executed.",
+           indicating the function was previously executed.",
           call = get_cli_abort_call()
         )
       }
