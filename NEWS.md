@@ -20,6 +20,8 @@
 
 * Added new function `remove_column_merge()` to undo a column merge. (#2130)
 
+* Added function `tbl_strata_nested_stack()`. The function is similar to `tbl_strata()`, but this function nests the resulting tables, indented under each of the strata headers. (#2006)
+
 * The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
 
 * Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)

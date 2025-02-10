@@ -36,7 +36,8 @@ tbl_strata2(
 a data frame or survey object}
 
 \item{strata}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-character vector or tidy-selector of columns in data to stratify results by}
+character vector or tidy-selector of columns in data to stratify results by.
+Only \emph{observed} combinations are shown in results.}
 
 \item{.tbl_fun}{(\code{function})
 A function or formula. If a \emph{function}, it is used as is.

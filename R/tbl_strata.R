@@ -15,7 +15,8 @@
 #'   The stratified data frame is passed to this function.
 #' @param ... Additional arguments passed on to the `.tbl_fun` function.
 #' @param strata ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   character vector or tidy-selector of columns in data to stratify results by
+#'   character vector or tidy-selector of columns in data to stratify results by.
+#'   Only _observed_ combinations are shown in results.
 #' @param .sep (`string`)\cr
 #'   when more than one stratifying variable is passed, this string is
 #'   used to separate the levels in the spanning header. Default is `", "`
