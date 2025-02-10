@@ -18,7 +18,8 @@ tbl_strata_nested_stack(
 a data frame}
 
 \item{strata}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-character vector or tidy-selector of columns in data to stratify results by}
+character vector or tidy-selector of columns in data to stratify results by.
+Only \emph{observed} combinations are shown in results.}
 
 \item{.tbl_fun}{(\code{function})
 A function or formula. If a \emph{function}, it is used as is.
@@ -28,10 +29,11 @@ The stratified data frame is passed to this function.}
 \item{...}{Additional arguments passed on to the \code{.tbl_fun} function.}
 
 \item{row_header}{(\code{string})\cr
-string indicating the the row headers that appear in the table.
+string indicating the row headers that appear in the table.
 The argument uses \code{glue::glue()} syntax to insert values into the
 row headers. Elements available to insert are \code{strata}, \code{n}, \code{N} and \code{p}.
-The \code{strata} element is the variable level of the strata variables.}
+The \code{strata} element is the variable level of the strata variables.
+Default is \code{'{strata}'}.}
 
 \item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
