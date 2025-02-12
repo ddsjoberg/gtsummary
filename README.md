@@ -8,11 +8,11 @@
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test
 coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
-[![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
+[![downloads](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
 
-## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
+## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' alt = "Logo of gtsummary" align="right" height="120" /></a>
 
 The {gtsummary} package provides an elegant and flexible way to create
 publication-ready analytical and summary tables using the **R**
@@ -105,7 +105,7 @@ table1 <-
   tbl_summary(include = c(age, grade, response))
 ```
 
-<img src="man/figures/README-tbl_summary_print_simple-1.png" width="25%" />
+<img src="man/figures/README-tbl_summary_print_simple-1.png" alt="Example of basic table" width="25%" />
 
 There are many **customization options** to **add information** (like
 comparing groups) and **format results** (like bold labels) in your
@@ -127,7 +127,7 @@ table2 <-
   bold_labels()
 ```
 
-<img src="man/figures/README-tbl_summary_print_extra-1.png" width="55%" />
+<img src="man/figures/README-tbl_summary_print_extra-1.png" alt="Example of table with customize options" width="55%" />
 
 ### Regression Models
 
@@ -144,7 +144,7 @@ mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression_printa-1.png" width="40%" />
+<img src="man/figures/README-tbl_regression_printa-1.png" alt="Example of table using tbl_regression" width="40%" />
 
 ### Side-by-side Regression Models
 
@@ -167,7 +167,7 @@ tbl_merge_ex1 <-
   )
 ```
 
-<img src="man/figures/README-tbl_merge_ex1-1.png" width="60%" />
+<img src="man/figures/README-tbl_merge_ex1-1.png" alt="Example of tables merged with tbl_merge" width="60%" />
 
 Review even more output options in the **[table
 gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
@@ -184,7 +184,7 @@ Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
 <a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
+<img src="man/figures/gt_output_formats.PNG" alt="Comparison of engines and their output compatibility" width="55%" /> </a>
 
 ## Save Individual Tables
 
