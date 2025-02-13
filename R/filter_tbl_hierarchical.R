@@ -37,10 +37,10 @@
 #' )
 #'
 #' # Example 1 - Row Sums > 10 ------------------
-#' tbl_filter(tbl, t = 10)
+#' tbl_filter(tbl, sum(n) > 10)
 #'
 #' # Example 2 - Row Sums <= 5 ------------------
-#' tbl_filter(tbl, t = 10, gt = FALSE, eq = TRUE)
+#' tbl_filter(tbl, sum(n) <= 5)
 NULL
 
 #' @rdname filter_tbl_hierarchical
@@ -54,72 +54,62 @@ tbl_filter <- function(x, ...) {
 
 #' @export
 #' @rdname filter_tbl_hierarchical
-tbl_filter.tbl_hierarchical <- function(x, t, gt = TRUE, eq = FALSE, .stat = "n", ...) {
+tbl_filter.tbl_hierarchical <- function(x, filter, ...) {
   set_cli_abort_call()
 
-  # process and check inputs ----------------------------------------------------------------------
-  check_numeric(t)
-  check_scalar_logical(gt)
-  check_scalar_logical(eq)
-  check_string(.stat)
+  ard_args <- attributes(x$cards$tbl_hierarchical)$args
+  by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
 
-  outer_cols <- sapply(
-    x$table_body |> select(cards::all_ard_groups("names")),
-    function(x) dplyr::last(unique(stats::na.omit(x)))
-  )
+  browser()
+  # add indices to ARD
+  x_ard <- x$cards$tbl_hierarchical |>
+    dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
+    dplyr::mutate(idx_sort = dplyr::cur_group_id()) |>
+    dplyr::ungroup() |>
+    cards::as_card()
 
-  # get row sums ----------------------------------------------------------------------------------
-  x <- .append_hierarchy_row_sums(x, .stat)
+  # re-add dropped args attribute
+  attr(x_ard, "args") <- ard_args
 
-  # keep all summary rows (removed later if no sub-rows are kept)
-  if (!gt) x$table_body$sum_row[x$table_body$variable %in% outer_cols] <- t - 1
+  # get `by` variable count rows (do not correspond to a table row)
+  rm_idx <- x_ard |>
+    dplyr::filter(is.na(group1)) |>
+    dplyr::pull("idx_sort") |>
+    unique()
 
-  # create and apply filtering expression ---------------------------------------------------------
-  filt_expr <- paste(
-    "sum_row",
-    dplyr::case_when(
-      gt && eq ~ ">=",
-      !gt && eq ~ "<=",
-      !gt ~ "<",
-      TRUE ~ ">"
-    ),
-    t
-  )
-  x$table_body <- x$table_body |>
-    dplyr::filter(!!parse_expr(filt_expr))
+  # pull index order (each corresponding to one row of x$table_body)
+  pre_sort_idx <- x_ard |>
+    dplyr::pull("idx_sort") |>
+    unique() |>
+    setdiff(rm_idx) |>
+    as.character()
 
-  # remove any summary rows with no sub-rows still present ----------------------------------------
-  if (!gt) {
-    for (i in rev(seq_along(outer_cols))) {
-      gp_empty <- x$table_body |>
-        dplyr::group_by(across(c(names(outer_cols[1:i]), paste0(names(outer_cols[1:i]), "_level")))) |>
-        dplyr::summarize(is_empty := dplyr::n() == 1) |>
-        stats::na.omit()
+  # apply sorting
+  x_ard_sort <- x_ard |> cards::ard_filter({{ filter }})
 
-      if (!all(!gp_empty$is_empty)) {
-        x$table_body <- x$table_body |>
-          dplyr::left_join(
-            gp_empty,
-            by = gp_empty |> select(cards::all_ard_groups()) |> names()
-          ) |>
-          dplyr::filter(!is_empty | is.na(is_empty)) |>
-          dplyr::select(-"is_empty")
-      } else {
-        break
-      }
-    }
-    if (nrow(x$table_body) > 0) {
-      cli::cli_inform(
-        "For readability, all summary rows preceding at least one row that meets the filtering criteria are kept
-        regardless of whether they meet the filtering criteria themselves.",
-        .frequency = "once",
-        .frequency_id = "sum_rows_lt"
-      )
-    }
-  }
+  # pull updated index order after sorting
+  post_sort_idx <- x_ard_sort |>
+    dplyr::pull("idx_sort") |>
+    unique() |>
+    setdiff(rm_idx) |>
+    as.character()
 
-  x$table_body <- x$table_body |>
-    dplyr::select(-"sum_row")
+  # get updated (relative) row positions
+  idx <- (seq_len(length(pre_sort_idx)) |> stats::setNames(pre_sort_idx))[post_sort_idx]
+
+  # update x$cards
+  x$cards$tbl_hierarchical <- x_ard_sort |> select(-"idx_sort")
+
+  # update x$table_body
+  x$table_body <- x$table_body[idx, ]
 
   x
+  # if (nrow(x$table_body) > 0) {
+  #     cli::cli_inform(
+  #       "For readability, all summary rows preceding at least one row that meets the filtering criteria are kept
+  #       regardless of whether they meet the filtering criteria themselves.",
+  #       .frequency = "once",
+  #       .frequency_id = "sum_rows_lt"
+  #     )
+  #   }
 }

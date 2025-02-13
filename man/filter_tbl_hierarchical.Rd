@@ -8,7 +8,7 @@
 \usage{
 tbl_filter(x, ...)
 
-\method{tbl_filter}{tbl_hierarchical}(x, t, gt = TRUE, eq = FALSE, .stat = "n", ...)
+\method{tbl_filter}{tbl_hierarchical}(x, filter, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
@@ -53,10 +53,10 @@ tbl <- tbl_hierarchical(
 )
 
 # Example 1 - Row Sums > 10 ------------------
-tbl_filter(tbl, t = 10)
+tbl_filter(tbl, sum(n) > 10)
 
 # Example 2 - Row Sums <= 5 ------------------
-tbl_filter(tbl, t = 10, gt = FALSE, eq = TRUE)
+tbl_filter(tbl, sum(n) <= 5)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
