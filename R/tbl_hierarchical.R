@@ -326,6 +326,9 @@ internal_tbl_hierarchical <- function(data,
   # add the gtsummary column names to ARD data frame ---------------------------
   cards <- .add_gts_column_to_cards_hierarchical(cards, variables, by)
 
+  # sort ARD alphanumerically (the default table layout)
+  cards <- cards |> cards::ard_sort("alphanumeric")
+
   # call bridge function here
   brdg_hierarchical(
     cards = cards,
@@ -416,6 +419,8 @@ internal_tbl_hierarchical <- function(data,
 }
 
 .add_gts_column_to_cards_hierarchical <- function(cards, variables, by) {
+  args <- attributes(cards)$args
+
   # adding the name of the column the stats will populate
   if (is_empty(by)) {
     cards$gts_column <-
@@ -435,7 +440,12 @@ internal_tbl_hierarchical <- function(data,
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
   }
 
-  cards |>
+  cards <- cards |>
     dplyr::ungroup() |>
     cards::as_card()
+
+  # re-add dropped args attribute
+  attr(cards, "args") <- args
+
+  cards
 }
