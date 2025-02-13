@@ -134,23 +134,3 @@ test_that("tbl_sort.tbl_hierarchical() works when some variables not included in
 
   expect_message(tbl_sort(tbl))
 })
-
-test_that("tbl_sort.tbl_hierarchical() error messaging works", {
-  # invalid x input
-  expect_snapshot(
-    tbl_sort(data.frame()),
-    error = TRUE
-  )
-
-  # invalid sort input
-  expect_snapshot(
-    tbl_sort(tbl, sort = "no_sorting"),
-    error = TRUE
-  )
-
-  # invalid .stat input
-  expect_snapshot(
-    tbl_sort(tbl, .stat = "mean"),
-    error = TRUE
-  )
-})

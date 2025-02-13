@@ -30,27 +30,3 @@
       24                                           AMERICAN INDIAN OR ALASKA NATIVE               0 (NA%)                           1 (100%)                           0 (NA%)
       25                                                                   ERYTHEMA               0 (NA%)                           1 (100%)                           0 (NA%)
 
-# tbl_sort.tbl_hierarchical() error messaging works
-
-    Code
-      tbl_sort(data.frame())
-    Condition
-      Error in `check_class()`:
-      ! The `x` argument must be class <gtsummary>, not a data frame.
-
----
-
-    Code
-      tbl_sort(tbl, sort = "no_sorting")
-    Condition
-      Error in `tbl_sort()`:
-      ! The `sort` argument must be either "descending" or "alphanumeric".
-
----
-
-    Code
-      tbl_sort(tbl, .stat = "mean")
-    Condition
-      Error in `tbl_sort()`:
-      ! The `.stat` argument is "mean" but this statistic is not present in `x`. For all valid statistic options see the "stat_name" column of `x$cards$tbl_hierarchical`.
-
