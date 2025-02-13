@@ -20,7 +20,7 @@
 #'
 #' @return A `gtsummary` of the same class as `x`.
 #'
-#' @name filter_tbl_hierarchical
+#' @name tbl_filter
 #' @seealso [tbl_sort()]
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
@@ -43,7 +43,7 @@
 #' tbl_filter(tbl, sum(n) <= 5)
 NULL
 
-#' @rdname filter_tbl_hierarchical
+#' @rdname tbl_filter
 #' @export
 tbl_filter <- function(x, ...) {
   check_not_missing(x)
@@ -53,7 +53,7 @@ tbl_filter <- function(x, ...) {
 }
 
 #' @export
-#' @rdname filter_tbl_hierarchical
+#' @rdname tbl_filter
 tbl_filter.tbl_hierarchical <- function(x, filter, ...) {
   set_cli_abort_call()
 
