@@ -8,24 +8,26 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "frequency", desc = (sort == "frequency"), .stat = "n", ...)
+\method{tbl_sort}{tbl_hierarchical}(x, sort = "descending", ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
-A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+a hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
 \item{sort}{(\code{string})\cr
-Specifies sorting to perform. Values must be one of \code{c("frequency", "alphanumeric")}. Default is \code{"frequency"}.}
+type of sorting to perform. Value must be one of:
+\itemize{
+\item \code{"alphanumeric"} - within each hierarchical section of the ARD, rows are ordered alphanumerically (i.e. A to Z)
+by \code{variable_label} text.
+\item \code{"descending"} - within each hierarchical section of the ARD, count sums are calculated for each row and rows are
+sorted in descending order by sum. If \code{sort = "descending"}, the \code{n} statistic is used to calculate row sums if
+included in \code{statistic} for all variables, otherwise \code{p} is used. If neither \code{n} nor \code{p} are present in \code{x} for
+all variables, an error will occur.
+}
 
-\item{desc}{(scalar \code{logical})\cr
-Whether to sort rows in ascending or descending order. Default is descending (\code{TRUE}) when \code{sort = "frequency"}
-and ascending (\code{FALSE}) when \code{sort = "alphanumeric"}.}
-
-\item{.stat}{(\code{string})\cr
-Statistic to use to calculate row sums when \code{sort = "frequency"}. This statistic must be present in the table for
-all hierarchy levels. Default is \code{"n"}.}
+Defaults to \code{"descending"}.}
 }
 \value{
 A \code{gtsummary} of the same class as \code{x}.
@@ -35,8 +37,8 @@ A \code{gtsummary} of the same class as \code{x}.
 
 This function is used to sort hierarchical tables. Options for sorting criteria are:
 \enumerate{
-\item Frequency - within each section of the hierarchy table, frequency sums are calculated for each row and rows are
-ordered accordingly (default).
+\item Descending - within each section of the hierarchy table, count sums are calculated for each row and rows are
+sorted in descending order by sum (default).
 \item Alphanumeric - rows are ordered alphanumerically by label text. By default, \code{\link[=tbl_hierarchical]{tbl_hierarchical()}} sorts tables
 in ascending alphanumeric order (i.e. A to Z).
 }
@@ -56,10 +58,12 @@ tbl <- tbl_hierarchical(
 )
 
 # Example 1 - Descending Frequency Sort ------------------
-tbl_sort(tbl)
+tbl <- tbl_sort(tbl, sort = "descending")
+tbl
 
-# Example 2 - Descending Alphanumeric Sort (Z to A) ------
-tbl_sort(tbl, sort = "alphanumeric", desc = TRUE)
+# Example 2 - Alphanumeric Sort --------------------------
+tbl <- tbl_sort(tbl, sort = "alphanumeric")
+tbl
 \dontshow{\}) # examplesIf}
 }
 \seealso{
