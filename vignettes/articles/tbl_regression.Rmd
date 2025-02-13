@@ -125,15 +125,15 @@ The `tbl_regression()` function includes many arguments for modifying the appear
 ```{r, echo = FALSE}
 dplyr::tribble(
   ~Argument, ~Description,
-  "`label=`", "modify variable labels in table",
-  "`exponentiate=`", "exponentiate model coefficients",
-  "`include=`", "names of variables to include in output. Default is all variables",
-  "`show_single_row=`", "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.",
-  "`conf.level=`", "confidence level of confidence interval",
-  "`intercept=`", "indicates whether to include the intercept",
-  "`estimate_fun=`", "function to round and format coefficient estimates",
-  "`pvalue_fun=`", "function to round and format p-values",
-  "`tidy_fun=`", "function to specify/customize tidier function"
+  "`label`", "modify variable labels in table",
+  "`exponentiate`", "exponentiate model coefficients",
+  "`include`", "names of variables to include in output. Default is all variables",
+  "`show_single_row`", "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.",
+  "`conf.level`", "confidence level of confidence interval",
+  "`intercept`", "indicates whether to include the intercept",
+  "`estimate_fun`", "function to round and format coefficient estimates",
+  "`pvalue_fun`", "function to round and format p-values",
+  "`tidy_fun`", "function to specify/customize tidier function"
 ) |>
   gt::gt() |>
   gt::fmt_markdown(columns = c(Argument)) |>

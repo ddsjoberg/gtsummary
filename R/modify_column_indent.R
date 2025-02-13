@@ -83,3 +83,19 @@ modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
   x$call_list <- updated_call_list
   x
 }
+
+.modify_column_indent <- function(x, columns, rows = NULL, indent = 4L) {
+  # update hidden status -------------------------------------------------------
+  x$table_styling$indent <-
+    dplyr::bind_rows(
+      x$table_styling$indent,
+      dplyr::tibble(
+        column = columns,
+        rows = list(enquo(rows)),
+        n_spaces = as.integer(indent)
+      )
+    )
+
+  # return gtsummary table -----------------------------------------------------
+  x
+}

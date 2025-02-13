@@ -25,3 +25,13 @@ modify_column_alignment <- function(x, columns, align = c("left", "right", "cent
   x$call_list <- updated_call_list
   x
 }
+
+.modify_column_alignment <- function(x, columns, align) {
+  # update alignment -----------------------------------------------------------
+  x$table_styling$header <-
+    x$table_styling$header |>
+    dplyr::mutate(align = ifelse(.data$column %in% .env$columns, .env$align, .data$align))
+
+  # return gtsummary table -----------------------------------------------------
+  x
+}

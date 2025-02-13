@@ -156,6 +156,16 @@ tbl_ard_summary <- function(cards,
       call = get_cli_abort_call()
     )
   }
+  # check consistent types for the by variable
+  if (!is_empty(by)) {
+    # test if any of the levels have inconsistent classes. making this a message, because it won't always result in a bad table
+    if (some(compact(cards$group1_level), \(x) is_empty(intersect(class(x), class(compact(cards$group1_level)[[1]]))))) {
+      cli::cli_inform(
+        c("Levels of the {.code tbl_ard_summary(by)} variable do not have a consistent S3 class.",
+          "i" = "This may cause an unexpected or incorrect layout in the final table.")
+      )
+    }
+  }
 
   # check the missing stats are available
   if (missing != "no") {

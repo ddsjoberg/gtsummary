@@ -87,23 +87,24 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # gt -------------------------------------------------------------------------
-  groupname_col <-
-    switch("groupname_col" %in% x$table_styling$header$column,
-      "groupname_col"
-    )
-  caption <-
-    switch(!is.null(x$table_styling$caption),
-      rlang::call2(
-        .fn = attr(x$table_styling$caption, "text_interpret"),
-        x$table_styling$caption,
-        .ns = "gt"
-      )
-    )
+  gt_args_caption_groupname_col <-
+    list(
+      groupname_col =
+        switch("groupname_col" %in% x$table_styling$header$column, "groupname_col"),
+      caption =
+        switch(
+          !is.null(x$table_styling$caption),
+          rlang::call2(.fn = attr(x$table_styling$caption, "text_interpret"),
+                       x$table_styling$caption,
+                       .ns = "gt")
+        )
+    ) |>
+    compact()
+
   gt_calls[["gt"]] <-
     expr(gt::gt(
       data = x$table_body,
-      groupname_col = !!groupname_col,
-      caption = !!caption,
+      !!!gt_args_caption_groupname_col,
       !!!list(...)
     ))
 

@@ -1,9 +1,13 @@
 .extract_glue_elements <- function(x) {
+  # this part removes double curlies pairs, trying to mimic how `glue::glue()` would find the element to evaluate
+  while (isTRUE(any(str_detect(x, "\\{\\{.*\\}\\}")))) {
+    x <- map_chr(x, ~ifelse(str_detect(x, "\\{\\{.*\\}\\}"), str_replace(.x, "(\\{\\{)|(\\}\\})", ""), .x))
+  }
+
+  # extract string from between the curlies
   regmatches(x, gregexpr("\\{([^\\}]*)\\}", x)) |>
     unlist() %>%
-    {
-      substr(., 2, nchar(.) - 1)
-    }
+    substr(start = 2, stop = nchar(.) - 1)
 }
 
 .ifelse1 <- function(test, yes, no) {

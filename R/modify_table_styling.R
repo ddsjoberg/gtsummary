@@ -1,20 +1,21 @@
 #' Modify Table Styling
 #'
 #' @description
-#' This function is for developers.
+#' **This function is for developers.**
+#' *This function has very little checking of the passed arguments, by design.*
+#'
 #' If you are not a developer, it's recommended that you use the following
-#' functions to make modifications to your table. [`modify_header()`],
-#' [`modify_spanning_header()`], `[modify_column_hide()]`, [`modify_column_unhide()`],
-#' [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
-#' [`modify_column_alignment()`], [`modify_fmt_fun()`], `[modify_column_indent()]`,
-#' [`modify_column_merge()`], [`modify_missing_symbol()`], [`modify_bold()`],
-#' [`modify_italic()`].
+#' functions to make modifications to your table:
 #'
+#'   [`modify_header()`],
+#'   [`modify_spanning_header()`], [`modify_column_hide()`], [`modify_column_unhide()`],
+#'   [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
+#'   [`modify_column_alignment()`], [`modify_fmt_fun()`], [`modify_column_indent()`],
+#'   [`modify_column_merge()`], [`modify_missing_symbol()`], [`modify_bold()`],
+#'   [`modify_italic()`].
 #'
-#' This is a function meant for advanced users to gain
-#' more control over the characteristics of the resulting
+#' This is a function provides control over the characteristics of the resulting
 #' gtsummary table by directly modifying `.$table_styling`.
-#' *This function has very little checking of the passed arguments.*
 #'
 #' Review the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
@@ -30,9 +31,9 @@
 #'   and text formatting. Default is `NULL`. See details below.
 #' @param label (`character`)\cr
 #'   Character vector of column label(s). Must be the same length as `columns`.
-#' @param hide (scalar `logical`)
+#' @param hide (scalar `logical`)\cr
 #'   Logical indicating whether to hide column from output
-#' @param align (`string`)
+#' @param align (`string`)\cr
 #'   String indicating alignment of column, must be one of `c("left", "right", "center")`
 #' @param text_format,undo_text_format (`string`)\cr
 #'   String indicated which type of text formatting to apply/remove to the rows and columns.
@@ -62,6 +63,7 @@
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #'
 #' @export
+#' @keywords internal
 #' @family Advanced modifiers
 #'
 #' @section rows argument:
@@ -322,15 +324,8 @@ modify_table_styling <- function(x,
     if (!is_scalar_integerish(indent) || indent < 0L) {
       cli::cli_abort("The {.arg indent} argument must be a non-negative scalar integer.")
     }
-    x$table_styling$indent <-
-      dplyr::bind_rows(
-        x$table_styling$indent,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          n_spaces = as.integer(indent)
-        )
-      )
+    x <- x |>
+      .modify_column_indent(columns = columns, rows = !!rows, indent = as.integer(indent))
   }
 
   # missing_symbol -------------------------------------------------------------
@@ -345,14 +340,18 @@ modify_table_styling <- function(x,
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is_empty(cols_merge_pattern)) {
-    if (!is.na(cols_merge_pattern)) check_string(cols_merge_pattern)
-    x <-
-      .modify_cols_merge(
-        x,
-        column = columns,
-        rows = !!rows,
-        pattern = cols_merge_pattern
-      )
+    if (!is.na(cols_merge_pattern)) {
+      x <-
+        .modify_column_merge(
+          x,
+          rows = !!rows,
+          pattern = cols_merge_pattern
+        )
+    }
+    else {
+      x <- .remove_column_merge(x, columns = columns)
+    }
+
   }
 
   # return x -------------------------------------------------------------------
@@ -376,45 +375,3 @@ modify_table_styling <- function(x,
 }
 
 
-# function to add merging columns instructions
-.modify_cols_merge <- function(x, column, rows, pattern) {
-  rows <- enquo(rows)
-  all_columns <- .extract_glue_elements(pattern)
-
-  if (!is_empty(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
-    cli::cli_abort(
-      c("All columns specified in {.arg cols_merge_pattern} argument must be present in {.code x$table_body}",
-        "i" = "The following columns are not present: {.val {setdiff(all_columns, x$table_styling$header$column)}}"),
-      call = get_cli_abort_call()
-    )
-  }
-
-  if (!is.na(pattern) && !identical(column, all_columns[1])) {
-    cli::cli_abort(
-      c("A single column must be specified in the {.arg columns} argument when
-         using {.arg cols_merge_pattern}, and that column must be the first to
-         appear in the pattern argument.",
-        i = "For example, {.code modify_table_styling(columns={.val {all_columns[1]}}, cols_merge_pattern={.val {pattern}})}"),
-      call = get_cli_abort_call()
-    )
-  }
-
-  x$table_styling$cols_merge <-
-    x$table_styling$cols_merge %>%
-    # remove previous merging for specified column
-    dplyr::filter(!.data$column %in% .env$column) %>%
-    # append new merge instructions
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = column,
-        rows = list(rows),
-        pattern = pattern
-      )
-    )
-
-  # hiding all but the first column
-  x <- modify_column_hide(x, columns = all_columns[-1])
-
-  # return gtsummary table
-  x
-}

@@ -319,3 +319,16 @@ test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorica
       as.data.frame()
   )
 })
+
+# addressed Issue #2000
+test_that("tbl_ard_summary(by) mixed-type messaging", {
+  expect_message(
+    cards::bind_ard(
+      cards::ard_continuous(trial, variables = age, by = trt),
+      cards::ard_continuous(trial |> dplyr::mutate(trt = factor(trt)), variables = marker, by = trt)
+    ) |>
+      tbl_ard_summary(by = trt),
+    "Levels of the.*variable do not have a consistent S3 class."
+  )
+})
+
