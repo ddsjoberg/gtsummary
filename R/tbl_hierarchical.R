@@ -368,6 +368,7 @@ internal_tbl_hierarchical <- function(data,
         denominator = denominator,
         include = all_of(dplyr::nth(variables, -2)),
         statistic = statistic,
+        over_variables = overall_row,
         total_n = (is_empty(by) && length(include) == 1)
       )
 
