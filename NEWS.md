@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+### New Features and Functions
+
 * Adding functions `modify_bold()`, `modify_italic()`, `remove_bold()`, and `remove_italic()` for adding or remove bold or italic styling to cells in the table. (#2125)
 
 * Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
@@ -16,17 +18,27 @@
 
 * Added new function `modify_missing_symbol()` to update how a missing value is displayed in a table. (#2121)
 
-* Language translations have been updated with a handful of missing translations. (#2100)
+* Added new function `remove_column_merge()` to undo a column merge. (#2130)
 
-* The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
-
-* Swapped out `dplyr::rows_update()` with a base R implementation in `tbl_merge()` that allows for tables with mixed types in `x$table_styling$header$modify_*` columns. For example, `tbl_summary()` has integer Ns and `tbl_svysummary()` has double Ns that can now be combined. (#1626)
+* Added function `tbl_strata_nested_stack()`. The function is similar to `tbl_strata()`, but this function nests the resulting tables, indented under each of the strata headers. (#2006)
 
 * The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
 
 * Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)
 
   This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
+
+* The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
+
+### Other Updates
+
+* Language translations have been updated with a handful of missing translations. (#2100)
+
+### Bug Fixes
+
+* Swapped out `dplyr::rows_update()` with a base R implementation in `tbl_merge()` that allows for tables with mixed types in `x$table_styling$header$modify_*` columns. For example, `tbl_summary()` has integer Ns and `tbl_svysummary()` has double Ns that can now be combined. (#1626)
+
+* Corrected the `?tests` documentation file to reflect that, as of v2.0, we no longer perform pre-processing (such as, converting a column to a factor) on variables before computing tests. (#2135)
 
 # gtsummary 2.0.4
 
@@ -57,6 +69,8 @@
 * Addressing encoding issue where `sort()` and `dplyr::arrange()` sorted differently, and the order of the `by` levels was inconsistent in the resulting table. (#2038)
 
 * Users may now pass a vector of integers to `tbl_hierarchical*(digits)`, as is possible in other summary functions. (#2080)
+
+* The `tbl_summary(statistic)` argument now allows users to pass curly brackets that appear in the final table. Just like in `glue::glue()` double curly brackets are escaped to a single bracket. For example, `tbl_summary(statistic=~"{{{mean}}}")` results in `"{<mean value>}"`. (#2123)
 
 # gtsummary 2.0.3
 

@@ -97,6 +97,28 @@ No more than one stratifying variable is allowed in each model.
 If you're experiencing unexpected errors using \code{tbl_survfit()},
 please review \link[=tbl_survfit_errors]{?tbl_survfit_errors} for a possible explanation.
 }
+\section{Formula Specification}{
+
+When passing a \code{\link[survival:survfit]{survival::survfit()}} object to \code{tbl_survfit()},
+the \code{survfit()} call must use an evaluated formula and not a stored formula.
+Including a proper formula in the call allows the function to accurately
+identify all variables included in the estimation. See below for examples:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(gtsummary)
+library(survival)
+
+# include formula in `survfit()` call
+survfit(Surv(time, status) ~ sex, lung) |> tbl_survfit(times = 500)
+
+# you can also pass a data frame to `tbl_survfit()` as well.
+lung |>
+  tbl_survfit(y = Surv(time, status), include = "sex", times = 500)
+}\if{html}{\out{</div>}}
+
+You \strong{cannot}, however, pass a stored formula, e.g. \code{survfit(my_formula, lung)},
+but you can use stored formulas with \code{rlang::inject(survfit(!!my_formula, lung))}.
+}
+
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)

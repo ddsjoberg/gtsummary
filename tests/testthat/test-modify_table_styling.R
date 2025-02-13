@@ -345,30 +345,6 @@ test_that("modify_table_styling(cols_merge_pattern)", {
   )
 })
 
-test_that("modify_table_styling(cols_merge_pattern) messaging", {
-  expect_snapshot(
-    error = TRUE,
-    lm(mpg ~ factor(am), mtcars) |>
-      tbl_regression() |>
-      modify_table_styling(
-        columns = "label",
-        rows = !is.na(conf.low),
-        cols_merge_pattern = "{conf.low}:::{conf.high}"
-      )
-  )
-
-  expect_snapshot(
-    error = TRUE,
-    lm(mpg ~ factor(am), mtcars) |>
-      tbl_regression() |>
-      modify_table_styling(
-        columns = "conf.low",
-        rows = !is.na(conf.low),
-        cols_merge_pattern = "{conf.low}:::{not_in_table}"
-      )
-    )
-})
-
 test_that("modify_table_styling(indent) messaging", {
   expect_snapshot(
     error = TRUE,

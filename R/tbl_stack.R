@@ -93,7 +93,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
         table_body |> dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), everything())
       }
     ) %>%
-      dplyr::bind_rows()
+    dplyr::bind_rows()
 
   # creating table styling -----------------------------------------------------
   # print message if column headers, footnotes, etc. are different among tbls
@@ -193,7 +193,8 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
   if (nrow(tbl_differences) > 0) {
     cli::cli_inform(
       c("Column headers among stacked tables differ. Headers from the first table are used.",
-         i = "Use {.code quiet = TRUE} to suppress this message.")
+        i = "Check the header is correct and use {.fun modify_header} to update,
+             or {.code quiet = TRUE} to suppress this message.")
     )
   }
 

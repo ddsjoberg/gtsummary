@@ -135,9 +135,9 @@
 #'
 #' # Example 2 ----------------------------------
 #' trial |>
-#'   select(age, grade, response, trt) |>
 #'   tbl_summary(
 #'     by = trt,
+#'     include = c(age, grade, response, trt),
 #'     label = list(age = "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(age = c(0, 1))
@@ -145,8 +145,8 @@
 #'
 #' # Example 3 ----------------------------------
 #' trial |>
-#'   select(age, marker) |>
 #'   tbl_summary(
+#'     include = c(age, marker),
 #'     type = all_continuous() ~ "continuous2",
 #'     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
 #'     missing = "no"

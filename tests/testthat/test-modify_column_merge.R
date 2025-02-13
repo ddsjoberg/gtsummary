@@ -41,4 +41,27 @@ test_that("modify_column_merge() messaging", {
         rows = !is.na(estimate)
       )
   )
+
+  expect_snapshot(
+    error = TRUE,
+    lm(mpg ~ factor(am), mtcars) |>
+      tbl_regression() |>
+      modify_column_merge(
+        rows = !is.na(conf.low),
+        pattern = "{conf.low}:::{not_in_table}"
+      )
+  )
+})
+
+test_that("remove_column_merge() works", {
+  expect_equal(
+    lm(mpg ~ am, mtcars) |>
+      tbl_regression() |>
+      remove_column_merge(columns = c("conf.low", "conf.high")) |>
+      modify_column_unhide(c("conf.low", "conf.high")) |>
+      as_tibble(col_labels = FALSE) |>
+      names() |>
+      intersect(c("conf.low", "conf.high")),
+    c("conf.low", "conf.high")
+  )
 })
