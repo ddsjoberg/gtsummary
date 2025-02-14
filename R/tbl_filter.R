@@ -6,7 +6,7 @@
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
-#' @inheritParams cards::ard_sort
+#' @inheritParams cards::ard_filter
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @details
@@ -68,10 +68,16 @@ tbl_filter.tbl_hierarchical <- function(x, filter, ...) {
   by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
   x_ard <- x$cards$tbl_hierarchical
 
-  # add dummy rows for variables not in include so their label rows are ordered correctly
+  # add dummy rows for variables not in include so their label rows are filtered correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
-    x_ard <- x_ard |> mutate(idx_o = seq_len(nrow(x$cards$tbl_hierarchical)))
+    cli::cli_inform(
+      "Not all hierarchy variables present in the table were included in the {.arg include} argument.
+      These variables ({not_incl}) do not have event rate data available so the total sum of the event rates
+      for this hierarchy section will be used instead. To use true event rates for all sections of the table,
+      set {.code include = everything()} when creating your table via {.fun tbl_hierarchical}."
+    )
+
     for (v in not_incl) {
       i <- length(ard_args$by) + which(ard_args$variables == v)
       x_sum_rows <- x_ard |>
@@ -85,75 +91,89 @@ tbl_filter.tbl_hierarchical <- function(x, filter, ...) {
               variable_level = .g[[ncol(.g)]],
               stat_name = "no_stat",
               stat = list(0),
-              idx_o = min(.df$idx_o) + 1,
               tmp = TRUE
             )
           } else {
             NULL
           }
         }, .keep = TRUE)
-      sum_row_pos <- dplyr::bind_rows(x_sum_rows) |> dplyr::pull(idx_o)
-      # adjust prior row indices to add in dummy summary rows
-      x_ard <- x_ard |>
-        dplyr::bind_rows(x_sum_rows) |>
-        dplyr::rowwise() |>
-        mutate(idx_o = .data$idx_o + sum(sum_row_pos > .data$idx_o)) |>
-        dplyr::ungroup()
+
+      x_ard <- x_ard |> dplyr::bind_rows(x_sum_rows)
     }
-    x_ard <- x_ard |>
-      dplyr::arrange(idx_o, tmp) |>
-      select(-"idx_o")
   }
 
   # add indices to ARD
   x_ard <- x_ard |>
     dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
-    dplyr::mutate(idx_filter = dplyr::cur_group_id()) |>
-    dplyr::ungroup()
+    dplyr::mutate(idx_nofilter = dplyr::cur_group_id())
+
+  gps <- x_ard |>
+    dplyr::group_keys() |>
+    dplyr::mutate(idx_nofilter = dplyr::row_number()) |>
+    cards::as_card() |>
+    cards::rename_ard_groups_shift(shift = -1) |>
+    dplyr::filter(!variable %in% ard_args$by) |>
+    dplyr::rename(label = variable_level)
+
+  overall_lbl <- x$table_body$label[x$table_body$variable == "..ard_hierarchical_overall.."]
+  if (length(overall_lbl) > 0) {
+    gps$label[gps$variable == "..ard_hierarchical_overall.."] <- overall_lbl
+    if (length(ard_args$variables) > 1) {
+      gps$group1[gps$variable == "..ard_hierarchical_overall.."] <- "..ard_hierarchical_overall.."
+    }
+  }
+
+  # match structure of ARD grouping columns to x$table_body grouping columns
+  gps <- gps |> tidyr::unnest(everything())
+  outer_cols <- if (length(ard_args$variables) > 1) {
+    ard_args$variables |>
+      utils::head(-1) |>
+      stats::setNames(paste0("group", seq_len(length(ard_args$variables) - 1)))
+  } else {
+    NULL
+  }
+  for (g in names(outer_cols)) {
+    which_g <- gps$variable == outer_cols[g]
+    gps[g][which_g, ] <- gps$variable[which_g]
+    gps[paste0(g, "_level")][which_g, ] <- gps$label[which_g]
+  }
+  x$table_body <- x$table_body |> dplyr::left_join(gps, by = names(gps) |> utils::head(-1))
 
   # re-add dropped args attribute
-  x_ard <- x_ard |> cards::as_card()
+  x_ard <- x_ard |>
+    dplyr::ungroup() |>
+    cards::as_card()
   attr(x_ard, "args") <- ard_args
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- x_ard |>
     dplyr::filter(is.na(group1)) |>
-    dplyr::pull("idx_filter") |>
+    dplyr::pull("idx_nofilter") |>
     unique()
 
-  # pull index order (each corresponding to one row of x$table_body)
-  pre_filter_idx <- x_ard |>
-    dplyr::pull("idx_filter") |>
-    unique() |>
-    setdiff(rm_idx) |>
-    as.character()
-
-  browser()
   # apply filtering
   x_ard_filter <- x_ard |> cards::ard_filter({{ filter }})
 
   # pull updated index order after filtering
-  post_filter_idx <- x_ard_filter |>
-    dplyr::pull("idx_filter") |>
+  idx_filter <- x_ard_filter |>
+    dplyr::pull("idx_nofilter") |>
     unique() |>
-    setdiff(rm_idx) |>
-    as.character()
+    setdiff(rm_idx)
 
-  # get updated (relative) row positions
-  idx <- (seq_len(length(pre_filter_idx)) |> stats::setNames(pre_filter_idx))[post_filter_idx]
-
-  # update x$cards
   if ("tmp" %in% names(x_ard_filter)) {
     x_ard_filter <- x_ard_filter |>
       dplyr::filter(is.na(tmp)) |>
       select(-"tmp")
   }
-  x$cards$tbl_hierarchical <- x_ard_filter |> select(-"idx_filter")
+
+  # update x$cards
+  x$cards$tbl_hierarchical <- x_ard_filter |> select(-"idx_nofilter")
 
   # update x$table_body
-  x$table_body <- x$table_body[idx, ]
+  x$table_body <- x$table_body[match(idx_filter, x$table_body$idx_nofilter), ] |> select(-"idx_nofilter")
 
   x
+
   # if (nrow(x$table_body) > 0) {
   #     cli::cli_inform(
   #       "For readability, all summary rows preceding at least one row that meets the filtering criteria are kept
