@@ -16,17 +16,17 @@ test_that("tbl_filter.tbl_hierarchical() works", {
   withr::local_options(width = 200)
 
   # no errors
-  expect_silent(tbl <- tbl_filter(tbl, n > 10))
+  expect_silent(tbl <- tbl_filter(tbl, sum(n) > 10))
   expect_snapshot(tbl |> as.data.frame())
-  expect_silent(tbl <- tbl_filter(tbl, p > 10))
+  expect_silent(tbl <- tbl_filter(tbl, p > 0.05))
 })
 
 test_that("tbl_filter.tbl_hierarchical(gt) works", {
   # gt = TRUE
-  expect_silent(tbl_gt <- tbl_filter(tbl, t = 10))
+  expect_silent(tbl_gt <- tbl_filter(tbl, sum(n) > 10))
 
   # gt = FALSE
-  expect_message(tbl_lt <- tbl_filter(tbl, t = 10, gt = FALSE))
+  expect_message(tbl_lt <- tbl_filter(tbl, sum(n) < 10))
 
   expect_equal(
     dplyr::inner_join(
@@ -56,22 +56,22 @@ test_that("tbl_filter.tbl_hierarchical(gt) works", {
 
 test_that("tbl_filter.tbl_hierarchical(eq) works", {
   # gt = TRUE, eq = FALSE
-  expect_silent(tbl_gt <- tbl_filter(tbl, t = 12))
+  expect_silent(tbl_gt <- tbl_filter(tbl, sum(n) > 12))
 
   # gt = TRUE, eq = TRUE
-  expect_silent(tbl_geq <- tbl_filter(tbl, t = 12, eq = TRUE))
+  expect_silent(tbl_geq <- tbl_filter(tbl, sum(n) >= 12))
   expect_gt(nrow(tbl_geq$table_body), nrow(tbl_gt$table_body))
 
   # gt = FALSE, eq = FALSE
-  expect_silent(tbl_lt <- tbl_filter(tbl, t = 12, gt = FALSE))
+  expect_silent(tbl_lt <- tbl_filter(tbl, sum(n) < 12))
 
   # gt = TRUE, eq = TRUE
-  expect_silent(tbl_leq <- tbl_filter(tbl, t = 12, gt = FALSE, eq = TRUE))
+  expect_silent(tbl_leq <- tbl_filter(tbl, sum(n) <= 12))
   expect_lt(nrow(tbl_lt$table_body), nrow(tbl_leq$table_body))
 })
 
 test_that("tbl_filter.tbl_hierarchical() returns empty table when all rows filtered out", {
-  expect_silent(tbl <- tbl_filter(tbl, t = 200))
+  expect_silent(tbl <- tbl_filter(tbl, sum(n) > 200))
   expect_equal(nrow(tbl$table_body), 0)
 })
 
@@ -85,7 +85,7 @@ test_that("tbl_filter.tbl_hierarchical() works with only one variable in x", {
     overall_row = TRUE
   )
 
-  expect_silent(tbl_single <- tbl_filter(tbl_single, t = 20))
+  expect_silent(tbl_single <- tbl_filter(tbl_single, sum(n) > 20))
   expect_equal(nrow(tbl_single$table_body), 4)
 })
 
@@ -100,37 +100,19 @@ test_that("tbl_filter.tbl_hierarchical() works when some variables not included 
     overall_row = TRUE
   )
 
-  expect_message(tbl_filter(tbl, t = 10))
+  expect_message(tbl_filter(tbl, sum(n) > 10))
 })
 
 test_that("tbl_filter.tbl_hierarchical() error messaging works", {
   # invalid x input
   expect_snapshot(
-    tbl_filter(data.frame(), t = 10),
+    tbl_filter(data.frame(), sum(n) > 10),
     error = TRUE
   )
 
-  # invalid t input
+  # invalid filter input
   expect_snapshot(
-    tbl_filter(tbl, t = "10"),
-    error = TRUE
-  )
-
-  # invalid gt input
-  expect_snapshot(
-    tbl_filter(tbl, t = "10", gt = "yes"),
-    error = TRUE
-  )
-
-  # invalid eq input
-  expect_snapshot(
-    tbl_filter(tbl, t = "10", eq = "no"),
-    error = TRUE
-  )
-
-  # invalid .stat input
-  expect_snapshot(
-    tbl_filter(tbl, t = "10", .stat = "pct"),
+    tbl_filter(tbl, 10),
     error = TRUE
   )
 })
