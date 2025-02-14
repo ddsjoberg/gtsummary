@@ -16,11 +16,9 @@ test_that("tbl_filter.tbl_hierarchical() works", {
   withr::local_options(width = 200)
 
   # no errors
-  expect_silent(tbl <- tbl_filter(tbl, t = 10))
+  expect_silent(tbl <- tbl_filter(tbl, n > 10))
   expect_snapshot(tbl |> as.data.frame())
-
-  # .stat argument works
-  expect_silent(tbl <- tbl_filter(tbl, t = 10, .stat = "p"))
+  expect_silent(tbl <- tbl_filter(tbl, p > 10))
 })
 
 test_that("tbl_filter.tbl_hierarchical(gt) works", {

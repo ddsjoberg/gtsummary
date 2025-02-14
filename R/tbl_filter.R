@@ -2,21 +2,28 @@
 #'
 #' @description `r lifecycle::badge('experimental')`\cr
 #'
-#' This function is used to filter hierarchical table rows by frequency row sum.
+#' This function is used to filter hierarchical table rows.
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
-#' @param t (scalar `numeric`)\cr
-#'   Threshold used to determine which rows will be retained.
-#' @param gt (scalar `logical`)\cr
-#'   Whether to filter for row sums greater than `t` or less than `t`. Default is greater than (`gt = TRUE`).
-#' @param eq (scalar `logical`)\cr
-#'   Whether to include the value of `t` in the filtered range, i.e. whether to use exclusive comparators (`>`, `<`) or
-#'   inclusive comparators (`>=`, `<=`) when filtering. Default is `FALSE`.
-#' @param .stat (`string`)\cr
-#'   Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
-#'   Default is `"n"`.
+#' @inheritParams cards::ard_sort
 #' @inheritParams rlang::args_dots_empty
+#'
+#' @details
+#' The `filter` argument can be used to filter out rows of a table which do not meet the criteria provided as an
+#' expression. Rows can be filtered on the values of any of the possible statistics (`n`, `p`, and `N`) provided they
+#' are included at least once in the table, as well as the values of any `by` variables. Filtering is only applied to
+#' rows that correspond to the innermost variable in the hierarchy - all outer variable (summary) rows preceding at
+#' least one inner row that meets the filtering criteria are kept regardless of whether they meet the filtering criteria
+#' themselves. In addition to filtering on individual statistic values, filters can be applied across the row (i.e.
+#' across all `by` variable values) by using aggregate functions such as `sum()` and `mean()`.
+#'
+#' Some examples of possible filters:
+#' - `filter = n > 5`
+#' - `filter = n == 2 & p < 0.05`
+#' - `filter = sum(n) > 4`
+#' - `filter = mean(n) > 4 | n > 3`
+#' - `filter = any(n > 2 & TRTA == "Xanomeline High Dose")`
 #'
 #' @return A `gtsummary` of the same class as `x`.
 #'
@@ -59,46 +66,89 @@ tbl_filter.tbl_hierarchical <- function(x, filter, ...) {
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
   by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
+  x_ard <- x$cards$tbl_hierarchical
 
-  browser()
+  # add dummy rows for variables not in include so their label rows are ordered correctly
+  not_incl <- setdiff(ard_args$variables, ard_args$include)
+  if (length(not_incl) > 0) {
+    x_ard <- x_ard |> mutate(idx_o = seq_len(nrow(x$cards$tbl_hierarchical)))
+    for (v in not_incl) {
+      i <- length(ard_args$by) + which(ard_args$variables == v)
+      x_sum_rows <- x_ard |>
+        dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
+        dplyr::group_map(function(.df, .g) {
+          g_cur <- .g[[ncol(.g) - 1]]
+          if (!is.na(g_cur) && g_cur == v) {
+            # dummy summary row to add in
+            .df[1, ] |> mutate(
+              variable = g_cur,
+              variable_level = .g[[ncol(.g)]],
+              stat_name = "no_stat",
+              stat = list(0),
+              idx_o = min(.df$idx_o) + 1,
+              tmp = TRUE
+            )
+          } else {
+            NULL
+          }
+        }, .keep = TRUE)
+      sum_row_pos <- dplyr::bind_rows(x_sum_rows) |> dplyr::pull(idx_o)
+      # adjust prior row indices to add in dummy summary rows
+      x_ard <- x_ard |>
+        dplyr::bind_rows(x_sum_rows) |>
+        dplyr::rowwise() |>
+        mutate(idx_o = .data$idx_o + sum(sum_row_pos > .data$idx_o)) |>
+        dplyr::ungroup()
+    }
+    x_ard <- x_ard |>
+      dplyr::arrange(idx_o, tmp) |>
+      select(-"idx_o")
+  }
+
   # add indices to ARD
-  x_ard <- x$cards$tbl_hierarchical |>
+  x_ard <- x_ard |>
     dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
-    dplyr::mutate(idx_sort = dplyr::cur_group_id()) |>
-    dplyr::ungroup() |>
-    cards::as_card()
+    dplyr::mutate(idx_filter = dplyr::cur_group_id()) |>
+    dplyr::ungroup()
 
   # re-add dropped args attribute
+  x_ard <- x_ard |> cards::as_card()
   attr(x_ard, "args") <- ard_args
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- x_ard |>
     dplyr::filter(is.na(group1)) |>
-    dplyr::pull("idx_sort") |>
+    dplyr::pull("idx_filter") |>
     unique()
 
   # pull index order (each corresponding to one row of x$table_body)
-  pre_sort_idx <- x_ard |>
-    dplyr::pull("idx_sort") |>
+  pre_filter_idx <- x_ard |>
+    dplyr::pull("idx_filter") |>
     unique() |>
     setdiff(rm_idx) |>
     as.character()
 
-  # apply sorting
-  x_ard_sort <- x_ard |> cards::ard_filter({{ filter }})
+  browser()
+  # apply filtering
+  x_ard_filter <- x_ard |> cards::ard_filter({{ filter }})
 
-  # pull updated index order after sorting
-  post_sort_idx <- x_ard_sort |>
-    dplyr::pull("idx_sort") |>
+  # pull updated index order after filtering
+  post_filter_idx <- x_ard_filter |>
+    dplyr::pull("idx_filter") |>
     unique() |>
     setdiff(rm_idx) |>
     as.character()
 
   # get updated (relative) row positions
-  idx <- (seq_len(length(pre_sort_idx)) |> stats::setNames(pre_sort_idx))[post_sort_idx]
+  idx <- (seq_len(length(pre_filter_idx)) |> stats::setNames(pre_filter_idx))[post_filter_idx]
 
   # update x$cards
-  x$cards$tbl_hierarchical <- x_ard_sort |> select(-"idx_sort")
+  if ("tmp" %in% names(x_ard_filter)) {
+    x_ard_filter <- x_ard_filter |>
+      dplyr::filter(is.na(tmp)) |>
+      select(-"tmp")
+  }
+  x$cards$tbl_hierarchical <- x_ard_filter |> select(-"idx_filter")
 
   # update x$table_body
   x$table_body <- x$table_body[idx, ]
