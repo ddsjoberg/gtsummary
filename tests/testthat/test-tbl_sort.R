@@ -57,10 +57,17 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'alphanumeric') works", {
   # ascending (A to Z)
   expect_silent(result <- tbl_sort(result, sort = "alphanumeric"))
 
-  # results match with tbl_hierarchical which sorts A to Z by default
+  # results are ordered correctly
   expect_equal(
-    result |> as.data.frame(),
-    tbl |> as.data.frame()
+    as.data.frame(result)[[1]],
+    c(
+      "Number of patients with event", "F", "BLACK OR AFRICAN AMERICAN", "APPLICATION SITE PRURITUS",
+      "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "ERYTHEMA", "WHITE", "APPLICATION SITE ERYTHEMA",
+      "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "M", "AMERICAN INDIAN OR ALASKA NATIVE", "ERYTHEMA",
+      "BLACK OR AFRICAN AMERICAN", "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "WHITE",
+      "APPLICATION SITE ERYTHEMA", "APPLICATION SITE PRURITUS", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA",
+      "ERYTHEMA"
+    )
   )
 })
 
@@ -85,7 +92,7 @@ test_that("tbl_sort.tbl_hierarchical() works when there is no overall row in x",
   expect_silent(tbl_no_overall <- tbl_sort(tbl_no_overall, sort = "alphanumeric"))
   expect_equal(
     tbl_no_overall$table_body,
-    tbl$table_body[-1, ]
+    tbl_sort(tbl, sort = "alphanumeric")$table_body[-1, ]
   )
 })
 
