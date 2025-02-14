@@ -380,6 +380,7 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
                         list(style_fun[[.y]]),
                         .data$fmt_fn)
       ) |>
+        cards::replace_null_statistic() |>
         cards::apply_fmt_fn()
     ) |>
     dplyr::bind_rows() |>
