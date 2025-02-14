@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9015</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +72,7 @@
 <h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
 <ul><li><p>Swapped out <code><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">dplyr::rows_update()</a></code> with a base R implementation in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> that allows for tables with mixed types in <code>x$table_styling$header$modify_*</code> columns. For example, <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has integer Ns and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> has double Ns that can now be combined. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1626" class="external-link">#1626</a>)</p></li>
 <li><p>Corrected the <code><a href="../reference/tests.html">?tests</a></code> documentation file to reflect that, as of v2.0, we no longer perform pre-processing (such as, converting a column to a factor) on variables before computing tests. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2135" class="external-link">#2135</a>)</p></li>
+<li><p>When <code><a href="../reference/add_ci.html">add_ci.tbl_summary()</a></code> was for a variable that was all <code>NA</code> we no longer return an error. Users will now see the confidence interval as <code>'NA%, NA%'</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2139" class="external-link">#2139</a>)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
