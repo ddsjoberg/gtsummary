@@ -340,7 +340,7 @@ internal_tbl_hierarchical <- function(data,
   ) |>
     append(
       list(
-        cards = list(cards |> cards::ard_sort("alphanumeric")) |> stats::setNames(calling_fun),
+        cards = list(cards) |> stats::setNames(calling_fun),
         inputs = tbl_hierarchical_inputs
       )
     ) |>

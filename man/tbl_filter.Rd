@@ -14,20 +14,6 @@ tbl_filter(x, ...)
 A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
-
-\item{t}{(scalar \code{numeric})\cr
-Threshold used to determine which rows will be retained.}
-
-\item{gt}{(scalar \code{logical})\cr
-Whether to filter for row sums greater than \code{t} or less than \code{t}. Default is greater than (\code{gt = TRUE}).}
-
-\item{eq}{(scalar \code{logical})\cr
-Whether to include the value of \code{t} in the filtered range, i.e. whether to use exclusive comparators (\code{>}, \code{<}) or
-inclusive comparators (\code{>=}, \code{<=}) when filtering. Default is \code{FALSE}.}
-
-\item{.stat}{(\code{string})\cr
-Statistic to use to calculate row sums. This statistic must be present in the table for all hierarchy levels.
-Default is \code{"n"}.}
 }
 \value{
 A \code{gtsummary} of the same class as \code{x}.
@@ -35,7 +21,25 @@ A \code{gtsummary} of the same class as \code{x}.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 
-This function is used to filter hierarchical table rows by frequency row sum.
+This function is used to filter hierarchical table rows.
+}
+\details{
+The \code{filter} argument can be used to filter out rows of a table which do not meet the criteria provided as an
+expression. Rows can be filtered on the values of any of the possible statistics (\code{n}, \code{p}, and \code{N}) provided they
+are included at least once in the table, as well as the values of any \code{by} variables. Filtering is only applied to
+rows that correspond to the innermost variable in the hierarchy - all outer variable (summary) rows preceding at
+least one inner row that meets the filtering criteria are kept regardless of whether they meet the filtering criteria
+themselves. In addition to filtering on individual statistic values, filters can be applied across the row (i.e.
+across all \code{by} variable values) by using aggregate functions such as \code{sum()} and \code{mean()}.
+
+Some examples of possible filters:
+\itemize{
+\item \code{filter = n > 5}
+\item \code{filter = n == 2 & p < 0.05}
+\item \code{filter = sum(n) > 4}
+\item \code{filter = mean(n) > 4 | n > 3}
+\item \code{filter = any(n > 2 & TRTA == "Xanomeline High Dose")}
+}
 }
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
