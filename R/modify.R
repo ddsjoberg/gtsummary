@@ -28,6 +28,9 @@
 #'   An integer specifying which level to place the spanning header.
 #' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Columns from which to remove spanning headers.
+#' @param show_hidden (scalar `logical`)\cr
+#'   Logical indicating whether to print hidden columns as well as printed columns.
+#'   Default is `FALSE`.
 #' @param update,quiet `r lifecycle::badge("deprecated")`
 #' @param include_example `r lifecycle::badge("deprecated")`
 #'
@@ -225,9 +228,10 @@ remove_spanning_header <- function(x, columns, level = 1L) {
 
 #' @name modify
 #' @export
-show_header_names <- function(x, include_example, quiet) {
+show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
   # checking input -------------------------------------------------------------
   check_class(x, "gtsummary")
+  check_scalar_logical(show_hidden)
 
   # deprecated arguments -------------------------------------------------------
   if (!missing(include_example)) {
@@ -247,8 +251,11 @@ show_header_names <- function(x, include_example, quiet) {
 
   # printing info --------------------------------------------------------------
   df_print <-
-    x$table_styling$header |>
-    dplyr::filter(!.data$hide) |>
+    x$table_styling$header %>%
+    {case_switch(
+      !show_hidden ~ dplyr::filter(., !.data$hide),
+      .default = dplyr::mutate(., column = ifelse(.data$hide, paste0(.data$column, "\U2020"), .data$column))
+    )} |>
     dplyr::select("column", "label", starts_with("modify_stat_"))
 
   # save column class abbreviations
@@ -298,10 +305,16 @@ show_header_names <- function(x, include_example, quiet) {
 
   tibble_as_cli(df_print, label = list(column = "Column Name", label = "Header"))
 
+  msg <-
+    c("* These values may be dynamically placed into headers (and other locations).",
+      "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify_header)} help for examples."
+    )
+  if (show_hidden) {
+    msg <- append(msg, values = "\U2020 Hidden columns", after = 2)
+  }
+
   cat("\n")
-  cli::cli_inform(c("* These values may be dynamically placed into headers (and other locations).",
-    "i" = "Review the {.help [{.fun modify_header}](gtsummary::modify_header)} help for examples."
-  ))
+  cli::cli_inform(message = msg)
 }
 
 .get_class_abbreviation <- function(x) {

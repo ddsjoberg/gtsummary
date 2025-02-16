@@ -8,6 +8,13 @@ test_that("show_header_names() works with tbl_summary()", {
   )
 })
 
+test_that("show_header_names(show_hidden)", {
+  expect_snapshot(
+    tbl_summary(trial, include = age, by = trt, missing = "no") |>
+      show_header_names(show_hidden = TRUE)
+  )
+})
+
 test_that("show_header_names() works with tbl_regression", {
   mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
   expect_snapshot(
