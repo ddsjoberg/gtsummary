@@ -80,8 +80,6 @@ a gtsummary table of class \code{"tbl_hierarchical"} (for \code{tbl_hierarchical
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-\emph{This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.}
-
 Use these functions to generate hierarchical tables.
 \itemize{
 \item \code{tbl_hierarchical()}: Calculates \emph{rates} of events (e.g. adverse events)
