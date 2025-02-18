@@ -283,7 +283,7 @@
     Code
       tbl_summary(trial, include = grade, type = grade ~ "dichotomous")
     Condition
-      Error in `FUN()`:
+      Error in `tbl_summary()`:
       ! Error in argument `value` for variable "grade".
       i Summary type is "dichotomous" but no summary value has been assigned.
 
