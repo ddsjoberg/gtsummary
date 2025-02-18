@@ -40,6 +40,8 @@
 
 * Corrected the `?tests` documentation file to reflect that, as of v2.0, we no longer perform pre-processing (such as, converting a column to a factor) on variables before computing tests. (#2135)
 
+* When `add_ci.tbl_summary()` was for a variable that was all `NA` we no longer return an error. Users will now see the confidence interval as `'NA%, NA%'`. (#2139) 
+
 # gtsummary 2.0.4
 
 ### New Features and Functions

@@ -575,7 +575,8 @@ tbl_summary <- function(data,
       cli::cli_abort(c(
         "Error in argument {.arg value} for variable {.val {variable}}.",
         "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
-      ))
+      ),
+      call = get_cli_abort_call())
     }
   ) |>
     stats::setNames(names(data))

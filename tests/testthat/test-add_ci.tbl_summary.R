@@ -924,3 +924,19 @@ test_that("add_ci() correctly handles tbl_summary(percent='cell')", {
   )
 })
 
+# Addresses Issue #2139
+test_that("add_ci() correctly handles columns of all NAs", {
+  expect_equal(
+    trial |>
+      mutate(death = ifelse(trt == "Drug B", NA, death)) |>
+      tbl_summary(
+        by = trt,
+        missing = "no",
+        include = death
+      ) |>
+      add_ci() |>
+      as_tibble(col_labels = FALSE) |>
+      dplyr::pull("ci_stat_2"),
+    "NA%, NA%"
+  )
+})
