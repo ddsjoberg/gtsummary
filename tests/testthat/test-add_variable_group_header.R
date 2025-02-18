@@ -8,7 +8,7 @@ test_that("add_variable_group_header() works", {
   # header row is in correct location
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$label[2],
-    "the header row	"
+    "the header row"
   )
 
   # grouped variables are indented.
