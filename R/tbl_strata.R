@@ -35,7 +35,6 @@
 #'     - `N` Overall N
 #'
 #'   The evaluated value of `.header` is also available within `tbl_strata2(.tbl_fun)`
-#' @param .stack_group_header `r lifecycle::badge("deprecated")`
 #' @param .quiet `r lifecycle::badge("deprecated")`
 #'
 #' @section Tips:
@@ -144,7 +143,6 @@ tbl_strata2 <- function(data,
                         .combine_args = NULL,
                         .header =
                           ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
-                        .stack_group_header = NULL,
                         .quiet = TRUE) {
   set_cli_abort_call()
 
@@ -184,7 +182,6 @@ tbl_strata_internal <- function(data,
                                 .combine_with = c("tbl_merge", "tbl_stack"),
                                 .combine_args = NULL,
                                 .header = NULL,
-                                .stack_group_header = NULL,
                                 .parent_fun) {
   check_string(.header)
 
@@ -244,21 +241,6 @@ tbl_strata_internal <- function(data,
                "tbl_strata2" = map2(.data$data, .data$header, .tbl_fun, ...)
         )
     )
-
-  # deprecated argument --------------------------------------------------------
-  if (!is.null(.stack_group_header) && isTRUE(.combine_with == "tbl_stack")) {
-    lifecycle::deprecate_stop(
-      when = "1.5.1",
-      what = "gtsummary::tbl_strata(.stack_group_header)",
-      details =
-        switch(isFALSE(.stack_group_header),
-               glue(
-                 "Use the following instead:\n",
-                 "gtsummary::tbl_strata(.combine_args = list(group_header = NULL))"
-               )
-        )
-    )
-  }
 
   # combining tbls -------------------------------------------------------------
   .combine_args <-
