@@ -38,7 +38,7 @@
 #'   row_header = "{strata}, n={n}"
 #' ) |>
 #'   # bold the row headers; print `x$table_body` to see hidden columns
-#'   modify_bold(columns = "label", rows = tbl_indent_id > 0)
+#'   modify_bold(columns = "label", rows = tbl_indent_id1 > 0)
 tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{strata}", quiet = FALSE) {
   set_cli_abort_call()
 
@@ -126,18 +126,18 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
         set_names(seq_along(strata)) |>
         tidyr::pivot_longer(
           cols = everything(),
-          names_to = "tbl_indent_id",
+          names_to = "tbl_indent_id1",
           values_to = first_non_hidden_col
         ) |>
         tidyr::drop_na() |>
-        dplyr::mutate(tbl_indent_id = as.integer(.data$tbl_indent_id))
+        dplyr::mutate(tbl_indent_id1 = as.integer(.data$tbl_indent_id1))
     )
 
   # before combining the headers with tbls, doing some checks ------------------
   .checks_for_nesting_stack(tbls)
 
   # adding the headers, indenting, and stacking --------------------------------
-  # add headers with their associated `tbl_indent_id`
+  # add headers with their associated `tbl_indent_id1`
   for (i in seq_len(nrow(df_headers))) {
     # indent the innermost table
     tbls[[i]]$table_styling$indent$n_spaces <-
@@ -147,7 +147,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     tbls[[i]]$table_body <-
       dplyr::bind_rows(
         lst_df_headers[[i]],
-        tbls[[i]]$table_body |> dplyr::mutate(tbl_indent_id = 0L)
+        tbls[[i]]$table_body |> dplyr::mutate(tbl_indent_id1 = 0L)
       )
   }
 
@@ -159,7 +159,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     tbl <- tbl |>
       modify_column_indent(
         columns = all_of(first_non_hidden_col),
-        rows = !!expr(.data$tbl_indent_id == !!d),
+        rows = !!expr(.data$tbl_indent_id1 == !!d),
         indent = (d - 1L) * 4L
       )
   }
@@ -192,10 +192,10 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
           call = get_cli_abort_call()
         )
       }
-      if ("tbl_indent_id" %in% names(tbls[[i]]$table_body)) {
+      if ("tbl_indent_id1" %in% names(tbls[[i]]$table_body)) {
         cli::cli_abort(
           "The {.fun tbl_strata_nested_stack} function can only be run once on a table.
-           One of the tables already contains a column named {.val tbl_indent_id}
+           One of the tables already contains a column named {.val tbl_indent_id1}
            indicating the function was previously executed.",
           call = get_cli_abort_call()
         )

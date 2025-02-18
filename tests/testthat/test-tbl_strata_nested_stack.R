@@ -17,7 +17,7 @@ test_that("tbl_strata_nested_stack() works", {
       dplyr::filter(dplyr::n() == dplyr::row_number())
 
     indent_last_row$n_spaces == 0L &&
-      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id == 1L"
+      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L"
   })
 
   # check the 2nd row is indented

@@ -66,5 +66,5 @@ tbl_strata_nested_stack(
   row_header = "{strata}, n={n}"
 ) |>
   # bold the row headers; print `x$table_body` to see hidden columns
-  modify_bold(columns = "label", rows = tbl_indent_id > 0)
+  modify_bold(columns = "label", rows = tbl_indent_id1 > 0)
 }
