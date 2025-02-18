@@ -19,7 +19,7 @@ Run show_header_names() to print the column names to the console."><meta propert
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ Run <code>show_header_names()</code> to print the column names to the console.</
 <span></span>
 <span><span class="fu">remove_spanning_header</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span>, level <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">show_header_names</span><span class="op">(</span><span class="va">x</span>, <span class="va">include_example</span>, <span class="va">quiet</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">show_header_names</span><span class="op">(</span><span class="va">x</span>, show_hidden <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">include_example</span>, <span class="va">quiet</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -117,6 +117,12 @@ An integer specifying which level to place the spanning header.</p></dd>
 <dt id="arg-columns">columns<a class="anchor" aria-label="anchor" href="#arg-columns"></a></dt>
 <dd><p>(<code><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a></code>)<br>
 Columns from which to remove spanning headers.</p></dd>
+
+
+<dt id="arg-show-hidden">show_hidden<a class="anchor" aria-label="anchor" href="#arg-show-hidden"></a></dt>
+<dd><p>(scalar <code>logical</code>)<br>
+Logical indicating whether to print hidden columns as well as printed columns.
+Default is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-include-example">include_example<a class="anchor" aria-label="anchor" href="#arg-include-example"></a></dt>
