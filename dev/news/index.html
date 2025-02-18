@@ -63,6 +63,7 @@
 <p>This does, however, introduce one change in behavior from the previous version of <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users’ expectations.</p>
 </li>
 <li><p>The <code>modify_caption(caption)</code> argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2107" class="external-link">#2107</a>)</p></li>
+<li><p>Added <code><a href="../reference/add_variable_group_header.html">add_variable_group_header()</a></code> function that adds a header row above a group of variables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2150" class="external-link">#2150</a>)</p></li>
 </ul></div>
 <div class="section level4">
 <h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
