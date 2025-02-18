@@ -32,6 +32,8 @@
 
 * Added `add_variable_group_header()` function that adds a header row above a group of variables. (#2150)
 
+* Added `show_header_names(show_hidden)` argument, which will print both hidden and printed column information. (#2147)
+
 ### Other Updates
 
 * Language translations have been updated with a handful of missing translations. (#2100)

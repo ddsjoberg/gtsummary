@@ -21,7 +21,7 @@ modify_spanning_header(
 
 remove_spanning_header(x, columns, level = 1L)
 
-show_header_names(x, include_example, quiet)
+show_header_names(x, show_hidden = FALSE, include_example, quiet)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -49,6 +49,10 @@ An integer specifying which level to place the spanning header.}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Columns from which to remove spanning headers.}
+
+\item{show_hidden}{(scalar \code{logical})\cr
+Logical indicating whether to print hidden columns as well as printed columns.
+Default is \code{FALSE}.}
 
 \item{include_example}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
