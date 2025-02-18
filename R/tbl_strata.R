@@ -100,7 +100,6 @@ tbl_strata <- function(data,
                        .combine_args = NULL,
                        .header =
                          ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
-                       .stack_group_header = NULL,
                        .quiet = NULL) {
   set_cli_abort_call()
 
@@ -127,7 +126,6 @@ tbl_strata <- function(data,
     .combine_with = .combine_with,
     .combine_args = .combine_args,
     .header = .header,
-    .stack_group_header = .stack_group_header,
     .parent_fun = "tbl_strata"
   )
 }
@@ -169,7 +167,6 @@ tbl_strata2 <- function(data,
     .combine_with = .combine_with,
     .combine_args = .combine_args,
     .header = .header,
-    .stack_group_header = .stack_group_header,
     .parent_fun = "tbl_strata2"
   )
 }
