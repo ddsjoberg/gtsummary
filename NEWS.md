@@ -30,6 +30,8 @@
 
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
 
+* Added `add_variable_group_header()` function that adds a header row above a group of variables. (#2150)
+
 ### Other Updates
 
 * Language translations have been updated with a handful of missing translations. (#2100)
