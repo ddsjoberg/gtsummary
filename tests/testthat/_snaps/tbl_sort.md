@@ -30,3 +30,19 @@
       24                                           AMERICAN INDIAN OR ALASKA NATIVE               0 (NA%)                           1 (100%)                           0 (NA%)
       25                                                                   ERYTHEMA               0 (NA%)                           1 (100%)                           0 (NA%)
 
+# tbl_sort.tbl_hierarchical() error messaging works
+
+    Code
+      tbl_sort(data.frame())
+    Condition
+      Error in `check_class()`:
+      ! The `x` argument must be class <gtsummary>, not a data frame.
+
+---
+
+    Code
+      tbl_sort(tbl, 10)
+    Condition
+      Error in `tbl_sort()`:
+      ! The `sort` argument must be a string, not a number.
+

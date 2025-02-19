@@ -214,7 +214,7 @@ internal_tbl_hierarchical <- function(data,
   if ("..ard_hierarchical_overall.." %in% variables) {
     cli::cli_abort("The {.arg variables} argument cannot include a column named {.val ..ard_hierarchical_overall..}.")
   }
-  if (!all(variables == unique(variables))) {
+  if (length(variables) != length(unique(variables))) {
     cli::cli_abort("The {.arg variables} argument cannot contain repeated variables.")
   }
 
