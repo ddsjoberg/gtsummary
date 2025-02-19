@@ -60,46 +60,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
   x_ard <- x$cards$tbl_hierarchical
 
   # add dummy rows for variables not in include so their label rows are sorted correctly
-  not_incl <- setdiff(ard_args$variables, ard_args$include)
-  if (length(not_incl) > 0) {
-    cli::cli_inform(
-      "Not all hierarchy variables present in the table were included in the {.arg include} argument.
-      These variables ({not_incl}) do not have event rate data available so the total sum of the event rates
-      for this hierarchy section will be used instead. To use true event rates for all sections of the table,
-      set {.code include = everything()} when creating your table via {.fun tbl_hierarchical}."
-    )
-
-    for (v in not_incl) {
-      i <- length(ard_args$by) + which(ard_args$variables == v)
-      x_sum_rows <- x_ard |>
-        dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
-        dplyr::group_map(function(.df, .g) {
-          # get pseudo-summary row stat value for descending sort
-          if (sort == "descending") {
-            stat_nm <- setdiff(.df$stat_name, "N")[1]
-            sum <- .df |>
-              dplyr::filter(stat_name == !!stat_nm) |>
-              dplyr::summarize(s = sum(unlist(stat))) |>
-              dplyr::pull(s)
-          }
-          g_cur <- .g[[ncol(.g) - 1]]
-          if (!is.na(g_cur) && g_cur == v) {
-            # dummy summary row to add in
-            .df[1, ] |> mutate(
-              variable = g_cur,
-              variable_level = .g[[ncol(.g)]],
-              stat_name = if (sort == "descending") stat_nm else "no_stat",
-              stat = if (sort == "descending") list(sum) else list(0),
-              tmp = TRUE
-            )
-          } else {
-            NULL
-          }
-        }, .keep = TRUE)
-
-      x_ard <- x_ard |> dplyr::bind_rows(x_sum_rows)
-    }
-  }
+  x_ard <- x_ard |> .append_not_incl(ard_args, sort)
 
   # add indices to ARD
   x_ard <- x_ard |>
@@ -170,6 +131,52 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
 
   # update x$table_body
   x$table_body <- x$table_body[match(idx_sort, x$table_body$idx_unsort), ] |> select(-"idx_unsort")
+
+  x
+}
+
+.append_not_incl <- function(x, ard_args, sort = NULL) {
+  # add dummy rows for variables not in include so their label rows are sorted correctly
+  not_incl <- setdiff(ard_args$variables, ard_args$include)
+  if (length(not_incl) > 0) {
+    cli::cli_inform(
+      "Not all hierarchy variables present in the table were included in the {.arg include} argument.
+      These variables ({not_incl}) do not have event rate data available so the total sum of the event rates
+      for this hierarchy section will be used instead. To use true event rates for all sections of the table,
+      set {.code include = everything()} when creating your table via {.fun tbl_hierarchical}."
+    )
+
+    for (v in not_incl) {
+      i <- length(ard_args$by) + which(ard_args$variables == v)
+      x_sum_rows <- x |>
+        dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
+        dplyr::group_map(function(.df, .g) {
+          # get pseudo-summary row stat value for descending sort
+          if (!is.null(sort) && sort == "descending") {
+            stat_nm <- setdiff(.df$stat_name, "N")[1]
+            sum <- .df |>
+              dplyr::filter(stat_name == !!stat_nm) |>
+              dplyr::summarize(s = sum(unlist(stat))) |>
+              dplyr::pull(s)
+          }
+          g_cur <- .g[[ncol(.g) - 1]]
+          if (!is.na(g_cur) && g_cur == v) {
+            # dummy summary row to add in
+            .df[1, ] |> mutate(
+              variable = g_cur,
+              variable_level = .g[[ncol(.g)]],
+              stat_name = if (!is.null(sort) && sort == "descending") stat_nm else "no_stat",
+              stat = if (!is.null(sort) && sort == "descending") list(sum) else list(0),
+              tmp = TRUE
+            )
+          } else {
+            NULL
+          }
+        }, .keep = TRUE)
+
+      x <- x |> dplyr::bind_rows(x_sum_rows)
+    }
+  }
 
   x
 }
