@@ -56,8 +56,45 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
   set_cli_abort_call()
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
-  by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
   x_ard <- x$cards$tbl_hierarchical
+
+  # add row indices match structure of ard to x$table_body
+  reshape_x <- .reshape_ard_compare(x, x_ard, ard_args, sort)
+  x <- reshape_x$x
+  x_ard <- reshape_x$x_ard
+
+  # get `by` variable count rows (do not correspond to a table row)
+  rm_idx <- x_ard |>
+    dplyr::filter(is.na(.data$group1)) |>
+    dplyr::pull("pre_idx") |>
+    unique()
+
+  # apply sorting
+  x_ard_sort <- x_ard |> cards::ard_sort(sort)
+
+  # pull updated index order after sorting
+  idx_sort <- x_ard_sort |>
+    dplyr::pull("pre_idx") |>
+    unique() |>
+    setdiff(rm_idx)
+
+  if ("tmp" %in% names(x_ard_sort)) {
+    x_ard_sort <- x_ard_sort |>
+      dplyr::filter(is.na(.data$tmp)) |>
+      select(-"tmp")
+  }
+
+  # update x$cards
+  x$cards$tbl_hierarchical <- x_ard_sort |> select(-"pre_idx")
+
+  # update x$table_body
+  x$table_body <- x$table_body[match(idx_sort, x$table_body$pre_idx), ] |> select(-"pre_idx")
+
+  x
+}
+
+.reshape_ard_compare <- function(x, x_ard, ard_args, sort = NULL) {
+  by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
 
   # add dummy rows for variables not in include so their label rows are sorted correctly
   x_ard <- x_ard |> .append_not_incl(ard_args, sort)
@@ -65,16 +102,18 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
   # add indices to ARD
   x_ard <- x_ard |>
     dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
-    dplyr::mutate(idx_unsort = dplyr::cur_group_id())
+    dplyr::mutate(pre_idx = dplyr::cur_group_id())
 
+  # get grouping structure
   gps <- x_ard |>
     dplyr::group_keys() |>
-    dplyr::mutate(idx_unsort = dplyr::row_number()) |>
+    dplyr::mutate(pre_idx = dplyr::row_number()) |>
     cards::as_card() |>
     cards::rename_ard_groups_shift(shift = -1) |>
-    dplyr::filter(!variable %in% ard_args$by) |>
-    dplyr::rename(label = variable_level)
+    dplyr::filter(!.data$variable %in% ard_args$by) |>
+    dplyr::rename(label = "variable_level")
 
+  # match overall row if present
   overall_lbl <- x$table_body$label[x$table_body$variable == "..ard_hierarchical_overall.."]
   if (length(overall_lbl) > 0) {
     gps$label[gps$variable == "..ard_hierarchical_overall.."] <- overall_lbl
@@ -105,34 +144,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
     cards::as_card()
   attr(x_ard, "args") <- ard_args
 
-  # get `by` variable count rows (do not correspond to a table row)
-  rm_idx <- x_ard |>
-    dplyr::filter(is.na(group1)) |>
-    dplyr::pull("idx_unsort") |>
-    unique()
-
-  # apply sorting
-  x_ard_sort <- x_ard |> cards::ard_sort(sort)
-
-  # pull updated index order after sorting
-  idx_sort <- x_ard_sort |>
-    dplyr::pull("idx_unsort") |>
-    unique() |>
-    setdiff(rm_idx)
-
-  if ("tmp" %in% names(x_ard_sort)) {
-    x_ard_sort <- x_ard_sort |>
-      dplyr::filter(is.na(tmp)) |>
-      select(-"tmp")
-  }
-
-  # update x$cards
-  x$cards$tbl_hierarchical <- x_ard_sort |> select(-"idx_unsort")
-
-  # update x$table_body
-  x$table_body <- x$table_body[match(idx_sort, x$table_body$idx_unsort), ] |> select(-"idx_unsort")
-
-  x
+  list(x = x, x_ard = x_ard)
 }
 
 .append_not_incl <- function(x, ard_args, sort = NULL) {
@@ -155,9 +167,9 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
           if (!is.null(sort) && sort == "descending") {
             stat_nm <- setdiff(.df$stat_name, "N")[1]
             sum <- .df |>
-              dplyr::filter(stat_name == !!stat_nm) |>
-              dplyr::summarize(s = sum(unlist(stat))) |>
-              dplyr::pull(s)
+              dplyr::filter(.data$stat_name == !!stat_nm) |>
+              dplyr::summarize(sum_stat = sum(unlist(.data$stat))) |>
+              dplyr::pull("sum_stat")
           }
           g_cur <- .g[[ncol(.g) - 1]]
           if (!is.na(g_cur) && g_cur == v) {
