@@ -17,28 +17,34 @@ test_that("tbl_filter.tbl_hierarchical() works", {
 
   # no errors
   expect_silent(tbl <- tbl_filter(tbl, sum(n) > 10))
+
+  # row order is retained
   expect_snapshot(tbl |> as.data.frame())
-  expect_silent(tbl <- tbl_filter(tbl, p > 0.05))
 })
 
-test_that("tbl_filter.tbl_hierarchical(gt) works", {
-  # gt = TRUE
-  expect_silent(tbl_gt <- tbl_filter(tbl, sum(n) > 10))
-
-  # gt = FALSE
-  expect_message(tbl_lt <- tbl_filter(tbl, sum(n) < 10))
-
-  expect_equal(
-    dplyr::inner_join(
-      tbl_gt$table_body,
-      tbl_lt$table_body,
-      by = names(tbl_gt$table_body)
-    ) |>
-      dplyr::filter(variable == "AETERM") |>
-      nrow(),
-    0
+test_that("tbl_filter.tbl_hierarchical(keep_empty_summary) works", {
+  tbl2 <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(SEX, RACE, AEBODSYS, AETERM),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    id = USUBJID
   )
 
+  # keep summary rows
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty_summary = TRUE))
+  expect_equal(nrow(tbl_f$table_body), 29)
+
+  # remove summary rows
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty_summary = FALSE))
+  expect_equal(nrow(tbl_f$table_body), 22)
+})
+
+test_that("tbl_filter.tbl_hierarchical() works with various different filter conditions", {
+  withr::local_options(width = 200)
+
+  expect_silent(tbl_gt <- tbl_filter(tbl, sum(n) > 10))
+  expect_silent(tbl_lt <- tbl_filter(tbl, sum(n) <= 10))
   expect_equal(
     sum(
       tbl_gt$table_body |>
@@ -52,27 +58,38 @@ test_that("tbl_filter.tbl_hierarchical(gt) works", {
       dplyr::filter(variable == "AETERM") |>
       nrow()
   )
-})
 
-test_that("tbl_filter.tbl_hierarchical(eq) works", {
-  # gt = TRUE, eq = FALSE
-  expect_silent(tbl_gt <- tbl_filter(tbl, sum(n) > 12))
+  expect_silent(tbl_f <- tbl_filter(tbl, n > 5))
+  expect_equal(nrow(tbl_f$table_body), 14)
 
-  # gt = TRUE, eq = TRUE
-  expect_silent(tbl_geq <- tbl_filter(tbl, sum(n) >= 12))
-  expect_gt(nrow(tbl_geq$table_body), nrow(tbl_gt$table_body))
+  expect_silent(tbl_f <- tbl_filter(tbl, p > 0.05))
+  expect_equal(nrow(tbl_f$table_body), 25)
 
-  # gt = FALSE, eq = FALSE
-  expect_silent(tbl_lt <- tbl_filter(tbl, sum(n) < 12))
+  expect_silent(tbl_f <- tbl_filter(tbl, n == 2 & p < 0.05))
+  expect_equal(nrow(tbl_f$table_body), 11)
 
-  # gt = TRUE, eq = TRUE
-  expect_silent(tbl_leq <- tbl_filter(tbl, sum(n) <= 12))
-  expect_lt(nrow(tbl_lt$table_body), nrow(tbl_leq$table_body))
+  expect_silent(tbl_f <- tbl_filter(tbl, mean(n) > 4 | n > 3))
+  expect_equal(nrow(tbl_f$table_body), 15)
+
+  expect_silent(tbl_f <- tbl_filter(tbl, any(n > 2 & TRTA == "Xanomeline High Dose"), keep_empty_summary = FALSE))
+  expect_snapshot(tbl_f |> as.data.frame())
 })
 
 test_that("tbl_filter.tbl_hierarchical() returns empty table when all rows filtered out", {
-  expect_silent(tbl <- tbl_filter(tbl, sum(n) > 200))
-  expect_equal(nrow(tbl$table_body), 0)
+  tbl2 <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(SEX, RACE, AETERM),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    id = USUBJID
+  )
+
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 200, keep_empty_summary = FALSE))
+  expect_equal(nrow(tbl_f$table_body), 0)
+
+  # overall row present
+  expect_silent(tbl_f <- tbl_filter(tbl, sum(n) > 200, keep_empty_summary = FALSE))
+  expect_equal(nrow(tbl_f$table_body), 1)
 })
 
 test_that("tbl_filter.tbl_hierarchical() works with only one variable in x", {
