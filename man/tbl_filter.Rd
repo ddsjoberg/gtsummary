@@ -7,13 +7,20 @@
 \usage{
 tbl_filter(x, ...)
 
-\method{tbl_filter}{tbl_hierarchical}(x, filter, ...)
+\method{tbl_filter}{tbl_hierarchical}(x, filter, keep_empty_summary = TRUE, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
 A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
+
+\item{filter}{(\code{expression})\cr an expression that is used to filter rows of the hierarchical ARD. See the Details
+section below for more information.}
+
+\item{keep_empty_summary}{(scalar \code{logical})\cr
+Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
+all rows filtered out. Default is \code{TRUE}.}
 }
 \value{
 A \code{gtsummary} of the same class as \code{x}.
@@ -21,22 +28,22 @@ A \code{gtsummary} of the same class as \code{x}.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 
-This function is used to filter hierarchical table rows.
+This function is used to filter hierarchical table rows. Filters are not applied to summary or overall rows.
 }
 \details{
 The \code{filter} argument can be used to filter out rows of a table which do not meet the criteria provided as an
 expression. Rows can be filtered on the values of any of the possible statistics (\code{n}, \code{p}, and \code{N}) provided they
 are included at least once in the table, as well as the values of any \code{by} variables. Filtering is only applied to
-rows that correspond to the innermost variable in the hierarchy - all outer variable (summary) rows preceding at
-least one inner row that meets the filtering criteria are kept regardless of whether they meet the filtering criteria
-themselves. In addition to filtering on individual statistic values, filters can be applied across the row (i.e.
-across all \code{by} variable values) by using aggregate functions such as \code{sum()} and \code{mean()}.
+rows that correspond to the innermost variable in the hierarchy - all outer variable (summary) rows are kept
+regardless of whether they meet the filtering criteria themselves. In addition to filtering on individual statistic
+values, filters can be applied across the row (i.e. across all \code{by} variable values) by using aggregate functions
+such as \code{sum()} and \code{mean()}.
 
 Some examples of possible filters:
 \itemize{
 \item \code{filter = n > 5}
 \item \code{filter = n == 2 & p < 0.05}
-\item \code{filter = sum(n) > 4}
+\item \code{filter = sum(n) >= 4}
 \item \code{filter = mean(n) > 4 | n > 3}
 \item \code{filter = any(n > 2 & TRTA == "Xanomeline High Dose")}
 }
