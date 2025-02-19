@@ -2,6 +2,20 @@
 
 ### New Features and Functions
 
+* Added function `tbl_strata_nested_stack()`. The function is similar to `tbl_strata()`, but this function nests the resulting tables, indented under each of the strata headers. (#2006)
+
+* The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
+
+* Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)
+
+  This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
+
+* Added `add_variable_group_header()` function that adds a header row above a group of variables. (#2150)
+
+### Updates to `modify_*()` Functions
+
+There were a number of updates to the family of `modify_*()` functions: functions that modify table attributes like headers, footnotes, bold, titles, etc.
+
 * Adding functions `modify_bold()`, `modify_italic()`, `remove_bold()`, and `remove_italic()` for adding or remove bold or italic styling to cells in the table. (#2125)
 
 * Updates to the handling of footnotes. Previously, header footnotes were handled with `modify_footnote()` and `modify_table_styling(footnote)`. It was possible to also include footnotes in the table body with `modify_table_styling(footnote)`, but this was largely a hidden feature. Also confusingly, a special abbreviation footnote was handled with `modify_footnote(abbreviation=TRUE)`.
@@ -20,15 +34,9 @@
 
 * Added new function `remove_column_merge()` to undo a column merge. (#2130)
 
-* Added function `tbl_strata_nested_stack()`. The function is similar to `tbl_strata()`, but this function nests the resulting tables, indented under each of the strata headers. (#2006)
-
-* The `add_ci.tbl_summary()` function now works with categorical variables that were summarized using `tbl_summary(percent = c('row', 'cell'))`. (#1929)
-
-* Adding the `tbl_merge(merge_vars)` argument. This argument allows users to specify any merging columns providing much more flexibility when merging unlike tables. Additionally, columns selected by `cards::all_ard_groups()` have been added to the default merging columns, which provides the functionality for merging the results from `tbl_hierarchical()` and `tbl_hierarchical_count()`. (#1861)
-
-  This does, however, introduce one change in behavior from the previous version of `tbl_merge()`. Previously, merging on a table with the same variable, but with a different label would be reconciled silently in the background and the first label would be used in the final table. While this may have been useful in a few edge cases, it largely was an unintuitive result. This update performs more straightforward merging and the results are more aligned with users' expectations.
-
 * The `modify_caption(caption)` argument now accepts a vector of captions, instead of just a string. Note, however, that not all print engines support a vector of captions. (#2107)
+
+* Added `show_header_names(show_hidden)` argument, which will print both hidden and printed column information. (#2147)
 
 ### Other Updates
 
