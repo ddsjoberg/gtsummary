@@ -21,7 +21,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,6 @@ are passed to <code>.tbl_fun=</code>, e.g. <code>purrr::map2(data, strata, .tbl_
 <span>  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,</span>
 <span>  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,</span>
-<span>  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .quiet <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -88,7 +87,6 @@ are passed to <code>.tbl_fun=</code>, e.g. <code>purrr::map2(data, strata, .tbl_
 <span>  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,</span>
 <span>  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,</span>
-<span>  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -146,10 +144,6 @@ curly brackets will be evaluated according to <code><a href="https://glue.tidyve
 - <code>n</code> N within stratum
 - <code>N</code> Overall N</p>
 <p>The evaluated value of <code>.header</code> is also available within <code>tbl_strata2(.tbl_fun)</code></p></dd>
-
-
-<dt id="arg--stack-group-header">.stack_group_header<a class="anchor" aria-label="anchor" href="#arg--stack-group-header"></a></dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p></dd>
 
 
 <dt id="arg--quiet">.quiet<a class="anchor" aria-label="anchor" href="#arg--quiet"></a></dt>
