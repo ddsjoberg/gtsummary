@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.4.9017</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,8 +43,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.0" id="gtsummary-210">gtsummary 2.1.0<a class="anchor" aria-label="anchor" href="#gtsummary-210"></a></h2><p class="text-muted">CRAN release: 2025-02-19</p>
 <div class="section level4">
-<h4 id="new-features-and-functions-development-version">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-development-version"></a></h4>
+<h4 id="new-features-and-functions-2-1-0">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-2-1-0"></a></h4>
 <ul><li><p>Added function <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code>. The function is similar to <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>, but this function nests the resulting tables, indented under each of the strata headers. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2006" class="external-link">#2006</a>)</p></li>
 <li><p>The <code><a href="../reference/add_ci.html">add_ci.tbl_summary()</a></code> function now works with categorical variables that were summarized using <code>tbl_summary(percent = c('row', 'cell'))</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1929" class="external-link">#1929</a>)</p></li>
 <li>
@@ -54,7 +57,7 @@
 <li><p>Added <code><a href="../reference/add_variable_group_header.html">add_variable_group_header()</a></code> function that adds a header row above a group of variables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2150" class="external-link">#2150</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="updates-to-modify_-functions-development-version">Updates to <code>modify_*()</code> Functions<a class="anchor" aria-label="anchor" href="#updates-to-modify_-functions-development-version"></a></h4>
+<h4 id="updates-to-modify_-functions-2-1-0">Updates to <code>modify_*()</code> Functions<a class="anchor" aria-label="anchor" href="#updates-to-modify_-functions-2-1-0"></a></h4>
 <p>There were a number of updates to the family of <code>modify_*()</code> functions: functions that modify table attributes like headers, footnotes, bold, titles, etc.</p>
 <ul><li><p>Adding functions <code><a href="../reference/modify_bold_italic.html">modify_bold()</a></code>, <code><a href="../reference/modify_bold_italic.html">modify_italic()</a></code>, <code><a href="../reference/modify_bold_italic.html">remove_bold()</a></code>, and <code><a href="../reference/modify_bold_italic.html">remove_italic()</a></code> for adding or remove bold or italic styling to cells in the table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2125" class="external-link">#2125</a>)</p></li>
 <li>
@@ -71,11 +74,11 @@
 <li><p>Added <code>show_header_names(show_hidden)</code> argument, which will print both hidden and printed column information. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2147" class="external-link">#2147</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<h4 id="other-updates-2-1-0">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-2-1-0"></a></h4>
 <ul><li>Language translations have been updated with a handful of missing translations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2100" class="external-link">#2100</a>)</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-2-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-1-0"></a></h4>
 <ul><li><p>Swapped out <code><a href="https://dplyr.tidyverse.org/reference/rows.html" class="external-link">dplyr::rows_update()</a></code> with a base R implementation in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> that allows for tables with mixed types in <code>x$table_styling$header$modify_*</code> columns. For example, <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has integer Ns and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> has double Ns that can now be combined. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1626" class="external-link">#1626</a>)</p></li>
 <li><p>Corrected the <code><a href="../reference/tests.html">?tests</a></code> documentation file to reflect that, as of v2.0, we no longer perform pre-processing (such as, converting a column to a factor) on variables before computing tests. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2135" class="external-link">#2135</a>)</p></li>
 <li><p>When <code><a href="../reference/add_ci.html">add_ci.tbl_summary()</a></code> was for a variable that was all <code>NA</code> we no longer return an error. Users will now see the confidence interval as <code>'NA%, NA%'</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2139" class="external-link">#2139</a>)</p></li>
