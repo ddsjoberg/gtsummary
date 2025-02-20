@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.0.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,12 +21,10 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
-    <li><a class="dropdown-item" href="../articles/inline_text.html">inline_text() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
-    <li><a class="dropdown-item" href="../articles/shiny.html">gtsummary + Shiny</a></li>
-    <li><a class="dropdown-item" href="../articles/themes.html">gtsummary + themes</a></li>
-    <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
+    <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
+    <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">News</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -115,8 +113,14 @@
         <dd>Add a custom statistic</dd>
       </dl><dl><dt>
 
-          <code><a href="separate_p_footnotes.html">separate_p_footnotes()</a></code>
+          <code><a href="add_variable_group_header.html">add_variable_group_header()</a></code>
 
+        </dt>
+        <dd>Variable Group Header</dd>
+      </dl><dl><dt>
+
+          <code><a href="separate_p_footnotes.html">separate_p_footnotes()</a></code>
+          <span class="badge lifecycle lifecycle-questioning">questioning</span>
         </dt>
         <dd>Create footnotes for individual p-values</dd>
       </dl></div><div class="section level2">
@@ -349,7 +353,7 @@
       </dl><dl><dt>
 
           <code><a href="separate_p_footnotes.html">separate_p_footnotes()</a></code>
-
+          <span class="badge lifecycle lifecycle-questioning">questioning</span>
         </dt>
         <dd>Create footnotes for individual p-values</dd>
       </dl></div><div class="section level2">
@@ -366,7 +370,7 @@
       <dl><dt>
 
           <code><a href="tbl_custom_summary.html">tbl_custom_summary()</a></code>
-
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Create a table of summary statistics using a custom summary function</dd>
       </dl><dl><dt>
@@ -378,13 +382,13 @@
       </dl><dl><dt>
 
           <code><a href="proportion_summary.html">proportion_summary()</a></code>
-
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Summarize a proportion</dd>
       </dl><dl><dt>
 
           <code><a href="ratio_summary.html">ratio_summary()</a></code>
-
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Summarize the ratio of two variables</dd>
       </dl></div><div class="section level2">
@@ -601,8 +605,14 @@
         <dd>Stratified gtsummary tables</dd>
       </dl><dl><dt>
 
-          <code><a href="tbl_split.html">tbl_split()</a></code> <code><a href="tbl_split.html">print(<i>&lt;tbl_split&gt;</i>)</a></code>
+          <code><a href="tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code>
 
+        </dt>
+        <dd>Stratified Nested Stacking</dd>
+      </dl><dl><dt>
+
+          <code><a href="tbl_split.html">tbl_split()</a></code> <code><a href="tbl_split.html">print(<i>&lt;tbl_split&gt;</i>)</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Split gtsummary table</dd>
       </dl><dl><dt>
@@ -624,16 +634,28 @@
 
       <dl><dt>
 
-          <code><a href="modify.html">modify_header()</a></code> <code><a href="modify.html">modify_footnote()</a></code> <code><a href="modify.html">modify_spanning_header()</a></code> <code><a href="modify.html">show_header_names()</a></code>
+          <code><a href="modify.html">modify_header()</a></code> <code><a href="modify.html">modify_spanning_header()</a></code> <code><a href="modify.html">remove_spanning_header()</a></code> <code><a href="modify.html">show_header_names()</a></code>
 
         </dt>
         <dd>Modify column headers, footnotes, and spanning headers</dd>
+      </dl><dl><dt>
+
+          <code><a href="modify_footnote2.html">modify_footnote_header()</a></code> <code><a href="modify_footnote2.html">modify_footnote_body()</a></code> <code><a href="modify_footnote2.html">modify_footnote_spanning_header()</a></code> <code><a href="modify_footnote2.html">remove_footnote_header()</a></code> <code><a href="modify_footnote2.html">remove_footnote_body()</a></code> <code><a href="modify_footnote2.html">remove_footnote_spanning_header()</a></code>
+
+        </dt>
+        <dd>Modify Footnotes</dd>
       </dl><dl><dt>
 
           <code><a href="modify_source_note.html">modify_source_note()</a></code> <code><a href="modify_source_note.html">remove_source_note()</a></code>
 
         </dt>
         <dd>Modify source note</dd>
+      </dl><dl><dt>
+
+          <code><a href="modify_abbreviation.html">modify_abbreviation()</a></code> <code><a href="modify_abbreviation.html">remove_abbreviation()</a></code>
+
+        </dt>
+        <dd>Modify Abbreviations</dd>
       </dl><dl><dt>
 
           <code><a href="modify_caption.html">modify_caption()</a></code>
@@ -747,16 +769,16 @@
 
       <dl><dt>
 
-          <code><a href="modify_table_styling.html">modify_table_styling()</a></code>
-
-        </dt>
-        <dd>Modify Table Styling</dd>
-      </dl><dl><dt>
-
           <code><a href="modify_table_body.html">modify_table_body()</a></code>
 
         </dt>
         <dd>Modify Table Body</dd>
+      </dl><dl><dt>
+
+          <code><a href="modify_bold_italic.html">modify_bold()</a></code> <code><a href="modify_bold_italic.html">remove_bold()</a></code> <code><a href="modify_bold_italic.html">modify_italic()</a></code> <code><a href="modify_bold_italic.html">remove_italic()</a></code>
+
+        </dt>
+        <dd>Modify Bold and Italic</dd>
       </dl><dl><dt>
 
           <code><a href="modify_column_hide.html">modify_column_hide()</a></code> <code><a href="modify_column_hide.html">modify_column_unhide()</a></code>
@@ -777,7 +799,7 @@
         <dd>Modify formatting functions</dd>
       </dl><dl><dt>
 
-          <code><a href="modify_column_merge.html">modify_column_merge()</a></code>
+          <code><a href="modify_column_merge.html">modify_column_merge()</a></code> <code><a href="modify_column_merge.html">remove_column_merge()</a></code>
 
         </dt>
         <dd>Modify Column Merging</dd>
@@ -787,6 +809,12 @@
 
         </dt>
         <dd>Modify column indentation</dd>
+      </dl><dl><dt>
+
+          <code><a href="modify_missing_symbol.html">modify_missing_symbol()</a></code>
+
+        </dt>
+        <dd>Modify Missing Substitution</dd>
       </dl></div><div class="section level2">
 
       <h3 id="select-helpers">Select Helpers<a class="anchor" aria-label="anchor" href="#select-helpers"></a></h3>
@@ -886,6 +914,12 @@
 
 
       <dl><dt>
+
+          <code><a href="as_gtsummary.html">as_gtsummary()</a></code>
+
+        </dt>
+        <dd>Create gtsummary table</dd>
+      </dl><dl><dt>
 
           <code><a href="brdg_continuous.html">brdg_continuous()</a></code>
 
