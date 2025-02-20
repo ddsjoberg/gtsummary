@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("knitr"))
+skip_if_not(is_pkg_installed(c("knitr", "broom.helpers", "cardx")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>

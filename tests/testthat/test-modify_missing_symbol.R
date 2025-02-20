@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+
 test_that("modify_missing_symbol()", {
   expect_equal(
     lm(marker ~ trt, data = trial) |>

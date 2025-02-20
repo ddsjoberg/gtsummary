@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survival", ref = "survival"))
+skip_if_not(is_pkg_installed(c("survival", "cardx", "broom.helpers")))
 
 # univariate regression models
 t0 <-
