@@ -1,4 +1,6 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+
 t1_summary <- trial |>
   select(trt, age, death) |>
   tbl_summary()
