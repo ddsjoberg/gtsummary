@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+# gtsummary 2.1.0
+
 ### New Features and Functions
 
 * Added function `tbl_strata_nested_stack()`. The function is similar to `tbl_strata()`, but this function nests the resulting tables, indented under each of the strata headers. (#2006)
