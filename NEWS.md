@@ -752,7 +752,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added a standardized mean difference method for  `tbl_svysummary()` tables.
 
-* Added `tbl_strata(.stack_group_header=)` argument to include/exclude the headers when tables are combined with `tbl_stack()`
+* Added `tbl_strata(.stack_group_header=)` argument to include/exclude the headers when tables are combined with `tbl_stack()`.
 
 * Added `tbl_strata(.quiet=)` argument.
 
