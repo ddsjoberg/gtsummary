@@ -7,7 +7,7 @@
 \usage{
 modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
 
-remove_abbreviation(x, abbreviation)
+remove_abbreviation(x, abbreviation = NULL)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
