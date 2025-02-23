@@ -49,13 +49,21 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
 
 #' @export
 #' @rdname modify_abbreviation
-remove_abbreviation <- function(x, abbreviation) {
+remove_abbreviation <- function(x, abbreviation = NULL) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_string(abbreviation)
+  check_string(abbreviation, allow_empty = TRUE)
+
+  # remove all abbreviations if abbreviation=NULL ------------------------------
+  if (is_empty(abbreviation)) {
+    x$table_styling$abbreviation <- x$table_styling$abbreviation[0,]
+    return(x)
+  }
+
+  # check passed abbreviations for validity
   if (nrow(x$table_styling$abbreviation) == 0L) {
     cli::cli_abort("There are no abbreviations to remove.", call = get_cli_abort_call())
   }
