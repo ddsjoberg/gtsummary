@@ -14,7 +14,8 @@ remove_abbreviation(x, abbreviation = NULL)
 A gtsummary object}
 
 \item{abbreviation}{(\code{string})\cr
-a string}
+a string. In \code{remove_abbreviation()}, the default value is \code{NULL}, which
+will remove all abbreviation source notes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
