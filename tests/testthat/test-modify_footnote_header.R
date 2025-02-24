@@ -59,4 +59,20 @@ test_that("remove_footnote_header(footnote)", {
       "stat_0",                NA,        "gt::md",     TRUE,    TRUE
     )
   )
+
+  # test all footnotes are removed by default
+  expect_true(
+    base_tbl_summary |>
+      modify_footnote_header(
+        footnote = "testing",
+        columns = all_stat_cols(),
+        replace = FALSE
+      ) |>
+      remove_footnote_header() |>
+      getElement("table_styling") |>
+      getElement("footnote_header") |>
+      dplyr::slice_tail(by = column, n = 1L) |>
+      getElement("remove") |>
+      unique()
+  )
 })
