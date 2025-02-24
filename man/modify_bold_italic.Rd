@@ -10,11 +10,11 @@
 \usage{
 modify_bold(x, columns, rows)
 
-remove_bold(x, columns, rows)
+remove_bold(x, columns = everything(), rows = TRUE)
 
 modify_italic(x, columns, rows)
 
-remove_italic(x, columns, rows)
+remove_italic(x, columns = everything(), rows = TRUE)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -36,6 +36,7 @@ Updated gtsummary object
 }
 \description{
 Add or remove bold and italic styling to a cell in a table.
+By default, the remove functions will remove all bold/italic styling.
 }
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

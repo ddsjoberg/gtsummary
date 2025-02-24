@@ -34,6 +34,18 @@ test_that("remove_abbreviation()", {
       NA_character_, "Q1 = First Quartile",        "gt::md",
     )
   )
+
+  # test all abbreviations removed by default
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_abbreviation("Q1 = First Quartile") |>
+      modify_abbreviation("Q3 = Third Quartile") |>
+      remove_abbreviation() |>
+      getElement("table_styling") |>
+      getElement("abbreviation") |>
+      nrow(),
+    0L
+  )
 })
 
 test_that("remove_abbreviation() messaging", {
