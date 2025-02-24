@@ -176,7 +176,7 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-remove_spanning_header <- function(x, columns, level = 1L) {
+remove_spanning_header <- function(x, columns = everything(), level = 1L) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_spanning_header = match.call()))
 

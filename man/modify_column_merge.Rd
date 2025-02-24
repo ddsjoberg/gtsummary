@@ -7,7 +7,7 @@
 \usage{
 modify_column_merge(x, pattern, rows = NULL)
 
-remove_column_merge(x, columns)
+remove_column_merge(x, columns = everything())
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr

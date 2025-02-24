@@ -106,7 +106,7 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
 
 #' @export
 #' @name modify_column_merge
-remove_column_merge <- function(x, columns) {
+remove_column_merge <- function(x, columns = everything()) {
   set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")

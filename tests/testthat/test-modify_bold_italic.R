@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+
 test_that("modify_bold/italic()/remove_bold/italic()", {
   expect_silent(
     tbl1 <- trial |>
@@ -33,5 +36,23 @@ test_that("modify_bold/italic()/remove_bold/italic()", {
     ),
     ignore_formula_env = TRUE,
     ignore_attr = TRUE
+  )
+})
+
+
+test_that("remove_bold/italic() removes all by default", {
+  expect_snapshot(
+    glm(response ~ death, trial, family = binomial()) |>
+      tbl_regression() |>
+      bold_p() |>
+      remove_bold() |>
+      as.data.frame(col_labels = FALSE)
+  )
+
+  expect_snapshot(
+    tbl_summary(trial, include = age, missing = "no") |>
+      modify_italic(columns = label, rows = variable == "age") |>
+      remove_italic() |>
+      as.data.frame(col_labels = FALSE)
   )
 })
