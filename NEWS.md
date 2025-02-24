@@ -2,6 +2,12 @@
 
 * The `remove_*()` family of functions default argument values have been updated to remove _all_ footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is `remove_spanning_headers()`, which will remove the first level spanning headers be default. (#2161)
 
+* The `tbl_strata_nested_stack(quiet)` argument documentation was updated. (#2164)
+
+* Corrected the class of objects returned from `tbl_strata_nested_stack()`.
+
+* Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Pervasively, the indentation of the single strata level was not correct.
+
 # gtsummary 2.1.0
 
 ### New Features and Functions
