@@ -5,7 +5,8 @@
 #'
 #' @inheritParams modify_footnote2
 #' @param abbreviation (`string`)\cr
-#'   a string
+#'   a string. In `remove_abbreviation()`, the default value is `NULL`, which
+#'   will remove all abbreviation source notes.
 #'
 #' @return Updated gtsummary object
 #' @name modify_abbreviation
