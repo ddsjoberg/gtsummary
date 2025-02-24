@@ -36,11 +36,11 @@ modify_footnote_spanning_header(
   text_interpret = c("md", "html")
 )
 
-remove_footnote_header(x, columns)
+remove_footnote_header(x, columns = everything())
 
-remove_footnote_body(x, columns, rows)
+remove_footnote_body(x, columns = everything(), rows = TRUE)
 
-remove_footnote_spanning_header(x, columns, level)
+remove_footnote_spanning_header(x, columns = everything(), level = 1L)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr

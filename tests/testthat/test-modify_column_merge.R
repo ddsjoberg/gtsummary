@@ -64,4 +64,15 @@ test_that("remove_column_merge() works", {
       intersect(c("conf.low", "conf.high")),
     c("conf.low", "conf.high")
   )
+
+  # all are removed by default
+  expect_equal(
+    lm(mpg ~ am, mtcars) |>
+      tbl_regression() |>
+      remove_column_merge() |>
+      getElement("table_styling") |>
+      getElement("cols_merge") |>
+      nrow(),
+    0L
+  )
 })

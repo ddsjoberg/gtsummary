@@ -65,4 +65,20 @@ test_that("remove_footnote_body(footnote)", {
     ),
     ignore_attr = TRUE
   )
+
+  # test we can remove footnotes from the cells by default
+  expect_true(
+    base_tbl_summary |>
+      modify_footnote_body(
+        footnote = "this will not appear",
+        columns = label,
+        rows = row_type == "label"
+      ) |>
+      remove_footnote_body() |>
+      getElement("table_styling") |>
+      getElement("footnote_body") |>
+      dplyr::slice_tail(by = "column", n = 1L) |>
+      getElement("remove") |>
+      unique()
+  )
 })
