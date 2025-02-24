@@ -9,7 +9,7 @@ a single source note."><meta property="og:image" content="https://www.danieldsjo
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9001</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ a single source note.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_abbreviation</span><span class="op">(</span><span class="va">x</span>, <span class="va">abbreviation</span>, text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">remove_abbreviation</span><span class="op">(</span><span class="va">x</span>, <span class="va">abbreviation</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remove_abbreviation</span><span class="op">(</span><span class="va">x</span>, abbreviation <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,7 +67,8 @@ A gtsummary object</p></dd>
 
 <dt id="arg-abbreviation">abbreviation<a class="anchor" aria-label="anchor" href="#arg-abbreviation"></a></dt>
 <dd><p>(<code>string</code>)<br>
-a string</p></dd>
+a string. In <code>remove_abbreviation()</code>, the default value is <code>NULL</code>, which
+will remove all abbreviation source notes.</p></dd>
 
 
 <dt id="arg-text-interpret">text_interpret<a class="anchor" aria-label="anchor" href="#arg-text-interpret"></a></dt>
