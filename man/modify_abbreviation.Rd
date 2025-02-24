@@ -7,14 +7,15 @@
 \usage{
 modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
 
-remove_abbreviation(x, abbreviation)
+remove_abbreviation(x, abbreviation = NULL)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
 A gtsummary object}
 
 \item{abbreviation}{(\code{string})\cr
-a string}
+a string. In \code{remove_abbreviation()}, the default value is \code{NULL}, which
+will remove all abbreviation source notes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
