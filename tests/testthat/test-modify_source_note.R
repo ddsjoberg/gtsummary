@@ -62,6 +62,18 @@ test_that("remove_source_note(source_note_id)", {
       getElement("remove") |>
       unique()
   )
+
+  # test all source notes are removed by default
+  expect_true(
+    tbl_summary(trial, include = trt) |>
+      modify_source_note("Created June 26, 2015") |>
+      modify_source_note("Created June 26, 2015") |>
+      remove_source_note() |>
+      getElement("table_styling") |>
+      getElement("source_note") |>
+      getElement("remove") |>
+      unique()
+  )
 })
 
 test_that("remove_source_note(source_note_id) messaging", {

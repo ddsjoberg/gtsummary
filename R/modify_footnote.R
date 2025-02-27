@@ -169,7 +169,7 @@ modify_footnote_spanning_header <- function(x, footnote, columns,
 
 #' @export
 #' @rdname modify_footnote2
-remove_footnote_header <- function(x, columns) {
+remove_footnote_header <- function(x, columns = everything()) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_header = match.call()))
 
@@ -197,7 +197,7 @@ remove_footnote_header <- function(x, columns) {
 
 #' @export
 #' @rdname modify_footnote2
-remove_footnote_body <- function(x, columns, rows) {
+remove_footnote_body <- function(x, columns = everything(), rows = TRUE) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_body = match.call()))
 
@@ -227,13 +227,13 @@ remove_footnote_body <- function(x, columns, rows) {
 
 #' @export
 #' @rdname modify_footnote2
-remove_footnote_spanning_header <- function(x, columns, level) {
+remove_footnote_spanning_header <- function(x, columns = everything(), level = 1L) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_scalar_integerish(level)
+  check_scalar_integerish(level, allow_empty = NULL)
   if (level < 1) {
     cli::cli_abort(
       "The {.arg level} argument must be a positive integer.",
