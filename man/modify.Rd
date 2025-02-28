@@ -19,7 +19,7 @@ modify_spanning_header(
   update
 )
 
-remove_spanning_header(x, columns, level = 1L)
+remove_spanning_header(x, columns = everything(), level = 1L)
 
 show_header_names(x, show_hidden = FALSE, include_example, quiet)
 }

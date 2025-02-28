@@ -1,4 +1,6 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+
 test_that("add_nevent.tbl_regression() works", {
   tbl <-
     glm(response ~ grade + age, trial, family = binomial) %>%

@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
 
 # first, testing deprecation
 test_that("modify_header(update,quiet) are deprecated", {
