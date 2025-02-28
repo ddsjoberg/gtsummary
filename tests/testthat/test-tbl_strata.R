@@ -228,23 +228,6 @@ test_that("tbl_strata2 works with standard use", {
   expect_equal(length(tbl$tbls), 3)
 })
 
-test_that("tbl_strata(.stack_group_header) produces defunct warning", {
-  lifecycle::expect_defunct(
-    trial |>
-      select(grade, stage, trt) |>
-      mutate(grade = paste("Grade", grade)) |>
-      tbl_strata(
-        strata = grade,
-        .tbl_fun =
-          ~ .x |>
-          tbl_summary(by = trt) |>
-          add_p(),
-        .combine_with = "tbl_stack",
-        .stack_group_header = TRUE
-      )
-  )
-})
-
 test_that("tbl_strata(.quiet) produces deprecation warning", {
   lifecycle::expect_deprecated(
     trial |>

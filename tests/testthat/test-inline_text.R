@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survival"))
+skip_if_not(is_pkg_installed(c("survival", "cardx", "broom.helpers")))
 
 # inline_text.tbl_summary tests ------------------------------------------------
 test_inline1 <- trial |> tbl_summary()
@@ -103,10 +103,6 @@ test_that("inline_text.tbl_summary", {
 
 
 test_that("inline_text.tbl_summary() messaging", {
-  # dplyr made a slight change to their messaging in v1.1.4 and that is captured here
-  # just adding this because some validated envs don't have the most recent version
-  skip_if(packageVersion("dplyr") < package_version("1.1.4"))
-
   expect_snapshot(
     error = TRUE,
     inline_text(test_inline2, variable = "age", column = "Pla5cebo")
