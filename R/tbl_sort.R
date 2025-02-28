@@ -11,7 +11,7 @@
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   a hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
-#' @inheritParams cards::ard_sort
+#' @inheritParams cards::sort_ard_hierarchical
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @return A `gtsummary` of the same class as `x`.
@@ -70,7 +70,7 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
     unique()
 
   # apply sorting
-  x_ard_sort <- x_ard |> cards::ard_sort(sort)
+  x_ard_sort <- x_ard |> cards::sort_ard_hierarchical(sort)
 
   # pull updated index order after sorting
   idx_sort <- x_ard_sort |>

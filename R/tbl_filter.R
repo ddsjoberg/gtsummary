@@ -9,7 +9,7 @@
 #' @param keep_empty_summary (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `TRUE`.
-#' @inheritParams cards::ard_filter
+#' @inheritParams cards::filter_ard_hierarchical
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @details
@@ -83,7 +83,7 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = TRUE, ..
     unique()
 
   # apply filtering
-  x_ard_filter <- x_ard |> cards::ard_filter({{ filter }})
+  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }})
 
   # pull updated index order after filtering
   idx_filter <- x_ard_filter |>
