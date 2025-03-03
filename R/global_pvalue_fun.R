@@ -14,7 +14,7 @@
 #' @return data frame
 #' @keywords internal
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car"))
+#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "car", "parameters"))
 #' lm(age ~ stage + grade, trial) |>
 #'   global_pvalue_fun(type = "III")
 NULL
