@@ -1,10 +1,15 @@
 #' Stratified Nested Stacking
 #'
+#' @description
 #' This function stratifies your data frame, builds gtsummary tables, and
 #' stacks the resulting tables in a nested style. The underlying functionality
 #' is similar to `tbl_strata()`, except the resulting tables are nested or indented
 #' within each group.
 #'
+#' **NOTE**: The header from the first table is used for the final table. Oftentimes,
+#'           this header will include incorrect Ns and _must be updated._
+#'
+#' @inheritParams tbl_stack
 #' @inheritParams tbl_strata
 #' @param data (`data.frame`)\cr
 #'   a data frame
@@ -155,7 +160,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   tbl <- tbl_stack(tbls = tbls, quiet = quiet)
 
   # cycle over the depth and indenting nesting headers
-  for (d in seq_len(nrow(df_headers) - 1L)) {
+  for (d in seq_along(strata)) {
     tbl <- tbl |>
       modify_column_indent(
         columns = all_of(first_non_hidden_col),
@@ -169,7 +174,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   tbl$inputs = list(tbl_row_split = func_inputs)
   tbl$tbls <- NULL
   tbl |>
-    structure(class = c("tbl_row_split", "gtsummary"))
+    structure(class = c("tbl_strata_nested_stack", "tbl_stack", "gtsummary"))
 }
 
 
