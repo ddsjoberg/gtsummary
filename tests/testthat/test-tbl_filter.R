@@ -126,10 +126,10 @@ test_that("tbl_filter.tbl_hierarchical() works with add_overall()", {
 
   expect_silent(tbl_o <- tbl_filter(tbl_o, n > 1))
 
-  # overall col does not affect filter
-  expect_equal(nrow(tbl_o$table_body), nrow(tbl_f$table_body))
+  # overall col does not affect rows filtered
+  expect_identical(tbl_o$table_body$label, tbl_f$table_body$label)
 
-  # tbl$cards$add_overall is filtered correctly
+  # cards$add_overall is filtered correctly
   expect_equal(nrow(tbl_o$cards$add_overall), 55)
 })
 

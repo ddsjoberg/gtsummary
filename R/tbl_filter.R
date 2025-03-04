@@ -6,10 +6,11 @@
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
+#' @param filter (`expression`)\cr
+#'   An expression that is used to filter rows of the table. See the Details section below.
 #' @param keep_empty_summary (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `TRUE`.
-#' @inheritParams cards::filter_ard_hierarchical
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @details
@@ -20,6 +21,10 @@
 #' regardless of whether they meet the filtering criteria themselves. In addition to filtering on individual statistic
 #' values, filters can be applied across the row (i.e. across all `by` variable values) by using aggregate functions
 #' such as `sum()` and `mean()`.
+#'
+#' If an overall column was added to the table (via `add_overall())`) this column will not be used in any filters (i.e.
+#' `sum(n)` will not include the overall `n` in a given row). To filter on overall statistics use the `sum()` function
+#' in your filter instead (i.e. `sum(n)` is equal to the overall column `n` across any `by` variables).
 #'
 #' Some examples of possible filters:
 #' - `filter = n > 5`
@@ -120,17 +125,15 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = TRUE, ..
   }
 
   # if overall column present, filter x$cards$add_overall
-  is_overall_col <- "add_overall" %in% names(x$cards)
-  if (is_overall_col && length(ard_args$by) > 0) {
-    # reformat data from overall column
+  if ("add_overall" %in% names(x$cards)) {
     x_ard_overall_col <- x$cards$add_overall |>
-      cards::rename_ard_groups_shift(shift = length(ard_args$by)) |>
-      dplyr::mutate(
-        group1 = ard_args$by[1],
-        group1_level = list("..overall..")
-      ) |>
-      dplyr::select(any_of(names(x_ard_filter))) |>
       dplyr::mutate(pre_idx = dplyr::row_number())
+
+    # reformat data from overall column
+    if (length(ard_args$by) > 0) {
+      x_ard_overall_col <- x_ard_overall_col |>
+        cards::rename_ard_groups_shift(shift = length(ard_args$by))
+    }
 
     # check which rows are kept after filtering x$cards$tbl_hierarchical
     # and find matching rows in x$cards$add_overall

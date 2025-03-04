@@ -15,8 +15,8 @@ A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_
 
 \item{...}{These dots are for future extensions and must be empty.}
 
-\item{filter}{(\code{expression})\cr an expression that is used to filter rows of the hierarchical ARD. See the Details
-section below for more information.}
+\item{filter}{(\code{expression})\cr
+An expression that is used to filter rows of the table. See the Details section below.}
 
 \item{keep_empty_summary}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
@@ -38,6 +38,10 @@ rows that correspond to the innermost variable in the hierarchy - all outer vari
 regardless of whether they meet the filtering criteria themselves. In addition to filtering on individual statistic
 values, filters can be applied across the row (i.e. across all \code{by} variable values) by using aggregate functions
 such as \code{sum()} and \code{mean()}.
+
+If an overall column was added to the table (via \verb{add_overall())}) this column will not be used in any filters (i.e.
+\code{sum(n)} will not include the overall \code{n} in a given row). To filter on overall statistics use the \code{sum()} function
+in your filter instead (i.e. \code{sum(n)} is equal to the overall column \code{n} across any \code{by} variables).
 
 Some examples of possible filters:
 \itemize{
