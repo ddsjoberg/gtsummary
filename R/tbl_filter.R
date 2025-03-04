@@ -68,7 +68,6 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = TRUE, ..
   set_cli_abort_call()
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
-  by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
   x_ard <- x$cards$tbl_hierarchical
 
   # add row indices to match structure of ard to x$table_body
@@ -120,10 +119,40 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = TRUE, ..
     }
   }
 
+  # if overall column present, filter x$cards$add_overall
+  is_overall_col <- "add_overall" %in% names(x$cards)
+  if (is_overall_col && length(ard_args$by) > 0) {
+    # reformat data from overall column
+    x_ard_overall_col <- x$cards$add_overall |>
+      cards::rename_ard_groups_shift(shift = length(ard_args$by)) |>
+      dplyr::mutate(
+        group1 = ard_args$by[1],
+        group1_level = list("..overall..")
+      ) |>
+      dplyr::select(any_of(names(x_ard_filter))) |>
+      dplyr::mutate(pre_idx = dplyr::row_number())
+
+    # check which rows are kept after filtering x$cards$tbl_hierarchical
+    # and find matching rows in x$cards$add_overall
+    by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
+    x_post_filter <- x_ard_filter |> select(cards::all_ard_groups(), cards::all_ard_variables(), -any_of(by_cols))
+    idx_overall_filter <- x_ard_overall_col |>
+      dplyr::inner_join(x_post_filter, by = names(x_post_filter), relationship = "many-to-many") |>
+      dplyr::pull("pre_idx") |>
+      unique()
+
+    # keep total N row
+    idx_overall_filter <- x_ard_overall_col$pre_idx |>
+      intersect(c(idx_overall_filter, which(x_ard_overall_col$variable == "..ard_total_n..")))
+
+    # update x$cards$add_overall
+    x$cards$add_overall <- x$cards$add_overall[idx_overall_filter, ]
+  }
+
   # update x$table_body
   x$table_body <- x$table_body |> select(-"pre_idx")
 
-  # update x$cards
+  # update x$cards$tbl_hierarchical
   x$cards$tbl_hierarchical <- x_ard_filter |> select(-"pre_idx")
 
   x
