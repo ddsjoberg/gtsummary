@@ -23,7 +23,7 @@ test_that("tbl_sort.tbl_hierarchical() works", {
   expect_silent(tbl <- tbl_sort(tbl, .stat = "p"))
 })
 
-test_that("tbl_sort.tbl_hierarchical(sort = 'frequency') works", {
+test_that("tbl_sort.tbl_hierarchical(sort = 'descending') works", {
   # descending frequency (default)
   expect_silent(tbl <- tbl_sort(tbl))
   expect_equal(
@@ -81,7 +81,7 @@ test_that("tbl_sort.tbl_hierarchical() works when there is no overall row in x",
     overall_row = FALSE
   )
 
-  # sort = 'frequency'
+  # sort = 'descending'
   expect_silent(tbl_no_overall <- tbl_sort(tbl_no_overall))
   expect_equal(
     tbl_no_overall$table_body,
@@ -140,6 +140,45 @@ test_that("tbl_sort.tbl_hierarchical() works when some variables not included in
   )
 
   expect_message(tbl_sort(tbl))
+})
+
+test_that("tbl_sort.tbl_hierarchical() works with add_overall()", {
+  tbl_s <- tbl_sort(tbl)
+  tbl_o <- tbl |> add_overall()
+
+  expect_silent(tbl_o <- tbl_sort(tbl_o))
+
+  # overall col does not affect sort order
+  expect_identical(tbl_o$table_body$label, tbl_s$table_body$label)
+
+  # cards$add_overall is sorted correctly
+  expect_equal(
+    tbl_o$cards$add_overall |>
+      dplyr::filter(variable == "SEX", stat_name == "n") |>
+      dplyr::pull(variable_level) |>
+      unlist(),
+    c("F", "M")
+  )
+  expect_equal(
+    tbl_o$cards$add_overall |>
+      dplyr::filter(variable == "RACE", stat_name == "n") |>
+      dplyr::pull(variable_level) |>
+      unlist(),
+    c("WHITE", "BLACK OR AFRICAN AMERICAN", "WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE")
+  )
+  expect_equal(
+    tbl_o$cards$add_overall |>
+      dplyr::filter(variable == "AETERM", stat_name == "n") |>
+      dplyr::pull(variable_level) |>
+      unlist() |>
+      as.character(),
+    c(
+      "APPLICATION SITE PRURITUS", "ERYTHEMA", "APPLICATION SITE ERYTHEMA", "DIARRHOEA", "APPLICATION SITE PRURITUS",
+      "ERYTHEMA", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "APPLICATION SITE PRURITUS",
+      "APPLICATION SITE ERYTHEMA", "ERYTHEMA", "DIARRHOEA", "ATRIOVENTRICULAR BLOCK SECOND DEGREE",
+      "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "ERYTHEMA"
+    )
+  )
 })
 
 test_that("tbl_sort.tbl_hierarchical() error messaging works", {
