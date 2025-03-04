@@ -18,9 +18,9 @@ a hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_
 \item{sort}{(\code{string})\cr
 type of sorting to perform. Value must be one of:
 \itemize{
-\item \code{"alphanumeric"} - within each hierarchical section of the ARD, rows are ordered alphanumerically (i.e. A to Z)
-by \code{variable_label} text.
-\item \code{"descending"} - within each hierarchical section of the ARD, count sums are calculated for each row and rows are
+\item \code{"alphanumeric"} - at each hierarchy level of the table, rows are ordered alphanumerically (i.e. A to Z)
+by label text.
+\item \code{"descending"} - at each hierarchy level of the table, count sums are calculated for each row and rows are
 sorted in descending order by sum. If \code{sort = "descending"}, the \code{n} statistic is used to calculate row sums if
 included in \code{statistic} for all variables, otherwise \code{p} is used. If neither \code{n} nor \code{p} are present in \code{x} for
 all variables, an error will occur.

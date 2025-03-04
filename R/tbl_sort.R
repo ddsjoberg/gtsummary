@@ -11,7 +11,16 @@
 #'
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
 #'   a hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
-#' @inheritParams cards::sort_ard_hierarchical
+#' @param sort (`string`)\cr
+#'   type of sorting to perform. Value must be one of:
+#'   - `"alphanumeric"` - at each hierarchy level of the table, rows are ordered alphanumerically (i.e. A to Z)
+#'     by label text.
+#'   - `"descending"` - at each hierarchy level of the table, count sums are calculated for each row and rows are
+#'     sorted in descending order by sum. If `sort = "descending"`, the `n` statistic is used to calculate row sums if
+#'     included in `statistic` for all variables, otherwise `p` is used. If neither `n` nor `p` are present in `x` for
+#'     all variables, an error will occur.
+#'
+#'   Defaults to `"descending"`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @return A `gtsummary` of the same class as `x`.
@@ -84,7 +93,13 @@ tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
       select(-"tmp")
   }
 
-  # update x$cards
+  # if overall column present, filter x$cards$add_overall
+  if ("add_overall" %in% names(x$cards)) {
+    # update x$cards$add_overall
+    x$cards$add_overall <- x$cards$add_overall |> cards::sort_ard_hierarchical(sort)
+  }
+
+  # update x$cards$tbl_hierarchical
   x$cards$tbl_hierarchical <- x_ard_sort |> select(-"pre_idx")
 
   # update x$table_body
