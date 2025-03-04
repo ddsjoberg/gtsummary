@@ -120,6 +120,19 @@ test_that("tbl_filter.tbl_hierarchical() works when some variables not included 
   expect_message(tbl_filter(tbl, sum(n) > 10))
 })
 
+test_that("tbl_filter.tbl_hierarchical() works with add_overall()", {
+  tbl_f <- tbl_filter(tbl, n > 1)
+  tbl_o <- tbl |> add_overall()
+
+  expect_silent(tbl_o <- tbl_filter(tbl_o, n > 1))
+
+  # overall col does not affect filter
+  expect_equal(nrow(tbl_o$table_body), nrow(tbl_f$table_body))
+
+  # tbl$cards$add_overall is filtered correctly
+  expect_equal(nrow(tbl_o$cards$add_overall), 55)
+})
+
 test_that("tbl_filter.tbl_hierarchical() error messaging works", {
   # invalid x input
   expect_snapshot(
