@@ -10,7 +10,7 @@
 #'   An expression that is used to filter rows of the table. See the Details section below.
 #' @param keep_empty_summary (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
-#'   all rows filtered out. Default is `TRUE`.
+#'   all rows filtered out. Default is `FALSE`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @details
@@ -69,7 +69,7 @@ tbl_filter <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_filter
-tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = TRUE, ...) {
+tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = FALSE, ...) {
   set_cli_abort_call()
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
