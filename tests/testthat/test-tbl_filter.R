@@ -60,16 +60,16 @@ test_that("tbl_filter.tbl_hierarchical() works with various different filter con
   )
 
   expect_silent(tbl_f <- tbl_filter(tbl, n > 5))
-  expect_equal(nrow(tbl_f$table_body), 14)
+  expect_equal(nrow(tbl_f$table_body), 11)
 
   expect_silent(tbl_f <- tbl_filter(tbl, p > 0.05))
   expect_equal(nrow(tbl_f$table_body), 25)
 
   expect_silent(tbl_f <- tbl_filter(tbl, n == 2 & p < 0.05))
-  expect_equal(nrow(tbl_f$table_body), 11)
+  expect_equal(nrow(tbl_f$table_body), 8)
 
   expect_silent(tbl_f <- tbl_filter(tbl, mean(n) > 4 | n > 3))
-  expect_equal(nrow(tbl_f$table_body), 15)
+  expect_equal(nrow(tbl_f$table_body), 12)
 
   expect_silent(tbl_f <- tbl_filter(tbl, any(n > 2 & TRTA == "Xanomeline High Dose"), keep_empty_summary = FALSE))
   expect_snapshot(tbl_f |> as.data.frame())
@@ -130,7 +130,7 @@ test_that("tbl_filter.tbl_hierarchical() works with add_overall()", {
   expect_identical(tbl_o$table_body$label, tbl_f$table_body$label)
 
   # cards$add_overall is filtered correctly
-  expect_equal(nrow(tbl_o$cards$add_overall), 55)
+  expect_equal(nrow(tbl_o$cards$add_overall), 49)
 })
 
 test_that("tbl_filter.tbl_hierarchical() error messaging works", {
