@@ -368,3 +368,27 @@ test_that("tbl_hierarchical_count table_body enables sorting", {
 
   expect_snapshot(res$table_body)
 })
+
+# tbl_hierarchical works with one arm level present ----------------------------------------
+test_that("tbl_hierarchical works with one arm level present", {
+  withr::local_options(list(width = 250))
+
+  # only records with arm Placebo remain in the data
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC == "EYE DISORDERS",
+      AEDECOD %in% c("EYE SWELLING", "EYE ALLERGY")
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      by = TRTA,
+      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(res$table_body)
+})
