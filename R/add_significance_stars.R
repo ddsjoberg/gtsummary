@@ -23,7 +23,7 @@
 #' @export
 #' @return a 'gtsummary' table
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("car")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "parameters"))
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) |>
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
