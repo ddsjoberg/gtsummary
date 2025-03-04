@@ -995,3 +995,15 @@
       10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
       # i 11 more rows
 
+# tbl_hierarchical works with one arm level present
+
+    Code
+      res$table_body
+    Output
+      # A tibble: 3 x 7
+        row_type group1 group1_level  var_label variable label         stat_1  
+        <chr>    <chr>  <chr>         <chr>     <chr>    <chr>         <chr>   
+      1 level    AESOC  EYE DISORDERS <NA>      AESOC    EYE DISORDERS 1 (1.2%)
+      2 level    AESOC  EYE DISORDERS <NA>      AEDECOD  EYE ALLERGY   1 (1.2%)
+      3 level    AESOC  EYE DISORDERS <NA>      AEDECOD  EYE SWELLING  1 (1.2%)
+
