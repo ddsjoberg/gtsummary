@@ -87,7 +87,7 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = FALSE, .
     unique()
 
   # apply filtering
-  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }})
+  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, keep_empty_summary)
 
   # pull updated index order after filtering
   idx_filter <- x_ard_filter |>
@@ -103,25 +103,6 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = FALSE, .
     x_ard_filter <- x_ard_filter |>
       dplyr::filter(is.na(.data$tmp)) |>
       select(-"tmp")
-  }
-
-  # remove summary rows from empty sections if requested
-  if (!keep_empty_summary) {
-    if (length(ard_args$variables) > 1) {
-      outer_cols <- ard_args$variables |> utils::head(-1)
-      if (!dplyr::last(ard_args$variables) %in% x$table_body$variable) {
-        x$table_body <- x$table_body |> dplyr::filter(!.data$variable %in% outer_cols)
-        x_ard_filter <- x_ard_filter |> dplyr::filter(!.data$variable %in% outer_cols)
-      } else {
-        for (v in rev(outer_cols)) {
-          empty_rows <- x$table_body |>
-            dplyr::filter(.data$variable == dplyr::lead(.data$variable) & .data$variable == v) |>
-            dplyr::pull("pre_idx")
-          x$table_body <- x$table_body |> dplyr::filter(!.data$pre_idx %in% empty_rows)
-          x_ard_filter <- x_ard_filter |> dplyr::filter(!.data$pre_idx %in% empty_rows)
-        }
-      }
-    }
   }
 
   # if overall column present, filter x$cards$add_overall

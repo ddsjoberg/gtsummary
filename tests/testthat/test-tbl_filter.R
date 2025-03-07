@@ -37,7 +37,7 @@ test_that("tbl_filter.tbl_hierarchical(keep_empty_summary) works", {
 
   # remove summary rows
   expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty_summary = FALSE))
-  expect_equal(nrow(tbl_f$table_body), 22)
+  expect_equal(nrow(tbl_f$table_body), 16)
 })
 
 test_that("tbl_filter.tbl_hierarchical() works with various different filter conditions", {
@@ -66,7 +66,7 @@ test_that("tbl_filter.tbl_hierarchical() works with various different filter con
   expect_equal(nrow(tbl_f$table_body), 25)
 
   expect_silent(tbl_f <- tbl_filter(tbl, n == 2 & p < 0.05))
-  expect_equal(nrow(tbl_f$table_body), 8)
+  expect_equal(nrow(tbl_f$table_body), 6)
 
   expect_silent(tbl_f <- tbl_filter(tbl, mean(n) > 4 | n > 3))
   expect_equal(nrow(tbl_f$table_body), 12)
