@@ -8,6 +8,10 @@
 
 * Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Pervasively, the indentation of the single strata level was not correct.
 
+* Fix in theme element `tbl_summary-arg:missing_stat` that was not being applied. (#2176)
+
+* Added a new theme element `tbl_svysummary-arg:missing_stat`
+
 # gtsummary 2.1.0
 
 ### New Features and Functions
