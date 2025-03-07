@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "broom.helpers", "cardx")))
+skip_if_not(is_pkg_installed(c("survival", "broom.helpers", "cardx", "survey")))
 
 # pkgwide-fn:prependpvalue_fun -------------------------------------------------
 test_that("pkgwide-fn:prependpvalue_fun", {
@@ -92,3 +92,35 @@ test_that("pkgwide-str:ci.sep works", {
   )
 })
 
+# tbl_summary-arg:missing_stat -------------------------------------------------
+test_that("tbl_summary-arg:missing_stat works", {
+  # works with add_difference()
+  expect_equal(
+    with_gtsummary_theme(
+      x = list("tbl_summary-arg:missing_stat" = "{N_miss} / {N_obs}"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "always") |>
+        as_tibble(col_labels = FALSE) |>
+        dplyr::pull(stat_1) |>
+        dplyr::last()
+    ),
+    "7 / 98"
+  )
+})
+
+# tbl_svysummary-arg:missing_stat ----------------------------------------------
+test_that("tbl_summary-arg:missing_stat works", {
+  expect_equal(
+    with_gtsummary_theme(
+      x = list("tbl_svysummary-arg:missing_stat" = "{N_miss} / {N_obs}"),
+      expr =
+        survey::svydesign(~1, data = trial, weights = ~1) |>
+        tbl_svysummary(by = trt, include = age, missing = "always") |>
+        as_tibble(col_labels = FALSE) |>
+        dplyr::pull(stat_1) |>
+        dplyr::last()
+    ),
+    "7 / 98"
+  )
+})
