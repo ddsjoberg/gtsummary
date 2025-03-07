@@ -214,6 +214,9 @@ internal_tbl_hierarchical <- function(data,
   if ("..ard_hierarchical_overall.." %in% variables) {
     cli::cli_abort("The {.arg variables} argument cannot include a column named {.val ..ard_hierarchical_overall..}.")
   }
+  if (length(variables) != length(unique(variables))) {
+    cli::cli_abort("The {.arg variables} argument cannot contain repeated variables.")
+  }
 
   # evaluate tidyselect
   cards::process_selectors(data[variables], include = {{ include }})
@@ -360,6 +363,7 @@ internal_tbl_hierarchical <- function(data,
         denominator = denominator,
         include = all_of(dplyr::nth(variables, -2)),
         statistic = statistic,
+        over_variables = overall_row,
         total_n = (is_empty(by) && length(include) == 1)
       )
 
@@ -411,6 +415,8 @@ internal_tbl_hierarchical <- function(data,
 }
 
 .add_gts_column_to_cards_hierarchical <- function(cards, variables, by) {
+  args <- attributes(cards)$args
+
   # adding the name of the column the stats will populate
   if (is_empty(by)) {
     cards$gts_column <-
@@ -430,7 +436,12 @@ internal_tbl_hierarchical <- function(data,
       dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
   }
 
-  cards |>
+  cards <- cards |>
     dplyr::ungroup() |>
     cards::as_card()
+
+  # re-add dropped args attribute
+  attr(cards, "args") <- args
+
+  cards
 }
