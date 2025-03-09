@@ -131,6 +131,11 @@ tbl_svysummary <- function(data,
   }
   check_string(missing_text)
 
+  if (missing(missing_stat)) {
+    missing_stat <- get_theme_element("tbl_svysummary-arg:missing_stat", default = missing_stat) # styler: off
+  }
+  check_string(missing_stat)
+
   if (missing(percent)) {
     percent <- get_theme_element("tbl_svysummary-arg:percent") %||%
       get_theme_element("tbl_summary-arg:percent", default = percent)
