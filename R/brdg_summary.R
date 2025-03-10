@@ -606,8 +606,10 @@ pier_summary_missing_row <- function(cards,
         tidyr::pivot_wider(
           id_cols = "gts_column",
           names_from = "stat_name",
-          values_from = "stat"
+          values_from = "stat",
+          values_fn = list
         ) |>
+        tidyr::unnest(cols = any_of(c("n", "N", "p", "level"))) |>
         dplyr::mutate(
           dplyr::across(-"gts_column", unlist),
           dplyr::across("level", as.character)
