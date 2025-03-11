@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9004</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>The <code>remove_*()</code> family of functions default argument values have been updated to remove <em>all</em> footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is <code>remove_spanning_headers()</code>, which will remove the first level spanning headers be default. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2161" class="external-link">#2161</a>)</p></li>
+<ul><li><p>Corrected bug causing an error in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> when more than one <code>by</code> variable level had been filtered out of the data. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2173" class="external-link">#2173</a>)</p></li>
+<li><p>The <code>remove_*()</code> family of functions default argument values have been updated to remove <em>all</em> footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is <code>remove_spanning_headers()</code>, which will remove the first level spanning headers be default. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2161" class="external-link">#2161</a>)</p></li>
 <li><p>The <code>tbl_strata_nested_stack(quiet)</code> argument documentation was updated. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2164" class="external-link">#2164</a>)</p></li>
 <li><p>Corrected the class of objects returned from <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code>.</p></li>
 <li><p>Corrected bug in <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> when the strata variable had a single level. Pervasively, the indentation of the single strata level was not correct.</p></li>
