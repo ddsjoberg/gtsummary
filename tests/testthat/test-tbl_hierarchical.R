@@ -390,5 +390,5 @@ test_that("tbl_hierarchical works with one arm level present", {
     )
   )
 
-  expect_snapshot(res$table_body)
+  expect_snapshot(as.data.frame(res))
 })

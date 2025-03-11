@@ -998,12 +998,10 @@
 # tbl_hierarchical works with one arm level present
 
     Code
-      res$table_body
+      as.data.frame(res)
     Output
-      # A tibble: 3 x 7
-        row_type group1 group1_level  var_label variable label         stat_1  
-        <chr>    <chr>  <chr>         <chr>     <chr>    <chr>         <chr>   
-      1 level    AESOC  EYE DISORDERS <NA>      AESOC    EYE DISORDERS 1 (1.2%)
-      2 level    AESOC  EYE DISORDERS <NA>      AEDECOD  EYE ALLERGY   1 (1.2%)
-      3 level    AESOC  EYE DISORDERS <NA>      AEDECOD  EYE SWELLING  1 (1.2%)
+        **Primary System Organ Class**  \n    **Dictionary-Derived Term** **Placebo**  \nN = 86
+      1                                                     EYE DISORDERS              1 (1.2%)
+      2                                                       EYE ALLERGY              1 (1.2%)
+      3                                                      EYE SWELLING              1 (1.2%)
 
