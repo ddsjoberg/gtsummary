@@ -125,3 +125,16 @@ test_that("tbl_cross(digits) works", {
   )
 })
 
+# Addresses issue #2182
+test_that("tbl_cross() works with column named missing", {
+  expect_equal(
+    trial |>
+      dplyr::mutate(missing = TRUE) |>
+      tbl_cross(stage, grade) |>
+      as.data.frame(),
+    trial |>
+      tbl_cross(stage, grade) |>
+      as.data.frame()
+  )
+})
+
