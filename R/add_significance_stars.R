@@ -118,7 +118,7 @@ add_significance_stars <- function(x,
     unlist() |>
     paste(collapse = "; ")
 
-  x <- modify_footnote_header(x, footnote = p_footnote, columns = any_of(pattern_cols[1]))
+  x <- modify_footnote_header(x, footnote = p_footnote, columns = any_of(pattern_cols[1]), replace = FALSE)
 
   # adding stars column --------------------------------------------------------
   thresholds <- union(thresholds, 0L)
