@@ -89,3 +89,20 @@ test_that("add_significance_stars(pattern) messaging", {
     "no stars will be added"
   )
 })
+
+# check the stars footnote does not replace the tests footnote, issue #2184
+test_that("add_significance_stars() footnote", {
+  expect_equal(
+    trial |>
+      tbl_summary(by = trt, include = c(age, grade)) |>
+      add_p() |>
+      add_significance_stars() |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("footnote_header") |>
+      dplyr::filter(column == "p.value") |>
+      dplyr::pull(footnote),
+    c("Wilcoxon rank sum test; Pearson's Chi-squared test",
+      "*p<0.05; **p<0.01; ***p<0.001")
+  )
+})
