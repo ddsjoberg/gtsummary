@@ -61,9 +61,10 @@ tbl_sort <- function(x, ...) {
 
 #' @rdname tbl_sort
 #' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = "descending", ...) {
+tbl_sort.tbl_hierarchical <- function(x, sort = c("descending", "alphanumeric"), ...) {
   set_cli_abort_call()
 
+  sort <- arg_match(sort, error_call = get_cli_abort_call())
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
   x_ard <- x$cards$tbl_hierarchical
 

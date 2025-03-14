@@ -41,8 +41,8 @@
 ---
 
     Code
-      tbl_sort(tbl, 10)
+      tbl_sort(tbl, "10")
     Condition
       Error in `tbl_sort()`:
-      ! The `sort` argument must be a string, not a number.
+      ! `sort` must be one of "descending" or "alphanumeric", not "10".
 

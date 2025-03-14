@@ -7,7 +7,7 @@
 \usage{
 tbl_sort(x, ...)
 
-\method{tbl_sort}{tbl_hierarchical}(x, sort = "descending", ...)
+\method{tbl_sort}{tbl_hierarchical}(x, sort = c("descending", "alphanumeric"), ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
