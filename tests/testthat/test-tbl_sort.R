@@ -190,7 +190,7 @@ test_that("tbl_sort.tbl_hierarchical() error messaging works", {
 
   # invalid sort input
   expect_snapshot(
-    tbl_sort(tbl, 10),
+    tbl_sort(tbl, "10"),
     error = TRUE
   )
 })
