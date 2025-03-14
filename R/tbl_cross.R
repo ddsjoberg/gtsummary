@@ -132,7 +132,7 @@ tbl_cross <- function(data,
       across(
         all_of(c(row, col)),
         ~ switch(
-          missing,
+          .env$missing,
           "no" = .,
           "ifany" =
             case_switch(

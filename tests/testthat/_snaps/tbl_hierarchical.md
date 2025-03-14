@@ -995,3 +995,13 @@
       10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
       # i 11 more rows
 
+# tbl_hierarchical works with one arm level present
+
+    Code
+      as.data.frame(res)
+    Output
+        **Primary System Organ Class**  \n    **Dictionary-Derived Term** **Placebo**  \nN = 86
+      1                                                     EYE DISORDERS              1 (1.2%)
+      2                                                       EYE ALLERGY              1 (1.2%)
+      3                                                      EYE SWELLING              1 (1.2%)
+
