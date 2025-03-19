@@ -8,7 +8,7 @@
 #'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
 #' @param filter (`expression`)\cr
 #'   An expression that is used to filter rows of the table. See the Details section below.
-#' @param keep_empty_summary (scalar `logical`)\cr
+#' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
 #' @inheritParams rlang::args_dots_empty
@@ -69,7 +69,7 @@ tbl_filter <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_filter
-tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = FALSE, ...) {
+tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, ...) {
   set_cli_abort_call()
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
@@ -87,7 +87,7 @@ tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty_summary = FALSE, .
     unique()
 
   # apply filtering
-  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, keep_empty_summary)
+  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, keep_empty)
 
   # pull updated index order after filtering
   idx_filter <- x_ard_filter |>

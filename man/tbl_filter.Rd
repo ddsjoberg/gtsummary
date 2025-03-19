@@ -7,7 +7,7 @@
 \usage{
 tbl_filter(x, ...)
 
-\method{tbl_filter}{tbl_hierarchical}(x, filter, keep_empty_summary = FALSE, ...)
+\method{tbl_filter}{tbl_hierarchical}(x, filter, keep_empty = FALSE, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
@@ -18,7 +18,7 @@ A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_
 \item{filter}{(\code{expression})\cr
 An expression that is used to filter rows of the table. See the Details section below.}
 
-\item{keep_empty_summary}{(scalar \code{logical})\cr
+\item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 all rows filtered out. Default is \code{FALSE}.}
 }
