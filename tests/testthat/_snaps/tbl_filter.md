@@ -50,5 +50,5 @@
       tbl_filter(tbl, 10)
     Condition
       Error in `tbl_filter()`:
-      ! `filter` must be an expression.
+      ! The `filter` argument must be an expression.
 

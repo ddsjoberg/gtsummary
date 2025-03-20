@@ -22,7 +22,7 @@ test_that("tbl_filter.tbl_hierarchical() works", {
   expect_snapshot(tbl |> as.data.frame())
 })
 
-test_that("tbl_filter.tbl_hierarchical(keep_empty_summary) works", {
+test_that("tbl_filter.tbl_hierarchical(keep_empty) works", {
   tbl2 <- tbl_hierarchical(
     data = ADAE_subset,
     variables = c(SEX, RACE, AEBODSYS, AETERM),
@@ -32,11 +32,11 @@ test_that("tbl_filter.tbl_hierarchical(keep_empty_summary) works", {
   )
 
   # keep summary rows
-  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty_summary = TRUE))
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty = TRUE))
   expect_equal(nrow(tbl_f$table_body), 29)
 
   # remove summary rows
-  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty_summary = FALSE))
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 10, keep_empty = FALSE))
   expect_equal(nrow(tbl_f$table_body), 16)
 })
 
@@ -71,7 +71,7 @@ test_that("tbl_filter.tbl_hierarchical() works with various different filter con
   expect_silent(tbl_f <- tbl_filter(tbl, mean(n) > 4 | n > 3))
   expect_equal(nrow(tbl_f$table_body), 12)
 
-  expect_silent(tbl_f <- tbl_filter(tbl, any(n > 2 & TRTA == "Xanomeline High Dose"), keep_empty_summary = FALSE))
+  expect_silent(tbl_f <- tbl_filter(tbl, any(n > 2 & TRTA == "Xanomeline High Dose"), keep_empty = FALSE))
   expect_snapshot(tbl_f |> as.data.frame())
 })
 
@@ -84,11 +84,11 @@ test_that("tbl_filter.tbl_hierarchical() returns empty table when all rows filte
     id = USUBJID
   )
 
-  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 200, keep_empty_summary = FALSE))
+  expect_silent(tbl_f <- tbl_filter(tbl2, sum(n) > 200, keep_empty = FALSE))
   expect_equal(nrow(tbl_f$table_body), 0)
 
   # overall row present
-  expect_silent(tbl_f <- tbl_filter(tbl, sum(n) > 200, keep_empty_summary = FALSE))
+  expect_silent(tbl_f <- tbl_filter(tbl, sum(n) > 200, keep_empty = FALSE))
   expect_equal(nrow(tbl_f$table_body), 1)
 })
 
