@@ -715,3 +715,17 @@ test_that("tbl_summary(statistic) double curly bracket escaping", {
     glue("Me{{an: {{{style_number(mean(trial$ttdeath), 1)}}}")
   )
 })
+
+# addressing issue #2188
+test_that("tbl_summary() column order for lgl by variable", {
+  expect_equal(
+    mtcars |>
+      dplyr::mutate(am = as.logical(am)) |>
+      tbl_summary(by = am, include = mpg) |>
+      add_overall() |>
+      as.data.frame(col_label = FALSE) |>
+      names(),
+    c("label", "stat_0", "stat_1", "stat_2")
+  )
+})
+
