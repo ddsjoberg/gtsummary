@@ -165,3 +165,17 @@ test_that("tbl_strata_nested_stack() messaging", {
     )
   )
 })
+
+# addressing issue #2179
+test_that("tbl_strata_nested_stack() unobserved combinations", {
+  # no error when there are unobserved combinations of the strata variables
+  expect_silent(
+    tbl_strata_nested_stack(
+      cards::ADTTE,
+      strata = c(SEX, RACE),
+      .tbl_fun = ~ .x |>
+        tbl_summary(include = AGE, type = AGE ~ "continuous"),
+      quiet = TRUE
+    )
+  )
+})
