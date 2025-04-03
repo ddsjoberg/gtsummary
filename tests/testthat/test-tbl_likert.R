@@ -119,17 +119,18 @@ test_that("tbl_likert(sort)", {
 # addressing issue # 2195
 # check the order of the variables match the input, and the formatting of the N
 test_that("tbl_likert(sort)", {
-  withr::local_options(list(width = 250))
-  expect_snapshot(
-    withr::with_seed(
-      seed = 11235,
-      data.frame(
-        recommend_friend = sample(levels, size = 1001, replace = TRUE) |> factor(levels = levels),
-        regret_purchase = sample(levels, size = 1001, replace = TRUE) |> factor(levels = levels)
-      )
-    ) |>
+  expect_silent(
+    tbl <-
+      withr::with_seed(
+        seed = 11235,
+        data.frame(
+          recommend_friend = sample(levels, size = 1001, replace = TRUE) |> factor(levels = levels),
+          regret_purchase = sample(levels, size = 1001, replace = TRUE) |> factor(levels = levels)
+        )
+      ) |>
       tbl_likert(include = c(regret_purchase, recommend_friend)) |>
-      add_n() |>
-      as.data.frame()
+      add_n()
   )
+  expect_equal(tbl$table_body$variable, c("regret_purchase", "recommend_friend"))
+  expect_equal(tbl$table_body$n |> unique(), "1,001")
 })
