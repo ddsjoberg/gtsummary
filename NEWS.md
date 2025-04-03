@@ -18,6 +18,10 @@
 
 * Added a new theme element `tbl_svysummary-arg:missing_stat`
 
+* Corrected bug in `tbl_likert()` where variables in table always appeared in alphabetical order. (#2195) 
+
+* Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
+
 * Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
 
 # gtsummary 2.1.0
