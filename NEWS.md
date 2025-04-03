@@ -18,6 +18,10 @@
 
 * Added a new theme element `tbl_svysummary-arg:missing_stat`
 
+* Corrected bug in `tbl_likert()` where variables in table always appeared in alphabetical order. (#2195) 
+
+* Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
+
 # gtsummary 2.1.0
 
 ### New Features and Functions
