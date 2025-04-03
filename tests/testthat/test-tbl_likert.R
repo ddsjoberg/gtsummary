@@ -119,6 +119,7 @@ test_that("tbl_likert(sort)", {
 # addressing issue # 2195
 # check the order of the variables match the input, and the formatting of the N
 test_that("tbl_likert(sort)", {
+  withr::local_options(list(width = 250))
   expect_snapshot(
     withr::with_seed(
       seed = 11235,
