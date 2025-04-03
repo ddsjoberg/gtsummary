@@ -22,6 +22,8 @@
 
 * Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
 
+* Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
+
 # gtsummary 2.1.0
 
 ### New Features and Functions
