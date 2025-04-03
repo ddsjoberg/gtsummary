@@ -47,3 +47,19 @@
       1               7 (35%)
       2               7 (35%)
 
+---
+
+    Code
+      as.data.frame(add_n(tbl_likert(withr::with_seed(seed = 11235, data.frame(
+        recommend_friend = factor(sample(levels, size = 1001, replace = TRUE),
+        levels = levels), regret_purchase = factor(sample(levels, size = 1001,
+          replace = TRUE), levels = levels))), include = c(regret_purchase,
+        recommend_friend))))
+    Output
+        **Characteristic** **N** **Strongly Disagree** **Disagree** **Agree**
+      1    regret_purchase 1,001             259 (26%)    266 (27%) 235 (23%)
+      2   recommend_friend 1,001             233 (23%)    262 (26%) 251 (25%)
+        **Strongly Agree**
+      1          241 (24%)
+      2          255 (25%)
+
