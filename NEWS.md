@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `add_variable_group_header()` function has been generalized to work with gtsummary tables, where previously only `'tbl_summary'` were accepted. (#2197)
+
 * The footnote placed on the p-value column by `add_significance_stars()` no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (#2184)
 
 * Fixed bug in `tbl_cross()` when a column was named `'missing'`. (#2182)
