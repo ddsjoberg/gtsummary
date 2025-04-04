@@ -182,6 +182,8 @@ ard_survival <-
     variables = "trt",
     times = c(12, 24)
   ) |> 
+  # retain survival time statistics
+  dplyr::filter(variable == "time") |> 
   update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = "xx%")
 
 # ARD with the mean post-treatment marker level with 95%CI
