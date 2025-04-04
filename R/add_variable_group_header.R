@@ -44,11 +44,22 @@
 #'   ) |>
 #'   modify_caption("**Study Exclusion Criteria**")
 add_variable_group_header <- function(x, header, variables, indent = 4L) {
+  set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
-  check_class(x, "tbl_summary")
+  check_class(x, "gtsummary")
   check_string(header)
   check_scalar_integerish(indent)
+
+  # check the necessary structure is in place
+  if (!all(c("variable", "row_type", "label") %in% names(x$table_body)) ||
+      .first_unhidden_column(x) != "label") {
+    cli::cli_abort(
+      "The {.cls gtsummary} table must include columns {.val {c('variable', 'row_type', 'label')}}
+       in the {.code x$table_body} data frame and the {.val label} column must appear first.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # process variables ----------------------------------------------------------
   cards::process_selectors(scope_table_body(x$table_body), variables = {{ variables }})
