@@ -1956,6 +1956,8 @@ them with <code><a href="https://insightsengineering.github.io/cards/latest-tag/
 <span>    variables <span class="op">=</span> <span class="st">"trt"</span>,</span>
 <span>    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># retain survival time statistics</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fn</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fn <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ARD with the mean post-treatment marker level with 95%CI</span></span>
