@@ -18,7 +18,8 @@ Variables to group that appear in \code{x$table_body}.
 Selected variables should be appear consecutively in table.}
 
 \item{indent}{(\code{integer})\cr
-An integer indicating how many space to indent text}
+An integer indicating how many space to indent text.
+All rows in the group will be indented by this amount. Default is \code{4}.}
 }
 \value{
 a gtsummary table
@@ -37,6 +38,7 @@ for example, \code{bold_labels()} will bold the incorrect rows after running
 this function.
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car", "broom", "broom.helpers", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 set.seed(11234)
 data.frame(
@@ -54,4 +56,24 @@ data.frame(
     variables = starts_with("exclusion_")
   ) |>
   modify_caption("**Study Exclusion Criteria**")
+
+# Example 2 ----------------------------------
+lm(marker ~ trt + grade + age, data = trial) |>
+  tbl_regression() |>
+  add_global_p(keep = TRUE, include = grade) |>
+  add_variable_group_header(
+    header = "Treatment:",
+    variables = trt
+  ) |>
+  add_variable_group_header(
+    header = "Covariate:",
+    variables = -trt
+  ) |>
+  # indent levels 8 spaces
+  modify_column_indent(
+    columns = "label",
+    rows = row_type == "level",
+    indent = 8L
+  )
+\dontshow{\}) # examplesIf}
 }
