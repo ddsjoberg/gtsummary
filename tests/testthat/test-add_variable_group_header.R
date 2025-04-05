@@ -1,3 +1,5 @@
+skip_if_not(is_pkg_installed(c("cardx", "car", "broom", "broom.helpers", "parameters", "survey")))
+
 test_that("add_variable_group_header() works", {
   expect_silent(
     tbl <- trial |>
