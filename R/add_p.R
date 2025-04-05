@@ -252,7 +252,8 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
                 test.args = test.args[[variable]],
                 adj.vars = adj.vars,
                 conf.level = conf.level,
-                continuous_variable = continuous_variable
+                continuous_variable = continuous_variable,
+                tbl = x
               )
             )
           )

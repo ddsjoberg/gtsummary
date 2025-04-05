@@ -634,3 +634,64 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
       as.data.frame()
   )
 })
+
+test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.test()", {
+  # check the results are correct by matching ARDs
+  expect_equal(
+    trial |>
+      dplyr::mutate(response = factor(response, levels = c(0, 1), labels = c("no", "yes"))) |>
+      tbl_summary(
+        by = trt,
+        include = response
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("response") |>
+      dplyr::select(-"fmt_fn"),
+    trial |>
+      dplyr::mutate(response = response == 1) |>
+      cardx::ard_stats_prop_test(by = trt, variable = response) |>
+      dplyr::select(-"fmt_fn")
+  )
+
+  # check when the value presented is the opposite (FALSE)
+  expect_equal(
+    trial |>
+      dplyr::mutate(response = as.logical(response)) |>
+      tbl_summary(
+        by = trt,
+        include = response,
+        value = list(response = FALSE)
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("response") |>
+      dplyr::select(-"fmt_fn"),
+    trial |>
+      dplyr::mutate(response = response == 0) |>
+      cardx::ard_stats_prop_test(by = trt, variable = response) |>
+      dplyr::select(-"fmt_fn")
+  )
+
+  # check results when variable has >2 levels
+  expect_equal(
+    trial |>
+      tbl_summary(
+        by = trt,
+        include = grade,
+        value = list(grade = "I")
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("grade") |>
+      dplyr::select(-"fmt_fn"),
+    trial |>
+      dplyr::mutate(grade = grade == "I") |>
+      cardx::ard_stats_prop_test(by = trt, variable = grade) |>
+      dplyr::select(-"fmt_fn")
+  )
+})
+
