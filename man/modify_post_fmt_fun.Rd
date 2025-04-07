@@ -28,6 +28,7 @@ Review \link[=rows_argument]{rows argument details}.}
 Updated gtsummary object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Apply a formatting function after the primary formatting functions have been applied.
 The function is similar to \code{gt::text_transform()}.
 }

@@ -1,5 +1,6 @@
 #' Modify post formatting
 #'
+#' `r lifecycle::badge('experimental')`\cr
 #' Apply a formatting function after the primary formatting functions have been applied.
 #' The function is similar to `gt::text_transform()`.
 #'
