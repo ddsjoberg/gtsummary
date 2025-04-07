@@ -228,9 +228,24 @@ test_that("as_tibble works with grouped columns", {
   )
 })
 
-test_that("as.data.frame works as expected", {
+test_that("as.data.frame() works as expected", {
   expect_equal(
     t1_summary |> as_tibble() |> as.data.frame(),
     t1_summary |> as.data.frame()
+  )
+})
+
+test_that("as.data.frame() works with modify_post_fmt_fun()", {
+  expect_equal(
+    data.frame(x = FALSE) |>
+      tbl_summary(type = x ~ "categorical") |>
+      modify_post_fmt_fun(
+        fmt_fun = ~ifelse(. == "0 (0%)", "0", .),
+        columns = all_stat_cols()
+      ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("stat_0") |>
+      dplyr::last(),
+    "0"
   )
 })
