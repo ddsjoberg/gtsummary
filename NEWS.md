@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added function `modify_post_fmt_fun()` to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to `gt::text_transform()`. (#2014)
+
 * Data pre-processing has now been re-introduced for calculations in `add_p()` and `add_difference()`. Data pre-processing steps  were removed in the v2.0 release; however, in some cases---particularly `add_difference()` for dichotomous variables---the reduced functionality was affecting the user experience. See `?tests` for details on data pre-processing. (#2165)
 
 * The `add_variable_group_header()` function has been generalized to work with gtsummary tables, where previously only `'tbl_summary'` were accepted. (#2197)

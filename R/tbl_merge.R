@@ -189,7 +189,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
 
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
                        "footnote_spanning_header", "abbreviation", "source_note",
-                       "fmt_fun", "indent", "text_format", "fmt_missing", "cols_merge")) {
+                       "fmt_fun", "post_fmt_fun", "indent", "text_format",
+                       "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map(
         rev(seq_along(tbls)),
