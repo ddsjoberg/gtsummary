@@ -29,7 +29,7 @@ test_that("as_kable(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(kbl),
-    c("tibble", "fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
+    c("tibble", "fmt", "post_fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
       "fmt_missing", "cols_hide", "remove_line_breaks", "kable")
   )
 })

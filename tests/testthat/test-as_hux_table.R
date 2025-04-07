@@ -25,7 +25,7 @@ test_that("as_hux_table(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(ht),
-    c("tibble", "fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
+    c("tibble", "fmt", "post_fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
       "add_footnote", "abbreviations", "source_note", "set_bold", "set_italic",
       "fmt_missing", "insert_row", "set_markdown", "align", "set_number_format")
   )
