@@ -248,4 +248,23 @@ test_that("as.data.frame() works with modify_post_fmt_fun()", {
       dplyr::last(),
     "0"
   )
+
+  expect_equal(
+    lm(age ~ grade, trial) |>
+      tbl_regression() |>
+      modify_table_styling(
+        columns = c(estimate, conf.low),
+        rows = reference_row %in% TRUE,
+        missing_symbol = "Ref."
+      ) |>
+      modify_post_fmt_fun(
+        fmt_fun = ~paste(., "YEP"),
+        columns = c(estimate, conf.low),
+        rows = reference_row %in% TRUE
+      ) |>
+      as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
+      dplyr::pull(estimate) |>
+      getElement(2L),
+    "Ref. YEP"
+  )
 })
