@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9012</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.1.0.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Data pre-processing has now been re-introduced for calculations in <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code>. Data pre-processing steps were removed in the v2.0 release; however, in some cases—particularly <code><a href="../reference/add_difference.html">add_difference()</a></code> for dichotomous variables—the reduced functionality was affecting the user experience. See <code><a href="../reference/tests.html">?tests</a></code> for details on data pre-processing. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2165" class="external-link">#2165</a>)</p></li>
+<ul><li><p>Added function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to <code><a href="https://gt.rstudio.com/reference/text_transform.html" class="external-link">gt::text_transform()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2014" class="external-link">#2014</a>)</p></li>
+<li><p>Data pre-processing has now been re-introduced for calculations in <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code>. Data pre-processing steps were removed in the v2.0 release; however, in some cases—particularly <code><a href="../reference/add_difference.html">add_difference()</a></code> for dichotomous variables—the reduced functionality was affecting the user experience. See <code><a href="../reference/tests.html">?tests</a></code> for details on data pre-processing. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2165" class="external-link">#2165</a>)</p></li>
 <li><p>The <code><a href="../reference/add_variable_group_header.html">add_variable_group_header()</a></code> function has been generalized to work with gtsummary tables, where previously only <code>'tbl_summary'</code> were accepted. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2197" class="external-link">#2197</a>)</p></li>
 <li><p>The footnote placed on the p-value column by <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2184" class="external-link">#2184</a>)</p></li>
 <li><p>Fixed bug in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> when a column was named <code>'missing'</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2182" class="external-link">#2182</a>)</p></li>
