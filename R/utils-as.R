@@ -215,7 +215,27 @@
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
     x$table_styling$fmt_fun %>%
-    # filter(.data$column %in% .cols_to_show(x)) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      row_numbers =
+        switch(nrow(.) == 0,
+               integer(0)
+        ) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows,
+                                  return_when_null = seq_len(nrow(x$table_body))
+        ) %>% list()
+    ) %>%
+    dplyr::select(-"rows") %>%
+    tidyr::unnest("row_numbers") %>%
+    dplyr::group_by(.data$column, .data$row_numbers) %>%
+    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
+    dplyr::ungroup() %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
+    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+
+  # post_fmt_fun --------------------------------------------------------------------
+  x$table_styling$post_fmt_fun <-
+    x$table_styling$post_fmt_fun %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       row_numbers =
