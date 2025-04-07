@@ -190,8 +190,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
       ~ expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
         columns = !!x$table_styling$post_fmt_fun$column[[.x]],
         row_numbers = !!x$table_styling$post_fmt_fun$row_numbers[[.x]],
-        fmt_fun = !!x$table_styling$post_fmt_fun$fmt_fun[[.x]],
-        update_from = !!x$table_body
+        fmt_fun = !!x$table_styling$post_fmt_fun$fmt_fun[[.x]]
       ))
     )
 
@@ -212,7 +211,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   tibble_calls
 }
 
-.apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
+.apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from = data) {
   # apply formatting functions
   df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%
