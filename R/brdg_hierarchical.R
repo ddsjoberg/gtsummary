@@ -366,7 +366,7 @@ pier_summary_hierarchical <- function(cards,
 
   # if overall_row present, change TRUE to NULL in applicable rows for compatibility when unnesting
   last_gp <- df_result_levels |> select(cards::all_ard_groups("names")) |> names() |> dplyr::last()
-  if ("..ard_hierarchical_overall.." %in% df_result_levels[[last_gp]]) {
+  if (!is.na(last_gp) && "..ard_hierarchical_overall.." %in% df_result_levels[[last_gp]]) {
     idx_overall <- which(df_result_levels[[last_gp]] == "..ard_hierarchical_overall..")
     df_result_levels[[paste0(last_gp, "_level")]][idx_overall] <- list(NULL)
   }
