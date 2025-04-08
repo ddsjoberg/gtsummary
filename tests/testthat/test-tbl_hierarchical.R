@@ -407,7 +407,7 @@ test_that("tbl_hierarchical table_body group variables are correct with no by", 
     tbl_hierarchical(
       data = ADAE_subset,
       variables = c(AESOC, AEDECOD),
-      denominator = adsl,
+      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
       id = USUBJID
     )
   )
