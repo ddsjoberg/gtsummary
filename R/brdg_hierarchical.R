@@ -362,7 +362,16 @@ pier_summary_hierarchical <- function(cards,
       id_cols = c("row_type", "var_label", "variable", "label", cards::all_ard_groups()),
       names_from = "gts_column",
       values_from = "stat"
-    ) |>
+    )
+
+  # if overall_row present, change TRUE to NULL in applicable rows for compatibility when unnesting
+  last_gp <- df_result_levels |> select(cards::all_ard_groups("names")) |> names() |> dplyr::last()
+  if ("..ard_hierarchical_overall.." %in% df_result_levels[[last_gp]]) {
+    idx_overall <- which(df_result_levels[[last_gp]] == "..ard_hierarchical_overall..")
+    df_result_levels[[paste0(last_gp, "_level")]][idx_overall] <- list(NULL)
+  }
+
+  df_result_levels <- df_result_levels |>
     tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE) |>
     mutate(across(where(is.factor), as.character))
 
