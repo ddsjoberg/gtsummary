@@ -370,18 +370,22 @@ pier_summary_hierarchical <- function(cards,
     gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
 
     df_result_levels <- df_result_levels |>
-      mutate(across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " ")))
+      mutate(across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " "), .names = "{.col}_sort"))
 
     for (i in seq_along(gps)) {
       df_result_levels[df_result_levels$variable == variables[i], ] <-
         df_result_levels[df_result_levels$variable == variables[i], ] |>
-        mutate(!!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), .data$label))
+        mutate(
+          !!gps[i] := dplyr::coalesce(!!sym(gps[i]), .data$variable),
+          !!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), .data$label)
+        )
     }
-    ord <- c(rbind(paste0(gps, "_level"), gps))
+    ord <- c(rbind(paste0(gps, "_level"), paste0(gps, "_sort")))
     df_result_levels <- df_result_levels |>
       dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
       dplyr::arrange(across(all_of(ord))) |>
-      dplyr::ungroup()
+      dplyr::ungroup() |>
+      dplyr::select(-ends_with("_sort"))
   }
 
   df_result_levels
