@@ -392,3 +392,25 @@ test_that("tbl_hierarchical works with one arm level present", {
 
   expect_snapshot(as.data.frame(res))
 })
+
+# tbl_hierarchical table_body group variables are correct with no by -----------------------
+test_that("tbl_hierarchical table_body group variables are correct with no by", {
+  withr::local_options(list(width = 250))
+
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(as.data.frame(res$table_body))
+})
