@@ -228,9 +228,43 @@ test_that("as_tibble works with grouped columns", {
   )
 })
 
-test_that("as.data.frame works as expected", {
+test_that("as.data.frame() works as expected", {
   expect_equal(
     t1_summary |> as_tibble() |> as.data.frame(),
     t1_summary |> as.data.frame()
+  )
+})
+
+test_that("as.data.frame() works with modify_post_fmt_fun()", {
+  expect_equal(
+    data.frame(x = FALSE) |>
+      tbl_summary(type = x ~ "categorical") |>
+      modify_post_fmt_fun(
+        fmt_fun = ~ifelse(. == "0 (0%)", "0", .),
+        columns = all_stat_cols()
+      ) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("stat_0") |>
+      dplyr::last(),
+    "0"
+  )
+
+  expect_equal(
+    lm(age ~ grade, trial) |>
+      tbl_regression() |>
+      modify_table_styling(
+        columns = c(estimate, conf.low),
+        rows = reference_row %in% TRUE,
+        missing_symbol = "Ref."
+      ) |>
+      modify_post_fmt_fun(
+        fmt_fun = ~paste(., "YEP"),
+        columns = c(estimate, conf.low),
+        rows = reference_row %in% TRUE
+      ) |>
+      as_tibble(col_labels = FALSE, fmt_missing = TRUE) |>
+      dplyr::pull(estimate) |>
+      getElement(2L),
+    "Ref. YEP"
   )
 })

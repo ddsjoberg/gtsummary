@@ -362,7 +362,16 @@ pier_summary_hierarchical <- function(cards,
       id_cols = c("row_type", "var_label", "variable", "label", cards::all_ard_groups()),
       names_from = "gts_column",
       values_from = "stat"
-    ) |>
+    )
+
+  # if overall_row present, change TRUE to NULL in applicable rows for compatibility when unnesting
+  last_gp <- df_result_levels |> select(cards::all_ard_groups("names")) |> names() |> dplyr::last()
+  if (!is.na(last_gp) && "..ard_hierarchical_overall.." %in% df_result_levels[[last_gp]]) {
+    idx_overall <- which(df_result_levels[[last_gp]] == "..ard_hierarchical_overall..")
+    df_result_levels[[paste0(last_gp, "_level")]][idx_overall] <- list(NULL)
+  }
+
+  df_result_levels <- df_result_levels |>
     tidyr::unnest(cols = cards::all_ard_groups("levels"), keep_empty = TRUE) |>
     mutate(across(where(is.factor), as.character))
 
@@ -370,18 +379,22 @@ pier_summary_hierarchical <- function(cards,
     gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
 
     df_result_levels <- df_result_levels |>
-      mutate(across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " ")))
+      mutate(across(cards::all_ard_groups("names"), .fns = ~tidyr::replace_na(., " "), .names = "{.col}_sort"))
 
     for (i in seq_along(gps)) {
       df_result_levels[df_result_levels$variable == variables[i], ] <-
         df_result_levels[df_result_levels$variable == variables[i], ] |>
-        mutate(!!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), .data$label))
+        mutate(
+          !!gps[i] := dplyr::coalesce(!!sym(gps[i]), .data$variable),
+          !!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), .data$label)
+        )
     }
-    ord <- c(rbind(paste0(gps, "_level"), gps))
+    ord <- c(rbind(paste0(gps, "_level"), paste0(gps, "_sort")))
     df_result_levels <- df_result_levels |>
       dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
       dplyr::arrange(across(all_of(ord))) |>
-      dplyr::ungroup()
+      dplyr::ungroup() |>
+      dplyr::select(-ends_with("_sort"))
   }
 
   df_result_levels

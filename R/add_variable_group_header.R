@@ -6,7 +6,6 @@
 #' This function indents the variables that should be reported together while
 #' adding a header above the group.
 #'
-#' @inheritParams modify_column_indent
 #' @param x (`tbl_summary`)\cr
 #'   gtsummary object of class `'tbl_summary'`
 #' @param header (`string`)\cr
@@ -14,6 +13,9 @@
 #' @param variables  ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to group that appear in `x$table_body`.
 #'   Selected variables should be appear consecutively in table.
+#' @param indent (`integer`)\cr
+#'   An integer indicating how many space to indent text.
+#'   All rows in the group will be indented by this amount. Default is `4`.
 #'
 #' @returns a gtsummary table
 #' @export
@@ -25,7 +27,7 @@
 #' for example, `bold_labels()` will bold the incorrect rows after running
 #' this function.
 #'
-#' @examples
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car", "broom", "broom.helpers", "parameters"))
 #' # Example 1 ----------------------------------
 #' set.seed(11234)
 #' data.frame(
@@ -43,12 +45,42 @@
 #'     variables = starts_with("exclusion_")
 #'   ) |>
 #'   modify_caption("**Study Exclusion Criteria**")
+#'
+#' # Example 2 ----------------------------------
+#' lm(marker ~ trt + grade + age, data = trial) |>
+#'   tbl_regression() |>
+#'   add_global_p(keep = TRUE, include = grade) |>
+#'   add_variable_group_header(
+#'     header = "Treatment:",
+#'     variables = trt
+#'   ) |>
+#'   add_variable_group_header(
+#'     header = "Covariate:",
+#'     variables = -trt
+#'   ) |>
+#'   # indent levels 8 spaces
+#'   modify_column_indent(
+#'     columns = "label",
+#'     rows = row_type == "level",
+#'     indent = 8L
+#'   )
 add_variable_group_header <- function(x, header, variables, indent = 4L) {
+  set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
-  check_class(x, "tbl_summary")
+  check_class(x, "gtsummary")
   check_string(header)
   check_scalar_integerish(indent)
+
+  # check the necessary structure is in place
+  if (!all(c("variable", "row_type", "label") %in% names(x$table_body)) ||
+      .first_unhidden_column(x) != "label") {
+    cli::cli_abort(
+      "The {.cls gtsummary} table must include columns {.val {c('variable', 'row_type', 'label')}}
+       in the {.code x$table_body} data frame and the {.val label} column must appear first.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # process variables ----------------------------------------------------------
   cards::process_selectors(scope_table_body(x$table_body), variables = {{ variables }})
