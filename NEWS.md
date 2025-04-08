@@ -1,5 +1,13 @@
 # gtsummary (development version)
 
+* Fixed a bug in `tbl_hierarchical()` where the `group*` variables of the resulting `table_body` were not fully populated. (#2192)
+
+* Added function `modify_post_fmt_fun()` to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to `gt::text_transform()`. (#2014)
+
+* Data pre-processing has now been re-introduced for calculations in `add_p()` and `add_difference()`. Data pre-processing steps  were removed in the v2.0 release; however, in some cases---particularly `add_difference()` for dichotomous variables---the reduced functionality was affecting the user experience. See `?tests` for details on data pre-processing. (#2165)
+
+* The `add_variable_group_header()` function has been generalized to work with gtsummary tables, where previously only `'tbl_summary'` were accepted. (#2197)
+
 * The footnote placed on the p-value column by `add_significance_stars()` no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (#2184)
 
 * Fixed bug in `tbl_cross()` when a column was named `'missing'`. (#2182)
@@ -17,6 +25,10 @@
 * Fix in theme element `tbl_summary-arg:missing_stat` that was not being applied. (#2176)
 
 * Added a new theme element `tbl_svysummary-arg:missing_stat`
+
+* Corrected bug in `tbl_likert()` where variables in table always appeared in alphabetical order. (#2195) 
+
+* Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
 
 * Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
 

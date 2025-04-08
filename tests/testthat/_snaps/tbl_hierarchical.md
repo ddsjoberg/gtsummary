@@ -1005,3 +1005,19 @@
       2                                                       EYE ALLERGY              1 (1.2%)
       3                                                      EYE SWELLING              1 (1.2%)
 
+# tbl_hierarchical table_body group variables are correct with no by
+
+    Code
+      as.data.frame(res$table_body)
+    Output
+        row_type group1                                         group1_level var_label variable                                                label    stat_0
+      1    level  AESOC                                    CARDIAC DISORDERS      <NA>    AESOC                                    CARDIAC DISORDERS  5 (2.0%)
+      2    level  AESOC                                    CARDIAC DISORDERS      <NA>  AEDECOD                 ATRIOVENTRICULAR BLOCK SECOND DEGREE  5 (2.0%)
+      3    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>    AESOC                           GASTROINTESTINAL DISORDERS 18 (7.1%)
+      4    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>  AEDECOD                                            DIARRHOEA 18 (7.1%)
+      5    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>    AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  57 (22%)
+      6    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE ERYTHEMA  30 (12%)
+      7    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE PRURITUS  50 (20%)
+      8    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>    AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS  38 (15%)
+      9    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>  AEDECOD                                             ERYTHEMA  38 (15%)
+

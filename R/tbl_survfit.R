@@ -283,9 +283,13 @@ tbl_survfit.list <- function(x,
                 }
               ),
             gts_column =
-              case_switch(
-                !is_empty(times) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(times)), times)),
-                !is_empty(probs) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(probs)), probs))
+              ifelse(
+                map_lgl(.data$variable_level, negate(is.null)),
+                case_switch(
+                  !is_empty(times) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(times)), times)),
+                  !is_empty(probs) ~ dplyr::recode(unlist(variable_level), !!!set_names(paste0("stat_", seq_along(probs)), probs))
+                ),
+                NA
               )
           )
       }
@@ -312,6 +316,10 @@ brdg_survfit <- function(cards,
                          label = NULL,
                          label_header) {
   set_cli_abort_call()
+  # remove model stats from ARD ------------------------------------------------
+  cards <- cards |>
+    map(~dplyr::filter(.x, .data$variable != "..ard_survival_survfit.."))
+
   # grab information for the headers -------------------------------------------
   df_header_survfit <- cards[[1]] |>
     dplyr::filter(!.data$context %in% "attributes") |>

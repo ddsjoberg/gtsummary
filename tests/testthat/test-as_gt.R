@@ -547,3 +547,19 @@ test_that("as_gt passes column merging correctly", {
     c("0.00", "<br />", "—", "-0.38", "-0.12")
   )
 })
+
+test_that("as_gt() works with modify_post_fmt_fun()", {
+  expect_equal(
+    data.frame(x = FALSE) |>
+      tbl_summary(type = x ~ "categorical") |>
+      modify_post_fmt_fun(
+        fmt_fun = ~ifelse(. == "0 (0%)", "0", .),
+        columns = all_stat_cols()
+      ) |>
+      as_gt() |>
+      gt::extract_body() |>
+      dplyr::pull("stat_0") |>
+      dplyr::last(),
+    "0"
+  )
+})

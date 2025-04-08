@@ -361,6 +361,23 @@ table_styling_to_gt_calls <- function(x, ...) {
       }
     )
 
+  # post_fmt_fun ---------------------------------------------------------------
+  gt_calls[["text_transform"]] <-
+    map(
+      seq_len(nrow(x$table_styling$post_fmt_fun)),
+      function(i) {
+        expr(
+          gt::text_transform(
+            fn = !!x$table_styling$post_fmt_fun$fmt_fun[[i]],
+            locations = gt::cells_body(
+              columns = !!x$table_styling$post_fmt_fun$column[[i]],
+              rows = !!x$table_styling$post_fmt_fun$row_numbers[[i]]
+            )
+          )
+        )
+      }
+    )
+
   # cols_hide ------------------------------------------------------------------
   gt_calls[["cols_hide"]] <-
     names(x$table_body) %>%
