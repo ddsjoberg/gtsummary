@@ -29,25 +29,31 @@
 #' @seealso [tbl_filter()]
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
-#' ADAE_subset <- cards::ADAE |>
-#'   dplyr::filter(AETERM %in% unique(cards::ADAE$AETERM)[1:5])
+#' theme_gtsummary_compact()
+#' ADAE_subset <- cards::ADAE %>%
+#'   dplyr::filter(., AEBODSYS %in% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+#'                                    "EAR AND LABYRINTH DISORDERS")) %>%
+#'   dplyr::filter(., .by = AEBODSYS, dplyr::row_number() < 20)
 #'
-#' tbl <- tbl_hierarchical(
-#'   data = ADAE_subset,
-#'   variables = c(SEX, RACE, AETERM),
-#'   by = TRTA,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
-#'   id = USUBJID,
-#'   overall_row = TRUE
-#' )
+#' tbl <-
+#'   tbl_hierarchical(
+#'     data = ADAE_subset,
+#'     variables = c(AEBODSYS, AEDECOD),
+#'     by = TRTA,
+#'     denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'     id = USUBJID,
+#'     overall_row = TRUE
+#'   ) |>
+#'   add_overall()
+#'
 #'
 #' # Example 1 - Descending Frequency Sort ------------------
-#' tbl <- tbl_sort(tbl)
-#' tbl
+#' tbl_sort(tbl)
 #'
 #' # Example 2 - Alphanumeric Sort --------------------------
-#' tbl <- tbl_sort(tbl, sort = "alphanumeric")
-#' tbl
+#' tbl_sort(tbl, sort = "alphanumeric")
+#'
+#' reset_gtsummary_theme()
 NULL
 
 #' @rdname tbl_sort
