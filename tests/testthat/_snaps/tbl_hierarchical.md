@@ -4,9 +4,9 @@
       as.data.frame(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2,
         id = id))
     Output
-        **Chemotherapy Treatment**  Overall
-      1                     Drug A 45 (46%)
-      2                     Drug B 44 (43%)
+        **Chemotherapy Treatment** **N = 200**
+      1                     Drug A    45 (46%)
+      2                     Drug B    44 (43%)
 
 ---
 
@@ -75,23 +75,23 @@
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade),
       denominator = trial2, id = id, include = grade))
     Output
-         **T Stage**  \n    **Grade**   Overall
-      1                            T1      <NA>
-      2                             I  14 (82%)
-      3                            II  20 (87%)
-      4                           III  12 (92%)
-      5                            T2      <NA>
-      6                             I  16 (89%)
-      7                            II  15 (88%)
-      8                           III  17 (89%)
-      9                            T3      <NA>
-      10                            I  16 (89%)
-      11                           II   9 (82%)
-      12                          III 14 (100%)
-      13                           T4      <NA>
-      14                            I  14 (93%)
-      15                           II  14 (82%)
-      16                          III 18 (100%)
+         **T Stage**  \n    **Grade** **N = 200**
+      1                            T1        <NA>
+      2                             I    14 (82%)
+      3                            II    20 (87%)
+      4                           III    12 (92%)
+      5                            T2        <NA>
+      6                             I    16 (89%)
+      7                            II    15 (88%)
+      8                           III    17 (89%)
+      9                            T3        <NA>
+      10                            I    16 (89%)
+      11                           II     9 (82%)
+      12                          III   14 (100%)
+      13                           T4        <NA>
+      14                            I    14 (93%)
+      15                           II    14 (82%)
+      16                          III   18 (100%)
 
 ---
 
@@ -138,7 +138,7 @@
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade),
       denominator = trial2, id = id, statistic = ~"{n}, {N}, {p}"))
     Output
-         **T Stage**  \n    **Grade**     Overall
+         **T Stage**  \n    **Grade** **N = 200**
       1                            T1  36, 53, 68
       2                             I  14, 17, 82
       3                            II  20, 23, 87
@@ -170,10 +170,10 @@
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2, id = id, overall_row = TRUE))
     Output
-           **Chemotherapy Treatment**  Overall
-      1 Number of patients with event 50 (25%)
-      2                        Drug A 45 (46%)
-      3                        Drug B 44 (43%)
+           **Chemotherapy Treatment** **N = 200**
+      1 Number of patients with event    50 (25%)
+      2                        Drug A    45 (46%)
+      3                        Drug B    44 (43%)
 
 ---
 
@@ -198,23 +198,23 @@
     Code
       as.data.frame(res)
     Output
-         **My Stage**  \n    **My Grade**   Overall
-      1                                T1  36 (68%)
-      2                                 I  14 (82%)
-      3                                II  20 (87%)
-      4                               III  12 (92%)
-      5                                T2  37 (69%)
-      6                                 I  16 (89%)
-      7                                II  15 (88%)
-      8                               III  17 (89%)
-      9                                T3  32 (74%)
-      10                                I  16 (89%)
-      11                               II   9 (82%)
-      12                              III 14 (100%)
-      13                               T4  35 (70%)
-      14                                I  14 (93%)
-      15                               II  14 (82%)
-      16                              III 18 (100%)
+         **My Stage**  \n    **My Grade** **N = 200**
+      1                                T1    36 (68%)
+      2                                 I    14 (82%)
+      3                                II    20 (87%)
+      4                               III    12 (92%)
+      5                                T2    37 (69%)
+      6                                 I    16 (89%)
+      7                                II    15 (88%)
+      8                               III    17 (89%)
+      9                                T3    32 (74%)
+      10                                I    16 (89%)
+      11                               II     9 (82%)
+      12                              III   14 (100%)
+      13                               T4    35 (70%)
+      14                                I    14 (93%)
+      15                               II    14 (82%)
+      16                              III   18 (100%)
 
 ---
 
@@ -235,7 +235,7 @@
     Code
       as.data.frame(res)
     Output
-         **T Stage**  \n    **Grade**         Overall
+         **T Stage**  \n    **Grade**     **N = 200**
       1                            T1        36 (68%)
       2                             I  14,0 (82.353%)
       3                            II  20,0 (86.957%)
@@ -337,27 +337,27 @@
     Code
       as.data.frame(res)
     Output
-              **Primary System Organ Class**  \n    **AESEV**   Overall
-      1                                     CARDIAC DISORDERS  6 (2.4%)
-      2                                                  MILD  3 (1.2%)
-      3                                              MODERATE  2 (0.8%)
-      4                                                SEVERE  1 (0.4%)
-      5                            GASTROINTESTINAL DISORDERS 19 (7.5%)
-      6                                                  MILD 16 (6.3%)
-      7                                              MODERATE  3 (1.2%)
-      8                                                SEVERE    0 (0%)
-      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  64 (25%)
-      10                                                 MILD  37 (15%)
-      11                                             MODERATE 25 (9.8%)
-      12                                               SEVERE  2 (0.8%)
-      13                          INFECTIONS AND INFESTATIONS 10 (3.9%)
-      14                                                 MILD  7 (2.8%)
-      15                                             MODERATE  3 (1.2%)
-      16                                               SEVERE    0 (0%)
-      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS  39 (15%)
-      18                                                 MILD 22 (8.7%)
-      19                                             MODERATE 17 (6.7%)
-      20                                               SEVERE    0 (0%)
+              **Primary System Organ Class**  \n    **AESEV** **N = 254**
+      1                                     CARDIAC DISORDERS    6 (2.4%)
+      2                                                  MILD    3 (1.2%)
+      3                                              MODERATE    2 (0.8%)
+      4                                                SEVERE    1 (0.4%)
+      5                            GASTROINTESTINAL DISORDERS   19 (7.5%)
+      6                                                  MILD   16 (6.3%)
+      7                                              MODERATE    3 (1.2%)
+      8                                                SEVERE      0 (0%)
+      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS    64 (25%)
+      10                                                 MILD    37 (15%)
+      11                                             MODERATE   25 (9.8%)
+      12                                               SEVERE    2 (0.8%)
+      13                          INFECTIONS AND INFESTATIONS   10 (3.9%)
+      14                                                 MILD    7 (2.8%)
+      15                                             MODERATE    3 (1.2%)
+      16                                               SEVERE      0 (0%)
+      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS    39 (15%)
+      18                                                 MILD   22 (8.7%)
+      19                                             MODERATE   17 (6.7%)
+      20                                               SEVERE      0 (0%)
 
 # tbl_hierarchical_count(data) works properly
 
@@ -420,9 +420,9 @@
     Code
       as.data.frame(res)
     Output
-        **Chemotherapy Treatment** Overall
-      1                     Drug A      98
-      2                     Drug B     102
+        **Chemotherapy Treatment** **N = 400**
+      1                     Drug A          98
+      2                     Drug B         102
 
 ---
 
