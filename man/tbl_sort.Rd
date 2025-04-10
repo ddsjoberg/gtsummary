@@ -45,10 +45,10 @@ sorts tables in alphanumeric order.
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 theme_gtsummary_compact()
-ADAE_subset <- cards::ADAE \%>\%
-  dplyr::filter(., AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
-                                   "EAR AND LABYRINTH DISORDERS")) \%>\%
-  dplyr::filter(., .by = AEBODSYS, dplyr::row_number() < 20)
+ADAE_subset <- cards::ADAE |>
+  dplyr::filter(AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                "EAR AND LABYRINTH DISORDERS")) |>
+  dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
 
 tbl <-
   tbl_hierarchical(

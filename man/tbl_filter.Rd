@@ -55,22 +55,25 @@ Some examples of possible filters:
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
-  dplyr::filter(AETERM \%in\% unique(cards::ADAE$AETERM)[1:5])
+  dplyr::filter(AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                "EAR AND LABYRINTH DISORDERS")) |>
+  dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
 
-tbl <- tbl_hierarchical(
-  data = ADAE_subset,
-  variables = c(SEX, RACE, AETERM),
-  by = TRTA,
-  denominator = cards::ADSL |> mutate(TRTA = ARM),
-  id = USUBJID,
-  overall_row = TRUE
-)
+tbl <-
+  tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AEBODSYS, AEDECOD),
+    by = TRTA,
+    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    id = USUBJID,
+    overall_row = TRUE
+  )
 
-# Example 1 - Row Sums > 10 ------------------
-tbl_filter(tbl, sum(n) > 10)
+# Example 1 - Row Sums > 3 -------------------
+tbl_filter(tbl, sum(n) > 3)
 
-# Example 2 - Row Sums <= 5 ------------------
-tbl_filter(tbl, sum(n) <= 5)
+# Example 2 - Row Sums <= 3 ------------------
+tbl_filter(tbl, sum(n) <= 3)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
