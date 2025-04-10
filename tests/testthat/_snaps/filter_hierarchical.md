@@ -1,4 +1,4 @@
-# tbl_filter.tbl_hierarchical() works
+# filter_hierarchical() works
 
     Code
       as.data.frame(tbl)
@@ -17,7 +17,7 @@
       11                                                                  DIARRHOEA               6 (20%)                           3 (7.5%)                          2 (5.9%)
       12                                                                   ERYTHEMA               3 (10%)                            5 (13%)                           6 (18%)
 
-# tbl_filter.tbl_hierarchical() works with various different filter conditions
+# filter_hierarchical() works with various different filter conditions
 
     Code
       as.data.frame(tbl_f)
@@ -36,19 +36,19 @@
       11                                                                  DIARRHOEA               6 (20%)                           3 (7.5%)                          2 (5.9%)
       12                                                                   ERYTHEMA               3 (10%)                            5 (13%)                           6 (18%)
 
-# tbl_filter.tbl_hierarchical() error messaging works
+# filter_hierarchical() error messaging works
 
     Code
-      tbl_filter(data.frame(), sum(n) > 10)
+      filter_hierarchical(data.frame(), sum(n) > 10)
     Condition
-      Error in `check_class()`:
+      Error in `filter_hierarchical()`:
       ! The `x` argument must be class <gtsummary>, not a data frame.
 
 ---
 
     Code
-      tbl_filter(tbl, 10)
+      filter_hierarchical(tbl, 10)
     Condition
-      Error in `tbl_filter()`:
+      Error in `filter_hierarchical()`:
       ! The `filter` argument must be an expression.
 

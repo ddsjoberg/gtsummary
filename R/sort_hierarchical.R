@@ -21,12 +21,12 @@
 #'     all variables, an error will occur.
 #'
 #'   Defaults to `"descending"`.
-#' @inheritParams rlang::args_dots_empty
 #'
 #' @return A `gtsummary` of the same class as `x`.
 #'
-#' @name tbl_sort
-#' @seealso [tbl_filter()]
+#' @seealso [filter_hierarchical()]
+#'
+#' @export
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' theme_gtsummary_compact()
@@ -48,27 +48,18 @@
 #'
 #'
 #' # Example 1 - Descending Frequency Sort ------------------
-#' tbl_sort(tbl)
+#' sort_hierarchical(tbl)
 #'
 #' # Example 2 - Alphanumeric Sort --------------------------
-#' tbl_sort(tbl, sort = "alphanumeric")
+#' sort_hierarchical(tbl, sort = "alphanumeric")
 #'
 #' reset_gtsummary_theme()
-NULL
+sort_hierarchical <- function(x, sort = c("descending", "alphanumeric")) {
+  set_cli_abort_call()
 
-#' @rdname tbl_sort
-#' @export
-tbl_sort <- function(x, ...) {
+  # check input
   check_not_missing(x)
   check_class(x, "gtsummary")
-
-  UseMethod("tbl_sort")
-}
-
-#' @rdname tbl_sort
-#' @export
-tbl_sort.tbl_hierarchical <- function(x, sort = c("descending", "alphanumeric"), ...) {
-  set_cli_abort_call()
 
   sort <- arg_match(sort, error_call = get_cli_abort_call())
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
