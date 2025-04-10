@@ -26,11 +26,14 @@
 #' in your filter instead (i.e. `sum(n)` is equal to the overall column `n` across any `by` variables).
 #'
 #' Some examples of possible filters:
-#' - `filter = n > 5`
-#' - `filter = n == 2 & p < 0.05`
-#' - `filter = sum(n) >= 4`
-#' - `filter = mean(n) > 4 | n > 3`
-#' - `filter = any(n > 2 & TRTA == "Xanomeline High Dose")`
+#' - `filter = n > 5`: keep rows where one of the treatment groups observed more than 5 AEs
+#' - `filter = n == 2 & p < 0.05`: keep rows where one of the treatment groups observed exactly 2 AEs and one of the
+#'    treatment groups observed a proportion less than 5%.
+#' - `filter = sum(n) >= 4`: keep rows where there were 4 or more AEs observed across the row
+#' - `filter = mean(n) > 4 | n > 3`: keep rows where the mean number of AEs is 4 or more across the row or one of the
+#'    treatment groups observed more than 3 AEs
+#' - `filter = any(n > 2 & TRTA == "Xanomeline High Dose")`: keep rows where the `"Xanomeline High Dose"` treatment
+#'    group observed more than 2 AEs
 #'
 #' @return A `gtsummary` of the same class as `x`.
 #'
@@ -54,11 +57,17 @@
 #'     overall_row = TRUE
 #'   )
 #'
-#' # Example 1 - Row Sums > 3 -------------------
-#' filter_hierarchical(tbl, sum(n) > 3)
+#' # Example 1 ----------------------------------
+#' # Keep rows where less than 2 AEs are observed across the row
+#' filter_hierarchical(tbl, sum(n) < 2)
 #'
-#' # Example 2 - Row Sums <= 3 ------------------
-#' filter_hierarchical(tbl, sum(n) <= 3)
+#' # Example 2 ----------------------------------
+#' Keep rows where at least one treatment group in the row has at least 2 AEs observed
+#' filter_hierarchical(tbl, n >= 2)
+#'
+#' # Example 3 ----------------------------------
+#' # Keep rows where AEs across the row have an overall prevalence of greater than 0.5%
+#' filter_hierarchical(tbl, sum(n) / sum(N) > 0.005)
 filter_hierarchical <- function(x, filter, keep_empty = FALSE) {
   set_cli_abort_call()
 
