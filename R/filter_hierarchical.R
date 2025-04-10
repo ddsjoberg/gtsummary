@@ -62,7 +62,7 @@
 #' filter_hierarchical(tbl, sum(n) < 2)
 #'
 #' # Example 2 ----------------------------------
-#' Keep rows where at least one treatment group in the row has at least 2 AEs observed
+#' # Keep rows where at least one treatment group in the row has at least 2 AEs observed
 #' filter_hierarchical(tbl, n >= 2)
 #'
 #' # Example 3 ----------------------------------
