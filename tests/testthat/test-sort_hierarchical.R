@@ -12,20 +12,17 @@ tbl <- tbl_hierarchical(
   overall_row = TRUE
 )
 
-test_that("tbl_sort.tbl_hierarchical() works", {
+test_that("sort_hierarchical() works", {
   withr::local_options(width = 200)
 
   # no errors
-  expect_silent(tbl <- tbl_sort(tbl))
+  expect_silent(tbl <- sort_hierarchical(tbl))
   expect_snapshot(tbl |> as.data.frame())
-
-  # .stat argument works
-  expect_silent(tbl <- tbl_sort(tbl, .stat = "p"))
 })
 
-test_that("tbl_sort.tbl_hierarchical(sort = 'descending') works", {
+test_that("sort_hierarchical(sort = 'descending') works", {
   # descending frequency (default)
-  expect_silent(tbl <- tbl_sort(tbl))
+  expect_silent(tbl <- sort_hierarchical(tbl))
   expect_equal(
     tbl$table_body |>
       dplyr::filter(variable == "SEX") |>
@@ -51,11 +48,11 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'descending') works", {
   )
 })
 
-test_that("tbl_sort.tbl_hierarchical(sort = 'alphanumeric') works", {
-  expect_silent(result <- tbl_sort(tbl))
+test_that("sort_hierarchical(sort = 'alphanumeric') works", {
+  expect_silent(result <- sort_hierarchical(tbl))
 
   # ascending (A to Z)
-  expect_silent(result <- tbl_sort(result, sort = "alphanumeric"))
+  expect_silent(result <- sort_hierarchical(result, sort = "alphanumeric"))
 
   # results are ordered correctly
   expect_equal(
@@ -71,7 +68,7 @@ test_that("tbl_sort.tbl_hierarchical(sort = 'alphanumeric') works", {
   )
 })
 
-test_that("tbl_sort.tbl_hierarchical() works when there is no overall row in x", {
+test_that("sort_hierarchical() works when there is no overall row in x", {
   tbl_no_overall <- tbl_hierarchical(
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
@@ -82,21 +79,21 @@ test_that("tbl_sort.tbl_hierarchical() works when there is no overall row in x",
   )
 
   # sort = 'descending'
-  expect_silent(tbl_no_overall <- tbl_sort(tbl_no_overall))
+  expect_silent(tbl_no_overall <- sort_hierarchical(tbl_no_overall))
   expect_equal(
     tbl_no_overall$table_body,
-    tbl_sort(tbl)$table_body[-1, ]
+    sort_hierarchical(tbl)$table_body[-1, ]
   )
 
   # sort = 'alphanumeric'
-  expect_silent(tbl_no_overall <- tbl_sort(tbl_no_overall, sort = "alphanumeric"))
+  expect_silent(tbl_no_overall <- sort_hierarchical(tbl_no_overall, sort = "alphanumeric"))
   expect_equal(
     tbl_no_overall$table_body,
-    tbl_sort(tbl, sort = "alphanumeric")$table_body[-1, ]
+    sort_hierarchical(tbl, sort = "alphanumeric")$table_body[-1, ]
   )
 })
 
-test_that("tbl_sort.tbl_hierarchical() works with only one variable in x", {
+test_that("sort_hierarchical() works with only one variable in x", {
   tbl_single <- tbl_hierarchical(
     data = ADAE_subset,
     variables = AETERM,
@@ -107,7 +104,7 @@ test_that("tbl_sort.tbl_hierarchical() works with only one variable in x", {
   )
 
   # sort = 'frequency'
-  expect_silent(tbl_single <- tbl_sort(tbl_single))
+  expect_silent(tbl_single <- sort_hierarchical(tbl_single))
   expect_equal(
     tbl_single$table_body |>
       dplyr::filter(variable == "AETERM") |>
@@ -119,7 +116,7 @@ test_that("tbl_sort.tbl_hierarchical() works with only one variable in x", {
   )
 
   # sort = 'alphanumeric'
-  expect_silent(tbl_single <- tbl_sort(tbl_single, sort = "alphanumeric"))
+  expect_silent(tbl_single <- sort_hierarchical(tbl_single, sort = "alphanumeric"))
   expect_equal(
     tbl_single$table_body |>
       dplyr::filter(variable == "AETERM") |>
@@ -128,7 +125,7 @@ test_that("tbl_sort.tbl_hierarchical() works with only one variable in x", {
   )
 })
 
-test_that("tbl_sort.tbl_hierarchical() works when some variables not included in x", {
+test_that("sort_hierarchical() works when some variables not included in x", {
   tbl <- tbl_hierarchical(
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
@@ -139,14 +136,14 @@ test_that("tbl_sort.tbl_hierarchical() works when some variables not included in
     overall_row = TRUE
   )
 
-  expect_message(tbl_sort(tbl))
+  expect_message(sort_hierarchical(tbl))
 })
 
-test_that("tbl_sort.tbl_hierarchical() works with add_overall()", {
-  tbl_s <- tbl_sort(tbl)
+test_that("sort_hierarchical() works with add_overall()", {
+  tbl_s <- sort_hierarchical(tbl)
   tbl_o <- tbl |> add_overall()
 
-  expect_silent(tbl_o <- tbl_sort(tbl_o))
+  expect_silent(tbl_o <- sort_hierarchical(tbl_o))
 
   # overall col does not affect sort order
   expect_identical(tbl_o$table_body$label, tbl_s$table_body$label)
@@ -181,16 +178,16 @@ test_that("tbl_sort.tbl_hierarchical() works with add_overall()", {
   )
 })
 
-test_that("tbl_sort.tbl_hierarchical() error messaging works", {
+test_that("sort_hierarchical() error messaging works", {
   # invalid x input
   expect_snapshot(
-    tbl_sort(data.frame()),
+    sort_hierarchical(data.frame()),
     error = TRUE
   )
 
   # invalid sort input
   expect_snapshot(
-    tbl_sort(tbl, "10"),
+    sort_hierarchical(tbl, "10"),
     error = TRUE
   )
 })

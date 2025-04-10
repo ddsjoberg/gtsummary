@@ -1,4 +1,4 @@
-# tbl_sort.tbl_hierarchical() works
+# sort_hierarchical() works
 
     Code
       as.data.frame(tbl)
@@ -30,19 +30,19 @@
       24                                           AMERICAN INDIAN OR ALASKA NATIVE               0 (NA%)                           1 (100%)                           0 (NA%)
       25                                                                   ERYTHEMA               0 (NA%)                           1 (100%)                           0 (NA%)
 
-# tbl_sort.tbl_hierarchical() error messaging works
+# sort_hierarchical() error messaging works
 
     Code
-      tbl_sort(data.frame())
+      sort_hierarchical(data.frame())
     Condition
-      Error in `check_class()`:
+      Error in `sort_hierarchical()`:
       ! The `x` argument must be class <gtsummary>, not a data frame.
 
 ---
 
     Code
-      tbl_sort(tbl, "10")
+      sort_hierarchical(tbl, "10")
     Condition
-      Error in `tbl_sort()`:
+      Error in `sort_hierarchical()`:
       ! `sort` must be one of "descending" or "alphanumeric", not "10".
 

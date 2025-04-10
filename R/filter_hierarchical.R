@@ -11,7 +11,6 @@
 #' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
-#' @inheritParams rlang::args_dots_empty
 #'
 #' @details
 #' The `filter` argument can be used to filter out rows of a table which do not meet the criteria provided as an
@@ -35,8 +34,9 @@
 #'
 #' @return A `gtsummary` of the same class as `x`.
 #'
-#' @name tbl_filter
-#' @seealso [tbl_sort()]
+#' @seealso [sort_hierarchical()]
+#'
+#' @export
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' ADAE_subset <- cards::ADAE |>
@@ -55,25 +55,16 @@
 #'   )
 #'
 #' # Example 1 - Row Sums > 3 -------------------
-#' tbl_filter(tbl, sum(n) > 3)
+#' filter_hierarchical(tbl, sum(n) > 3)
 #'
 #' # Example 2 - Row Sums <= 3 ------------------
-#' tbl_filter(tbl, sum(n) <= 3)
-NULL
+#' filter_hierarchical(tbl, sum(n) <= 3)
+filter_hierarchical <- function(x, filter, keep_empty = FALSE) {
+  set_cli_abort_call()
 
-#' @rdname tbl_filter
-#' @export
-tbl_filter <- function(x, ...) {
+  # check input
   check_not_missing(x)
   check_class(x, "gtsummary")
-
-  UseMethod("tbl_filter")
-}
-
-#' @export
-#' @rdname tbl_filter
-tbl_filter.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, ...) {
-  set_cli_abort_call()
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
   x_ard <- x$cards$tbl_hierarchical
