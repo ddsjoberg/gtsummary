@@ -363,7 +363,6 @@ internal_tbl_hierarchical <- function(data,
         denominator = denominator,
         include = all_of(dplyr::nth(variables, -2)),
         statistic = statistic,
-        over_variables = overall_row,
         total_n = (is_empty(by) && length(include) == 1)
       )
 
@@ -400,7 +399,18 @@ internal_tbl_hierarchical <- function(data,
       total_n = is_empty(by)
     )
 
-    cards::bind_ard(cards, cards_ord)
+    # bind ARDs for ordered and non-ordered variable results, merge args attribute, and re-sort
+    if (!is_empty(cards_ord)) {
+      cards <- cards::bind_ard(cards, cards_ord)
+      attr(cards, "args") <- list(
+        by = attr(cards, "args")$by,
+        variables = c(attr(cards, "args")$variables, attr(cards_ord, "args")$by[-1]),
+        include = c(attr(cards, "args")$include, attr(cards_ord, "args")$by[-1])
+      )
+      cards <- cards |> cards::sort_ard_hierarchical("alphanumeric")
+    }
+
+    cards
   } else {
     cards::ard_stack_hierarchical_count(
       data = data,
