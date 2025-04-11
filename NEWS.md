@@ -32,6 +32,8 @@
 
 * Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
 
+* Added functions `sort_hierarchical()` and `filter_hierarchical()` to sort and filter hierarchical tables. (#2096)
+
 # gtsummary 2.1.0
 
 ### New Features and Functions

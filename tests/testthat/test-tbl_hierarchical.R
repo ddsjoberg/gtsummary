@@ -176,6 +176,8 @@ test_that("tbl_hierarchical(digits) works properly", {
 
 # tbl_hierarchical with ordered variables ------------------------------------------------------------
 test_that("tbl_hierarchical works properly when last variable of hierarchy is ordered", {
+  withr::local_options(width = 250)
+
   data <- cards::ADAE |>
     dplyr::filter(
       AESOC %in% unique(cards::ADAE$AESOC)[1:10],
@@ -206,6 +208,13 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
     denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
   ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
+
+  # ordered variable, include all variables
+  res_o <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
+    denominator = cards::ADSL |> mutate(TRTA = ARM), label = list(AESEV = "Highest Severity")
+  ) |> suppressMessages()
+  expect_snapshot(res_o |> as.data.frame())
 })
 
 # tbl_hierarchical_count(data) ------------------------------------------------------------
