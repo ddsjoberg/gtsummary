@@ -378,6 +378,7 @@ internal_tbl_hierarchical <- function(data,
       # otherwise, bind to results for the remaining include variables
       variables <- utils::head(variables, -1)
       include <- intersect(include, variables)
+      n <- NULL
       if (is_empty(include)) {
         cards_ord[cards_ord[[which_var]] %in% by, which_h + 0:1] <-
           cards_ord[cards_ord[[which_var]] %in% by, which_var + 0:1]
