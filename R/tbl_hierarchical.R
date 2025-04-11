@@ -402,8 +402,7 @@ internal_tbl_hierarchical <- function(data,
 
     # bind ARDs for ordered and non-ordered variable results, merge args attribute, and re-sort
     if (!is_empty(cards_ord)) {
-      cards <- cards::bind_ard(cards_ord, cards)
-      cards <- cards |>
+      cards <- cards::bind_ard(cards_ord, cards) |>
         cards::sort_ard_hierarchical("alphanumeric") |>
         cards::filter_ard_hierarchical(sum(n) > 0)
     }
