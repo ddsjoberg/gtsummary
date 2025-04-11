@@ -407,7 +407,9 @@ internal_tbl_hierarchical <- function(data,
         variables = c(attr(cards, "args")$variables, attr(cards_ord, "args")$by[-1]),
         include = c(attr(cards, "args")$include, attr(cards_ord, "args")$by[-1])
       )
-      cards <- cards |> cards::sort_ard_hierarchical("alphanumeric")
+      cards <- cards |>
+        cards::sort_ard_hierarchical("alphanumeric") |>
+        cards::filter_ard_hierarchical(sum(n) > 0)
     }
 
     cards
