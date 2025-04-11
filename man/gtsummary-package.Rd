@@ -26,6 +26,7 @@ Authors:
 \itemize{
   \item Joseph Larmarange (\href{https://orcid.org/0000-0001-7097-700X}{ORCID})
   \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID})
+  \item Emily de la Rua (\href{https://orcid.org/0009-0000-8738-5561}{ORCID})
   \item Jessica Lavery (\href{https://orcid.org/0000-0002-2746-5647}{ORCID})
   \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
   \item Emily C. Zabor (\href{https://orcid.org/0000-0002-1402-4498}{ORCID})
