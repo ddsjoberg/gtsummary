@@ -365,6 +365,7 @@ internal_tbl_hierarchical <- function(data,
         statistic = statistic,
         total_n = (is_empty(by) && length(include) == 1)
       )
+      attr(cards_ord, "args") <- list(by = by, variables = variables, include = include)
 
       # update structure to match results for non-ordered factor variables
       which_var <- which(names(cards_ord) == "variable")
@@ -380,7 +381,7 @@ internal_tbl_hierarchical <- function(data,
       if (is_empty(include)) {
         cards_ord[cards_ord[[which_var]] %in% by, which_h + 0:1] <-
           cards_ord[cards_ord[[which_var]] %in% by, which_var + 0:1]
-        return(cards_ord)
+        return(cards_ord |> cards::filter_ard_hierarchical(sum(n) > 0))
       } else if (!is_empty(by)) {
         cards_ord <- cards_ord |>
           dplyr::filter(.data$group1 == by[1] | .data$context == "total_n")
@@ -401,12 +402,7 @@ internal_tbl_hierarchical <- function(data,
 
     # bind ARDs for ordered and non-ordered variable results, merge args attribute, and re-sort
     if (!is_empty(cards_ord)) {
-      cards <- cards::bind_ard(cards, cards_ord)
-      attr(cards, "args") <- list(
-        by = attr(cards, "args")$by,
-        variables = c(attr(cards, "args")$variables, attr(cards_ord, "args")$by[-1]),
-        include = c(attr(cards, "args")$include, attr(cards_ord, "args")$by[-1])
-      )
+      cards <- cards::bind_ard(cards_ord, cards)
       cards <- cards |>
         cards::sort_ard_hierarchical("alphanumeric") |>
         cards::filter_ard_hierarchical(sum(n) > 0)
