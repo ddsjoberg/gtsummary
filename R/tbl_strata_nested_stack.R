@@ -104,7 +104,8 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
           dplyr::mutate(
             strata = .data$variable_level |> unlist(),
             "{strata[i]}_strata" := glue::glue(row_header)
-          ) |>
+          ) %>%
+          structure(., class = c("card", class(.))) |>
           cards::rename_ard_columns() |>
           dplyr::select(any_of(strata), all_of(glue::glue("{strata[i]}_strata")))
       }

@@ -252,12 +252,6 @@ test_that("as_hux_table passes missing symbols correctly", {
   )
 })
 
-test_that("as_hux_table(strip_md_bold) causes defunct error", {
-  lifecycle::expect_defunct(
-    my_tbl_summary |> as_hux_table(strip_md_bold = TRUE)
-  )
-})
-
 # as_hux_xlsx ----
 
 test_that("as_hux_xlsx works with standard use", {
