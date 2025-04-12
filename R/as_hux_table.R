@@ -14,7 +14,6 @@
 #' @inheritParams huxtable::quick_xlsx
 #' @param bold_header_rows (scalar `logical`)\cr
 #'   logical indicating whether to bold header rows. Default is `TRUE`
-#' @param strip_md_bold `r lifecycle::badge("deprecated")`
 #'
 #' @name as_hux_table
 #' @return A \{huxtable\} object
@@ -29,19 +28,12 @@ NULL
 
 #' @export
 #' @rdname as_hux_table
-as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = FALSE) {
+as_hux_table <- function(x, include = everything(), return_calls = FALSE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
   check_pkg_installed("huxtable")
   check_scalar_logical(return_calls)
 
-  if (!isFALSE(strip_md_bold)) {
-    lifecycle::deprecate_stop(
-      "1.6.0", "gtsummary::as_hux_table(strip_md_bold=)",
-      details = "Markdown syntax is now recognized by the {huxtable} package."
-    )
-  }
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
