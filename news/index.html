@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,31 @@
       <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.2.0" id="gtsummary-220">gtsummary 2.2.0<a class="anchor" aria-label="anchor" href="#gtsummary-220"></a></h2><p class="text-muted">CRAN release: 2025-04-14</p>
+<div class="section level4">
+<h4 id="new-features-and-functions-2-2-0">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-2-2-0"></a></h4>
+<ul><li><p>Added function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to <code><a href="https://gt.rstudio.com/reference/text_transform.html" class="external-link">gt::text_transform()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2014" class="external-link">#2014</a>)</p></li>
+<li><p>Data pre-processing has now been re-introduced for calculations in <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code>. Data pre-processing steps were removed in the v2.0 release; however, in some cases—particularly <code><a href="../reference/add_difference.html">add_difference()</a></code> for dichotomous variables—the reduced functionality was affecting the user experience. See <code><a href="../reference/tests.html">?tests</a></code> for details on data pre-processing. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2165" class="external-link">#2165</a>)</p></li>
+<li><p>The <code><a href="../reference/add_variable_group_header.html">add_variable_group_header()</a></code> function has been generalized to work with any gtsummary table, where previously only <code>'tbl_summary'</code> were accepted. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2197" class="external-link">#2197</a>)</p></li>
+<li><p>The footnote placed on the p-value column by <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2184" class="external-link">#2184</a>)</p></li>
+<li><p>The <code>remove_*()</code> family of functions default argument values have been updated to remove <em>all</em> footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is <code>remove_spanning_headers()</code>, which will remove the first level spanning headers be default. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2161" class="external-link">#2161</a>)</p></li>
+<li><p>Added a new theme element <code>tbl_svysummary-arg:missing_stat</code></p></li>
+<li><p>Added functions <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> and <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> to sort and filter hierarchical tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2096" class="external-link">#2096</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-2-2-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-2-0"></a></h4>
+<ul><li><p>Fixed a bug in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> where the <code>group*</code> variables of the resulting <code>table_body</code> were not fully populated. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2192" class="external-link">#2192</a>)</p></li>
+<li><p>Corrected bug causing an error in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> when more than one <code>by</code> variable level had been filtered out of the data. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2173" class="external-link">#2173</a>)</p></li>
+<li><p>Corrected the class of objects returned from <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code>.</p></li>
+<li><p>Corrected bug in <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> when the strata variable had a single level. Previously, the indentation of the single strata level was not correct.</p></li>
+<li><p>Fix in <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> when there are unobserved combinations of strata levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2179" class="external-link">#2179</a>)</p></li>
+<li><p>Fixed bug in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> when a column was named <code>'missing'</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2182" class="external-link">#2182</a>)</p></li>
+<li><p>Fix in theme element <code>tbl_summary-arg:missing_stat</code> that was not being applied. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2176" class="external-link">#2176</a>)</p></li>
+<li><p>Corrected bug in <code><a href="../reference/tbl_likert.html">tbl_likert()</a></code> where variables in table always appeared in alphabetical order. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2195" class="external-link">#2195</a>)</p></li>
+<li><p>Corrected bug in <code><a href="../reference/add_n_summary.html">add_n.tbl_likert()</a></code> where the Ns were not formatted with <code><a href="../reference/style_number.html">style_number()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2195" class="external-link">#2195</a>)</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.0" id="gtsummary-210">gtsummary 2.1.0<a class="anchor" aria-label="anchor" href="#gtsummary-210"></a></h2><p class="text-muted">CRAN release: 2025-02-19</p>
 <div class="section level4">
@@ -600,7 +625,7 @@
 <li><p>Added Standardized Mean Difference method to <code><a href="../reference/add_difference.html">add_difference()</a></code>, wrapping the {smd} package’s calculations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/966" class="external-link">#966</a>)</p></li>
 <li><p>Extended <code><a href="../reference/add_difference.html">add_difference()</a></code> to accept <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects in addition to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> objects.</p></li>
 <li><p>Added a standardized mean difference method for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> tables.</p></li>
-<li><p>Added <code>tbl_strata(.stack_group_header=)</code> argument to include/exclude the headers when tables are combined with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code></p></li>
+<li><p>Added <code>tbl_strata(.stack_group_header=)</code> argument to include/exclude the headers when tables are combined with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>.</p></li>
 <li><p>Added <code>tbl_strata(.quiet=)</code> argument.</p></li>
 <li><p>Allow <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code> to be run on the same table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/959" class="external-link">#959</a>)</p></li>
 <li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the <code>df_stats</code> tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code>inline_text(pattern=)</code> argument.</p></li>
@@ -1145,7 +1170,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, Michael Curry, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, Michael Curry, Emily de la Rua, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

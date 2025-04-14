@@ -9,7 +9,7 @@ and add_difference()."><meta property="og:image" content="https://www.danieldsjo
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -160,13 +160,14 @@ a column name of the continuous summary variable in <code><a href="tbl_continuou
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     check_pkg_installed("cardx")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     check_empty(c("group", "adj.vars"), ...)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     dplyr::mutate(rlang::inject(cardx::ard_stats_wilcox_test(data = data, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         variable = all_of(variable), by = all_of(by), conf.int = TRUE, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         conf.level = conf.level, !!!test.args)), stat = dplyr::case_when(.data$stat_name %in% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     dplyr::mutate(rlang::inject(cardx::ard_stats_wilcox_test(data = .data_pre_processing(data, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         factor = by, numeric = variable), variable = all_of(variable), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         by = all_of(by), conf.int = TRUE, conf.level = conf.level, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         !!!test.args)), stat = dplyr::case_when(.data$stat_name %in% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         "method" &amp; .data$stat %in% "Wilcoxon rank sum test with continuity correction" ~ </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         list("Wilcoxon rank sum test"), .default = .data$stat))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55a5ccd9aee8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda8aad6e0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:gtsummary&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"test_name")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "wilcox.test"</span>
@@ -177,7 +178,7 @@ a column name of the continuous summary variable in <code><a href="tbl_continuou
 <span class="r-out co"><span class="r-pr">#&gt;</span>     add_p_test_chisq.test(data = data, variable = variable, by = by, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         test.args = c(list(correct = FALSE), test.args), ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55a5c0811870&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55cda69313f0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:gtsummary&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"test_name")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "chisq.test.no.correct"</span>
@@ -189,7 +190,7 @@ a column name of the continuous summary variable in <code><a href="tbl_continuou
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, Michael Curry, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, Michael Curry, Emily de la Rua, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
