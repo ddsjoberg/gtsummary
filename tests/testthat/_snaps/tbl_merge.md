@@ -55,3 +55,13 @@
       Error in `tbl_merge()`:
       ! The tables in the `tbls` argument do not share any columns specified in `merge_vars` argument and merge cannot be performed.
 
+# tbl_merge(merge_vars)
+
+    Code
+      as.data.frame(tbl)
+    Output
+          **Characteristic** **Beta** **95% CI** **p-value** **Beta** **95% CI**
+      1 Marker Level (ng/mL)    -0.05  -2.5, 2.4        >0.9    -0.05  -2.5, 2.4
+        **p-value**
+      1        >0.9
+
