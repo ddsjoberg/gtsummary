@@ -258,9 +258,11 @@ tbl_regression.default <- function(x,
 
     # warning about multinomial models
     cli::cli_inform(
-      c("i" = "Multinomial models and other grouped models have a different
+      c("i" = "Multinomial models, multi-component models and other groups models
+               have a different
                underlying structure than the models gtsummary was designed for.",
-        "*" = "Functions designed to work with {.fun tbl_regression} objects may yield unexpected results.")
+        "*" = "Functions designed to work with {.fun tbl_regression} objects may yield unexpected results.",
+        "i" = "Suppress this message with {.help suppressMessages}.")
     )
   }
 
