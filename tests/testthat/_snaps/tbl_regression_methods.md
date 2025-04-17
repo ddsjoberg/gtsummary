@@ -111,8 +111,9 @@
       as.data.frame(tbl_regression(lme4::lmer(mpg ~ hp + (1 | cyl), mtcars), tidy = broom.mixed::tidy,
       group_by = "effect", group_label = c(fixed = "Fixed Effects", ran_pars = "Random Effects")))
     Message
-      i Multinomial models and other grouped models have a different underlying structure than the models gtsummary was designed for.
+      i Multinomial models, multi-component models and other groups models have a different underlying structure than the models gtsummary was designed for.
       * Functions designed to work with `tbl_regression()` objects may yield unexpected results.
+      i Suppress this message with `?suppressMessages()`.
     Output
            **Outcome**       **Characteristic** **Beta**  **95% CI**
       1  Fixed Effects                       hp    -0.03 -0.06, 0.00
@@ -165,8 +166,9 @@
       final  value 29.311125 
       converged
     Message
-      i Multinomial models and other grouped models have a different underlying structure than the models gtsummary was designed for.
+      i Multinomial models, multi-component models and other groups models have a different underlying structure than the models gtsummary was designed for.
       * Functions designed to work with `tbl_regression()` objects may yield unexpected results.
+      i Suppress this message with `?suppressMessages()`.
     Output
         **Outcome** **Characteristic** **log(OR)**  **95% CI** **p-value**
       1           6                 am        -1.3  -3.3, 0.73         0.2
