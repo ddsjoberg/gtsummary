@@ -115,7 +115,7 @@
       * Functions designed to work with `tbl_regression()` objects may yield unexpected results.
       i Suppress this message with `?suppressMessages()`.
     Output
-           **Outcome**       **Characteristic** **Beta**  **95% CI**
+             **Group**       **Characteristic** **Beta**  **95% CI**
       1  Fixed Effects                       hp    -0.03 -0.06, 0.00
       2 Random Effects      cyl.sd__(Intercept)      4.0        <NA>
       3           <NA> Residual.sd__Observation      3.1        <NA>
