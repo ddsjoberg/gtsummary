@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)
+
 * Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
 
 * Fix in `tbl_merge(merge_vars)` argument when a table contained a `"row_type"` column and the tables were not merged by this variable (which is included in the default). (#2205)
