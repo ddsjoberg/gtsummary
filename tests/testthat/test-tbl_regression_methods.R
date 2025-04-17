@@ -66,6 +66,17 @@ test_that("tbl_regression.lmerMod()", {
       tbl_regression() |>
       as.data.frame()
   )
+
+  expect_snapshot(
+    lme4::lmer(mpg ~ hp + (1 | cyl), mtcars) |>
+      tbl_regression(
+        tidy = broom.mixed::tidy,
+        group_by = "effect",
+        group_label = c(fixed = "Fixed Effects",
+                        ran_pars = "Random Effects")
+      ) |>
+      as.data.frame()
+  )
 })
 
 test_that("tbl_regression.gam()", {

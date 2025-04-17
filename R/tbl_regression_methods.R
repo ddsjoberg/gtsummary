@@ -49,11 +49,6 @@ tbl_regression.survreg <- function(x, tidy_fun = function(x, ...) broom::tidy(x,
 tbl_regression.mira <- function(x, tidy_fun = pool_and_tidy_mice, ...) {
   tbl <- tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 
-  # adding outcome levels to multinomial models
-  if (inherits(x$analyses[[1]], "multinom")) {
-    tbl <- .multinom_modifations(tbl)
-  }
-
   tbl
 }
 
@@ -113,35 +108,3 @@ tbl_regression.crr <- function(x, ...) {
   tbl_regression.default(x = x, ...)
 }
 
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.multinom <- function(x, ...) {
-  result <- tbl_regression.default(x = x, ...)
-
-  # grouping by outcome, and printing warning message
-  .multinom_modifations(result)
-}
-
-.multinom_modifations <- function(x) {
-  # adding a grouped header for the outcome levels
-  x$table_body <-
-    x$table_body |>
-    mutate(groupname_col = .data$y.level, .before = 1L)
-
-  x <- modify_table_styling(
-      x = x,
-      columns = all_of("groupname_col"),
-      hide = FALSE,
-      label = "**Outcome**",
-      align = "left"
-    )
-
-  # warning about multinomial models
-  cli::cli_inform(
-    c("i" = "Multinomial models have a different underlying structure than the
-             models gtsummary was designed for.",
-      "*" = "Functions designed to work with {.fun tbl_regression} objects may yield unexpected results.")
-  )
-
-  x
-}
