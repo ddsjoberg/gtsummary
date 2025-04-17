@@ -218,7 +218,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
             style_updated$rows <-
               map(
                 style_updated$rows,
-                ~ .rename_variables_in_expression(.x, i, tbls[[i]])
+                \(.x) {
+                  .rename_variables_in_expression(.x, i, tbls[[i]], merge_vars = merge_vars)
+                }
               )
           }
 
@@ -227,7 +229,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
             style_updated$pattern <-
               map_chr(
                 style_updated$pattern,
-                ~ .rename_variables_in_pattern(.x, i, tbls[[i]])
+                ~ .rename_variables_in_pattern(.x, i, tbls[[i]], merge_vars = merge_vars)
               )
           }
 
@@ -252,7 +254,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
         ~ .rename_variables_in_expression(
           rows = getElement(tbls, .x) |> getElement("table_styling") |> getElement(style_type),
           id = .x,
-          tbl = tbls[[.x]]
+          tbl = tbls[[.x]],
+          merge_vars = merge_vars
         )
       ) %>%
       reduce(.f = \(.x, .y) .x %||% .y)
@@ -261,7 +264,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   x
 }
 
-.rename_variables_in_expression <- function(rows, id, tbl) {
+.rename_variables_in_expression <- function(rows, id, tbl, merge_vars) {
   # if NULL, return rows expression unmodified
   rows_evaluated <- eval_tidy(rows, data = tbl$table_body)
   if (is.null(rows_evaluated)) {
@@ -277,7 +280,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     expr(~ !!expr) %>%
     eval() %>%
     all.vars() %>%
-    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    setdiff(merge_vars) %>%
     intersect(columns)
 
   # if no variables to rename, return rows unaltered
@@ -302,7 +305,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   expr_renamed
 }
 
-.rename_variables_in_pattern <- function(pattern, id, tbl) {
+.rename_variables_in_pattern <- function(pattern, id, tbl, merge_vars) {
   # get all variable names in expression to be renamed
   columns <- tbl$table_styling$header$column
   var_list <-
@@ -310,7 +313,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     map(~ str_remove_all(.x, pattern = "}", fixed = TRUE)) %>%
     map(~ str_remove_all(.x, pattern = "{", fixed = TRUE)) %>%
     unlist() %>%
-    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    setdiff(merge_vars) %>%
     intersect(columns)
 
   # if no variables to rename, return rows unaltered
