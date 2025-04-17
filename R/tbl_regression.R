@@ -278,6 +278,6 @@ tbl_regression.default <- function(x,
   "**Group**"
 }
 
-.grouped_data_header.default <- function(x) {
+.grouped_data_header.multinom <- function(x) {
   "**Outcome**"
 }
