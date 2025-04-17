@@ -251,6 +251,7 @@ tbl_uvregression.data.frame <- function(data,
 
   # exporting results ----------------------------------------------------------
   results$inputs <- tbl_uvregression_inputs
+  results$cards <- list(tbl_uvregression = NULL)
   results$call_list <- list(tbl_uvregression = match.call())
 
   results
