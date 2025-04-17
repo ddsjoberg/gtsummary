@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
+
 # gtsummary 2.2.0
 
 ### New Features and Functions

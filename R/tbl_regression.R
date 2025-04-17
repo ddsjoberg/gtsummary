@@ -231,5 +231,6 @@ tbl_regression.default <- function(x,
       indent = 4
     )
   res$call_list <- list(tbl_regression = match.call())
+  res$cards <- list(tbl_regression = NULL)
   res
 }
