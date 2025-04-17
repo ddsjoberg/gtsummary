@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to <code>add_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2208" class="external-link">#2208</a>)</p></li>
+<ul><li><p>The <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review <code><a href="https://larmarange.github.io/broom.helpers/reference/tidy_group_by.html" class="external-link">broom.helpers::tidy_group_by()</a></code> for details. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1540" class="external-link">#1540</a>)</p></li>
+<li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to <code>add_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2208" class="external-link">#2208</a>)</p></li>
 <li><p>Fix in <code>tbl_merge(merge_vars)</code> argument when a table contained a <code>"row_type"</code> column and the tables were not merged by this variable (which is included in the default). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2205" class="external-link">#2205</a>)</p></li>
 </ul></div>
     <div class="section level2">
