@@ -17,6 +17,9 @@ Selector of columns in \code{x$table_body}}
 Predicate expression to select rows in \code{x$table_body}.
 Review \link[=rows_argument]{rows argument details}.}
 
+\item{indent}{(\code{integer})\cr
+An integer indicating how many space to indent text}
+
 \item{double_indent, undo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
 \value{
