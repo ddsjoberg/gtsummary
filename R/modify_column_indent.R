@@ -3,6 +3,7 @@
 #' Add, increase, or reduce indentation for columns.
 #'
 #' @inheritParams modify_bold_italic
+#' @inheritParams modify_table_styling
 #' @param double_indent,undo `r lifecycle::badge("deprecated")`
 #'
 #' @return a gtsummary table
