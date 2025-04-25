@@ -3,24 +3,43 @@
 \name{tbl_split}
 \alias{tbl_split}
 \alias{tbl_split.gtsummary}
+\alias{tbl_split.list}
+\alias{tbl_split_by_rows}
 \alias{print.tbl_split}
+\alias{tbl_split_by_columns}
+\alias{first_column}
 \title{Split gtsummary table}
 \usage{
 tbl_split(x, ...)
 
-\method{tbl_split}{gtsummary}(x, variables, ...)
+\method{tbl_split}{gtsummary}(x, keys, variables, groups, ...)
+
+\method{tbl_split}{list}(x, keys, variables, groups, ...)
+
+tbl_split_by_rows(x, variables)
 
 \method{print}{tbl_split}(x, ...)
+
+tbl_split_by_columns(x, keys, groups)
+
+first_column(x)
 }
 \arguments{
-\item{x}{(\code{gtsummary})\cr
-gtsummary table}
+\item{x}{(\code{gtsummary} or \code{list})\cr
+gtsummary table.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
+\item{keys}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+columns to be repeated in each table split.}
+
 \item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables at which to split the gtsummary table rows (tables
-will be separated after each of these variables)}
+will be separated after each of these variables).}
+
+\item{groups}{(list of \code{character} vectors)\cr
+list of column names that appear in \code{x$table_body}.
+Each group of column names represent.}
 }
 \value{
 \code{tbl_split} object
@@ -28,10 +47,30 @@ will be separated after each of these variables)}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 The \code{tbl_split} function splits a single gtsummary table into multiple tables.
+Both horizontal (column-wise, (that is, splits by columns in
+\code{x$table_body}) and vertical (row-wise) splits are possible.
 Updates to the print method are expected.
 }
+\details{
+Run \code{gtsummary::show_header_names()} to print all column names to split by.
+}
 \examples{
-tbl <-
-  tbl_summary(trial) |>
+# create standard table
+tbl <- tbl_summary(trial, by = trt)
+
+# split by rows
+tbl_list_rows <- tbl |>
   tbl_split(variables = c(marker, grade))
+
+# print column names
+gtsummary::show_header_names(tbl)
+
+# split by columns
+tbl_list_cols <- tbl |>
+  tbl_split(key = c(stat_1, stat_2))
+
+# take the list of splitted rows and split again by columns
+tbl_list_rows_cols <- tbl_list_rows |>
+  tbl_split(key = c(stat_1, stat_2))
+
 }
