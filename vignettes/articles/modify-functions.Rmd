@@ -1,0 +1,197 @@
+---
+title: "Modifier Functions"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gtsummary)
+theme_gtsummary_compact()
+```
+
+## Introduction
+
+Oftentimes when a table is created using {gtsummary} the default formatting does not exactly match a user's preferred formatting. To make modifications to tables after the table has been built, the `modify_*()` functions were created.
+
+In the following sections we briefly outline each of these functions that can be used to modify gtsummary tables.
+
+Many of the modifier functions share the common `columns` argument. When this argument is required, the column names provided should match their names in the table's `table_body` element (i.e. `x$table_body`). These column names can be printed to the console by running `show_header_names(x)`.
+
+When the `rows` argument is available for a modifier function, a subset of rows in the table on which the function should operate can also be specified via a predicate expression selecting rows from `x$table_body`. See the function documentation for details.
+
+We will begin by crafting a basic table to summarize a regression model. In the following sections, we will showcase how to use a variety of table modifier functions by applying them to this basic table.
+
+```{r tbl}
+x <- glm(response ~ age + grade, trial, family = binomial()) |>
+  tbl_regression(exponentiate = TRUE)
+x
+```
+
+## Column Formatting Modifiers
+
+- `modify_column_alignment()`: Update column alignment/justification
+- `modify_column_indent()`: Update column indentation
+- `modify_column_hide()`/`modify_column_unhide()`: Hide/unhide table columns
+
+These functions are used to apply column-wise formatting updates to a table.
+
+For each of these functions the column(s) on which to operate must be specified via the `columns` argument. 
+
+In addition to specifying the column(s) to modify, the `modify_column_indent()` function also optionally accepts a `rows` argument if indentation should only be changed on a particular subset of rows.
+
+```{r col fmt}
+x |>
+  # unhide the standard error column
+  modify_column_unhide(columns = std.error) |>
+  # align the p-value column to the right
+  modify_column_alignment(columns = p.value, align = "right") |>
+  # increase indentation to 8 for all labels from non-label rows
+  modify_column_indent(columns = label, rows = !row_type %in% 'label', indent = 8L)
+```
+
+## Cell Style Modifiers
+
+- `modify_bold()`/`remove_bold()`: Add/remove bold styling in table cells
+- `modify_italic()`/`remove_italic()`: Add/remove italic styling in table cells
+
+These functions are used to modify the cell font styling within a table.
+
+For each of the `modify_*()` functions the column(s) and row(s) in which cell contents should be bolded/italicized must be specified via the `columns` and `rows` arguments.
+
+The `remove_*()` functions will remove all bold/italic styling by default, but cell locations can be specified if needed via the `columns` and `rows` arguments.
+
+```{r cell style}
+x |>
+  # bold contents of label column in label rows
+  modify_bold(columns = label, rows = row_type == "label") |>
+  # italicize contents of p-value column in level rows
+  modify_italic(columns = p.value, rows = row_type == "level")
+```
+
+## Value Formatting Modifiers
+
+- `modify_missing_symbol()`: Update how missing values are represented in the table
+- `modify_fmt_fun()`: Update the formatting functions applied to numeric columns and rows
+- `modify_post_fmt_fun()`: Apply a second formatting function after the primary formatting functions have been applied
+
+These functions are used to modify the value formatting within a table.
+
+The formatting function modifiers can update multiple formats at once by listing the formats that should be applied in each column, as shown in the following example. The function can be called consecutively if different row subsets should be updated in each column.
+
+The `modify_post_fmt_fun()` function applies formatting to already formatted cell contents, which allows for conditions contingent on the text in the cell.
+
+```{r val fmt}
+x |>
+  # update missing value symbol from '-' to '<Missing>' for OR/CI columns in the reference group row
+  modify_missing_symbol(symbol = "<Missing>", columns = c(estimate, conf.low, conf.high), rows = reference_row == TRUE) |>
+  # update formatting functions in p-value, OR, and CI columns for grade variable rows
+  modify_fmt_fun(
+    p.value = label_style_pvalue(digits = 3),
+    c(estimate, conf.low, conf.high) ~ label_style_sigfig(digits = 4),
+    rows = variable == "grade"
+  ) |>
+  # update formatting function in OR column for age variable row
+  modify_fmt_fun(
+    estimate = label_style_sigfig(digits = 6),
+    rows = variable == "age"
+  ) |>
+  # update formatting in all cells where cell contents = "0.10"
+  modify_post_fmt_fun(
+    fmt_fun = ~ifelse(. == "0.10", "p = 0.1", .),
+    columns = everything()
+  )
+```
+
+## Header Modifiers
+
+- `modify_header()`: Update column headers
+- `modify_spanning_header()`/`remove_spanning_header()`: Update/remove spanning headers
+
+These functions are used to modify table headers.
+
+See the function documentation for details on the customization options available when modifying headers.
+
+```{r hdr}
+x |>
+  # update header for the OR column
+  modify_header(
+    estimate ~ "**Odds Ratio**",
+    label ~ ""
+  ) |>
+  # add a spanning header across all columns
+  modify_spanning_header(everything() ~ "**Linear Regression (N = {N})**")
+```
+
+## Footnote Modifiers
+
+- `modify_footnote_body()`/`remove_footnote_body()`: Update/remove footnotes corresponding to columns/rows/cells in the table
+- `modify_footnote_header()`/`remove_footnote_header()`: Update/remove footnotes corresponding to the table header
+- `modify_footnote_spanning_header()`/`remove_footnote_spanning_header()`: Update/remove footnotes corresponding to a table spanning header
+
+These functions are used to modify table footnotes. Each function corresponds to footnotes relating to a specific part of the table - the table body (including labels), header, and spanning header(s).
+
+Footnotes will be listed (and numbered) in the order in which they appear in the table, from top-left to bottom-right. Duplicate footnotes will only be numbered and displayed once.
+
+By default any pre-existing footnotes will be overwritten and replaced with the newly specified footnotes. This can be disabled so that previous footnotes are retained by setting `replace = FALSE` in each of the footnote modifier functions.
+
+The `remove_*()` functions will remove all footnotes for the associated table part by default. See the function documentation for custom footnote removal options.
+
+```{r foot}
+x |>
+  # add footnote associated with the grade label within the label column
+  modify_footnote_body(
+    footnote = "Tumor grade was assessed _before_ treatment began",
+    columns = "label",
+    rows = variable == "grade" & row_type == "label"
+  ) |>
+  # add footnote associated with the grade III p-value cell
+  modify_footnote_body(
+    footnote = "Reported p-value outside of the range of interest",
+    columns = p.value,
+    rows = variable == "grade" & label == "III"
+  ) |>
+  # add footnote associated with the header over all columns
+  modify_footnote_header(
+    footnote = "All subjects received treatment",
+    columns = everything(),
+    replace = FALSE
+  )
+```
+
+## Source Note & Caption Modifiers
+
+- `modify_abbreviation()`/`remove_abbreviation()`: Update/remove table text abbreviations source note
+- `modify_caption()`: Update table caption
+- `modify_source_note()`/`remove_source_note()`: Update/remove table source notes
+
+These functions are used to modify table source notes and captions. Source notes are similar to footnotes but are not linked to a specific cell in the table.
+
+All abbreviations supplied via `modify_source_note()` are coalesced into a single source note.
+
+Source notes are displayed after footnotes, with the abbreviations source note listed before any other source notes.
+
+The formatting and appearance of source notes and captions are largely dependent on the table engine used, as some features are not supported by all table engines. See the individual function documentation for details.
+
+```{r source}
+x |>
+  modify_source_note("Results as of June 26, 2015") |>
+  modify_abbreviation("I = Grade 1") |>
+  remove_abbreviation("OR = Odds Ratio")
+```
+
+## Advanced Modifiers
+
+**These functions should be used by developers or advanced users only.**
+
+- `modify_table_body()`: Update `x$table_body` directly 
+- `modify_table_styling()`: Update `x$table_styling` directly 
+- `modify_column_merge()`/`remove_column_merge()`: Merge/unmerge two or more columns
+
+The other - more user-friendly - modifier functions are intended to replace the functionality provided by these functions.
+
+For details on how to use these advanced functions see the function documentation.
