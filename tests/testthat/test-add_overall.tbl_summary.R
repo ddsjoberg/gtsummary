@@ -100,3 +100,32 @@ test_that("add_overall.tbl_summary() errors", {
       add_overall()
   )
 })
+
+# Addressing this issue: https://github.com/insightsengineering/crane/issues/41
+test_that("add_overall.tbl_summary() gets all table_styling instructions", {
+  tbl_styling_test <- function(...) {
+    tbl <- tbl_summary(...) %>%
+      modify_post_fmt_fun(
+        fmt_fun = ~ifelse(. == "0 (0%)", "0", .),
+        columns = all_stat_cols()
+      ) %>%
+      structure(.Data = ., class = c("tbl_styling_test", class(.)))
+
+    names(tbl$call_list) <-  "tbl_styling_test"
+    tbl
+  }
+
+  expect_equal(
+    trial |>
+      dplyr::mutate(grade = forcats::fct_expand(grade, "Other")) |>
+      tbl_styling_test(
+        by = trt,
+        include = grade
+      ) |>
+      add_overall() |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull("stat_0") |>
+      dplyr::last(),
+    "0"
+  )
+})
