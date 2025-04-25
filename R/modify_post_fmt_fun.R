@@ -4,7 +4,7 @@
 #' Apply a formatting function after the primary formatting functions have been applied.
 #' The function is similar to `gt::text_transform()`.
 #'
-#' @inheritParams modify_footnote_body
+#' @inheritParams modify_bold_italic
 #' @param fmt_fun (`function`)\cr
 #'   a function that will be applied to the specified columns and rows.
 #'

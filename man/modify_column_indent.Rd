@@ -8,18 +8,14 @@ modify_column_indent(x, columns, rows = NULL, indent = 4L, double_indent, undo)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
-gtsummary object}
+A gtsummary object}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Selector of columns in \code{x$table_body}}
 
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
-Can be used to style footnote, formatting functions, missing symbols,
-and text formatting. Default is \code{NULL}. See details below.}
-
-\item{indent}{(\code{integer})\cr
-An integer indicating how many space to indent text}
+Review \link[=rows_argument]{rows argument details}.}
 
 \item{double_indent, undo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 }
