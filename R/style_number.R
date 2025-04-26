@@ -19,6 +19,8 @@
 #'   Additional text to display before the number.
 #' @param suffix (`string`)\cr
 #'   Additional text to display after the number.
+#' @param (`NA`/`string`)\cr
+#'   Character to replace `NA` values with. Default is `NA_character`
 #' @param ... Arguments passed on to `base::format()`
 #'
 #' @return formatted character vector
@@ -33,7 +35,9 @@ style_number <- function(x,
                          decimal.mark = getOption("OutDec"),
                          scale = 1,
                          prefix = "",
-                         suffix = "", ...) {
+                         suffix = "",
+                         na = NA_character_,
+                         ...) {
   set_cli_abort_call()
   if (!is_string(prefix) || !is_string(suffix)) {
     cli::cli_abort(
@@ -66,7 +70,7 @@ style_number <- function(x,
       )
   }
   ret <- paste0(prefix, ret, suffix)
-  ret[is.na(x)] <- NA_character_
+  ret[is.na(x)] <- na
   attributes(ret) <- attributes(unclass(x))
 
   ret

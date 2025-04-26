@@ -14,6 +14,11 @@ test_that("style_ratio() works", {
     c("-0.999", "-1.000", "-1.000", "-1.001", "-1.001")
   )
 
+  expect_equal(
+    style_ratio(NA, na = "NE"),
+    "NE"
+  )
+
   expect_false(
     style_ratio(0.99) == "1.0"
   )

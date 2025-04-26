@@ -10,6 +10,7 @@ style_pvalue(
   prepend_p = FALSE,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  na = NA_character_,
   ...
 )
 }

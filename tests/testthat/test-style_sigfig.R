@@ -17,6 +17,11 @@ test_that("style_sigfig() works", {
     style_sigfig(0.97, digits = 1) == "1"
   )
 
+  expect_equal(
+    style_sigfig(NA, na = "NE"),
+    "NE"
+  )
+
   vec2 <- c(one = 0.99, two = 0.0005)
   expect_equal(
     attributes(vec2),
