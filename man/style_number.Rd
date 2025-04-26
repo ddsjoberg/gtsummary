@@ -12,6 +12,7 @@ style_number(
   scale = 1,
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 }
@@ -43,6 +44,8 @@ Additional text to display before the number.}
 Additional text to display after the number.}
 
 \item{...}{Arguments passed on to \code{base::format()}}
+
+\item{(`NA`/`string`)\cr}{Character to replace \code{NA} values with. Default is \code{NA_character}}
 }
 \value{
 formatted character vector

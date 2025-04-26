@@ -12,6 +12,7 @@ style_percent(
   prefix = "",
   suffix = "",
   symbol,
+  na = NA_character_,
   ...
 )
 }

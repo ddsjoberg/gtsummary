@@ -12,6 +12,7 @@ style_sigfig(
   decimal.mark = getOption("OutDec"),
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 }

@@ -11,6 +11,7 @@ style_ratio(
   decimal.mark = getOption("OutDec"),
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 }

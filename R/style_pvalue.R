@@ -26,6 +26,7 @@ style_pvalue <- function(x,
                          prepend_p = FALSE,
                          big.mark = ifelse(decimal.mark == ",", " ", ","),
                          decimal.mark = getOption("OutDec"),
+                         na = NA_character_,
                          ...) {
   set_cli_abort_call()
 
@@ -48,24 +49,25 @@ style_pvalue <- function(x,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.9 ~ paste0(">", style_number(
           x = 0.9, digits = 1, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+          decimal.mark = decimal.mark, na = na, ...
         )),
         cards::round5(x, 1) >= 0.2 ~ style_number(x,
                                                   digits = 1, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, ...
+                                                  decimal.mark = decimal.mark, na = na, ...
         ),
         cards::round5(x, 2) >= 0.1 ~ style_number(x,
                                                   digits = 2, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, ...
+                                                  decimal.mark = decimal.mark, na = na, ...
         ),
         x >= 0.001 ~ style_number(x,
                                   digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...
+                                  decimal.mark = decimal.mark, na = na, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
-        ))
+          decimal.mark = decimal.mark, na = na, ...
+        )),
+        is.na(x) ~ na
       )
   }
   # rounding large p-values to 2 digits
@@ -76,20 +78,21 @@ style_pvalue <- function(x,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.99 ~ paste0(">", style_number(
           x = 0.99, digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+          decimal.mark = decimal.mark, na = na, ...
         )),
         cards::round5(x, 2) >= 0.1 ~ style_number(x,
                                                   digits = 2, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, ...
+                                                  decimal.mark = decimal.mark, na = na, ...
         ),
         x >= 0.001 ~ style_number(x,
                                   digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...
+                                  decimal.mark = decimal.mark, na = na, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
-        ))
+          decimal.mark = decimal.mark, na = na, ...
+        )),
+        is.na(x) ~ na
       )
   }
 
@@ -101,16 +104,17 @@ style_pvalue <- function(x,
         x < 0 - 1e-15 ~ NA_character_,
         x > 0.999 ~ paste0(">", style_number(
           x = 0.999, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
+          decimal.mark = decimal.mark, na = na, ...
         )),
         x >= 0.001 ~ style_number(x,
                                   digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...
+                                  decimal.mark = decimal.mark, na = na, ...
         ),
         x < 0.001 ~ paste0("<", style_number(
           x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, ...
-        ))
+          decimal.mark = decimal.mark, na = na, ...
+        )),
+        is.na(x) ~ na
       )
   } else {
     cli::cli_abort(
@@ -122,7 +126,7 @@ style_pvalue <- function(x,
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
     p_fmt <- dplyr::case_when(
-      is.na(p_fmt) ~ NA_character_,
+      (is.na(na) & is.na(p_fmt)) | p_fmt == na ~ na,
       grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)
     )
