@@ -19,7 +19,7 @@
 #'   Additional text to display before the number.
 #' @param suffix (`string`)\cr
 #'   Additional text to display after the number.
-#' @param (`NA`/`string`)\cr
+#' @param na (`NA`/`string`)\cr
 #'   Character to replace `NA` values with. Default is `NA_character`
 #' @param ... Arguments passed on to `base::format()`
 #'
