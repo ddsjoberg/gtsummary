@@ -35,6 +35,9 @@ Default is \code{","}, except when \code{decimal.mark = ","} when the default is
 The character to be used to indicate the numeric decimal point.
 Default is \code{"."}  or \code{getOption("OutDec")}}
 
+\item{na}{(\code{NA}/\code{string})\cr
+Character to replace \code{NA} values with. Default is \code{NA_character}}
+
 \item{...}{Arguments passed on to \code{base::format()}}
 }
 \value{
