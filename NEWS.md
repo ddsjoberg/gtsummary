@@ -6,6 +6,8 @@
 
 * Fix in `tbl_merge(merge_vars)` argument when a table contained a `"row_type"` column and the tables were not merged by this variable (which is included in the default). (#2205)
 
+* Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
+
 # gtsummary 2.2.0
 
 ### New Features and Functions
