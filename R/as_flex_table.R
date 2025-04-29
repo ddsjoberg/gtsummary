@@ -34,9 +34,6 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
 
   # deprecated arguments -------------------------------------------------------
   dots <- rlang::dots_list(...)
-  if (!is.null(dots$strip_md_bold)) {
-    lifecycle::deprecate_stop("1.6.0", "gtsummary::as_flex_table(strip_md_bold=)")
-  }
 
   # process inputs -------------------------------------------------------------
   check_class(x, "gtsummary")

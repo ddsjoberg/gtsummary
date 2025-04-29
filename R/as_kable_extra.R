@@ -151,23 +151,8 @@ as_kable_extra <- function(x,
 }
 
 
-
-
 table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...) {
   dots <- rlang::dots_list(...)
-
-  if (!is.null(dots[["strip_md_bold"]])) {
-    lifecycle::deprecate_warn(
-      when = "1.6.0",
-      what = "gtsummary::as_kable_extra(strip_md_bold=)"
-    )
-  }
-  if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_stop(
-      when = "1.6.0",
-      what = "gtsummary::as_kable_extra(fmt_missing=)"
-    )
-  }
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
   if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "latex")) {

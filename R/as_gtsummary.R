@@ -105,6 +105,8 @@ as_gtsummary <- function(table_body, ...) {
     dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
   x$table_styling$cols_merge <-
     dplyr::tibble(column = character(), rows = list(), pattern = character())
+  x$table_styling$post_fmt_fun <-
+    dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
 
   # adding other objects to list -----------------------------------------------
   x <- c(x, list(...))

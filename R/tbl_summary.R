@@ -198,6 +198,11 @@ tbl_summary <- function(data,
   }
   check_string(missing_text)
 
+  if (missing(missing_stat)) {
+    missing_stat <- get_theme_element("tbl_summary-arg:missing_stat", default = missing_stat) # styler: off
+  }
+  check_string(missing_stat)
+
 
   if (missing(percent))
     percent <- get_theme_element("tbl_summary-arg:percent", default = percent) # styler: off
@@ -214,6 +219,11 @@ tbl_summary <- function(data,
 
 
   # assign summary type --------------------------------------------------------
+  type <-
+    case_switch(
+      missing(type) ~ get_theme_element("tbl_summary-arg:type", default = type),
+      .default = type
+    )
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
@@ -221,11 +231,7 @@ tbl_summary <- function(data,
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
-      type =
-        case_switch(
-          missing(type) ~ get_theme_element("tbl_summary-arg:type", default = type),
-          .default = type
-        )
+      type = type
     )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)

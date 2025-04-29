@@ -268,69 +268,24 @@
     Code
       as.data.frame(res_o)
     Output
-         **Primary System Organ Class**  \n    **Highest Severity**
-      1                                           CARDIAC DISORDERS
-      2                                                        MILD
-      3                                                    MODERATE
-      4                                                      SEVERE
-      5                                  GASTROINTESTINAL DISORDERS
-      6                                                        MILD
-      7                                                    MODERATE
-      8                                                      SEVERE
-      9        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
-      10                                                       MILD
-      11                                                   MODERATE
-      12                                                     SEVERE
-      13                                INFECTIONS AND INFESTATIONS
-      14                                                       MILD
-      15                                                   MODERATE
-      16                                                     SEVERE
-      17                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS
-      18                                                       MILD
-      19                                                   MODERATE
-      20                                                     SEVERE
-         **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
-      1                   <NA>                               <NA>
-      2               2 (2.3%)                           1 (1.2%)
-      3                 0 (0%)                           2 (2.4%)
-      4               1 (1.2%)                             0 (0%)
-      5                   <NA>                               <NA>
-      6                9 (10%)                           2 (2.4%)
-      7               1 (1.2%)                           2 (2.4%)
-      8                 0 (0%)                             0 (0%)
-      9                   <NA>                               <NA>
-      10              8 (9.3%)                           15 (18%)
-      11              1 (1.2%)                           13 (15%)
-      12                0 (0%)                             0 (0%)
-      13                  <NA>                               <NA>
-      14              4 (4.7%)                           2 (2.4%)
-      15              2 (2.3%)                           1 (1.2%)
-      16                0 (0%)                             0 (0%)
-      17                  <NA>                               <NA>
-      18              5 (5.8%)                           11 (13%)
-      19              4 (4.7%)                           4 (4.8%)
-      20                0 (0%)                             0 (0%)
-         **Xanomeline Low Dose**  \nN = 84
-      1                               <NA>
-      2                             0 (0%)
-      3                             0 (0%)
-      4                             0 (0%)
-      5                               <NA>
-      6                           5 (6.0%)
-      7                             0 (0%)
-      8                             0 (0%)
-      9                               <NA>
-      10                          14 (17%)
-      11                          11 (13%)
-      12                          2 (2.4%)
-      13                              <NA>
-      14                          1 (1.2%)
-      15                            0 (0%)
-      16                            0 (0%)
-      17                              <NA>
-      18                          6 (7.1%)
-      19                           9 (11%)
-      20                            0 (0%)
+         **Primary System Organ Class**  \n    **Highest Severity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                           CARDIAC DISORDERS                  <NA>                               <NA>                              <NA>
+      2                                                        MILD              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      3                                                    MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      4                                                      SEVERE              1 (1.2%)                             0 (0%)                            0 (0%)
+      5                                  GASTROINTESTINAL DISORDERS                  <NA>                               <NA>                              <NA>
+      6                                                        MILD               9 (10%)                           2 (2.4%)                          5 (6.0%)
+      7                                                    MODERATE              1 (1.2%)                           2 (2.4%)                            0 (0%)
+      8        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS                  <NA>                               <NA>                              <NA>
+      9                                                        MILD              8 (9.3%)                           15 (18%)                          14 (17%)
+      10                                                   MODERATE              1 (1.2%)                           13 (15%)                          11 (13%)
+      11                                                     SEVERE                0 (0%)                             0 (0%)                          2 (2.4%)
+      12                                INFECTIONS AND INFESTATIONS                  <NA>                               <NA>                              <NA>
+      13                                                       MILD              4 (4.7%)                           2 (2.4%)                          1 (1.2%)
+      14                                                   MODERATE              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      15                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS                  <NA>                               <NA>                              <NA>
+      16                                                       MILD              5 (5.8%)                           11 (13%)                          6 (7.1%)
+      17                                                   MODERATE              4 (4.7%)                           4 (4.8%)                           9 (11%)
 
 ---
 
@@ -345,19 +300,40 @@
       5                            GASTROINTESTINAL DISORDERS   19 (7.5%)
       6                                                  MILD   16 (6.3%)
       7                                              MODERATE    3 (1.2%)
-      8                                                SEVERE      0 (0%)
-      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS    64 (25%)
-      10                                                 MILD    37 (15%)
-      11                                             MODERATE   25 (9.8%)
-      12                                               SEVERE    2 (0.8%)
-      13                          INFECTIONS AND INFESTATIONS   10 (3.9%)
-      14                                                 MILD    7 (2.8%)
-      15                                             MODERATE    3 (1.2%)
-      16                                               SEVERE      0 (0%)
-      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS    39 (15%)
-      18                                                 MILD   22 (8.7%)
-      19                                             MODERATE   17 (6.7%)
-      20                                               SEVERE      0 (0%)
+      8  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS    64 (25%)
+      9                                                  MILD    37 (15%)
+      10                                             MODERATE   25 (9.8%)
+      11                                               SEVERE    2 (0.8%)
+      12                          INFECTIONS AND INFESTATIONS   10 (3.9%)
+      13                                                 MILD    7 (2.8%)
+      14                                             MODERATE    3 (1.2%)
+      15               SKIN AND SUBCUTANEOUS TISSUE DISORDERS    39 (15%)
+      16                                                 MILD   22 (8.7%)
+      17                                             MODERATE   17 (6.7%)
+
+---
+
+    Code
+      as.data.frame(res_o)
+    Output
+         **Primary System Organ Class**  \n    **Highest Severity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                           CARDIAC DISORDERS              3 (3.5%)                           3 (3.6%)                            0 (0%)
+      2                                                        MILD              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      3                                                    MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      4                                                      SEVERE              1 (1.2%)                             0 (0%)                            0 (0%)
+      5                                  GASTROINTESTINAL DISORDERS              10 (12%)                           4 (4.8%)                          5 (6.0%)
+      6                                                        MILD               9 (10%)                           2 (2.4%)                          5 (6.0%)
+      7                                                    MODERATE              1 (1.2%)                           2 (2.4%)                            0 (0%)
+      8        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS               9 (10%)                           28 (33%)                          27 (32%)
+      9                                                        MILD              8 (9.3%)                           15 (18%)                          14 (17%)
+      10                                                   MODERATE              1 (1.2%)                           13 (15%)                          11 (13%)
+      11                                                     SEVERE                0 (0%)                             0 (0%)                          2 (2.4%)
+      12                                INFECTIONS AND INFESTATIONS              6 (7.0%)                           3 (3.6%)                          1 (1.2%)
+      13                                                       MILD              4 (4.7%)                           2 (2.4%)                          1 (1.2%)
+      14                                                   MODERATE              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      15                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS               9 (10%)                           15 (18%)                          15 (18%)
+      16                                                       MILD              5 (5.8%)                           11 (13%)                          6 (7.1%)
+      17                                                   MODERATE              4 (4.7%)                           4 (4.8%)                           9 (11%)
 
 # tbl_hierarchical_count(data) works properly
 
@@ -994,4 +970,30 @@
        9 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE PRURITUS                            4 (7.5%) 10 (25%) 12 (24%)
       10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
       # i 11 more rows
+
+# tbl_hierarchical works with one arm level present
+
+    Code
+      as.data.frame(res)
+    Output
+        **Primary System Organ Class**  \n    **Dictionary-Derived Term** **Placebo**  \nN = 86
+      1                                                     EYE DISORDERS              1 (1.2%)
+      2                                                       EYE ALLERGY              1 (1.2%)
+      3                                                      EYE SWELLING              1 (1.2%)
+
+# tbl_hierarchical table_body group variables are correct with no by
+
+    Code
+      as.data.frame(res$table_body)
+    Output
+        row_type group1                                         group1_level var_label variable                                                label    stat_0
+      1    level  AESOC                                    CARDIAC DISORDERS      <NA>    AESOC                                    CARDIAC DISORDERS  5 (2.0%)
+      2    level  AESOC                                    CARDIAC DISORDERS      <NA>  AEDECOD                 ATRIOVENTRICULAR BLOCK SECOND DEGREE  5 (2.0%)
+      3    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>    AESOC                           GASTROINTESTINAL DISORDERS 18 (7.1%)
+      4    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>  AEDECOD                                            DIARRHOEA 18 (7.1%)
+      5    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>    AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  57 (22%)
+      6    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE ERYTHEMA  30 (12%)
+      7    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE PRURITUS  50 (20%)
+      8    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>    AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS  38 (15%)
+      9    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>  AEDECOD                                             ERYTHEMA  38 (15%)
 

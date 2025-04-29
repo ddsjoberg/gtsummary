@@ -1,12 +1,50 @@
 # gtsummary (development version)
 
+* The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)
+
+* Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
+
+* Fix in `tbl_merge(merge_vars)` argument when a table contained a `"row_type"` column and the tables were not merged by this variable (which is included in the default). (#2205)
+
+* Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
+
+# gtsummary 2.2.0
+
+### New Features and Functions
+
+* Added function `modify_post_fmt_fun()` to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to `gt::text_transform()`. (#2014)
+
+* Data pre-processing has now been re-introduced for calculations in `add_p()` and `add_difference()`. Data pre-processing steps  were removed in the v2.0 release; however, in some cases---particularly `add_difference()` for dichotomous variables---the reduced functionality was affecting the user experience. See `?tests` for details on data pre-processing. (#2165)
+
+* The `add_variable_group_header()` function has been generalized to work with any gtsummary table, where previously only `'tbl_summary'` were accepted. (#2197)
+
+* The footnote placed on the p-value column by `add_significance_stars()` no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (#2184)
+
 * The `remove_*()` family of functions default argument values have been updated to remove _all_ footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is `remove_spanning_headers()`, which will remove the first level spanning headers be default. (#2161)
 
-* The `tbl_strata_nested_stack(quiet)` argument documentation was updated. (#2164)
+* Added a new theme element `tbl_svysummary-arg:missing_stat`
+
+* Added functions `sort_hierarchical()` and `filter_hierarchical()` to sort and filter hierarchical tables. (#2096)
+
+### Bug Fixes
+
+* Fixed a bug in `tbl_hierarchical()` where the `group*` variables of the resulting `table_body` were not fully populated. (#2192)
+
+* Corrected bug causing an error in `tbl_hierarchical()` when more than one `by` variable level had been filtered out of the data. (#2173)
 
 * Corrected the class of objects returned from `tbl_strata_nested_stack()`.
 
-* Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Pervasively, the indentation of the single strata level was not correct.
+* Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Previously, the indentation of the single strata level was not correct.
+
+* Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
+
+* Fixed bug in `tbl_cross()` when a column was named `'missing'`. (#2182)
+
+* Fix in theme element `tbl_summary-arg:missing_stat` that was not being applied. (#2176)
+
+* Corrected bug in `tbl_likert()` where variables in table always appeared in alphabetical order. (#2195) 
+
+* Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
 
 # gtsummary 2.1.0
 

@@ -176,6 +176,8 @@ test_that("tbl_hierarchical(digits) works properly", {
 
 # tbl_hierarchical with ordered variables ------------------------------------------------------------
 test_that("tbl_hierarchical works properly when last variable of hierarchy is ordered", {
+  withr::local_options(width = 250)
+
   data <- cards::ADAE |>
     dplyr::filter(
       AESOC %in% unique(cards::ADAE$AESOC)[1:10],
@@ -206,6 +208,13 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
     denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
   ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
+
+  # ordered variable, include all variables
+  res_o <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
+    denominator = cards::ADSL |> mutate(TRTA = ARM), label = list(AESEV = "Highest Severity")
+  ) |> suppressMessages()
+  expect_snapshot(res_o |> as.data.frame())
 })
 
 # tbl_hierarchical_count(data) ------------------------------------------------------------
@@ -367,4 +376,50 @@ test_that("tbl_hierarchical_count table_body enables sorting", {
   )
 
   expect_snapshot(res$table_body)
+})
+
+# tbl_hierarchical works with one arm level present ----------------------------------------
+test_that("tbl_hierarchical works with one arm level present", {
+  withr::local_options(list(width = 250))
+
+  # only records with arm Placebo remain in the data
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC == "EYE DISORDERS",
+      AEDECOD %in% c("EYE SWELLING", "EYE ALLERGY")
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      by = TRTA,
+      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(as.data.frame(res))
+})
+
+# tbl_hierarchical table_body group variables are correct with no by -----------------------
+test_that("tbl_hierarchical table_body group variables are correct with no by", {
+  withr::local_options(list(width = 250))
+
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(as.data.frame(res$table_body))
 })
