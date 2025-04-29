@@ -29,6 +29,7 @@ NULL
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, fmt_missing = FALSE, ...) {
   set_cli_abort_call()
+  check_dots_empty()
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
@@ -102,6 +103,8 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   # but the bolding and italic code needs to executed on pre-formatted data
   # (e.g. `bold_p()`) this holds its place for when it is finally run
   tibble_calls[["fmt"]] <- list()
+  tibble_calls[["fmt_missing"]] <- list()
+  tibble_calls[["post_fmt"]] <- list()
 
   # cols_merge -----------------------------------------------------------------
   tibble_calls[["cols_merge"]] <-
@@ -181,6 +184,17 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     tibble_calls[["fmt_missing"]] <- list()
   }
 
+  # post_fmt (part 2) ---------------------------------------------------------------
+  tibble_calls[["post_fmt"]] <-
+    map(
+      seq_len(nrow(x$table_styling$post_fmt_fun)),
+      ~ expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
+        columns = !!x$table_styling$post_fmt_fun$column[[.x]],
+        row_numbers = !!x$table_styling$post_fmt_fun$row_numbers[[.x]],
+        fmt_fun = !!x$table_styling$post_fmt_fun$fmt_fun[[.x]]
+      ))
+    )
+
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
   tibble_calls[["cols_hide"]] <-
@@ -198,7 +212,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   tibble_calls
 }
 
-.apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
+.apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from = data) {
   # apply formatting functions
   df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%

@@ -86,12 +86,13 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     map(
       seq_along(strata),
       \(i) {
-        # for factors, remove unobserved rows
-        case_switch(
-          is.factor(data[[strata[i]]]) ~ dplyr::mutate(data, "{strata[i]}" := factor(.data[[strata[i]]])),
-          .default = data
-        ) |>
+        data |>
         cards::ard_categorical(variables = all_of(strata[i]), strata = any_of(strata[seq_len(i - 1L)])) |>
+          # remove any unobserved levels/combination of levels
+          dplyr::filter(
+            .by = c(cards::all_ard_groups(), cards::all_ard_variables()),
+            !any(.data$stat == 0)
+          ) |>
           dplyr::select(cards::all_ard_groups(), cards::all_ard_variables(), "stat_name", "stat") |>
           dplyr::arrange(dplyr::pick(c(cards::all_ard_groups(), cards::all_ard_variables()))) |>
           tidyr::pivot_wider(
@@ -103,7 +104,8 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
           dplyr::mutate(
             strata = .data$variable_level |> unlist(),
             "{strata[i]}_strata" := glue::glue(row_header)
-          ) |>
+          ) %>%
+          structure(., class = c("card", class(.))) |>
           cards::rename_ard_columns() |>
           dplyr::select(any_of(strata), all_of(glue::glue("{strata[i]}_strata")))
       }

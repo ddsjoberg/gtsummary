@@ -590,10 +590,10 @@ pier_summary_missing_row <- function(cards,
         df_by_stats |>
         dplyr::filter(.data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")) |>
         dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
-        dplyr::left_join(
+        dplyr::inner_join(
           cards |>
             dplyr::select(cards::all_ard_groups(), "gts_column") |>
-            dplyr::filter(!is.na(.data$gts_column)) |>
+            dplyr::filter(!is.na(.data$gts_column) & !is.na(.data$group1)) |>
             dplyr::distinct() |>
             dplyr::rename(variable = "group1", variable_level = "group1_level"),
           by = c("variable", "variable_level")
