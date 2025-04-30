@@ -9,7 +9,7 @@
 #'   List of gtsummary objects
 #' @param group_header (`character`)\cr
 #'   Character vector with table headers where length matches the length of `tbls`
-#' @param attr_order (`integer`)\cr
+#' @param attr_order (`integer`) `r lifecycle::badge("experimental")` \cr
 #'   Set the order table attributes are set.
 #'   Tables are stacked in the order they are passed in the `tbls` argument:
 #'   use `attr_order` to specify the order the table attributes take precedent.
