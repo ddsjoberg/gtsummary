@@ -21,7 +21,7 @@ Character vector with table headers where length matches the length of \code{tbl
 \item{quiet}{(scalar \code{logical})\cr
 Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
 
-\item{attr_order}{(\code{integer})\cr
+\item{attr_order}{(\code{integer}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \cr
 Set the order table attributes are set.
 Tables are stacked in the order they are passed in the \code{tbls} argument:
 use \code{attr_order} to specify the order the table attributes take precedent.
