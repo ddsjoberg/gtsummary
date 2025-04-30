@@ -4,7 +4,12 @@
 \alias{tbl_stack}
 \title{Stack tables}
 \usage{
-tbl_stack(tbls, group_header = NULL, quiet = FALSE)
+tbl_stack(
+  tbls,
+  group_header = NULL,
+  quiet = FALSE,
+  attr_order = seq_along(tbls)
+)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -15,6 +20,13 @@ Character vector with table headers where length matches the length of \code{tbl
 
 \item{quiet}{(scalar \code{logical})\cr
 Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
+
+\item{attr_order}{(\code{integer})\cr
+Set the order table attributes are set.
+Tables are stacked in the order they are passed in the \code{tbls} argument:
+use \code{attr_order} to specify the order the table attributes take precedent.
+For example, to use the header from the second table specify \code{attr_order=2}.
+Default is to set precedent in the order tables are passed.}
 }
 \value{
 A \code{tbl_stack} object
