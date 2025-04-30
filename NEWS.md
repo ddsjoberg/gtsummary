@@ -8,6 +8,8 @@
 
 * Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
 
+* Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The enquo environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
+
 # gtsummary 2.2.0
 
 ### New Features and Functions
