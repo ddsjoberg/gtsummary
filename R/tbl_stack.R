@@ -2,8 +2,6 @@
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
 #' or more gtsummary tables.
-#' Column attributes, including number formatting and column footnotes, are
-#' retained from the first passed gtsummary object.
 #'
 #' @param tbls (`list`)\cr
 #'   List of gtsummary objects

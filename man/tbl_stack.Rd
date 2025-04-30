@@ -34,8 +34,6 @@ A \code{tbl_stack} object
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more gtsummary tables.
-Column attributes, including number formatting and column footnotes, are
-retained from the first passed gtsummary object.
 }
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("survival", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
