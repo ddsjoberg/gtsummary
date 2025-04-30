@@ -27,13 +27,18 @@ test_that("style_pvalue() works", {
     c(NA, '>0.999', '0.999', '0.500', '0.250', '0.200', '0.120', '0.100', '0.060', '0.030', '0.002', '<0.001', '<0.001', NA)
   )
   expect_equal(
-    style_pvalue(pvals, digits = 3, prepend_p = TRUE),
+    style_pvalue(pvals, digits = 3, prepend_p = TRUE, na = "NE"),
     c(NA, 'p>0.999', 'p=0.999', 'p=0.500', 'p=0.250', 'p=0.200', 'p=0.120', 'p=0.100', 'p=0.060', 'p=0.030', 'p=0.002', 'p<0.001', 'p<0.001', NA)
   )
 
   expect_equal(
     style_pvalue(NA, na = "NE"),
     "NE"
+  )
+
+  expect_equal(
+    style_pvalue(c(1.5, NA, -1), digits = 3, prepend_p = TRUE, na = "NE"),
+    c('p=NA', 'NE', 'p=NA')
   )
 
   vec2 <- c(one = 0.99, two = 0.0005)
