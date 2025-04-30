@@ -32,4 +32,9 @@ test_that("style_sigfig() works", {
     style_sigfig(c(0, 1, 11, NA), digits = 2, prefix = "$", suffix = "*"),
     c("$0.00*", "$1.0*", "$11*",  NA)
   )
+
+  expect_equal(
+    style_sigfig(c(0, 1, NA, 11, NA), digits = 2, prefix = "$", suffix = "*", na = "NE"),
+    c("$0.00*", "$1.0*", "NE", "$11*",  "NE")
+  )
 })

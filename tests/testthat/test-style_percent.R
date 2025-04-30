@@ -15,7 +15,10 @@ test_that("style_percent() works", {
     style_percent(NA, na = "NE"),
     "NE"
   )
-
+  expect_equal(
+    style_percent(c(NA, -1, NA), na = "NE"),
+    c("NE", NA, "NE")
+  )
   vec2 <- c(one = 0.99, two = 0.0005)
   expect_equal(
     attributes(vec2),
