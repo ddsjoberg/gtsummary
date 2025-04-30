@@ -29,7 +29,15 @@ add_difference_row <- function(x, ...) {
 #' @param reference (scalar)\cr
 #'   Value of the `tbl_summary(by)` variable value that is the reference for
 #'   each of the difference calculations.
-#' @hea
+#' @param header (`string`)\cr
+#'   When supplied, a header row will appear above the difference statistics.
+#' @param statistic ([`formula-list-selector`][syntax])\cr
+#'   Specifies summary statistics to display for each variable.  The default is
+#'   `everything() ~ "{estimate}"`. The statistics available to include will
+#'   depend on the method specified in the `test` argument, but are generally
+#'   `"estimate"`, `"std.error"`, `"parameter"`, `"statistic"`,
+#'   `"conf.low"`, `"conf.high"`, `"p.value"`
+#'
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
@@ -195,7 +203,7 @@ add_difference_row.tbl_summary <- function(x,
 
   # prep data for tests, by adding reference level to the first position in factor
   data <- x$inputs$data
-  data[[x$inputs$by]] <- forcats::fct_relevel(data[[x$inputs$by]], reference, after = 0L)
+  data[[x$inputs$by]] <- fct_relevel(data[[x$inputs$by]], reference, after = 0L)
 
   # create data frame that is one line per test to be calculated
   df_results <-
@@ -243,7 +251,8 @@ add_difference_row.tbl_summary <- function(x,
                 type = tryCatch(x$inputs$type[[variable]], error = \(e) NULL), # in tbl_survfit(), the type argument is for transforming the estimate, not the summary type
                 test.args = test.args[[variable]],
                 adj.vars = adj.vars,
-                conf.level = conf.level
+                conf.level = conf.level,
+                tbl = x
               )
             )
           )
@@ -251,7 +260,8 @@ add_difference_row.tbl_summary <- function(x,
         # if the result is null, replace is with a data frame of of NA
         chr_expected_stats <- c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", "p.value")
         if (is.null(lst_captured_results[["result"]])) {
-          rep_named(chr_expected_stats, list(NA)) |>
+          lst_captured_results[["result"]] <-
+            rep_named(chr_expected_stats, list(NA)) |>
             as.data.frame()
         }
 
@@ -263,7 +273,7 @@ add_difference_row.tbl_summary <- function(x,
             c("The result from the {.arg test} argument for variable {.var {variable}}
                must be an ARD of class {.cls card} or a data frame with one row,
                similar to what is returned by {.fun broom::tidy}."),
-            call = get_cli_abort_call
+            call = get_cli_abort_call()
           )
         }
 
@@ -272,7 +282,8 @@ add_difference_row.tbl_summary <- function(x,
             !inherits(lst_captured_results[["result"]], "card")) {
           lst_captured_results[["result"]] <-
             lst_captured_results[["result"]] |>
-            cards::ard_identity(variable = .env$variable) |>
+            as.list() |>
+            cards::ard_identity(variable = variable) |>
             dplyr::mutate(
               warning = lst_captured_results["warning"],
               error = lst_captured_results["error"]
@@ -387,7 +398,7 @@ add_difference_row.tbl_summary <- function(x,
     dplyr::mutate(
       result_lst =
         list(.data$result) |>
-        set_names(nm = paste(shQuote(.data$reference_level), shQuote(compare_level), sep = " vs. "))
+        set_names(nm = paste(shQuote(.data$reference_level), shQuote(.data$compare_level), sep = " vs. "))
     ) |>
     dplyr::select("variable", "result_lst") |>
     tidyr::nest(result_nested = "result_lst") |>

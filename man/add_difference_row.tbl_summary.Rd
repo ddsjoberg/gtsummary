@@ -26,6 +26,17 @@
 \item{x}{(\code{tbl_summary})\cr
 table created with \code{tbl_summary()}}
 
+\item{reference}{(scalar)\cr
+Value of the \code{tbl_summary(by)} variable value that is the reference for
+each of the difference calculations.}
+
+\item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
+Specifies summary statistics to display for each variable.  The default is
+\code{everything() ~ "{estimate}"}. The statistics available to include will
+depend on the method specified in the \code{test} argument, but are generally
+\code{"estimate"}, \code{"std.error"}, \code{"parameter"}, \code{"statistic"},
+\code{"conf.low"}, \code{"conf.high"}, \code{"p.value"}}
+
 \item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the tests/methods to perform for each variable, e.g.
 \code{list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")}.
@@ -37,6 +48,9 @@ tests and creating custom tests.}
 Variable name of an ID or grouping variable. The column can be used to
 calculate p-values with correlated data.
 Default is \code{NULL}. See \link{tests} for methods that utilize the \code{group} argument.}
+
+\item{header}{(\code{string})\cr
+When supplied, a header row will appear above the difference statistics.}
 
 \item{adj.vars}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in adjusted calculations (e.g. in ANCOVA models).
@@ -80,7 +94,7 @@ Pairwise differences are calculated relative to the specified \code{by} variable
 # Example 1 ----------------------------------
 trial |>
   tbl_summary(by = grade, include = c(age, response), missing = "no") |>
-  add_difference_row.tbl_summary(
+  add_difference_row(
     reference = "I",
     statistic = everything() ~ c("{estimate}", "{conf.low}, {conf.high}", "{p.value}")
   )
