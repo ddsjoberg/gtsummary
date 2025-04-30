@@ -9,6 +9,12 @@
 #'   List of gtsummary objects
 #' @param group_header (`character`)\cr
 #'   Character vector with table headers where length matches the length of `tbls`
+#' @param attr_order (`integer`)\cr
+#'   Set the order table attributes are set.
+#'   Tables are stacked in the order they are passed in the `tbls` argument:
+#'   use `attr_order` to specify the order the table attributes take precedent.
+#'   For example, to use the header from the second table specify `attr_order=2`.
+#'   Default is to set precedent in the order tables are passed.
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
 #'
@@ -59,13 +65,15 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls)) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
   check_class(tbls, "list")
   walk(tbls, ~check_class(.x, "gtsummary", message = "Each element of the list {.arg tbls} must be class {.cls gtsummary}."))
   check_scalar_logical(quiet)
+  check_integerish(attr_order)
+  check_range(attr_order, range = c(1L, length(tbls)), include_bounds = c(TRUE, TRUE))
   check_class(group_header, cls = "character", allow_empty = TRUE)
   check_length(group_header, length = length(tbls), allow_empty = TRUE)
 
@@ -100,7 +108,10 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
   if (identical(quiet, FALSE)) .print_stack_differences(tbls)
 
   results$table_styling$header <-
-    map(tbls, ~ .x[["table_styling"]][["header"]]) |>
+    map(
+      union(attr_order, seq_along(tbls)),
+      ~ tbls[[.x]][["table_styling"]][["header"]]
+    ) |>
     dplyr::bind_rows() |>
     dplyr::filter(.by = "column", dplyr::row_number() == 1)
 
@@ -111,7 +122,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
                        "fmt_missing", "cols_merge")) {
     results$table_styling[[style_type]] <-
       map(
-        rev(seq_along(tbls)),
+        rev(union(attr_order, seq_along(tbls))),
         function(i) {
           df <- tbls[[i]]$table_styling[[style_type]]
           if ("rows" %in% names(df) && nrow(df) > 0) {
