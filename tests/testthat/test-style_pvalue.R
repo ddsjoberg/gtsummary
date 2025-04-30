@@ -38,7 +38,7 @@ test_that("style_pvalue() works", {
 
   expect_equal(
     style_pvalue(c(1.5, NA, -1), digits = 3, prepend_p = TRUE, na = "NE"),
-    c('p=NA', 'NE', 'p=NA')
+    c(NA, 'NE', NA)
   )
 
   vec2 <- c(one = 0.99, two = 0.0005)

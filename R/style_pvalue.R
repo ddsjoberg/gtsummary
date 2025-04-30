@@ -126,6 +126,7 @@ style_pvalue <- function(x,
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
     p_fmt <- dplyr::case_when(
+      is.na(p_fmt) ~ NA_character_,
       (is.na(na) & is.na(p_fmt)) | p_fmt == na ~ na,
       grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)
