@@ -164,7 +164,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   # cycle over the depth and indenting nesting headers
   for (d in seq_along(strata)) {
     tbl <- tbl |>
-      modify_column_indent(
+      modify_indent(
         columns = all_of(first_non_hidden_col),
         rows = !!expr(.data$tbl_indent_id1 == !!d),
         indent = (d - 1L) * 4L
@@ -174,7 +174,6 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   # return table ---------------------------------------------------------------
   tbl$call_list <- list(tbl_row_split = match.call())
   tbl$inputs = list(tbl_row_split = func_inputs)
-  tbl$tbls <- NULL
   tbl |>
     structure(class = c("tbl_strata_nested_stack", "tbl_stack", "gtsummary"))
 }
