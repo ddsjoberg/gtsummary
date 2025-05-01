@@ -414,7 +414,7 @@ test_that("as_flex_table passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   ft_tbl <- tbl |> as_flex_table()
 
   expect_equal(
