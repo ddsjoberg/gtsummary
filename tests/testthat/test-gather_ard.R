@@ -184,3 +184,17 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
       is_empty()
   )
 })
+
+test_that("gather_ard(x) works with `tbl_strata_nested_stack()` function", {
+  expect_length(
+    tbl_strata_nested_stack(
+      trial,
+      strata = trt,
+      .tbl_fun = ~ .x |>
+        tbl_summary(include = c(age, grade), missing = "no") |>
+        modify_header(all_stat_cols() ~ "**Summary Statistics**")
+    ) |>
+      gather_ard(),
+    2L
+  )
+})
