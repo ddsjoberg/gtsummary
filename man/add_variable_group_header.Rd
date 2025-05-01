@@ -70,7 +70,7 @@ lm(marker ~ trt + grade + age, data = trial) |>
     variables = -trt
   ) |>
   # indent levels 8 spaces
-  modify_column_indent(
+  modify_indent(
     columns = "label",
     rows = row_type == "level",
     indent = 8L

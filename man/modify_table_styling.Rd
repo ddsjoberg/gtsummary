@@ -87,7 +87,7 @@ functions to make modifications to your table:
 \code{\link[=modify_header]{modify_header()}},
 \code{\link[=modify_spanning_header]{modify_spanning_header()}}, \code{\link[=modify_column_hide]{modify_column_hide()}}, \code{\link[=modify_column_unhide]{modify_column_unhide()}},
 \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_abbreviation]{modify_abbreviation()}},
-\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \code{\link[=modify_column_indent]{modify_column_indent()}},
+\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \code{\link[=modify_indent]{modify_indent()}},
 \code{\link[=modify_column_merge]{modify_column_merge()}}, \code{\link[=modify_missing_symbol]{modify_missing_symbol()}}, \code{\link[=modify_bold]{modify_bold()}},
 \code{\link[=modify_italic]{modify_italic()}}.
 
@@ -142,8 +142,8 @@ internally with care, and it is \emph{not} recommended for users.
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
 Other Advanced modifiers: 
-\code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()}
+\code{\link{modify_column_merge}()},
+\code{\link{modify_indent}()}
 }
 \concept{Advanced modifiers}
 \keyword{internal}

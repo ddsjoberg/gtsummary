@@ -223,7 +223,7 @@ test_that("as_hux_table passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   ht <- tbl |> as_hux_table()
 
   expect_equal(
