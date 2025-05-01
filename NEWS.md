@@ -14,7 +14,7 @@
 
 * Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
 
-* Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2233)
+* Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
 
 # gtsummary 2.2.0
 
