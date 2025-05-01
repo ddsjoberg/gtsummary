@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,8 @@
 <li><p>Fix in <code>tbl_merge(merge_vars)</code> argument when a table contained a <code>"row_type"</code> column and the tables were not merged by this variable (which is included in the default). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2205" class="external-link">#2205</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/add_overall.html">add_overall()</a></code> where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.</p></li>
 <li><p>Fix in experimental function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> when tables including this call, did not specify the <code>rows</code> argument, and were later stacked. The enquo environment associated with the <code>rows</code> argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.</p></li>
+<li><p>Updated the function name of <code><a href="../reference/deprecated.html">modify_column_indent()</a></code> to the more accurately named <code><a href="../reference/modify_indent.html">modify_indent()</a></code> as the function operates on cells rather than columns.</p></li>
+<li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> tables, where the function returned an empty list. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2223" class="external-link">#2223</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.2.0" id="gtsummary-220">gtsummary 2.2.0<a class="anchor" aria-label="anchor" href="#gtsummary-220"></a></h2><p class="text-muted">CRAN release: 2025-04-14</p>
@@ -492,7 +494,7 @@
 <li><p>Added a <code>tbl_regression.tidycrr()</code> method to summarize competing risks regression models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1169" class="external-link">#1169</a>)</p></li>
 <li><p>Added tidier <code><a href="../reference/custom_tidiers.html">tidy_wald_test()</a></code>, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code> and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> to obtain the variance-covariance matrix and the coef vector.</p></li>
 <li><p>Adding functions <code><a href="../reference/set_gtsummary_theme.html">get_gtsummary_theme()</a></code> and <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code> for extracting the current gtsummary theme and running code with a temporarily theme.</p></li>
-<li><p>Added new function <code><a href="../reference/modify_column_indent.html">modify_column_indent()</a></code>–a wrapper for <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>–to make it easier to add and remove indentation in a table.</p></li>
+<li><p>Added new function <code><a href="../reference/deprecated.html">modify_column_indent()</a></code>–a wrapper for <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>–to make it easier to add and remove indentation in a table.</p></li>
 <li><p>Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): <code><a href="../reference/dot-table_styling_expr_to_row_number.html">.table_styling_expr_to_row_number()</a></code>.</p></li>
 <li><p>Theme helper function <code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code> has been added. The function takes a gtsummary theme list as the input, and runs various consistency checks. Useful when constructing a personalized theme. This function replaces the internal checks that a passed theme element is indeed a valid theme element.</p></li>
 </ul></div>
