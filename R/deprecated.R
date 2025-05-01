@@ -26,9 +26,19 @@ NULL
 #   v1.6.1 2022-06-22
 
 
-# v1.6.1 ----------------------------------------------------------
+# v1.6.1 -----------------------------------------------------------------------
 #' @rdname deprecated
 #' @export
 modify_cols_merge <- function(...) {
   lifecycle::deprecate_stop("1.6.1", "gtsummary::modify_cols_merge()", "modify_column_merge()")
 }
+
+# v2.3.0 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
+modify_column_indent <- function(...) {
+  lifecycle::deprecate_soft("2.3.0", "gtsummary::modify_column_indent()", "modify_indent()")
+  modify_indent(...)
+}
+
+
