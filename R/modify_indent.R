@@ -13,14 +13,14 @@
 #' # remove indentation from `tbl_summary()`
 #' trial |>
 #'   tbl_summary(include = grade) |>
-#'   modify_column_indent(columns = label, indent = 0L)
+#'   modify_indent(columns = label, indent = 0L)
 #'
 #' # increase indentation in `tbl_summary`
 #' trial |>
 #'   tbl_summary(include = grade) |>
-#'   modify_column_indent(columns = label, rows = !row_type %in% 'label', indent = 8L)
-modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
-                                 double_indent, undo) {
+#'   modify_indent(columns = label, rows = !row_type %in% 'label', indent = 8L)
+modify_indent <- function(x, columns, rows = NULL, indent = 4L,
+                          double_indent, undo) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
 
@@ -35,21 +35,21 @@ modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
     if (!missing(double_indent)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",
-        what = I(glue("modify_column_indent(double_indent={double_indent})")),
-        with = I(glue("modify_column_indent(indent={ifelse(double_indent, 8, 4)})"))
+        what = I(glue("modify_indent(double_indent={double_indent})")),
+        with = I(glue("modify_indent(indent={ifelse(double_indent, 8, 4)})"))
       )
     } else double_indent <- FALSE
     if (!missing(undo) && isTRUE(undo)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",
-        what = I(glue("modify_column_indent(undo=TRUE)")),
-        with = I("modify_column_indent(indent=0)")
+        what = I(glue("modify_indent(undo=TRUE)")),
+        with = I("modify_indent(indent=0)")
       )
     }
     else if (!missing(undo) && isFALSE(undo)) {
       lifecycle::deprecate_warn(
         when = "2.0.0",
-        what = I(glue("modify_column_indent(undo)")),
+        what = I(glue("modify_indent(undo)")),
         details = "Argument has been ignored."
       )
     } else undo <- FALSE
@@ -84,7 +84,7 @@ modify_column_indent <- function(x, columns, rows = NULL, indent = 4L,
   x
 }
 
-.modify_column_indent <- function(x, columns, rows = NULL, indent = 4L) {
+.modify_indent <- function(x, columns, rows = NULL, indent = 4L) {
   # update hidden status -------------------------------------------------------
   x$table_styling$indent <-
     dplyr::bind_rows(
