@@ -30,7 +30,13 @@ modify_post_fmt_fun <- function(x, fmt_fun, columns, rows = TRUE) {
   fmt_fun <- as_function(fmt_fun, call = get_cli_abort_call())
   cards::process_selectors(scope_header(x$table_body), columns =  {{ columns }})
   .check_rows_input(x, rows = {{ rows }})
-  rows <- enquo(rows)
+  # if rows is not specified, the associated env is empty, which can cause issues
+  # after a merge or stack when additional items are added to the expression
+  rows <-
+    case_switch(
+      missing(rows) ~ enexpr(rows),
+      .default = enquo(rows)
+    )
 
   # return table if no columns selected ----------------------------------------
   if (is_empty(columns)) {
