@@ -259,7 +259,7 @@ test_that("as_kable_extra passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   kbl <- tbl |> as_kable_extra()
 
   expect_false(
