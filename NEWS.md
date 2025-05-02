@@ -16,6 +16,8 @@
 
 * Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
 
+* Added an article on `modify_*()` functions. (#2209)
+
 # gtsummary 2.2.0
 
 ### New Features and Functions
