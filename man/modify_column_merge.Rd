@@ -11,16 +11,16 @@ remove_column_merge(x, columns = everything())
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
-gtsummary object}
+A gtsummary object}
 
-\item{pattern}{glue syntax string indicating how to merge columns in
+\item{pattern}{(\code{string})\cr
+glue syntax string indicating how to merge columns in
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
-Can be used to style footnote, formatting functions, missing symbols,
-and text formatting. Default is \code{NULL}. See details below.}
+Review \link[=rows_argument]{rows argument details}.}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Selector of columns in \code{x$table_body}}
