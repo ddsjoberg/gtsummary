@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
 <li><p>Fix in experimental function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> when tables including this call, did not specify the <code>rows</code> argument, and were later stacked. The enquo environment associated with the <code>rows</code> argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.</p></li>
 <li><p>Updated the function name of <code><a href="../reference/deprecated.html">modify_column_indent()</a></code> to the more accurately named <code><a href="../reference/modify_indent.html">modify_indent()</a></code> as the function operates on cells rather than columns.</p></li>
 <li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> tables, where the function returned an empty list. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2223" class="external-link">#2223</a>)</p></li>
+<li><p>Added an article on <code>modify_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2209" class="external-link">#2209</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.2.0" id="gtsummary-220">gtsummary 2.2.0<a class="anchor" aria-label="anchor" href="#gtsummary-220"></a></h2><p class="text-muted">CRAN release: 2025-04-14</p>

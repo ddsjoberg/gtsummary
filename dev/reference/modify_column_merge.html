@@ -9,7 +9,7 @@ Use show_header_names() to print underlying column names."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +62,12 @@ Use <code><a href="modify.html">show_header_names()</a></code> to print underlyi
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>(<code>gtsummary</code>)<br>
-gtsummary object</p></dd>
+A gtsummary object</p></dd>
 
 
 <dt id="arg-pattern">pattern<a class="anchor" aria-label="anchor" href="#arg-pattern"></a></dt>
-<dd><p>glue syntax string indicating how to merge columns in
+<dd><p>(<code>string</code>)<br>
+glue syntax string indicating how to merge columns in
 <code>x$table_body</code>. For example, to construct a confidence interval
 use <code>"{conf.low}, {conf.high}"</code>.</p></dd>
 
@@ -74,8 +75,7 @@ use <code>"{conf.low}, {conf.high}"</code>.</p></dd>
 <dt id="arg-rows">rows<a class="anchor" aria-label="anchor" href="#arg-rows"></a></dt>
 <dd><p>(predicate <code>expression</code>)<br>
 Predicate expression to select rows in <code>x$table_body</code>.
-Can be used to style footnote, formatting functions, missing symbols,
-and text formatting. Default is <code>NULL</code>. See details below.</p></dd>
+Review <a href="rows_argument.html">rows argument details</a>.</p></dd>
 
 
 <dt id="arg-columns">columns<a class="anchor" aria-label="anchor" href="#arg-columns"></a></dt>
