@@ -16,8 +16,8 @@ test_that("style_percent() works", {
     "NE"
   )
   expect_equal(
-    style_percent(c(NA, -1, NA), na = "NE"),
-    c("NE", NA, "NE")
+    style_percent(c(NA, -1, NA, 1), na = "NE", prefix = "*", suffix = "*"),
+    c("NE", NA, "NE", "*100*")
   )
   vec2 <- c(one = 0.99, two = 0.0005)
   expect_equal(
