@@ -18,11 +18,11 @@ test_that("label_style_*()", {
 
   expect_equal(
     c(
-      label_style_number(na = "NE")(NA),
-      label_style_sigfig(na = "NE")(NA),
-      label_style_ratio(na = "NE")(NA),
-      label_style_pvalue(na = "NE")(NA),
-      label_style_percent(na = "NE")(NA)
+      label_style_number(na = "NE", prefix = "$", suffix = "*")(NA),
+      label_style_sigfig(na = "NE", prefix = "$", suffix = "*")(NA),
+      label_style_ratio(na = "NE", prefix = "$", suffix = "*")(NA),
+      label_style_pvalue(na = "NE", prefix = "$", suffix = "*")(NA),
+      label_style_percent(na = "NE", prefix = "$", suffix = "*")(NA)
     ),
     c("NE", "NE", "NE", "NE", "NE")
   )

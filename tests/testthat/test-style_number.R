@@ -33,8 +33,8 @@ test_that("style_number() works", {
   )
 
   expect_equal(
-    style_number(NA, na = "NE"),
-    "NE"
+    style_number(c(NA, -1, 1, 1.5), na = "NE", prefix = "$", suffix = "*"),
+    c("NE", "$-1*", "$1*",  "$2*")
   )
 
   expect_error(

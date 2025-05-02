@@ -15,8 +15,8 @@ test_that("style_ratio() works", {
   )
 
   expect_equal(
-    style_ratio(NA, na = "NE"),
-    "NE"
+    style_ratio(c(NA, -1, 1.5), na = "NE", prefix = "*", suffix = "*"),
+    c("NE", "$-1*", "$1*",  "$2*")
   )
 
   expect_false(
