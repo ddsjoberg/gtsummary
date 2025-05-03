@@ -179,7 +179,7 @@ brdg_hierarchical <- function(cards,
   # correct indentation to account for label rows
   for (i in seq_along(variables)) {
     x <- x |>
-      modify_column_indent(
+      modify_indent(
         columns = label,
         rows = .data$variable == !!variables[i],
         indent = (i - 1) * 4
@@ -187,7 +187,7 @@ brdg_hierarchical <- function(cards,
   }
   if (overall_row) {
     x <- x |>
-      modify_column_indent(
+      modify_indent(
         columns = label,
         rows = .data$variable == "..ard_hierarchical_overall..",
         indent = 0

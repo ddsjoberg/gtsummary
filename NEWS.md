@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_stack(attr_order)` argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify `attr_order=2`. (#2202)
+
 * The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)
 
 * Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
@@ -9,6 +11,12 @@
 * Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
 
 * Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The enquo environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
+
+* Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
+
+* Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
+
+* Added an article on `modify_*()` functions. (#2209)
 
 # gtsummary 2.2.0
 
