@@ -10,7 +10,7 @@
 #'   [`modify_header()`],
 #'   [`modify_spanning_header()`], [`modify_column_hide()`], [`modify_column_unhide()`],
 #'   [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
-#'   [`modify_column_alignment()`], [`modify_fmt_fun()`], [`modify_column_indent()`],
+#'   [`modify_column_alignment()`], [`modify_fmt_fun()`], [`modify_indent()`],
 #'   [`modify_column_merge()`], [`modify_missing_symbol()`], [`modify_bold()`],
 #'   [`modify_italic()`].
 #'
@@ -325,7 +325,7 @@ modify_table_styling <- function(x,
       cli::cli_abort("The {.arg indent} argument must be a non-negative scalar integer.")
     }
     x <- x |>
-      .modify_column_indent(columns = columns, rows = !!rows, indent = as.integer(indent))
+      .modify_indent(columns = columns, rows = !!rows, indent = as.integer(indent))
   }
 
   # missing_symbol -------------------------------------------------------------
