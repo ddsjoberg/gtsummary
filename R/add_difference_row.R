@@ -417,7 +417,7 @@ add_difference_row.tbl_summary <- function(x,
 
   # add final styling to table -------------------------------------------------
   x |>
-    .modify_column_indent(
+    .modify_indent(
       columns = "label",
       rows = .data$row_type == "difference_row",
       indent = 4L
