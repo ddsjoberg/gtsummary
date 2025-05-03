@@ -29,3 +29,13 @@ test_that("add_difference_row() works", {
       dplyr::select(-"fmt_fn")
   )
 })
+
+test_that("add_difference_row() messaging", {
+  # bad input to `reference` arg
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(by = grade, include = c(age, response), missing = "no") |>
+      add_difference_row(reference = "XXX")
+  )
+})
