@@ -285,9 +285,11 @@ add_difference_row.tbl_summary <- function(x,
             as.list() |>
             cards::ard_identity(variable = variable) |>
             dplyr::mutate(
+              group1 = x$inputs$by,
               warning = lst_captured_results["warning"],
               error = lst_captured_results["error"]
-            )
+            ) |>
+            cards::tidy_ard_column_order()
         }
 
         # print captured errors or warnings
