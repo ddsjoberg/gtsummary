@@ -21,11 +21,7 @@ remove_italic(x, columns = everything(), rows = TRUE)
 A gtsummary object}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-columns to add footnote.
-
-For \code{modify_footnote_spanning_header()}, pass a single column name where
-the spanning header begins. If multiple column names are passed, only
-the first is used.}
+Selector of columns in \code{x$table_body}}
 
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.

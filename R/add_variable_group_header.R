@@ -59,7 +59,7 @@
 #'     variables = -trt
 #'   ) |>
 #'   # indent levels 8 spaces
-#'   modify_column_indent(
+#'   modify_indent(
 #'     columns = "label",
 #'     rows = row_type == "level",
 #'     indent = 8L
@@ -94,7 +94,7 @@ add_variable_group_header <- function(x, header, variables, indent = 4L) {
 
   x |>
     modify_table_body(~ dplyr::add_row(.x, df_insert, .before = idx)) |>
-    .modify_column_indent(
+    .modify_indent(
       columns = "label",
       rows = .data$variable %in% .env$variables,
       indent = indent
