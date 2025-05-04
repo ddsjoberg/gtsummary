@@ -47,7 +47,8 @@
       test = age ~ (function(...) letters))
     Condition
       Error in `add_difference_row()`:
-      ! The result from the `test` argument for variable `age` must be an ARD of class <card> or a data frame with one row, similar to what is returned by `broom::tidy()`.
+      ! The result from the `test` argument for variable `age` must be an ARD of class <card> or a data frame with one row.
+      i Review `?gtsummary::tests()` for details on constructing a custom function.
 
 ---
 

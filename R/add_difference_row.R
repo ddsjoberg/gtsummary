@@ -235,77 +235,19 @@ add_difference_row.tbl_summary <- function(x,
       list(df_results$variable,
            df_results$data),
       \(variable, data) {
-        lst_captured_results <-
-          cards::eval_capture_conditions(
-            do.call(
-              what =
-                df_test_meta_data |>
-                dplyr::filter(.data$variable %in% .env$variable) |>
-                dplyr::pull("fun_to_run") %>%
-                getElement(1),
-              args = list(
-                data = data, # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
-                variable = variable,
-                by = x$inputs$by,
-                group = group,
-                type = tryCatch(x$inputs$type[[variable]], error = \(e) NULL), # in tbl_survfit(), the type argument is for transforming the estimate, not the summary type
-                test.args = test.args[[variable]],
-                adj.vars = adj.vars,
-                conf.level = conf.level,
-                tbl = x
-              )
-            )
-          )
-
-        # if the result is null, replace is with a data frame of of NA
-        chr_expected_stats <- c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", "p.value")
-        if (is.null(lst_captured_results[["result"]])) {
-          lst_captured_results[["result"]] <-
-            rep_named(chr_expected_stats, list(NA)) |>
-            as.data.frame()
-        }
-
-        # check class of returned object. Object must be ARD of class 'card' or a data frame with one row
-        if (!(inherits(lst_captured_results[["result"]], "card") ||
-              (is.data.frame(lst_captured_results[["result"]]) &&
-               nrow(lst_captured_results[["result"]]) == 1L))) {
-          cli::cli_abort(
-            c("The result from the {.arg test} argument for variable {.var {variable}}
-               must be an ARD of class {.cls card} or a data frame with one row,
-               similar to what is returned by {.fun broom::tidy}."),
-            call = get_cli_abort_call()
-          )
-        }
-
-        # convert the broom-like data frame to an ARD
-        if (!is.null(lst_captured_results[["result"]]) &&
-            !inherits(lst_captured_results[["result"]], "card")) {
-          lst_captured_results[["result"]] <-
-            lst_captured_results[["result"]] |>
-            as.list() |>
-            cards::ard_identity(variable = variable) |>
-            dplyr::mutate(
-              group1 = x$inputs$by,
-              warning = lst_captured_results["warning"],
-              error = lst_captured_results["error"]
-            ) |>
-            cards::tidy_ard_column_order()
-        }
-
-        # print captured errors or warnings
-        cards::print_ard_conditions(lst_captured_results[["result"]])
-
-        # Add rounded statistic and return ARD
-        lst_captured_results[["result"]] |>
-          cards::update_ard_fmt_fn(
-            stat_names = chr_expected_stats,
-            fmt_fn = estimate_fun[[variable]]
-          ) |>
-          cards::update_ard_fmt_fn(
-            stat_names = "p.value",
-            fmt_fn = pvalue_fun
-          ) |>
-          cards::apply_fmt_fn()
+        .calculate_one_test(
+          data = data,
+          variable = variable,
+          x = x,
+          df_test_meta_data = df_test_meta_data,
+          estimate_fun = estimate_fun,
+          pvalue_fun = pvalue_fun,
+          group = group,
+          test.args = test.args,
+          adj.vars = adj.vars,
+          conf.level = conf.level,
+          apply_fmt_fn = TRUE
+        )
       }
     )
 
@@ -416,6 +358,13 @@ add_difference_row.tbl_summary <- function(x,
   # add info to table ----------------------------------------------------------
   x$call_list[["add_difference_row"]] <- match.call()
   x$cards[["add_difference_row"]] <- card
+  # print warnings/errors from calculations
+  x$cards[["add_difference_row"]] |>
+    map(dplyr::bind_rows) |>
+    dplyr::bind_rows() |>
+    dplyr::filter(.data$stat_name %in% c("estimate", "std.error", "parameter",
+                                         "statistic", "conf.low", "conf.high", "p.value")) |>
+    cards::print_ard_conditions()
 
   # add final styling to table -------------------------------------------------
   x |>
