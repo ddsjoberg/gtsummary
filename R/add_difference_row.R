@@ -342,7 +342,7 @@ add_difference_row.tbl_summary <- function(x,
     dplyr::mutate(
       result_lst =
         list(.data$result) |>
-        set_names(nm = paste(shQuote(.data$reference_level), shQuote(.data$compare_level), sep = " vs. "))
+        set_names(nm = paste(shQuote(.data$reference_level, type = "sh"), shQuote(.data$compare_level, type = "sh"), sep = " vs. "))
     ) |>
     dplyr::select("variable", "result_lst") |>
     tidyr::nest(result_nested = "result_lst") |>
