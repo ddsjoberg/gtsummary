@@ -2,53 +2,42 @@
 % Please edit documentation in R/tbl_split.R
 \name{tbl_split}
 \alias{tbl_split}
-\alias{tbl_split.gtsummary}
-\alias{tbl_split.list}
 \alias{tbl_split_by_rows}
-\alias{print.tbl_split}
 \alias{tbl_split_by_columns}
 \alias{first_column}
-\title{Split gtsummary table}
+\alias{print.tbl_split}
+\title{Split gtsummary table bz rows and/or columns}
 \usage{
-tbl_split(x, ...)
-
-\method{tbl_split}{gtsummary}(x, keys, variables, groups, ...)
-
-\method{tbl_split}{list}(x, keys, variables, groups, ...)
-
 tbl_split_by_rows(x, variables)
-
-\method{print}{tbl_split}(x, ...)
 
 tbl_split_by_columns(x, keys, groups)
 
 first_column(x)
+
+\method{print}{tbl_split}(x, ...)
 }
 \arguments{
 \item{x}{(\code{gtsummary} or \code{list})\cr
 gtsummary table.}
 
-\item{...}{These dots are for future extensions and must be empty.}
-
-\item{keys}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-columns to be repeated in each table split.}
-
 \item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 variables at which to split the gtsummary table rows (tables
 will be separated after each of these variables).}
 
+\item{keys}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+columns to be repeated in each table split. It defaults to \code{first_column(x)}
+if missing (usually label column).}
+
 \item{groups}{(list of \code{character} vectors)\cr
 list of column names that appear in \code{x$table_body}.
-Each group of column names represent.}
+Each group of column names represent a different table in the output list.}
 }
 \value{
 \code{tbl_split} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-The \code{tbl_split} function splits a single gtsummary table into multiple tables.
-Both horizontal (column-wise, (that is, splits by columns in
-\code{x$table_body}) and vertical (row-wise) splits are possible.
+The \code{tbl_split_by_rows} and \verb{tbl_split_by_columns`` functions split a single gtsummary table into multiple tables. Both horizontal (column-wise, (that is, splits by columns in }x$table_body`) and vertical (row-wise) splits are possible.
 Updates to the print method are expected.
 }
 \details{
@@ -60,17 +49,17 @@ tbl <- tbl_summary(trial, by = trt)
 
 # split by rows
 tbl_list_rows <- tbl |>
-  tbl_split(variables = c(marker, grade))
+  tbl_split_by_rows(variables = c(marker, grade))
 
 # print column names
 gtsummary::show_header_names(tbl)
 
 # split by columns
 tbl_list_cols <- tbl |>
-  tbl_split(key = c(stat_1, stat_2))
+  tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 
 # take the list of splitted rows and split again by columns
 tbl_list_rows_cols <- tbl_list_rows |>
-  tbl_split(key = c(stat_1, stat_2))
+  tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 
 }
