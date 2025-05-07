@@ -1,7 +1,8 @@
-#' Split gtsummary table
+#' Split gtsummary table bz rows and/or columns
 #'
 #' `r lifecycle::badge('experimental')`\cr
-#' The `tbl_split` function splits a single gtsummary table into multiple tables.
+#' The `tbl_split_by_rows` and `tbl_split_by_columns`` functions split a single
+#' gtsummary table into multiple tables.
 #' Both horizontal (column-wise, (that is, splits by columns in
 #' `x$table_body`) and vertical (row-wise) splits are possible.
 #' Updates to the print method are expected.
@@ -12,11 +13,11 @@
 #'   variables at which to split the gtsummary table rows (tables
 #'   will be separated after each of these variables).
 #' @param keys ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   columns to be repeated in each table split.
+#'   columns to be repeated in each table split. It defaults to `first_column(x)`
+#'   if missing (usually label column).
 #' @param groups (list of `character` vectors)\cr
 #'   list of column names that appear in `x$table_body`.
-#'   Each group of column names represent.
-#' @inheritParams rlang::args_dots_empty
+#'   Each group of column names represent a different table in the output list.
 #'
 #' @return `tbl_split` object
 #'
@@ -29,87 +30,39 @@
 #'
 #' # split by rows
 #' tbl_list_rows <- tbl |>
-#'   tbl_split(variables = c(marker, grade))
+#'   tbl_split_by_rows(variables = c(marker, grade))
 #'
 #' # print column names
 #' gtsummary::show_header_names(tbl)
 #'
 #' # split by columns
 #' tbl_list_cols <- tbl |>
-#'   tbl_split(key = c(stat_1, stat_2))
+#'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 #'
 #' # take the list of splitted rows and split again by columns
 #' tbl_list_rows_cols <- tbl_list_rows |>
-#'   tbl_split(key = c(stat_1, stat_2))
+#'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 #'
 #' @name tbl_split
 NULL
 
 #' @export
 #' @rdname tbl_split
-tbl_split <- function(x, ...) {
-  UseMethod("tbl_split")
-}
-
-#' @export
-#' @rdname tbl_split
-tbl_split.gtsummary <- function(x, keys, variables, groups, ...) {
-  set_cli_abort_call()
-  check_dots_empty()
-
-  out_list <- NULL
-  # split columns first (vertically) -------------------------------------------
-  if (!missing(groups)) {
-
-    # do the split
-    out_list <- tbl_split_by_columns(
-      x = x,
-      keys = {{ keys }},
-      groups = groups
-    )
-  }
-
-  # split rows then ------------------------------------------------------------
-  if (!missing(variables)) {
-
-    # if already split, nest lists
-    if (!is.null(out_list)) {
-      out_list <- tbl_split(out_list, variables = {{ variables }})
-    # otherwise split only horizontally
-    } else {
-      out_list <- tbl_split_by_rows(
-        x = x,
-        variables = {{ variables }}
-      )
-    }
-  }
-
-  out_list |>
-    structure(class = c("tbl_split", "list"))
-}
-
-#' @export
-#' @rdname tbl_split
-tbl_split.list <- function(x, keys, variables, groups, ...) {
-  set_cli_abort_call()
-  check_dots_empty()
-
-  out <- map(
-    .x = x,
-    .f = tbl_split,
-    keys = {{ keys }},
-    variables = {{ variables }},
-    groups = groups
-  )
-
-  # return list of tbls --------------------------------------------------------
-  out
-}
-
-#' @export
-#' @rdname tbl_split
 tbl_split_by_rows <- function(x, variables) {
   set_cli_abort_call()
+
+  # list map -------------------------------------------------------------------
+  if (inherits(x, "list")) {
+    out_list <- map(
+      .x = x,
+      .f = tbl_split_by_rows,
+      variables = {{ variables }}
+    )
+    return(
+      out_list |>
+        structure(class = c("tbl_split", "tbl_split_by_rows", "list"))
+    )
+  }
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
@@ -138,23 +91,33 @@ tbl_split_by_rows <- function(x, variables) {
         c(utils::modifyList(x, val = list(table_body = NULL))) %>% # add the other parts of the gtsummary table
         `class<-`(class(x)) # add original class from `x`
     ) %>%
-    `class<-`(c("tbl_split", "list")) # assign class (can't assign gtsummary because of print definitions)
+    # assign class (can't assign gtsummary because of print definitions)
+    `class<-`(c("tbl_split", "tbl_split_by_rows", "list"))
 }
 
 #' @export
 #' @rdname tbl_split
-print.tbl_split <- function(x, ...) {
-  check_dots_empty()
-  walk(x, print)
-}
-
-#' @export
-#' @name tbl_split
 tbl_split_by_columns <- function(x, keys, groups) {
   set_cli_abort_call()
 
+  # list map -------------------------------------------------------------------
+  if (inherits(x, "list")) {
+    keys <- maybe_missing(keys, default = first_column(x[[1]])) # refers only to first? better handling?
+    out_list <- map(
+      .x = x,
+      .f = tbl_split_by_columns,
+      keys = {{ keys }},
+      groups = groups
+    )
+    return(
+      out_list |>
+        structure(class = c("tbl_split", "tbl_split_by_columns", "list"))
+    )
+  }
+
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
+  keys <- maybe_missing(keys, default = first_column(x))
   cards::process_selectors(x$table_body, keys = {{ keys }})
   check_class(groups, "list")
   cards::check_list_elements(
@@ -162,9 +125,6 @@ tbl_split_by_columns <- function(x, keys, groups) {
     predicate = is.character,
     error_msg = "Each element of the {.arg groups} argument's list must be a {.cls character} vector."
   )
-  if (missing(keys)) {
-    keys <- first_column(x)
-  }
 
   # check all variables in groups appear in the table
   columns_do_not_exist <-
@@ -176,13 +136,14 @@ tbl_split_by_columns <- function(x, keys, groups) {
 
   # check that every un-hidden column is present
   missing_cols <-
-    x$table_styling$header[!x$table_styling$header$hide,][["column"]] |>
+    x$table_styling$header[!x$table_styling$header$hide, ][["column"]] |>
     setdiff(c(keys, unlist(groups)))
   if (!is_empty(missing_cols)) {
     cli::cli_inform(
       c("The following columns were not listed in either {.arg keys} or {.arg groups} argument: {.val {missing_cols}}",
         "i" = "These columns have been added to the end of {.arg groups}.",
-        "*" = "Run {.fun gtsummary::show_header_names} for a list of all column names.")
+        "*" = "Run {.fun gtsummary::show_header_names} for a list of all column names."
+      )
     )
     groups <- c(groups, list(missing_cols))
   }
@@ -195,14 +156,21 @@ tbl_split_by_columns <- function(x, keys, groups) {
 
   # return list of tbls --------------------------------------------------------
   result |>
-    structure(class = c("tbl_split", "list"))
+    structure(class = c("tbl_split", "tbl_split_by_columns", "list"))
 }
 
 #' @export
-#' @name tbl_split
+#' @rdname tbl_split
 first_column <- function(x) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
 
-  x$table_styling$header[!x$table_styling$header$hide,][["column"]][1]
+  x$table_styling$header[!x$table_styling$header$hide, ][["column"]][1]
+}
+
+#' @export
+#' @rdname tbl_split
+print.tbl_split <- function(x, ...) {
+  check_dots_empty()
+  walk(x, print)
 }
