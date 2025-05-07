@@ -29,6 +29,7 @@ NULL
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, fmt_missing = FALSE, ...) {
   set_cli_abort_call()
+  check_dots_empty()
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
