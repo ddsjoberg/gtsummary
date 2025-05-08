@@ -37,14 +37,14 @@
 #' # create standard table
 #' tbl <- tbl_summary(trial, by = trt)
 #'
-#' # split by rows
+#' # split by rows ---------------------------
 #' tbl_list_rows <- tbl |>
 #'   tbl_split_by_rows(variables = c(marker, grade))
 #'
 #' # print column names
 #' gtsummary::show_header_names(tbl)
 #'
-#' # split by columns
+#' # split by columns ------------------------
 #' tbl_list_cols <- tbl |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 #'
@@ -52,7 +52,33 @@
 #' tbl_list_rows_cols <- tbl_list_rows |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
 #'
-#' # Handle footnotes
+#' # Handle footnotes -------------------------
+#' tbl_fc <- trial |>
+#' tbl_summary(by = trt, missing = "no") |>
+#'   modify_footnote_header(
+#'     footnote = "All but four subjects received both treatments in a crossover design",
+#'     columns = all_stat_cols(),
+#'     replace = FALSE
+#'   ) |>
+#'   modify_footnote_body(
+#'     footnote = "Tumor grade was assessed _before_ treatment began",
+#'     columns = "label",
+#'     rows = variable == "grade" & row_type == "label"
+#'   ) |>
+#'   modify_spanning_header(
+#'     c(stat_1, stat_2) ~ "**TRT**"
+#'   ) |>
+#'   modify_abbreviation("I = 1, II = 2, III = 3") |>
+#'   modify_caption("_Some caption_") |>
+#'   modify_footnote_spanning_header(
+#'     footnote = "Treatment",
+#'     columns = c(stat_1)
+#'   ) |>
+#'   modify_source_note("Some source note!")
+#'
+#' # lets split it!
+#' tbl_list <- tbl_fc |>
+#'   tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "first")
 #'
 #' @name tbl_split_by
 NULL
@@ -207,7 +233,7 @@ tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = 
   }
   if (!is.null(which_to_modify)) {
     for (i in which_to_modify) {
-      tbl_list[[i]] |>
+      tbl_list[[i]] <- tbl_list[[i]] |>
         remove_source_note() |>
         remove_abbreviation()
     }
