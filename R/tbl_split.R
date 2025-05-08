@@ -25,6 +25,7 @@
 #' @param caption (`string`)\cr
 #'   similarly to footnotes, makes the titles, and subtitles appear only on the
 #'   `"first"` or `"each"` table. It defaults to `"each"`.
+#' @inheritParams rlang::args_dots_empty
 #'
 #' @return `tbl_split` object. They can also be identified further by subclass
 #'   definitions `tbl_split_by_rows` and `tbl_split_by_columns`.
