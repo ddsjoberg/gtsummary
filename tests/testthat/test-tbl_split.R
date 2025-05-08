@@ -43,3 +43,115 @@ test_that("tbl_split_by_columns() warns if not all columns are selected", {
       tbl_split_by_columns(groups = list("stat_2"))
   )
 })
+
+# footnotes/caption ------------------------------------------------------------
+# create standard table
+tbl_fc <- trial |>
+  tbl_summary(by = trt, missing = "no") |>
+  modify_footnote_header(
+    footnote = "All but four subjects received both treatments in a crossover design",
+    columns = all_stat_cols(),
+    replace = FALSE
+  ) |>
+  modify_footnote_body(
+    footnote = "Tumor grade was assessed _before_ treatment began",
+    columns = "label",
+    rows = variable == "grade" & row_type == "label"
+  ) |>
+  modify_spanning_header(
+    c(stat_1, stat_2) ~ "**TRT**"
+  ) |>
+  modify_abbreviation("I = 1, II = 2, III = 3") |>
+  modify_caption("_Some caption_") |>
+  modify_footnote_spanning_header(
+    footnote = "Treatment",
+    columns = c(stat_1)
+  ) |>
+  modify_source_note("Some source note!")
+
+
+test_that("tbl_split_by_rows(footntes, caption) works", {
+  expect_silent(
+    def_tbl_list <- tbl_fc |>
+      tbl_split_by_rows(variables = c(marker, grade))
+  )
+
+  # footnotes = "first", caption = "first"
+  expect_silent(
+    tbl_list <- tbl_fc |>
+      tbl_split_by_rows(variables = c(marker, grade), footnotes = "first", caption = "first")
+  )
+  expect_s3_class(tbl_list, "tbl_split_by_rows")
+
+  test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
+  test_tbl$table_styling$caption <- NULL
+  expect_equal(
+    tbl_list[[2]]$table_styling,
+    test_tbl$table_styling
+  )
+  expect_equal(
+    tbl_list[[1]]$table_styling,
+    tbl_fc$table_styling
+  )
+
+  # footnotes = "last", caption = "each"
+  expect_silent(
+    tbl_list <- tbl_fc |>
+      tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "each")
+  )
+  expect_s3_class(tbl_list, "tbl_split_by_rows")
+
+  test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
+  expect_equal(
+    tbl_list[[2]]$table_styling,
+    test_tbl$table_styling
+  )
+  expect_equal(
+    tbl_list[[length(tbl_list)]]$table_styling,
+    tbl_fc$table_styling
+  )
+})
+
+test_that("tbl_split_by_columns(footntes, caption) works", {
+  expect_silent(
+    def_tbl_list <- tbl_fc |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2"))
+  )
+
+  # footnotes = "first", caption = "first"
+  expect_silent(
+    tbl_list <- tbl_fc |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "first", caption = "first")
+  )
+  expect_s3_class(tbl_list, "tbl_split_by_columns")
+
+  test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
+  test_tbl$table_styling$caption <- NULL
+  expect_equal(
+    tbl_list[[2]]$table_styling,
+    test_tbl$table_styling
+  )
+  tbl_fc_test <- tbl_fc |> modify_column_hide(stat_2)
+  expect_equal(
+    tbl_list[[1]]$table_styling,
+    tbl_fc_test$table_styling
+  )
+
+  # footnotes = "last", caption = "each"
+  expect_silent(
+    tbl_list <- tbl_fc |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "last", caption = "each")
+  )
+  expect_s3_class(tbl_list, "tbl_split_by_columns")
+
+  test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
+  tbl_fc_test <- tbl_fc |> modify_column_hide(stat_1)
+  expect_equal(
+    tbl_list[[2]]$table_styling,
+    tbl_fc_test$table_styling
+  )
+  expect_equal(
+    tbl_list[[length(tbl_list)]]$table_styling,
+    tbl_fc_test$table_styling
+  )
+})
