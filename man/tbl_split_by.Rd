@@ -40,6 +40,8 @@ if missing (usually label column).}
 \item{groups}{(list of \code{character} vectors)\cr
 list of column names that appear in \code{x$table_body}.
 Each group of column names represent a different table in the output list.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
 \code{tbl_split} object. They can also be identified further by subclass
