@@ -12,6 +12,7 @@ style_percent(
   prefix = "",
   suffix = "",
   symbol,
+  na = NA_character_,
   ...
 )
 }
@@ -39,6 +40,9 @@ Additional text to display after the number.}
 
 \item{symbol}{Logical indicator to include percent symbol in output.
 Default is \code{FALSE}.}
+
+\item{na}{(\code{NA}/\code{string})\cr
+Character to replace \code{NA} values with. Default is \code{NA_character}}
 
 \item{...}{Arguments passed on to \code{base::format()}}
 }

@@ -32,6 +32,11 @@ test_that("style_number() works", {
     c("$-1.0*", "$0.0*", "$1.0*",  NA)
   )
 
+  expect_equal(
+    style_number(c(NA, -1, 1, 1.5), na = "NE", prefix = "$", suffix = "*"),
+    c("NE", "$-1*", "$1*",  "$2*")
+  )
+
   expect_error(
     style_number(4, prefix = letters),
     "must be strings."
