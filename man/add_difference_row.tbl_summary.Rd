@@ -84,10 +84,10 @@ a gtsummary table of class \code{"tbl_summary"}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Adds difference to tables created by \code{\link[=tbl_summary]{tbl_summary()}} as additional rows.
-This function is often useful compared to \code{add_difference()} when there are
-more than two groups to compare.
+This function is often useful when there are more than two groups to compare.
 
-Pairwise differences are calculated relative to the specified \code{by} variable's reference level.
+Pairwise differences are calculated relative to the specified
+\code{by} variable's specified reference level.
 }
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

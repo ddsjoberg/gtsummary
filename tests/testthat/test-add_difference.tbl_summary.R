@@ -64,7 +64,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl1$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -74,7 +75,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 
@@ -90,7 +92,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl2$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -101,7 +104,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 
@@ -117,7 +121,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl3$cards$add_difference$response |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -128,7 +133,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 })

@@ -512,20 +512,19 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
       cards::tidy_ard_column_order()
   }
 
-  res <- lst_captured_results[["result"]]
+  res <- lst_captured_results[["result"]] |>
+    cards::update_ard_fmt_fn(
+      stat_names = chr_expected_stats,
+      fmt_fn = estimate_fun[[variable]] %||% label_style_sigfig(digits = 3)
+    ) |>
+    cards::update_ard_fmt_fn(
+      stat_names = "p.value",
+      fmt_fn = pvalue_fun
+    )
 
   # Add rounded statistic and return ARD
   if (isTRUE(apply_fmt_fn)) {
-    res <- res |>
-      cards::update_ard_fmt_fn(
-        stat_names = chr_expected_stats,
-        fmt_fn = estimate_fun[[variable]]
-      ) |>
-      cards::update_ard_fmt_fn(
-        stat_names = "p.value",
-        fmt_fn = pvalue_fun
-      ) |>
-      cards::apply_fmt_fn()
+    res <- cards::apply_fmt_fn(res)
   }
 
   # return results

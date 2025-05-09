@@ -20,10 +20,10 @@ add_difference_row <- function(x, ...) {
 #' @description
 #' `r lifecycle::badge('experimental')`\cr
 #' Adds difference to tables created by [`tbl_summary()`] as additional rows.
-#' This function is often useful compared to `add_difference()` when there are
-#' more than two groups to compare.
+#' This function is often useful when there are more than two groups to compare.
 #'
-#' Pairwise differences are calculated relative to the specified `by` variable's reference level.
+#' Pairwise differences are calculated relative to the specified
+#' `by` variable's specified reference level.
 #'
 #' @inheritParams add_difference.tbl_summary
 #' @param reference (scalar)\cr
