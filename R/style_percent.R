@@ -23,6 +23,7 @@ style_percent <- function(x,
                           prefix = "",
                           suffix = "",
                           symbol,
+                          na = NA_character_,
                           ...) {
   set_cli_abort_call()
 
@@ -47,13 +48,14 @@ style_percent <- function(x,
   }
 
   y <- dplyr::case_when(
-    x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
-    x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
+    x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
+    x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
     x > 0 ~ paste0("<", style_number(
       x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
-      decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...
+      decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...
     )),
-    x == 0 ~ paste0(prefix, "0", suffix)
+    x == 0 ~ paste0(prefix, "0", suffix),
+    is.na(x) ~ na
   )
 
   attributes(y) <- attributes(unclass(x))

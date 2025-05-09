@@ -28,6 +28,7 @@ style_ratio <- function(x,
                         decimal.mark = getOption("OutDec"),
                         prefix = "",
                         suffix = "",
+                        na = NA_character_,
                         ...) {
   set_cli_abort_call()
 
@@ -44,11 +45,12 @@ style_ratio <- function(x,
   x_fmt <-
     dplyr::case_when(
       cards::round5(abs(x), digits = digits) < 1 ~
-        style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
+        style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
       x > 0 ~
-        style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
+        style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
       x < 0 ~
-        style_sigfig(pmin(-1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
+        style_sigfig(pmin(-1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
+      is.na(x) ~ na
     )
 
   attributes(x_fmt) <- attributes(unclass(x))
