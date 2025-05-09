@@ -89,6 +89,14 @@ This function is often useful when there are more than two groups to compare.
 Pairwise differences are calculated relative to the specified
 \code{by} variable's specified reference level.
 }
+\details{
+The default labels for the statistic rows will often \emph{not} be what you need
+to display. In cases like this, use \code{modify_table_body()} to directly
+update the label rows. Use \code{show_header_names()} to print the underlying
+column names to identify the columns to target when changing the label,
+which in this case will always be the \code{'label'} column.
+See Example 2.
+}
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
@@ -97,6 +105,34 @@ trial |>
   add_difference_row(
     reference = "I",
     statistic = everything() ~ c("{estimate}", "{conf.low}, {conf.high}", "{p.value}")
+  )
+
+# Example 2 ----------------------------------
+# Function to build logistic regression and put results in ARD format
+ard_odds_ratio <- \(data, variable, by, ...) {
+  cardx::construct_model(
+    data = data,
+    formula = reformulate(response = variable, termlabels = by),
+    method = "glm",
+    method.args = list(family = binomial)
+  ) |>
+    cardx::ard_regression_basic(exponentiate = TRUE)
+}
+
+trial |>
+  tbl_summary(by = trt, include = response, missing = "no") |>
+  add_difference_row(
+    reference = "Drug A",
+    statistic = everything() ~ c("{estimate}", "{conf.low}, {conf.high}", "{p.value}"),
+    test = everything() ~ ard_odds_ratio,
+    estimate_fun = everything() ~ label_style_ratio()
+  ) |>
+  # change the default label for the 'Odds Ratio'
+  modify_table_body(
+    ~ .x |>
+      dplyr::mutate(
+        label = ifelse(label == "Coefficient", "Odds Ratio", label)
+      )
   )
 \dontshow{\}) # examplesIf}
 }
