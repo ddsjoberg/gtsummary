@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `style_*()` and `label_style_*()` functions have gained the `na` argument allowing users to specify how `NA` values are returned.
+
 * The `tbl_stack(attr_order)` argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify `attr_order=2`. (#2202)
 
 * The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)

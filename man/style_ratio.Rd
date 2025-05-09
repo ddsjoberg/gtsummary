@@ -11,6 +11,7 @@ style_ratio(
   decimal.mark = getOption("OutDec"),
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 }
@@ -37,6 +38,9 @@ Additional text to display before the number.}
 
 \item{suffix}{(\code{string})\cr
 Additional text to display after the number.}
+
+\item{na}{(\code{NA}/\code{string})\cr
+Character to replace \code{NA} values with. Default is \code{NA_character}}
 
 \item{...}{Arguments passed on to \code{base::format()}}
 }
