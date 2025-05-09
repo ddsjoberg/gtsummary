@@ -31,7 +31,7 @@
 #'   definitions `tbl_split_by_rows` and `tbl_split_by_columns`.
 #'
 #' @details
-#' Run `gtsummary::show_header_names()` to print all column names to split by.
+#' Run [show_header_names()] to print all column names to split by.
 #'
 #' @examples
 #' # create standard table
@@ -42,7 +42,7 @@
 #'   tbl_split_by_rows(variables = c(marker, grade))
 #'
 #' # print column names
-#' gtsummary::show_header_names(tbl)
+#' show_header_names(tbl)
 #'
 #' # split by columns ------------------------
 #' tbl_list_cols <- tbl |>
@@ -108,9 +108,6 @@ tbl_split_by_rows <- function(x, variables, footnotes = "each", caption = "each"
     variables <- variables |> union(dplyr::last(x$table_body$variable))
 
     footnotes <- arg_match(footnotes, values = c("each", "first", "last"))
-    # if (missing(footnotes)) {
-    #   footnotes <- get_theme_element("tbl_summary-arg:footnotes", default = translate_string(footnotes)) # styler: off
-    # }
     check_string(footnotes)
 
     # caption check
@@ -143,7 +140,7 @@ tbl_split_by_rows <- function(x, variables, footnotes = "each", caption = "each"
   # return list of tbls --------------------------------------------------------
   # assign class (can't assign gtsummary because of print definitions)
   tbl_list |>
-    structure(class = c("tbl_split", "tbl_split_by_rows", "list"))
+    structure(class = c("tbl_split_by_rows", "tbl_split", "list"))
 }
 
 #' @export
@@ -196,9 +193,6 @@ tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = 
 
     # footnotes check
     footnotes <- arg_match(footnotes, values = c("each", "first", "last"))
-    # if (missing(footnotes)) {
-    #   footnotes <- get_theme_element("tbl_summary-arg:footnotes", default = translate_string(footnotes)) # styler: off
-    # }
     check_string(footnotes)
 
     # caption check
@@ -219,7 +213,7 @@ tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = 
 
   # return list of tbls --------------------------------------------------------
   tbl_list |>
-    structure(class = c("tbl_split", "tbl_split_by_columns", "list"))
+    structure(class = c("tbl_split_by_columns", "tbl_split", "list"))
 }
 
 # helper function for handling caption/footnotes
