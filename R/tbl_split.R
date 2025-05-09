@@ -1,4 +1,4 @@
-#' Split gtsummary table bz rows and/or columns
+#' Split gtsummary table by rows and/or columns
 #'
 #' `r lifecycle::badge('experimental')`\cr
 #' The `tbl_split_by_rows` and `tbl_split_by_columns`` functions split a single
