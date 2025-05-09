@@ -21,7 +21,8 @@ test_that("add_q() works after add_p()", {
       as.data.frame(col_label = FALSE) |>
       dplyr::pull(q.value),
     p.adjust(table1$table_body$p.value) |>
-      style_pvalue(digits = 3)
+      style_pvalue(digits = 3),
+    ignore_attr = TRUE
   )
 })
 

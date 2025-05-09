@@ -154,9 +154,10 @@ test_that("add_p with custom p-value function", {
       as.data.frame()
   )
 
-
   expect_equal(
-    tbl$cards$add_p$response$p.value,
+    tbl$cards$add_p$response |>
+      cards::get_ard_statistics() |>
+      getElement("p.value"),
     stats::mcnemar.test(trial[["response"]], trial[["trt"]])$p.value
   )
 })
@@ -175,8 +176,6 @@ test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
     )
   )
 })
-
-
 
 
 test_that("p-values are replicated within tbl_summary()", {

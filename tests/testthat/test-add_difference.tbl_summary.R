@@ -64,7 +64,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl1$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -74,7 +75,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 
@@ -90,7 +92,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl2$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -101,7 +104,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 
@@ -117,7 +121,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl3$cards$add_difference$response |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -128,7 +133,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fn
       )
   )
 })
@@ -603,8 +609,8 @@ test_that("add_difference.tbl_summary() with emmeans()", {
 })
 
 test_that("ordering in add_difference.tbl_summary() with paired tests", {
-  expect_snapshot(
-    mtcars |>
+  expect_snapshot({
+    tbl <- mtcars |>
       mutate(
         .by = am,
         id = dplyr::row_number(),
@@ -614,12 +620,14 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
         by = am,
         include = mpg
       ) |>
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id)
+
+    tbl |>
       modify_column_hide(all_stat_cols()) |>
       as.data.frame()
-  )
-  expect_snapshot(
-    mtcars |>
+  })
+  expect_snapshot({
+    tbl <- mtcars |>
       mutate(
         .by = am,
         id = dplyr::row_number(),
@@ -629,10 +637,12 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
         by = am,
         include = mpg
       ) |>
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id)
+
+    tbl |>
       modify_column_hide(all_stat_cols()) |>
       as.data.frame()
-  )
+  })
 })
 
 test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.test()", {

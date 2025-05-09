@@ -1,6 +1,8 @@
-#' Tests/methods available in `add_p()` and `add_difference()`
+#' Comparison tests/methods available
 #'
-#' @description Below is a listing of tests available internally within gtsummary.
+#' @description
+#' Below is a listing of tests available internally within gtsummary.
+#' These methods are available to be called in `add_p()`, `add_difference()`, and `add_difference_row()`
 #'
 #' Tests listed with `...` may have additional arguments
 #' passed to them using `add_p(test.args=)`. For example, to
@@ -71,7 +73,7 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_summary() %>% add_difference():
+#' @section `tbl_summary() %>% add_difference()/add_difference_row()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
@@ -86,7 +88,7 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_svysummary() %>% add_difference():
+#' @section `tbl_svysummary() %>% add_difference()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
