@@ -6,7 +6,7 @@
 \alias{tbl_split_by_columns}
 \alias{first_column}
 \alias{print.tbl_split}
-\title{Split gtsummary table bz rows and/or columns}
+\title{Split gtsummary table by rows and/or columns}
 \usage{
 tbl_split_by_rows(x, variables, footnotes = "each", caption = "each")
 
@@ -53,7 +53,7 @@ The \code{tbl_split_by_rows} and \verb{tbl_split_by_columns`` functions split a 
 Updates to the print method are expected.
 }
 \details{
-Run \code{gtsummary::show_header_names()} to print all column names to split by.
+Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
 }
 \examples{
 # create standard table
@@ -64,7 +64,7 @@ tbl_list_rows <- tbl |>
   tbl_split_by_rows(variables = c(marker, grade))
 
 # print column names
-gtsummary::show_header_names(tbl)
+show_header_names(tbl)
 
 # split by columns ------------------------
 tbl_list_cols <- tbl |>
