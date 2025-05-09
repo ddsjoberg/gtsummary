@@ -196,9 +196,6 @@ tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = 
 
     # footnotes check
     footnotes <- arg_match(footnotes, values = c("each", "first", "last"))
-    # if (missing(footnotes)) {
-    #   footnotes <- get_theme_element("tbl_summary-arg:footnotes", default = translate_string(footnotes)) # styler: off
-    # }
     check_string(footnotes)
 
     # caption check
