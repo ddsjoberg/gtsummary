@@ -14,6 +14,8 @@
 
 * Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The enquo environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
 
+* Fix in `tbl_svysummary(missing='ifany')` when the weighted number of missing observations was <= 0.5. Previously, these counts were coerced to integer and rounded to zero, and therefore, did not appear in the table. (#2229)
+
 * Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
 
 * Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
