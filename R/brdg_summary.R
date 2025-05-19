@@ -518,7 +518,7 @@ pier_summary_missing_row <- function(cards,
     variables <-
       cards |>
       dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
-      dplyr::filter(.data$stat > 0L) |>
+      dplyr::filter(.data$stat > 0) |>
       dplyr::pull("variable") |>
       unique()
   }

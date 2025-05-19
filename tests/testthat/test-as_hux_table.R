@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("huxtable", "withr")))
+skip_if_not(is_pkg_installed(c("huxtable", "withr", "broom.helpers")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
