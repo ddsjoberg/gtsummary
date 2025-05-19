@@ -53,26 +53,34 @@ add_difference_row <- function(x, ...) {
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
-#'   tbl_summary(by = grade, include = c(age, response), missing = "no") |>
+#'   tbl_summary(
+#'     by = grade,
+#'     include = c(age, response),
+#'     missing = "no",
+#'     statistic = all_continuous() ~ "{mean} ({sd})"
+#'   ) |>
+#'   add_stat_label() |>
 #'   add_difference_row(
 #'     reference = "I",
 #'     statistic = everything() ~ c("{estimate}", "{conf.low}, {conf.high}", "{p.value}")
 #'   )
 #'
 #' # Example 2 ----------------------------------
-#' # Function to build logistic regression and put results in ARD format
+#' # Function to build age-adjusted logistic regression and put results in ARD format
 #' ard_odds_ratio <- \(data, variable, by, ...) {
 #'   cardx::construct_model(
 #'     data = data,
-#'     formula = reformulate(response = variable, termlabels = by),
+#'     formula = reformulate(response = variable, termlabels = c(by, "age")), # adjusting model for age
 #'     method = "glm",
 #'     method.args = list(family = binomial)
 #'   ) |>
-#'     cardx::ard_regression_basic(exponentiate = TRUE)
+#'     cardx::ard_regression_basic(exponentiate = TRUE) |>
+#'     dplyr::filter(.data$variable == .env$by)
 #' }
 #'
 #' trial |>
 #'   tbl_summary(by = trt, include = response, missing = "no") |>
+#'   add_stat_label() |>
 #'   add_difference_row(
 #'     reference = "Drug A",
 #'     statistic = everything() ~ c("{estimate}", "{conf.low}, {conf.high}", "{p.value}"),
@@ -85,6 +93,12 @@ add_difference_row <- function(x, ...) {
 #'       dplyr::mutate(
 #'         label = ifelse(label == "Coefficient", "Odds Ratio", label)
 #'       )
+#'   ) |>
+#'   # add footnote about logistic regression
+#'   modify_footnote_body(
+#'     footnote = "Age-adjusted logistic regression model",
+#'     column = "label",
+#'     rows = variable == "response-row_difference"
 #'   )
 add_difference_row.tbl_summary <- function(x,
                                            reference,
