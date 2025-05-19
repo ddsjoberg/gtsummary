@@ -1,11 +1,10 @@
 #' Split gtsummary table by rows and/or columns
 #'
 #' `r lifecycle::badge('experimental')`\cr
-#' The `tbl_split_by_rows` and `tbl_split_by_columns`` functions split a single
+#' The `tbl_split_by_rows()` and `tbl_split_by_columns()` functions split a single
 #' gtsummary table into multiple tables.
-#' Both horizontal (column-wise, (that is, splits by columns in
-#' `x$table_body`) and vertical (row-wise) splits are possible.
-#' Updates to the print method are expected.
+#' Both column-wise splitting (that is, splits by columns in
+#' `x$table_body`) and row-wise splitting is possible.
 #'
 #' @param x (`gtsummary` or `list`)\cr
 #'   gtsummary table.
