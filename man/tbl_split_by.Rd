@@ -49,8 +49,10 @@ definitions \code{tbl_split_by_rows} and \code{tbl_split_by_columns}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-The \code{tbl_split_by_rows} and \verb{tbl_split_by_columns`` functions split a single gtsummary table into multiple tables. Both horizontal (column-wise, (that is, splits by columns in }x$table_body`) and vertical (row-wise) splits are possible.
-Updates to the print method are expected.
+The \code{tbl_split_by_rows()} and \code{tbl_split_by_columns()} functions split a single
+gtsummary table into multiple tables.
+Both column-wise splitting (that is, splits by columns in
+\code{x$table_body}) and row-wise splitting is possible.
 }
 \details{
 Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
