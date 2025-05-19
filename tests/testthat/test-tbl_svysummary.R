@@ -600,3 +600,24 @@ test_that("tbl_svysummary() default fmt fn", {
     "11 (5.5%)"
   )
 })
+
+# Fix for missing counts <1 in #2229
+test_that("tbl_svysummary() default fmt fn", {
+  expect_equal(
+    dplyr::tribble(
+      ~category,  ~success, ~weight,
+      "A",        TRUE,     2,
+      "A",        FALSE,    1,
+      "A",        NA,       0.5
+    ) |>
+      survey::svydesign(data = _, id = ~1, weights = ~weight) |>
+      tbl_svysummary(
+        include = success,
+        by = category
+      ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      dplyr::pull("stat_1"),
+    "1"
+  )
+})
