@@ -8,9 +8,20 @@
 \alias{print.tbl_split}
 \title{Split gtsummary table by rows and/or columns}
 \usage{
-tbl_split_by_rows(x, variables, footnotes = "each", caption = "each")
+tbl_split_by_rows(
+  x,
+  variables,
+  footnotes = c("each", "first", "last"),
+  caption = c("each", "first")
+)
 
-tbl_split_by_columns(x, keys, groups, footnotes = "each", caption = "each")
+tbl_split_by_columns(
+  x,
+  keys,
+  groups,
+  footnotes = c("each", "first", "last"),
+  caption = c("each", "first")
+)
 
 first_column(x)
 
@@ -44,8 +55,8 @@ Each group of column names represent a different table in the output list.}
 \item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
-\code{tbl_split} object. They can also be identified further by subclass
-definitions \code{tbl_split_by_rows} and \code{tbl_split_by_columns}.
+\code{tbl_split} object. If multiple splits are performed (e.g., both by
+row and columns), the output is flattened anyway into a single level list.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -58,27 +69,31 @@ Both column-wise splitting (that is, splits by columns in
 Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
 }
 \examples{
-# create standard table
-tbl <- tbl_summary(trial, by = trt)
+# Example 1 ------------------------------
+# Split by rows
+trial |>
+  tbl_summary(by = trt) |>
+  tbl_split_by_rows(variables = c(marker, grade)) |>
+  tail(n = 1) # Take only last table for simplicity
 
-# split by rows ---------------------------
-tbl_list_rows <- tbl |>
-  tbl_split_by_rows(variables = c(marker, grade))
+# Example 2 ------------------------------
+# Split by columns
+trial |>
+  tbl_summary(by = trt, include = c(death, ttdeath)) |>
+  tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+  tail(n = 1) # Take only last table for simplicity
 
-# print column names
-show_header_names(tbl)
+# Example 3 ------------------------------
+# Both row and column splitting
+trial |>
+  tbl_summary(by = trt) |>
+  tbl_split_by_rows(variables = c(marker, grade)) |>
+  tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+  tail(n = 1) # Take only last table for simplicity
 
-# split by columns ------------------------
-tbl_list_cols <- tbl |>
-  tbl_split_by_columns(groups = list("stat_1", "stat_2"))
-
-# take the list of splitted rows and split again by columns
-tbl_list_rows_cols <- tbl_list_rows |>
-  tbl_split_by_columns(groups = list("stat_1", "stat_2"))
-
-# Handle footnotes -------------------------
-tbl_fc <- trial |>
-tbl_summary(by = trt, missing = "no") |>
+# Example 4 ------------------------------
+trial |>
+  tbl_summary(by = trt, missing = "no") |>
   modify_footnote_header(
     footnote = "All but four subjects received both treatments in a crossover design",
     columns = all_stat_cols(),
@@ -98,10 +113,9 @@ tbl_summary(by = trt, missing = "no") |>
     footnote = "Treatment",
     columns = c(stat_1)
   ) |>
-  modify_source_note("Some source note!")
-
-# lets split it!
-tbl_list <- tbl_fc |>
-  tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "first")
+  modify_source_note("Some source note!") |>
+  tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
+  tail(n = 2) |>
+  head(n = 1) # Take only one but not last table for simplicity
 
 }

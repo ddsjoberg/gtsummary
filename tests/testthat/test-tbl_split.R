@@ -5,7 +5,7 @@ test_that("tbl_split_by_rows()", {
     tbl <- tbl_summary(trial) |>
       tbl_split_by_rows(variables = c(marker, grade))
   )
-  expect_s3_class(tbl, "tbl_split_by_rows")
+  expect_s3_class(tbl, "tbl_split")
 
   expect_equal(
     tbl[[1]] |> as.data.frame(),
@@ -23,7 +23,7 @@ test_that("tbl_split_by_columns()", {
     tbl <- tbl_summary(trial, by = trt) |>
       tbl_split_by_columns(groups = list("stat_1", "stat_2"))
   )
-  expect_s3_class(tbl, "tbl_split_by_columns")
+  expect_s3_class(tbl, "tbl_split")
 
 
   expect_equal(
@@ -81,7 +81,7 @@ test_that("tbl_split_by_rows(footntes, caption) works", {
     tbl_list <- tbl_fc |>
       tbl_split_by_rows(variables = c(marker, grade), footnotes = "first", caption = "first")
   )
-  expect_s3_class(tbl_list, "tbl_split_by_rows")
+  expect_s3_class(tbl_list, "tbl_split")
 
   test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
   test_tbl$table_styling$caption <- NULL
@@ -99,7 +99,7 @@ test_that("tbl_split_by_rows(footntes, caption) works", {
     tbl_list <- tbl_fc |>
       tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "each")
   )
-  expect_s3_class(tbl_list, "tbl_split_by_rows")
+  expect_s3_class(tbl_list, "tbl_split")
 
   test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
   expect_equal(
@@ -123,7 +123,7 @@ test_that("tbl_split_by_columns(footntes, caption) works", {
     tbl_list <- tbl_fc |>
       tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "first", caption = "first")
   )
-  expect_s3_class(tbl_list, "tbl_split_by_columns")
+  expect_s3_class(tbl_list, "tbl_split")
 
   test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
   test_tbl$table_styling$caption <- NULL
@@ -142,7 +142,7 @@ test_that("tbl_split_by_columns(footntes, caption) works", {
     tbl_list <- tbl_fc |>
       tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "last", caption = "each")
   )
-  expect_s3_class(tbl_list, "tbl_split_by_columns")
+  expect_s3_class(tbl_list, "tbl_split")
 
   test_tbl <- def_tbl_list[[2]] |> remove_source_note() |> remove_abbreviation()
   tbl_fc_test <- tbl_fc |> modify_column_hide(stat_1)
