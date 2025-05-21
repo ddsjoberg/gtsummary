@@ -28,7 +28,8 @@ add_difference_row <- function(x, ...) {
 #' @inheritParams add_difference.tbl_summary
 #' @param reference (scalar)\cr
 #'   Value of the `tbl_summary(by)` variable value that is the reference for
-#'   each of the difference calculations.
+#'   each of the difference calculations. For factors, use the character
+#'   level.
 #' @param header (`string`)\cr
 #'   When supplied, a header row will appear above the difference statistics.
 #' @param statistic ([`formula-list-selector`][syntax])\cr
@@ -123,6 +124,12 @@ add_difference_row.tbl_summary <- function(x,
   updated_call_list <- c(x$call_list, list(add_difference = match.call()))
   check_not_missing(reference)
   check_scalar(reference)
+  if (inherits(reference, "factor")) {
+    cli::cli_abort(
+      c("The scalar in the {.arg reference} argument cannot be a {.cls factor}.",
+        i = "Use the {.cls character} level instead.")
+    )
+  }
 
   # checking that input x has a by var and it has two levels
   if (is_empty(x$inputs$by)) {

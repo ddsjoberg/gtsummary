@@ -47,6 +47,14 @@ test_that("add_difference_row(reference) messaging", {
       tbl_summary(by = grade, include = c(age, response), missing = "no") |>
       add_difference_row(reference = "XXX")
   )
+
+  # passing factor
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(by = grade, include = c(age, response), missing = "no") |>
+      add_difference_row(reference = factor("I"))
+  )
 })
 
 test_that("add_difference_row() messaging", {
