@@ -35,7 +35,7 @@ Specifies summary statistics to display for each variable.  The default is
 \code{everything() ~ "{estimate}"}. The statistics available to include will
 depend on the method specified in the \code{test} argument, but are generally
 \code{"estimate"}, \code{"std.error"}, \code{"parameter"}, \code{"statistic"},
-\code{"conf.low"}, \code{"conf.high"}, \code{"p.value"}}
+\code{"conf.low"}, \code{"conf.high"}, \code{"p.value"}.}
 
 \item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the tests/methods to perform for each variable, e.g.
