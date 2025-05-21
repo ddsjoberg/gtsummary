@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9010</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9011</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>The <code>style_*()</code> and <code>label_style_*()</code> functions have gained the <code>na</code> argument allowing users to specify how <code>NA</code> values are returned.</p></li>
+<ul><li><p>Adding new function <code><a href="../reference/add_difference_row.html">add_difference_row()</a></code>. The function is similar to <code><a href="../reference/add_difference.html">add_difference()</a></code>, except that differences are placed on the rows below the summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2138" class="external-link">#2138</a>)</p></li>
+<li><p>The <code>style_*()</code> and <code>label_style_*()</code> functions have gained the <code>na</code> argument allowing users to specify how <code>NA</code> values are returned.</p></li>
 <li><p>The <code>tbl_stack(attr_order)</code> argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify <code>attr_order=2</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2202" class="external-link">#2202</a>)</p></li>
 <li><p>The <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review <code><a href="https://larmarange.github.io/broom.helpers/reference/tidy_group_by.html" class="external-link">broom.helpers::tidy_group_by()</a></code> for details. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1540" class="external-link">#1540</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to <code>add_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2208" class="external-link">#2208</a>)</p></li>
