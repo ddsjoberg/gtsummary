@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding new function `add_difference_row()`. The function is similar to `add_difference()`, except that differences are placed on the rows below the summary statistics. (#2138)
+
 * The `style_*()` and `label_style_*()` functions have gained the `na` argument allowing users to specify how `NA` values are returned.
 
 * The `tbl_stack(attr_order)` argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify `attr_order=2`. (#2202)
