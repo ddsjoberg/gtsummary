@@ -263,7 +263,6 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
             "estimate", "std.error", "parameter", "statistic",
             "conf.low", "conf.high", "p.value"
           )) |>
-          cards::replace_null_statistic() |>
           tidyr::pivot_wider(
             id_cols = "variable",
             names_from = "stat_name",
@@ -520,7 +519,8 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
     cards::update_ard_fmt_fn(
       stat_names = "p.value",
       fmt_fn = pvalue_fun
-    )
+    ) |>
+    cards::replace_null_statistic()
 
   # Add rounded statistic and return ARD
   if (isTRUE(apply_fmt_fn)) {

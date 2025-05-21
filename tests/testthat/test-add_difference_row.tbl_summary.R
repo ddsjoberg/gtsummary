@@ -23,7 +23,8 @@ test_that("add_difference_row() works", {
     trial |>
       dplyr::filter(grade != "II") |>
       cardx::ard_stats_t_test(variables = "age", by = "grade") |>
-      dplyr::select(-"fmt_fn")
+      dplyr::select(-"fmt_fn"),
+    ignore_attr = TRUE
   )
   # Response I vs III
   expect_equal(
@@ -32,7 +33,9 @@ test_that("add_difference_row() works", {
     trial |>
       dplyr::filter(grade != "II") |>
       cardx::ard_stats_prop_test(variables = "response", by = "grade") |>
-      dplyr::select(-"fmt_fn")
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fn"),
+    ignore_attr = TRUE
   )
 })
 
