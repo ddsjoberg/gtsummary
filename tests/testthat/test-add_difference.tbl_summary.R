@@ -77,7 +77,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
         -fmt_fn
-      )
+      ),
+    ignore_attr = TRUE
   )
 
   tbl2 <-
@@ -106,7 +107,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
         -fmt_fn
-      )
+      ),
+    ignore_attr = TRUE
   )
 
   tbl3 <-
@@ -135,7 +137,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
         -fmt_fn
-      )
+      ),
+    ignore_attr = TRUE
   )
 })
 
@@ -662,7 +665,9 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
     trial |>
       dplyr::mutate(response = response == 1) |>
       cardx::ard_stats_prop_test(by = trt, variable = response) |>
-      dplyr::select(-"fmt_fn")
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fn"),
+    ignore_attr = TRUE
   )
 
   # check when the value presented is the opposite (FALSE)
@@ -682,7 +687,9 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
     trial |>
       dplyr::mutate(response = response == 0) |>
       cardx::ard_stats_prop_test(by = trt, variable = response) |>
-      dplyr::select(-"fmt_fn")
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fn"),
+    ignore_attr = TRUE
   )
 
   # check results when variable has >2 levels
@@ -701,7 +708,9 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
     trial |>
       dplyr::mutate(grade = grade == "I") |>
       cardx::ard_stats_prop_test(by = trt, variable = grade) |>
-      dplyr::select(-"fmt_fn")
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fn"),
+    ignore_attr = TRUE
   )
 })
 
