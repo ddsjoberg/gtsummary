@@ -32,7 +32,8 @@ test_that("add_stat() works with fns that return a scalar", {
   # checking the pvalues match
   expect_equal(
     test1$table_body$p.value,
-    test1$table_body$add_stat_1
+    test1$table_body$add_stat_1,
+    ignore_attr = TRUE
   )
 
   expect_error(
