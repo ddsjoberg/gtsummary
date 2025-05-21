@@ -36,7 +36,7 @@ add_difference_row <- function(x, ...) {
 #'   `everything() ~ "{estimate}"`. The statistics available to include will
 #'   depend on the method specified in the `test` argument, but are generally
 #'   `"estimate"`, `"std.error"`, `"parameter"`, `"statistic"`,
-#'   `"conf.low"`, `"conf.high"`, `"p.value"`
+#'   `"conf.low"`, `"conf.high"`, `"p.value"`.
 #'
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
