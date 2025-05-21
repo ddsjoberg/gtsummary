@@ -2,9 +2,10 @@
 % Please edit documentation in R/tests.R
 \name{tests}
 \alias{tests}
-\title{Tests/methods available in \code{add_p()} and \code{add_difference()}}
+\title{Comparison tests/methods available}
 \description{
 Below is a listing of tests available internally within gtsummary.
+These methods are available to be called in \code{add_p()}, \code{add_difference()}, and \code{add_difference_row()}
 
 Tests listed with \code{...} may have additional arguments
 passed to them using \code{add_p(test.args=)}. For example, to
@@ -77,7 +78,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_summary() \%>\% add_difference()}{
+\section{\code{tbl_summary() \%>\% add_difference()/add_difference_row()}}{
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'t.test'} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
@@ -95,7 +96,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
-\section{tbl_svysummary() \%>\% add_difference()}{
+\section{\code{tbl_svysummary() \%>\% add_difference()}}{
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{'smd'} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = variable, g = by, w = weights(data),  std.error = TRUE)} \tab  \cr

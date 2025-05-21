@@ -243,7 +243,7 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   if (!missing(quiet)) {
     lifecycle::deprecate_stop(
       when = "2.0.0",
-      what = "gtsummary::tidy_standardize(quiet)",
+      what = "gtsummary::pool_and_tidy_mice(quiet)",
       details = "Argument has been ignored."
     )
   }
