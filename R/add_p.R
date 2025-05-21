@@ -478,7 +478,7 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
       map(~c(.x, lst_captured_results[["warning"]]))
   }
 
-  # if the result is null, replace is with a data frame of of NA
+  # if the result is null, replace it with a data frame of of NA
   if (is.null(lst_captured_results[["result"]])) {
     lst_captured_results[["result"]] <-
       rep_named(chr_expected_stats, list(NA)) |>
