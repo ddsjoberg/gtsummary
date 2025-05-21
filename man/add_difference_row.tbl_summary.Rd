@@ -28,7 +28,8 @@ table created with \code{tbl_summary()}}
 
 \item{reference}{(scalar)\cr
 Value of the \code{tbl_summary(by)} variable value that is the reference for
-each of the difference calculations.}
+each of the difference calculations. For factors, use the character
+level.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies summary statistics to display for each variable.  The default is

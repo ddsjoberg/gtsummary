@@ -22,6 +22,16 @@
       Error in `add_difference_row()`:
       ! The `reference` argument must be one of "I", "II", and "III".
 
+---
+
+    Code
+      add_difference_row(tbl_summary(trial, by = grade, include = c(age, response),
+      missing = "no"), reference = factor("I"))
+    Condition
+      Error in `add_difference_row()`:
+      ! The scalar in the `reference` argument cannot be a <factor>.
+      i Use the <character> level instead.
+
 # add_difference_row() messaging
 
     Code
