@@ -2,7 +2,7 @@
 .rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
   rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
 
-  # if a single lgl value, then expand it to the length of the tabel_body
+  # if a single lgl value, then expand it to the length of the table_body
   if (is_scalar_logical(rows_evaluated)) {
     rows_evaluated <- rep_len(rows_evaluated, length.out = nrow(table_body))
   }
