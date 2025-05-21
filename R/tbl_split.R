@@ -26,34 +26,38 @@
 #'   `"first"` or `"each"` table. It defaults to `"each"`.
 #' @inheritParams rlang::args_dots_empty
 #'
-#' @return `tbl_split` object. They can also be identified further by subclass
-#'   definitions `tbl_split_by_rows` and `tbl_split_by_columns`.
+#' @return `tbl_split` object. If multiple splits are performed (e.g., both by
+#'   row and columns), the output is flattened anyway into a single level list.
 #'
 #' @details
 #' Run [show_header_names()] to print all column names to split by.
 #'
 #' @examples
-#' # create standard table
-#' tbl <- tbl_summary(trial, by = trt)
+#' # Example 1 ------------------------------
+#' # Split by rows
+#' trial |>
+#'   tbl_summary(by = trt) |>
+#'   tbl_split_by_rows(variables = c(marker, grade)) |>
+#'   tail(n = 1) # Take only last table for simplicity
 #'
-#' # split by rows ---------------------------
-#' tbl_list_rows <- tbl |>
-#'   tbl_split_by_rows(variables = c(marker, grade))
+#' # Example 2 ------------------------------
+#' # Split by columns
+#' trial |>
+#'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
+#'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+#'   tail(n = 1) # Take only last table for simplicity
 #'
-#' # print column names
-#' show_header_names(tbl)
+#' # Example 3 ------------------------------
+#' # Both row and column splitting
+#' trial |>
+#'   tbl_summary(by = trt) |>
+#'   tbl_split_by_rows(variables = c(marker, grade)) |>
+#'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+#'   tail(n = 1) # Take only last table for simplicity
 #'
-#' # split by columns ------------------------
-#' tbl_list_cols <- tbl |>
-#'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
-#'
-#' # take the list of splitted rows and split again by columns
-#' tbl_list_rows_cols <- tbl_list_rows |>
-#'   tbl_split_by_columns(groups = list("stat_1", "stat_2"))
-#'
-#' # Handle footnotes -------------------------
-#' tbl_fc <- trial |>
-#' tbl_summary(by = trt, missing = "no") |>
+#' # Example 4 ------------------------------
+#' trial |>
+#'   tbl_summary(by = trt, missing = "no") |>
 #'   modify_footnote_header(
 #'     footnote = "All but four subjects received both treatments in a crossover design",
 #'     columns = all_stat_cols(),
@@ -73,18 +77,19 @@
 #'     footnote = "Treatment",
 #'     columns = c(stat_1)
 #'   ) |>
-#'   modify_source_note("Some source note!")
-#'
-#' # lets split it!
-#' tbl_list <- tbl_fc |>
-#'   tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "first")
+#'   modify_source_note("Some source note!") |>
+#'   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
+#'   tail(n = 2) |>
+#'   head(n = 1) # Take only one but not last table for simplicity
 #'
 #' @name tbl_split_by
 NULL
 
 #' @export
 #' @rdname tbl_split_by
-tbl_split_by_rows <- function(x, variables, footnotes = "each", caption = "each") {
+tbl_split_by_rows <- function(x, variables,
+                              footnotes = c("each", "first", "last"),
+                              caption = c("each", "first")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
@@ -94,57 +99,62 @@ tbl_split_by_rows <- function(x, variables, footnotes = "each", caption = "each"
       .f = tbl_split_by_rows,
       variables = {{ variables }}
     )
-  } else {
-    # check inputs ---------------------------------------------------------------
-    check_class(x, "gtsummary")
 
-    # process inputs -------------------------------------------------------------
-    cards::process_selectors(
-      data = scope_table_body(x$table_body),
-      variables = {{ variables }}
+    return(
+      tbl_list |>
+        unlist(recursive = FALSE) |>
+        structure(class = c("tbl_split", "list"))
     )
-    # adding last variable
-    variables <- variables |> union(dplyr::last(x$table_body$variable))
+  }
 
-    footnotes <- arg_match(footnotes, values = c("each", "first", "last"))
-    check_string(footnotes)
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
 
-    # caption check
-    caption <- arg_match(caption, values = c("each", "first"))
-    check_string(caption)
+  # process inputs -------------------------------------------------------------
+  cards::process_selectors(
+    data = scope_table_body(x$table_body),
+    variables = {{ variables }}
+  )
+  # adding last variable
+  variables <- variables |> union(dplyr::last(x$table_body$variable))
 
-    # merging split points -------------------------------------------------------
-    # convert list of table_body into list of gtsummary objects
-    tbl_list <- x$table_body %>%
-      dplyr::left_join(
-        dplyr::tibble(variable = variables, ..group.. = variables),
-        by = "variable"
-      ) |>
-      tidyr::fill("..group..", .direction = "up") |>
-      tidyr::nest(data = -"..group..") |>
-      dplyr::pull("data") |>
-      map(
-        ~ list(.) |>
-          set_names("table_body") |>
-          c(utils::modifyList(x, val = list(table_body = NULL))) %>% # add the other parts of the gtsummary table
-          `class<-`(class(x)) # add original class from `x`
-      )
+  # footnotes and caption check
+  footnotes <- rlang::arg_match(footnotes)
+  caption <- rlang::arg_match(caption)
 
-    # caption/footnotes handling -----------------------------------------------
-    if (length(tbl_list) > 1) {
-      tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
-    }
+  # merging split points -------------------------------------------------------
+  # convert list of table_body into list of gtsummary objects
+  tbl_list <- x$table_body %>%
+    dplyr::left_join(
+      dplyr::tibble(variable = variables, ..group.. = variables),
+      by = "variable"
+    ) |>
+    tidyr::fill("..group..", .direction = "up") |>
+    tidyr::nest(data = -"..group..") |>
+    dplyr::pull("data") |>
+    map(
+      ~ list(.) |>
+        set_names("table_body") |>
+        c(utils::modifyList(x, val = list(table_body = NULL))) %>% # add the other parts of the gtsummary table
+        `class<-`(class(x)) # add original class from `x`
+    )
+
+  # caption/footnotes handling -----------------------------------------------
+  if (length(tbl_list) > 1) {
+    tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
   }
 
   # return list of tbls --------------------------------------------------------
   # assign class (can't assign gtsummary because of print definitions)
   tbl_list |>
-    structure(class = c("tbl_split_by_rows", "tbl_split", "list"))
+    structure(class = c("tbl_split", "list"))
 }
 
 #' @export
 #' @rdname tbl_split_by
-tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = "each") {
+tbl_split_by_columns <- function(x, keys, groups,
+                                 footnotes = c("each", "first", "last"),
+                                 caption = c("each", "first")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
@@ -156,63 +166,64 @@ tbl_split_by_columns <- function(x, keys, groups, footnotes = "each", caption = 
       keys = {{ keys }},
       groups = groups
     )
-  } else {
-    # check inputs ---------------------------------------------------------------
-    check_class(x, "gtsummary")
-    keys <- maybe_missing(keys, default = first_column(x))
-    cards::process_selectors(x$table_body, keys = {{ keys }})
-    check_class(groups, "list")
-    cards::check_list_elements(
-      groups,
-      predicate = is.character,
-      error_msg = "Each element of the {.arg groups} argument's list must be a {.cls character} vector."
+    return(
+      tbl_list |>
+        unlist(recursive = FALSE) |>
+        structure(class = c("tbl_split", "list"))
     )
+  }
 
-    # check all variables in groups appear in the table
-    columns_do_not_exist <-
-      unlist(groups) |>
-      setdiff(x$table_styling$header$column)
-    if (!is_empty(columns_do_not_exist)) {
-      cli::cli_abort()
-    }
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
+  keys <- maybe_missing(keys, default = first_column(x))
+  cards::process_selectors(x$table_body, keys = {{ keys }})
+  check_class(groups, "list")
+  cards::check_list_elements(
+    groups,
+    predicate = is.character,
+    error_msg = "Each element of the {.arg groups} argument's list must be a {.cls character} vector."
+  )
 
-    # check that every un-hidden column is present
-    missing_cols <-
-      x$table_styling$header[!x$table_styling$header$hide, ][["column"]] |>
-      setdiff(c(keys, unlist(groups)))
-    if (!is_empty(missing_cols)) {
-      cli::cli_inform(
-        c("The following columns were not listed in either {.arg keys} or {.arg groups} argument: {.val {missing_cols}}",
-          "i" = "These columns have been added to the end of {.arg groups}.",
-          "*" = "Run {.fun gtsummary::show_header_names} for a list of all column names."
-        )
+  # check all variables in groups appear in the table
+  columns_do_not_exist <-
+    unlist(groups) |>
+    setdiff(x$table_styling$header$column)
+  if (!is_empty(columns_do_not_exist)) {
+    cli::cli_abort()
+  }
+
+  # check that every un-hidden column is present
+  missing_cols <-
+    x$table_styling$header[!x$table_styling$header$hide, ][["column"]] |>
+    setdiff(c(keys, unlist(groups)))
+  if (!is_empty(missing_cols)) {
+    cli::cli_inform(
+      c("The following columns were not listed in either {.arg keys} or {.arg groups} argument: {.val {missing_cols}}",
+        "i" = "These columns have been added to the end of {.arg groups}.",
+        "*" = "Run {.fun gtsummary::show_header_names} for a list of all column names."
       )
-      groups <- c(groups, list(missing_cols))
-    }
+    )
+    groups <- c(groups, list(missing_cols))
+  }
 
-    # footnotes check
-    footnotes <- arg_match(footnotes, values = c("each", "first", "last"))
-    check_string(footnotes)
+  # footnotes and caption check
+  footnotes <- rlang::arg_match(footnotes)
+  caption <- rlang::arg_match(caption)
 
-    # caption check
-    caption <- arg_match(caption, values = c("each", "first"))
-    check_string(caption)
+  # splitting table ------------------------------------------------------------
+  tbl_list <- vector(mode = "list", length = length(groups))
+  for (i in seq_along(groups)) {
+    tbl_list[[i]] <- gtsummary::modify_column_hide(x, columns = -all_of(union(keys, groups[[i]])))
+  }
 
-    # splitting table ------------------------------------------------------------
-    tbl_list <- vector(mode = "list", length = length(groups))
-    for (i in seq_along(groups)) {
-      tbl_list[[i]] <- gtsummary::modify_column_hide(x, columns = -all_of(union(keys, groups[[i]])))
-    }
-
-    # caption/footnotes handling -----------------------------------------------
-    if (length(tbl_list) > 1) {
-      tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
-    }
+  # caption/footnotes handling -----------------------------------------------
+  if (length(tbl_list) > 1) {
+    tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
   }
 
   # return list of tbls --------------------------------------------------------
   tbl_list |>
-    structure(class = c("tbl_split_by_columns", "tbl_split", "list"))
+    structure(class = c("tbl_split", "list"))
 }
 
 # helper function for handling caption/footnotes
