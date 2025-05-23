@@ -94,10 +94,10 @@ test_that("tbl_split_by_rows(footntes, caption) works", {
     tbl_fc$table_styling
   )
 
-  # footnotes = "last", caption = "each"
+  # footnotes = "last", caption = "all"
   expect_silent(
     tbl_list <- tbl_fc |>
-      tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "each")
+      tbl_split_by_rows(variables = c(marker, grade), footnotes = "last", caption = "all")
   )
   expect_s3_class(tbl_list, "tbl_split")
 
@@ -137,10 +137,10 @@ test_that("tbl_split_by_columns(footntes, caption) works", {
     tbl_fc_test$table_styling
   )
 
-  # footnotes = "last", caption = "each"
+  # footnotes = "last", caption = "all"
   expect_silent(
     tbl_list <- tbl_fc |>
-      tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "last", caption = "each")
+      tbl_split_by_columns(groups = list("stat_1", "stat_2"), footnotes = "last", caption = "all")
   )
   expect_s3_class(tbl_list, "tbl_split")
 

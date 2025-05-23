@@ -18,45 +18,44 @@
 #'   list of column names that appear in `x$table_body`.
 #'   Each group of column names represent a different table in the output list.
 #' @param footnotes (`string`) `r lifecycle::badge('experimental')`\cr
-#'   can be either `"first"`, `"each"`, or `"last"`, to locate global footnotes
+#'   can be either `"first"`, `"all"`, or `"last"`, to locate global footnotes
 #'   only on the first, in each, or in the last table, respectively. It defaults
-#'   to `"each"`. Reference footnotes are always present wherever they appear.
+#'   to `"all"`. Reference footnotes are always present wherever they appear.
 #' @param caption (`string`) `r lifecycle::badge('experimental')`\cr
 #'   similarly to footnotes, makes the titles, and subtitles appear only on the
-#'   `"first"` or `"each"` table. It defaults to `"each"`.
+#'   `"first"` or `"all"` table. It defaults to `"all"`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @return `tbl_split` object. If multiple splits are performed (e.g., both by
-#'   row and columns), the output is flattened anyway into a single level list.
+#'   row and columns), the output is returned a single level list.
 #'
 #' @details
 #' Run [show_header_names()] to print all column names to split by.
 #'
-#' Footnotes and caption handling are experimental and may be subject to change
-#' in the future.
+#' Footnotes and caption handling are experimental and may change in the future.
 #'
-#' @examples
-#' # Example 1 ------------------------------
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' # Example 1 ----------------------------------
 #' # Split by rows
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
-#'   tail(n = 1) # Take only last table for simplicity
+#'   tail(n = 1) # Print only last table for simplicity
 #'
-#' # Example 2 ------------------------------
+#' # Example 2 ----------------------------------
 #' # Split by columns
 #' trial |>
 #'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Take only last table for simplicity
+#'   tail(n = 1) # Print only last table for simplicity
 #'
-#' # Example 3 ------------------------------
+#' # Example 3 ----------------------------------
 #' # Both row and column splitting
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Take only last table for simplicity
+#'   tail(n = 1) # Print only last table for simplicity
 #'
 #' # Example 4 ------------------------------
 #' trial |>
@@ -83,7 +82,7 @@
 #'   modify_source_note("Some source note!") |>
 #'   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
 #'   tail(n = 2) |>
-#'   head(n = 1) # Take only one but not last table for simplicity
+#'   head(n = 1) # Print only one but not last table for simplicity
 #'
 #' @name tbl_split_by
 NULL
@@ -91,8 +90,8 @@ NULL
 #' @export
 #' @rdname tbl_split_by
 tbl_split_by_rows <- function(x, variables,
-                              footnotes = c("each", "first", "last"),
-                              caption = c("each", "first")) {
+                              footnotes = c("all", "first", "last"),
+                              caption = c("all", "first")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
@@ -156,8 +155,8 @@ tbl_split_by_rows <- function(x, variables,
 #' @export
 #' @rdname tbl_split_by
 tbl_split_by_columns <- function(x, keys, groups,
-                                 footnotes = c("each", "first", "last"),
-                                 caption = c("each", "first")) {
+                                 footnotes = c("all", "first", "last"),
+                                 caption = c("all", "first")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
