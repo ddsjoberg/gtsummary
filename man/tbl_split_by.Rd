@@ -11,16 +11,16 @@
 tbl_split_by_rows(
   x,
   variables,
-  footnotes = c("each", "first", "last"),
-  caption = c("each", "first")
+  footnotes = c("all", "first", "last"),
+  caption = c("all", "first")
 )
 
 tbl_split_by_columns(
   x,
   keys,
   groups,
-  footnotes = c("each", "first", "last"),
-  caption = c("each", "first")
+  footnotes = c("all", "first", "last"),
+  caption = c("all", "first")
 )
 
 first_column(x)
@@ -36,13 +36,13 @@ variables at which to split the gtsummary table rows (tables
 will be separated after each of these variables).}
 
 \item{footnotes}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-can be either \code{"first"}, \code{"each"}, or \code{"last"}, to locate global footnotes
+can be either \code{"first"}, \code{"all"}, or \code{"last"}, to locate global footnotes
 only on the first, in each, or in the last table, respectively. It defaults
-to \code{"each"}. Reference footnotes are always present wherever they appear.}
+to \code{"all"}. Reference footnotes are always present wherever they appear.}
 
 \item{caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 similarly to footnotes, makes the titles, and subtitles appear only on the
-\code{"first"} or \code{"each"} table. It defaults to \code{"each"}.}
+\code{"first"} or \code{"all"} table. It defaults to \code{"all"}.}
 
 \item{keys}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 columns to be repeated in each table split. It defaults to \code{first_column(x)}
@@ -56,7 +56,7 @@ Each group of column names represent a different table in the output list.}
 }
 \value{
 \code{tbl_split} object. If multiple splits are performed (e.g., both by
-row and columns), the output is flattened anyway into a single level list.
+row and columns), the output is returned a single level list.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -68,31 +68,31 @@ Both column-wise splitting (that is, splits by columns in
 \details{
 Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
 
-Footnotes and caption handling are experimental and may be subject to change
-in the future.
+Footnotes and caption handling are experimental and may change in the future.
 }
 \examples{
-# Example 1 ------------------------------
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Example 1 ----------------------------------
 # Split by rows
 trial |>
   tbl_summary(by = trt) |>
   tbl_split_by_rows(variables = c(marker, grade)) |>
-  tail(n = 1) # Take only last table for simplicity
+  tail(n = 1) # Print only last table for simplicity
 
-# Example 2 ------------------------------
+# Example 2 ----------------------------------
 # Split by columns
 trial |>
   tbl_summary(by = trt, include = c(death, ttdeath)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-  tail(n = 1) # Take only last table for simplicity
+  tail(n = 1) # Print only last table for simplicity
 
-# Example 3 ------------------------------
+# Example 3 ----------------------------------
 # Both row and column splitting
 trial |>
   tbl_summary(by = trt) |>
   tbl_split_by_rows(variables = c(marker, grade)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-  tail(n = 1) # Take only last table for simplicity
+  tail(n = 1) # Print only last table for simplicity
 
 # Example 4 ------------------------------
 trial |>
@@ -119,6 +119,6 @@ trial |>
   modify_source_note("Some source note!") |>
   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
   tail(n = 2) |>
-  head(n = 1) # Take only one but not last table for simplicity
-
+  head(n = 1) # Print only one but not last table for simplicity
+\dontshow{\}) # examplesIf}
 }
