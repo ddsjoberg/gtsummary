@@ -35,12 +35,12 @@ gtsummary table.}
 variables at which to split the gtsummary table rows (tables
 will be separated after each of these variables).}
 
-\item{footnotes}{(\code{string})\cr
+\item{footnotes}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 can be either \code{"first"}, \code{"each"}, or \code{"last"}, to locate global footnotes
 only on the first, in each, or in the last table, respectively. It defaults
 to \code{"each"}. Reference footnotes are always present wherever they appear.}
 
-\item{caption}{(\code{string})\cr
+\item{caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 similarly to footnotes, makes the titles, and subtitles appear only on the
 \code{"first"} or \code{"each"} table. It defaults to \code{"each"}.}
 
@@ -67,6 +67,9 @@ Both column-wise splitting (that is, splits by columns in
 }
 \details{
 Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
+
+Footnotes and caption handling are experimental and may be subject to change
+in the future.
 }
 \examples{
 # Example 1 ------------------------------

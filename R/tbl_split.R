@@ -17,11 +17,11 @@
 #' @param groups (list of `character` vectors)\cr
 #'   list of column names that appear in `x$table_body`.
 #'   Each group of column names represent a different table in the output list.
-#' @param footnotes (`string`)\cr
+#' @param footnotes (`string`) `r lifecycle::badge('experimental')`\cr
 #'   can be either `"first"`, `"each"`, or `"last"`, to locate global footnotes
 #'   only on the first, in each, or in the last table, respectively. It defaults
 #'   to `"each"`. Reference footnotes are always present wherever they appear.
-#' @param caption (`string`)\cr
+#' @param caption (`string`) `r lifecycle::badge('experimental')`\cr
 #'   similarly to footnotes, makes the titles, and subtitles appear only on the
 #'   `"first"` or `"each"` table. It defaults to `"each"`.
 #' @inheritParams rlang::args_dots_empty
@@ -31,6 +31,9 @@
 #'
 #' @details
 #' Run [show_header_names()] to print all column names to split by.
+#'
+#' Footnotes and caption handling are experimental and may be subject to change
+#' in the future.
 #'
 #' @examples
 #' # Example 1 ------------------------------
