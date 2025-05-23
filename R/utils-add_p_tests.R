@@ -508,7 +508,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
               is_empty(adj.vars) ~ list("One-way ANOVA with random intercept"),
               TRUE ~ list("ANCOVA with random intercept")
             ),
-          fmt_fun = list(NULL)
+          fmt_fn = list(as.character)
         )
     ) |>
     dplyr::select(-cards::all_ard_variables("levels")) |>
