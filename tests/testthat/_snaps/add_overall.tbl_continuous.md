@@ -1,8 +1,8 @@
-# add_overall.tbl_continuous() errors
+# add_overall.tbl_continuous() messaging
 
     Code
-      add_overall(tbl_continuous(mtcars, include = gear, variable = mpg))
-    Condition
-      Error in `add_overall()`:
-      ! Cannot run `add_overall()` when original table function is not statified with `tbl_continuous(by)`.
+      tbl <- add_overall(tbl_continuous(mtcars, include = gear, variable = mpg))
+    Message
+      Cannot add an overall column with `add_overall()` when original table is not statified with `tbl_continuous(by)`.
+      i Returning table unaltered.
 

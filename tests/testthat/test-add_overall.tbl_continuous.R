@@ -90,15 +90,15 @@ test_that("add_overall.tbl_continuous() works", {
 })
 
 
-test_that("add_overall.tbl_continuous() errors", {
-  # no stratifying variable
+test_that("add_overall.tbl_continuous() messaging", {
+  # no stratifying variable message
   expect_snapshot(
-    error = TRUE,
-    tbl_continuous(
-      mtcars,
-      include = gear,
-      variable = mpg
-    ) |>
+    tbl <-
+      tbl_continuous(
+        mtcars,
+        include = gear,
+        variable = mpg
+      ) |>
       add_overall()
   )
 })
