@@ -222,7 +222,7 @@ brdg_hierarchical <- function(cards,
                             default = "**N = {style_number(N)}**"),
           is_empty(by) ~
             get_theme_element("tbl_hierarchical-str:header-noby-noN",
-                            default = "Overall"),
+                            default = "**Overall**"),
           "modify_stat_n" %in% names(x$table_styling$header) ~
             get_theme_element("tbl_hierarchical-str:header-withby",
                             default = "**{level}**  \nN = {style_number(n)}"),

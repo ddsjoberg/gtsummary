@@ -120,10 +120,12 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
 
   # checking that input x has a by var
   if (is_empty(x$inputs[["by"]])) {
-    cli::cli_abort(
-      "Cannot run {.fun add_overall} when original table function is not statified with {.code {calling_fun}(by)}.",
-      call = get_cli_abort_call()
+    cli::cli_inform(
+      c("Cannot add an overall column with {.fun add_overall} when original table
+         is not statified with {.code {calling_fun}(by)}.",
+        i = "Returning table unaltered.")
     )
+    return(x)
   }
 
   # save arguments to pass to original function without `by` stratified --------

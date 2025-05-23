@@ -85,11 +85,10 @@ test_that("add_overall.tbl_summary() works", {
 })
 
 
-test_that("add_overall.tbl_summary() errors", {
-  # no stratifying variable
+test_that("add_overall.tbl_summary() messaging", {
+  # no stratifying variable message
   expect_snapshot(
-    error = TRUE,
-    tbl_summary(mtcars) |> add_overall()
+    tbl <- tbl_summary(mtcars) |> add_overall()
   )
 
   # Run add_overall() after after `add_stat_label()`
