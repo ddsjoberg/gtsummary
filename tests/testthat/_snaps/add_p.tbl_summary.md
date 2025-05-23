@@ -105,7 +105,7 @@
         ...) mtcars))
     Condition
       Error in `add_p()`:
-      ! The test result object for variable "age" is not the expected structure.
+      ! The result from the `test` argument for variable `age` must be an ARD of class <card> or a data frame with one row.
       i Review `?gtsummary::tests()` for details on constructing a custom function.
 
 ---
@@ -115,7 +115,7 @@
         ...) letters))
     Condition
       Error in `add_p()`:
-      ! Expecting the test result object for variable "age" to be a <data.frame/tibble>.
+      ! The result from the `test` argument for variable `age` must be an ARD of class <card> or a data frame with one row.
       i Review `?gtsummary::tests()` for details on constructing a custom function.
 
 # add_p.tbl_summary() & lme4
@@ -150,13 +150,13 @@
         "lme4"), col_labels = FALSE), -all_stat_cols())
     Message
       The following errors were returned during `add_p()`:
-      x For variable `age` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `death` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `grade` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `marker` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `response` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `stage` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
-      x For variable `ttdeath` (`trt`) and "p.value" statistic: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `age` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `death` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `grade` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `marker` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `response` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `stage` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
+      x For variable `ttdeath` (`trt`) and "estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", and "p.value" statistics: The `group` argument cannot be missing for "lme4" tests.
     Output
                           label p.value
       1                     Age    <NA>

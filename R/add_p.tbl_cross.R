@@ -85,7 +85,7 @@ add_p.tbl_cross <- function(x,
   x$inputs$data <- x$tbl_data
   x$inputs$by <- original_x_inputs$col
   x$inputs$include <- original_x_inputs$row
-  x$inputs$type <- list("categorical") |> set_names(original_x_inputs$row)
+  x$inputs$type <- rep_named(original_x_inputs$row, list("categorical"))
   x <- x |>
     add_p.tbl_summary(
       test = input_test,

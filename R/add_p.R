@@ -235,130 +235,48 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
       include,
       \(variable) {
         # evaluate the test
-        lst_captured_results <-
-          cards::eval_capture_conditions(
-            do.call(
-              what =
-                df_test_meta_data |>
-                dplyr::filter(.data$variable %in% .env$variable) |>
-                dplyr::pull("fun_to_run") %>%
-                getElement(1),
-              args = list(
-                data = x$inputs[[1]], # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
-                variable = variable,
-                by = x$inputs$by,
-                group = group,
-                type = tryCatch(x$inputs$type[[variable]], error = \(e) NULL), # in tbl_survfit(), the type argument is for transforming the estimate, not the summary type
-                test.args = test.args[[variable]],
-                adj.vars = adj.vars,
-                conf.level = conf.level,
-                continuous_variable = continuous_variable,
-                tbl = x
-              )
-            )
-          )
-
-        # if there was a warning captured, print it now
-        if (!is.null(lst_captured_results[["warning"]])) {
-          cli::cli_inform(c(
-            "The following warning was returned in {.fun {calling_fun}} for variable {.val {variable}}",
-            "!" = "{lst_captured_results[['warning']]}"
-          ))
-        }
-
-        # if test evaluated without error, return the result
-        if (!is.null(lst_captured_results[["result"]])) return(lst_captured_results[["result"]]) # styler: off
-        # otherwise, construct a {cards}-like object with error
-        dplyr::tibble(
-          group1 = switch(!is_empty(x$inputs$by), x$inputs$by),
+        .calculate_one_test(
+          data = x$inputs[[1]], # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
           variable = variable,
-          stat_name = switch(calling_fun,
-                             "add_p" = "p.value",
-                             "add_difference" = "estimate"
-          ),
-          stat = list(NULL),
-          warning = lst_captured_results["warning"],
-          error = lst_captured_results["error"]
-        ) %>%
-          structure(., class = c("card", class(.)))
+          x = x,
+          df_test_meta_data = df_test_meta_data,
+          estimate_fun = estimate_fun,
+          pvalue_fun = pvalue_fun,
+          group = group,
+          test.args = test.args,
+          adj.vars = adj.vars,
+          conf.level = conf.level,
+          continuous_variable = continuous_variable
+        )
       }
     ) |>
     stats::setNames(include)
-
-  # print any errors or warnings
-  lst_results |>
-    map(
-      \(x) {
-        if (inherits(x, "card")) {
-          x |>
-            dplyr::mutate(
-              across(c(cards::all_ard_groups("levels"), cards::all_ard_variables("levels")), ~ unlist(.) |> as.character())
-            )
-        } else {
-          NULL
-        }
-      }
-    ) |>
-    dplyr::bind_rows() %>%
-    {
-      switch(!is_empty(.),
-             dplyr::filter(., .data$stat_name %in% c(
-               "estimate", "std.error", "parameter", "statistic",
-               "conf.low", "conf.high", "p.value"
-             )) |>
-               cards::print_ard_conditions()
-      )
-    }
-
 
   # combine results into a single data frame
   df_results <-
     lst_results |>
     imap(
       function(x, variable) {
-        # if results are an ARD, reshape into broom::tidy-like format
-        if (inherits(x, "card")) {
-          res <-
-            dplyr::filter(x, .data$stat_name %in% c(
-              "estimate", "std.error", "parameter", "statistic",
-              "conf.low", "conf.high", "p.value"
-            )) |>
-            cards::replace_null_statistic() |>
-            tidyr::pivot_wider(
-              id_cols = "variable",
-              names_from = "stat_name",
-              values_from = "stat"
-            ) |>
-            dplyr::mutate(
-              across(-"variable", unlist),
-              variable = .env$variable
-            )
-        } else {
-          if (!is.data.frame(x)) {
-            cli::cli_abort(
-              c("Expecting the test result object for variable {.val {variable}} to be a {.cls {c('data.frame', 'tibble')}}.",
-                i = "Review {.help gtsummary::tests} for details on constructing a custom function."
-              ),
-              call = get_cli_abort_call()
-            )
-          }
+        # reshape into broom::tidy-like format
+        res <-
+          dplyr::filter(x, .data$stat_name %in% c(
+            "estimate", "std.error", "parameter", "statistic",
+            "conf.low", "conf.high", "p.value"
+          )) |>
+          tidyr::pivot_wider(
+            id_cols = "variable",
+            names_from = "stat_name",
+            values_from = "stat",
+            values_fn = unlist
+          ) |>
+          dplyr::select(any_of(c(
+            "variable",
+            "estimate", "std.error", "parameter", "statistic",
+            "conf.low", "conf.high", "p.value"
+          ))) |>
+          # for `tbl_continuous` tables we need to ensure the 'variable' is the one from the table
+          dplyr::mutate( variable = .env$variable)
 
-          res <-
-            dplyr::select(x, any_of(c(
-              "estimate", "std.error", "parameter", "statistic",
-              "conf.low", "conf.high", "p.value"
-            ))) |>
-            dplyr::mutate(variable = .env$variable, .before = 1L)
-          # check the result structure
-          if (identical(names(res), "variable") || nrow(res) != 1L) {
-            cli::cli_abort(
-              c("The test result object for variable {.val {variable}} is not the expected structure.",
-                i = "Review {.help gtsummary::tests} for details on constructing a custom function."
-              ),
-              call = get_cli_abort_call()
-            )
-          }
-        }
         res
       }
     ) |>
@@ -509,11 +427,106 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
   }
 
   # extending modify_stat_N to new columns
-  x$table_styling$header <- x$table_styling$header |>
-    tidyr::fill(any_of("modify_stat_N"), .direction = "downup")
+  x <- .fill_table_header_modify_stats(x)
 
   # add raw results to `.$card`
   x$cards[[calling_fun]] <- lst_results
+  # print warnings/errors from calculations
+  dplyr::bind_rows(x$cards[[calling_fun]]) |>
+    dplyr::filter(.data$stat_name %in% c("estimate", "std.error", "parameter",
+                                         "statistic", "conf.low", "conf.high", "p.value")) |>
+    cards::print_ard_conditions()
 
   x
+}
+
+.calculate_one_test <- function(df_test_meta_data, variable, data, x, group,
+                                test.args, adj.vars, conf.level,
+                                estimate_fun, pvalue_fun,
+                                continuous_variable = NULL,
+                                apply_fmt_fn = FALSE) {
+  chr_expected_stats <- c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", "p.value")
+  lst_captured_results <-
+    cards::eval_capture_conditions(
+      do.call(
+        what =
+          df_test_meta_data |>
+          dplyr::filter(.data$variable %in% .env$variable) |>
+          dplyr::pull("fun_to_run") %>%
+          getElement(1),
+        args = list(
+          data = data, # most arg names here are data, but `tbl_survfit(x)` is a list of survfit
+          variable = variable,
+          by = x$inputs$by,
+          group = group,
+          type = tryCatch(x$inputs$type[[variable]], error = \(e) NULL), # in tbl_survfit(), the type argument is for transforming the estimate, not the summary type
+          test.args = test.args[[variable]],
+          adj.vars = adj.vars,
+          conf.level = conf.level,
+          tbl = x,
+          continuous_variable = continuous_variable
+        )
+      )
+    )
+
+  # if we captured a warning and the result is an ARD, add the warning to the ARD
+  if (!is.null(lst_captured_results[["warning"]]) &&
+      inherits(lst_captured_results[["result"]], "card")) {
+    lst_captured_results[["result"]][["warning"]] <-
+      lst_captured_results[["result"]][["warning"]] |>
+      map(~c(.x, lst_captured_results[["warning"]]))
+  }
+
+  # if the result is null, replace it with a data frame of of NA
+  if (is.null(lst_captured_results[["result"]])) {
+    lst_captured_results[["result"]] <-
+      rep_named(chr_expected_stats, list(NA)) |>
+      as.data.frame()
+  }
+
+  # check class of returned object. Object must be ARD of class 'card' or a data frame with one row
+  if (!(inherits(lst_captured_results[["result"]], "card") ||
+        (is.data.frame(lst_captured_results[["result"]]) &&
+         nrow(lst_captured_results[["result"]]) == 1L))) {
+    cli::cli_abort(
+      c("The result from the {.arg test} argument for variable {.var {variable}}
+               must be an ARD of class {.cls card} or a data frame with one row.",
+        i = "Review {.help gtsummary::tests} for details on constructing a custom function."),
+      call = get_cli_abort_call()
+    )
+  }
+
+  # convert the broom-like data frame to an ARD
+  if (!is.null(lst_captured_results[["result"]]) &&
+      !inherits(lst_captured_results[["result"]], "card")) {
+    lst_captured_results[["result"]] <-
+      lst_captured_results[["result"]] |>
+      as.list() |>
+      cards::ard_identity(variable = variable) |>
+      dplyr::mutate(
+        group1 = case_switch(!is_empty(x$inputs$by) ~ x$inputs$by),
+        warning = lst_captured_results["warning"],
+        error = lst_captured_results["error"]
+      ) |>
+      cards::tidy_ard_column_order()
+  }
+
+  res <- lst_captured_results[["result"]] |>
+    cards::update_ard_fmt_fn(
+      stat_names = chr_expected_stats,
+      fmt_fn = estimate_fun[[variable]] %||% label_style_sigfig(digits = 3)
+    ) |>
+    cards::update_ard_fmt_fn(
+      stat_names = "p.value",
+      fmt_fn = pvalue_fun
+    ) |>
+    cards::replace_null_statistic()
+
+  # Add rounded statistic and return ARD
+  if (isTRUE(apply_fmt_fn)) {
+    res <- cards::apply_fmt_fn(res)
+  }
+
+  # return results
+  res
 }
