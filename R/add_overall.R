@@ -70,7 +70,8 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
-    paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
+    col_label <-
+      paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
   }
 
   add_overall_generic(
