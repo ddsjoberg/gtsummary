@@ -1,10 +1,10 @@
-# add_overall.tbl_svysummary() errors
+# add_overall.tbl_svysummary() messaging
 
     Code
-      add_overall(tbl_svysummary(svy_mtcars))
-    Condition
-      Error in `add_overall()`:
-      ! Cannot run `add_overall()` when original table function is not statified with `tbl_svysummary(by)`.
+      tbl <- add_overall(tbl_svysummary(svy_mtcars))
+    Message
+      Cannot add an overall column with `add_overall()` when original table is not statified with `tbl_svysummary(by)`.
+      i Returning table unaltered.
 
 ---
 
