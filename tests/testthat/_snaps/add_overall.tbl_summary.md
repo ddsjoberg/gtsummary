@@ -1,10 +1,10 @@
-# add_overall.tbl_summary() errors
+# add_overall.tbl_summary() messaging
 
     Code
-      add_overall(tbl_summary(mtcars))
-    Condition
-      Error in `add_overall()`:
-      ! Cannot run `add_overall()` when original table function is not statified with `tbl_summary(by)`.
+      tbl <- add_overall(tbl_summary(mtcars))
+    Message
+      Cannot add an overall column with `add_overall()` when original table is not statified with `tbl_summary(by)`.
+      i Returning table unaltered.
 
 ---
 
