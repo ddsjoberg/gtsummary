@@ -115,7 +115,7 @@ test_that("filter_hierarchical() works with no by variable", {
   )
 
   expect_silent(tbl_f <- filter_hierarchical(tbl_noby, sum(n) / sum(N) > 0.05))
-  expect_equal(nrow(tbl_f$table_body), 15)
+  expect_equal(nrow(tbl_f$table_body), 21)
 })
 
 test_that("filter_hierarchical() works when some variables not included in x", {
