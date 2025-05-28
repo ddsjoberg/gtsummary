@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
+
 * The `add_overall()` function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.
 
 * Adding new function `add_difference_row()`. The function is similar to `add_difference()`, except that differences are placed on the rows below the summary statistics. (#2138)
