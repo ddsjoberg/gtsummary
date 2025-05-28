@@ -129,6 +129,19 @@ test_that("filter_hierarchical() works with no by variable", {
 
   expect_silent(tbl_f <- filter_hierarchical(tbl_noby, sum(n) / sum(N) > 0.05))
   expect_equal(nrow(tbl_f$table_body), 21)
+
+  # check indentation of results, line 2 should be indented 4 spaces
+  expect_equal(
+    tbl_noby |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% 2) |>
+      dplyr::arrange(row_numbers) |>
+      dplyr::pull(n_spaces),
+    4
+  )
 })
 
 test_that("filter_hierarchical() works when some variables not included in x", {
