@@ -20,6 +20,19 @@ test_that("filter_hierarchical() works", {
 
   # row order is retained
   expect_snapshot(tbl |> as.data.frame())
+
+  # check indentation of results, lines 3,4 should be indented 4 and 8 spaces
+  expect_equal(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% c(3, 4)) |>
+      dplyr::arrange(row_numbers) |>
+      dplyr::pull(n_spaces),
+    c(4, 8)
+  )
 })
 
 test_that("filter_hierarchical(keep_empty) works", {
