@@ -91,7 +91,7 @@ sort_hierarchical <- function(x, sort = c("descending", "alphanumeric")) {
       select(-"tmp")
   }
 
-  # if overall column present, filter x$cards$add_overall
+  # if overall column present, sort x$cards$add_overall
   if ("add_overall" %in% names(x$cards)) {
     # update x$cards$add_overall
     x$cards$add_overall <- x$cards$add_overall |> cards::sort_ard_hierarchical(sort)
