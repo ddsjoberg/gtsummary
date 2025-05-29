@@ -49,6 +49,10 @@
 #' @param percent (`string`)\cr
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
+#'
+#'   In rarer cases, you may need to define/override the typical denominators.
+#'   In these cases, pass an integer or a data frame. Refer to the
+#'   [`?cards::ard_categorical(denominator)`][cards::ard_categorical] help file for details.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`.
 #'
@@ -166,7 +170,8 @@ tbl_summary <- function(data,
                         missing_stat = "{N_miss}",
                         sort = all_categorical(FALSE) ~ "alphanumeric",
                         percent = c("column", "row", "cell"),
-                        include = everything()) {
+                        include = everything(),
+                        denominator = NULL) {
   set_cli_abort_call()
 
   # data argument checks -------------------------------------------------------
@@ -204,9 +209,19 @@ tbl_summary <- function(data,
   check_string(missing_stat)
 
 
-  if (missing(percent))
-    percent <- get_theme_element("tbl_summary-arg:percent", default = percent) # styler: off
-  percent <- arg_match(percent, values = c("column", "row", "cell"))
+  if (missing(percent)) {
+    percent <- get_theme_element("tbl_summary-arg:percent", default = percent)
+  }
+  if (is.character(percent)) {
+    percent <- arg_match(percent, values = c("column", "row", "cell"))
+  }
+  else if (!is.data.frame(percent) && !is_integerish(percent)) {
+    cli::cli_abort(
+      "The {.arg percent} argument must be one of {.val c('column', 'row', 'cell')} ({.emph the most common input}),
+         or a {.cls data.frame}/{.cls integer}",
+      call = get_cli_abort_call()
+    )
+  }
 
   cards::process_formula_selectors(
     data = data[include],

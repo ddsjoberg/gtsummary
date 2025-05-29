@@ -437,3 +437,21 @@
       |continuous_var     |      Inf, -Inf      |     1.00, 3.00      |
       |Unknown            |          3          |          0          |
 
+# tbl_summary(percent = c(<data.frame>, <integer>))
+
+    Code
+      as.data.frame(tbl)
+    Output
+         **Characteristic**    **N = 254**
+      1            DCREASCD           <NA>
+      2       Adverse Event 92 / 254 (36%)
+      3               Death 3 / 254 (1.2%)
+      4         I/E Not Met 3 / 254 (1.2%)
+      5    Lack of Efficacy 4 / 254 (1.6%)
+      6   Lost to Follow-up 2 / 254 (0.8%)
+      7  Physician Decision 3 / 254 (1.2%)
+      8  Protocol Violation 3 / 254 (1.2%)
+      9    Sponsor Decision 7 / 254 (2.8%)
+      10   Withdrew Consent 27 / 254 (11%)
+      11            Unknown            110
+
