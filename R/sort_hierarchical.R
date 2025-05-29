@@ -72,7 +72,7 @@ sort_hierarchical <- function(x, sort = c("descending", "alphanumeric")) {
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- x_ard |>
-    dplyr::filter(is.na(.data$group1)) |>
+    dplyr::filter(if (!is_empty(ard_args$by)) is.na(.data$group1) else context != "hierarchical") |>
     dplyr::pull("pre_idx") |>
     unique()
 
@@ -91,7 +91,7 @@ sort_hierarchical <- function(x, sort = c("descending", "alphanumeric")) {
       select(-"tmp")
   }
 
-  # if overall column present, filter x$cards$add_overall
+  # if overall column present, sort x$cards$add_overall
   if ("add_overall" %in% names(x$cards)) {
     # update x$cards$add_overall
     x$cards$add_overall <- x$cards$add_overall |> cards::sort_ard_hierarchical(sort)
