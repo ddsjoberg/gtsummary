@@ -18,7 +18,8 @@ tbl_summary(
   missing_stat = "{N_miss}",
   sort = all_categorical(FALSE) ~ "alphanumeric",
   percent = c("column", "row", "cell"),
-  include = everything()
+  include = everything(),
+  denominator = NULL
 )
 }
 \arguments{
@@ -69,7 +70,11 @@ Default is \code{all_categorical(FALSE) ~ "alphanumeric"}.}
 
 \item{percent}{(\code{string})\cr
 Indicates the type of percentage to return.
-Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
+Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.
+
+In rarer cases, you may need to define/override the typical denominators.
+In these cases, pass an integer or a data frame. Refer to the
+\code{\link[cards:ard_categorical]{?cards::ard_categorical(denominator)}} help file for details.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}.}
