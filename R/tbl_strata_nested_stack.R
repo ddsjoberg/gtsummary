@@ -66,7 +66,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   .tbl_fun <- rlang::as_function(.tbl_fun, call = get_cli_abort_call())
 
   # nest data and create tables within each level ------------------------------
-  tbls <-
+  df_tbls <-
     cards::nest_for_ard(data, strata = strata) |>
     dplyr::mutate(
       tbl =
@@ -78,8 +78,9 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
               message = c("The following {type} occured while building a table:", x = "{condition}")
             )
         )
-    ) |>
-    dplyr::pull("tbl")
+    )
+
+  tbls <- df_tbls$tbl
 
   # process the headers --------------------------------------------------------
   lst_headers <-
@@ -116,6 +117,17 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y)))) |>
     dplyr::select(-all_of(strata)) |>
     dplyr::rename_with(.fn = ~str_remove(.x, "_strata$"))
+
+  tbl_ids <-
+    df_headers |>
+    dplyr::mutate(
+      across(
+        everything(),
+        .fns = ~ paste(dplyr::cur_column(), cli::cli_format(.x), sep = "=")
+      ),
+      .....strata..... = paste(!!!syms(names(df_headers)), sep = ",")
+    ) |>
+    dplyr::pull(".....strata.....")
 
   for (i in seq_along(strata[-1])) {
     df_headers <- df_headers |>
@@ -159,7 +171,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   }
 
   # stack the tbls
-  tbl <- tbl_stack(tbls = tbls, quiet = quiet)
+  tbl <- tbl_stack(tbls = tbls, quiet = quiet, tbl_ids = tbl_ids)
 
   # cycle over the depth and indenting nesting headers
   for (d in seq_along(strata)) {

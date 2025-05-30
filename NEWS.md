@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 
+
 * Fixed bug in `sort_hierarchical()` causing some rows to be dropped when sorting unstratified tables. (#2237)
 
 * Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
