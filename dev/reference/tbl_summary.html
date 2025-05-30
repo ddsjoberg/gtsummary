@@ -15,7 +15,7 @@ for detailed examples."><meta property="og:image" content="https://www.danieldsj
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9015</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,7 +146,10 @@ Default is <code>all_categorical(FALSE) ~ "alphanumeric"</code>.</p></dd>
 <dt id="arg-percent">percent<a class="anchor" aria-label="anchor" href="#arg-percent"></a></dt>
 <dd><p>(<code>string</code>)<br>
 Indicates the type of percentage to return.
-Must be one of <code>c("column", "row", "cell")</code>. Default is <code>"column"</code>.</p></dd>
+Must be one of <code>c("column", "row", "cell")</code>. Default is <code>"column"</code>.</p>
+<p>In rarer cases, you may need to define/override the typical denominators.
+In these cases, pass an integer or a data frame. Refer to the
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">?cards::ard_categorical(denominator)</a></code> help file for details.</p></dd>
 
 
 <dt id="arg-include">include<a class="anchor" aria-label="anchor" href="#arg-include"></a></dt>
