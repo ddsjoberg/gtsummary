@@ -198,3 +198,34 @@ test_that("gather_ard(x) works with `tbl_strata_nested_stack()` function", {
     2L
   )
 })
+
+test_that("gather_ard() has labels for mergeed/stacked tbls", {
+  expect_equal(
+    trial |>
+      select(grade, response, stage, trt) |>
+      tbl_strata(
+        strata = grade,
+        .tbl_fun = ~ .x |>
+          tbl_summary(by = trt) |>
+          add_p()
+      ) |>
+      gather_ard() |>
+      names(),
+    c("grade=I", "grade=II", "grade=III")
+  )
+
+  expect_equal(
+    tbl_strata_nested_stack(
+      trial,
+      strata = trt,
+      ~ .x |>
+        tbl_summary(include = c(age, grade), missing = "no") |>
+        modify_header(all_stat_cols() ~ "**Summary Statistics**")
+    ) |>
+      gather_ard() |>
+      names(),
+    c("trt=\"Drug A\"", "trt=\"Drug B\"")
+  )
+})
+
+
