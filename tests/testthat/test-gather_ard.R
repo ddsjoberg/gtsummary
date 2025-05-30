@@ -199,7 +199,7 @@ test_that("gather_ard(x) works with `tbl_strata_nested_stack()` function", {
   )
 })
 
-test_that("gather_ard() has labels for mergeed/stacked tbls", {
+test_that("gather_ard() has labels for merged/stacked tbls", {
   expect_equal(
     trial |>
       select(grade, response, stage, trt) |>
