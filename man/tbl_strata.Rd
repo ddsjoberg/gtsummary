@@ -75,8 +75,11 @@ a data frame as its first argument can be stratified.
 \item In \code{tbl_strata()}, the stratified or subset data frame is passed to the
 function in \verb{.tbl_fun=}, e.g. \code{purrr::map(data, .tbl_fun)}.
 \item In \code{tbl_strata2()}, both the stratified data frame and the strata level
-are passed to \verb{.tbl_fun=}, e.g. \code{purrr::map2(data, strata, .tbl_fun)}
+are passed to \verb{.tbl_fun=}, e.g. \code{purrr::map2(data, strata, .tbl_fun)}.
 }
+
+When merging, keep in mind that merging works best with \strong{like tables}.
+See \code{\link[=tbl_merge]{tbl_merge()}} for details.
 }
 \section{Tips}{
 

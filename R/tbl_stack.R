@@ -3,6 +3,7 @@
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
 #' or more gtsummary tables.
 #'
+#' @inheritParams tbl_merge
 #' @param tbls (`list`)\cr
 #'   List of gtsummary objects
 #' @param group_header (`character`)\cr
@@ -63,7 +64,7 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls)) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls), tbl_ids = NULL) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -74,6 +75,10 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
   check_range(attr_order, range = c(1L, length(tbls)), include_bounds = c(TRUE, TRUE))
   check_class(group_header, cls = "character", allow_empty = TRUE)
   check_length(group_header, length = length(tbls), allow_empty = TRUE)
+  check_class(tbl_ids, cls = "character", allow_empty = TRUE)
+  if (!is_empty(tbl_ids)) {
+    check_identical_length(tbls, tbl_ids)
+  }
 
   # will return call, and all arguments passed to tbl_stack
   func_inputs <- as.list(environment())
@@ -171,10 +176,16 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
       hide = FALSE
     )
 
-  # returning results ----------------------------------------------------------
+  # add objects to the returned tbl --------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
   results$tbls <- tbls
 
+  # add tbl_ids, if specified --------------------------------------------------
+  if (!is_empty(tbl_ids)) {
+    names(results$tbls) <- tbl_ids
+  }
+
+  # returning results ----------------------------------------------------------
   results
 }
 

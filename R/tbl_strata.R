@@ -1,11 +1,15 @@
 #' Stratified gtsummary tables
 #'
+#' @description
 #' Build a stratified gtsummary table. Any gtsummary table that accepts
 #' a data frame as its first argument can be stratified.
 #' - In `tbl_strata()`, the stratified or subset data frame is passed to the
 #'   function in `.tbl_fun=`, e.g. `purrr::map(data, .tbl_fun)`.
 #' - In `tbl_strata2()`, both the stratified data frame and the strata level
-#'   are passed to `.tbl_fun=`, e.g. `purrr::map2(data, strata, .tbl_fun)`
+#'   are passed to `.tbl_fun=`, e.g. `purrr::map2(data, strata, .tbl_fun)`.
+#'
+#' When merging, keep in mind that merging works best with **like tables**.
+#' See [`tbl_merge()`] for details.
 #'
 #' @param data (`data.frame`, `survey.design`)\cr
 #'   a data frame or survey object
@@ -225,7 +229,9 @@ tbl_strata_internal <- function(data,
     dplyr::arrange(!!!syms(strata)) %>%
     dplyr::rename(!!!syms(new_strata_names)) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(strata = paste(!!!syms(names(new_strata_names)), sep = .sep)) %>%
+    dplyr::mutate(
+      strata = paste(!!!syms(names(new_strata_names)), sep = .sep)
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::left_join(
       df_by %>% select("strata", "header"),
@@ -238,6 +244,19 @@ tbl_strata_internal <- function(data,
                "tbl_strata2" = map2(.data$data, .data$header, .tbl_fun, ...)
         )
     )
+  # add the column to be used for the tbl_id
+  df_tbls$tbl_id <-
+    df_tbls[names(new_strata_names)] |>
+    dplyr::mutate(
+      across(
+        everything(),
+        .fns = ~ paste(new_strata_names[[dplyr::cur_column()]], cli::cli_format(.x), sep = "=")
+      ),
+      strata = paste(!!!syms(names(new_strata_names)), sep = ",")
+    ) |>
+    dplyr::pull("strata")
+
+
 
   # combining tbls -------------------------------------------------------------
   .combine_args <-
@@ -250,9 +269,9 @@ tbl_strata_internal <- function(data,
     utils::modifyList(val = .combine_args %||% list())
 
   if (.combine_with == "tbl_merge") {
-    tbl <- inject(tbl_merge(tbls = df_tbls$tbl, !!!.combine_args))
+    tbl <- inject(tbl_merge(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args))
   } else if (.combine_with == "tbl_stack") {
-    tbl <- inject(tbl_stack(tbls = df_tbls$tbl, !!!.combine_args))
+    tbl <- inject(tbl_stack(tbls = df_tbls$tb, tbl_ids = df_tbls$tbl_idl, !!!.combine_args))
   }
 
   # return tbl -----------------------------------------------------------------
