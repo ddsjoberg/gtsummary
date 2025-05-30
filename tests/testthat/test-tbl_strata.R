@@ -14,6 +14,12 @@ test_that("tbl_strata works with standard use", {
       )
   )
 
+  # check the tbl_ids are correct
+  expect_equal(
+    names(tbl$tbls),
+    c('grade=\"Grade I\"', 'grade=\"Grade II\"', 'grade=\"Grade III\"')
+  )
+
   # df_strata correct
   expect_equal(nrow(tbl$df_strata), 3)
   expect_equal(names(tbl$df_strata), c("strata_1", "header"))

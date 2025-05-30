@@ -8,7 +8,8 @@ tbl_stack(
   tbls,
   group_header = NULL,
   quiet = FALSE,
-  attr_order = seq_along(tbls)
+  attr_order = seq_along(tbls),
+  tbl_ids = NULL
 )
 }
 \arguments{
@@ -27,6 +28,11 @@ Tables are stacked in the order they are passed in the \code{tbls} argument:
 use \code{attr_order} to specify the order the table attributes take precedent.
 For example, to use the header from the second table specify \code{attr_order=2}.
 Default is to set precedent in the order tables are passed.}
+
+\item{tbl_ids}{(\code{character})\cr
+Optional character vector of IDs that will be assigned to the input tables.
+The ID is assigned by assigning a name to the \code{tbls} list, which is
+returned in \code{x$tbls}.}
 }
 \value{
 A \code{tbl_stack} object
