@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fixed bug in <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> causing some rows to be dropped when sorting unstratified tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2237" class="external-link">#2237</a>)</p></li>
+<ul><li><p>Added the <code>tbl_merge(tbl_ids)</code> and <code>tbl_stack(tbl_ids)</code> arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling <code><a href="../reference/gather_ard.html">gather_ard()</a></code>, which will return a named list of ARDs where the names are the assigned tbl IDs. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2224" class="external-link">#2224</a>)</p></li>
+<li><p>Fixed bug in <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> causing some rows to be dropped when sorting unstratified tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2237" class="external-link">#2237</a>)</p></li>
 <li><p>Fixed bug in <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> causing an error for unstratified tables.</p></li>
 <li><p>The <code><a href="../reference/add_overall.html">add_overall()</a></code> function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.</p></li>
 <li><p>Adding new function <code><a href="../reference/add_difference_row.html">add_difference_row()</a></code>. The function is similar to <code><a href="../reference/add_difference.html">add_difference()</a></code>, except that differences are placed on the rows below the summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2138" class="external-link">#2138</a>)</p></li>

@@ -4,16 +4,20 @@ a data frame as its first argument can be stratified.
 In tbl_strata(), the stratified or subset data frame is passed to the
 function in .tbl_fun=, e.g. purrr::map(data, .tbl_fun).
 In tbl_strata2(), both the stratified data frame and the strata level
-are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
+are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun).
 
-"><meta property="og:description" content="Build a stratified gtsummary table. Any gtsummary table that accepts
+
+When merging, keep in mind that merging works best with like tables.
+See tbl_merge() for details."><meta property="og:description" content="Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 In tbl_strata(), the stratified or subset data frame is passed to the
 function in .tbl_fun=, e.g. purrr::map(data, .tbl_fun).
 In tbl_strata2(), both the stratified data frame and the strata level
-are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
+are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun).
 
-"><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"><!-- dependencies from examples --></head><body>
+
+When merging, keep in mind that merging works best with like tables.
+See tbl_merge() for details."><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"><!-- dependencies from examples --></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +25,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,8 +65,10 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
 a data frame as its first argument can be stratified.</p><ul><li><p>In <code>tbl_strata()</code>, the stratified or subset data frame is passed to the
 function in <code>.tbl_fun=</code>, e.g. <code>purrr::map(data, .tbl_fun)</code>.</p></li>
 <li><p>In <code>tbl_strata2()</code>, both the stratified data frame and the strata level
-are passed to <code>.tbl_fun=</code>, e.g. <code>purrr::map2(data, strata, .tbl_fun)</code></p></li>
-</ul></div>
+are passed to <code>.tbl_fun=</code>, e.g. <code>purrr::map2(data, strata, .tbl_fun)</code>.</p></li>
+</ul><p>When merging, keep in mind that merging works best with <strong>like tables</strong>.
+See <code><a href="tbl_merge.html">tbl_merge()</a></code> for details.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
@@ -161,6 +167,12 @@ of decimal places.</p></li>
 <li><p>If some levels of a categorical variable are unobserved within a
 stratum, convert the variable to a factor to ensure all levels appear in
 each stratum's summary table.</p></li>
+<li><p>The summary type for variables (e.g. continuous vs categorical vs dichotomous)
+are determined separately within stratum. Use the <code>tbl_summary(type)</code>
+argument to assign a summary type consistent across all tables being combined.</p></li>
+<li><p>By default, a "missing" row appears when there are missing values only.
+Use the <code>tbl_summary(missing)</code> argument to ensure there is always/never
+a missing row for the combining of the tables.</p></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
