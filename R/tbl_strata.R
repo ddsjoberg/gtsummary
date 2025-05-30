@@ -271,7 +271,7 @@ tbl_strata_internal <- function(data,
   if (.combine_with == "tbl_merge") {
     tbl <- inject(tbl_merge(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args))
   } else if (.combine_with == "tbl_stack") {
-    tbl <- inject(tbl_stack(tbls = df_tbls$tb, tbl_ids = df_tbls$tbl_idl, !!!.combine_args))
+    tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args))
   }
 
   # return tbl -----------------------------------------------------------------
