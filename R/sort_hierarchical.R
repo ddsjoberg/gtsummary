@@ -72,7 +72,7 @@ sort_hierarchical <- function(x, sort = c("descending", "alphanumeric")) {
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- x_ard |>
-    dplyr::filter(if (!is_empty(ard_args$by)) is.na(.data$group1) else context != "hierarchical") |>
+    dplyr::filter(if (!is_empty(ard_args$by)) is.na(.data$group1) else .data$context != "hierarchical") |>
     dplyr::pull("pre_idx") |>
     unique()
 
