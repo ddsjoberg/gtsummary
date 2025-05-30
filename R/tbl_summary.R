@@ -170,8 +170,7 @@ tbl_summary <- function(data,
                         missing_stat = "{N_miss}",
                         sort = all_categorical(FALSE) ~ "alphanumeric",
                         percent = c("column", "row", "cell"),
-                        include = everything(),
-                        denominator = NULL) {
+                        include = everything()) {
   set_cli_abort_call()
 
   # data argument checks -------------------------------------------------------
