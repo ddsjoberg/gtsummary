@@ -437,7 +437,7 @@
       |continuous_var     |      Inf, -Inf      |     1.00, 3.00      |
       |Unknown            |          3          |          0          |
 
-# tbl_summary(percent = c(<data.frame>, <integer>))
+# tbl_summary(percent = c(<data.frame>))
 
     Code
       as.data.frame(tbl)
@@ -453,5 +453,4 @@
       8  Protocol Violation 3 / 254 (1.2%)
       9    Sponsor Decision 7 / 254 (2.8%)
       10   Withdrew Consent 27 / 254 (11%)
-      11            Unknown            110
 
