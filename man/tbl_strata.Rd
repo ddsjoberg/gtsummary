@@ -93,6 +93,12 @@ of decimal places.
 \item If some levels of a categorical variable are unobserved within a
 stratum, convert the variable to a factor to ensure all levels appear in
 each stratum's summary table.
+\item The summary type for variables (e.g. continuous vs categorial vs dichotomous)
+are determined separately within stratum. Use the \code{tbl_summary(type)}
+argument assign a summary type consistent across all tables being combined.
+\item By default, a "missing" row appears when there are missing values only.
+Use the \code{tbl_summary(missing)} argument to ensure there is always/never
+a missing row for the combining of the tables.
 }
 }
 }

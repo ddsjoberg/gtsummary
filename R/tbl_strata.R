@@ -54,6 +54,14 @@
 #'     stratum, convert the variable to a factor to ensure all levels appear in
 #'     each stratum's summary table.
 #'
+#'     * The summary type for variables (e.g. continuous vs categorial vs dichotomous)
+#'     are determined separately within stratum. Use the `tbl_summary(type)`
+#'     argument assign a summary type consistent across all tables being combined.
+#'
+#'     * By default, a "missing" row appears when there are missing values only.
+#'     Use the `tbl_summary(missing)` argument to ensure there is always/never
+#'     a missing row for the combining of the tables.
+#'
 #' @author Daniel D. Sjoberg
 #' @name tbl_strata
 #'
