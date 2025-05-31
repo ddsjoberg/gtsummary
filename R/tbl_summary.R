@@ -38,8 +38,8 @@
 #'   See below for details.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`
-#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
+#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param sort ([`formula-list-selector`][syntax])\cr
