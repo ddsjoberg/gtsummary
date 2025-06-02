@@ -28,8 +28,8 @@
 #'   The argument is required for `tbl_hierarchical()` and optional for `tbl_hierarchical_count()`.
 #'   The `denominator` argument must be specified when `id` is used to calculate event rates.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   variables from `hierarchy` for which summary statistics should be returned (on the variable label rows) Including
-#'   the last element of `hierarchy` has no effect since each level has its own row for this variable.
+#'   variables from `variables` for which summary statistics should be returned (on the variable label rows) Including
+#'   the last element of `variables` has no effect since each level has its own row for this variable.
 #'   The default is `everything()`.
 #' @param statistic ([`formula-list-selector`][syntax])\cr
 #'   used to specify the summary statistics to display for all variables in `tbl_hierarchical()`.

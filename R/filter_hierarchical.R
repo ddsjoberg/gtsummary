@@ -84,10 +84,14 @@ filter_hierarchical <- function(x, filter, keep_empty = FALSE) {
   x_ard <- reshape_x$x_ard
 
   # get `by` variable count rows (do not correspond to a table row)
-  rm_idx <- x_ard |>
-    dplyr::filter(is.na(.data$group1)) |>
-    dplyr::pull("pre_idx") |>
-    unique()
+  rm_idx <- if (!is_empty(ard_args$by)) {
+    x_ard |>
+      dplyr::filter(is.na(.data$group1)) |>
+      dplyr::pull("pre_idx") |>
+      unique()
+  } else {
+    NULL
+  }
 
   # apply filtering
   x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, keep_empty)

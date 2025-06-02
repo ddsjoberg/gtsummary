@@ -20,6 +20,19 @@ test_that("filter_hierarchical() works", {
 
   # row order is retained
   expect_snapshot(tbl |> as.data.frame())
+
+  # check indentation of results, lines 3,4 should be indented 4 and 8 spaces
+  expect_equal(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% c(3, 4)) |>
+      dplyr::arrange(row_numbers) |>
+      dplyr::pull(n_spaces),
+    c(4, 8)
+  )
 })
 
 test_that("filter_hierarchical(keep_empty) works", {
@@ -104,6 +117,31 @@ test_that("filter_hierarchical() works with only one variable in x", {
 
   expect_silent(tbl_single <- filter_hierarchical(tbl_single, sum(n) > 20))
   expect_equal(nrow(tbl_single$table_body), 4)
+})
+
+test_that("filter_hierarchical() works with no by variable", {
+  tbl_noby <- tbl_hierarchical(
+    data = cards::ADAE,
+    denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+    variables = c(AEBODSYS, AEDECOD),
+    id = "USUBJID"
+  )
+
+  expect_silent(tbl_f <- filter_hierarchical(tbl_noby, sum(n) / sum(N) > 0.05))
+  expect_equal(nrow(tbl_f$table_body), 21)
+
+  # check indentation of results, line 2 should be indented 4 spaces
+  expect_equal(
+    tbl_noby |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% 2) |>
+      dplyr::arrange(row_numbers) |>
+      dplyr::pull(n_spaces),
+    4
+  )
 })
 
 test_that("filter_hierarchical() works when some variables not included in x", {
