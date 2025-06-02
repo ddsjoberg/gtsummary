@@ -139,6 +139,19 @@ test_that("sort_hierarchical() works when some variables not included in x", {
   expect_message(sort_hierarchical(tbl))
 })
 
+test_that("sort_hierarchical() works with no by variable", {
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    denominator = cards::ADSL,
+    variables = c(AEBODSYS, AEDECOD),
+    id = "USUBJID",
+    overall_row = TRUE
+  )
+
+  expect_silent(tbl_sort <- sort_hierarchical(tbl))
+  expect_equal(nrow(tbl_sort$table_body), nrow(tbl$table_body))
+})
+
 test_that("sort_hierarchical() works with add_overall()", {
   tbl_s <- sort_hierarchical(tbl)
   tbl_o <- tbl |> add_overall()

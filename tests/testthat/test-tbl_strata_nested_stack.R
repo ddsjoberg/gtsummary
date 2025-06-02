@@ -10,6 +10,15 @@ test_that("tbl_strata_nested_stack() works", {
       )
   )
 
+  # check the tbl_ids have been applied correctly
+  expect_equal(
+    names(tbl$tbls),
+    unique(trial$trt) |>
+      sort() |>
+      cli::cli_format() %>%
+      paste("trt", ., sep = "=")
+  )
+
   # check indenting of first row, which should not be indented
   expect_true({
     indent_last_row <- tbl$table_styling$indent |>
@@ -65,6 +74,14 @@ test_that("tbl_strata_nested_stack() works", {
           modify_header(all_stat_cols() ~ "**Summary Statistics**")
       )
   )
+
+  # check the tbl_ids
+  expect_equal(
+    names(tbl$tbls),
+    c('trt=\"Drug A\",grade=\"I\"', 'trt=\"Drug A\",grade=\"II\"', 'trt=\"Drug A\",grade=\"III\"',
+      'trt=\"Drug B\",grade=\"I\"', 'trt=\"Drug B\",grade=\"II\"', 'trt=\"Drug B\",grade=\"III\"')
+  )
+
   # check correct indentation
   expect_equal(
     tbl |>

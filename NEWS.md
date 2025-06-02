@@ -1,5 +1,13 @@
 # gtsummary (development version)
 
+* Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
+
+* Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 
+
+* Fixed bug in `sort_hierarchical()` causing some rows to be dropped when sorting unstratified tables. (#2237)
+
+* Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
+
 * The `add_overall()` function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.
 
 * Adding new function `add_difference_row()`. The function is similar to `add_difference()`, except that differences are placed on the rows below the summary statistics. (#2138)

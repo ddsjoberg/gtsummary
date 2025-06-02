@@ -5,6 +5,9 @@
 #'
 #' @param data (`survey.design`)\cr
 #'   A survey object created with created with `survey::svydesign()`
+#' @param percent (`string`)\cr
+#'   Indicates the type of percentage to return.
+#'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
 #' @inheritParams tbl_summary
 #'
 #' @inheritSection tbl_summary type and value arguments
