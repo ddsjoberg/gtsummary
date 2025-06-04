@@ -2,13 +2,21 @@
 % Please edit documentation in R/filter_hierarchical.R
 \name{filter_hierarchical}
 \alias{filter_hierarchical}
+\alias{filter_hierarchical.tbl_hierarchical}
+\alias{filter_hierarchical.tbl_hierarchical_count}
 \title{Filter Hierarchical Tables}
 \usage{
-filter_hierarchical(x, filter, keep_empty = FALSE)
+filter_hierarchical(x, ...)
+
+\method{filter_hierarchical}{tbl_hierarchical}(x, filter, keep_empty = FALSE, ...)
+
+\method{filter_hierarchical}{tbl_hierarchical_count}(x, filter, keep_empty = FALSE, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
 A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{filter}{(\code{expression})\cr
 An expression that is used to filter rows of the table. See the Details section below.}
