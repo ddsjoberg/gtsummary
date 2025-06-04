@@ -75,6 +75,7 @@ NULL
 #' @rdname filter_hierarchical
 #' @export
 filter_hierarchical <- function(x, ...) {
+  set_cli_abort_call()
   check_not_missing(x)
   check_class(x, "gtsummary")
   UseMethod("filter_hierarchical")
@@ -88,7 +89,6 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, 
 
   # check input
   check_not_missing(x)
-  check_class(x, "gtsummary")
 
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
   x_ard <- x$cards$tbl_hierarchical
