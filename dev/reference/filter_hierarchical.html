@@ -9,7 +9,7 @@ This function is used to filter hierarchical table rows. Filters are not applied
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,13 @@ This function is used to filter hierarchical table rows. Filters are not applied
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_hierarchical</span><span class="op">(</span><span class="va">x</span>, <span class="va">filter</span>, keep_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_hierarchical</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'tbl_hierarchical'</span></span>
+<span><span class="fu">filter_hierarchical</span><span class="op">(</span><span class="va">x</span>, <span class="va">filter</span>, keep_empty <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'tbl_hierarchical_count'</span></span>
+<span><span class="fu">filter_hierarchical</span><span class="op">(</span><span class="va">x</span>, <span class="va">filter</span>, keep_empty <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,6 +67,10 @@ This function is used to filter hierarchical table rows. Filters are not applied
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>(<code>tbl_hierarchical</code>, <code>tbl_hierarchical_count</code>)<br>
 A hierarchical gtsummary table of class <code>'tbl_hierarchical'</code> or <code>'tbl_hierarchical_count'</code>.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>These dots are for future extensions and must be empty.</p></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
