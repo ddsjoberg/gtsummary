@@ -59,6 +59,7 @@ NULL
 #' @rdname sort_hierarchical
 #' @export
 sort_hierarchical <- function(x, ...) {
+  set_cli_abort_call()
   check_not_missing(x)
   check_class(x, "gtsummary")
   UseMethod("sort_hierarchical")
@@ -71,7 +72,6 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = c("descending", "alphan
 
   # check input
   check_not_missing(x)
-  check_class(x, "gtsummary")
 
   sort <- arg_match(sort, error_call = get_cli_abort_call())
   ard_args <- attributes(x$cards$tbl_hierarchical)$args
