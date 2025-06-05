@@ -26,7 +26,7 @@ a single column from \code{data}. Summary statistics will be stratified by this 
 Default is \code{NULL}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{variables} for which summary statistics should be returned (on the variable label rows) Including
+variables from \code{variables} for which summary statistics should be returned (on the variable label rows). Including
 the last element of \code{variables} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
