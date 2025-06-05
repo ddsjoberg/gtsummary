@@ -133,13 +133,13 @@ test_that("tbl_hierarchical(label) works properly", {
     tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, label = "Stages")
   )
 
-  # labels correct when only one variable and label is passed for ..ard_hierarchical_overall..
+  # variable labels correct when label is passed for ..ard_hierarchical_overall..
   res <- tbl_hierarchical(
-    data = trial2, variables = grade, denominator = trial2, id = id,
-    label = list(..ard_hierarchical_overall.. = "Total AEs", grade = "My Grade"),
+    data = trial2, variables = c(grade, stage), denominator = trial2, id = id,
+    label = list(stage = "My Stage", ..ard_hierarchical_overall.. = "Total AEs", grade = "My Grade"),
     overall_row = TRUE
   )
-  expect_identical(res$table_styling$header$label[4], "**My Grade**")
+  expect_identical(res$table_styling$header$label[4], "**My Stage**  \n    **My Grade**")
   expect_identical(res$table_body$label[1], "Total AEs")
 })
 
