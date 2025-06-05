@@ -139,7 +139,7 @@ test_that("tbl_hierarchical(label) works properly", {
     label = list(stage = "My Stage", ..ard_hierarchical_overall.. = "Total AEs", grade = "My Grade"),
     overall_row = TRUE
   )
-  expect_identical(res$table_styling$header$label[6], "**My Stage**  \n    **My Grade**")
+  expect_equal(res$table_styling$header$label[6], "**My Grade**  \n\U00A0\U00A0\U00A0\U00A0**My Stage**")
   expect_identical(res$table_body$label[1], "Total AEs")
 })
 
