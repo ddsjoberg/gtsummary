@@ -202,7 +202,7 @@ brdg_hierarchical <- function(cards,
       paste0(
         paste(rep("\U00A0", indent[x]), collapse = ""),
         "**",
-        label[x],
+        label[variables][x],
         "**",
         if (x < length(indent)) "  "
       )
