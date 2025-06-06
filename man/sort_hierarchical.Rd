@@ -2,13 +2,21 @@
 % Please edit documentation in R/sort_hierarchical.R
 \name{sort_hierarchical}
 \alias{sort_hierarchical}
+\alias{sort_hierarchical.tbl_hierarchical}
+\alias{sort_hierarchical.tbl_hierarchical_count}
 \title{Sort Hierarchical Tables}
 \usage{
-sort_hierarchical(x, sort = c("descending", "alphanumeric"))
+sort_hierarchical(x, ...)
+
+\method{sort_hierarchical}{tbl_hierarchical}(x, sort = c("descending", "alphanumeric"), ...)
+
+\method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = c("descending", "alphanumeric"), ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
 a hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{sort}{(\code{string})\cr
 type of sorting to perform. Value must be one of:
