@@ -132,6 +132,15 @@ test_that("tbl_hierarchical(label) works properly", {
     error = TRUE,
     tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, label = "Stages")
   )
+
+  # variable labels correct when label is passed for ..ard_hierarchical_overall..
+  res <- tbl_hierarchical(
+    data = trial2, variables = c(grade, stage), denominator = trial2, id = id,
+    label = list(stage = "My Stage", ..ard_hierarchical_overall.. = "Total AEs", grade = "My Grade"),
+    overall_row = TRUE
+  )
+  expect_equal(res$table_styling$header$label[6], "**My Grade**  \n\U00A0\U00A0\U00A0\U00A0**My Stage**")
+  expect_identical(res$table_body$label[1], "Total AEs")
 })
 
 # tbl_hierarchical(digits) ------------------------------------------------------------

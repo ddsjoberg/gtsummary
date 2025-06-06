@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
+* Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
+ 
+* Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
 
 * Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
 
