@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
+ 
+* Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
+
 * Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
 
 * Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 

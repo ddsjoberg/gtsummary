@@ -18,7 +18,7 @@ tbl_ard_hierarchical(
 An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()} functions.}
 
 \item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
+character vector or tidy-selector of columns in \code{data} used to create a hierarchy. Hierarchy will be built with
 variables in the order given.}
 
 \item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
@@ -26,8 +26,8 @@ a single column from \code{data}. Summary statistics will be stratified by this 
 Default is \code{NULL}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{variables} for which summary statistics should be returned (on the variable label rows) Including
-the last element of \code{variables} has no effect since each level has its own row for this variable.
+columns from the \code{variables} argument for which summary statistics should be returned (on the variable label rows).
+Including the last element of \code{variables} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
