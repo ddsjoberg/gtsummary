@@ -11,6 +11,7 @@
 tbl_split_by_rows(
   x,
   variables,
+  row_numbers,
   footnotes = c("all", "first", "last"),
   caption = c("all", "first")
 )
@@ -31,8 +32,8 @@ first_column(x)
 \item{x}{(\code{gtsummary} or \code{list})\cr
 gtsummary table.}
 
-\item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables at which to split the gtsummary table rows (tables
+\item{variables, row_numbers}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}} or \code{integer})\cr
+variables or row numbers at which to split the gtsummary table rows (tables
 will be separated after each of these variables).}
 
 \item{footnotes}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -80,13 +81,20 @@ trial |>
   tail(n = 1) # Print only last table for simplicity
 
 # Example 2 ----------------------------------
+# Split by rows with row numbers
+trial |>
+  tbl_summary(by = trt) |>
+  tbl_split_by_rows(row_numbers = c(5, 7)) |>
+  tail(n = 1) # Print only last table for simplicity
+
+# Example 3 ----------------------------------
 # Split by columns
 trial |>
   tbl_summary(by = trt, include = c(death, ttdeath)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
   tail(n = 1) # Print only last table for simplicity
 
-# Example 3 ----------------------------------
+# Example 4 ----------------------------------
 # Both row and column splitting
 trial |>
   tbl_summary(by = trt) |>
@@ -94,7 +102,8 @@ trial |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
   tail(n = 1) # Print only last table for simplicity
 
-# Example 4 ------------------------------
+# Example 5 ------------------------------
+# Split by rows with footnotes and caption
 trial |>
   tbl_summary(by = trt, missing = "no") |>
   modify_footnote_header(
