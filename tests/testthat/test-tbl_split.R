@@ -155,3 +155,49 @@ test_that("tbl_split_by_columns(footntes, caption) works", {
     tbl_fc_test$table_styling
   )
 })
+
+# row_numbers -------------------------------------------------------------
+test_that("tbl_split_by_rows(row_numbers) works", {
+  tbl_lst <- trial |>
+    tbl_summary(by = trt) |>
+    tbl_split_by_rows(row_numbers = c(1, 2))
+
+  expect_s3_class(tbl_lst, "tbl_split")
+
+  expect_equal(
+    tbl_lst[[1]] |> as.data.frame(),
+    tbl_summary(trial, by = trt) |> as.data.frame() |> dplyr::slice(1)
+  )
+  expect_equal(
+    tbl_lst[[2]] |> as.data.frame(),
+    tbl_summary(trial, by = trt) |> as.data.frame() |> dplyr::slice(2)
+  )
+  expect_equal(
+    tbl_lst[[3]] |> as.data.frame(),
+    tbl_summary(trial, by = trt) |> as.data.frame() |> dplyr::slice(- c(1, 2))
+  )
+})
+
+test_that("tbl_split_by_rows(row_numbers) throws errors", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_lst <- trial |>
+      tbl_summary(by = trt) |>
+      tbl_split_by_rows(row_numbers = -1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_lst <- trial |>
+      tbl_summary(by = trt) |>
+      tbl_split_by_rows(row_numbers = "grade")
+  )
+})
+
+test_that("tbl_split_by_rows(row_numbers, variables) throws an error", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_lst <- trial |>
+      tbl_summary(by = trt) |>
+      tbl_split_by_rows(row_numbers = c(2), variables = grade)
+  )
+})

@@ -8,8 +8,8 @@
 #'
 #' @param x (`gtsummary` or `list`)\cr
 #'   gtsummary table.
-#' @param variables ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   variables at which to split the gtsummary table rows (tables
+#' @param variables,row_numbers ([`tidy-select`][dplyr::dplyr_tidy_select] or `integer`)\cr
+#'   variables or row numbers at which to split the gtsummary table rows (tables
 #'   will be separated after each of these variables).
 #' @param keys ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   columns to be repeated in each table split. It defaults to `first_column(x)`
@@ -43,13 +43,20 @@
 #'   tail(n = 1) # Print only last table for simplicity
 #'
 #' # Example 2 ----------------------------------
+#' # Split by rows with row numbers
+#' trial |>
+#'   tbl_summary(by = trt) |>
+#'   tbl_split_by_rows(row_numbers = c(5, 7)) |>
+#'   tail(n = 1) # Print only last table for simplicity
+#'
+#' # Example 3 ----------------------------------
 #' # Split by columns
 #' trial |>
 #'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
 #'   tail(n = 1) # Print only last table for simplicity
 #'
-#' # Example 3 ----------------------------------
+#' # Example 4 ----------------------------------
 #' # Both row and column splitting
 #' trial |>
 #'   tbl_summary(by = trt) |>
@@ -57,7 +64,8 @@
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
 #'   tail(n = 1) # Print only last table for simplicity
 #'
-#' # Example 4 ------------------------------
+#' # Example 5 ------------------------------
+#' # Split by rows with footnotes and caption
 #' trial |>
 #'   tbl_summary(by = trt, missing = "no") |>
 #'   modify_footnote_header(
@@ -90,6 +98,7 @@ NULL
 #' @export
 #' @rdname tbl_split_by
 tbl_split_by_rows <- function(x, variables,
+                              row_numbers,
                               footnotes = c("all", "first", "last"),
                               caption = c("all", "first")) {
   set_cli_abort_call()
@@ -124,20 +133,60 @@ tbl_split_by_rows <- function(x, variables,
   footnotes <- rlang::arg_match(footnotes)
   caption <- rlang::arg_match(caption)
 
+  # check that row_numbers is integerish and in bounds
+  if (!is_missing(row_numbers)) {
+    check_integerish(row_numbers)
+
+    # check that row_numbers are in bounds
+    if (any(row_numbers > nrow(x$table_body) | row_numbers < 1)) {
+      cli::cli_abort(
+        c("Argument {.arg row_numbers} is out of bounds.",
+          i = "Must be between {.val {1}} and {.val {nrow(x$table_body)}}."
+        ),
+        call = get_cli_abort_call()
+      )
+    }
+
+    # Check if variables have been provided too
+    if (length(variables) > 1) {
+      cli::cli_abort(
+        "Please select only one between {.arg row_numbers} and {.arg variables} arguments.",
+        call = get_cli_abort_call()
+      )
+    }
+  }
+
   # merging split points -------------------------------------------------------
   # convert list of table_body into list of gtsummary objects
-  tbl_list <- x$table_body %>%
-    dplyr::left_join(
-      dplyr::tibble(variable = variables, ..group.. = variables),
-      by = "variable"
-    ) |>
+  if (is_missing(row_numbers)) {
+    tbl_body_with_groups <- x$table_body |>
+      dplyr::left_join(
+        dplyr::tibble(variable = variables, ..group.. = variables),
+        by = "variable"
+      )
+  } else {
+    row_numbers <- c(row_numbers, nrow(x$table_body)) # add last row number
+    tbl_body_with_groups <- x$table_body |>
+      dplyr::bind_cols(
+        dplyr::tibble(
+          row_number = seq_len(nrow(x$table_body)),
+          ..group.. = dplyr::case_when(
+            row_number %in% row_numbers ~ as.character(row_number),
+            TRUE ~ NA_character_
+          )
+        )
+      )
+  }
+
+  # Split the table body into groups and add decorations
+  tbl_list <- tbl_body_with_groups |>
     tidyr::fill("..group..", .direction = "up") |>
     tidyr::nest(data = -"..group..") |>
     dplyr::pull("data") |>
     map(
       ~ list(.) |>
         set_names("table_body") |>
-        c(utils::modifyList(x, val = list(table_body = NULL))) %>% # add the other parts of the gtsummary table
+        c(utils::modifyList(x, val = list(table_body = NULL))) |> # add the other parts of the gtsummary table
         `class<-`(class(x)) # add original class from `x`
     )
 
