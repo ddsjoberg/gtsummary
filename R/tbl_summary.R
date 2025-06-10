@@ -216,8 +216,8 @@ tbl_summary <- function(data,
   }
   else if (!is.data.frame(percent) && !is_integerish(percent)) {
     cli::cli_abort(
-      "The {.arg percent} argument must be one of {.val c('column', 'row', 'cell')} ({.emph the most common input}),
-         or a {.cls data.frame}/{.cls integer}",
+      "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
+         or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
       call = get_cli_abort_call()
     )
   }
