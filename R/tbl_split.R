@@ -12,18 +12,15 @@
 #'   variables or row numbers at which to split the gtsummary table rows (tables
 #'   will be separated after each of these variables).
 #' @param keys ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   columns to be repeated in each table split. It defaults to `first_column(x)`
+#'   columns to be repeated in each table split. It defaults to the first column
 #'   if missing (usually label column).
 #' @param groups (list of `character` vectors)\cr
 #'   list of column names that appear in `x$table_body`.
 #'   Each group of column names represent a different table in the output list.
-#' @param footnotes (`string`) `r lifecycle::badge('experimental')`\cr
-#'   can be either `"first"`, `"all"`, or `"last"`, to locate global footnotes
-#'   only on the first, in each, or in the last table, respectively. It defaults
+#' @param footnotes,caption (`string`) `r lifecycle::badge('experimental')`\cr
+#'   can be either `"first"`, `"all"`, or `"last"`, to locate global footnotes or
+#'   caption only on the first, in each, or in the last table, respectively. It defaults
 #'   to `"all"`. Reference footnotes are always present wherever they appear.
-#' @param caption (`string`) `r lifecycle::badge('experimental')`\cr
-#'   similarly to footnotes, makes the titles, and subtitles appear only on the
-#'   `"first"` or `"all"` table. It defaults to `"all"`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @return `tbl_split` object. If multiple splits are performed (e.g., both by
@@ -33,6 +30,11 @@
 #' Run [show_header_names()] to print all column names to split by.
 #'
 #' Footnotes and caption handling are experimental and may change in the future.
+#'
+#' `row_numbers` indicates the row numbers at which to split the table. It means
+#'   that the table will be split after each of these row numbers. If the last
+#'   row is selected, the split will not happen as it is supposed to happen after
+#'   the last row.
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
@@ -98,9 +100,9 @@ NULL
 #' @export
 #' @rdname tbl_split_by
 tbl_split_by_rows <- function(x, variables,
-                              row_numbers,
+                              row_numbers = NULL,
                               footnotes = c("all", "first", "last"),
-                              caption = c("all", "first")) {
+                              caption = c("all", "first", "last")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
@@ -130,22 +132,24 @@ tbl_split_by_rows <- function(x, variables,
   variables <- variables |> union(dplyr::last(x$table_body$variable))
 
   # footnotes and caption check
-  footnotes <- rlang::arg_match(footnotes)
-  caption <- rlang::arg_match(caption)
+  footnotes <- arg_match(footnotes)
+  caption <- arg_match(caption)
 
   # check that row_numbers is integerish and in bounds
-  if (!is_missing(row_numbers)) {
+  if (!is_empty(row_numbers)) {
     check_integerish(row_numbers)
 
     # check that row_numbers are in bounds
-    if (any(row_numbers > nrow(x$table_body) | row_numbers < 1)) {
-      cli::cli_abort(
-        c("Argument {.arg row_numbers} is out of bounds.",
-          i = "Must be between {.val {1}} and {.val {nrow(x$table_body)}}."
-        ),
-        call = get_cli_abort_call()
-      )
-    }
+    check_range(
+      row_numbers,
+      include_bounds = c(TRUE, TRUE),
+      range = c(1, nrow(x$table_body)),
+      message = c("Argument {.arg row_numbers} is out of bounds.",
+        i = "Must be between {.val {1}} and {.val {nrow(x$table_body)}}."
+      ),
+      envir = current_env(),
+      call = get_cli_abort_call()
+    )
 
     # Check if variables have been provided too
     if (length(variables) > 1) {
@@ -158,14 +162,18 @@ tbl_split_by_rows <- function(x, variables,
 
   # merging split points -------------------------------------------------------
   # convert list of table_body into list of gtsummary objects
-  if (is_missing(row_numbers)) {
+  if (is_empty(row_numbers)) {
+    # Create a new column to indicate split groups by variables
     tbl_body_with_groups <- x$table_body |>
       dplyr::left_join(
         dplyr::tibble(variable = variables, ..group.. = variables),
         by = "variable"
       )
   } else {
-    row_numbers <- c(row_numbers, nrow(x$table_body)) # add last row number
+    # If last row is added as a split point nothing changes as split is after the last row
+    row_numbers <- sort(unique(c(row_numbers, nrow(x$table_body))))
+
+    # Create a new column to indicate split groups
     tbl_body_with_groups <- x$table_body |>
       dplyr::bind_cols(
         dplyr::tibble(
@@ -192,7 +200,7 @@ tbl_split_by_rows <- function(x, variables,
 
   # caption/footnotes handling -----------------------------------------------
   if (length(tbl_list) > 1) {
-    tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
+    tbl_list <- .modify_split_footnotes_caption(tbl_list, footnotes, caption)
   }
 
   # return list of tbls --------------------------------------------------------
@@ -205,12 +213,13 @@ tbl_split_by_rows <- function(x, variables,
 #' @rdname tbl_split_by
 tbl_split_by_columns <- function(x, keys, groups,
                                  footnotes = c("all", "first", "last"),
-                                 caption = c("all", "first")) {
+                                 caption = c("all", "first", "last")) {
   set_cli_abort_call()
 
   # list map -------------------------------------------------------------------
   if (inherits(x, "list")) {
-    keys <- maybe_missing(keys, default = first_column(x[[1]])) # refers only to first? better handling?
+    check_class(x[[1]], "gtsummary")
+    keys <- maybe_missing(keys, default = .first_unhidden_column(x[[1]])) # refers only to first? better handling?
     tbl_list <- map(
       .x = x,
       .f = tbl_split_by_columns,
@@ -226,7 +235,7 @@ tbl_split_by_columns <- function(x, keys, groups,
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  keys <- maybe_missing(keys, default = first_column(x))
+  keys <- maybe_missing(keys, default = .first_unhidden_column(x))
   cards::process_selectors(x$table_body, keys = {{ keys }})
   check_class(groups, "list")
   cards::check_list_elements(
@@ -258,8 +267,8 @@ tbl_split_by_columns <- function(x, keys, groups,
   }
 
   # footnotes and caption check
-  footnotes <- rlang::arg_match(footnotes)
-  caption <- rlang::arg_match(caption)
+  footnotes <- arg_match(footnotes)
+  caption <- arg_match(caption)
 
   # splitting table ------------------------------------------------------------
   tbl_list <- vector(mode = "list", length = length(groups))
@@ -269,7 +278,7 @@ tbl_split_by_columns <- function(x, keys, groups,
 
   # caption/footnotes handling -----------------------------------------------
   if (length(tbl_list) > 1) {
-    tbl_list <- .modify_footnotes_caption(tbl_list, footnotes, caption)
+    tbl_list <- .modify_split_footnotes_caption(tbl_list, footnotes, caption)
   }
 
   # return list of tbls --------------------------------------------------------
@@ -278,37 +287,43 @@ tbl_split_by_columns <- function(x, keys, groups,
 }
 
 # helper function for handling caption/footnotes
-.modify_footnotes_caption <- function(tbl_list, footnotes, caption) {
-  which_to_modify <- if (footnotes == "first") {
+.modify_split_footnotes_caption <- function(tbl_list, footnotes, caption) {
+  # which splits to remove footnotes from
+  which_footnotes_to_remove <- if (footnotes == "first") {
     seq(2, length(tbl_list))
   } else if (footnotes == "last") {
     seq(1, length(tbl_list) - 1)
   } else {
     NULL
   }
-  if (!is.null(which_to_modify)) {
-    for (i in which_to_modify) {
+
+  # Remove footnotes from the specified splits
+  if (!is.null(which_footnotes_to_remove)) {
+    for (i in which_footnotes_to_remove) {
       tbl_list[[i]] <- tbl_list[[i]] |>
         remove_source_note() |>
         remove_abbreviation()
     }
   }
-  if (caption == "first") {
+
+  # which splits to remove caption from
+  which_caption_to_remove <- if (caption == "first") {
+    seq(2, length(tbl_list))
+  } else if (caption == "last") {
+    seq(1, length(tbl_list) - 1)
+  } else {
+    NULL
+  }
+
+  # Remove caption from the specified splits
+  if (!is.null(which_caption_to_remove)) {
     # Changing the call_list does not affect the output, should it be trimmed?
-    for (i in seq(2, length(tbl_list))) {
+    for (i in which_caption_to_remove) {
       tbl_list[[i]]$table_styling$caption <- NULL
     }
   }
+
   tbl_list
-}
-
-#' @export
-#' @rdname tbl_split_by
-first_column <- function(x) {
-  set_cli_abort_call()
-  check_class(x, "gtsummary")
-
-  x$table_styling$header[!x$table_styling$header$hide, ][["column"]][1]
 }
 
 #' @export
