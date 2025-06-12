@@ -4,16 +4,15 @@
 \alias{tbl_split_by}
 \alias{tbl_split_by_rows}
 \alias{tbl_split_by_columns}
-\alias{first_column}
 \alias{print.tbl_split}
 \title{Split gtsummary table by rows and/or columns}
 \usage{
 tbl_split_by_rows(
   x,
   variables,
-  row_numbers,
+  row_numbers = NULL,
   footnotes = c("all", "first", "last"),
-  caption = c("all", "first")
+  caption = c("all", "first", "last")
 )
 
 tbl_split_by_columns(
@@ -21,10 +20,8 @@ tbl_split_by_columns(
   keys,
   groups,
   footnotes = c("all", "first", "last"),
-  caption = c("all", "first")
+  caption = c("all", "first", "last")
 )
-
-first_column(x)
 
 \method{print}{tbl_split}(x, ...)
 }
@@ -36,17 +33,13 @@ gtsummary table.}
 variables or row numbers at which to split the gtsummary table rows (tables
 will be separated after each of these variables).}
 
-\item{footnotes}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-can be either \code{"first"}, \code{"all"}, or \code{"last"}, to locate global footnotes
-only on the first, in each, or in the last table, respectively. It defaults
+\item{footnotes, caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
+can be either \code{"first"}, \code{"all"}, or \code{"last"}, to locate global footnotes or
+caption only on the first, in each, or in the last table, respectively. It defaults
 to \code{"all"}. Reference footnotes are always present wherever they appear.}
 
-\item{caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-similarly to footnotes, makes the titles, and subtitles appear only on the
-\code{"first"} or \code{"all"} table. It defaults to \code{"all"}.}
-
 \item{keys}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-columns to be repeated in each table split. It defaults to \code{first_column(x)}
+columns to be repeated in each table split. It defaults to the first column
 if missing (usually label column).}
 
 \item{groups}{(list of \code{character} vectors)\cr
@@ -70,6 +63,11 @@ Both column-wise splitting (that is, splits by columns in
 Run \code{\link[=show_header_names]{show_header_names()}} to print all column names to split by.
 
 Footnotes and caption handling are experimental and may change in the future.
+
+\code{row_numbers} indicates the row numbers at which to split the table. It means
+that the table will be split after each of these row numbers. If the last
+row is selected, the split will not happen as it is supposed to happen after
+the last row.
 }
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
