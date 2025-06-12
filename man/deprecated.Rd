@@ -4,11 +4,17 @@
 \alias{deprecated}
 \alias{modify_cols_merge}
 \alias{modify_column_indent}
+\alias{tbl_split}
+\alias{tbl_split.gtsummary}
 \title{Deprecated functions}
 \usage{
 modify_cols_merge(...)
 
 modify_column_indent(...)
+
+tbl_split(x, ...)
+
+\method{tbl_split}{gtsummary}(...)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}\cr

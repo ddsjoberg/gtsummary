@@ -10,7 +10,7 @@
 #' @param source_note (`string`)\cr
 #'   A string to add as a source note.
 #' @param source_note_id (`integers`)\cr
-#'   Integers specifying the ID of the source note to remove.
+#'   Integers specifying the IDs of the source notes to remove.
 #'   Source notes are indexed sequentially at the time of creation.
 #'   Default is `NULL`, which removes all source notes.
 #' @inheritParams modify
