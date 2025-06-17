@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9018</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9019</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fixed bug in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> causing the overall row label to be incorrectly used as a variable label.</p></li>
+<ul><li><p>Added <code><a href="../reference/tbl_split_by.html">tbl_split_by_rows()</a></code> and <code><a href="../reference/tbl_split_by.html">tbl_split_by_columns()</a></code> to split tables horizontally (row-wise) and vertically (column-wise). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2216" class="external-link">#2216</a>)</p></li>
+<li><p>Fixed bug in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> causing the overall row label to be incorrectly used as a variable label.</p></li>
 <li><p>Functions <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> and <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> are now S3 generics.</p></li>
 <li><p>Users are now allows to specify/override the denominator by passing an integer or a data frame to the <code>tbl_summary(percent)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2239" class="external-link">#2239</a>)</p></li>
 <li><p>Added the <code>tbl_merge(tbl_ids)</code> and <code>tbl_stack(tbl_ids)</code> arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling <code><a href="../reference/gather_ard.html">gather_ard()</a></code>, which will return a named list of ARDs where the names are the assigned tbl IDs. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2224" class="external-link">#2224</a>)</p></li>
@@ -57,7 +58,7 @@
 <li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to <code>add_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2208" class="external-link">#2208</a>)</p></li>
 <li><p>Fix in <code>tbl_merge(merge_vars)</code> argument when a table contained a <code>"row_type"</code> column and the tables were not merged by this variable (which is included in the default). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2205" class="external-link">#2205</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/add_overall.html">add_overall()</a></code> where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.</p></li>
-<li><p>Fix in experimental function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> when tables including this call, did not specify the <code>rows</code> argument, and were later stacked. The enquo environment associated with the <code>rows</code> argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.</p></li>
+<li><p>Fix in experimental function <code><a href="../reference/modify_post_fmt_fun.html">modify_post_fmt_fun()</a></code> when tables including this call, did not specify the <code>rows</code> argument, and were later stacked. The <code>enquo</code> environment associated with the <code>rows</code> argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.</p></li>
 <li><p>Fix in <code>tbl_svysummary(missing='ifany')</code> when the weighted number of missing observations was &lt;= 0.5. Previously, these counts were coerced to integer and rounded to zero, and therefore, did not appear in the table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2229" class="external-link">#2229</a>)</p></li>
 <li><p>Updated the function name of <code><a href="../reference/deprecated.html">modify_column_indent()</a></code> to the more accurately named <code><a href="../reference/modify_indent.html">modify_indent()</a></code> as the function operates on cells rather than columns.</p></li>
 <li><p>Fix in <code><a href="../reference/gather_ard.html">gather_ard()</a></code> for <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> tables, where the function returned an empty list. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2223" class="external-link">#2223</a>)</p></li>
@@ -217,7 +218,7 @@
 </ul><div class="section level4">
 <h4 id="other-updates-2-0-1">Other updates<a class="anchor" aria-label="anchor" href="#other-updates-2-0-1"></a></h4>
 <ul><li><p>The {tidycmprsk} dependency has been removed and the <code>tbl_regression.tidycrr()</code> method has been migrated to the {tidycmprsk} package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1865" class="external-link">#1865</a>)</p></li>
-<li><p>The class of <code><a href="../reference/tbl_split.html">tbl_split()</a></code> objects has been updated from <code>"tbl_split"</code> to <code>c("tbl_split", "list")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1854" class="external-link">#1854</a>)</p></li>
+<li><p>The class of <code><a href="../reference/deprecated.html">tbl_split()</a></code> objects has been updated from <code>"tbl_split"</code> to <code>c("tbl_split", "list")</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1854" class="external-link">#1854</a>)</p></li>
 <li><p>Updated the default value of <code>tbl_ard_summary(missing)</code> to <code>"no"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1857" class="external-link">#1857</a>)</p></li>
 <li><p>Line breaks (i.e. <code>'\n'</code>) are now auto-stripped from gt-rendered tables when in an R markdown or Quarto environment. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1896" class="external-link">#1896</a>)</p></li>
 </ul></div>
@@ -603,7 +604,7 @@
 <li><p>The <code><a href="../reference/add_n_regression.html">add_n.tbl_regression()</a></code> (which is also utilized in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>) was adding the N column without applying a formatting function. The <code><a href="../reference/style_number.html">style_number()</a></code> function has now been added as the default styler. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1022" class="external-link">#1022</a>)</p></li>
 <li><p>Added class <code>"tbl_continuous"</code> to the output of <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>.</p></li>
 <li><p>Adding <code><a href="../reference/add_p.html">add_p()</a></code> test <code>"mcnemar.test.wide"</code> to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.</p></li>
-<li><p>Converted <code><a href="../reference/tbl_split.html">tbl_split()</a></code> to S3 function.</p></li>
+<li><p>Converted <code><a href="../reference/deprecated.html">tbl_split()</a></code> to S3 function.</p></li>
 <li><p>Update how calls to <code><a href="https://gt.rstudio.com/reference/fmt_missing.html" class="external-link">gt::fmt_missing()</a></code> are constructed to be more memory efficient.</p></li>
 </ul></div>
 <div class="section level4">
@@ -630,7 +631,7 @@
 <h4 id="new-functions-1-5-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-5-0"></a></h4>
 <ul><li><p>Added new function <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> to summarize a continuous variable by 1 or more categorical variables.</p></li>
 <li><p>Added new function <code><a href="../reference/add_ci.html">add_ci()</a></code> that adds a new column with the confidence interval for proportions/means reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/868" class="external-link">#868</a>)</p></li>
-<li><p>Migrated a new function <code><a href="../reference/tbl_split.html">tbl_split()</a></code> from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.</p></li>
+<li><p>Migrated a new function <code><a href="../reference/deprecated.html">tbl_split()</a></code> from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.</p></li>
 <li><p>Migrated a new function <code><a href="../reference/separate_p_footnotes.html">separate_p_footnotes()</a></code> from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in <code><a href="../reference/add_p.html">add_p()</a></code>, and replaces it with individual footnotes for each test name.</p></li>
 <li>
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href="https://github.com/ddsjoberg/gtsummary/issues/973" class="external-link">#973</a>, <a href="https://github.com/ddsjoberg/gtsummary/issues/976" class="external-link">#976</a>)</p>
