@@ -25,7 +25,7 @@ table created with \code{tbl_summary()}}
 
 \item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the tests/methods to perform for each variable, e.g.
-\code{list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")}.
+\code{list(all_continuous() ~ "svy.t.test", all_dichotomous() ~ "emmeans", all_categorical(FALSE) ~ "svy.chisq.test")}.
 
 See below for details on default tests and \link[=tests]{?tests} for details on available
 tests and creating custom tests.}

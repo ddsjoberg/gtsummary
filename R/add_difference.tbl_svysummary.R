@@ -8,7 +8,7 @@
 #'   table created with `tbl_summary()`
 #' @param test ([`formula-list-selector`][syntax])\cr
 #'   Specifies the tests/methods to perform for each variable, e.g.
-#'   `list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")`.
+#'   `list(all_continuous() ~ "svy.t.test", all_dichotomous() ~ "emmeans", all_categorical(FALSE) ~ "svy.chisq.test")`.
 #'
 #'   See below for details on default tests and [?tests][tests] for details on available
 #'   tests and creating custom tests.
