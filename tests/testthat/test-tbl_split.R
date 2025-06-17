@@ -238,6 +238,14 @@ test_that("tbl_split_by_rows(row_numbers) works", {
     tbl_lst[[4]] |> as.data.frame(),
     tbl_summary(trial, by = trt) |> as.data.frame() |> dplyr::slice(nrow(tbl$table_body))
   )
+
+  # no errors if the table does not have a 'variable' column
+  expect_length(
+    mtcars |>
+      as_gtsummary() |>
+      tbl_split_by_rows(row_numbers = 15),
+    2L
+  )
 })
 
 test_that("tbl_split_by_rows(row_numbers) throws errors", {
@@ -255,6 +263,14 @@ test_that("tbl_split_by_rows(row_numbers) throws errors", {
     tbl_lst <- trial |>
       tbl_summary(by = trt) |>
       tbl_split_by_rows(row_numbers = "grade")
+  )
+
+  # appropriate error when the table does not have a 'variable' column
+  expect_snapshot(
+    error = TRUE,
+    mtcars |>
+      as_gtsummary() |>
+      tbl_split_by_rows(variables = 1L)
   )
 })
 
