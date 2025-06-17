@@ -25,6 +25,14 @@
       Error in `tbl_split_by_rows()`:
       ! The `row_numbers` argument must an integer vector or empty.
 
+---
+
+    Code
+      tbl_split_by_rows(as_gtsummary(mtcars), variables = 1L)
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! The `row_numbers` argument must be specified when the passed table does not contain a "variable" column in `x$table_body`.
+
 # tbl_split_by_rows(row_numbers, variables) throws an error
 
     Code

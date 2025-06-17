@@ -124,11 +124,22 @@ tbl_split_by_rows <- function(x,
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
 
+  # if the table doesn't have a 'variable' column, user must specify `row_numbers`
+  if (!"variable" %in% names(x$table_body) && is_empty(row_numbers)) {
+    cli::cli_abort(
+      "The {.arg row_numbers} argument must be specified when the passed table does
+       not contain a {.val variable} column in {.code x$table_body}.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # process inputs -------------------------------------------------------------
-  cards::process_selectors(
-    data = scope_table_body(x$table_body),
-    variables = {{ variables }}
-  )
+  if ("variable" %in% names(x$table_body)) {
+    cards::process_selectors(
+      data = scope_table_body(x$table_body),
+      variables = {{ variables }}
+    )
+  }
 
   # check that row_numbers is integerish and in bounds
   check_integerish(row_numbers, allow_empty = TRUE)
