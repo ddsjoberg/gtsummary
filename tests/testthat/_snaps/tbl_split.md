@@ -23,7 +23,7 @@
       tbl_lst <- tbl_split_by_rows(tbl_summary(trial, by = trt), row_numbers = "grade")
     Condition
       Error in `tbl_split_by_rows()`:
-      ! The `row_numbers` argument must an integer vector.
+      ! The `row_numbers` argument must an integer vector or empty.
 
 # tbl_split_by_rows(row_numbers, variables) throws an error
 
@@ -32,5 +32,5 @@
       variables = grade)
     Condition
       Error in `tbl_split_by_rows()`:
-      ! Please select only one between `row_numbers` and `variables` arguments.
+      ! Please select only one and only one between `row_numbers` and `variables` arguments.
 
