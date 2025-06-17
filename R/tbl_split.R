@@ -99,7 +99,8 @@ NULL
 
 #' @export
 #' @rdname tbl_split_by
-tbl_split_by_rows <- function(x, variables,
+tbl_split_by_rows <- function(x,
+                              variables = NULL,
                               row_numbers = NULL,
                               footnotes = c("all", "first", "last"),
                               caption = c("all", "first", "last")) {
@@ -128,37 +129,38 @@ tbl_split_by_rows <- function(x, variables,
     data = scope_table_body(x$table_body),
     variables = {{ variables }}
   )
+
+  # check that row_numbers is integerish and in bounds
+  check_integerish(row_numbers, allow_empty = TRUE)
+
+  # check that row_numbers are in bounds
+  check_range(
+    row_numbers,
+    include_bounds = c(TRUE, TRUE),
+    range = c(1L, nrow(x$table_body)),
+    message = c("Argument {.arg row_numbers} is out of bounds.",
+                i = "Must be between {.val {1}} and {.val {nrow(x$table_body)}}."
+    ),
+    envir = current_env(),
+    allow_empty = TRUE
+  )
+
+  # only one of `variables` and `row_numbers` may be specified
+  if (is_empty(variables) + is_empty(row_numbers) != 1L) {
+    cli::cli_abort(
+      "Please select only one and only one between {.arg row_numbers} and {.arg variables} arguments.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # adding last variable
-  variables <- variables |> union(dplyr::last(x$table_body$variable))
+  if (!is_empty(variables)) {
+    variables <- variables |> union(dplyr::last(x$table_body$variable))
+  }
 
   # footnotes and caption check
   footnotes <- arg_match(footnotes)
   caption <- arg_match(caption)
-
-  # check that row_numbers is integerish and in bounds
-  if (!is_empty(row_numbers)) {
-    check_integerish(row_numbers)
-
-    # check that row_numbers are in bounds
-    check_range(
-      row_numbers,
-      include_bounds = c(TRUE, TRUE),
-      range = c(1, nrow(x$table_body)),
-      message = c("Argument {.arg row_numbers} is out of bounds.",
-        i = "Must be between {.val {1}} and {.val {nrow(x$table_body)}}."
-      ),
-      envir = current_env(),
-      call = get_cli_abort_call()
-    )
-
-    # Check if variables have been provided too
-    if (length(variables) > 1) {
-      cli::cli_abort(
-        "Please select only one between {.arg row_numbers} and {.arg variables} arguments.",
-        call = get_cli_abort_call()
-      )
-    }
-  }
 
   # merging split points -------------------------------------------------------
   # convert list of table_body into list of gtsummary objects
