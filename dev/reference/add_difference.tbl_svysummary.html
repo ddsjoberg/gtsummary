@@ -83,7 +83,7 @@ table created with <code><a href="tbl_summary.html">tbl_summary()</a></code></p>
 <dt id="arg-test">test<a class="anchor" aria-label="anchor" href="#arg-test"></a></dt>
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
 Specifies the tests/methods to perform for each variable, e.g.
-<code>list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")</code>.</p>
+<code>list(all_continuous() ~ "svy.t.test", all_dichotomous() ~ "emmeans", all_categorical(FALSE) ~ "svy.chisq.test")</code>.</p>
 <p>See below for details on default tests and <a href="tests.html">?tests</a> for details on available
 tests and creating custom tests.</p></dd>
 
