@@ -41,4 +41,17 @@ modify_column_indent <- function(...) {
   modify_indent(...)
 }
 
+# v2.3.0 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
+tbl_split <- function(x, ...) {
+  UseMethod("tbl_split")
+}
 
+# v2.3.0 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
+tbl_split.gtsummary <- function(...) {
+  lifecycle::deprecate_soft("2.3.0", "gtsummary::tbl_split.gtsummary()", "tbl_split_by_rows()")
+  tbl_split_by_rows(...)
+}

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `tbl_split_by_rows()` and `tbl_split_by_columns()` to split tables horizontally (row-wise) and vertically (column-wise). (#2216)
+
 * Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
  
 * Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
@@ -28,7 +30,7 @@
 
 * Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
 
-* Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The enquo environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
+* Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The `enquo` environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
 
 * Fix in `tbl_svysummary(missing='ifany')` when the weighted number of missing observations was <= 0.5. Previously, these counts were coerced to integer and rounded to zero, and therefore, did not appear in the table. (#2229)
 
