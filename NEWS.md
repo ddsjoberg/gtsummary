@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `tbl_split_by_rows()` and `tbl_split_by_columns()` to split tables horizontally (row-wise) and vertically (column-wise). (#2216)
+
 * Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
  
 * Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
