@@ -29,10 +29,6 @@
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = stage, by = trt,
         denominator = trial2, id = id))
-    Condition
-      Warning:
-      Duplicate rows found in data for the "id" column.
-      i Percentages/Denominators are not correct.
     Output
         **T Stage** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1          T1             22 (79%)              22 (88%)
@@ -98,10 +94,6 @@
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade), by = trt,
       denominator = trial2, id = id, include = NULL))
-    Condition
-      Warning:
-      Duplicate rows found in data for the "id" column.
-      i Percentages/Denominators are not correct.
     Output
          **T Stage**  \n    **Grade** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1                            T1                 <NA>                  <NA>
