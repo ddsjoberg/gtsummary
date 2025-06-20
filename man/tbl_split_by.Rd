@@ -9,7 +9,7 @@
 \usage{
 tbl_split_by_rows(
   x,
-  variables,
+  variables = NULL,
   row_numbers = NULL,
   footnotes = c("all", "first", "last"),
   caption = c("all", "first", "last")
