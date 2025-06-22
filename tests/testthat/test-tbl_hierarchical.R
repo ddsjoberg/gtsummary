@@ -89,10 +89,10 @@ test_that("tbl_hierarchical(overall_row) works properly", {
   expect_snapshot(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2, id = id, overall_row = TRUE) |> as.data.frame())
 
   # value are correct when by is passed
-  expect_warning(expect_warning(
+  expect_silent(
     res <-
       tbl_hierarchical(data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE)
-  ))
+  )
   expect_snapshot(res |> as.data.frame())
   expect_equal((res |> as.data.frame())[1, 1], "Number of patients with event")
   expect_equal(
@@ -101,13 +101,13 @@ test_that("tbl_hierarchical(overall_row) works properly", {
   )
 
   # overall row labeling works
-  expect_warning(expect_warning(
+  expect_silent(
     res <-
       tbl_hierarchical(
         data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE,
         label = list(..ard_hierarchical_overall.. = "Total patients")
       )
-  ))
+  )
   expect_equal((res |> as.data.frame())[1, 1], "Total patients")
 
   # errors thrown when bad overall_row argument passed

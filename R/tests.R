@@ -22,7 +22,7 @@
 #'
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -36,7 +36,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -50,7 +50,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_survfit", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -64,7 +64,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_continuous", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -78,7 +78,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_difference == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
@@ -93,7 +93,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_difference == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
