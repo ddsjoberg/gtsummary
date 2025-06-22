@@ -621,3 +621,40 @@ test_that("tbl_svysummary() default fmt fn", {
     "1"
   )
 })
+
+# missing values handled correctly
+# addressed https://stackoverflow.com/questions/79673577
+test_that("tbl_svysummary() missing `by` handling", {
+  database <- data.frame(
+    INDIV_AGE = rnorm(100, mean = 50, sd = 4),
+    INDIV_GENDER = rbinom(n = 100, size=1, prob = 0.6),
+    PAIN_SCALE = factor(sample(c("Low", "Elevated"), size = 100, replace = T)),
+    FLOWER_COLOR = factor(sample(c("Blue", "Red"), size = 100, replace = T)),
+    poids = rnorm(100, mean = 2, sd = 0.8)
+  )
+
+  # no errors and proper messaging
+  expect_snapshot(
+    tbl <-
+      survey::svydesign(
+        id = ~1,
+        weights = ~poids,
+        data =
+          database |>
+          dplyr::mutate(INDIV_GENDER = ifelse(dplyr::row_number() == 1L, NA, INDIV_GENDER))
+      ) |>
+      tbl_svysummary(by = "INDIV_GENDER")
+  )
+
+  # ensure results are the same if row is entirely removed
+  expect_equal(
+    as.data.frame(tbl),
+    survey::svydesign(
+      id = ~1,
+      weights = ~poids,
+      data = database |> dplyr::filter(!dplyr::row_number() == 1L)
+    ) |>
+      tbl_svysummary(by = "INDIV_GENDER") |>
+      as.data.frame()
+  )
+})
