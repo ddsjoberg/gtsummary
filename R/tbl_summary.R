@@ -492,7 +492,8 @@ tbl_summary <- function(data,
   }
 
   obs_to_drop <- is.na(data[[by]])
-  cli::cli_inform("{.val {sum(obs_to_drop)}} missing rows in the {.val {by}} column have been removed.")
+  cli::cli_inform("{.val {sum(obs_to_drop)}} missing row{?s} in the {.val {by}}
+                  column {cli::qty(sum(obs_to_drop))}{?has/have} been removed.")
   dplyr::filter(data, !obs_to_drop)
 }
 

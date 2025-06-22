@@ -376,3 +376,12 @@
       Error in `tbl_svysummary()`:
       ! `percent` must be one of "column", "row", or "cell", not "a".
 
+# tbl_svysummary() missing `by` handling
+
+    Code
+      tbl <- tbl_svysummary(survey::svydesign(id = ~1, weights = ~poids, data = dplyr::mutate(
+        database, INDIV_GENDER = ifelse(dplyr::row_number() == 1L, NA, INDIV_GENDER))),
+      by = "INDIV_GENDER")
+    Message
+      1 row with missingness in the "INDIV_GENDER" column has been ignored with `subset()`.
+
