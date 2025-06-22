@@ -383,5 +383,5 @@
         database, INDIV_GENDER = ifelse(dplyr::row_number() == 1L, NA, INDIV_GENDER))),
       by = "INDIV_GENDER")
     Message
-      1 row with missingness in the "INDIV_GENDER" column has been ignored with `subset()`.
+      1 row with missingness in the "INDIV_GENDER" column has been removed with `subset()`.
 
