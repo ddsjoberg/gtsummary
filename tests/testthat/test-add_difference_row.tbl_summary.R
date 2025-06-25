@@ -19,22 +19,22 @@ test_that("add_difference_row() works", {
   # Age I vs III
   expect_equal(
     tbl$cards$add_difference_row$age$`'I' vs. 'III'` |>
-      dplyr::select(-c("stat_fmt", "fmt_fn")),
+      dplyr::select(-c("stat_fmt", "fmt_fun")),
     trial |>
       dplyr::filter(grade != "II") |>
       cardx::ard_stats_t_test(variables = "age", by = "grade") |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
   )
   # Response I vs III
   expect_equal(
     tbl$cards$add_difference_row$response$`'I' vs. 'III'` |>
-      dplyr::select(-c("stat_fmt", "fmt_fn")),
+      dplyr::select(-c("stat_fmt", "fmt_fun")),
     trial |>
       dplyr::filter(grade != "II") |>
       cardx::ard_stats_prop_test(variables = "response", by = "grade") |>
       cards::replace_null_statistic() |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
   )
 })
@@ -84,12 +84,12 @@ test_that("add_difference_row(test)", {
       getElement("add_difference_row") |>
       getElement("age") |>
       getElement("'I' vs. 'III'") |>
-      dplyr::select(-c("stat_fmt", "fmt_fn", "context", "stat_label")) |>
+      dplyr::select(-c("stat_fmt", "fmt_fun", "context", "stat_label")) |>
       dplyr::filter(stat_name %in% c("estimate", "conf.low", "conf.high", "p.value")),
     trial |>
       dplyr::filter(grade != "II") |>
       cardx::ard_stats_t_test(variables = "age", by = "grade") |>
-      dplyr::select(-c("fmt_fn", "context", "stat_label")) |>
+      dplyr::select(-c("fmt_fun", "context", "stat_label")) |>
       dplyr::filter(stat_name %in% c("estimate", "conf.low", "conf.high", "p.value")),
     ignore_attr = TRUE
   )

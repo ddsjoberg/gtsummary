@@ -6,7 +6,7 @@
 #' @param ... [`dynamic-dots`][rlang::dyn-dots]\cr
 #'   Used to assign updates to formatting functions.
 #'
-#'   Use `modify_fmt_fun(colname = <fmt fn>)` to update a single column. Using a
+#'   Use `modify_fmt_fun(colname = <fmt fun>)` to update a single column. Using a
 #'   formula will invoke tidyselect, e.g. `modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)`.
 #'
 #'   Use the `show_header_names()` to see the column names that can be modified.

@@ -288,7 +288,7 @@ tbl_svysummary <- function(data,
       cardx::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
@@ -301,7 +301,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
-        fmt_fn = digits[variables_categorical],
+        fmt_fun = digits[variables_categorical],
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
@@ -310,7 +310,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
-        fmt_fn = digits[variables_dichotomous],
+        fmt_fun = digits[variables_dichotomous],
         denominator = percent,
         value = value[variables_dichotomous],
         stat_label = ~ default_stat_labels()
@@ -321,7 +321,7 @@ tbl_svysummary <- function(data,
         by = all_of(by),
         variables = all_of(variables_continuous),
         statistic = statistic_continuous,
-        fmt_fn = digits[variables_continuous],
+        fmt_fun = digits[variables_continuous],
         stat_label = ~ default_stat_labels()
       )
     ) |>
