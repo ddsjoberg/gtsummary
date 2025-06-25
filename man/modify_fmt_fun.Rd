@@ -13,7 +13,7 @@ A gtsummary object}
 \item{...}{\code{\link[rlang:dyn-dots]{dynamic-dots}}\cr
 Used to assign updates to formatting functions.
 
-Use \verb{modify_fmt_fun(colname = <fmt fn>)} to update a single column. Using a
+Use \verb{modify_fmt_fun(colname = <fmt fun>)} to update a single column. Using a
 formula will invoke tidyselect, e.g. \verb{modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)}.
 
 Use the \code{show_header_names()} to see the column names that can be modified.}

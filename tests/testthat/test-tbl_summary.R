@@ -715,3 +715,45 @@ test_that("tbl_summary(statistic) double curly bracket escaping", {
     glue("Me{{an: {{{style_number(mean(trial$ttdeath), 1)}}}")
   )
 })
+
+# addressing issue #2188
+test_that("tbl_summary() column order for lgl by variable", {
+  expect_equal(
+    mtcars |>
+      dplyr::mutate(am = as.logical(am)) |>
+      tbl_summary(by = am, include = mpg) |>
+      add_overall() |>
+      as.data.frame(col_label = FALSE) |>
+      names(),
+    c("label", "stat_0", "stat_1", "stat_2")
+  )
+})
+
+test_that("tbl_summary(percent = c(<data.frame>))", {
+  expect_silent(
+    tbl <- cards::ADSL |>
+      dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)) |>
+      tbl_summary(
+        include = DCREASCD,
+        percent = cards::ADSL,
+        statistic = all_categorical() ~ "{n} / {N} ({p}%)",
+        missing = "no"
+      )
+  )
+  expect_snapshot(as.data.frame(tbl))
+  expect_equal(
+    gather_ard(tbl) |>
+      getElement("tbl_summary") |>
+      dplyr::filter(variable == "DCREASCD", context == "categorical") |>
+      dplyr::select(-gts_column, -fmt_fun),
+    cards::ard_categorical(
+      cards::ADSL |>
+        dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)),
+      variables = "DCREASCD",
+      denominator = cards::ADSL
+    ) |>
+      dplyr::select(-fmt_fun),
+    ignore_attr = TRUE
+  )
+})
+

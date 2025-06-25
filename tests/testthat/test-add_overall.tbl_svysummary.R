@@ -88,11 +88,10 @@ test_that("add_overall.tbl_svysummary() works", {
 })
 
 
-test_that("add_overall.tbl_svysummary() errors", {
-  # no stratifying variable
+test_that("add_overall.tbl_svysummary() messaging", {
+  # no stratifying variable message
   expect_snapshot(
-    error = TRUE,
-    tbl_svysummary(svy_mtcars) |> add_overall()
+    tbl <- tbl_svysummary(svy_mtcars) |> add_overall()
   )
 
   # Run add_overall() after after `add_stat_label()`

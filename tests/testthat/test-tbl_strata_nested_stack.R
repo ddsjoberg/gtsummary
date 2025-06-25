@@ -10,6 +10,15 @@ test_that("tbl_strata_nested_stack() works", {
       )
   )
 
+  # check the tbl_ids have been applied correctly
+  expect_equal(
+    names(tbl$tbls),
+    unique(trial$trt) |>
+      sort() |>
+      cli::cli_format() %>%
+      paste("trt", ., sep = "=")
+  )
+
   # check indenting of first row, which should not be indented
   expect_true({
     indent_last_row <- tbl$table_styling$indent |>
@@ -17,7 +26,7 @@ test_that("tbl_strata_nested_stack() works", {
       dplyr::filter(dplyr::n() == dplyr::row_number())
 
     indent_last_row$n_spaces == 0L &&
-      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id == 1L"
+      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L"
   })
 
   # check the 2nd row is indented
@@ -65,6 +74,14 @@ test_that("tbl_strata_nested_stack() works", {
           modify_header(all_stat_cols() ~ "**Summary Statistics**")
       )
   )
+
+  # check the tbl_ids
+  expect_equal(
+    names(tbl$tbls),
+    c('trt=\"Drug A\",grade=\"I\"', 'trt=\"Drug A\",grade=\"II\"', 'trt=\"Drug A\",grade=\"III\"',
+      'trt=\"Drug B\",grade=\"I\"', 'trt=\"Drug B\",grade=\"II\"', 'trt=\"Drug B\",grade=\"III\"')
+  )
+
   # check correct indentation
   expect_equal(
     tbl |>
@@ -103,6 +120,23 @@ test_that("tbl_strata_nested_stack() works with unobserved factor levels", {
       setdiff(x = seq_len(nrow(tbl$table_body)), y = _),
     c(1L, 7L)
   )
+
+  # check indentation is correct when only one level present in stratum
+  expect_true({
+    df_indent <- trial |>
+      dplyr::filter(trt == "Drug A") |>
+      tbl_strata_nested_stack(
+        strata = "trt",
+        ~ tbl_summary(.x, include = "age", missing = "no")
+      ) |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      dplyr::filter(n_spaces == 0L)
+
+    (df_indent$column == "label") &&
+      (df_indent$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L")
+  })
+
 })
 
 test_that("tbl_strata_nested_stack() messaging", {
@@ -145,6 +179,20 @@ test_that("tbl_strata_nested_stack() messaging", {
           }
         )
       }
+    )
+  )
+})
+
+# addressing issue #2179
+test_that("tbl_strata_nested_stack() unobserved combinations", {
+  # no error when there are unobserved combinations of the strata variables
+  expect_silent(
+    tbl_strata_nested_stack(
+      cards::ADTTE,
+      strata = c(SEX, RACE),
+      .tbl_fun = ~ .x |>
+        tbl_summary(include = AGE, type = AGE ~ "continuous"),
+      quiet = TRUE
     )
   )
 })

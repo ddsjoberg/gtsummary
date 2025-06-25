@@ -14,6 +14,12 @@ test_that("tbl_strata works with standard use", {
       )
   )
 
+  # check the tbl_ids are correct
+  expect_equal(
+    names(tbl$tbls),
+    c('grade=\"Grade I\"', 'grade=\"Grade II\"', 'grade=\"Grade III\"')
+  )
+
   # df_strata correct
   expect_equal(nrow(tbl$df_strata), 3)
   expect_equal(names(tbl$df_strata), c("strata_1", "header"))
@@ -226,23 +232,6 @@ test_that("tbl_strata2 works with standard use", {
 
   # correct subtables
   expect_equal(length(tbl$tbls), 3)
-})
-
-test_that("tbl_strata(.stack_group_header) produces defunct warning", {
-  lifecycle::expect_defunct(
-    trial |>
-      select(grade, stage, trt) |>
-      mutate(grade = paste("Grade", grade)) |>
-      tbl_strata(
-        strata = grade,
-        .tbl_fun =
-          ~ .x |>
-          tbl_summary(by = trt) |>
-          add_p(),
-        .combine_with = "tbl_stack",
-        .stack_group_header = TRUE
-      )
-  )
 })
 
 test_that("tbl_strata(.quiet) produces deprecation warning", {

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("flextable"))
+skip_if_not(is_pkg_installed(c("flextable", "broom.helpers", "cardx")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -414,7 +414,7 @@ test_that("as_flex_table passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   ft_tbl <- tbl |> as_flex_table()
 
   expect_equal(

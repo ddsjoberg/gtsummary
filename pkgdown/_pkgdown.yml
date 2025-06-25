@@ -62,10 +62,12 @@ reference:
       - add_q
       - add_overall.tbl_summary
       - add_difference.tbl_summary
+      - add_difference_row.tbl_summary
       - add_n.tbl_summary
       - add_ci
       - add_stat_label
       - add_stat
+      - add_variable_group_header
       - separate_p_footnotes
   - subtitle: Cross Tables
   - contents:
@@ -83,6 +85,8 @@ reference:
   - subtitle: Hierarchical Summary Tables
   - contents:
       - tbl_hierarchical
+      - sort_hierarchical
+      - filter_hierarchical
       - add_overall.tbl_hierarchical
   - subtitle: Likert Summary Tables
   - contents:
@@ -154,7 +158,7 @@ reference:
       - tbl_stack
       - tbl_strata
       - tbl_strata_nested_stack
-      - tbl_split
+      - tbl_split_by
       - tbl_butcher
   - subtitle: Style Summary Tables
   - contents:
@@ -186,8 +190,9 @@ reference:
       - modify_column_hide
       - modify_column_alignment
       - modify_fmt_fun
+      - modify_post_fmt_fun
       - modify_column_merge
-      - modify_column_indent
+      - modify_indent
       - modify_missing_symbol
   - subtitle: Select Helpers
   - contents:

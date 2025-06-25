@@ -46,7 +46,7 @@
 #'   modify_table_body(~.x |> dplyr::arrange(row_type == "glance_statistic"))
 #' ````
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
 #' mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 #'
 #' # Example 1 ----------------------------------
@@ -203,7 +203,7 @@ add_glance_source_note <- function(x,
   )
   cards::fill_formula_selectors(
     data = df_glance_orig,
-    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fn"]] |> eval()
+    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fun"]] |> eval()
   )
 
   df_label <-

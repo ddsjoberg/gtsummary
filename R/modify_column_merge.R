@@ -3,10 +3,11 @@
 #' Merge two or more columns in a gtsummary table.
 #' Use `show_header_names()` to print underlying column names.
 #'
-#' @param pattern glue syntax string indicating how to merge columns in
-#' `x$table_body`. For example, to construct a confidence interval
-#' use `"{conf.low}, {conf.high}"`.
-#' @inheritParams modify_table_styling
+#' @param pattern (`string`)\cr
+#'   glue syntax string indicating how to merge columns in
+#'   `x$table_body`. For example, to construct a confidence interval
+#'   use `"{conf.low}, {conf.high}"`.
+#' @inheritParams modify_bold_italic
 #'
 #' @section Details:
 #' 1. Calling this function merely records the instructions to merge columns.
@@ -106,7 +107,7 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
 
 #' @export
 #' @name modify_column_merge
-remove_column_merge <- function(x, columns) {
+remove_column_merge <- function(x, columns = everything()) {
   set_cli_abort_call()
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")

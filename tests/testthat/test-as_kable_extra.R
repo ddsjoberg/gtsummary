@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("kableExtra", "knitr")))
+skip_if_not(is_pkg_installed(c("kableExtra", "knitr", "broom.helpers", "cardx")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -27,7 +27,7 @@ test_that("as_kable_extra(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(kbl),
-    c("tibble", "fmt", "cols_merge", "fmt_missing", "cols_hide", "remove_line_breaks",
+    c("tibble", "fmt", "fmt_missing", "post_fmt", "cols_merge", "cols_hide", "remove_line_breaks",
       "escape_table_body", "bold_italic", "kable", "add_indent",
       "add_header_above", "source_note", "abbreviations", "footnote")
   )
@@ -259,7 +259,7 @@ test_that("as_kable_extra passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   kbl <- tbl |> as_kable_extra()
 
   expect_false(

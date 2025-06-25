@@ -7,7 +7,7 @@
 \usage{
 modify_source_note(x, source_note, text_interpret = c("md", "html"))
 
-remove_source_note(x, source_note_id)
+remove_source_note(x, source_note_id = NULL)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -22,8 +22,9 @@ String indicates whether text will be interpreted with
 Applies to tables printed with \code{{gt}}.}
 
 \item{source_note_id}{(\code{integers})\cr
-Integers specifying the ID of the source note to remove.
-Source notes are indexed sequentially at the time of creation.}
+Integers specifying the IDs of the source notes to remove.
+Source notes are indexed sequentially at the time of creation.
+Default is \code{NULL}, which removes all source notes.}
 }
 \value{
 gtsummary object

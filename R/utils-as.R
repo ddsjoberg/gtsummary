@@ -2,7 +2,7 @@
 .rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
   rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
 
-  # if a single lgl value, then expand it to the length of the tabel_body
+  # if a single lgl value, then expand it to the length of the table_body
   if (is_scalar_logical(rows_evaluated)) {
     rows_evaluated <- rep_len(rows_evaluated, length.out = nrow(table_body))
   }
@@ -215,7 +215,27 @@
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
     x$table_styling$fmt_fun %>%
-    # filter(.data$column %in% .cols_to_show(x)) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      row_numbers =
+        switch(nrow(.) == 0,
+               integer(0)
+        ) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows,
+                                  return_when_null = seq_len(nrow(x$table_body))
+        ) %>% list()
+    ) %>%
+    dplyr::select(-"rows") %>%
+    tidyr::unnest("row_numbers") %>%
+    dplyr::group_by(.data$column, .data$row_numbers) %>%
+    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
+    dplyr::ungroup() %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
+    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+
+  # post_fmt_fun --------------------------------------------------------------------
+  x$table_styling$post_fmt_fun <-
+    x$table_styling$post_fmt_fun %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       row_numbers =

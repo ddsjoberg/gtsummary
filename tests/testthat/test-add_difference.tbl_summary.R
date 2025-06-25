@@ -64,7 +64,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl1$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -74,8 +75,10 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
-      )
+        -cards::all_ard_variables(),
+        -fmt_fun
+      ),
+    ignore_attr = TRUE
   )
 
   tbl2 <-
@@ -90,7 +93,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl2$cards$add_difference$ttdeath |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -101,8 +105,10 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
-      )
+        -cards::all_ard_variables(),
+        -fmt_fun
+      ),
+    ignore_attr = TRUE
   )
 
   tbl3 <-
@@ -117,7 +123,8 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     tbl3$cards$add_difference$response |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
+        -cards::all_ard_variables(),
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -128,8 +135,10 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
     ) |>
       dplyr::select(
         -cards::all_ard_groups(),
-        -cards::all_ard_variables()
-      )
+        -cards::all_ard_variables(),
+        -fmt_fun
+      ),
+    ignore_attr = TRUE
   )
 })
 
@@ -603,8 +612,8 @@ test_that("add_difference.tbl_summary() with emmeans()", {
 })
 
 test_that("ordering in add_difference.tbl_summary() with paired tests", {
-  expect_snapshot(
-    mtcars |>
+  expect_snapshot({
+    tbl <- mtcars |>
       mutate(
         .by = am,
         id = dplyr::row_number(),
@@ -614,12 +623,14 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
         by = am,
         include = mpg
       ) |>
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id)
+
+    tbl |>
       modify_column_hide(all_stat_cols()) |>
       as.data.frame()
-  )
-  expect_snapshot(
-    mtcars |>
+  })
+  expect_snapshot({
+    tbl <- mtcars |>
       mutate(
         .by = am,
         id = dplyr::row_number(),
@@ -629,8 +640,77 @@ test_that("ordering in add_difference.tbl_summary() with paired tests", {
         by = am,
         include = mpg
       ) |>
-      add_difference(test = ~"paired.t.test", group = id) |>
+      add_difference(test = ~"paired.t.test", group = id)
+
+    tbl |>
       modify_column_hide(all_stat_cols()) |>
       as.data.frame()
+  })
+})
+
+test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.test()", {
+  # check the results are correct by matching ARDs
+  expect_equal(
+    trial |>
+      dplyr::mutate(response = factor(response, levels = c(0, 1), labels = c("no", "yes"))) |>
+      tbl_summary(
+        by = trt,
+        include = response
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("response") |>
+      dplyr::select(-"fmt_fun"),
+    trial |>
+      dplyr::mutate(response = response == 1) |>
+      cardx::ard_stats_prop_test(by = trt, variable = response) |>
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fun"),
+    ignore_attr = TRUE
+  )
+
+  # check when the value presented is the opposite (FALSE)
+  expect_equal(
+    trial |>
+      dplyr::mutate(response = as.logical(response)) |>
+      tbl_summary(
+        by = trt,
+        include = response,
+        value = list(response = FALSE)
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("response") |>
+      dplyr::select(-"fmt_fun"),
+    trial |>
+      dplyr::mutate(response = response == 0) |>
+      cardx::ard_stats_prop_test(by = trt, variable = response) |>
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fun"),
+    ignore_attr = TRUE
+  )
+
+  # check results when variable has >2 levels
+  expect_equal(
+    trial |>
+      tbl_summary(
+        by = trt,
+        include = grade,
+        value = list(grade = "I")
+      ) |>
+      add_difference() |>
+      gather_ard() |>
+      getElement("add_difference") |>
+      getElement("grade") |>
+      dplyr::select(-"fmt_fun"),
+    trial |>
+      dplyr::mutate(grade = grade == "I") |>
+      cardx::ard_stats_prop_test(by = trt, variable = grade) |>
+      cards::replace_null_statistic() |>
+      dplyr::select(-"fmt_fun"),
+    ignore_attr = TRUE
   )
 })
+

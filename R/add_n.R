@@ -92,7 +92,7 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         .data$variable %in% .env$x$inputs$include,
         .data$context %in% "missing"
       ) |>
-      cards::apply_fmt_fn()
+      cards::apply_fmt_fun()
   } else if (is_empty(x$inputs$by)) {
     x$cards$add_n <-
       x[["cards"]][[1]] |>
@@ -100,19 +100,19 @@ add_n.tbl_summary <- function(x, statistic = "{N_nonmiss}", col_label = "**N**",
         .data$variable %in% .env$x$inputs$include,
         .data$context %in% "missing"
       ) |>
-      cards::apply_fmt_fn()
+      cards::apply_fmt_fun()
   } else {
     x$cards$add_n <-
       cards::ard_missing(
         data = x$inputs$data,
         variables = x$inputs$include,
         by = character(0L),
-        fmt_fn = ~ list(
+        fmt_fun = ~ list(
           starts_with("N_") ~ label_style_number(),
           starts_with("p_") ~ label_style_percent()
         )
       ) |>
-      cards::apply_fmt_fn()
+      cards::apply_fmt_fun()
 
     x$cards$add_n$stat_label <- translate_vector(x$cards$add_n$stat_label)
   }

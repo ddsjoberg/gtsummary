@@ -206,7 +206,7 @@ pier_summary_categorical <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -329,7 +329,7 @@ pier_summary_continuous2 <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -441,7 +441,7 @@ pier_summary_continuous <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -518,7 +518,7 @@ pier_summary_missing_row <- function(cards,
     variables <-
       cards |>
       dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
-      dplyr::filter(.data$stat > 0L) |>
+      dplyr::filter(.data$stat > 0) |>
       dplyr::pull("variable") |>
       unique()
   }
@@ -590,10 +590,10 @@ pier_summary_missing_row <- function(cards,
         df_by_stats |>
         dplyr::filter(.data$stat_name %in% c("N", "n", "p", "N_unweighted", "n_unweighted", "p_unweighted")) |>
         dplyr::select(cards::all_ard_variables(), "stat_name", "stat") |>
-        dplyr::left_join(
+        dplyr::inner_join(
           cards |>
             dplyr::select(cards::all_ard_groups(), "gts_column") |>
-            dplyr::filter(!is.na(.data$gts_column)) |>
+            dplyr::filter(!is.na(.data$gts_column) & !is.na(.data$group1)) |>
             dplyr::distinct() |>
             dplyr::rename(variable = "group1", variable_level = "group1_level"),
           by = c("variable", "variable_level")

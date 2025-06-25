@@ -1,8 +1,11 @@
 #' Modify Bold and Italic
 #'
 #' Add or remove bold and italic styling to a cell in a table.
+#' By default, the remove functions will remove all bold/italic styling.
 #'
 #' @inheritParams modify_footnote2
+#' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Selector of columns in `x$table_body`
 #'
 #' @return Updated gtsummary object
 #' @name modify_bold_italic
@@ -45,7 +48,7 @@ modify_bold <- function(x, columns, rows) {
 
 #' @rdname modify_bold_italic
 #' @export
-remove_bold <- function(x, columns, rows) {
+remove_bold <- function(x, columns = everything(), rows = TRUE) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -89,7 +92,7 @@ modify_italic <- function(x, columns, rows) {
 
 #' @rdname modify_bold_italic
 #' @export
-remove_italic <- function(x, columns, rows) {
+remove_italic <- function(x, columns = everything(), rows = TRUE) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------

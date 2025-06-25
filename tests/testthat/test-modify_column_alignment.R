@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
 
 test_that("modify_column_alignment() works", {
   tbl <-

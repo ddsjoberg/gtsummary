@@ -60,6 +60,7 @@ Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf
 and the corresponding method.
 }
 \examples{
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 Titanic |>
   as.data.frame() |>
@@ -80,6 +81,7 @@ Titanic |>
   ) |>
   bold_labels() |>
   modify_footnote_header("Proportion (\%) of survivors (n/N) [95\% CI]", columns = all_stat_cols())
+\dontshow{\}) # examplesIf}
 }
 \author{
 Joseph Larmarange

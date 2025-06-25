@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -337,7 +338,7 @@ test_that("as_gt passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   gt_tbl <- tbl |> as_gt()
 
   expect_equal(
@@ -544,5 +545,21 @@ test_that("as_gt passes column merging correctly", {
   expect_equal(
     as.data.frame(gt_tbl)$estimate,
     c("0.00", "<br />", "—", "-0.38", "-0.12")
+  )
+})
+
+test_that("as_gt() works with modify_post_fmt_fun()", {
+  expect_equal(
+    data.frame(x = FALSE) |>
+      tbl_summary(type = x ~ "categorical") |>
+      modify_post_fmt_fun(
+        fmt_fun = ~ifelse(. == "0 (0%)", "0", .),
+        columns = all_stat_cols()
+      ) |>
+      as_gt() |>
+      gt::extract_body() |>
+      dplyr::pull("stat_0") |>
+      dplyr::last(),
+    "0"
   )
 })

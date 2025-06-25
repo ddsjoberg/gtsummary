@@ -255,6 +255,13 @@ tbl_custom_summary <- function(data,
   )
 
   # assign summary type --------------------------------------------------------
+  type <-
+    case_switch(
+      missing(type) ~
+        get_theme_element("tbl_custom_summary-arg:type") %||%
+        get_theme_element("tbl_summary-arg:type", default = type),
+      .default = type
+    )
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
@@ -262,13 +269,7 @@ tbl_custom_summary <- function(data,
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
-      type =
-        case_switch(
-          missing(type) ~
-            get_theme_element("tbl_custom_summary-arg:type") %||%
-            get_theme_element("tbl_summary-arg:type", default = type),
-          .default = type
-        )
+      type = type
     )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
@@ -356,7 +357,7 @@ tbl_custom_summary <- function(data,
             variables = all_of(variable),
             by = all_of(c(by, variable)),
             statistic = stat_fns[variable] |> map(~list(complex = .x)),
-            fmt_fn = digits[variable]
+            fmt_fun = digits[variable]
           ) |>
           dplyr::select(-cards::all_ard_variables()) |>
           dplyr::mutate(context = type[[variable]])
@@ -388,7 +389,7 @@ tbl_custom_summary <- function(data,
       variables = all_of(variables_continuous),
       by = any_of(by),
       statistic = stat_fns[variables_continuous] |> map(~list(complex = .x)),
-      fmt_fn = digits[variables_continuous]
+      fmt_fun = digits[variables_continuous]
     ) |>
     dplyr::mutate(context = "continuous")
 
@@ -399,7 +400,7 @@ tbl_custom_summary <- function(data,
       cards::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()
       ),
       cards::ard_total_n(data),
@@ -416,7 +417,7 @@ tbl_custom_summary <- function(data,
     cards::replace_null_statistic()
 
 
-  # fixing integer fmt_fn that have defaulted to character/date results
+  # fixing integer fmt_fun that have defaulted to character/date results
   # cycle through the formatting functions, and replace default numeric for character stats
   # THIS IS NOT PERFECT! IN v2.0, WE NOW LET USERS PASS A SINGLE FMTFN TO A SINGLE
   #   STAT USING NAMED LISTS (previously, each fn had to be specified if you specified one).
@@ -430,7 +431,7 @@ tbl_custom_summary <- function(data,
     if (inherits(stat, c("character", "Date")) &&                  # if the stat is character OR Date
         is_empty(digits[names(user_passed_digits)][[variable]][[stat_name]]) &&  # and the user didn't pass a digit for this stat
         !is_empty(digits[[variable]][[stat_name]]) ) {                           # and we created a default formatting stat, THEN change the default to as.character()
-      cards$fmt_fn[i][[1]] <- as.character
+      cards$fmt_fun[i][[1]] <- as.character
       digits[[variable]][[stat_name]] <- as.character
     }
   }

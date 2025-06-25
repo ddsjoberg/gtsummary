@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survival", ref = "survival"))
+skip_if_not(is_pkg_installed(c("survival", "cardx", "broom.helpers")))
 
 # univariate regression models
 t0 <-
@@ -269,6 +269,13 @@ test_that("tbl_merge(merge_vars)", {
       1L,     "cyl_1",    "**Table 1**",        "gt::md",   FALSE
     )
   )
+
+  # no errors when merging doesn't include row_type (and other defaults)
+  expect_silent({
+    tbl0 <- lm(age ~ marker, trial) |> tbl_regression()
+    tbl <- tbl_merge(list(tbl0, tbl0), merge_vars = "label")
+  })
+  expect_snapshot(as.data.frame(tbl))
 })
 
 test_that("tbl_merge() works with tbl_hierarchical()", {

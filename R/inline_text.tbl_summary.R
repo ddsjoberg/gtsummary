@@ -50,8 +50,8 @@ inline_text.tbl_summary <- function(x,
   x <- modify_fmt_fun(x, any_of(c("p.value", "q.value")) ~ pvalue_fun)
 
   if (!is_empty(pattern) && any(c("p.value", "q.value") %in% .extract_glue_elements(pattern))) {
-    lst_fmt_fn_updates <- rep_named(c("p.value", "q.value"), list(pvalue_fun))
-    x$cards <- .update_fmt_fn(x$cards, lst_fmt_fn_updates)
+    lst_fmt_fun_updates <- rep_named(c("p.value", "q.value"), list(pvalue_fun))
+    x$cards <- .update_fmt_fun(x$cards, lst_fmt_fun_updates)
   }
 
   # setting column argument ----------------------------------------------------

@@ -223,6 +223,9 @@ tbl_regression.default <- function(x,
     get_theme_element("tbl_regression-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(res))
 
+  # running function for multimodel models (and similar) for grouped results ---
+  res <- .regression_grouped_results(res)
+
   # return results -------------------------------------------------------------
   res <- res |>
     modify_table_styling(
@@ -231,5 +234,50 @@ tbl_regression.default <- function(x,
       indent = 4
     )
   res$call_list <- list(tbl_regression = match.call())
+  res$cards <- list(tbl_regression = NULL)
   res
+}
+
+.regression_grouped_results <- function(x) {
+  # if grouped model, then adjusting output accordingly
+  if ("group_by" %in% names(x$table_body)) {
+    # rename the grouping column
+    x$table_body <-
+      x$table_body |>
+      dplyr::rename(groupname_col = "group_by") |>
+      dplyr::relocate("groupname_col", .before = "label")
+
+    # assign header label
+    x <- x |>
+      modify_table_styling(
+        columns = "groupname_col",
+        hide = FALSE,
+        label = .grouped_data_header(x$inputs$x),
+        align = "left"
+      )
+
+    # warning about multinomial models
+    cli::cli_inform(
+      c("i" = "Multinomial models, multi-component models and other groups models
+               have a different
+               underlying structure than the models gtsummary was designed for.",
+        "*" = "Functions designed to work with {.fun tbl_regression} objects may yield unexpected results.",
+        "i" = "Suppress this message with {.help suppressMessages}.")
+    )
+  }
+
+  # return regression tbl
+  x
+}
+
+.grouped_data_header <- function(x) {
+  UseMethod(".grouped_data_header")
+}
+
+.grouped_data_header.default <- function(x) {
+  "**Group**"
+}
+
+.grouped_data_header.multinom <- function(x) {
+  "**Outcome**"
 }
