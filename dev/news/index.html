@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9020</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added the <code>"add_overall.tbl_summary-arg:col_label"</code> theme element to control the default value of <code>add_overall.tbl_summary(col_label)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2246" class="external-link">#2246</a>)</p></li>
+<ul><li><p>Fix in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> when there are missing values in the <code>by</code> column.</p></li>
+<li><p>Added the <code>"add_overall.tbl_summary-arg:col_label"</code> theme element to control the default value of <code>add_overall.tbl_summary(col_label)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2246" class="external-link">#2246</a>)</p></li>
 <li><p>Added <code><a href="../reference/tbl_split_by.html">tbl_split_by_rows()</a></code> and <code><a href="../reference/tbl_split_by.html">tbl_split_by_columns()</a></code> to split tables horizontally (row-wise) and vertically (column-wise). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2216" class="external-link">#2216</a>)</p></li>
 <li><p>Fixed bug in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> causing the overall row label to be incorrectly used as a variable label.</p></li>
 <li><p>Functions <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> and <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> are now S3 generics.</p></li>
