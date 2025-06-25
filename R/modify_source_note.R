@@ -10,8 +10,9 @@
 #' @param source_note (`string`)\cr
 #'   A string to add as a source note.
 #' @param source_note_id (`integers`)\cr
-#'   Integers specifying the ID of the source note to remove.
+#'   Integers specifying the IDs of the source notes to remove.
 #'   Source notes are indexed sequentially at the time of creation.
+#'   Default is `NULL`, which removes all source notes.
 #' @inheritParams modify
 #'
 #' @details
@@ -62,13 +63,12 @@ modify_source_note <- function(x, source_note, text_interpret = c("md", "html"))
 
 #' @export
 #' @rdname modify_source_note
-remove_source_note <- function(x, source_note_id) {
+remove_source_note <- function(x, source_note_id = NULL) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(remove_source_note = match.call()))
 
   # check inputs ---------------------------------------------------------------
   check_not_missing(x)
-  check_not_missing(source_note_id)
   check_class(x, "gtsummary")
   check_integerish(source_note_id, allow_empty = TRUE)
 

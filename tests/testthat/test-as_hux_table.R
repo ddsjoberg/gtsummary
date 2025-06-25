@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("huxtable", "withr")))
+skip_if_not(is_pkg_installed(c("huxtable", "withr", "broom.helpers")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -25,7 +25,7 @@ test_that("as_hux_table(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(ht),
-    c("tibble", "fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
+    c("tibble", "fmt", "post_fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
       "add_footnote", "abbreviations", "source_note", "set_bold", "set_italic",
       "fmt_missing", "insert_row", "set_markdown", "align", "set_number_format")
   )
@@ -223,7 +223,7 @@ test_that("as_hux_table passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   ht <- tbl |> as_hux_table()
 
   expect_equal(
@@ -249,12 +249,6 @@ test_that("as_hux_table passes missing symbols correctly", {
   # correct substitution for missing values
   expect_true(
     all(attr(ht, "na_string")[2:7, 2] == "n / a")
-  )
-})
-
-test_that("as_hux_table(strip_md_bold) causes defunct error", {
-  lifecycle::expect_defunct(
-    my_tbl_summary |> as_hux_table(strip_md_bold = TRUE)
   )
 })
 

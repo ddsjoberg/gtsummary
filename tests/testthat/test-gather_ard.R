@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx"))
+skip_if_not(is_pkg_installed(c("cardx", "broom.helpers", "car", "parameters")))
 
 test_that("gather_ard(x) works with `tbl_*()` functions", {
   # tbl_summary()
@@ -23,25 +23,57 @@ test_that("gather_ard(x) works with `tbl_*()` functions", {
   )
 
   # tbl_regression()
-  expect_false(
-    glm(response ~ age + grade, trial, family = binomial()) |>
+  expect_silent(
+    lst_ard <- glm(response ~ age + grade, trial, family = binomial()) |>
       tbl_regression(exponentiate = TRUE) |>
-      gather_ard() |>
-      is_empty()
+      add_global_p() |>
+      gather_ard()
+  )
+  expect_equal(
+    names(lst_ard),
+    c("tbl_regression", "add_global_p")
+  )
+  expect_true(
+    map(lst_ard, ~inherits(.x, "data.frame")) |>
+      unlist() |>
+      all()
   )
 
   # tbl_uvregression()
-  expect_false(
-    tbl_uvregression(
-      trial,
-      method = glm,
-      y = response,
-      method.args = list(family = binomial),
-      exponentiate = TRUE,
-      include = c("age", "grade")
-    ) |>
-      gather_ard() |>
-      is_empty()
+  expect_silent(
+    lst_ard <-
+      tbl_uvregression(
+        trial,
+        method = glm,
+        y = response,
+        method.args = list(family = binomial),
+        exponentiate = TRUE,
+        include = c("age", "grade")
+      ) |>
+      add_global_p() |>
+      gather_ard()
+  )
+  expect_equal(
+    names(lst_ard),
+    c("tbl_uvregression", "add_global_p")
+  )
+  expect_equal(
+    names(lst_ard[["tbl_uvregression"]]),
+    c("age", "grade")
+  )
+  expect_equal(
+    names(lst_ard[["add_global_p"]]),
+    c("age", "grade")
+  )
+  expect_true(
+    map(lst_ard[["tbl_uvregression"]], ~inherits(.x, "data.frame")) |>
+      unlist() |>
+      all()
+  )
+  expect_true(
+    map(lst_ard[["add_global_p"]], ~inherits(.x, "data.frame")) |>
+      unlist() |>
+      all()
   )
 
   # tbl_stack()
@@ -152,3 +184,48 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
       is_empty()
   )
 })
+
+test_that("gather_ard(x) works with `tbl_strata_nested_stack()` function", {
+  expect_length(
+    tbl_strata_nested_stack(
+      trial,
+      strata = trt,
+      .tbl_fun = ~ .x |>
+        tbl_summary(include = c(age, grade), missing = "no") |>
+        modify_header(all_stat_cols() ~ "**Summary Statistics**")
+    ) |>
+      gather_ard(),
+    2L
+  )
+})
+
+test_that("gather_ard() has labels for merged/stacked tbls", {
+  expect_equal(
+    trial |>
+      select(grade, response, stage, trt) |>
+      tbl_strata(
+        strata = grade,
+        .tbl_fun = ~ .x |>
+          tbl_summary(by = trt) |>
+          add_p()
+      ) |>
+      gather_ard() |>
+      names(),
+    c("grade=I", "grade=II", "grade=III")
+  )
+
+  expect_equal(
+    tbl_strata_nested_stack(
+      trial,
+      strata = trt,
+      ~ .x |>
+        tbl_summary(include = c(age, grade), missing = "no") |>
+        modify_header(all_stat_cols() ~ "**Summary Statistics**")
+    ) |>
+      gather_ard() |>
+      names(),
+    c("trt=\"Drug A\"", "trt=\"Drug B\"")
+  )
+})
+
+

@@ -3,7 +3,7 @@
 #' Similar to the `style_*()` family of functions, but these functions return
 #' a `style_*()` **function** rather than performing the styling.
 #'
-#' @param digits,big.mark,decimal.mark,scale,prepend_p,prefix,suffix,... arguments
+#' @param digits,big.mark,decimal.mark,scale,prepend_p,prefix,suffix,na,... arguments
 #' passed to the `style_*()` functions
 #'
 #' @return a function
@@ -23,6 +23,7 @@ label_style_number <- function(digits = 0,
                                scale = 1,
                                prefix = "",
                                suffix = "",
+                               na = NA_character_,
                                ...) {
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -34,7 +35,7 @@ label_style_number <- function(digits = 0,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  function(x) style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, scale = scale, prefix = prefix, suffix = suffix, ...)
+  function(x) style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, scale = scale, prefix = prefix, suffix = suffix, na = na, ...)
 }
 
 #' @rdname label_style
@@ -45,6 +46,7 @@ label_style_sigfig <- function(digits = 2,
                                decimal.mark = getOption("OutDec"),
                                prefix = "",
                                suffix = "",
+                               na = NA_character_,
                                ...) {
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -56,7 +58,7 @@ label_style_sigfig <- function(digits = 2,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  function(x) style_sigfig(x, digits = digits, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...)
+  function(x) style_sigfig(x, digits = digits, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
 }
 
 #' @rdname label_style
@@ -65,6 +67,7 @@ label_style_pvalue <- function(digits = 1,
                                prepend_p = FALSE,
                                big.mark = ifelse(decimal.mark == ",", " ", ","),
                                decimal.mark = getOption("OutDec"),
+                               na = NA_character_,
                                ...) {
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -76,7 +79,7 @@ label_style_pvalue <- function(digits = 1,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  function(x) style_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  function(x) style_pvalue(x, digits = digits, prepend_p = prepend_p, big.mark = big.mark, decimal.mark = decimal.mark, na = na, ...)
 }
 
 #' @rdname label_style
@@ -86,6 +89,7 @@ label_style_ratio <- function(digits = 2,
                               decimal.mark = getOption("OutDec"),
                               prefix = "",
                               suffix = "",
+                              na = NA_character_,
                               ...) {
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -97,7 +101,7 @@ label_style_ratio <- function(digits = 2,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  function(x) style_ratio(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...)
+  function(x) style_ratio(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
 }
 
 #' @rdname label_style
@@ -107,6 +111,7 @@ label_style_percent <- function(prefix = "",
                                 digits = 0,
                                 big.mark = ifelse(decimal.mark == ",", " ", ","),
                                 decimal.mark = getOption("OutDec"),
+                                na = NA_character_,
                                 ...) {
   # setting defaults -----------------------------------------------------------
   if (missing(decimal.mark)) {
@@ -118,5 +123,5 @@ label_style_percent <- function(prefix = "",
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  function(x) style_percent(x, prefix = prefix, suffix = suffix, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  function(x) style_percent(x, prefix = prefix, suffix = suffix, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, na = na, ...)
 }

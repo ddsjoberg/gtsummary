@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survival")))
+skip_if_not(is_pkg_installed(c("cardx", "survival", "broom.helpers")))
 
 t1_summary <- trial |>
   dplyr::filter(trt == "Drug A") |>
@@ -98,6 +98,20 @@ test_that("tbl_stack(quiet) works", {
   expect_equal(
     tbl |> as_tibble() |> names(),
     c("**Characteristic**", "**Statistic**")
+  )
+})
+
+test_that("tbl_stack(attr_order) works", {
+  tbl1 <- lm(age ~ trt, trial) |> tbl_regression()
+  tbl2 <- glm(response ~ trt, trial, family = binomial()) |> tbl_regression()
+
+  # check that we get the header from the second table (with the OR in the header)
+  expect_equal(
+    tbl_stack(list(tbl1, tbl2), attr_order = 2) |>
+      as.data.frame() |>
+      names() |>
+      getElement(2),
+    "**log(OR)**"
   )
 })
 

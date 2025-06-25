@@ -96,7 +96,7 @@ tbl_ard_hierarchical <- function(cards,
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
 
   # apply formatting fns -------------------------------------------------------
-  cards <- cards |> cards::apply_fmt_fn()
+  cards <- cards |> cards::apply_fmt_fun()
 
   # fill in missing labels -----------------------------------------------------
   default_label <- default_label <- names(data) |> as.list() |> stats::setNames(names(data))

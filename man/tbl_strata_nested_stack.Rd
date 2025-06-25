@@ -35,7 +35,8 @@ row headers. Elements available to insert are \code{strata}, \code{n}, \code{N} 
 The \code{strata} element is the variable level of the strata variables.
 Default is \code{'{strata}'}.}
 
-\item{quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\item{quiet}{(scalar \code{logical})\cr
+Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
 }
 \value{
 a stacked 'gtsummary' table
@@ -45,6 +46,9 @@ This function stratifies your data frame, builds gtsummary tables, and
 stacks the resulting tables in a nested style. The underlying functionality
 is similar to \code{tbl_strata()}, except the resulting tables are nested or indented
 within each group.
+
+\strong{NOTE}: The header from the first table is used for the final table. Oftentimes,
+this header will include incorrect Ns and \emph{must be updated.}
 }
 \examples{
 # Example 1 ----------------------------------
@@ -66,5 +70,5 @@ tbl_strata_nested_stack(
   row_header = "{strata}, n={n}"
 ) |>
   # bold the row headers; print `x$table_body` to see hidden columns
-  modify_bold(columns = "label", rows = tbl_indent_id > 0)
+  modify_bold(columns = "label", rows = tbl_indent_id1 > 0)
 }

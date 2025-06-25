@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("knitr"))
+skip_if_not(is_pkg_installed(c("knitr", "broom.helpers", "cardx")))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -29,8 +29,8 @@ test_that("as_kable(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(kbl),
-    c("tibble", "fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
-      "fmt_missing", "cols_hide", "remove_line_breaks", "kable")
+    c("tibble", "fmt", "fmt_missing", "post_fmt", "cols_merge", "tab_style_bold", "tab_style_italic",
+      "cols_hide", "remove_line_breaks", "kable")
   )
 })
 

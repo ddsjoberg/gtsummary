@@ -2,13 +2,18 @@
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
 #' or more gtsummary tables.
-#' Column attributes, including number formatting and column footnotes, are
-#' retained from the first passed gtsummary object.
 #'
+#' @inheritParams tbl_merge
 #' @param tbls (`list`)\cr
 #'   List of gtsummary objects
 #' @param group_header (`character`)\cr
 #'   Character vector with table headers where length matches the length of `tbls`
+#' @param attr_order (`integer`) `r lifecycle::badge("experimental")` \cr
+#'   Set the order table attributes are set.
+#'   Tables are stacked in the order they are passed in the `tbls` argument:
+#'   use `attr_order` to specify the order the table attributes take precedent.
+#'   For example, to use the header from the second table specify `attr_order=2`.
+#'   Default is to set precedent in the order tables are passed.
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
 #'
@@ -59,15 +64,21 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls), tbl_ids = NULL) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
   check_class(tbls, "list")
   walk(tbls, ~check_class(.x, "gtsummary", message = "Each element of the list {.arg tbls} must be class {.cls gtsummary}."))
   check_scalar_logical(quiet)
+  check_integerish(attr_order)
+  check_range(attr_order, range = c(1L, length(tbls)), include_bounds = c(TRUE, TRUE))
   check_class(group_header, cls = "character", allow_empty = TRUE)
   check_length(group_header, length = length(tbls), allow_empty = TRUE)
+  check_class(tbl_ids, cls = "character", allow_empty = TRUE)
+  if (!is_empty(tbl_ids)) {
+    check_identical_length(tbls, tbl_ids)
+  }
 
   # will return call, and all arguments passed to tbl_stack
   func_inputs <- as.list(environment())
@@ -100,17 +111,21 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
   if (identical(quiet, FALSE)) .print_stack_differences(tbls)
 
   results$table_styling$header <-
-    map(tbls, ~ .x[["table_styling"]][["header"]]) |>
+    map(
+      union(attr_order, seq_along(tbls)),
+      ~ tbls[[.x]][["table_styling"]][["header"]]
+    ) |>
     dplyr::bind_rows() |>
     dplyr::filter(.by = "column", dplyr::row_number() == 1)
 
   # cycle over each of the styling tibbles and stack them in reverse order -----
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
                        "footnote_spanning_header", "abbreviation", "source_note",
-                       "fmt_fun", "text_format", "indent", "fmt_missing", "cols_merge")) {
+                       "fmt_fun", "post_fmt_fun", "text_format", "indent",
+                       "fmt_missing", "cols_merge")) {
     results$table_styling[[style_type]] <-
       map(
-        rev(seq_along(tbls)),
+        rev(union(attr_order, seq_along(tbls))),
         function(i) {
           df <- tbls[[i]]$table_styling[[style_type]]
           if ("rows" %in% names(df) && nrow(df) > 0) {
@@ -161,10 +176,16 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE) {
       hide = FALSE
     )
 
-  # returning results ----------------------------------------------------------
+  # add objects to the returned tbl --------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
   results$tbls <- tbls
 
+  # add tbl_ids, if specified --------------------------------------------------
+  if (!is_empty(tbl_ids)) {
+    names(results$tbls) <- tbl_ids
+  }
+
+  # returning results ----------------------------------------------------------
   results
 }
 

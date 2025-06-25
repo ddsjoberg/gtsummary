@@ -4,7 +4,7 @@
 \alias{tbl_merge}
 \title{Merge tables}
 \usage{
-tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL)
+tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -23,6 +23,11 @@ The default is \code{NULL}, which merges on
 \verb{c(any_of(c("variable", "row_type", "var_label", "label"), cards::all_ard_groups())}.
 Any column name included here that does not appear in all tables, will
 be removed.}
+
+\item{tbl_ids}{(\code{character})\cr
+Optional character vector of IDs that will be assigned to the input tables.
+The ID is assigned by assigning a name to the \code{tbls} list, which is
+returned in \code{x$tbls}.}
 }
 \value{
 A \code{'tbl_merge'} object
@@ -30,6 +35,13 @@ A \code{'tbl_merge'} object
 \description{
 Merge gtsummary tables, e.g. \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
 \code{tbl_summary}, \code{tbl_svysummary}, etc.
+
+This function merges \strong{like tables}.
+Generally, this means each of the tables being merged
+should have the same structure.
+When merging tables with different structures, rows may appear
+out of order.
+The ordering of rows can be updated with \code{modify_table_body(~dplyr::arrange(.x, ...))}.
 }
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

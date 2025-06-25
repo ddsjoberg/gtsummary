@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(is_pkg_installed(c("huxtable", "broom.helpers", "cardx")))
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(

@@ -5,6 +5,9 @@
 #'
 #' @param data (`survey.design`)\cr
 #'   A survey object created with created with `survey::svydesign()`
+#' @param percent (`string`)\cr
+#'   Indicates the type of percentage to return.
+#'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
 #' @inheritParams tbl_summary
 #'
 #' @inheritSection tbl_summary type and value arguments
@@ -114,9 +117,8 @@ tbl_svysummary <- function(data,
     )
   )
 
-  data$variables <- .drop_missing_by_obs(data$variables, by = by) # styler: off
+  data <- .svy_ignore_missing_by_obs(data, by = by, include)
   include <- setdiff(include, by) # remove by variable from list vars included
-
 
   if (missing(missing)) {
     missing <-
@@ -130,6 +132,11 @@ tbl_svysummary <- function(data,
       get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
   }
   check_string(missing_text)
+
+  if (missing(missing_stat)) {
+    missing_stat <- get_theme_element("tbl_svysummary-arg:missing_stat", default = missing_stat) # styler: off
+  }
+  check_string(missing_stat)
 
   if (missing(percent)) {
     percent <- get_theme_element("tbl_svysummary-arg:percent") %||%
@@ -149,6 +156,13 @@ tbl_svysummary <- function(data,
   )
 
   # assign summary type --------------------------------------------------------
+  type <-
+    case_switch(
+      missing(type) ~
+        get_theme_element("tbl_svysummary-arg:type") %||%
+        get_theme_element("tbl_summary-arg:type", default = type),
+      .default = type
+    )
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
@@ -156,13 +170,7 @@ tbl_svysummary <- function(data,
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), as.data.frame(data)[include]),
-      type =
-        case_switch(
-          missing(type) ~
-            get_theme_element("tbl_svysummary-arg:type") %||%
-            get_theme_element("tbl_summary-arg:type", default = type),
-          .default = type
-        )
+      type = type
     )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
@@ -280,7 +288,7 @@ tbl_svysummary <- function(data,
       cardx::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
@@ -293,7 +301,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
-        fmt_fn = digits[variables_categorical],
+        fmt_fun = digits[variables_categorical],
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
@@ -302,7 +310,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
-        fmt_fn = digits[variables_dichotomous],
+        fmt_fun = digits[variables_dichotomous],
         denominator = percent,
         value = value[variables_dichotomous],
         stat_label = ~ default_stat_labels()
@@ -313,7 +321,7 @@ tbl_svysummary <- function(data,
         by = all_of(by),
         variables = all_of(variables_continuous),
         statistic = statistic_continuous,
-        fmt_fn = digits[variables_continuous],
+        fmt_fun = digits[variables_continuous],
         stat_label = ~ default_stat_labels()
       )
     ) |>
@@ -375,3 +383,30 @@ tbl_svysummary <- function(data,
   x
 }
 
+.svy_ignore_missing_by_obs <- function(data, by, include) {
+  if (is_empty(by) || !any(is.na(data$variables[[by]]))) {
+    return(data)
+  }
+
+  obs_to_drop <- is.na(data$variables[[by]])
+  cli::cli_inform(
+    "{.val {sum(obs_to_drop)}} row{?s} with missingness in the {.val {by}} column
+    {cli::qty(sum(obs_to_drop))}{?has/have} been removed with {.fun subset}."
+  )
+
+  # save original labels (subsetting removes labels)
+  original_lbs <- lapply(data$variables[c(by, include)], \(x) {attr(x, "label")})
+
+  # subset data
+  data <-
+    call2("subset", x = expr(data), subset = expr(!is.na(!!sym(by)))) |>
+    eval()
+
+  # restore column labels
+  for (v in c(by, include)) {
+    attr(data$variables[[v]], "label") <- original_lbs[[v]]
+  }
+
+  # return data
+  data
+}

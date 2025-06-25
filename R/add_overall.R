@@ -70,7 +70,11 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
-    paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
+    col_label <-
+      get_theme_element(
+        "add_overall.tbl_summary-arg:col_label",
+        default = paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
+      )
   }
 
   add_overall_generic(
@@ -120,10 +124,12 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
 
   # checking that input x has a by var
   if (is_empty(x$inputs[["by"]])) {
-    cli::cli_abort(
-      "Cannot run {.fun add_overall} when original table function is not statified with {.code {calling_fun}(by)}.",
-      call = get_cli_abort_call()
+    cli::cli_inform(
+      c("Cannot add an overall column with {.fun add_overall} when original table
+         is not statified with {.code {calling_fun}(by)}.",
+        i = "Returning table unaltered.")
     )
+    return(x)
   }
 
   # save arguments to pass to original function without `by` stratified --------
@@ -179,38 +185,50 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
       tbl_overall$table_body |> dplyr::select("stat_0")
     )
 
-  # add the overall header row to the primary table
-  x$table_styling$header <-
-    dplyr::bind_rows(
-      x$table_styling$header,
-      tbl_overall$table_styling$header |>
-        dplyr::filter(.data$column %in% "stat_0")
-    )
+  # add all formatting instructions for "stat_0" column
+  for (style in names(x$table_styling)) {
+    if (is.data.frame(x$table_styling[[style]]) && "column" %in% names(x$table_styling[[style]])) {
+      x$table_styling[[style]] <-
+        x$table_styling[[style]] |>
+        dplyr::bind_rows(
+          tbl_overall$table_styling[[style]] |>
+            dplyr::filter(.data$column == "stat_0")
+        )
+    }
+  }
 
-  x$table_styling$header %>%
-    dplyr::rows_update(
-      tbl_overall$table_styling$header %>%
-        dplyr::filter(.data$column %in% "stat_0"),
-      by = "column"
-    )
+  # # add the overall header row to the primary table
+  # x$table_styling$header <-
+  #   dplyr::bind_rows(
+  #     x$table_styling$header,
+  #     tbl_overall$table_styling$header |>
+  #       dplyr::filter(.data$column %in% "stat_0")
+  #   )
+  #
+  # x$table_styling$header %>%
+  #   dplyr::rows_update(
+  #     tbl_overall$table_styling$header %>%
+  #       dplyr::filter(.data$column %in% "stat_0"),
+  #     by = "column"
+  #   )
 
   if (last == FALSE) {
     x <- modify_table_body(x, dplyr::relocate, "stat_0", .before = "stat_1")
   }
 
-  # updating table_style with footnote and column header
-  x$table_styling$footnote_header <-
-    dplyr::bind_rows(
-      x$table_styling$footnote_header,
-      tbl_overall$table_styling$footnote_header %>%
-        dplyr::filter(.data$column %in% "stat_0")
-    )
-  x$table_styling$footnote_body <-
-    dplyr::bind_rows(
-      x$table_styling$footnote_body,
-      tbl_overall$table_styling$footnote_body %>%
-        dplyr::filter(.data$column %in% "stat_0")
-    )
+  # # updating table_style with footnote and column header
+  # x$table_styling$footnote_header <-
+  #   dplyr::bind_rows(
+  #     x$table_styling$footnote_header,
+  #     tbl_overall$table_styling$footnote_header %>%
+  #       dplyr::filter(.data$column %in% "stat_0")
+  #   )
+  # x$table_styling$footnote_body <-
+  #   dplyr::bind_rows(
+  #     x$table_styling$footnote_body,
+  #     tbl_overall$table_styling$footnote_body %>%
+  #       dplyr::filter(.data$column %in% "stat_0")
+  #   )
 
   # Add header to overall column
   x <- modify_header(x, stat_0 = col_label)

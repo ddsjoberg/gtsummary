@@ -29,10 +29,6 @@
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = stage, by = trt,
         denominator = trial2, id = id))
-    Condition
-      Warning:
-      Duplicate rows found in data for the "id" column.
-      i Percentages/Denominators are not correct.
     Output
         **T Stage** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1          T1             22 (79%)              22 (88%)
@@ -98,10 +94,6 @@
     Code
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade), by = trt,
       denominator = trial2, id = id, include = NULL))
-    Condition
-      Warning:
-      Duplicate rows found in data for the "id" column.
-      i Percentages/Denominators are not correct.
     Output
          **T Stage**  \n    **Grade** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1                            T1                 <NA>                  <NA>
@@ -268,69 +260,24 @@
     Code
       as.data.frame(res_o)
     Output
-         **Primary System Organ Class**  \n    **Highest Severity**
-      1                                           CARDIAC DISORDERS
-      2                                                        MILD
-      3                                                    MODERATE
-      4                                                      SEVERE
-      5                                  GASTROINTESTINAL DISORDERS
-      6                                                        MILD
-      7                                                    MODERATE
-      8                                                      SEVERE
-      9        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
-      10                                                       MILD
-      11                                                   MODERATE
-      12                                                     SEVERE
-      13                                INFECTIONS AND INFESTATIONS
-      14                                                       MILD
-      15                                                   MODERATE
-      16                                                     SEVERE
-      17                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS
-      18                                                       MILD
-      19                                                   MODERATE
-      20                                                     SEVERE
-         **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84
-      1                   <NA>                               <NA>
-      2               2 (2.3%)                           1 (1.2%)
-      3                 0 (0%)                           2 (2.4%)
-      4               1 (1.2%)                             0 (0%)
-      5                   <NA>                               <NA>
-      6                9 (10%)                           2 (2.4%)
-      7               1 (1.2%)                           2 (2.4%)
-      8                 0 (0%)                             0 (0%)
-      9                   <NA>                               <NA>
-      10              8 (9.3%)                           15 (18%)
-      11              1 (1.2%)                           13 (15%)
-      12                0 (0%)                             0 (0%)
-      13                  <NA>                               <NA>
-      14              4 (4.7%)                           2 (2.4%)
-      15              2 (2.3%)                           1 (1.2%)
-      16                0 (0%)                             0 (0%)
-      17                  <NA>                               <NA>
-      18              5 (5.8%)                           11 (13%)
-      19              4 (4.7%)                           4 (4.8%)
-      20                0 (0%)                             0 (0%)
-         **Xanomeline Low Dose**  \nN = 84
-      1                               <NA>
-      2                             0 (0%)
-      3                             0 (0%)
-      4                             0 (0%)
-      5                               <NA>
-      6                           5 (6.0%)
-      7                             0 (0%)
-      8                             0 (0%)
-      9                               <NA>
-      10                          14 (17%)
-      11                          11 (13%)
-      12                          2 (2.4%)
-      13                              <NA>
-      14                          1 (1.2%)
-      15                            0 (0%)
-      16                            0 (0%)
-      17                              <NA>
-      18                          6 (7.1%)
-      19                           9 (11%)
-      20                            0 (0%)
+         **Primary System Organ Class**  \n    **Highest Severity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                           CARDIAC DISORDERS                  <NA>                               <NA>                              <NA>
+      2                                                        MILD              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      3                                                    MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      4                                                      SEVERE              1 (1.2%)                             0 (0%)                            0 (0%)
+      5                                  GASTROINTESTINAL DISORDERS                  <NA>                               <NA>                              <NA>
+      6                                                        MILD               9 (10%)                           2 (2.4%)                          5 (6.0%)
+      7                                                    MODERATE              1 (1.2%)                           2 (2.4%)                            0 (0%)
+      8        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS                  <NA>                               <NA>                              <NA>
+      9                                                        MILD              8 (9.3%)                           15 (18%)                          14 (17%)
+      10                                                   MODERATE              1 (1.2%)                           13 (15%)                          11 (13%)
+      11                                                     SEVERE                0 (0%)                             0 (0%)                          2 (2.4%)
+      12                                INFECTIONS AND INFESTATIONS                  <NA>                               <NA>                              <NA>
+      13                                                       MILD              4 (4.7%)                           2 (2.4%)                          1 (1.2%)
+      14                                                   MODERATE              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      15                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS                  <NA>                               <NA>                              <NA>
+      16                                                       MILD              5 (5.8%)                           11 (13%)                          6 (7.1%)
+      17                                                   MODERATE              4 (4.7%)                           4 (4.8%)                           9 (11%)
 
 ---
 
@@ -345,38 +292,59 @@
       5                            GASTROINTESTINAL DISORDERS   19 (7.5%)
       6                                                  MILD   16 (6.3%)
       7                                              MODERATE    3 (1.2%)
-      8                                                SEVERE      0 (0%)
-      9  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS    64 (25%)
-      10                                                 MILD    37 (15%)
-      11                                             MODERATE   25 (9.8%)
-      12                                               SEVERE    2 (0.8%)
-      13                          INFECTIONS AND INFESTATIONS   10 (3.9%)
-      14                                                 MILD    7 (2.8%)
-      15                                             MODERATE    3 (1.2%)
-      16                                               SEVERE      0 (0%)
-      17               SKIN AND SUBCUTANEOUS TISSUE DISORDERS    39 (15%)
-      18                                                 MILD   22 (8.7%)
-      19                                             MODERATE   17 (6.7%)
-      20                                               SEVERE      0 (0%)
+      8  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS    64 (25%)
+      9                                                  MILD    37 (15%)
+      10                                             MODERATE   25 (9.8%)
+      11                                               SEVERE    2 (0.8%)
+      12                          INFECTIONS AND INFESTATIONS   10 (3.9%)
+      13                                                 MILD    7 (2.8%)
+      14                                             MODERATE    3 (1.2%)
+      15               SKIN AND SUBCUTANEOUS TISSUE DISORDERS    39 (15%)
+      16                                                 MILD   22 (8.7%)
+      17                                             MODERATE   17 (6.7%)
+
+---
+
+    Code
+      as.data.frame(res_o)
+    Output
+         **Primary System Organ Class**  \n    **Highest Severity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                           CARDIAC DISORDERS              3 (3.5%)                           3 (3.6%)                            0 (0%)
+      2                                                        MILD              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      3                                                    MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      4                                                      SEVERE              1 (1.2%)                             0 (0%)                            0 (0%)
+      5                                  GASTROINTESTINAL DISORDERS              10 (12%)                           4 (4.8%)                          5 (6.0%)
+      6                                                        MILD               9 (10%)                           2 (2.4%)                          5 (6.0%)
+      7                                                    MODERATE              1 (1.2%)                           2 (2.4%)                            0 (0%)
+      8        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS               9 (10%)                           28 (33%)                          27 (32%)
+      9                                                        MILD              8 (9.3%)                           15 (18%)                          14 (17%)
+      10                                                   MODERATE              1 (1.2%)                           13 (15%)                          11 (13%)
+      11                                                     SEVERE                0 (0%)                             0 (0%)                          2 (2.4%)
+      12                                INFECTIONS AND INFESTATIONS              6 (7.0%)                           3 (3.6%)                          1 (1.2%)
+      13                                                       MILD              4 (4.7%)                           2 (2.4%)                          1 (1.2%)
+      14                                                   MODERATE              2 (2.3%)                           1 (1.2%)                            0 (0%)
+      15                     SKIN AND SUBCUTANEOUS TISSUE DISORDERS               9 (10%)                           15 (18%)                          15 (18%)
+      16                                                       MILD              5 (5.8%)                           11 (13%)                          6 (7.1%)
+      17                                                   MODERATE              4 (4.7%)                           4 (4.8%)                           9 (11%)
 
 # tbl_hierarchical_count(data) works properly
 
     Code
       as.data.frame(tbl_hierarchical_count(data = trial, variables = trt))
     Output
-        **Chemotherapy Treatment** Overall
-      1                     Drug A      98
-      2                     Drug B     102
+        **Chemotherapy Treatment** **Overall**
+      1                     Drug A          98
+      2                     Drug B         102
 
 ---
 
     Code
       as.data.frame(tbl_hierarchical_count(data = iris, variables = Species))
     Output
-        **Species** Overall
-      1      setosa      50
-      2  versicolor      50
-      3   virginica      50
+        **Species** **Overall**
+      1      setosa          50
+      2  versicolor          50
+      3   virginica          50
 
 ---
 
@@ -438,23 +406,23 @@
       as.data.frame(tbl_hierarchical_count(data = trial, variables = c(stage, grade),
       include = grade))
     Output
-         **T Stage**  \n    **Grade** Overall
-      1                            T1    <NA>
-      2                             I      17
-      3                            II      23
-      4                           III      13
-      5                            T2    <NA>
-      6                             I      18
-      7                            II      17
-      8                           III      19
-      9                            T3    <NA>
-      10                            I      18
-      11                           II      11
-      12                          III      14
-      13                           T4    <NA>
-      14                            I      15
-      15                           II      17
-      16                          III      18
+         **T Stage**  \n    **Grade** **Overall**
+      1                            T1        <NA>
+      2                             I          17
+      3                            II          23
+      4                           III          13
+      5                            T2        <NA>
+      6                             I          18
+      7                            II          17
+      8                           III          19
+      9                            T3        <NA>
+      10                            I          18
+      11                           II          11
+      12                          III          14
+      13                           T4        <NA>
+      14                            I          15
+      15                           II          17
+      16                          III          18
 
 ---
 
@@ -496,10 +464,10 @@
       as.data.frame(tbl_hierarchical_count(data = trial, variables = trt,
         overall_row = TRUE))
     Output
-        **Chemotherapy Treatment** Overall
-      1     Total number of events     200
-      2                     Drug A      98
-      3                     Drug B     102
+        **Chemotherapy Treatment** **Overall**
+      1     Total number of events         200
+      2                     Drug A          98
+      3                     Drug B         102
 
 ---
 
@@ -524,23 +492,23 @@
     Code
       as.data.frame(res)
     Output
-         **My Stage**  \n    **My Grade** Overall
-      1                                T1      53
-      2                                 I      17
-      3                                II      23
-      4                               III      13
-      5                                T2      54
-      6                                 I      18
-      7                                II      17
-      8                               III      19
-      9                                T3      43
-      10                                I      18
-      11                               II      11
-      12                              III      14
-      13                               T4      50
-      14                                I      15
-      15                               II      17
-      16                              III      18
+         **My Stage**  \n    **My Grade** **Overall**
+      1                                T1          53
+      2                                 I          17
+      3                                II          23
+      4                               III          13
+      5                                T2          54
+      6                                 I          18
+      7                                II          17
+      8                               III          19
+      9                                T3          43
+      10                                I          18
+      11                               II          11
+      12                              III          14
+      13                               T4          50
+      14                                I          15
+      15                               II          17
+      16                              III          18
 
 ---
 
@@ -560,23 +528,23 @@
     Code
       as.data.frame(res)
     Output
-         **T Stage**  \n    **Grade** Overall
-      1                            T1    53,0
-      2                             I    17,0
-      3                            II    23,0
-      4                           III    13,0
-      5                            T2    54,0
-      6                             I    18,0
-      7                            II    17,0
-      8                           III    19,0
-      9                            T3    43,0
-      10                            I    18,0
-      11                           II    11,0
-      12                          III    14,0
-      13                           T4    50,0
-      14                            I    15,0
-      15                           II    17,0
-      16                          III    18,0
+         **T Stage**  \n    **Grade** **Overall**
+      1                            T1        53,0
+      2                             I        17,0
+      3                            II        23,0
+      4                           III        13,0
+      5                            T2        54,0
+      6                             I        18,0
+      7                            II        17,0
+      8                           III        19,0
+      9                            T3        43,0
+      10                            I        18,0
+      11                           II        11,0
+      12                          III        14,0
+      13                           T4        50,0
+      14                            I        15,0
+      15                           II        17,0
+      16                          III        18,0
 
 ---
 
@@ -784,196 +752,196 @@
       187                                                                                                                                                                                                                                                                       P
       188                                                                                                                                                                                                                                                                       Q
       189                                                                                                                                                                                                                                                                       T
-          Overall
-      1      <NA>
-      2      <NA>
-      3      <NA>
-      4      <NA>
-      5      <NA>
-      6      <NA>
-      7      <NA>
-      8      <NA>
-      9      <NA>
-      10        1
-      11     <NA>
-      12     <NA>
-      13     <NA>
-      14     <NA>
-      15     <NA>
-      16        1
-      17     <NA>
-      18     <NA>
-      19     <NA>
-      20     <NA>
-      21        1
-      22     <NA>
-      23     <NA>
-      24     <NA>
-      25     <NA>
-      26     <NA>
-      27     <NA>
-      28     <NA>
-      29        1
-      30     <NA>
-      31     <NA>
-      32     <NA>
-      33     <NA>
-      34        1
-      35     <NA>
-      36     <NA>
-      37        1
-      38     <NA>
-      39     <NA>
-      40     <NA>
-      41     <NA>
-      42     <NA>
-      43     <NA>
-      44        1
-      45     <NA>
-      46     <NA>
-      47     <NA>
-      48     <NA>
-      49     <NA>
-      50        1
-      51     <NA>
-      52     <NA>
-      53     <NA>
-      54     <NA>
-      55     <NA>
-      56     <NA>
-      57     <NA>
-      58     <NA>
-      59        1
-      60     <NA>
-      61     <NA>
-      62     <NA>
-      63        1
-      64     <NA>
-      65     <NA>
-      66     <NA>
-      67     <NA>
-      68     <NA>
-      69        1
-      70     <NA>
-      71     <NA>
-      72     <NA>
-      73     <NA>
-      74        1
-      75     <NA>
-      76     <NA>
-      77     <NA>
-      78     <NA>
-      79     <NA>
-      80     <NA>
-      81        1
-      82     <NA>
-      83     <NA>
-      84     <NA>
-      85     <NA>
-      86     <NA>
-      87        1
-      88     <NA>
-      89     <NA>
-      90     <NA>
-      91     <NA>
-      92     <NA>
-      93     <NA>
-      94     <NA>
-      95        1
-      96     <NA>
-      97     <NA>
-      98     <NA>
-      99     <NA>
-      100    <NA>
-      101       1
-      102    <NA>
-      103    <NA>
-      104    <NA>
-      105    <NA>
-      106       1
-      107    <NA>
-      108    <NA>
-      109    <NA>
-      110    <NA>
-      111    <NA>
-      112    <NA>
-      113       1
-      114    <NA>
-      115       1
-      116    <NA>
-      117    <NA>
-      118    <NA>
-      119       1
-      120    <NA>
-      121    <NA>
-      122    <NA>
-      123    <NA>
-      124    <NA>
-      125    <NA>
-      126    <NA>
-      127    <NA>
-      128    <NA>
-      129       1
-      130    <NA>
-      131    <NA>
-      132    <NA>
-      133    <NA>
-      134    <NA>
-      135    <NA>
-      136    <NA>
-      137       1
-      138    <NA>
-      139    <NA>
-      140    <NA>
-      141    <NA>
-      142    <NA>
-      143    <NA>
-      144       1
-      145    <NA>
-      146    <NA>
-      147    <NA>
-      148    <NA>
-      149    <NA>
-      150    <NA>
-      151    <NA>
-      152    <NA>
-      153       1
-      154    <NA>
-      155    <NA>
-      156    <NA>
-      157    <NA>
-      158       1
-      159    <NA>
-      160    <NA>
-      161    <NA>
-      162    <NA>
-      163    <NA>
-      164    <NA>
-      165    <NA>
-      166       1
-      167    <NA>
-      168    <NA>
-      169    <NA>
-      170    <NA>
-      171       1
-      172    <NA>
-      173    <NA>
-      174    <NA>
-      175    <NA>
-      176    <NA>
-      177       1
-      178    <NA>
-      179    <NA>
-      180    <NA>
-      181    <NA>
-      182       1
-      183    <NA>
-      184    <NA>
-      185    <NA>
-      186    <NA>
-      187    <NA>
-      188    <NA>
-      189       1
+          **Overall**
+      1          <NA>
+      2          <NA>
+      3          <NA>
+      4          <NA>
+      5          <NA>
+      6          <NA>
+      7          <NA>
+      8          <NA>
+      9          <NA>
+      10            1
+      11         <NA>
+      12         <NA>
+      13         <NA>
+      14         <NA>
+      15         <NA>
+      16            1
+      17         <NA>
+      18         <NA>
+      19         <NA>
+      20         <NA>
+      21            1
+      22         <NA>
+      23         <NA>
+      24         <NA>
+      25         <NA>
+      26         <NA>
+      27         <NA>
+      28         <NA>
+      29            1
+      30         <NA>
+      31         <NA>
+      32         <NA>
+      33         <NA>
+      34            1
+      35         <NA>
+      36         <NA>
+      37            1
+      38         <NA>
+      39         <NA>
+      40         <NA>
+      41         <NA>
+      42         <NA>
+      43         <NA>
+      44            1
+      45         <NA>
+      46         <NA>
+      47         <NA>
+      48         <NA>
+      49         <NA>
+      50            1
+      51         <NA>
+      52         <NA>
+      53         <NA>
+      54         <NA>
+      55         <NA>
+      56         <NA>
+      57         <NA>
+      58         <NA>
+      59            1
+      60         <NA>
+      61         <NA>
+      62         <NA>
+      63            1
+      64         <NA>
+      65         <NA>
+      66         <NA>
+      67         <NA>
+      68         <NA>
+      69            1
+      70         <NA>
+      71         <NA>
+      72         <NA>
+      73         <NA>
+      74            1
+      75         <NA>
+      76         <NA>
+      77         <NA>
+      78         <NA>
+      79         <NA>
+      80         <NA>
+      81            1
+      82         <NA>
+      83         <NA>
+      84         <NA>
+      85         <NA>
+      86         <NA>
+      87            1
+      88         <NA>
+      89         <NA>
+      90         <NA>
+      91         <NA>
+      92         <NA>
+      93         <NA>
+      94         <NA>
+      95            1
+      96         <NA>
+      97         <NA>
+      98         <NA>
+      99         <NA>
+      100        <NA>
+      101           1
+      102        <NA>
+      103        <NA>
+      104        <NA>
+      105        <NA>
+      106           1
+      107        <NA>
+      108        <NA>
+      109        <NA>
+      110        <NA>
+      111        <NA>
+      112        <NA>
+      113           1
+      114        <NA>
+      115           1
+      116        <NA>
+      117        <NA>
+      118        <NA>
+      119           1
+      120        <NA>
+      121        <NA>
+      122        <NA>
+      123        <NA>
+      124        <NA>
+      125        <NA>
+      126        <NA>
+      127        <NA>
+      128        <NA>
+      129           1
+      130        <NA>
+      131        <NA>
+      132        <NA>
+      133        <NA>
+      134        <NA>
+      135        <NA>
+      136        <NA>
+      137           1
+      138        <NA>
+      139        <NA>
+      140        <NA>
+      141        <NA>
+      142        <NA>
+      143        <NA>
+      144           1
+      145        <NA>
+      146        <NA>
+      147        <NA>
+      148        <NA>
+      149        <NA>
+      150        <NA>
+      151        <NA>
+      152        <NA>
+      153           1
+      154        <NA>
+      155        <NA>
+      156        <NA>
+      157        <NA>
+      158           1
+      159        <NA>
+      160        <NA>
+      161        <NA>
+      162        <NA>
+      163        <NA>
+      164        <NA>
+      165        <NA>
+      166           1
+      167        <NA>
+      168        <NA>
+      169        <NA>
+      170        <NA>
+      171           1
+      172        <NA>
+      173        <NA>
+      174        <NA>
+      175        <NA>
+      176        <NA>
+      177           1
+      178        <NA>
+      179        <NA>
+      180        <NA>
+      181        <NA>
+      182           1
+      183        <NA>
+      184        <NA>
+      185        <NA>
+      186        <NA>
+      187        <NA>
+      188        <NA>
+      189           1
 
 # tbl_hierarchical_count table_body enables sorting
 
@@ -994,4 +962,30 @@
        9 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE PRURITUS                            4 (7.5%) 10 (25%) 12 (24%)
       10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
       # i 11 more rows
+
+# tbl_hierarchical works with one arm level present
+
+    Code
+      as.data.frame(res)
+    Output
+        **Primary System Organ Class**  \n    **Dictionary-Derived Term** **Placebo**  \nN = 86
+      1                                                     EYE DISORDERS              1 (1.2%)
+      2                                                       EYE ALLERGY              1 (1.2%)
+      3                                                      EYE SWELLING              1 (1.2%)
+
+# tbl_hierarchical table_body group variables are correct with no by
+
+    Code
+      as.data.frame(res$table_body)
+    Output
+        row_type group1                                         group1_level var_label variable                                                label    stat_0
+      1    level  AESOC                                    CARDIAC DISORDERS      <NA>    AESOC                                    CARDIAC DISORDERS  5 (2.0%)
+      2    level  AESOC                                    CARDIAC DISORDERS      <NA>  AEDECOD                 ATRIOVENTRICULAR BLOCK SECOND DEGREE  5 (2.0%)
+      3    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>    AESOC                           GASTROINTESTINAL DISORDERS 18 (7.1%)
+      4    level  AESOC                           GASTROINTESTINAL DISORDERS      <NA>  AEDECOD                                            DIARRHOEA 18 (7.1%)
+      5    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>    AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  57 (22%)
+      6    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE ERYTHEMA  30 (12%)
+      7    level  AESOC GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS      <NA>  AEDECOD                            APPLICATION SITE PRURITUS  50 (20%)
+      8    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>    AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS  38 (15%)
+      9    level  AESOC               SKIN AND SUBCUTANEOUS TISSUE DISORDERS      <NA>  AEDECOD                                             ERYTHEMA  38 (15%)
 

@@ -130,14 +130,14 @@ tbl_wide_summary <- function(data,
       cards::ard_attributes(data, variables = all_of(include), label = label),
       cards::ard_missing(data,
                          variables = all_of(include),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()
       ),
       # tabulate categorical summaries
       cards::ard_categorical(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_categorical(FALSE),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         stat_label = ~ default_stat_labels()
       ),
@@ -145,7 +145,7 @@ tbl_wide_summary <- function(data,
       cards::ard_dichotomous(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_dichotomous(),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         value = value,
         stat_label = ~ default_stat_labels()
@@ -158,7 +158,7 @@ tbl_wide_summary <- function(data,
           .continuous_statistics_chr_to_fun(
             statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
-        fmt_fn = digits,
+        fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       )
     ) |>

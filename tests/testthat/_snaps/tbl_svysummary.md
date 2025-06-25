@@ -241,7 +241,7 @@
     Code
       tbl_svysummary(svy_trial, include = grade, type = grade ~ "dichotomous")
     Condition
-      Error in `FUN()`:
+      Error in `tbl_svysummary()`:
       ! Error in argument `value` for variable "grade".
       i Summary type is "dichotomous" but no summary value has been assigned.
 
@@ -375,4 +375,13 @@
     Condition
       Error in `tbl_svysummary()`:
       ! `percent` must be one of "column", "row", or "cell", not "a".
+
+# tbl_svysummary() missing `by` handling
+
+    Code
+      tbl <- tbl_svysummary(survey::svydesign(id = ~1, weights = ~poids, data = dplyr::mutate(
+        database, INDIV_GENDER = ifelse(dplyr::row_number() == 1L, NA, INDIV_GENDER))),
+      by = "INDIV_GENDER")
+    Message
+      1 row with missingness in the "INDIV_GENDER" column has been removed with `subset()`.
 

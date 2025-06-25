@@ -182,17 +182,19 @@ ard_survival <-
     variables = "trt",
     times = c(12, 24)
   ) |> 
-  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = "xx%")
+  # retain survival time statistics
+  dplyr::filter(variable == "time") |> 
+  update_ard_fmt_fun(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fun = "xx%")
 
 # ARD with the mean post-treatment marker level with 95%CI
 ard_marker_level <-
   cardx::ard_stats_t_test_onesample(trial, variables = marker, by = trt) |> 
-  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = label_style_sigfig(digits = 2))
+  update_ard_fmt_fun(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fun = label_style_sigfig(digits = 2))
 
 # ARD with the post-treatment response rate with 95%CI
 ard_tumor_response <-
   cardx::ard_categorical_ci(trial, by = trt, variables = response, method = "wilson") |> 
-  update_ard_fmt_fn(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fn = "xx%")
+  update_ard_fmt_fun(stat_names = c("estimate", "conf.low", "conf.high"), fmt_fun = "xx%")
 
 
 # combine all the ARDs into a single ARD for the outcomes

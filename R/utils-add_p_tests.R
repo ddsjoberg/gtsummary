@@ -1,3 +1,13 @@
+.data_pre_processing <- function(data, numeric = character(), factor = character()) {
+  for (v in numeric) {
+    data[[v]] <- as.numeric(data[[v]])
+  }
+  for (v in factor) {
+    data[[v]] <- as.factor(data[[v]])
+  }
+  data
+}
+
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   check_pkg_installed("cardx")
@@ -5,7 +15,7 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 
   rlang::inject(
     cardx::ard_stats_t_test(
-      data = data,
+      data = .data_pre_processing(data, factor = by),
       variable = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
@@ -20,7 +30,7 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0
 
   rlang::inject(
     cardx::ard_stats_wilcox_test(
-      data = data,
+      data = .data_pre_processing(data, factor = by, numeric = variable),
       variable = all_of(variable),
       by = all_of(by),
       conf.int = TRUE,
@@ -75,7 +85,7 @@ add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
 
   rlang::inject(
     cardx::ard_stats_chisq_test(
-      data = data,
+      data = .data_pre_processing(data, factor = by),
       variable = all_of(variable),
       by = all_of(by),
       !!!test.args
@@ -103,7 +113,7 @@ add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
 
   rlang::inject(
     cardx::ard_stats_mood_test(
-      data = data,
+      data = .data_pre_processing(data, factor = by),
       variable = all_of(variable),
       by = all_of(by),
       !!!test.args
@@ -117,7 +127,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
   check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_stats_kruskal_test(
-    data = data,
+    data = .data_pre_processing(data, factor = by),
     variable = all_of(variable),
     by = all_of(by)
   )
@@ -129,7 +139,7 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 
   rlang::inject(
     cardx::ard_stats_fisher_test(
-      data = data,
+      data = .data_pre_processing(data, factor = by),
       variable = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
@@ -152,7 +162,8 @@ add_p_test_aov <- function(data, variable, by, ...) {
     i = "The same functionality is covered in {.val oneway.test} with argument `var.equal = TRUE`."
   ))
 
-  add_p_test_oneway.test(data = data, variable = variable, by = by, test.args = list(var.equal = TRUE))
+  add_p_test_oneway.test(data = .data_pre_processing(data, factor = by),
+                         variable = variable, by = by, test.args = list(var.equal = TRUE))
 }
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
@@ -162,21 +173,8 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
   rlang::inject(
     cardx::ard_stats_oneway_test(
       formula = cardx::reformulate2(termlabels = by, response = variable),
-      data = data,
+      data = .data_pre_processing(data, factor = by),
       !!!test.args
-    )
-  )
-}
-
-add_p_test_mood.test <- function(data, variable, by, ...) {
-  check_pkg_installed("cardx")
-  check_empty(c("group", "adj.vars", "test.args"), ...)
-
-  rlang::inject(
-    cardx::ard_stats_mood_test(
-      data = data,
-      variable = all_of(variable),
-      by = all_of(by)
     )
   )
 }
@@ -247,9 +245,15 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
   )
 }
 
-add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, tbl, ...) {
   check_pkg_installed("cardx")
   check_empty(c("adj.vars", "group"), ...)
+
+  # convert variable to lgl using the `value` argument
+  if (identical(tbl$inputs$type[[variable]], "dichotomous") &&
+      !is_empty(tbl$inputs$value[[variable]])) {
+    data[[variable]] <- data[[variable]] == tbl$inputs$value[[variable]]
+  }
 
   rlang::inject(
     cardx::ard_stats_prop_test(
@@ -504,7 +508,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
               is_empty(adj.vars) ~ list("One-way ANOVA with random intercept"),
               TRUE ~ list("ANCOVA with random intercept")
             ),
-          fmt_fun = list(NULL)
+          fmt_fun = list(as.character)
         )
     ) |>
     dplyr::select(-cards::all_ard_variables("levels")) |>

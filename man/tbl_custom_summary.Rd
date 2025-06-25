@@ -63,8 +63,8 @@ with this argument. Default is \code{NULL}. See below for details.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
-\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
-\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}.
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
 }}

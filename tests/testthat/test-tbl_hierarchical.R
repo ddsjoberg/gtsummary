@@ -89,10 +89,10 @@ test_that("tbl_hierarchical(overall_row) works properly", {
   expect_snapshot(tbl_hierarchical(data = trial2, variables = trt, denominator = trial2, id = id, overall_row = TRUE) |> as.data.frame())
 
   # value are correct when by is passed
-  expect_warning(expect_warning(
+  expect_silent(
     res <-
       tbl_hierarchical(data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE)
-  ))
+  )
   expect_snapshot(res |> as.data.frame())
   expect_equal((res |> as.data.frame())[1, 1], "Number of patients with event")
   expect_equal(
@@ -101,13 +101,13 @@ test_that("tbl_hierarchical(overall_row) works properly", {
   )
 
   # overall row labeling works
-  expect_warning(expect_warning(
+  expect_silent(
     res <-
       tbl_hierarchical(
         data = trial2, variables = trt, by = grade, denominator = trial2, id = id, overall_row = TRUE,
         label = list(..ard_hierarchical_overall.. = "Total patients")
       )
-  ))
+  )
   expect_equal((res |> as.data.frame())[1, 1], "Total patients")
 
   # errors thrown when bad overall_row argument passed
@@ -132,6 +132,15 @@ test_that("tbl_hierarchical(label) works properly", {
     error = TRUE,
     tbl_hierarchical(data = trial2, variables = c(stage, grade), denominator = trial2, id = id, label = "Stages")
   )
+
+  # variable labels correct when label is passed for ..ard_hierarchical_overall..
+  res <- tbl_hierarchical(
+    data = trial2, variables = c(grade, stage), denominator = trial2, id = id,
+    label = list(stage = "My Stage", ..ard_hierarchical_overall.. = "Total AEs", grade = "My Grade"),
+    overall_row = TRUE
+  )
+  expect_equal(res$table_styling$header$label[6], "**My Grade**  \n\U00A0\U00A0\U00A0\U00A0**My Stage**")
+  expect_identical(res$table_body$label[1], "Total AEs")
 })
 
 # tbl_hierarchical(digits) ------------------------------------------------------------
@@ -176,6 +185,8 @@ test_that("tbl_hierarchical(digits) works properly", {
 
 # tbl_hierarchical with ordered variables ------------------------------------------------------------
 test_that("tbl_hierarchical works properly when last variable of hierarchy is ordered", {
+  withr::local_options(width = 250)
+
   data <- cards::ADAE |>
     dplyr::filter(
       AESOC %in% unique(cards::ADAE$AESOC)[1:10],
@@ -206,6 +217,13 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
     denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
   ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
+
+  # ordered variable, include all variables
+  res_o <- tbl_hierarchical(
+    data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
+    denominator = cards::ADSL |> mutate(TRTA = ARM), label = list(AESEV = "Highest Severity")
+  ) |> suppressMessages()
+  expect_snapshot(res_o |> as.data.frame())
 })
 
 # tbl_hierarchical_count(data) ------------------------------------------------------------
@@ -367,4 +385,50 @@ test_that("tbl_hierarchical_count table_body enables sorting", {
   )
 
   expect_snapshot(res$table_body)
+})
+
+# tbl_hierarchical works with one arm level present ----------------------------------------
+test_that("tbl_hierarchical works with one arm level present", {
+  withr::local_options(list(width = 250))
+
+  # only records with arm Placebo remain in the data
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC == "EYE DISORDERS",
+      AEDECOD %in% c("EYE SWELLING", "EYE ALLERGY")
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(as.data.frame(res))
+})
+
+# tbl_hierarchical table_body group variables are correct with no by -----------------------
+test_that("tbl_hierarchical table_body group variables are correct with no by", {
+  withr::local_options(list(width = 250))
+
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(
+      AESOC %in% unique(cards::ADAE$AESOC)[1:5],
+      AETERM %in% unique(cards::ADAE$AETERM)[1:5]
+    )
+
+  res <- expect_silent(
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AEDECOD),
+      denominator = cards::ADSL,
+      id = USUBJID
+    )
+  )
+
+  expect_snapshot(as.data.frame(res$table_body))
 })

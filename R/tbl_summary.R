@@ -38,8 +38,8 @@
 #'   See below for details.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`
-#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`
+#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param sort ([`formula-list-selector`][syntax])\cr
@@ -49,6 +49,10 @@
 #' @param percent (`string`)\cr
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
+#'
+#'   In rarer cases, you may need to define/override the typical denominators.
+#'   In these cases, pass an integer or a data frame. Refer to the
+#'   [`?cards::ard_categorical(denominator)`][cards::ard_categorical] help file for details.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`.
 #'
@@ -198,10 +202,25 @@ tbl_summary <- function(data,
   }
   check_string(missing_text)
 
+  if (missing(missing_stat)) {
+    missing_stat <- get_theme_element("tbl_summary-arg:missing_stat", default = missing_stat) # styler: off
+  }
+  check_string(missing_stat)
 
-  if (missing(percent))
-    percent <- get_theme_element("tbl_summary-arg:percent", default = percent) # styler: off
-  percent <- arg_match(percent, values = c("column", "row", "cell"))
+
+  if (missing(percent)) {
+    percent <- get_theme_element("tbl_summary-arg:percent", default = percent)
+  }
+  if (is.character(percent)) {
+    percent <- arg_match(percent, values = c("column", "row", "cell"))
+  }
+  else if (!is.data.frame(percent) && !is_integerish(percent)) {
+    cli::cli_abort(
+      "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
+         or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
+      call = get_cli_abort_call()
+    )
+  }
 
   cards::process_formula_selectors(
     data = data[include],
@@ -214,6 +233,11 @@ tbl_summary <- function(data,
 
 
   # assign summary type --------------------------------------------------------
+  type <-
+    case_switch(
+      missing(type) ~ get_theme_element("tbl_summary-arg:type", default = type),
+      .default = type
+    )
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
@@ -221,11 +245,7 @@ tbl_summary <- function(data,
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
-      type =
-        case_switch(
-          missing(type) ~ get_theme_element("tbl_summary-arg:type", default = type),
-          .default = type
-        )
+      type = type
     )
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
@@ -321,7 +341,7 @@ tbl_summary <- function(data,
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
@@ -330,7 +350,7 @@ tbl_summary <- function(data,
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = percent,
         value = value,
         stat_label = ~ default_stat_labels()
@@ -344,14 +364,14 @@ tbl_summary <- function(data,
           .continuous_statistics_chr_to_fun(
             statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
-        fmt_fn = digits,
+        fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()
       ),
       # adding total N
@@ -472,7 +492,8 @@ tbl_summary <- function(data,
   }
 
   obs_to_drop <- is.na(data[[by]])
-  cli::cli_inform("{.val {sum(obs_to_drop)}} missing rows in the {.val {by}} column have been removed.")
+  cli::cli_inform("{.val {sum(obs_to_drop)}} missing row{?s} in the {.val {by}}
+                  column {cli::qty(sum(obs_to_drop))}{?has/have} been removed.")
   dplyr::filter(data, !obs_to_drop)
 }
 
@@ -575,7 +596,8 @@ tbl_summary <- function(data,
       cli::cli_abort(c(
         "Error in argument {.arg value} for variable {.val {variable}}.",
         "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
-      ))
+      ),
+      call = get_cli_abort_call())
     }
   ) |>
     stats::setNames(names(data))

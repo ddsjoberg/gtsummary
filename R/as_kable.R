@@ -64,13 +64,6 @@ as_kable <- function(x, ..., include = everything(), return_calls = FALSE) {
 table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
-  if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_stop(
-      when = "1.6.0",
-      what = "gtsummary::as_kable_extra(fmt_missing=)"
-    )
-  }
-
   kable_calls <-
     table_styling_to_tibble_calls(x, col_labels = FALSE, fmt_missing = TRUE)
 
