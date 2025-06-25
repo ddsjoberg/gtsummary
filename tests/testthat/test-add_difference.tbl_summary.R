@@ -65,7 +65,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -76,7 +76,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     ignore_attr = TRUE
   )
@@ -94,7 +94,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -106,7 +106,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     ignore_attr = TRUE
   )
@@ -124,7 +124,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     cardx::ard_emmeans_mean_difference(
       data = trial,
@@ -136,7 +136,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
       dplyr::select(
         -cards::all_ard_groups(),
         -cards::all_ard_variables(),
-        -fmt_fn
+        -fmt_fun
       ),
     ignore_attr = TRUE
   )
@@ -661,12 +661,12 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
       gather_ard() |>
       getElement("add_difference") |>
       getElement("response") |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     trial |>
       dplyr::mutate(response = response == 1) |>
       cardx::ard_stats_prop_test(by = trt, variable = response) |>
       cards::replace_null_statistic() |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
   )
 
@@ -683,12 +683,12 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
       gather_ard() |>
       getElement("add_difference") |>
       getElement("response") |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     trial |>
       dplyr::mutate(response = response == 0) |>
       cardx::ard_stats_prop_test(by = trt, variable = response) |>
       cards::replace_null_statistic() |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
   )
 
@@ -704,12 +704,12 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
       gather_ard() |>
       getElement("add_difference") |>
       getElement("grade") |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     trial |>
       dplyr::mutate(grade = grade == "I") |>
       cardx::ard_stats_prop_test(by = trt, variable = grade) |>
       cards::replace_null_statistic() |>
-      dplyr::select(-"fmt_fn"),
+      dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
   )
 })

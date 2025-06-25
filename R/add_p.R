@@ -444,7 +444,7 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
                                 test.args, adj.vars, conf.level,
                                 estimate_fun, pvalue_fun,
                                 continuous_variable = NULL,
-                                apply_fmt_fn = FALSE) {
+                                apply_fmt_fun = FALSE) {
   chr_expected_stats <- c("estimate", "std.error", "parameter", "statistic", "conf.low", "conf.high", "p.value")
   lst_captured_results <-
     cards::eval_capture_conditions(
@@ -512,19 +512,19 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
   }
 
   res <- lst_captured_results[["result"]] |>
-    cards::update_ard_fmt_fn(
+    cards::update_ard_fmt_fun(
       stat_names = chr_expected_stats,
-      fmt_fn = estimate_fun[[variable]] %||% label_style_sigfig(digits = 3)
+      fmt_fun = estimate_fun[[variable]] %||% label_style_sigfig(digits = 3)
     ) |>
-    cards::update_ard_fmt_fn(
+    cards::update_ard_fmt_fun(
       stat_names = "p.value",
-      fmt_fn = pvalue_fun
+      fmt_fun = pvalue_fun
     ) |>
     cards::replace_null_statistic()
 
   # Add rounded statistic and return ARD
-  if (isTRUE(apply_fmt_fn)) {
-    res <- cards::apply_fmt_fn(res)
+  if (isTRUE(apply_fmt_fun)) {
+    res <- cards::apply_fmt_fun(res)
   }
 
   # return results

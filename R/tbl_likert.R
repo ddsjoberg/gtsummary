@@ -134,13 +134,13 @@ tbl_likert <- function(data,
       cards::ard_missing(
         data,
         variables = all_of(include),
-        fmt_fn = digits,
+        fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
       cards::ard_categorical(
         data = data,
         variables = all_of(include),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         stat_label = ~ default_stat_labels()
       )

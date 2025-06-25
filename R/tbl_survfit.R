@@ -273,13 +273,13 @@ tbl_survfit.list <- function(x,
         cardx::ard_survival_survfit(x, times = times, probs = probs, type = type)  |>
           cards::replace_null_statistic() |>
           dplyr::mutate(
-            fmt_fn =
+            fmt_fun =
               pmap(
-                list(.data$fmt_fn, .data$stat_name, .data$stat),
-                \(fmt_fn, stat_name, stat) {
+                list(.data$fmt_fun, .data$stat_name, .data$stat),
+                \(fmt_fun, stat_name, stat) {
                   if (stat_name %in% c("estimate", "conf.low", "conf.high") && !is.na(stat)) return(estimate_fun)
                   else if (stat_name %in% c("estimate", "conf.low", "conf.high") && is.na(stat)) return(\(x, ...) missing)
-                  else return(fmt_fn)
+                  else return(fmt_fun)
                 }
               ),
             gts_column =

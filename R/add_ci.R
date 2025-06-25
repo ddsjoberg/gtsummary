@@ -376,12 +376,12 @@ brdg_add_ci <- function(x, pattern, statistic, include, conf.level, updated_call
     imap(
       ~dplyr::mutate(
         .x,
-        fmt_fn = ifelse(.data$stat_name %in% c("estimate", "conf.low", "conf.high"),
+        fmt_fun = ifelse(.data$stat_name %in% c("estimate", "conf.low", "conf.high"),
                         list(style_fun[[.y]]),
-                        .data$fmt_fn)
+                        .data$fmt_fun)
       ) |>
         cards::replace_null_statistic() |>
-        cards::apply_fmt_fn()
+        cards::apply_fmt_fun()
     ) |>
     dplyr::bind_rows() |>
     cards::tidy_ard_column_order()
