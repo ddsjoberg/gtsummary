@@ -122,7 +122,7 @@ test_that("filter_hierarchical() works with only one variable in x", {
 test_that("filter_hierarchical() works with no by variable", {
   tbl_noby <- tbl_hierarchical(
     data = cards::ADAE,
-    denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+    denominator = cards::ADSL,
     variables = c(AEBODSYS, AEDECOD),
     id = "USUBJID"
   )
