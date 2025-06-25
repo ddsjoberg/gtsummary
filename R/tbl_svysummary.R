@@ -117,9 +117,8 @@ tbl_svysummary <- function(data,
     )
   )
 
-  data$variables <- .drop_missing_by_obs(data$variables, by = by) # styler: off
+  data <- .svy_ignore_missing_by_obs(data, by = by, include)
   include <- setdiff(include, by) # remove by variable from list vars included
-
 
   if (missing(missing)) {
     missing <-
@@ -384,3 +383,30 @@ tbl_svysummary <- function(data,
   x
 }
 
+.svy_ignore_missing_by_obs <- function(data, by, include) {
+  if (is_empty(by) || !any(is.na(data$variables[[by]]))) {
+    return(data)
+  }
+
+  obs_to_drop <- is.na(data$variables[[by]])
+  cli::cli_inform(
+    "{.val {sum(obs_to_drop)}} row{?s} with missingness in the {.val {by}} column
+    {cli::qty(sum(obs_to_drop))}{?has/have} been removed with {.fun subset}."
+  )
+
+  # save original labels (subsetting removes labels)
+  original_lbs <- lapply(data$variables[c(by, include)], \(x) {attr(x, "label")})
+
+  # subset data
+  data <-
+    call2("subset", x = expr(data), subset = expr(!is.na(!!sym(by)))) |>
+    eval()
+
+  # restore column labels
+  for (v in c(by, include)) {
+    attr(data$variables[[v]], "label") <- original_lbs[[v]]
+  }
+
+  # return data
+  data
+}
