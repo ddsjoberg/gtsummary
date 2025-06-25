@@ -306,7 +306,7 @@ test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorica
       cardx::ard_survival_survfit(times = c(12, 24)) |>
       dplyr::filter(stat_name %in% c("estimate")) |>
       dplyr::mutate(
-        fmt_fn = list("xx.x%"),
+        fmt_fun = list("xx.x%"),
         group1_level = unlist(group1_level) |> as.character() |> as.list()
       ),
     cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>

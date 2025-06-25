@@ -298,7 +298,7 @@ test_that("full_data contains all observations including missing values", {
   expect_equal(res[[2]][1], "189/200")
 })
 
-test_that("character statistic get default fmt_fn, as.character()", {
+test_that("character statistic get default fmt_fun, as.character()", {
   diff_to_great_mean <- function(data, full_data, ...) {
     mean <- mean(data$marker, na.rm = TRUE)
     great_mean <- mean(full_data$marker, na.rm = TRUE)
@@ -324,7 +324,7 @@ test_that("character statistic get default fmt_fn, as.character()", {
       getElement("cards") |>
       getElement(1L) |>
       dplyr::filter(stat_name %in% "level") |>
-      dplyr::pull(fmt_fn) |>
+      dplyr::pull(fmt_fun) |>
       unique(),
     list(as.character)
   )

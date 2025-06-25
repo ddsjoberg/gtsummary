@@ -203,7 +203,7 @@ add_glance_source_note <- function(x,
   )
   cards::fill_formula_selectors(
     data = df_glance_orig,
-    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fn"]] |> eval()
+    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fun"]] |> eval()
   )
 
   df_label <-
