@@ -745,14 +745,14 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
     gather_ard(tbl) |>
       getElement("tbl_summary") |>
       dplyr::filter(variable == "DCREASCD", context == "categorical") |>
-      dplyr::select(-gts_column, -fmt_fn),
+      dplyr::select(-gts_column, -fmt_fun),
     cards::ard_categorical(
       cards::ADSL |>
         dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)),
       variables = "DCREASCD",
       denominator = cards::ADSL
     ) |>
-      dplyr::select(-fmt_fn),
+      dplyr::select(-fmt_fun),
     ignore_attr = TRUE
   )
 })

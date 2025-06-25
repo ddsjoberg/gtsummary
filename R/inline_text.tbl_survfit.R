@@ -88,11 +88,11 @@ inline_text.tbl_survfit <- function(x,
     )
 
   if (!is_empty(pattern) && any(c("p.value", "q.value", "estimate", "conf.high", "conf.low") %in% .extract_glue_elements(pattern))) {
-    lst_fmt_fn_updates <-
+    lst_fmt_fun_updates <-
       c(rep_named(c("p.value", "q.value"), list(pvalue_fun)),
         rep_named(c("estimate", "conf.high", "conf.low"), list(estimate_fun)))
-    x$cards[[1]] <- .update_fmt_fn(x$cards[[1]], lst_fmt_fn_updates)
-    x$cards <- .update_fmt_fn(x$cards, lst_fmt_fn_updates)
+    x$cards[[1]] <- .update_fmt_fun(x$cards[[1]], lst_fmt_fun_updates)
+    x$cards <- .update_fmt_fun(x$cards, lst_fmt_fun_updates)
   }
 
   # checking inputs ----------------------------------------------------------

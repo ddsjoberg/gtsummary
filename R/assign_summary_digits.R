@@ -34,7 +34,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
                                          "p.std.error", "deff"))
     )
 
-  lst_all_fmt_fns <-
+  lst_all_fmt_funs <-
     case_switch(
       inherits(data, "data.frame") ~
         .categorical_summary_functions(c("N_obs", "N_miss", "N_nonmiss", "p_miss", "p_nonmiss")),
@@ -67,7 +67,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
           }
 
           # convert integers to a proper function
-          digits[[variable]] <- .convert_integer_to_fmt_fn(digits[[variable]])
+          digits[[variable]] <- .convert_integer_to_fmt_fun(digits[[variable]])
 
           # check value is a function
           if (!is_list(digits[[variable]]) || some(digits[[variable]], \(.x) !is_function(.x))) {
@@ -81,13 +81,13 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
           # if the passed value fully specifies the formatting for each 'statistic',
           # then return it. Otherwise, the remaining stat will be filled below
           if (setequal(statistic[[variable]], names(digits[[variable]]))) {
-            return(lst_all_fmt_fns |> utils::modifyList(digits[[variable]]))
+            return(lst_all_fmt_funs |> utils::modifyList(digits[[variable]]))
           }
         }
 
         if (type[[variable]] %in% c("categorical", "dichotomous")) {
           return(
-            c(lst_cat_summary_fns, lst_all_fmt_fns) |>
+            c(lst_cat_summary_fns, lst_all_fmt_funs) |>
               utils::modifyList(digits[[variable]] %||% list())
           )
         }
@@ -98,7 +98,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
               statistic[[variable]],
               list(.guess_continuous_summary_digits(data, variable))
             ) |>
-              utils::modifyList(lst_all_fmt_fns) |>
+              utils::modifyList(lst_all_fmt_funs) |>
               utils::modifyList(digits[[variable]] %||% list())
           )
         }
@@ -109,7 +109,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   digits_final
 }
 
-.convert_integer_to_fmt_fn <- function(x) {
+.convert_integer_to_fmt_fun <- function(x) {
   imap(
     x,
     function(value, stat_name) {

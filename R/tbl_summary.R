@@ -341,7 +341,7 @@ tbl_summary <- function(data,
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
@@ -350,7 +350,7 @@ tbl_summary <- function(data,
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = percent,
         value = value,
         stat_label = ~ default_stat_labels()
@@ -364,14 +364,14 @@ tbl_summary <- function(data,
           .continuous_statistics_chr_to_fun(
             statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
-        fmt_fn = digits,
+        fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
                          variables = all_of(include),
                          by = all_of(by),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()
       ),
       # adding total N

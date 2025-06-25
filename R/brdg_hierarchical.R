@@ -263,7 +263,7 @@ pier_summary_hierarchical <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-

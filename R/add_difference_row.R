@@ -304,7 +304,7 @@ add_difference_row.tbl_summary <- function(x,
           test.args = test.args,
           adj.vars = adj.vars,
           conf.level = conf.level,
-          apply_fmt_fn = TRUE
+          apply_fmt_fun = TRUE
         )
       }
     )
