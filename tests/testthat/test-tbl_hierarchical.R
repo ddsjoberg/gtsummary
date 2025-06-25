@@ -403,7 +403,7 @@ test_that("tbl_hierarchical works with one arm level present", {
       data = ADAE_subset,
       variables = c(AESOC, AEDECOD),
       by = TRTA,
-      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID
     )
   )
@@ -425,7 +425,7 @@ test_that("tbl_hierarchical table_body group variables are correct with no by", 
     tbl_hierarchical(
       data = ADAE_subset,
       variables = c(AESOC, AEDECOD),
-      denominator = cards::ADSL |> dplyr::rename(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID
     )
   )
