@@ -103,6 +103,6 @@ test_that("tbl_wide_summary(sort)", {
     tbl_wide_summary(trial, include = trt, sort = ~"frequency") |>
       as.data.frame(col_label = FALSE) |>
       dplyr::pull("label"),
-    c("trt", "Drug B", "Drug A")
+    c("Chemotherapy Treatment", "Drug B", "Drug A")
   )
 })
