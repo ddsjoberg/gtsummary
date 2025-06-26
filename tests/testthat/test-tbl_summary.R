@@ -585,6 +585,15 @@ test_that("tbl_summary(sort)", {
       dplyr::pull(label),
     c("8", "4", "6")
   )
+
+  # check that sorting does not remove variable label
+  expect_equal(
+    tbl_summary(trial, include = stage, sort = list(stage = "frequency")) |>
+      getElement("table_body") |>
+      getElement("label") |>
+      dplyr::first(),
+    "T Stage"
+  )
 })
 
 test_that("tbl_summary(sort) errors properly", {

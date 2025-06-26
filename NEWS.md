@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Variable labels are now retained with `tbl_summary(sort=~'frequency')`. (#2260)
+
 * Fix in `tbl_svysummary()` when there are missing values in the `by` column. 
 
 * Added the `"add_overall.tbl_summary-arg:col_label"` theme element to control the default value of `add_overall.tbl_summary(col_label)`. (#2246)
