@@ -538,7 +538,9 @@ tbl_summary <- function(data,
 
   for (i in seq_along(sort[intersect(names(sort), names(data))])) {
     if (sort[[i]] %in% "frequency") {
+      lbl <- attr(data[[names(sort)[i]]], "label")
       data[[names(sort)[i]]] <- fct_infreq(data[[names(sort)[i]]])
+      attr(data[[names(sort)[i]]], "label") <- lbl
     }
   }
 
