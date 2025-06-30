@@ -92,6 +92,40 @@ test_that("pkgwide-str:ci.sep works", {
   )
 })
 
+# tbl_hierarchical-fn:addnl-fn-to-run ------------------------------------
+test_that("tbl_hierarchical_count-fn:addnl-fn-to-run", {
+  expect_s3_class(
+    with_gtsummary_theme(
+      x = list("tbl_hierarchical-fn:addnl-fn-to-run" = as.data.frame),
+      expr =
+        tbl_hierarchical(
+          data = cards::ADAE[1:20,],
+          variables = c(AESOC, AETERM),
+          by = TRTA,
+          denominator = cards::ADSL,
+          id = USUBJID
+        )
+    ),
+    "data.frame"
+  )
+})
+
+# tbl_hierarchical_count-fn:addnl-fn-to-run ------------------------------------
+test_that("tbl_hierarchical_count-fn:addnl-fn-to-run", {
+  expect_s3_class(
+    with_gtsummary_theme(
+      x = list("tbl_hierarchical_count-fn:addnl-fn-to-run" = as.data.frame),
+      expr =
+        tbl_hierarchical_count(
+          data = cards::ADAE[1:20,],
+          variables = c(AESOC, AETERM, AESEV),
+          by = TRTA
+        )
+    ),
+    "data.frame"
+  )
+})
+
 # tbl_summary-arg:missing_stat -------------------------------------------------
 test_that("tbl_summary-arg:missing_stat works", {
   # works with add_difference()
