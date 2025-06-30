@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added theme elements `tbl_hierarchical_count-fn:addnl-fn-to-run` and `tbl_hierarchical_count-fn:addnl-fn-to-run`. (#2262)
+
 * Variable labels are now retained with `tbl_summary(sort=~'frequency')`. (#2260)
 
 * Fix in `tbl_svysummary()` when there are missing values in the `by` column. 

@@ -235,10 +235,6 @@ brdg_hierarchical <- function(cards,
   # return tbl_hierarchical table ---------------------------------------------------
   x$call_list <- list(call) |>
     stats::setNames(if (count) "tbl_hierarchical_count" else "tbl_hierarchical")
-  # running any additional mods
-  x <-
-    get_theme_element("tbl_hierarchical-fn:addnl-fn-to-run", default = identity) |>
-    do.call(list(x))
 
   x
 }
