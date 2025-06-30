@@ -34,6 +34,8 @@ FALSE,Package-wide,pkgwide-str:theme_name,FALSE,optional name of theme; name is 
 FALSE,Package-wide,pkgwide-fun:pre_conversion,FALSE,"function that is executed on the gtsummary object before it is converted with `as_gt()`, `as_flex_table()`, etc. Must be a function that can be run on every and any gtsummary object",bold_levels
 FALSE,style_number,style_number-arg:big.mark,TRUE,,
 FALSE,style_number,style_number-arg:decimal.mark,TRUE,,
+FALSE,tbl_hierarchical,tbl_hierarchical-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_hierarchical()` call,
+FALSE,tbl_hierarchical_count,tbl_hierarchical_count-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_hierarchical_count()` call,
 FALSE,tbl_regression,tbl_regression-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_regression()` call,bold_labels
 TRUE,tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"
 FALSE,tbl_regression,tbl_regression-lst:tidy_plus_plus,FALSE,"Additional `tidy_plus_plus()` arguments. Cannot be one of `model=`, `tidy_fun=`, `exponentiate=`, `variable_labels=`, `show_single_row=`, `intercept=`, `include=`, `conf.level=`, `conf.int=`, or `strict=` as these are controlled by `tbl_regression()`. The default value for the additional arguments is `list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = FALSE)`.","list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = TRUE)"
