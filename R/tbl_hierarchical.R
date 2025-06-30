@@ -135,19 +135,24 @@ tbl_hierarchical <- function(data,
   }
 
   # create table ---------------------------------------------------------------
-  internal_tbl_hierarchical(
-    data = data,
-    variables = variables,
-    by = by,
-    id = id,
-    denominator = denominator,
-    include = {{ include }},
-    statistic = {{ statistic }},
-    overall_row = overall_row,
-    label = label,
-    digits = {{ digits }},
-    calling_fun = "tbl_hierarchical"
-  )
+  x <-
+    internal_tbl_hierarchical(
+      data = data,
+      variables = variables,
+      by = by,
+      id = id,
+      denominator = denominator,
+      include = {{ include }},
+      statistic = {{ statistic }},
+      overall_row = overall_row,
+      label = label,
+      digits = {{ digits }},
+      calling_fun = "tbl_hierarchical"
+    )
+
+  # running any additional mods
+  get_theme_element("tbl_hierarchical-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 }
 
 #' @rdname tbl_hierarchical
@@ -180,19 +185,24 @@ tbl_hierarchical_count <- function(data,
   }
 
   # create table ---------------------------------------------------------------
-  internal_tbl_hierarchical(
-    data = data,
-    variables = variables,
-    by = by,
-    id = NULL,
-    denominator = denominator,
-    include = {{ include }},
-    statistic = statistic,
-    overall_row = overall_row,
-    label = label,
-    digits = digits,
-    calling_fun = "tbl_hierarchical_count"
-  )
+  x <-
+    internal_tbl_hierarchical(
+      data = data,
+      variables = variables,
+      by = by,
+      id = NULL,
+      denominator = denominator,
+      include = {{ include }},
+      statistic = statistic,
+      overall_row = overall_row,
+      label = label,
+      digits = digits,
+      calling_fun = "tbl_hierarchical_count"
+    )
+
+  # running any additional mods
+  get_theme_element("tbl_hierarchical_count-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 }
 
 internal_tbl_hierarchical <- function(data,
