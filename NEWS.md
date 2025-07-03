@@ -1,28 +1,12 @@
 # gtsummary (development version)
 
-* Added theme elements `tbl_hierarchical_count-fn:addnl-fn-to-run` and `tbl_hierarchical_count-fn:addnl-fn-to-run`. (#2262)
-
-* Variable labels are now retained with `tbl_summary(sort=~'frequency')`. (#2260)
-
-* Fix in `tbl_svysummary()` when there are missing values in the `by` column. 
-
-* Added the `"add_overall.tbl_summary-arg:col_label"` theme element to control the default value of `add_overall.tbl_summary(col_label)`. (#2246)
+### New Features and Functions
 
 * Added `tbl_split_by_rows()` and `tbl_split_by_columns()` to split tables horizontally (row-wise) and vertically (column-wise). (#2216)
-
-* Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
- 
-* Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
 
 * Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
 
 * Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 
-
-* Fixed bug in `sort_hierarchical()` causing some rows to be dropped when sorting unstratified tables. (#2237)
-
-* Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
-
-* The `add_overall()` function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.
 
 * Adding new function `add_difference_row()`. The function is similar to `add_difference()`, except that differences are placed on the rows below the summary statistics. (#2138)
 
@@ -31,6 +15,34 @@
 * The `tbl_stack(attr_order)` argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify `attr_order=2`. (#2202)
 
 * The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)
+
+### Other Updates
+
+* Added an article on `modify_*()` functions. (#2209)
+
+* Added theme elements `tbl_hierarchical_count-fn:addnl-fn-to-run` and `tbl_hierarchical_count-fn:addnl-fn-to-run`. (#2262)
+
+* Added the `"add_overall.tbl_summary-arg:col_label"` theme element to control the default value of `add_overall.tbl_summary(col_label)`. (#2246)
+
+* Variable labels are now retained with `tbl_summary(sort=~'frequency')`. (#2260)
+
+* Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
+
+* The `add_overall()` function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.
+
+### Lifecycle Updates
+
+* Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
+
+### Bug Fixes
+
+* Fix in `tbl_svysummary()` when there are missing values in the `by` column. 
+
+* Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
+
+* Fixed bug in `sort_hierarchical()` causing some rows to be dropped when sorting unstratified tables. (#2237)
+
+* Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
 
 * Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
 
@@ -42,12 +54,8 @@
 
 * Fix in `tbl_svysummary(missing='ifany')` when the weighted number of missing observations was <= 0.5. Previously, these counts were coerced to integer and rounded to zero, and therefore, did not appear in the table. (#2229)
 
-* Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
-
 * Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
-
-* Added an article on `modify_*()` functions. (#2209)
-
+ 
 # gtsummary 2.2.0
 
 ### New Features and Functions
