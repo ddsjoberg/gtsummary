@@ -1950,7 +1950,7 @@ them with <code><a href="https://insightsengineering.github.io/cards/latest-tag/
 <code class="sourceCode R"><span><span class="co"># ARD with the Kaplan-Meier survival estimates</span></span>
 <span><span class="va">ard_survival</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">trial</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/main/reference/ard_survival_survfit.html" class="external-link">ard_survival_survfit</a></span><span class="op">(</span></span>
+<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_survival_survfit.html" class="external-link">ard_survival_survfit</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span>,</span>
 <span>    variables <span class="op">=</span> <span class="st">"trt"</span>,</span>
 <span>    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span></span>
@@ -1961,12 +1961,12 @@ them with <code><a href="https://insightsengineering.github.io/cards/latest-tag/
 <span></span>
 <span><span class="co"># ARD with the mean post-treatment marker level with 95%CI</span></span>
 <span><span class="va">ard_marker_level</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/main/reference/ard_stats_t_test_onesample.html" class="external-link">ard_stats_t_test_onesample</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="va">marker</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_stats_t_test_onesample.html" class="external-link">ard_stats_t_test_onesample</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="va">marker</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="fu"><a href="../reference/label_style.html">label_style_sigfig</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ARD with the post-treatment response rate with 95%CI</span></span>
 <span><span class="va">ard_tumor_response</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/main/reference/ard_categorical_ci.html" class="external-link">ard_categorical_ci</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">trt</span>, variables <span class="op">=</span> <span class="va">response</span>, method <span class="op">=</span> <span class="st">"wilson"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_categorical_ci.html" class="external-link">ard_categorical_ci</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">trt</span>, variables <span class="op">=</span> <span class="va">response</span>, method <span class="op">=</span> <span class="st">"wilson"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -1981,11 +1981,11 @@ them with <code><a href="https://insightsengineering.github.io/cards/latest-tag/
 a similar structure to the simple ARDs we extracted from the
 <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> results above.</p>
 <ul>
-<li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_survival_survfit.html" class="external-link">cardx::ard_survival_survfit()</a></code> ARD looks like the
+<li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_survival_survfit.html" class="external-link">cardx::ard_survival_survfit()</a></code> ARD looks like the
 <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical()</a></code> result.</li>
-<li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_stats_t_test_onesample.html" class="external-link">cardx::ard_stats_t_test_onesample()</a></code> ARD looks like
+<li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_stats_t_test_onesample.html" class="external-link">cardx::ard_stats_t_test_onesample()</a></code> ARD looks like
 the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous()</a></code> result.</li>
-<li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_categorical_ci.html" class="external-link">cardx::ard_categorical_ci()</a></code> ARD looks like the
+<li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_categorical_ci.html" class="external-link">cardx::ard_categorical_ci()</a></code> ARD looks like the
 <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous()</a></code> result.</li>
 </ul>
 <p>With the created ARD, we can now build a summary table.</p>
