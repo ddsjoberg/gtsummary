@@ -47,12 +47,15 @@ or \code{'tbl_ard_hierarchical'}.}
 An expression that is used to filter rows of the table. See the Details section below.}
 
 \item{var}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-hierarchy variable from \code{x} to perform filtering on. If \code{NULL}, the last hierarchy variable
+Hierarchy variable from \code{x} to perform filtering on. If \code{NULL}, the last hierarchy variable
 from \code{x} (\code{dplyr::last(attributes(x)$args$variables)}) will be used.}
 
 \item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 all rows filtered out. Default is \code{FALSE}.}
+
+\item{quiet}{(\code{logical})\cr
+Logical indicating whether to suppress any messaging. Default is \code{FALSE}.}
 }
 \value{
 A \code{gtsummary} of the same class as \code{x}.

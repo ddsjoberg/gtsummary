@@ -9,9 +9,14 @@
 #'   or `'tbl_ard_hierarchical'`.
 #' @param filter (`expression`)\cr
 #'   An expression that is used to filter rows of the table. See the Details section below.
+#' @param var ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Hierarchy variable from `x` to perform filtering on. If `NULL`, the last hierarchy variable
+#'   from `x` (`dplyr::last(attributes(x)$args$variables)`) will be used.
 #' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
+#' @param quiet (`logical`)\cr
+#'   Logical indicating whether to suppress any messaging. Default is `FALSE`.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @details
@@ -83,7 +88,7 @@ filter_hierarchical <- function(x, ...) {
 
 #' @rdname filter_hierarchical
 #' @export
-filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, ...) {
+filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_empty = FALSE, quiet = FALSE, ...) {
   set_cli_abort_call()
   check_dots_empty(call = get_cli_abort_call())
 
@@ -110,7 +115,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, 
   }
 
   # apply filtering
-  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, keep_empty)
+  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, {{ var }}, keep_empty, quiet)
 
   # pull updated index order after filtering
   idx_filter <- x_ard_filter |>
