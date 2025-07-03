@@ -4,15 +4,15 @@
 #'
 #' This function is used to filter hierarchical table rows. Filters are not applied to summary or overall rows.
 #'
-#' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`)\cr
-#'   A hierarchical gtsummary table of class `'tbl_hierarchical'` or `'tbl_hierarchical_count'`.
+#' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`, `tbl_ard_hierarchical`)\cr
+#'   A hierarchical gtsummary table of class `'tbl_hierarchical'`, `'tbl_hierarchical_count'`,
+#'   or `'tbl_ard_hierarchical'`.
 #' @param filter (`expression`)\cr
 #'   An expression that is used to filter rows of the table. See the Details section below.
 #' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
 #' @inheritParams rlang::args_dots_empty
-#'
 #'
 #' @details
 #' The `filter` argument can be used to filter out rows of a table which do not meet the criteria provided as an
@@ -90,8 +90,9 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, 
   # check input
   check_not_missing(x)
 
-  ard_args <- attributes(x$cards$tbl_hierarchical)$args
-  x_ard <- x$cards$tbl_hierarchical
+  cls <- if (is(x, "tbl_ard_hierarchical")) "tbl_ard_hierarchical" else "tbl_hierarchical"
+  ard_args <- attributes(x$cards[[cls]])$args
+  x_ard <- x$cards[[cls]]
 
   # add row indices to match structure of ard to x$table_body
   reshape_x <- .reshape_ard_compare(x, x_ard, ard_args)
@@ -159,7 +160,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, 
   x$table_body <- x$table_body |> select(-"pre_idx")
 
   # update x$cards$tbl_hierarchical
-  x$cards$tbl_hierarchical <- x_ard_filter |> select(-"pre_idx")
+  x$cards[[cls]] <- x_ard_filter |> select(-"pre_idx")
 
   x
 }
@@ -167,3 +168,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, keep_empty = FALSE, 
 #' @rdname filter_hierarchical
 #' @export
 filter_hierarchical.tbl_hierarchical_count <- filter_hierarchical.tbl_hierarchical
+
+#' @rdname filter_hierarchical
+#' @export
+filter_hierarchical.tbl_ard_hierarchical <- filter_hierarchical.tbl_hierarchical
