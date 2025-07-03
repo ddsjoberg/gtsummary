@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.2.0.9023</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,13 +38,16 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.3.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.3.0" id="gtsummary-230">gtsummary 2.3.0<a class="anchor" aria-label="anchor" href="#gtsummary-230"></a></h2><p class="text-muted">CRAN release: 2025-07-03</p>
 <div class="section level4">
-<h4 id="new-features-and-functions-development-version">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-development-version"></a></h4>
+<h4 id="new-features-and-functions-2-3-0">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-2-3-0"></a></h4>
 <ul><li><p>Added <code><a href="../reference/tbl_split_by.html">tbl_split_by_rows()</a></code> and <code><a href="../reference/tbl_split_by.html">tbl_split_by_columns()</a></code> to split tables horizontally (row-wise) and vertically (column-wise). (<a href="https://github.com/ddsjoberg/gtsummary/issues/2216" class="external-link">#2216</a>)</p></li>
 <li><p>Users are now allows to specify/override the denominator by passing an integer or a data frame to the <code>tbl_summary(percent)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2239" class="external-link">#2239</a>)</p></li>
 <li><p>Added the <code>tbl_merge(tbl_ids)</code> and <code>tbl_stack(tbl_ids)</code> arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling <code><a href="../reference/gather_ard.html">gather_ard()</a></code>, which will return a named list of ARDs where the names are the assigned tbl IDs. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2224" class="external-link">#2224</a>)</p></li>
@@ -54,7 +57,7 @@
 <li><p>The <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review <code><a href="https://larmarange.github.io/broom.helpers/reference/tidy_group_by.html" class="external-link">broom.helpers::tidy_group_by()</a></code> for details. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1540" class="external-link">#1540</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<h4 id="other-updates-2-3-0">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-2-3-0"></a></h4>
 <ul><li><p>Added an article on <code>modify_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2209" class="external-link">#2209</a>)</p></li>
 <li><p>Added theme elements <code>tbl_hierarchical_count-fn:addnl-fn-to-run</code> and <code>tbl_hierarchical_count-fn:addnl-fn-to-run</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2262" class="external-link">#2262</a>)</p></li>
 <li><p>Added the <code>"add_overall.tbl_summary-arg:col_label"</code> theme element to control the default value of <code>add_overall.tbl_summary(col_label)</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2246" class="external-link">#2246</a>)</p></li>
@@ -63,11 +66,11 @@
 <li><p>The <code><a href="../reference/add_overall.html">add_overall()</a></code> function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="lifecycle-updates-development-version">Lifecycle Updates<a class="anchor" aria-label="anchor" href="#lifecycle-updates-development-version"></a></h4>
+<h4 id="lifecycle-updates-2-3-0">Lifecycle Updates<a class="anchor" aria-label="anchor" href="#lifecycle-updates-2-3-0"></a></h4>
 <ul><li>Updated the function name of <code><a href="../reference/deprecated.html">modify_column_indent()</a></code> to the more accurately named <code><a href="../reference/modify_indent.html">modify_indent()</a></code> as the function operates on cells rather than columns.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-2-3-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-3-0"></a></h4>
 <ul><li><p>Fix in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> when there are missing values in the <code>by</code> column.</p></li>
 <li><p>Fixed bug in <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> causing the overall row label to be incorrectly used as a variable label.</p></li>
 <li><p>Fixed bug in <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> causing some rows to be dropped when sorting unstratified tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2237" class="external-link">#2237</a>)</p></li>
