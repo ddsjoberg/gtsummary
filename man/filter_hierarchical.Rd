@@ -4,22 +4,51 @@
 \alias{filter_hierarchical}
 \alias{filter_hierarchical.tbl_hierarchical}
 \alias{filter_hierarchical.tbl_hierarchical_count}
+\alias{filter_hierarchical.tbl_ard_hierarchical}
 \title{Filter Hierarchical Tables}
 \usage{
 filter_hierarchical(x, ...)
 
-\method{filter_hierarchical}{tbl_hierarchical}(x, filter, keep_empty = FALSE, ...)
+\method{filter_hierarchical}{tbl_hierarchical}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
 
-\method{filter_hierarchical}{tbl_hierarchical_count}(x, filter, keep_empty = FALSE, ...)
+\method{filter_hierarchical}{tbl_hierarchical_count}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
+
+\method{filter_hierarchical}{tbl_ard_hierarchical}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
-A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count}, \code{tbl_ard_hierarchical})\cr
+A hierarchical gtsummary table of class \code{'tbl_hierarchical'}, \code{'tbl_hierarchical_count'},
+or \code{'tbl_ard_hierarchical'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
 \item{filter}{(\code{expression})\cr
 An expression that is used to filter rows of the table. See the Details section below.}
+
+\item{var}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+hierarchy variable from \code{x} to perform filtering on. If \code{NULL}, the last hierarchy variable
+from \code{x} (\code{dplyr::last(attributes(x)$args$variables)}) will be used.}
 
 \item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
