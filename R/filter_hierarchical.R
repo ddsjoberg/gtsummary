@@ -11,7 +11,7 @@
 #'   An expression that is used to filter rows of the table. See the Details section below.
 #' @param var ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Hierarchy variable from `x` to perform filtering on. If `NULL`, the last hierarchy variable
-#'   from `x` (`dplyr::last(attributes(x)$args$variables)`) will be used.
+#'   from `x` (`dplyr::last(x$inputs$variables)`) will be used.
 #' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
@@ -39,11 +39,6 @@
 #' parameter can be used to specify a different variable to filter on. When `var` is set to a different (outer) variable
 #' and a level of the variable does not meet the filtering criteria then the section corresponding to that variable
 #' level - including summary rows - and all sub-sections within that section will be removed.
-#'
-#' In addition to filtering on individual statistic values, filters can be applied across the row (i.e. across all `by`
-#' variable values) by using aggregate functions such as `sum()` and `mean()`. For simplicity, it is suggested to use
-#' the `XX_overall` statistics in place of `sum(XX)` in equivalent scenarios. For example, `n_overall` is equivalent to
-#' `sum(n)`.
 #'
 #' If an overall column was added to the table (via `add_overall())`) this column will not be used in any filters (i.e.
 #' `n_overall` will not include the overall `n` in a given row).

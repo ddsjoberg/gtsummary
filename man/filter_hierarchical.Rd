@@ -48,7 +48,7 @@ An expression that is used to filter rows of the table. See the Details section 
 
 \item{var}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Hierarchy variable from \code{x} to perform filtering on. If \code{NULL}, the last hierarchy variable
-from \code{x} (\code{dplyr::last(attributes(x)$args$variables)}) will be used.}
+from \code{x} (\code{dplyr::last(x$inputs$variables)}) will be used.}
 
 \item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
@@ -85,11 +85,6 @@ to \code{variables}. If filters should instead be applied at the level of one of
 parameter can be used to specify a different variable to filter on. When \code{var} is set to a different (outer) variable
 and a level of the variable does not meet the filtering criteria then the section corresponding to that variable
 level - including summary rows - and all sub-sections within that section will be removed.
-
-In addition to filtering on individual statistic values, filters can be applied across the row (i.e. across all \code{by}
-variable values) by using aggregate functions such as \code{sum()} and \code{mean()}. For simplicity, it is suggested to use
-the \code{XX_overall} statistics in place of \code{sum(XX)} in equivalent scenarios. For example, \code{n_overall} is equivalent to
-\code{sum(n)}.
 
 If an overall column was added to the table (via \verb{add_overall())}) this column will not be used in any filters (i.e.
 \code{n_overall} will not include the overall \code{n} in a given row).
