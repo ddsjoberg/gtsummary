@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
+
 # gtsummary 2.3.0
 
 ### New Features and Functions
