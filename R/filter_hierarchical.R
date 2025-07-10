@@ -139,7 +139,8 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
   }
 
   # apply filtering
-  x_ard_filter <- x_ard |> cards::filter_ard_hierarchical({{ filter }}, {{ var }}, keep_empty, quiet)
+  x_ard_filter <- x_ard |>
+    cards::filter_ard_hierarchical(filter = {{ filter }}, var = {{ var }}, keep_empty = keep_empty, quiet = quiet)
 
   # pull updated index order after filtering
   idx_filter <- x_ard_filter |>
