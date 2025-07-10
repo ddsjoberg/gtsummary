@@ -32,3 +32,26 @@ test_that("add_p.tbl_cross(source_note) errors properly", {
     add_p(source_note = NULL)
   )
 })
+
+
+# testing a custom method
+test_that("add_p.tbl_cross(test) custom fn", {
+  custom_test_fn <- function(...) data.frame(p.value = 1, method = "My method")
+
+  expect_equal(
+    mtcars |>
+      tbl_cross(
+        row = am,
+        col = vs,
+        percent = "cell"
+      ) |>
+      add_p(test = custom_test_fn) |>
+      gather_ard() |>
+      getElement("add_p") |>
+      getElement("am") |>
+      dplyr::filter(stat_name == "p.value") |>
+      dplyr::pull(stat) |>
+      unlist(),
+    1
+  )
+})
