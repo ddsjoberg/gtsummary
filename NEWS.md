@@ -2,6 +2,10 @@
 
 * Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
 
+* Added parameters `var` and `quiet` to `filter_hierarchical()` to allow for filtering by specific hierarchy variables and to silence messages, respectively.
+
+* Added a method for class `"tbl_ard_hierarchical"` to `sort_hierarchical()` and `filter_hierarchical()`.
+
 # gtsummary 2.3.0
 
 ### New Features and Functions
