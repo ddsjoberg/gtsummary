@@ -10,8 +10,8 @@
 #' @param filter (`expression`)\cr
 #'   An expression that is used to filter rows of the table. See the Details section below.
 #' @param var ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   Hierarchy variable from `x` to perform filtering on. If `NULL`, the last hierarchy variable
-#'   from `x` (`dplyr::last(x$inputs$variables)`) will be used.
+#'   Hierarchy variable from `x` to perform filtering on. The variable must be present in `x$inputs$include`. If
+#'   `NULL`, the last hierarchy variable from `x` (`dplyr::last(x$inputs$include)`) will be used.
 #' @param keep_empty (scalar `logical`)\cr
 #'   Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 #'   all rows filtered out. Default is `FALSE`.
