@@ -47,8 +47,8 @@ or \code{'tbl_ard_hierarchical'}.}
 An expression that is used to filter rows of the table. See the Details section below.}
 
 \item{var}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Hierarchy variable from \code{x} to perform filtering on. If \code{NULL}, the last hierarchy variable
-from \code{x} (\code{dplyr::last(x$inputs$variables)}) will be used.}
+Hierarchy variable from \code{x} to perform filtering on. The variable must be present in \code{x$inputs$include}. If
+\code{NULL}, the last hierarchy variable from \code{x} (\code{dplyr::last(x$inputs$include)}) will be used.}
 
 \item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
