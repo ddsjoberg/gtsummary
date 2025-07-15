@@ -42,21 +42,22 @@
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 2 ----------------------------------
 #' # Split by rows with row numbers
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(row_numbers = c(5, 7)) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 3 ----------------------------------
 #' # Split by columns
 #' trial |>
 #'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   tail(n = 1) |> # Print only last table for simplicity
+#'   unlist()
 #'
 #' # Example 4 ----------------------------------
 #' # Both row and column splitting
@@ -64,7 +65,7 @@
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 5 ------------------------------
 #' # Split by rows with footnotes and caption
@@ -92,7 +93,7 @@
 #'   modify_source_note("Some source note!") |>
 #'   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
 #'   tail(n = 2) |>
-#'   head(n = 1) # Print only one but not last table for simplicity
+#'   dplyr::first() # Print only one but not last table for simplicity
 #'
 #' @name tbl_split_by
 NULL
