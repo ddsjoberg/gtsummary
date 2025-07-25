@@ -1,4 +1,4 @@
-#' Modify column headers, footnotes, and spanning headers
+#' Modify column headers and spanning headers
 #'
 #' @description
 #' These functions assist with modifying the aesthetics/style of a table.
