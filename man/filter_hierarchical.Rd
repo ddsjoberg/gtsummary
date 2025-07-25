@@ -4,26 +4,58 @@
 \alias{filter_hierarchical}
 \alias{filter_hierarchical.tbl_hierarchical}
 \alias{filter_hierarchical.tbl_hierarchical_count}
+\alias{filter_hierarchical.tbl_ard_hierarchical}
 \title{Filter Hierarchical Tables}
 \usage{
 filter_hierarchical(x, ...)
 
-\method{filter_hierarchical}{tbl_hierarchical}(x, filter, keep_empty = FALSE, ...)
+\method{filter_hierarchical}{tbl_hierarchical}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
 
-\method{filter_hierarchical}{tbl_hierarchical_count}(x, filter, keep_empty = FALSE, ...)
+\method{filter_hierarchical}{tbl_hierarchical_count}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
+
+\method{filter_hierarchical}{tbl_ard_hierarchical}(
+  x,
+  filter,
+  var = NULL,
+  keep_empty = FALSE,
+  quiet = FALSE,
+  ...
+)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
-A hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count}, \code{tbl_ard_hierarchical})\cr
+A hierarchical gtsummary table of class \code{'tbl_hierarchical'}, \code{'tbl_hierarchical_count'},
+or \code{'tbl_ard_hierarchical'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
 \item{filter}{(\code{expression})\cr
 An expression that is used to filter rows of the table. See the Details section below.}
 
+\item{var}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+Hierarchy variable from \code{x} to perform filtering on. The variable must be present in \code{x$inputs$include}. If
+\code{NULL}, the last hierarchy variable from \code{x} (\code{dplyr::last(x$inputs$include)}) will be used.}
+
 \item{keep_empty}{(scalar \code{logical})\cr
 Logical argument indicating whether to retain summary rows corresponding to table hierarchy sections that have had
 all rows filtered out. Default is \code{FALSE}.}
+
+\item{quiet}{(\code{logical})\cr
+Logical indicating whether to suppress any messaging. Default is \code{FALSE}.}
 }
 \value{
 A \code{gtsummary} of the same class as \code{x}.
@@ -36,26 +68,36 @@ This function is used to filter hierarchical table rows. Filters are not applied
 \details{
 The \code{filter} argument can be used to filter out rows of a table which do not meet the criteria provided as an
 expression. Rows can be filtered on the values of any of the possible statistics (\code{n}, \code{p}, and \code{N}) provided they
-are included at least once in the table, as well as the values of any \code{by} variables. Filtering is only applied to
-rows that correspond to the innermost variable in the hierarchy - all outer variable (summary) rows are kept
-regardless of whether they meet the filtering criteria themselves. In addition to filtering on individual statistic
-values, filters can be applied across the row (i.e. across all \code{by} variable values) by using aggregate functions
-such as \code{sum()} and \code{mean()}.
+are included at least once in the table, as well as the values of any \code{by} variables.
+
+Additionally, filters can be applied on individual column values (if a \code{by} variable was specified) via the \code{n_XX},
+\code{N_XX}, and \code{p_XX} statistics, where each \code{XX} represents the index of the column to select the statistic from. For
+example, \code{filter = n_1 > 5} will check whether \code{n} values in the first column of the table are greater than 5 in each
+row.
+
+Overall statistics for each row can be used in filters via the \code{n_overall}, \code{N_overall}, and \code{p_overall} statistics.
+If used in \code{filter}, overall statistics are derived within the filtering function. \code{n_overall} can only be derived if
+\code{n} statistic is present in the table for the filter variable, \code{N_overall} if the \code{N} statistic is present for the
+filter variable, and \code{p_overall} if both the \code{n} and \code{N} statistics are present for the filter variable.
+
+By default, filters will be applied at the level of the innermost hierarchy variable, i.e. the last variable supplied
+to \code{variables}. If filters should instead be applied at the level of one of the outer hierarchy variables, the \code{var}
+parameter can be used to specify a different variable to filter on. When \code{var} is set to a different (outer) variable
+and a level of the variable does not meet the filtering criteria then the section corresponding to that variable
+level - including summary rows - and all sub-sections within that section will be removed.
 
 If an overall column was added to the table (via \verb{add_overall())}) this column will not be used in any filters (i.e.
-\code{sum(n)} will not include the overall \code{n} in a given row). To filter on overall statistics use the \code{sum()} function
-in your filter instead (i.e. \code{sum(n)} is equal to the overall column \code{n} across any \code{by} variables).
+\code{n_overall} will not include the overall \code{n} in a given row).
 
 Some examples of possible filters:
 \itemize{
 \item \code{filter = n > 5}: keep rows where one of the treatment groups observed more than 5 AEs
 \item \code{filter = n == 2 & p < 0.05}: keep rows where one of the treatment groups observed exactly 2 AEs and one of the
 treatment groups observed a proportion less than 5\%.
-\item \code{filter = sum(n) >= 4}: keep rows where there were 4 or more AEs observed across the row
+\item \code{filter = n_overall >= 4}: keep rows where there were 4 or more AEs observed across the row
 \item \code{filter = mean(n) > 4 | n > 3}: keep rows where the mean number of AEs is 4 or more across the row or one of the
 treatment groups observed more than 3 AEs
-\item \code{filter = any(n > 2 & TRTA == "Xanomeline High Dose")}: keep rows where the \code{"Xanomeline High Dose"} treatment
-group observed more than 2 AEs
+\item \code{filter = n_2 > 2}: keep rows where the \code{"Xanomeline High Dose"} treatment group observed more than 2 AEs
 }
 }
 \examples{
@@ -85,7 +127,16 @@ filter_hierarchical(tbl, n >= 2)
 
 # Example 3 ----------------------------------
 # Keep rows where AEs across the row have an overall prevalence of greater than 0.5\%
-filter_hierarchical(tbl, sum(n) / sum(N) > 0.005)
+filter_hierarchical(tbl, p_overall > 0.005)
+
+# Example 4 ----------------------------------
+# Keep rows where SOCs across the row have an overall prevalence of greater than 20
+filter_hierarchical(tbl, n_overall > 20, var = AEBODSYS)
+
+# Example 5 ----------------------------------
+# Keep AEs that have a difference in prevalence of greater than 3\% between reference group with
+# `TRTA = "Xanomeline High Dose"` and comparison group with `TRTA = "Xanomeline Low Dose"`
+filter_hierarchical(tbl, abs(p_2 - p_3) > 0.03)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

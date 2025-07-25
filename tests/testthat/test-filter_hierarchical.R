@@ -53,6 +53,87 @@ test_that("filter_hierarchical(keep_empty) works", {
   expect_equal(nrow(tbl_f$table_body), 16)
 })
 
+test_that("filter_hierarchical(var) works", {
+  withr::local_options(width = 200)
+
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AESOC, AEDECOD, AESEV),
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID
+  )
+
+  # default uses the correct variable
+  expect_identical(
+    filter_hierarchical(tbl, n > 5, var = AESEV),
+    filter_hierarchical(tbl, n > 5)
+  )
+
+  # works with `var` specified
+  expect_silent(tbl_f <- filter_hierarchical(tbl, sum(n) > 15, var = AEDECOD))
+  expect_snapshot(tbl_f$table_body$label)
+  expect_equal(nrow(tbl_f$table_body), 17)
+
+  # works with first hierarchy variable
+  expect_silent(tbl_f <- filter_hierarchical(tbl, sum(n) > 50, var = AESOC))
+  expect_equal(nrow(tbl_f$table_body), 9)
+
+  # works with no `by` variable
+  tbl_noby <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AESOC, AEDECOD, AESEV),
+    denominator = cards::ADSL,
+    id = USUBJID
+  )
+  expect_silent(tbl_f <- filter_hierarchical(tbl_noby, sum(n) > 10, var = AEDECOD))
+  # same rows kept in table with/without `by`
+  expect_identical(
+    tbl_f$table_body$label,
+    filter_hierarchical(tbl, sum(n) > 10, var = AEDECOD)$table_body$label
+  )
+  expect_equal(nrow(tbl_f$table_body), 17)
+})
+
+test_that("filter_hierarchical() works with column-specific filters", {
+  tbl_o <- tbl |> add_overall()
+
+  # difference between n's in columns 2 and 3 > 1 (one-sided)
+  expect_message(tbl_f <- filter_hierarchical(tbl, n_2 - n_3 > 1))
+  expect_equal(nrow(tbl_f$table_body), 6)
+
+  # difference between n's in columns 2 and 3 > 1 (absolute)
+  expect_message(tbl_f <- filter_hierarchical(tbl, abs(n_2 - n_3) > n_1))
+  expect_equal(nrow(tbl_f$table_body), 15)
+
+  # overall prevalence across row group > 30%
+  expect_silent(tbl_f <- filter_hierarchical(tbl, p_overall > 0.3))
+  # p_overall calculated correctly
+  expect_identical(
+    tbl_f,
+    tbl |> filter_hierarchical(sum(n) / sum(N) > 0.3),
+  )
+  # p_overall filters the same rows with overall column added
+  expect_identical(
+    tbl_f$table_body,
+    filter_hierarchical(tbl_o, p_overall > 0.3)$table_body |>
+      select(-"stat_0")
+  )
+  expect_equal(nrow(tbl_f$table_body), 7)
+
+  # overall prevalence across row group > 15
+  expect_silent(tbl_f <- filter_hierarchical(tbl, n_overall > 15))
+  expect_equal(nrow(tbl_f$table_body), 9)
+
+  # column-wise p statistics equal to previous derivation with column names specified (both still work)
+  expect_message(tbl_f <- filter_hierarchical(tbl, p_2 > 0.15 | p_3 > 0.2))
+  expect_identical(
+    tbl_f,
+    tbl |>
+      filter_hierarchical(any(p > 0.15 & TRTA == "Xanomeline High Dose") | any(p > 0.2 & TRTA == "Xanomeline Low Dose"))
+  )
+})
+
 test_that("filter_hierarchical() works with various different filter conditions", {
   withr::local_options(width = 200)
 

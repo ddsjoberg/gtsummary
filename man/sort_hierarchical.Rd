@@ -4,6 +4,7 @@
 \alias{sort_hierarchical}
 \alias{sort_hierarchical.tbl_hierarchical}
 \alias{sort_hierarchical.tbl_hierarchical_count}
+\alias{sort_hierarchical.tbl_ard_hierarchical}
 \title{Sort Hierarchical Tables}
 \usage{
 sort_hierarchical(x, ...)
@@ -11,10 +12,13 @@ sort_hierarchical(x, ...)
 \method{sort_hierarchical}{tbl_hierarchical}(x, sort = c("descending", "alphanumeric"), ...)
 
 \method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = c("descending", "alphanumeric"), ...)
+
+\method{sort_hierarchical}{tbl_ard_hierarchical}(x, sort = c("descending", "alphanumeric"), ...)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
-a hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count}, \code{tbl_ard_hierarchical})\cr
+a hierarchical gtsummary table of class \code{'tbl_hierarchical'}, \code{'tbl_hierarchical_count'},
+or \code{'tbl_ard_hierarchical'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 

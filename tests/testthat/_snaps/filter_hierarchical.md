@@ -17,6 +17,18 @@
       11                                                                  DIARRHOEA               6 (20%)                           3 (7.5%)                          2 (5.9%)
       12                                                                   ERYTHEMA               3 (10%)                            5 (13%)                           6 (18%)
 
+# filter_hierarchical(var) works
+
+    Code
+      tbl_f$table_body$label
+    Output
+       [1] "GASTROINTESTINAL DISORDERS"                           "DIARRHOEA"                                            "MILD"                                                
+       [4] "MODERATE"                                             "GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS" "APPLICATION SITE ERYTHEMA"                           
+       [7] "MILD"                                                 "MODERATE"                                             "SEVERE"                                              
+      [10] "APPLICATION SITE PRURITUS"                            "MILD"                                                 "MODERATE"                                            
+      [13] "SEVERE"                                               "SKIN AND SUBCUTANEOUS TISSUE DISORDERS"               "ERYTHEMA"                                            
+      [16] "MILD"                                                 "MODERATE"                                            
+
 # filter_hierarchical() works with various different filter conditions
 
     Code
