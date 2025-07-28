@@ -6,7 +6,7 @@
 \alias{modify_spanning_header}
 \alias{remove_spanning_header}
 \alias{show_header_names}
-\title{Modify column headers, footnotes, and spanning headers}
+\title{Modify column headers and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
