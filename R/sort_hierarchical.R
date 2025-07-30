@@ -75,7 +75,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = c("descending", "alphan
   check_not_missing(x)
 
   sort <- arg_match(sort, error_call = get_cli_abort_call())
-  cls <- if (is(x, "tbl_ard_hierarchical")) "tbl_ard_hierarchical" else "tbl_hierarchical"
+  cls <- class(x)[1]
   ard_args <- attributes(x$cards[[cls]])$args
   x_ard <- x$cards[[cls]]
 
