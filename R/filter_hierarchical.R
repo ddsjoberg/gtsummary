@@ -173,9 +173,9 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
       dplyr::pull("pre_idx") |>
       unique()
 
-    # keep total N row
+    # keep total N, attribute rows
     idx_overall_filter <- x_ard_overall_col$pre_idx |>
-      intersect(c(idx_overall_filter, which(x_ard_overall_col$variable == "..ard_total_n..")))
+      intersect(c(idx_overall_filter, which(x_ard_overall_col$context %in% c("total_n", "attributes"))))
 
     # update x$cards$add_overall
     x$cards$add_overall <- x$cards$add_overall[idx_overall_filter, ]

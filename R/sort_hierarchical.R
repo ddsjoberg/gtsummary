@@ -86,7 +86,9 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = c("descending", "alphan
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- x_ard |>
-    dplyr::filter(if (!is_empty(ard_args$by)) is.na(.data$group1) else .data$context != "hierarchical") |>
+    dplyr::filter(
+      if (!is_empty(ard_args$by)) is.na(.data$group1) else !.data$context %in% c("hierarchical", "total_n", "attributes")
+    ) |>
     dplyr::pull("pre_idx") |>
     unique()
 
@@ -95,6 +97,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = c("descending", "alphan
 
   # pull updated index order after sorting
   idx_sort <- x_ard_sort |>
+    dplyr::filter(!.data$context %in% c("total_n", "attributes")) |>
     dplyr::pull("pre_idx") |>
     unique() |>
     setdiff(rm_idx)
