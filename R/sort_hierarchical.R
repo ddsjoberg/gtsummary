@@ -91,11 +91,11 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   if (is.character(sort)) {
     sort <- stats::as.formula(paste0("everything() ~ '", sort, "'"))
   }
-  process_formula_selectors(
+  cards::process_formula_selectors(
     as.list(ard_args$variables) |> data.frame() |> stats::setNames(ard_args$variables),
     sort = sort
   )
-  fill_formula_selectors(
+  cards::fill_formula_selectors(
     as.list(ard_args$variables) |> data.frame() |> stats::setNames(ard_args$variables),
     sort = everything() ~ "descending"
   )
