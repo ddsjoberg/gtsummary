@@ -114,7 +114,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
   # check input
   check_not_missing(x)
 
-  cls <- if (is(x, "tbl_ard_hierarchical")) "tbl_ard_hierarchical" else "tbl_hierarchical"
+  cls <- class(x)[1]
   ard_args <- attributes(x$cards[[cls]])$args
   x_ard <- x$cards[[cls]]
 
