@@ -44,5 +44,5 @@
       sort_hierarchical(tbl, "10")
     Condition
       Error in `sort_hierarchical()`:
-      ! `sort` must be one of "descending" or "alphanumeric", not "10".
+      ! Sorting type must be either "descending" or "alphanumeric" for all variables.
 
