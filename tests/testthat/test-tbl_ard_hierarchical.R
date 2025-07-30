@@ -76,3 +76,35 @@ test_that("tbl_ard_hierarchical() counts", {
       as.data.frame(col_labels = FALSE)
   )
 })
+
+test_that("tbl_ard_hierarchical() preserves ARD sorting", {
+  ard <-
+    cards::ard_stack_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      id = USUBJID,
+      denominator = cards::ADSL
+    ) |>
+    cards::sort_ard_hierarchical("descending")
+
+  expect_silent(
+    tbl <- tbl_ard_hierarchical(
+      cards = ard,
+      variables = c(AESOC, AETERM),
+      by = TRTA
+    )
+  )
+
+  expect_equal(
+    tbl$table_body |>
+      select("variable", "label"),
+    ard |>
+      filter(variable != "TRTA") |>
+      unlist_ard_columns() |>
+      select(cards::all_ard_variables()) |>
+      rename(label = variable_level) |>
+      distinct(),
+    ignore_attr = TRUE
+  )
+})
