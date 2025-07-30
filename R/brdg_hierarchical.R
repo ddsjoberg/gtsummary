@@ -356,7 +356,7 @@ pier_summary_hierarchical <- function(cards,
     select(-cards::all_ard_groups()) |>
     tidyr::unnest(cols = "df_stats") |>
     tidyr::unnest(cols = "stat") |>
-    arrange(sort_idx) |>
+    dplyr::arrange(.data$sort_idx) |>
     tidyr::pivot_wider(
       id_cols = c("row_type", "var_label", "variable", "label", cards::all_ard_groups()),
       names_from = "gts_column",

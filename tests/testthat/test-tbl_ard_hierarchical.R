@@ -100,11 +100,11 @@ test_that("tbl_ard_hierarchical() preserves ARD sorting", {
     tbl$table_body |>
       select("variable", "label"),
     ard |>
-      filter(variable != "TRTA") |>
-      unlist_ard_columns() |>
+      dplyr::filter(variable != "TRTA") |>
+      cards::unlist_ard_columns() |>
       select(cards::all_ard_variables()) |>
-      rename(label = variable_level) |>
-      distinct(),
+      dplyr::rename(label = variable_level) |>
+      dplyr::distinct(),
     ignore_attr = TRUE
   )
 })
