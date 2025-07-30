@@ -78,7 +78,7 @@ test_that("show_header_names() has all values aligned", {
       data = cards::ADAE,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID
     )
 

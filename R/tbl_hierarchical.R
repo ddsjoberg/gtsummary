@@ -73,7 +73,7 @@
 #'   data = ADAE_subset,
 #'   variables = c(AESOC, AETERM),
 #'   by = TRTA,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'   denominator = cards::ADSL,
 #'   id = USUBJID,
 #'   digits = everything() ~ list(p = 1),
 #'   overall_row = TRUE,
@@ -86,7 +86,7 @@
 #'   variables = c(AESOC, AESEV),
 #'   by = TRTA,
 #'   id = USUBJID,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'   denominator = cards::ADSL,
 #'   include = AESEV,
 #'   label = list(AESEV = "Highest Severity")
 #' )

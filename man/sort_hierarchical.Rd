@@ -62,7 +62,7 @@ tbl <-
     data = ADAE_subset,
     variables = c(AEBODSYS, AEDECOD),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID,
     overall_row = TRUE
   ) |>

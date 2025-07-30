@@ -196,7 +196,7 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
   # unordered variable
   res_uo <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV
+    denominator = cards::ADSL, include = AESEV
   )
 
   # ordered variable
@@ -204,7 +204,7 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
 
   res_o <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV, label = list(AESEV = "Highest Severity")
+    denominator = cards::ADSL, include = AESEV, label = list(AESEV = "Highest Severity")
   ) |> suppressMessages()
   expect_snapshot(res_o |> as.data.frame())
 
@@ -214,14 +214,14 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
   # ordered variable, no by
   res <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV),
-    denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
+    denominator = cards::ADSL, id = USUBJID
   ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
 
   # ordered variable, include all variables
   res_o <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), label = list(AESEV = "Highest Severity")
+    denominator = cards::ADSL, label = list(AESEV = "Highest Severity")
   ) |> suppressMessages()
   expect_snapshot(res_o |> as.data.frame())
 })
@@ -378,7 +378,7 @@ test_that("tbl_hierarchical_count table_body enables sorting", {
       data = ADAE_subset,
       variables = c(SEX, AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID,
       overall_row = TRUE
     )

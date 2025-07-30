@@ -12,7 +12,7 @@ test_that("tbl_ard_hierarchical() event rates", {
       data = ADAE_subset,
       variables = c(AESOC, AETERM, AESEV),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID
     )
 
@@ -38,7 +38,7 @@ test_that("tbl_ard_hierarchical() event rates", {
       data = ADAE_subset,
       variables = c(AESOC, AETERM, AESEV),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID,
       digits = ~list(p = 1L)
     ) |>
@@ -52,7 +52,7 @@ test_that("tbl_ard_hierarchical() counts", {
       data = ADAE_subset,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM)
+      denominator = cards::ADSL
     )
 
   expect_error(
@@ -71,7 +71,7 @@ test_that("tbl_ard_hierarchical() counts", {
       data = ADAE_subset,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM)
+      denominator = cards::ADSL
     ) |>
       as.data.frame(col_labels = FALSE)
   )
