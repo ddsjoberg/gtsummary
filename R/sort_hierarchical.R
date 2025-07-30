@@ -12,19 +12,23 @@
 #' @param x (`tbl_hierarchical`, `tbl_hierarchical_count`, `tbl_ard_hierarchical`)\cr
 #'   a hierarchical gtsummary table of class `'tbl_hierarchical'`, `'tbl_hierarchical_count'`,
 #'   or `'tbl_ard_hierarchical'`.
-#' @param sort (`string`)\cr
-#'   type of sorting to perform. Value must be one of:
-#'   - `"alphanumeric"` - at each hierarchy level of the table, rows are ordered alphanumerically (i.e. A to Z)
-#'     by label text.
-#'   - `"descending"` - at each hierarchy level of the table, count sums are calculated for each row and rows are
-#'     sorted in descending order by sum. If `sort = "descending"`, the `n` statistic is used to calculate row sums if
-#'     included in `statistic` for all variables, otherwise `p` is used. If neither `n` nor `p` are present in `x` for
-#'     all variables, an error will occur.
+#' @param sort ([`formula-list-selector`][syntax], `string`)\cr
+#'   a named list, a list of formulas, a single formula where the list element is a named list of functions
+#'   (or the RHS of a formula), or a string specifying the types of sorting to perform at each hierarchy level.
+#'   If the sort method for any variable is not specified then the method will default to `"descending"`. If a single
+#'   unnamed string is supplied it is applied to all hierarchy levels. For each variable, the value specified must
+#'   be one of:
+#'   - `"alphanumeric"` - at the specified hierarchy level, groups are ordered alphanumerically (i.e. A to Z) by
+#'     `variable_level` text.
+#'   - `"descending"` - at the specified hierarchy level, count sums are calculated for each row and rows are sorted in
+#'     descending order by sum. If `sort` is `"descending"` for a given variable and `n` is included in `statistic` for
+#'     the variable then `n` is used to calculate row sums, otherwise `p` is used. If neither `n` nor `p` are present
+#'     in `x` for the variable, an error will occur.
 #'
-#'   Defaults to `"descending"`.
+#'   Defaults to `everything() ~ "descending"`.
 #' @inheritParams rlang::args_dots_empty
 #'
-#' @return A `gtsummary` of the same class as `x`.
+#' @return a gtsummary table of the same class as `x`.
 #'
 #' @seealso [filter_hierarchical()]
 #' @name sort_hierarchical
@@ -47,12 +51,17 @@
 #'   ) |>
 #'   add_overall()
 #'
-#'
-#' # Example 1 - Descending Frequency Sort ------------------
+#' # Example 1 ----------------------------------------------
+#' # Sort all variables by descending frequency (default)
 #' sort_hierarchical(tbl)
 #'
-#' # Example 2 - Alphanumeric Sort --------------------------
-#' sort_hierarchical(tbl, sort = "alphanumeric")
+#' # Example 2 ----------------------------------------------
+#' # Sort all variables alphanumerically
+#' sort_hierarchical(tbl, sort = everything() ~ "alphanumeric")
+#'
+#' # Example 3 ----------------------------------------------
+#' # Sort `AEBODSYS` alphanumerically, `AEDECOD` by descending frequency
+#' sort_hierarchical(tbl, sort = list(AEBODSYS ~ "alphanumeric", AEDECOD ~ "descending"))
 #'
 #' reset_gtsummary_theme()
 NULL
@@ -68,16 +77,34 @@ sort_hierarchical <- function(x, ...) {
 
 #' @rdname sort_hierarchical
 #' @export
-sort_hierarchical.tbl_hierarchical <- function(x, sort = c("descending", "alphanumeric"), ...) {
+sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descending", ...) {
   set_cli_abort_call()
 
   # check input
   check_not_missing(x)
 
-  sort <- arg_match(sort, error_call = get_cli_abort_call())
   cls <- class(x)[1]
   ard_args <- attributes(x$cards[[cls]])$args
   x_ard <- x$cards[[cls]]
+
+  # get and check sorting method(s)
+  if (is.character(sort)) {
+    sort <- stats::as.formula(paste0("everything() ~ '", sort, "'"))
+  }
+  process_formula_selectors(
+    as.list(ard_args$variables) |> data.frame() |> stats::setNames(ard_args$variables),
+    sort = sort
+  )
+  fill_formula_selectors(
+    as.list(ard_args$variables) |> data.frame() |> stats::setNames(ard_args$variables),
+    sort = everything() ~ "descending"
+  )
+  if (!all(unlist(sort) %in% c("descending", "alphanumeric"))) {
+    cli::cli_abort(
+      "Sorting type must be either {.val descending} or {.val alphanumeric} for all variables.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # add row indices match structure of ard to x$table_body
   reshape_x <- .reshape_ard_compare(x, x_ard, ard_args, sort)

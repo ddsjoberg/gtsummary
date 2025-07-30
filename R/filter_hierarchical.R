@@ -52,7 +52,7 @@
 #'    treatment groups observed more than 3 AEs
 #' - `filter = n_2 > 2`: keep rows where the `"Xanomeline High Dose"` treatment group observed more than 2 AEs
 #'
-#' @return A `gtsummary` of the same class as `x`.
+#' @return a gtsummary table of the same class as `x`.
 #'
 #' @seealso [sort_hierarchical()]
 #'
