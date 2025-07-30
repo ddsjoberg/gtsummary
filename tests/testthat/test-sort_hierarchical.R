@@ -13,7 +13,7 @@ tbl <- tbl_hierarchical(
 )
 
 test_that("sort_hierarchical() works", {
-  withr::local_options(width = 200)
+  withr::local_options(width = 250)
 
   # no errors
   expect_silent(tbl <- sort_hierarchical(tbl))
@@ -64,6 +64,40 @@ test_that("sort_hierarchical(sort = 'alphanumeric') works", {
       "BLACK OR AFRICAN AMERICAN", "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "WHITE",
       "APPLICATION SITE ERYTHEMA", "APPLICATION SITE PRURITUS", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA",
       "ERYTHEMA"
+    )
+  )
+})
+
+test_that("sort_hierarchical(sort) works with different sorting methods for each variable", {
+  expect_silent(
+    tbl <- sort_hierarchical(
+      tbl,
+      sort = list(SEX ~ "alphanumeric", RACE = "descending", AETERM = "alphanumeric")
+    )
+  )
+
+  # results are ordered correctly
+  expect_equal(
+    tbl$table_body |>
+      dplyr::filter(variable == "SEX") |>
+      dplyr::pull(label),
+    c("F", "M")
+  )
+  expect_equal(
+    tbl$table_body |>
+      dplyr::filter(variable == "RACE") |>
+      dplyr::pull(label),
+    c("WHITE", "BLACK OR AFRICAN AMERICAN", "WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE")
+  )
+  expect_equal(
+    tbl$table_body |>
+      dplyr::filter(variable == "AETERM") |>
+      dplyr::pull(label),
+    c(
+      "APPLICATION SITE ERYTHEMA", "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "APPLICATION SITE PRURITUS",
+      "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "ERYTHEMA", "APPLICATION SITE ERYTHEMA",
+      "APPLICATION SITE PRURITUS", "ATRIOVENTRICULAR BLOCK SECOND DEGREE", "DIARRHOEA", "ERYTHEMA",
+      "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "ERYTHEMA"
     )
   )
 })
