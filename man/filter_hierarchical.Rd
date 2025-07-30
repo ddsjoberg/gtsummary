@@ -58,7 +58,7 @@ all rows filtered out. Default is \code{FALSE}.}
 Logical indicating whether to suppress any messaging. Default is \code{FALSE}.}
 }
 \value{
-A \code{gtsummary} of the same class as \code{x}.
+a gtsummary table of the same class as \code{x}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
