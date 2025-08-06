@@ -82,7 +82,7 @@ sort_hierarchical(tbl, sort = everything() ~ "alphanumeric")
 
 # Example 3 ----------------------------------------------
 # Sort `AEBODSYS` alphanumerically, `AEDECOD` by descending frequency
-sort_hierarchical(tbl, sort = list(AEBODSYS ~ "alphanumeric", AEDECOD ~ "descending"))
+sort_hierarchical(tbl, sort = list(AEBODSYS = "alphanumeric", AEDECOD = "descending"))
 
 reset_gtsummary_theme()
 \dontshow{\}) # examplesIf}
