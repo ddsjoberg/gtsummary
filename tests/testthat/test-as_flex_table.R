@@ -27,6 +27,20 @@ test_that("as_flex_table works with standard use", {
   )
 })
 
+test_that("as_flex_table works with custom footnote symbols", {
+  # return_calls argument does not produce warnings
+  expect_silent(my_tbl_summary |> as_flex_table(ref_symbols = letters, return_calls = TRUE))
+
+  # include argument does not produce warnings
+  expect_silent(my_tbl_summary |> as_flex_table(include = tibble, ref_symbols = letters))
+
+  # correct elements are returned
+  expect_equal(
+    names(ft_tbl_summary),
+    c("header", "body", "footer", "col_keys", "caption", "blanks", "properties")
+  )
+})
+
 test_that("as_flex_table works with tbl_survfit", {
   skip_if_not(is_pkg_installed("survival"))
   fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
