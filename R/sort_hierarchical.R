@@ -28,6 +28,11 @@
 #'   Defaults to `everything() ~ "descending"`.
 #' @inheritParams rlang::args_dots_empty
 #'
+#' @note
+#' When sorting a table that includes an overall column [add_overall()] must be called to add the overall column
+#' _before_ `sort_hierarchical()` is called.
+#'
+#'
 #' @return a gtsummary table of the same class as `x`.
 #'
 #' @seealso [filter_hierarchical()]
