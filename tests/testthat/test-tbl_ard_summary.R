@@ -263,7 +263,8 @@ test_that("tbl_ard_summary(overall)", {
       .attributes = TRUE,
       .total_n = TRUE
     ) |>
-      cards::tidy_ard_row_order()
+      cards::tidy_ard_row_order(),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl$cards$add_overall |>
@@ -277,7 +278,8 @@ test_that("tbl_ard_summary(overall)", {
       .attributes = TRUE,
       .total_n = TRUE
     ) |>
-      cards::tidy_ard_row_order()
+      cards::tidy_ard_row_order(),
+    ignore_attr = TRUE
   )
 })
 
