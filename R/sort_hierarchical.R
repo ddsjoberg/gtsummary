@@ -99,12 +99,11 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
     as.list(ard_args$variables) |> data.frame() |> stats::setNames(ard_args$variables),
     sort = everything() ~ "descending"
   )
-  if (!all(unlist(sort) %in% c("descending", "alphanumeric"))) {
-    cli::cli_abort(
-      "Sorting type must be either {.val descending} or {.val alphanumeric} for all variables.",
-      call = get_cli_abort_call()
-    )
-  }
+  cards::check_list_elements(
+    x = sort,
+    predicate = \(x) x %in% c("descending", "alphanumeric"),
+    error_msg = "Sorting type must be either {.val descending} or {.val alphanumeric} for all variables."
+  )
 
   # add row indices match structure of ard to x$table_body
   reshape_x <- .reshape_ard_compare(x, x_ard, ard_args, sort)
