@@ -223,6 +223,22 @@ test_that("sort_hierarchical() works with add_overall()", {
       "APPLICATION SITE PRURITUS", "DIARRHOEA", "ERYTHEMA", "ERYTHEMA"
     )
   )
+
+  # overall col with different sort variables does not affect sort order
+  expect_silent(
+    tbl_s <- sort_hierarchical(
+      tbl,
+      sort = list(SEX ~ "alphanumeric", RACE = "descending", AETERM = "alphanumeric")
+    )
+  )
+  tbl_o <- tbl |> add_overall()
+  expect_silent(
+    tbl_o <- sort_hierarchical(
+      tbl_o,
+      sort = list(SEX ~ "alphanumeric", RACE = "descending", AETERM = "alphanumeric")
+    )
+  )
+  expect_identical(tbl_o$table_body$label, tbl_s$table_body$label)
 })
 
 test_that("sort_hierarchical() error messaging works", {
