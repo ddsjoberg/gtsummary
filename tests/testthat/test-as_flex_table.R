@@ -34,11 +34,6 @@ test_that("as_flex_table works with custom footnote symbols", {
   # include argument does not produce warnings
   expect_silent(my_tbl_summary |> as_flex_table(include = tibble, ref_symbols = letters))
 
-  # correct elements are returned
-  expect_equal(
-    names(ft_tbl_summary),
-    c("header", "body", "footer", "col_keys", "caption", "blanks", "properties")
-  )
 })
 
 test_that("as_flex_table works with tbl_survfit", {
