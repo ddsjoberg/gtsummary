@@ -90,7 +90,7 @@ trial |>
 trial |>
   tbl_summary(by = trt, include = c(death, ttdeath)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-  dplyr::tail(n = 1) # Print only last table for simplicity
+  dplyr::last() # Print only last table for simplicity
 
 # Example 4 ----------------------------------
 # Both row and column splitting
