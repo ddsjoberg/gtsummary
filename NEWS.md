@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Refactored `sort_hierarchical()` to allow for different sorting methods at each hierarchy variable level.
+
+* Updated `sort_hierarchical()` and `filter_hierarchical()` to always keep attribute and total N rows at the bottom of the ARD.
+
 * Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
 
 * Added parameters `var` and `quiet` to `filter_hierarchical()` to allow for filtering by specific hierarchy variables and to silence messages, respectively.

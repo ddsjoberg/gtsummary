@@ -63,7 +63,7 @@ ard <-
     data = ADAE_subset,
     variables = c(AESOC, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID
   )
 
@@ -80,7 +80,7 @@ ard <-
     data = ADAE_subset,
     variables = c(AESOC, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM)
+    denominator = cards::ADSL
   )
 
 tbl_ard_hierarchical(

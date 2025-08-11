@@ -52,7 +52,7 @@
 #'    treatment groups observed more than 3 AEs
 #' - `filter = n_2 > 2`: keep rows where the `"Xanomeline High Dose"` treatment group observed more than 2 AEs
 #'
-#' @return A `gtsummary` of the same class as `x`.
+#' @return a gtsummary table of the same class as `x`.
 #'
 #' @seealso [sort_hierarchical()]
 #'
@@ -69,7 +69,7 @@
 #'     data = ADAE_subset,
 #'     variables = c(AEBODSYS, AEDECOD),
 #'     by = TRTA,
-#'     denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'     denominator = cards::ADSL,
 #'     id = USUBJID,
 #'     overall_row = TRUE
 #'   )
@@ -114,7 +114,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
   # check input
   check_not_missing(x)
 
-  cls <- if (is(x, "tbl_ard_hierarchical")) "tbl_ard_hierarchical" else "tbl_hierarchical"
+  cls <- class(x)[1]
   ard_args <- attributes(x$cards[[cls]])$args
   x_ard <- x$cards[[cls]]
 
@@ -173,9 +173,9 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
       dplyr::pull("pre_idx") |>
       unique()
 
-    # keep total N row
+    # keep total N, attribute rows
     idx_overall_filter <- x_ard_overall_col$pre_idx |>
-      intersect(c(idx_overall_filter, which(x_ard_overall_col$variable == "..ard_total_n..")))
+      intersect(c(idx_overall_filter, which(x_ard_overall_col$context %in% c("total_n", "attributes"))))
 
     # update x$cards$add_overall
     x$cards$add_overall <- x$cards$add_overall[idx_overall_filter, ]
