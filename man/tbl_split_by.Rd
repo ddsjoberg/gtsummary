@@ -125,7 +125,6 @@ trial |>
   ) |>
   modify_source_note("Some source note!") |>
   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
-  tail(n = 2) |>
-  dplyr::first() # Print only one but not last table for simplicity
+  dplyr::nth(n = 2) # Print only one but not last table for simplicity
 \dontshow{\}) # examplesIf}
 }
