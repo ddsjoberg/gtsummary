@@ -78,7 +78,7 @@ tbl_ae <-
   tbl_hierarchical(
     variables = c(AESOC, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID,
     overall_row = TRUE,
     label = list(..ard_hierarchical_overall.. = "Any Adverse Event")

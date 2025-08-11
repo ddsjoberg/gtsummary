@@ -7,7 +7,7 @@ tbl <- tbl_hierarchical(
   data = ADAE_subset,
   variables = c(SEX, RACE, AETERM),
   by = TRTA,
-  denominator = cards::ADSL |> mutate(TRTA = ARM),
+  denominator = cards::ADSL,
   id = USUBJID,
   overall_row = TRUE
 )
@@ -40,7 +40,7 @@ test_that("filter_hierarchical(keep_empty) works", {
     data = ADAE_subset,
     variables = c(SEX, RACE, AEBODSYS, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID
   )
 
@@ -174,7 +174,7 @@ test_that("filter_hierarchical() returns empty table when all rows filtered out"
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID
   )
 
@@ -191,7 +191,7 @@ test_that("filter_hierarchical() works with only one variable in x", {
     data = ADAE_subset,
     variables = AETERM,
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID,
     overall_row = TRUE
   )
@@ -230,7 +230,7 @@ test_that("filter_hierarchical() works when some variables not included in x", {
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID,
     include = c(SEX, AETERM),
     overall_row = TRUE
