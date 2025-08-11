@@ -122,7 +122,7 @@ Logical indicating whether to suppress any messaging. Default is <code>FALSE</co
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>gtsummary</code> of the same class as <code>x</code>.</p>
+    <p>a gtsummary table of the same class as <code>x</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -169,7 +169,7 @@ treatment groups observed more than 3 AEs</p></li>
 <span class="r-in"><span>    data <span class="op">=</span> <span class="va">ADAE_subset</span>,</span></span>
 <span class="r-in"><span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    by <span class="op">=</span> <span class="va">TRTA</span>,</span></span>
-<span class="r-in"><span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TRTA <span class="op">=</span> <span class="va">ARM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span></span>
 <span class="r-in"><span>    id <span class="op">=</span> <span class="va">USUBJID</span>,</span></span>
 <span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
