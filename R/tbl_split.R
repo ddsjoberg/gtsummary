@@ -56,7 +56,7 @@
 #' trial |>
 #'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   dplyr::tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 4 ----------------------------------
 #' # Both row and column splitting
@@ -91,8 +91,7 @@
 #'   ) |>
 #'   modify_source_note("Some source note!") |>
 #'   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
-#'   tail(n = 2) |>
-#'   dplyr::first() # Print only one but not last table for simplicity
+#'   dplyr::nth(n = 2) # Print only one but not last table for simplicity
 #'
 #' @name tbl_split_by
 NULL

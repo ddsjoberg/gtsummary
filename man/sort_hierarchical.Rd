@@ -53,6 +53,10 @@ sorted in descending order by sum (default).
 sorts tables in alphanumeric order.
 }
 }
+\note{
+When sorting a table that includes an overall column \code{\link[=add_overall]{add_overall()}} must be called to add the overall column
+\emph{before} \code{sort_hierarchical()} is called.
+}
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 theme_gtsummary_compact()
