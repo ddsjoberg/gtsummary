@@ -18,6 +18,7 @@
 #' @param ... Not used
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
+#' @inheritParams flextable::footnote
 #' @export
 #' @return A 'flextable' object
 #'
@@ -28,7 +29,7 @@
 #'   tbl_summary(by = trt) |>
 #'   add_p() |>
 #'   as_flex_table()
-as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) {
+as_flex_table <- function(x, include = everything(), return_calls = FALSE, ref_symbols = NULL, ...) {
   set_cli_abort_call()
   check_pkg_installed("flextable")
 
@@ -45,7 +46,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
   x <- .table_styling_expr_to_row_number(x)
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_styling_to_flextable_calls(x = x)
+  flextable_calls <- table_styling_to_flextable_calls(x = x, ref_symbols = ref_symbols)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
@@ -79,7 +80,8 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
 }
 
 # creating flextable calls from table_styling ----------------------------------
-table_styling_to_flextable_calls <- function(x, ...) {
+table_styling_to_flextable_calls <- function(x, ref_symbols = NULL, ...) {
+
   # adding id number for columns not hidden
   x$table_styling$header <-
     x$table_styling$header |>
@@ -229,6 +231,26 @@ table_styling_to_flextable_calls <- function(x, ...) {
       column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
     )
 
+  # footnote_body --------------------------------------------------------------
+  df_footnote_body <-
+    .number_footnotes(x, type = x$table_styling$footnote_body, start_with = nrow(df_footnote_header)) |>
+    tidyr::nest(df_location = c("column", "column_id", "row_numbers")) |>
+    dplyr::mutate(
+      row_numbers = map(.data$df_location, ~ getElement(.x, "row_numbers")),
+      column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
+    )
+
+  if (is.null(ref_symbols)) {
+
+    footnotes <- union(
+      df_footnote_header$footnote_id,
+      df_footnote_body$footnote_id
+    )
+
+    ref_symbols <- seq_along(footnotes)
+
+  }
+
   flextable_calls[["footnote_header"]] <-
     map(
       seq_len(nrow(df_footnote_header)),
@@ -238,18 +260,9 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_header$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
           part = "header",
-          ref_symbols = !!df_footnote_header$footnote_id[[.x]]
+          ref_symbols = !!ref_symbols[df_footnote_header$footnote_id[[.x]]]
         )
       )
-    )
-
-  # footnote_body --------------------------------------------------------------
-  df_footnote_body <-
-    .number_footnotes(x, type = x$table_styling$footnote_body, start_with = nrow(df_footnote_header)) |>
-    tidyr::nest(df_location = c("column", "column_id", "row_numbers")) |>
-    dplyr::mutate(
-      row_numbers = map(.data$df_location, ~ getElement(.x, "row_numbers")),
-      column_id = map(.data$df_location, ~ getElement(.x, "column_id"))
     )
 
   flextable_calls[["footnote_body"]] <-
@@ -261,7 +274,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_body$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_body$footnote[[.x]]),
           part = "body",
-          ref_symbols = !!df_footnote_body$footnote_id[[.x]]
+          ref_symbols = !!ref_symbols[df_footnote_body$footnote_id[[.x]]]
         )
       )
     )

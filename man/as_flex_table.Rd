@@ -4,7 +4,13 @@
 \alias{as_flex_table}
 \title{Convert gtsummary object to a flextable object}
 \usage{
-as_flex_table(x, include = everything(), return_calls = FALSE, ...)
+as_flex_table(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  ref_symbols = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -17,6 +23,9 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
+
+\item{ref_symbols}{character value, symbols to append that will be used
+as references to notes.}
 
 \item{...}{Not used}
 }
