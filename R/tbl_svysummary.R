@@ -278,6 +278,15 @@ tbl_svysummary <- function(data,
   # if a user only requests missingness stats, there are no "continuous" stats to calculate
   variables_continuous <- intersect(variables_continuous, names(statistic_continuous))
 
+  # any categorical `deff` statistics requested, when TRUE, deff is returned for all categorical statistics.
+  any_cat_deff <- c(variables_categorical, variables_dichotomous) |>
+    some(~"deff" %in% .extract_glue_elements(statistic[[.x]]))
+  cat_statistics <-
+    c(
+      c("n", "N", "p", "p.std.error", "n_unweighted", "N_unweighted", "p_unweighted"),
+      if(any_cat_deff) "deff" # styler: off
+    )
+
   cards <-
     cards::bind_ard(
       # attributes for summary columns
@@ -301,6 +310,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
+        statistic = everything() ~ cat_statistics,
         fmt_fun = digits[variables_categorical],
         denominator = percent,
         stat_label = ~ default_stat_labels()
@@ -310,6 +320,7 @@ tbl_svysummary <- function(data,
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
+        statistic = everything() ~ cat_statistics,
         fmt_fun = digits[variables_dichotomous],
         denominator = percent,
         value = value[variables_dichotomous],
