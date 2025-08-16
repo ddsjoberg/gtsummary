@@ -80,11 +80,11 @@ NULL
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
                           quiet, update) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
   text_interpret <- arg_match(text_interpret)
+  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # process inputs -------------------------------------------------------------
   dots <- dots_list(...)
