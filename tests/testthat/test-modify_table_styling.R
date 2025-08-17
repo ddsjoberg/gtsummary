@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_not(is_pkg_installed("broom.helpers"))
 
 # starting with checks of the deprecation
 test_that("modify_table_styling(undo_text_format=logical()) deprecation", {

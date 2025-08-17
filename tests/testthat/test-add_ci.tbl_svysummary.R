@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survey", "withr")) && is_pkg_installed("broom", ref = "cardx"))
+skip_if_not(is_pkg_installed(c("survey", "withr")) && is_pkg_installed("broom", ref = "cardx"))
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_ci(method) with no `by`", {

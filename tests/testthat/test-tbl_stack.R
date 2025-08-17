@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survival", "broom.helpers")))
+skip_if_not(is_pkg_installed(c("survival", "broom.helpers")))
 
 t1_summary <- trial |>
   dplyr::filter(trt == "Drug A") |>
