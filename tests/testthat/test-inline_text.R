@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "cardx", "broom.helpers")))
+skip_if_not(is_pkg_installed(c("survival", "broom.helpers")))
 
 # inline_text.tbl_summary tests ------------------------------------------------
 test_inline1 <- trial |> tbl_summary()

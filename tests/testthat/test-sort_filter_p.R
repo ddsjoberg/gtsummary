@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom")))
+skip_if_not(is_pkg_installed("broom"))
 
 test_that("sort_p() works", {
   # check the variables sort to the correct order

@@ -46,7 +46,7 @@
 #'   modify_table_body(~.x |> dplyr::arrange(row_type == "glance_statistic"))
 #' ````
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 #'
 #' # Example 1 ----------------------------------

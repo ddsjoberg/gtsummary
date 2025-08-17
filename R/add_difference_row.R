@@ -51,7 +51,7 @@ add_difference_row <- function(x, ...) {
 #' See Example 2.
 #'
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(
