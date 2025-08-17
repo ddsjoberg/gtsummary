@@ -54,7 +54,7 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # create summary table
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>

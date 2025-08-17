@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+skip_if_not(is_pkg_installed("broom.helpers"))
 
 test_that("modify_bold/italic()/remove_bold/italic()", {
   expect_silent(
