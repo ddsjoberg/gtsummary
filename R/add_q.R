@@ -15,7 +15,7 @@
 #'
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom.helpers", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom.helpers", "parameters"))
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-
 #'   trial |>

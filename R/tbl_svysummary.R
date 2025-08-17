@@ -72,7 +72,7 @@
 #' @return A `'tbl_svysummary'` object
 #'
 #' @author Joseph Larmarange
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey")
 #' # Example 1 ----------------------------------
 #' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
 #'   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
@@ -100,7 +100,7 @@ tbl_svysummary <- function(data,
                            percent = c("column", "row", "cell"),
                            include = everything()) {
   set_cli_abort_call()
-  check_pkg_installed(c("cardx", "survey"))
+  check_pkg_installed("survey")
 
   # data argument checks -------------------------------------------------------
   check_not_missing(data)

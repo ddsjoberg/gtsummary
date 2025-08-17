@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom", "smd", "withr")))
+skip_if_not(is_pkg_installed(c("broom", "smd", "withr")))
 
 test_that("separate_p_footnotes()", {
   withr::local_options(list(width = 130))

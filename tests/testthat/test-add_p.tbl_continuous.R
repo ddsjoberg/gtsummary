@@ -1,5 +1,4 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx"))
 
 test_that("add_p.tbl_continuous() works", {
   expect_silent(
