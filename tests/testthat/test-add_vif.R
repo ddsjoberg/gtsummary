@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("car", "broom.helpers", "cardx")))
+skip_if_not(is_pkg_installed(c("car", "broom.helpers")))
 
 test_that("add_vif(x)", {
   expect_snapshot(
