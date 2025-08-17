@@ -11,7 +11,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' lm(age ~ grade + marker, trial) |>
 #'   tbl_regression() |>
@@ -23,7 +23,7 @@
 #'   add_vif(c("aGVIF", "df"))
 add_vif <- function(x, statistic = NULL, estimate_fun = label_style_sigfig(digits = 2)) {
   set_cli_abort_call()
-  check_pkg_installed(c("car", "cardx"))
+  check_pkg_installed("car")
 
   # check inputs ---------------------------------------------------------------
   check_not_missing(x)
