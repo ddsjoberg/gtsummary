@@ -11,7 +11,7 @@
 #' @export
 #' @return 'tbl_continuous' object
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_continuous(variable = age, by = trt, include = grade) |>

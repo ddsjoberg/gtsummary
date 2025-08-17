@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+skip_if_not(is_pkg_installed("broom.helpers"))
 
 # add_glance_source_note() -----------------------------------------------------
 test_that("add_glance_source_note(x)", {
