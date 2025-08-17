@@ -31,7 +31,7 @@
 #' @export
 #' @name add_ci.tbl_svysummary
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survey")) && gtsummary:::is_pkg_installed("broom",  ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey") && gtsummary:::is_pkg_installed("broom",  ref = "cardx")
 #' data(api, package = "survey")
 #' survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
 #'   tbl_svysummary(
