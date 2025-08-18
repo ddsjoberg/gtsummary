@@ -301,12 +301,12 @@ tbl_svysummary <- function(data,
                          stat_label = ~ default_stat_labels()),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
-        cardx::ard_categorical(data,
+        cardx::ard_tabulate(data,
                                variables = all_of(by),
                                stat_label = ~ default_stat_labels())
       },
       # tabulate categorical summaries
-      cardx::ard_categorical(
+      cardx::ard_tabulate(
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
@@ -316,7 +316,7 @@ tbl_svysummary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cardx::ard_dichotomous(
+      cardx::ard_tabulate_value(
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
@@ -327,7 +327,7 @@ tbl_svysummary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cardx::ard_continuous(
+      cardx::ard_summary(
         data,
         by = all_of(by),
         variables = all_of(variables_continuous),

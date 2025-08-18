@@ -60,8 +60,8 @@
 #'
 #' ard_stack(
 #'   data = ADSL,
-#'   ard_categorical(variables = "AGEGR1"),
-#'   ard_continuous(variables = "AGE"),
+#'   ard_tabulate(variables = "AGEGR1"),
+#'   ard_summary(variables = "AGE"),
 #'   .attributes = TRUE,
 #'   .missing = TRUE,
 #'   .total_n = TRUE
@@ -71,8 +71,8 @@
 #' ard_stack(
 #'   data = ADSL,
 #'   .by = ARM,
-#'   ard_categorical(variables = "AGEGR1"),
-#'   ard_continuous(variables = "AGE"),
+#'   ard_tabulate(variables = "AGEGR1"),
+#'   ard_summary(variables = "AGE"),
 #'   .attributes = TRUE,
 #'   .missing = TRUE,
 #'   .total_n = TRUE
@@ -82,8 +82,8 @@
 #' ard_stack(
 #'   data = ADSL,
 #'   .by = ARM,
-#'   ard_categorical(variables = "AGEGR1"),
-#'   ard_continuous(variables = "AGE"),
+#'   ard_tabulate(variables = "AGEGR1"),
+#'   ard_summary(variables = "AGE"),
 #'   .attributes = TRUE,
 #'   .missing = TRUE,
 #'   .total_n = TRUE,
@@ -185,6 +185,16 @@ tbl_ard_summary <- function(cards,
   # temporary type so we can evaluate `statistic`, then we'll update it
   default_types <- dplyr::select(cards, "variable", "context") |>
     dplyr::distinct() |>
+    dplyr::mutate(
+      context =
+        dplyr::case_match(
+          .data$context,
+          "summary" ~ "continuous",
+          "tabulate" ~ "categorical",
+          "tabulate_value" ~ "dichotomous",
+          .default = .data$context
+        )
+    ) |>
     dplyr::filter(
       .data$context %in% c("continuous", "categorical", "dichotomous"),
       .data$variable %in% .env$include

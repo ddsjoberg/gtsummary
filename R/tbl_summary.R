@@ -52,7 +52,7 @@
 #'
 #'   In rarer cases, you may need to define/override the typical denominators.
 #'   In these cases, pass an integer or a data frame. Refer to the
-#'   [`?cards::ard_categorical(denominator)`][cards::ard_categorical] help file for details.
+#'   [`?cards::ard_tabulate(denominator)`][cards::ard_tabulate] help file for details.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`.
 #'
@@ -337,7 +337,7 @@ tbl_summary <- function(data,
   cards <-
     cards::bind_ard(
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cards::ard_tabulate(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
@@ -346,7 +346,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cards::ard_tabulate_value(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
@@ -356,7 +356,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_continuous(),
@@ -379,7 +379,7 @@ tbl_summary <- function(data,
       # tabulate by variable for header stats
       case_switch(
         !is_empty(by) ~
-          cards::ard_categorical(
+          cards::ard_tabulate(
             data,
             variables = all_of(by),
             stat_label = ~ default_stat_labels()

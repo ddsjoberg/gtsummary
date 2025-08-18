@@ -5,8 +5,8 @@ test_that("tbl_ard_wide_summary(cards)", {
   expect_snapshot(
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
-      cards::ard_categorical(variables = grade),
+      cards::ard_tabulate_value(variables = response),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE
     ) |>
@@ -18,8 +18,8 @@ test_that("tbl_ard_wide_summary(cards)", {
   expect_snapshot(
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
-      cards::ard_categorical(variables = grade)
+      cards::ard_tabulate_value(variables = response),
+      cards::ard_tabulate(variables = grade)
     ) |>
       tbl_ard_wide_summary() |>
       as.data.frame()
@@ -30,7 +30,7 @@ test_that("tbl_ard_wide_summary(cards) messaging", {
   # error when there are grouping variables
   expect_snapshot(
     error = TRUE,
-    cards::ard_continuous(trial, by = trt, variables = age) |>
+    cards::ard_summary(trial, by = trt, variables = age) |>
       tbl_ard_wide_summary()
   )
 })
@@ -42,7 +42,7 @@ test_that("tbl_ard_wide_summary(type) messaging", {
     error = TRUE,
     cards::ard_stack(
       trial,
-      cards::ard_continuous(variables = age),
+      cards::ard_summary(variables = age),
       .missing = TRUE,
       .attributes = TRUE
     ) |>
@@ -53,8 +53,8 @@ test_that("tbl_ard_wide_summary(type) messaging", {
     error = TRUE,
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
-      cards::ard_continuous(variables = age),
+      cards::ard_tabulate_value(variables = response),
+      cards::ard_summary(variables = age),
       .missing = TRUE,
       .attributes = TRUE
     ) |>
@@ -66,7 +66,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       trial,
-      cards::ard_continuous(variables = age),
+      cards::ard_summary(variables = age),
       .missing = TRUE,
       .attributes = TRUE,
       .total_n = TRUE
@@ -81,7 +81,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       trial,
-      cards::ard_continuous(variables = age),
+      cards::ard_summary(variables = age),
       .attributes = FALSE
     ) |>
       tbl_ard_wide_summary(label = age ~ "Updated AGE!") |>

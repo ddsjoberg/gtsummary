@@ -153,7 +153,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
           stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
           stats::quantile(data[[variable]], probs = c(0.05), na.rm = TRUE),
         inherits(data, "survey.design") ~
-          cardx::ard_continuous(data, variables = all_of(variable), statistic = ~ c("p5", "p95")) |>
+          cardx::ard_summary(data, variables = all_of(variable), statistic = ~ c("p5", "p95")) |>
           dplyr::pull("stat") |>
           reduce(\(.x, .y) .y - .x) %>%
           {ifelse(is_empty(.), Inf, .)} # styler: off
