@@ -134,7 +134,7 @@ tbl_wide_summary <- function(data,
                          stat_label = ~ default_stat_labels()
       ),
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cards::ard_tabulate(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_categorical(FALSE),
         fmt_fun = digits,

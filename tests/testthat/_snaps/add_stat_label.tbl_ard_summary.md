@@ -41,7 +41,7 @@
 
     Code
       as.data.frame(add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE, .total_n = TRUE), type = all_continuous() ~
         "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
         "{min} - {max}")), label = AGE ~ c("Median (IQR)", "Range")))
@@ -58,7 +58,7 @@
 # add_stat_label(label) messaging
 
     Code
-      add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
+      add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_tabulate(
         variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE), type = all_continuous() ~ "continuous2",
       statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}")),
@@ -70,7 +70,7 @@
 ---
 
     Code
-      add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
+      add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_tabulate(
         variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE), type = all_continuous() ~ "continuous2",
       statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}")),
@@ -83,7 +83,7 @@
 
     Code
       invisible(add_stat_label(add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE, .total_n = TRUE), type = all_continuous() ~
         "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
         "{min} - {max}")))))

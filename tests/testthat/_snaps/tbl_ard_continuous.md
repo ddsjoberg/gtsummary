@@ -14,7 +14,7 @@
 
     Code
       as.data.frame(tbl_ard_continuous(cards::bind_ard(cards::ard_summary(trial, by = c(
-        trt, grade), variables = age), cards::ard_categorical(trial, trt)), variable = "age",
+        trt, grade), variables = age), cards::ard_tabulate(trial, trt)), variable = "age",
       include = "grade", by = "trt"))
     Output
         **Characteristic**        **Drug A**        **Drug B**

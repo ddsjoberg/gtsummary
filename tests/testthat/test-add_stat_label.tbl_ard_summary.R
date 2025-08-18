@@ -3,7 +3,7 @@ skip_if_not(is_pkg_installed("survey"))
 
 tbl_ard <- cards::ard_stack(
   data = cards::ADSL |> dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))),
-  cards::ard_categorical(variables = "AGEGR1"),
+  cards::ard_tabulate(variables = "AGEGR1"),
   cards::ard_summary(variables = "AGE"),
   .attributes = TRUE,
   .missing = TRUE,
@@ -40,7 +40,7 @@ test_that("add_stat_label(label) standard use", {
   expect_snapshot(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
@@ -60,7 +60,7 @@ test_that("add_stat_label(label) messaging", {
     error = TRUE,
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
@@ -77,7 +77,7 @@ test_that("add_stat_label(label) messaging", {
     error = TRUE,
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
@@ -95,7 +95,7 @@ test_that("add_stat_label() messaging", {
   expect_snapshot(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,

@@ -6,7 +6,7 @@ test_that("tbl_ard_wide_summary(cards)", {
     cards::ard_stack(
       trial,
       cards::ard_dichotomous(variables = response),
-      cards::ard_categorical(variables = grade),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE
     ) |>
@@ -19,7 +19,7 @@ test_that("tbl_ard_wide_summary(cards)", {
     cards::ard_stack(
       trial,
       cards::ard_dichotomous(variables = response),
-      cards::ard_categorical(variables = grade)
+      cards::ard_tabulate(variables = grade)
     ) |>
       tbl_ard_wide_summary() |>
       as.data.frame()

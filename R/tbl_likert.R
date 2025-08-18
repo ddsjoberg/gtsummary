@@ -137,7 +137,7 @@ tbl_likert <- function(data,
         fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
-      cards::ard_categorical(
+      cards::ard_tabulate(
         data = data,
         variables = all_of(include),
         fmt_fun = digits,

@@ -147,7 +147,7 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
   expect_false(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE

@@ -10,7 +10,7 @@ test_that("tbl_ard_continuous(cards)", {
   expect_snapshot(
     cards::bind_ard(
       cards::ard_summary(trial, by = c(trt, grade), variables = age),
-      cards::ard_categorical(trial, trt)
+      cards::ard_tabulate(trial, trt)
     ) |>
       tbl_ard_continuous(variable = "age", include = "grade", by = "trt") |>
       as.data.frame()

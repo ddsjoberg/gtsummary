@@ -2,7 +2,7 @@
 
     Code
       as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(
-        variables = response), cards::ard_categorical(variables = grade), .missing = TRUE,
+        variables = response), cards::ard_tabulate(variables = grade), .missing = TRUE,
       .attributes = TRUE)))
     Output
         **Characteristic** **n** **%**
@@ -16,7 +16,7 @@
 
     Code
       as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(
-        variables = response), cards::ard_categorical(variables = grade))))
+        variables = response), cards::ard_tabulate(variables = grade))))
     Output
         **Characteristic** **n** **%**
       1           response    61 31.6%

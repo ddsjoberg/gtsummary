@@ -49,7 +49,7 @@ tbl <-
     trial,
     .by = trt,
     cards::ard_summary(variables = age),
-    cards::ard_categorical(variables = grade),
+    cards::ard_tabulate(variables = grade),
     .missing = TRUE,
     .attributes = TRUE,
     .total_n = TRUE
@@ -61,7 +61,7 @@ ard_overall <-
   cards::ard_stack(
     trial,
     cards::ard_summary(variables = age),
-    cards::ard_categorical(variables = grade),
+    cards::ard_tabulate(variables = grade),
     .missing = TRUE,
     .attributes = TRUE,
     .total_n = TRUE
