@@ -58,7 +58,7 @@ library(cards)
 
 ard_stack(
   trial,
-  ard_continuous(variables = age),
+  ard_summary(variables = age),
   .missing = TRUE,
   .attributes = TRUE,
   .total_n = TRUE
@@ -67,8 +67,8 @@ ard_stack(
 
 ard_stack(
   trial,
-  ard_dichotomous(variables = response),
-  ard_categorical(variables = grade),
+  ard_tabulate_value(variables = response),
+  ard_tabulate(variables = grade),
   .missing = TRUE,
   .attributes = TRUE,
   .total_n = TRUE

@@ -196,7 +196,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
       tbls,
       FUN = \(x) {
         x[["table_styling"]][["header"]] |>
-          dplyr::filter(!hide) |>
+          dplyr::filter(!.data$hide) |>
           dplyr::select("column", "label")
       }
     ) |>

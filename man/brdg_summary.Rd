@@ -92,9 +92,9 @@ library(cards)
 cards <-
   ard_stack(
     mtcars,
-    ard_continuous(variables = c("mpg", "hp")),
-    ard_categorical(variables = "cyl"),
-    ard_dichotomous(variables = "am"),
+    ard_summary(variables = c("mpg", "hp")),
+    ard_tabulate(variables = "cyl"),
+    ard_tabulate_value(variables = "am"),
     .missing = TRUE,
     .attributes = TRUE
   ) |>

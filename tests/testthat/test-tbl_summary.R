@@ -753,9 +753,9 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
   expect_equal(
     gather_ard(tbl) |>
       getElement("tbl_summary") |>
-      dplyr::filter(variable == "DCREASCD", context == "categorical") |>
+      dplyr::filter(variable == "DCREASCD", context == "tabulate") |>
       dplyr::select(-gts_column, -fmt_fun),
-    cards::ard_categorical(
+    cards::ard_tabulate(
       cards::ADSL |>
         dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)),
       variables = "DCREASCD",

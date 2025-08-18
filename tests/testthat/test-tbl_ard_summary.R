@@ -6,8 +6,8 @@ test_that("tbl_ard_summary() works", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -18,8 +18,8 @@ test_that("tbl_ard_summary() works", {
   expect_snapshot(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
       .total_n = TRUE
@@ -36,8 +36,8 @@ test_that("tbl_ard_summary(cards)", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       .attributes = FALSE,
       .missing = TRUE
     ) |>
@@ -53,7 +53,7 @@ test_that("tbl_ard_summary(cards)", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = FALSE,
       .missing = FALSE
     ) |>
@@ -61,9 +61,9 @@ test_that("tbl_ard_summary(cards)", {
       as.data.frame()
   )
 
-  # no error when no tablulation of the 'by' data is passed
+  # no error when no tabulation of the 'by' data is passed
   expect_snapshot(
-    cards::ard_continuous(trial, by = trt, variables = age) |>
+    cards::ard_summary(trial, by = trt, variables = age) |>
       tbl_ard_summary(by = trt) |>
       as.data.frame()
   )
@@ -75,7 +75,7 @@ test_that("tbl_ard_summary(cards) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = c(ARM, AGEGR1),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -88,7 +88,7 @@ test_that("tbl_ard_summary(cards) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = FALSE,
       .missing = FALSE
     ) |>
@@ -100,8 +100,8 @@ test_that("tbl_ard_summary(by) messaging", {
   expect_snapshot(
     error = TRUE,
     cards::bind_ard(
-      cards::ard_continuous(trial, by = trt, variables = age),
-      cards::ard_continuous(trial, by = grade, variables = age)
+      cards::ard_summary(trial, by = trt, variables = age),
+      cards::ard_summary(trial, by = grade, variables = age)
     ) |>
       tbl_ard_summary(by = trt)
   )
@@ -112,7 +112,7 @@ test_that("tbl_ard_summary(by) messaging", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -124,8 +124,8 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE
     ) |>
       tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
@@ -138,8 +138,8 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = FALSE
     ) |>
       tbl_ard_summary(label = AGE ~ "Updated AGE!") |>
@@ -154,8 +154,8 @@ test_that("tbl_ard_summary(statistic) argument works", {
   ard <-
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
       .total_n = TRUE
@@ -186,7 +186,7 @@ test_that("tbl_ard_summary(type) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -198,7 +198,7 @@ test_that("tbl_ard_summary(type) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -212,7 +212,7 @@ test_that("tbl_ard_summary(statistic) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -224,7 +224,7 @@ test_that("tbl_ard_summary(statistic) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -239,8 +239,8 @@ test_that("tbl_ard_summary(overall)", {
       cards::ard_stack(
         trial,
         .by = trt,
-        cards::ard_continuous(variables = age),
-        cards::ard_categorical(variables = grade),
+        cards::ard_summary(variables = age),
+        cards::ard_tabulate(variables = grade),
         .missing = TRUE,
         .attributes = TRUE,
         .total_n = TRUE,
@@ -257,8 +257,8 @@ test_that("tbl_ard_summary(overall)", {
     cards::ard_stack(
       trial,
       .by = trt,
-      cards::ard_continuous(variables = age),
-      cards::ard_categorical(variables = grade),
+      cards::ard_summary(variables = age),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE,
       .total_n = TRUE
@@ -272,8 +272,8 @@ test_that("tbl_ard_summary(overall)", {
       cards::tidy_ard_row_order(),
     cards::ard_stack(
       trial,
-      cards::ard_continuous(variables = age),
-      cards::ard_categorical(variables = grade),
+      cards::ard_summary(variables = age),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE,
       .total_n = TRUE
@@ -326,8 +326,8 @@ test_that("tbl_ard_summary() non-standard ARDs (ie not 'continuous', 'categorica
 test_that("tbl_ard_summary(by) mixed-type messaging", {
   expect_message(
     cards::bind_ard(
-      cards::ard_continuous(trial, variables = age, by = trt),
-      cards::ard_continuous(trial |> dplyr::mutate(trt = factor(trt)), variables = marker, by = trt)
+      cards::ard_summary(trial, variables = age, by = trt),
+      cards::ard_summary(trial |> dplyr::mutate(trt = factor(trt)), variables = marker, by = trt)
     ) |>
       tbl_ard_summary(by = trt),
     "Levels of the.*variable do not have a consistent S3 class."
