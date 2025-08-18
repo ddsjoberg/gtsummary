@@ -121,7 +121,7 @@ This table has variables: a continuous variable summary for AGE, a categorical v
 **Data ➡ ARD**
 
 The {cards} package can be utilized to create the ARD from a data frame.
-The package includes functions `ard_continuous()` for continuous summaries, `ard_categorical()` for categorical summaries, and `ard_dichotomous()` for dichotomous variables (and more).
+The package includes functions `ard_summary()` for continuous summaries, `ard_tabulate()` for categorical summaries, and `ard_tabulate_value()` for dichotomous variables (and more).
 
 The package also exports a helper function, `ard_stack()` to simultaneously build these summaries along with optional ancillary results for a nicer display.
 
@@ -133,8 +133,8 @@ ard_demo <-
     # stratify all results by ARM
     .by = ARM, 
     # these are the results that will be calculated
-    ard_continuous(variables = "AGE"),
-    ard_categorical(variables = c("AGEGR1","SEX")),
+    ard_summary(variables = "AGE"),
+    ard_tabulate(variables = c("AGEGR1","SEX")),
     # optional arguments for additional results
     .attributes = TRUE,
     .total_n = TRUE,
@@ -208,9 +208,9 @@ ard_outcomes <-
 
 If you inspect the ARDs, you'll see that these analytic results have a similar structure to the simple ARDs we extracted from the `tbl_summary()` results above.
 
-- The `cardx::ard_survival_survfit()` ARD looks like the `ard_categorical()` result.
-- The `cardx::ard_stats_t_test_onesample()` ARD looks like the `ard_continuous()` result.
-- The `cardx::ard_categorical_ci()` ARD looks like the `ard_dichotomous()` result.
+- The `cardx::ard_survival_survfit()` ARD looks like the `ard_tabulate()` result.
+- The `cardx::ard_stats_t_test_onesample()` ARD looks like the `ard_summary()` result.
+- The `cardx::ard_categorical_ci()` ARD looks like the `ard_tabulate_value()` result.
 
 With the created ARD, we can now build a summary table.
 

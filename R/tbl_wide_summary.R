@@ -142,7 +142,7 @@ tbl_wide_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cards::ard_tabulate_value(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_dichotomous(),
         fmt_fun = digits,
