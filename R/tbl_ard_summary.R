@@ -185,6 +185,16 @@ tbl_ard_summary <- function(cards,
   # temporary type so we can evaluate `statistic`, then we'll update it
   default_types <- dplyr::select(cards, "variable", "context") |>
     dplyr::distinct() |>
+    dplyr::mutate(
+      context =
+        dplyr::case_match(
+          .data$context,
+          "summary" ~ "continuous",
+          "tabulate" ~ "categorical",
+          "tabulate_value" ~ "dichotomous",
+          .default = .data$context
+        )
+    ) |>
     dplyr::filter(
       .data$context %in% c("continuous", "categorical", "dichotomous"),
       .data$variable %in% .env$include
