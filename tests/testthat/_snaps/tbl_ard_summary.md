@@ -2,7 +2,7 @@
 
     Code
       as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
+      cards::ard_tabulate(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), by = ARM))
     Output
         **Characteristic**       **Placebo** **Xanomeline High Dose**
@@ -21,7 +21,7 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
+      as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_tabulate(
         variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE)))
     Output
@@ -135,7 +135,7 @@
 ---
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_categorical(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_tabulate(
         variables = "AGEGR1"), .attributes = TRUE, .missing = TRUE), by = ARM, type = list(
         AGEGR1 = "continuous"))
     Condition

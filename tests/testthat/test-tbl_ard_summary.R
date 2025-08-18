@@ -6,7 +6,7 @@ test_that("tbl_ard_summary() works", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
@@ -18,7 +18,7 @@ test_that("tbl_ard_summary() works", {
   expect_snapshot(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
@@ -37,7 +37,7 @@ test_that("tbl_ard_summary(cards)", {
       data = cards::ADSL,
       .by = ARM,
       cards::ard_summary(variables = "AGE"),
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       .attributes = FALSE,
       .missing = TRUE
     ) |>
@@ -124,7 +124,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE
     ) |>
@@ -138,7 +138,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = FALSE
     ) |>
@@ -154,7 +154,7 @@ test_that("tbl_ard_summary(statistic) argument works", {
   ard <-
     cards::ard_stack(
       data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE,
@@ -198,7 +198,7 @@ test_that("tbl_ard_summary(type) error messages", {
     cards::ard_stack(
       data = cards::ADSL,
       .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"),
+      cards::ard_tabulate(variables = "AGEGR1"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -240,7 +240,7 @@ test_that("tbl_ard_summary(overall)", {
         trial,
         .by = trt,
         cards::ard_summary(variables = age),
-        cards::ard_categorical(variables = grade),
+        cards::ard_tabulate(variables = grade),
         .missing = TRUE,
         .attributes = TRUE,
         .total_n = TRUE,
@@ -258,7 +258,7 @@ test_that("tbl_ard_summary(overall)", {
       trial,
       .by = trt,
       cards::ard_summary(variables = age),
-      cards::ard_categorical(variables = grade),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE,
       .total_n = TRUE
@@ -273,7 +273,7 @@ test_that("tbl_ard_summary(overall)", {
     cards::ard_stack(
       trial,
       cards::ard_summary(variables = age),
-      cards::ard_categorical(variables = grade),
+      cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE,
       .total_n = TRUE

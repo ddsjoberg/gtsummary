@@ -88,7 +88,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
       seq_along(strata),
       \(i) {
         data |>
-        cards::ard_categorical(variables = all_of(strata[i]), strata = any_of(strata[seq_len(i - 1L)])) |>
+        cards::ard_tabulate(variables = all_of(strata[i]), strata = any_of(strata[seq_len(i - 1L)])) |>
           # remove any unobserved levels/combination of levels
           dplyr::filter(
             .by = c(cards::all_ard_groups(), cards::all_ard_variables()),

@@ -163,7 +163,7 @@ tbl_continuous <- function(data,
     dplyr::bind_rows(
       cards,
       cards::ard_attributes(data, variables = all_of(c(variable, by, include)), label = label),
-      cards::ard_categorical(data, variables = any_of(by), stat_label = ~ default_stat_labels()),
+      cards::ard_tabulate(data, variables = any_of(by), stat_label = ~ default_stat_labels()),
       cards::ard_total_n(data)
     )
 
