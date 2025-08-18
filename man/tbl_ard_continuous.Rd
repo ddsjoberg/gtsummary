@@ -53,7 +53,7 @@ library(cards)
 
 # Example 1 ----------------------------------
 # the primary ARD with the results
-ard_continuous(
+ard_summary(
   # the order variables are passed is important for the `by` variable.
   # 'trt' is the column stratifying variable and needs to be listed first.
   trial, by = c(trt, grade), variables = age
@@ -70,7 +70,7 @@ ard_continuous(
 
 # Example 2 ----------------------------------
 # the primary ARD with the results
-ard_continuous(trial, by = grade, variables = age) |>
+ard_summary(trial, by = grade, variables = age) |>
   # adding OPTIONAL information about the summary variables
   bind_ard(
     # add missing and attributes ARD

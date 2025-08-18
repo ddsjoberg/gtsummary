@@ -316,7 +316,7 @@ tbl_svysummary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cardx::ard_continuous(
+      cardx::ard_summary(
         data,
         by = all_of(by),
         variables = all_of(variables_continuous),

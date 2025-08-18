@@ -18,7 +18,7 @@
 #'
 #' ard_stack(
 #'   trial,
-#'   ard_continuous(variables = age),
+#'   ard_summary(variables = age),
 #'   .missing = TRUE,
 #'   .attributes = TRUE,
 #'   .total_n = TRUE
@@ -70,6 +70,16 @@ tbl_ard_wide_summary <- function(cards,
     data[include],
     type =
       cards[c("variable", "context")] |>
+      dplyr::mutate(
+        context =
+          dplyr::case_match(
+            .data$context,
+            "summary" ~ "continuous",
+            "tabulate" ~ "categorical",
+            "tabulate_value" ~ "dichotomous",
+            .default = .data$context
+          )
+      ) |>
       dplyr::filter(.data$context %in% c("continuous", "categorical", "dichotomous")) |>
       unique() |>
       deframe() |>

@@ -136,7 +136,7 @@ tbl_continuous <- function(data,
           )
 
         # calculate the continuous summary stats
-        cards::ard_continuous(
+        cards::ard_summary(
           data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
           variables = all_of(variable),
           by = any_of(c(by, cat_variable)),

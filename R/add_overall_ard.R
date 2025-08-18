@@ -27,7 +27,7 @@
 #'   cards::ard_stack(
 #'     trial,
 #'     .by = trt,
-#'     cards::ard_continuous(variables = age),
+#'     cards::ard_summary(variables = age),
 #'     cards::ard_categorical(variables = grade),
 #'     .missing = TRUE,
 #'     .attributes = TRUE,
@@ -39,7 +39,7 @@
 #' ard_overall <-
 #'   cards::ard_stack(
 #'     trial,
-#'     cards::ard_continuous(variables = age),
+#'     cards::ard_summary(variables = age),
 #'     cards::ard_categorical(variables = grade),
 #'     .missing = TRUE,
 #'     .attributes = TRUE,

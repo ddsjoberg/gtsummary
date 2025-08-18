@@ -44,7 +44,7 @@
 #' cards <-
 #'   ard_stack(
 #'     mtcars,
-#'     ard_continuous(variables = c("mpg", "hp")),
+#'     ard_summary(variables = c("mpg", "hp")),
 #'     ard_categorical(variables = "cyl"),
 #'     ard_dichotomous(variables = "am"),
 #'     .missing = TRUE,

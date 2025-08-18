@@ -6,7 +6,7 @@ test_that("add_overall.tbl_ard_summary() works", {
     cards::ard_stack(
       mtcars,
       .by = am,
-      cards::ard_continuous(variables = mpg),
+      cards::ard_summary(variables = mpg),
       cards::ard_categorical(variables = cyl),
       .missing = TRUE,
       .attributes = TRUE,
@@ -18,7 +18,7 @@ test_that("add_overall.tbl_ard_summary() works", {
   ard_overall <-
     cards::ard_stack(
       mtcars,
-      cards::ard_continuous(variables = mpg),
+      cards::ard_summary(variables = mpg),
       cards::ard_categorical(variables = cyl),
       .missing = TRUE,
       .attributes = TRUE,
