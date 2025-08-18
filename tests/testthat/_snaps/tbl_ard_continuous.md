@@ -47,8 +47,8 @@
 ---
 
     Code
-      tbl_ard_continuous(cards::bind_ard(cards::ard_continuous(trial, by = c(trt,
-        grade), variables = age)), variable = "age", include = "trt", by = "grade")
+      tbl_ard_continuous(cards::bind_ard(cards::ard_summary(trial, by = c(trt, grade),
+      variables = age)), variable = "age", include = "trt", by = "grade")
     Condition
       Error in `tbl_ard_continuous()`:
       ! All variables specified in argument `include` must appear in the column `cards$group2`.
