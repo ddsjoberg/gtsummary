@@ -54,7 +54,7 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # create summary table
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
@@ -80,11 +80,11 @@ NULL
 modify_header <- function(x, ..., text_interpret = c("md", "html"),
                           quiet, update) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
   text_interpret <- arg_match(text_interpret)
+  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # process inputs -------------------------------------------------------------
   dots <- dots_list(...)

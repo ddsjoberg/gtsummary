@@ -31,7 +31,6 @@ gather_ard <- function(x) {
     x$cards$tbl_uvregression <- map(x[["tbls"]], ~gather_ard(.x)[[1]])
   }
   if (inherits(x, "tbl_regression")) {
-    check_pkg_installed("cardx")
     x$cards$tbl_regression <- cardx::ard_regression(x$inputs$x)
   }
 

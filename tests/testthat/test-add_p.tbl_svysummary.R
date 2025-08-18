@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survey", "cardx")))
+skip_if_not(is_pkg_installed("survey"))
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)

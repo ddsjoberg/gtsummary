@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_not(is_pkg_installed("broom.helpers"))
 
 # first, testing deprecation
 test_that("modify_footnote(update,quiet) are deprecated", {
@@ -157,7 +157,7 @@ test_that("modify_footnote() with tbl_svysummary()", {
 })
 
 test_that("modify_footnote() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx")))
+  skip_if_not(is_pkg_installed("survey"))
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>

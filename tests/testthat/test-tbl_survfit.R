@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "cardx", "broom")))
+skip_if_not(is_pkg_installed(c("survival", "broom")))
 
 test_that("tbl_survfit(times) works", {
   expect_silent(
