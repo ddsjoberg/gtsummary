@@ -316,7 +316,7 @@ tbl_svysummary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cardx::ard_dichotomous(
+      cardx::ard_tabulate_value(
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),

@@ -1,7 +1,7 @@
 # tbl_ard_wide_summary(cards)
 
     Code
-      as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(
+      as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_tabulate_value(
         variables = response), cards::ard_tabulate(variables = grade), .missing = TRUE,
       .attributes = TRUE)))
     Output
@@ -15,7 +15,7 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(
+      as.data.frame(tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_tabulate_value(
         variables = response), cards::ard_tabulate(variables = grade))))
     Output
         **Characteristic** **n** **%**
@@ -45,8 +45,9 @@
 ---
 
     Code
-      tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(variables = response),
-      cards::ard_summary(variables = age), .missing = TRUE, .attributes = TRUE))
+      tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_tabulate_value(
+        variables = response), cards::ard_summary(variables = age), .missing = TRUE,
+      .attributes = TRUE))
     Condition
       Error in `tbl_ard_wide_summary()`:
       ! The summary types must all be "continuous" or all be "categorical" and "dichotomous".

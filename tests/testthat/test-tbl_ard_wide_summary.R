@@ -5,7 +5,7 @@ test_that("tbl_ard_wide_summary(cards)", {
   expect_snapshot(
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
+      cards::ard_tabulate_value(variables = response),
       cards::ard_tabulate(variables = grade),
       .missing = TRUE,
       .attributes = TRUE
@@ -18,7 +18,7 @@ test_that("tbl_ard_wide_summary(cards)", {
   expect_snapshot(
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
+      cards::ard_tabulate_value(variables = response),
       cards::ard_tabulate(variables = grade)
     ) |>
       tbl_ard_wide_summary() |>
@@ -53,7 +53,7 @@ test_that("tbl_ard_wide_summary(type) messaging", {
     error = TRUE,
     cards::ard_stack(
       trial,
-      cards::ard_dichotomous(variables = response),
+      cards::ard_tabulate_value(variables = response),
       cards::ard_summary(variables = age),
       .missing = TRUE,
       .attributes = TRUE
