@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1331,10 +1331,10 @@ Guidelines. This table has variables: a continuous variable summary for
 AGE, a categorical variable summaries for AGEGR1 and SEX.</p>
 <p><strong>Data ➡ ARD</strong></p>
 <p>The {cards} package can be utilized to create the ARD from a data
-frame. The package includes functions <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous()</a></code> for
-continuous summaries, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical()</a></code> for categorical
-summaries, and <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous()</a></code> for dichotomous variables
-(and more).</p>
+frame. The package includes functions <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> for
+continuous summaries, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> for categorical
+summaries, and <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> for dichotomous
+variables (and more).</p>
 <p>The package also exports a helper function, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html" class="external-link">ard_stack()</a></code>
 to simultaneously build these summaries along with optional ancillary
 results for a nicer display.</p>
@@ -1346,8 +1346,8 @@ results for a nicer display.</p>
 <span>    <span class="co"># stratify all results by ARM</span></span>
 <span>    .by <span class="op">=</span> <span class="va">ARM</span>, </span>
 <span>    <span class="co"># these are the results that will be calculated</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="co"># optional arguments for additional results</span></span>
 <span>    .attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    .total_n <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1982,11 +1982,11 @@ a similar structure to the simple ARDs we extracted from the
 <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> results above.</p>
 <ul>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_survival_survfit.html" class="external-link">cardx::ard_survival_survfit()</a></code> ARD looks like the
-<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> result.</li>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_stats_t_test_onesample.html" class="external-link">cardx::ard_stats_t_test_onesample()</a></code> ARD looks like
-the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous()</a></code> result.</li>
+the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> result.</li>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/main/reference/ard_categorical_ci.html" class="external-link">cardx::ard_categorical_ci()</a></code> ARD looks like the
-<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> result.</li>
 </ul>
 <p>With the created ARD, we can now build a summary table.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
