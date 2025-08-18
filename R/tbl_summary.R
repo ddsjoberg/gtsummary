@@ -356,7 +356,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_continuous(),

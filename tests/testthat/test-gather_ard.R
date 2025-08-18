@@ -148,7 +148,7 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
     cards::ard_stack(
       data = cards::ADSL,
       cards::ard_categorical(variables = "AGEGR1"),
-      cards::ard_continuous(variables = "AGE"),
+      cards::ard_summary(variables = "AGE"),
       .attributes = TRUE,
       .missing = TRUE
     ) |>
@@ -161,7 +161,7 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
   expect_false(
     cards::bind_ard(
       # the primary ARD with the results
-      cards::ard_continuous(trial, by = grade, variables = age),
+      cards::ard_summary(trial, by = grade, variables = age),
       # add missing and attributes ARD
       cards::ard_missing(trial, by = grade, variables = age),
       cards::ard_attributes(trial, variables = c(grade, age))
@@ -175,7 +175,7 @@ test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
   expect_false(
     cards::ard_stack(
       trial,
-      cards::ard_continuous(variables = age),
+      cards::ard_summary(variables = age),
       .missing = TRUE,
       .attributes = TRUE
     ) |>

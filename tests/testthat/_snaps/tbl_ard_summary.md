@@ -2,7 +2,7 @@
 
     Code
       as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"),
+      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE), by = ARM))
     Output
         **Characteristic**       **Placebo** **Xanomeline High Dose**
@@ -22,7 +22,7 @@
 
     Code
       as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
-        variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"), .attributes = TRUE,
+        variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE)))
     Output
         **Characteristic**       **Overall**
@@ -36,7 +36,7 @@
 
     Code
       as.data.frame(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM,
-      cards::ard_continuous(variables = "AGE"), .attributes = FALSE, .missing = FALSE),
+      cards::ard_summary(variables = "AGE"), .attributes = FALSE, .missing = FALSE),
       by = ARM, missing = "no"))
     Output
         **Characteristic**       **Placebo** **Xanomeline High Dose**
@@ -47,7 +47,7 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_summary(cards::ard_continuous(trial, by = trt, variables = age),
+      as.data.frame(tbl_ard_summary(cards::ard_summary(trial, by = trt, variables = age),
       by = trt))
     Output
         **Characteristic**        **Drug A**        **Drug B**
@@ -57,7 +57,7 @@
 
     Code
       tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = c(ARM, AGEGR1),
-      cards::ard_continuous(variables = "AGE"), .attributes = TRUE, .missing = TRUE),
+      cards::ard_summary(variables = "AGE"), .attributes = TRUE, .missing = TRUE),
       by = ARM)
     Condition
       Error in `tbl_ard_summary()`:
@@ -67,7 +67,7 @@
 ---
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_summary(
         variables = "AGE"), .attributes = FALSE, .missing = FALSE), by = ARM,
       missing = "ifany")
     Condition
@@ -78,9 +78,8 @@
 # tbl_ard_summary(by) messaging
 
     Code
-      tbl_ard_summary(cards::bind_ard(cards::ard_continuous(trial, by = trt,
-        variables = age), cards::ard_continuous(trial, by = grade, variables = age)),
-      by = trt)
+      tbl_ard_summary(cards::bind_ard(cards::ard_summary(trial, by = trt, variables = age),
+      cards::ard_summary(trial, by = grade, variables = age)), by = trt)
     Condition
       Error in `tbl_ard_summary()`:
       ! For `by = "trt"`, columns "group1" and "group1_level" must be present in `cards` and "group1" must be equal to "trt".
@@ -88,7 +87,7 @@
 ---
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_summary(
         variables = "AGE"), .attributes = TRUE, .missing = TRUE))
     Condition
       Error in `tbl_ard_summary()`:
@@ -125,7 +124,7 @@
 # tbl_ard_summary(type) error messages
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_summary(
         variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM, type = list(
         AGE = "categorical"))
     Condition
@@ -146,7 +145,7 @@
 # tbl_ard_summary(statistic) error messages
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_summary(
         variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM,
       statistic = list(AGE = "{not_a_valid_summary_statistic}"))
     Condition
@@ -157,7 +156,7 @@
 ---
 
     Code
-      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_continuous(
+      tbl_ard_summary(cards::ard_stack(data = cards::ADSL, .by = ARM, cards::ard_summary(
         variables = "AGE"), .attributes = TRUE, .missing = TRUE), by = ARM,
       statistic = list(AGE = c("{mean}", "{median}")))
     Condition

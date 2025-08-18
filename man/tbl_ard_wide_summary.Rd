@@ -58,7 +58,7 @@ library(cards)
 
 ard_stack(
   trial,
-  ard_continuous(variables = age),
+  ard_summary(variables = age),
   .missing = TRUE,
   .attributes = TRUE,
   .total_n = TRUE

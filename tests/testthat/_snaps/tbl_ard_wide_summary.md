@@ -28,7 +28,7 @@
 # tbl_ard_wide_summary(cards) messaging
 
     Code
-      tbl_ard_wide_summary(cards::ard_continuous(trial, by = trt, variables = age))
+      tbl_ard_wide_summary(cards::ard_summary(trial, by = trt, variables = age))
     Condition
       Error in `tbl_ard_wide_summary()`:
       ! The `cards` object cannot contain grouping variables "group1" and "group1_level".
@@ -36,7 +36,7 @@
 # tbl_ard_wide_summary(type) messaging
 
     Code
-      tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_continuous(variables = age),
+      tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_summary(variables = age),
       .missing = TRUE, .attributes = TRUE), type = age ~ "categorical")
     Condition
       Error in `tbl_ard_wide_summary()`:
@@ -46,7 +46,7 @@
 
     Code
       tbl_ard_wide_summary(cards::ard_stack(trial, cards::ard_dichotomous(variables = response),
-      cards::ard_continuous(variables = age), .missing = TRUE, .attributes = TRUE))
+      cards::ard_summary(variables = age), .missing = TRUE, .attributes = TRUE))
     Condition
       Error in `tbl_ard_wide_summary()`:
       ! The summary types must all be "continuous" or all be "categorical" and "dichotomous".

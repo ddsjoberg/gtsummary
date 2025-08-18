@@ -41,7 +41,7 @@
 
     Code
       as.data.frame(add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"),
+      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE, .total_n = TRUE), type = all_continuous() ~
         "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
         "{min} - {max}")), label = AGE ~ c("Median (IQR)", "Range")))
@@ -59,7 +59,7 @@
 
     Code
       add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
-        variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"), .attributes = TRUE,
+        variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE), type = all_continuous() ~ "continuous2",
       statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}")),
       label = AGE ~ letters)
@@ -71,7 +71,7 @@
 
     Code
       add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL, cards::ard_categorical(
-        variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"), .attributes = TRUE,
+        variables = "AGEGR1"), cards::ard_summary(variables = "AGE"), .attributes = TRUE,
       .missing = TRUE, .total_n = TRUE), type = all_continuous() ~ "continuous2",
       statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}")),
       label = AGE ~ c("Median (IQR)", "Range", "TOO LONG!"))
@@ -83,7 +83,7 @@
 
     Code
       invisible(add_stat_label(add_stat_label(tbl_ard_summary(cards::ard_stack(data = cards::ADSL,
-      cards::ard_categorical(variables = "AGEGR1"), cards::ard_continuous(variables = "AGE"),
+      cards::ard_categorical(variables = "AGEGR1"), cards::ard_summary(variables = "AGE"),
       .attributes = TRUE, .missing = TRUE, .total_n = TRUE), type = all_continuous() ~
         "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
         "{min} - {max}")))))
