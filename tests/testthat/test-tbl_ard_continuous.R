@@ -42,7 +42,7 @@ test_that("tbl_ard_continuous(cards) error messaging", {
   expect_snapshot(
     error = TRUE,
     cards::bind_ard(
-      cards::ard_continuous(trial, by = c(trt, grade), variables = age)
+      cards::ard_summary(trial, by = c(trt, grade), variables = age)
     ) |>
       tbl_ard_continuous(variable = "age", include = "trt", by = "grade")
   )
