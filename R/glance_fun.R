@@ -12,7 +12,7 @@
 #' @name glance_fun_s3
 #' @keywords internal
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))
 #' mod <- lm(age ~ trt, trial)
 #'
 #' glance_fun_s3(mod)

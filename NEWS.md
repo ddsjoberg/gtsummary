@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
+
+* Greatly improved messaging when column headers differ in `tbl_stack()`. (#2266)
+
+* The {cardx} package is now a strong dependency. (#2256)
+
 * Refactored `sort_hierarchical()` to allow for different sorting methods at each hierarchy variable level.
 
 * Updated `sort_hierarchical()` and `filter_hierarchical()` to always keep attribute and total N rows at the bottom of the ARD.
