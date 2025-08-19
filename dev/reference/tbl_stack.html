@@ -9,7 +9,7 @@ or more gtsummary tables."><meta property="og:image" content="https://www.daniel
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9004</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,8 @@ or more gtsummary tables.</p>
 <span>  group_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  attr_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">tbls</span><span class="op">)</span>,</span>
-<span>  tbl_ids <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  tbl_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tbl_id_lbls <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,6 +94,14 @@ Default is to set precedent in the order tables are passed.</p></dd>
 Optional character vector of IDs that will be assigned to the input tables.
 The ID is assigned by assigning a name to the <code>tbls</code> list, which is
 returned in <code>x$tbls</code>.</p></dd>
+
+
+<dt id="arg-tbl-id-lbls">tbl_id_lbls<a class="anchor" aria-label="anchor" href="#arg-tbl-id-lbls"></a></dt>
+<dd><p>(<code>vector</code>)<br>
+Optional vector of the same length <code>tbls</code>.
+When specified a new, hidden column is added to the returned <code>.$table_body</code>
+with these labels. <em>The most common use case of this argument is for
+the development of other functions.</em></p></dd>
 
 </dl></div>
     <div class="section level2">
