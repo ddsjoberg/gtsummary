@@ -85,7 +85,7 @@ tidyr::expand_grid(
       printer == "gt" & output %in% c("RTF") ~ 5, # under construction
       printer == "kable" ~ 2, # ok output
       printer == "flextable" & output != "RTF" ~ 1, # good output
-      printer == "flextable" & output == "RTF" ~ 4, # not supported
+      printer == "flextable" & output == "RTF" ~ 1, # good output
       printer == "kableExtra" & output %in% c("PDF", "HTML") ~ 1, # good output
       printer == "kableExtra" & output %in% c("RTF", "Word") ~ 4, # not supported
       printer == "huxtable" ~ 1, # good output
