@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_stack(tbl_id_lbls)` argument has been added. When specified, a new column is added to the resulting `.$table_body` labelling the rows associated with each table ID. This argument is utilized in `tbl_strata()` and all returned tables include a hidden column with the stratum levels. (#2288)
+
 * No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
 
 * Greatly improved messaging when column headers differ in `tbl_stack()`. (#2266)
