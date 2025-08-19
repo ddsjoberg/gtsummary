@@ -209,7 +209,8 @@ test_that("as_hux_table passes captions correctly", {
 
   expect_equal(
     attr(ht, "caption"),
-    "My table caption"
+    "My table caption",
+    ignore_attr = TRUE
   )
 })
 

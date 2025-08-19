@@ -9,7 +9,8 @@ tbl_stack(
   group_header = NULL,
   quiet = FALSE,
   attr_order = seq_along(tbls),
-  tbl_ids = NULL
+  tbl_ids = NULL,
+  tbl_id_lbls = NULL
 )
 }
 \arguments{
@@ -33,6 +34,12 @@ Default is to set precedent in the order tables are passed.}
 Optional character vector of IDs that will be assigned to the input tables.
 The ID is assigned by assigning a name to the \code{tbls} list, which is
 returned in \code{x$tbls}.}
+
+\item{tbl_id_lbls}{(\code{vector})\cr
+Optional vector of the same length \code{tbls}.
+When specified a new, hidden column is added to the returned \code{.$table_body}
+with these labels. \emph{The most common use case of this argument is for
+the development of other functions.}}
 }
 \value{
 A \code{tbl_stack} object
