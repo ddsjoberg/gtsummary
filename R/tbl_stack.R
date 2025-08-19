@@ -16,6 +16,11 @@
 #'   Default is to set precedent in the order tables are passed.
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
+#' @param tbl_id_lbls (`vector`)\cr
+#'   Optional vector of the same length `tbls`.
+#'   When specified a new, hidden column is added to the returned `.$table_body`
+#'   with these labels. _The most common use case of this argument is for
+#'   the development of other functions._
 #'
 #' @author Daniel D. Sjoberg
 #' @export
@@ -64,7 +69,12 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls), tbl_ids = NULL) {
+tbl_stack <- function(tbls,
+                      group_header = NULL,
+                      quiet = FALSE,
+                      attr_order = seq_along(tbls),
+                      tbl_ids = NULL,
+                      tbl_id_lbls = NULL) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -78,6 +88,9 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
   check_class(tbl_ids, cls = "character", allow_empty = TRUE)
   if (!is_empty(tbl_ids)) {
     check_identical_length(tbls, tbl_ids)
+  }
+  if (!is_empty(tbl_id_lbls)) {
+    check_identical_length(tbls, tbl_id_lbls)
   }
 
   # will return call, and all arguments passed to tbl_stack
@@ -95,13 +108,21 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
       function(tbl, id) {
         # adding a table ID and group header
         table_body <- tbl[["table_body"]] |> dplyr::mutate("{tbl_id_colname}" := id)
+
+        # add ID label column if specified
+        if (!is_empty(tbl_id_lbls)) {
+          table_body <- table_body |>
+            dplyr::mutate("{tbl_id_colname}_lbl" := tbl_id_lbls[id])
+        }
+
         if (!is.null(group_header)) {
           table_body <-
             table_body |>
             dplyr::mutate(groupname_col = group_header[id])
         }
 
-        table_body |> dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), everything())
+        table_body |>
+          dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), matches("^tbl_id\\d+_lbl$"), everything())
       }
     ) %>%
     dplyr::bind_rows()
