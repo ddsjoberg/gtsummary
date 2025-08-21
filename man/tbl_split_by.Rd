@@ -11,6 +11,7 @@ tbl_split_by_rows(
   x,
   variables = NULL,
   row_numbers = NULL,
+  variable_level = NULL,
   footnotes = c("all", "first", "last"),
   caption = c("all", "first", "last")
 )
@@ -29,9 +30,17 @@ tbl_split_by_columns(
 \item{x}{(\code{gtsummary} or \code{list})\cr
 gtsummary table.}
 
-\item{variables, row_numbers}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}} or \code{integer})\cr
-variables or row numbers at which to split the gtsummary table rows (tables
-will be separated after each of these variables).}
+\item{variables, row_numbers, variable_level}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}} or \code{integer})\cr
+Specifies where the table will be split.
+\itemize{
+\item \code{variables}: Tables will be separated after each of the variables specified.
+The \code{x$table_body} data frame must contains a \code{'variable'}
+column to use this argument.
+\item \code{row_numbers}: Row numbers after which the table will be split.
+\item \code{variable_level}: A single column name in \code{x$table_body}. When specified,
+the table will be split at each unique level of the
+variable.
+}}
 
 \item{footnotes, caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 can be either \code{"first"}, \code{"all"}, or \code{"last"}, to locate global footnotes or
