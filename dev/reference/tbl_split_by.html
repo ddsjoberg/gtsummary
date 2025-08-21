@@ -15,7 +15,7 @@ x$table_body) and row-wise splitting is possible."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9005</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@ Both column-wise splitting (that is, splits by columns in
 <span>  <span class="va">x</span>,</span>
 <span>  variables <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  row_numbers <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  variable_level <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"first"</span>, <span class="st">"last"</span><span class="op">)</span>,</span>
 <span>  caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"first"</span>, <span class="st">"last"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -89,10 +90,16 @@ Both column-wise splitting (that is, splits by columns in
 gtsummary table.</p></dd>
 
 
-<dt id="arg-variables-row-numbers">variables, row_numbers<a class="anchor" aria-label="anchor" href="#arg-variables-row-numbers"></a></dt>
+<dt id="arg-variables-row-numbers-variable-level">variables, row_numbers, variable_level<a class="anchor" aria-label="anchor" href="#arg-variables-row-numbers-variable-level"></a></dt>
 <dd><p>(<code><a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a></code> or <code>integer</code>)<br>
-variables or row numbers at which to split the gtsummary table rows (tables
-will be separated after each of these variables).</p></dd>
+Specifies where the table will be split.</p><ul><li><p><code>variables</code>: Tables will be separated after each of the variables specified.
+The <code>x$table_body</code> data frame must contains a <code>'variable'</code>
+column to use this argument.</p></li>
+<li><p><code>row_numbers</code>: Row numbers after which the table will be split.</p></li>
+<li><p><code>variable_level</code>: A single column name in <code>x$table_body</code>. When specified,
+the table will be split at each unique level of the
+variable.</p></li>
+</ul></dd>
 
 
 <dt id="arg-footnotes-caption">footnotes, caption<a class="anchor" aria-label="anchor" href="#arg-footnotes-caption"></a></dt>
