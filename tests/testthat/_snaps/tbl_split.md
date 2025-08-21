@@ -31,7 +31,7 @@
       tbl_split_by_rows(as_gtsummary(mtcars), variables = 1L)
     Condition
       Error in `tbl_split_by_rows()`:
-      ! The `row_numbers` argument must be specified when the passed table does not contain a "variable" column in `x$table_body`.
+      ! The `variables` argument cannot be specified when `x$table_body` does not have a column named "variable".
 
 # tbl_split_by_rows(row_numbers, variables) throws an error
 
@@ -40,5 +40,14 @@
       variables = grade)
     Condition
       Error in `tbl_split_by_rows()`:
-      ! Please select only one and only one between `row_numbers` and `variables` arguments.
+      ! One and only one of the following arguments may be specified: `variables`, `row_numbers`, and `variable_level`
+
+# tbl_split_by_rows(variable_level) messaging
+
+    Code
+      tbl_split_by_rows(tbl_summary(trial, include = c(age, marker), by = trt,
+      missing = "no"), variable_level = all_stat_cols())
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! The `variable_level` argument may only select a single column when specified.
 

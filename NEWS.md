@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Added the `tbl_split_by_rows(variable_level)` argument to split a table by the levels of a column in `x$table_body`.
+
+* Improved the print method for class `'tbl_split'` to be more informative.
+
+* Added a `dim()` S3 method for `'gtsummary'` class, which also allows for `nrow()` calls on gtsummary objects.
+
 * The `tbl_stack(tbl_id_lbls)` argument has been added. When specified, a new column is added to the resulting `.$table_body` labelling the rows associated with each table ID. This argument is utilized in `tbl_strata()` and all returned tables include a hidden column with the stratum levels. (#2288)
 
 * No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
