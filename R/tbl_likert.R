@@ -1,6 +1,5 @@
 #' Likert Summary
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' Create a table of ordered categorical variables in a wide format.
 #'
 #' @inheritParams tbl_summary

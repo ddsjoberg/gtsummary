@@ -24,7 +24,6 @@ Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 This helper, to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}}, creates a function
 computing the ratio of two continuous variables and its confidence interval.
 }
