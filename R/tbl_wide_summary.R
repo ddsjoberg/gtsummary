@@ -1,6 +1,5 @@
 #' Wide summary table
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' This function is similar to `tbl_summary()`, but places summary statistics
 #' wide, in separate columns.
 #' All included variables must be of the same summary type, e.g. all continuous
