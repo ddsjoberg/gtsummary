@@ -43,19 +43,28 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added the <code>tbl_split_by_rows(variable_level)</code> argument to split a table by the levels of a column in <code>x$table_body</code>.</p></li>
-<li><p>Improved the print method for class <code>'tbl_split'</code> to be more informative.</p></li>
-<li><p>Added a <code><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim()</a></code> S3 method for <code>'gtsummary'</code> class, which also allows for <code><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow()</a></code> calls on gtsummary objects.</p></li>
-<li><p>The <code>tbl_stack(tbl_id_lbls)</code> argument has been added. When specified, a new column is added to the resulting <code>.$table_body</code> labelling the rows associated with each table ID. This argument is utilized in <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code> and all returned tables include a hidden column with the stratum levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2288" class="external-link">#2288</a>)</p></li>
-<li><p>No longer calculating <code>deff</code> by default in <code>tbl_svysummary(type='categorical')</code>.</p></li>
-<li><p>Greatly improved messaging when column headers differ in <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2266" class="external-link">#2266</a>)</p></li>
-<li><p>The {cardx} package is now a strong dependency. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2256" class="external-link">#2256</a>)</p></li>
+<div class="section level4">
+<h4 id="new-features-and-functions-development-version">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-development-version"></a></h4>
+<ul><li><p>Greatly improved messaging when column headers differ in <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2266" class="external-link">#2266</a>)</p></li>
+<li><p>Added the <code>tbl_split_by_rows(variable_level)</code> argument to split a table by the levels of a column in <code>x$table_body</code>.</p></li>
+<li><p>The <code>tbl_stack(tbl_id_lbls)</code> argument has been added. When specified, a new column is added to the resulting <code>.$table_body</code> labeling the rows associated with each table ID. This argument is utilized in <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code> and all returned tables include a hidden column with the stratum levels. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2288" class="external-link">#2288</a>)</p></li>
 <li><p>Refactored <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> to allow for different sorting methods at each hierarchy variable level.</p></li>
 <li><p>Updated <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> and <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> to always keep attribute and total N rows at the bottom of the ARD.</p></li>
-<li><p>Bug fix in <code><a href="../reference/add_p.tbl_cross.html">add_p.tbl_cross()</a></code> when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.</p></li>
 <li><p>Added parameters <code>var</code> and <code>quiet</code> to <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code> to allow for filtering by specific hierarchy variables and to silence messages, respectively.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<ul><li><p>No longer calculating <code>deff</code> by default in <code>tbl_svysummary(type='categorical')</code>.</p></li>
+<li><p>Improved the print method for class <code>'tbl_split'</code> to be more informative.</p></li>
+<li><p>Added a <code><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim()</a></code> S3 method for <code>'gtsummary'</code> class, which also allows for <code><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow()</a></code> calls on gtsummary objects.</p></li>
+<li><p>The {cardx} package is now a strong dependency. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2256" class="external-link">#2256</a>)</p></li>
 <li><p>Added a method for class <code>"tbl_ard_hierarchical"</code> to <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> and <code><a href="../reference/filter_hierarchical.html">filter_hierarchical()</a></code>.</p></li>
 </ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li>Bug fix in <code><a href="../reference/add_p.tbl_cross.html">add_p.tbl_cross()</a></code> when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.0" id="gtsummary-230">gtsummary 2.3.0<a class="anchor" aria-label="anchor" href="#gtsummary-230"></a></h2><p class="text-muted">CRAN release: 2025-07-03</p>
 <div class="section level4">
