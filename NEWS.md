@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+# gtsummary 2.4.0
+
 ### New Features and Functions
 
 * Greatly improved messaging when column headers differ in `tbl_stack()`. (#2266)
