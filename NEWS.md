@@ -1,28 +1,34 @@
 # gtsummary (development version)
 
-* Added the `tbl_split_by_rows(variable_level)` argument to split a table by the levels of a column in `x$table_body`.
-
-* Improved the print method for class `'tbl_split'` to be more informative.
-
-* Added a `dim()` S3 method for `'gtsummary'` class, which also allows for `nrow()` calls on gtsummary objects.
-
-* The `tbl_stack(tbl_id_lbls)` argument has been added. When specified, a new column is added to the resulting `.$table_body` labelling the rows associated with each table ID. This argument is utilized in `tbl_strata()` and all returned tables include a hidden column with the stratum levels. (#2288)
-
-* No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
+### New Features and Functions
 
 * Greatly improved messaging when column headers differ in `tbl_stack()`. (#2266)
 
-* The {cardx} package is now a strong dependency. (#2256)
+* Added the `tbl_split_by_rows(variable_level)` argument to split a table by the levels of a column in `x$table_body`.
+
+* The `tbl_stack(tbl_id_lbls)` argument has been added. When specified, a new column is added to the resulting `.$table_body` labeling the rows associated with each table ID. This argument is utilized in `tbl_strata()` and all returned tables include a hidden column with the stratum levels. (#2288)
 
 * Refactored `sort_hierarchical()` to allow for different sorting methods at each hierarchy variable level.
 
 * Updated `sort_hierarchical()` and `filter_hierarchical()` to always keep attribute and total N rows at the bottom of the ARD.
 
-* Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
-
 * Added parameters `var` and `quiet` to `filter_hierarchical()` to allow for filtering by specific hierarchy variables and to silence messages, respectively.
 
+### Other Updates
+
+* No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
+
+* Improved the print method for class `'tbl_split'` to be more informative.
+
+* Added a `dim()` S3 method for `'gtsummary'` class, which also allows for `nrow()` calls on gtsummary objects.
+
+* The {cardx} package is now a strong dependency. (#2256)
+
 * Added a method for class `"tbl_ard_hierarchical"` to `sort_hierarchical()` and `filter_hierarchical()`.
+
+### Bug Fixes
+
+* Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
 
 # gtsummary 2.3.0
 
