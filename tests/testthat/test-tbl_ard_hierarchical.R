@@ -127,7 +127,7 @@ test_that("tbl_ard_hierarchical() works correctly with non-standard hierarchical
 
   race_alphanum <- c("AMERICAN INDIAN OR ALASKA NATIVE", "BLACK OR AFRICAN AMERICAN", "WHITE")
   expect_equal(
-    tbl$table_body |> pull("label"),
+    tbl$table_body |> dplyr::pull("label"),
     c("F", race_alphanum, "M", race_alphanum)
   )
 })
