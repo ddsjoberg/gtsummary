@@ -108,3 +108,26 @@ test_that("tbl_ard_hierarchical() preserves ARD sorting", {
     ignore_attr = TRUE
   )
 })
+
+test_that("tbl_ard_hierarchical() works correctly with non-standard hierarchical ARD input", {
+  # build ARD
+  ard <- bind_ard(
+    cards::ADSL |> ard_tabulate(by = ARM, variable = SEX),
+    cards::ADSL |> ard_tabulate(by = ARM, strata = SEX, variable = RACE),
+    cards::ADSL |> ard_tabulate(variables = ARM)
+  )
+
+  expect_silent(
+    tbl <- tbl_ard_hierarchical(
+      cards = ard,
+      by = ARM,
+      variables = c(SEX, RACE)
+    )
+  )
+
+  race_alphanumeric <- c("AMERICAN INDIAN OR ALASKA NATIVE", "BLACK OR AFRICAN AMERICAN", "WHITE")
+  expect_equal(
+    tbl$table_body |> pull("label"),
+    c("F", race_alphanumeric, "M", race_alphanumeric)
+  )
+})
