@@ -111,7 +111,7 @@ tbl_ard_hierarchical <- function(cards,
       variables = variables,
       include = include
     )
-    cards <- cards |> sort_ard_hierarchical("alphanumeric")
+    cards <- cards |> cards::sort_ard_hierarchical("alphanumeric")
   }
 
   brdg_hierarchical(
