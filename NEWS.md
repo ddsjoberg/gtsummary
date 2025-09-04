@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
+
 # gtsummary 2.4.0
 
 ### New Features and Functions
