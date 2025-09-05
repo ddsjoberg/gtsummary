@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Now depending on a version of cards greater than v0.7.0.
+ 
 * Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
 
 # gtsummary 2.4.0
