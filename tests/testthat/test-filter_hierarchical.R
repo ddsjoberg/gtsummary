@@ -106,31 +106,31 @@ test_that("filter_hierarchical() works with column-specific filters", {
   expect_message(tbl_f <- filter_hierarchical(tbl, abs(n_2 - n_3) > n_1))
   expect_equal(nrow(tbl_f$table_body), 15)
 
-  # overall prevalence across row group > 30%
-  expect_silent(tbl_f <- filter_hierarchical(tbl, p_overall > 0.3))
+  # overall prevalence across row group > 3%
+  expect_silent(tbl_f <- filter_hierarchical(tbl, p_overall > 0.03))
   # p_overall calculated correctly
   expect_identical(
     tbl_f,
-    tbl |> filter_hierarchical(sum(n) / sum(N) > 0.3),
+    tbl |> filter_hierarchical(sum(n) / sum(N) > 0.03),
   )
   # p_overall filters the same rows with overall column added
   expect_identical(
     tbl_f$table_body,
-    filter_hierarchical(tbl_o, p_overall > 0.3)$table_body |>
+    filter_hierarchical(tbl_o, p_overall > 0.03)$table_body |>
       select(-"stat_0")
   )
-  expect_equal(nrow(tbl_f$table_body), 7)
+  expect_equal(nrow(tbl_f$table_body), 12)
 
   # overall prevalence across row group > 15
   expect_silent(tbl_f <- filter_hierarchical(tbl, n_overall > 15))
   expect_equal(nrow(tbl_f$table_body), 9)
 
   # column-wise p statistics equal to previous derivation with column names specified (both still work)
-  expect_message(tbl_f <- filter_hierarchical(tbl, p_2 > 0.15 | p_3 > 0.2))
+  expect_message(tbl_f <- filter_hierarchical(tbl, p_2 > 0.015 | p_3 > 0.02))
   expect_identical(
     tbl_f,
     tbl |>
-      filter_hierarchical(any(p > 0.15 & TRTA == "Xanomeline High Dose") | any(p > 0.2 & TRTA == "Xanomeline Low Dose"))
+      filter_hierarchical(any(p > 0.015 & TRTA == "Xanomeline High Dose") | any(p > 0.02 & TRTA == "Xanomeline Low Dose"))
   )
 })
 
@@ -157,10 +157,10 @@ test_that("filter_hierarchical() works with various different filter conditions"
   expect_equal(nrow(tbl_f$table_body), 11)
 
   expect_silent(tbl_f <- filter_hierarchical(tbl, p > 0.05))
-  expect_equal(nrow(tbl_f$table_body), 25)
+  expect_equal(nrow(tbl_f$table_body), 12)
 
   expect_silent(tbl_f <- filter_hierarchical(tbl, n == 2 & p < 0.05))
-  expect_equal(nrow(tbl_f$table_body), 6)
+  expect_equal(nrow(tbl_f$table_body), 12)
 
   expect_silent(tbl_f <- filter_hierarchical(tbl, mean(n) > 4 | n > 3))
   expect_equal(nrow(tbl_f$table_body), 12)
