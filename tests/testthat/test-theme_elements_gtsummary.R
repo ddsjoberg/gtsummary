@@ -97,9 +97,9 @@ test_that("assign_summary_type-arg:cat_threshold", {
   expect_equal(
     with_gtsummary_theme(
       x = list("assign_summary_type-arg:cat_threshold" = 0L),
-      expr =
-        tbl_summary(mtcars, include = cyl)
-    )
+      expr = tbl_summary(mtcars, include = cyl)$table_body$var_type[1]
+    ),
+    "continuous"
   )
 })
 
