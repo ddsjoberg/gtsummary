@@ -1,8 +1,8 @@
 # gtsummary (development version)
 
-* Now depending on a version of cards greater than v0.7.0.
- 
 * Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
+
+* Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
 
 # gtsummary 2.4.0
 
