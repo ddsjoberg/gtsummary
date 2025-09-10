@@ -92,7 +92,18 @@ test_that("pkgwide-str:ci.sep works", {
   )
 })
 
-# tbl_hierarchical-fn:addnl-fn-to-run ------------------------------------
+# assign_summary_type-arg:cat_threshold ----------------------------------------
+test_that("assign_summary_type-arg:cat_threshold", {
+  expect_equal(
+    with_gtsummary_theme(
+      x = list("assign_summary_type-arg:cat_threshold" = 0L),
+      expr =
+        tbl_summary(mtcars, include = cyl)
+    )
+  )
+})
+
+# tbl_hierarchical-fn:addnl-fn-to-run ------------------------------------------
 test_that("tbl_hierarchical_count-fn:addnl-fn-to-run", {
   expect_s3_class(
     with_gtsummary_theme(
