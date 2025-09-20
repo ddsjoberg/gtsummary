@@ -41,7 +41,7 @@
 #' @param pkg (`character`)\cr
 #'   vector of package names to check.
 #' @param call (`environment`)\cr
-#'   frame for error messaging. Default is [get_cli_abort_call()].
+#'   frame for error messaging. Default is `get_cli_abort_call()`.
 #' @param ref (`string`)\cr
 #'   name of the package the function will search for a minimum required version from.
 #' @param lib.loc (`path`)\cr

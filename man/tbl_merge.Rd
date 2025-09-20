@@ -44,7 +44,7 @@ out of order.
 The ordering of rows can be updated with \code{modify_table_body(~dplyr::arrange(.x, ...))}.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed('survival')) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Side-by-side Regression Models
 library(survival)

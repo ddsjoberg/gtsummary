@@ -66,7 +66,7 @@ print the table the estimates are extracted from.
 }
 
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 inline_text_ex1 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
