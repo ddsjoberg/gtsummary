@@ -32,7 +32,7 @@ The \code{plot()} function extracts \code{x$table_body} and passes the it to
 \code{ggstats::ggcoef_plot()} along with formatting options.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("ggstats")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("ggstats")) withAutoprint(\{ # examplesIf}
 glm(response ~ marker + grade, trial, family = binomial) |>
   tbl_regression(
     add_estimate_to_reference_rows = TRUE,

@@ -161,7 +161,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
