@@ -61,9 +61,13 @@ String indicating the headers that will be placed.
 Default is \code{"**{strata}**"} when \code{.combine_with = "tbl_merge"} and
 \code{"{strata}"} when \code{.combine_with = "tbl_stack"}. Items placed in
 curly brackets will be evaluated according to \code{glue::glue()} syntax.
-- \code{strata} stratum levels
-- \code{n} N within stratum
-- \code{N} Overall N
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{- `strata` stratum levels
+
+- `n` N within stratum
+
+- `N` Overall N
+}\if{html}{\out{</div>}}
 
 The evaluated value of \code{.header} is also available within \code{tbl_strata2(.tbl_fun)}}
 }

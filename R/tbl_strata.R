@@ -34,8 +34,11 @@
 #'   Default is `"**{strata}**"` when `.combine_with = "tbl_merge"` and
 #'   `"{strata}"` when `.combine_with = "tbl_stack"`. Items placed in
 #'   curly brackets will be evaluated according to `glue::glue()` syntax.
+#'
 #'     - `strata` stratum levels
+#'
 #'     - `n` N within stratum
+#'
 #'     - `N` Overall N
 #'
 #'   The evaluated value of `.header` is also available within `tbl_strata2(.tbl_fun)`
