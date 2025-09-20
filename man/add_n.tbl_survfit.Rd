@@ -16,7 +16,7 @@ For each \code{survfit()} object summarized with \code{tbl_survfit()} this funct
 will add the total number of observations in a new column.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survival")) withAutoprint(\{ # examplesIf}
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)

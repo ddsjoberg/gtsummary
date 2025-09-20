@@ -45,7 +45,7 @@ a 'gtsummary' table
 Add significance stars to estimates with small p-values
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "parameters"))) withAutoprint(\{ # examplesIf}
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) |>
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
