@@ -107,8 +107,8 @@ tbl_ard_strata2 <- function(cards,
                                      .parent_fun) {
   check_string(.header)
   check_class(cards, cls = "card")
-  cards::process_selectors(card, strata = {{ strata }})
-  .ard_strata_col_check(card, strata)
+  cards::process_selectors(cards, strata = {{ strata }})
+  .ard_strata_col_check(cards, strata)
 
   card_renamed <- cards |>
     cards::rename_ard_columns(
@@ -180,10 +180,10 @@ tbl_ard_strata2 <- function(cards,
     group_columns <- names(dplyr::select(cards, cards::all_ard_groups()))
 
     if (is_empty(group_columns)) {
-      cli::cli_abort("The {.arg card} argument input must contain grouping columns.")
+      cli::cli_abort("The {.arg cards} argument input must contain grouping columns.")
     }
     cli::cli_abort(
-      c("The columns selected in the {.arg strata} argument must select grouping columns from {.arg card}.",
+      c("The columns selected in the {.arg strata} argument must select grouping columns from {.arg cards}.",
         i = " Select from {.val {group_columns}}.")
     )
   }
@@ -191,7 +191,7 @@ tbl_ard_strata2 <- function(cards,
   # check the group variables are a single variable
   group_columns <- intersect(strata, dplyr::select(cards, cards::all_ard_groups("name")))
   for (i in seq_along(group_columns)) {
-    if (any(card[[group_columns[i]]] != card[[group_columns[1]]])) {
+    if (any(cards[[group_columns[i]]] != cards[[group_columns[1]]])) {
       cli::cli_inform(
         c("The {.val {group_columns[i]}} column is not the same variable for all rows.",
           i = "This may cause unexpected results.")
