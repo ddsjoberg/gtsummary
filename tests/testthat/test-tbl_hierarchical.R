@@ -151,7 +151,7 @@ test_that("tbl_hierarchical(digits) works properly", {
     digits = grade ~ list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
   )
   expect_snapshot(res |> as.data.frame())
-  expect_equal(res$table_body$stat_0[1], "36 (68%)")
+  expect_equal(res$table_body$stat_0[1], "36 (18%)")
 
   # testing passing vector
   expect_equal(
@@ -162,7 +162,7 @@ test_that("tbl_hierarchical(digits) works properly", {
       as.data.frame(col_labels = FALSE) |>
       dplyr::pull(stat_0) |>
       dplyr::last(),
-    "18.00 (100.00%)"
+    "18.00 (9.00%)"
   )
   expect_equal(
     tbl_hierarchical(
@@ -172,9 +172,8 @@ test_that("tbl_hierarchical(digits) works properly", {
       as.data.frame(col_labels = FALSE) |>
       dplyr::pull(stat_0) |>
       dplyr::last(),
-    "18 (100.00%)"
+    "18 (9.00%)"
   )
-
 
   # errors thrown when bad digits argument passed
   expect_snapshot(

@@ -273,6 +273,7 @@
     ) %>%
     dplyr::select(-"rows", rows = "row_numbers")
 
+  class(x) <- "list"
   x
 }
 

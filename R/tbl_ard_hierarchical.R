@@ -104,6 +104,16 @@ tbl_ard_hierarchical <- function(cards,
     label, default_label[setdiff(names(default_label), names(label))]
   )[c(variables, if ("overall" %in% names(label)) "overall")]
 
+  # add hierarchical ARD args attribute and sort if not directly using a hierarchical ARD
+  if (!"args" %in% names(attributes(cards))) {
+    attr(cards, "args") <- list(
+      by = by,
+      variables = variables,
+      include = include
+    )
+    cards <- cards |> cards::sort_ard_hierarchical("alphanumeric")
+  }
+
   brdg_hierarchical(
     cards = cards,
     variables = variables,
