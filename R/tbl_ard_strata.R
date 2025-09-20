@@ -189,7 +189,7 @@ tbl_ard_strata2 <- function(cards,
   }
 
   # check the group variables are a single variable
-  group_columns <- intersect(strata, dplyr::select(cards, cards::all_ard_groups("name")))
+  group_columns <- intersect(strata, dplyr::select(cards, cards::all_ard_groups("names")))
   for (i in seq_along(group_columns)) {
     if (any(cards[[group_columns[i]]] != cards[[group_columns[1]]])) {
       cli::cli_inform(
