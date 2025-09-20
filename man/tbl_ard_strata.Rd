@@ -29,7 +29,11 @@ tbl_ard_strata2(
 }
 \arguments{
 \item{strata}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-the grouping columns to stratify by. Must select \code{group#} and \code{group#_level} pairs.}
+the grouping columns to stratify by.
+Must select \code{'group#'} and \code{'group#_level'} pairs.
+Importantly, the function expects the \code{'group#'} columns to be the same variable,
+e.g. stratifying my a single variable.
+The \code{'group#_level'} value is available to place in header (and more) in the \code{{strata}} element.}
 
 \item{.tbl_fun}{(\code{function})
 A function or formula. If a \emph{function}, it is used as is.
@@ -64,6 +68,7 @@ The evaluated value of \code{.header} is also available within \code{tbl_strata2
 a 'gtsummary' table
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Similar to \code{tbl_strata()}, except the function accepts an ARD
 instead of a data frame.
 }
