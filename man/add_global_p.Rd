@@ -63,7 +63,7 @@ for model covariates.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "car", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "car", "parameters"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 lm(marker ~ age + grade, trial) |>
   tbl_regression() |>
