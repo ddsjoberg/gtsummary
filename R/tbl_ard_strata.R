@@ -1,12 +1,17 @@
 #' Stratified gtsummary tables from ARD
 #'
+#' @description `r lifecycle::badge("experimental")`\cr
 #' Similar to `tbl_strata()`, except the function accepts an ARD
 #' instead of a data frame.
 #'
 #' @inheritParams tbl_ard_summary
 #' @inheritParams tbl_strata
 #' @param strata ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'  the grouping columns to stratify by. Must select `group#` and `group#_level` pairs.
+#'  the grouping columns to stratify by.
+#'  Must select `'group#'` and `'group#_level'` pairs.
+#'  Importantly, the function expects the `'group#'` columns to be the same variable,
+#'  e.g. stratifying my a single variable.
+#'  The `'group#_level'` value is available to place in header (and more) in the `{strata}` element.
 #'
 #' @returns a 'gtsummary' table
 #' @name tbl_ard_strata
@@ -182,4 +187,16 @@ tbl_ard_strata2 <- function(card,
         i = " Select from {.val {group_columns}}.")
     )
   }
+
+  # check the group variables are a single variable
+  group_columns <- intersect(strata, dplyr::select(card, cards::all_ard_groups("name")))
+  for (i in seq_along(group_columns)) {
+    if (any(card[[group_columns[i]]] != card[[group_columns[1]]])) {
+      cli::cli_inform(
+        c("The {.val {group_columns[i]}} column is not the same variable for all rows.",
+          i = "This may cause unexpected results.")
+      )
+    }
+  }
+
 }
