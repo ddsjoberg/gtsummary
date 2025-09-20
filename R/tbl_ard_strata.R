@@ -39,7 +39,7 @@ NULL
 
 #' @rdname tbl_ard_strata
 #' @export
-tbl_ard_strata <- function(card,
+tbl_ard_strata <- function(cards,
                            strata,
                            .tbl_fun,
                            ...,
@@ -54,7 +54,7 @@ tbl_ard_strata <- function(card,
 
   # run `tbl_ard_strata()`
   .tbl_ard_strata_internal(
-    card = card,
+    cards = cards,
     strata = {{ strata }},
     .tbl_fun = .tbl_fun,
     ...,
@@ -68,7 +68,7 @@ tbl_ard_strata <- function(card,
 
 #' @rdname tbl_ard_strata
 #' @export
-tbl_ard_strata2 <- function(card,
+tbl_ard_strata2 <- function(cards,
                             strata,
                             .tbl_fun,
                             ...,
@@ -83,7 +83,7 @@ tbl_ard_strata2 <- function(card,
 
   # run `tbl_ard_strata()`
   .tbl_ard_strata_internal(
-    card = card,
+    cards = cards,
     strata = {{ strata }},
     .tbl_fun = .tbl_fun,
     ...,
@@ -96,7 +96,7 @@ tbl_ard_strata2 <- function(card,
 }
 
 
-.tbl_ard_strata_internal <- function(card,
+.tbl_ard_strata_internal <- function(cards,
                                      strata,
                                      .tbl_fun,
                                      ...,
@@ -106,15 +106,15 @@ tbl_ard_strata2 <- function(card,
                                      .header,
                                      .parent_fun) {
   check_string(.header)
-  check_class(card, cls = "card")
+  check_class(cards, cls = "card")
   cards::process_selectors(card, strata = {{ strata }})
   .ard_strata_col_check(card, strata)
 
-  card_renamed <- card |>
+  card_renamed <- cards |>
     cards::rename_ard_columns(
       columns = intersect(all_of(strata), c(cards::all_ard_groups("names"), cards::all_ard_variables("names")))
     )
-  strata_renamed <- names(card_renamed) |> setdiff(names(card))
+  strata_renamed <- names(card_renamed) |> setdiff(names(cards))
 
   new_strata_names <-
     as.list(strata_renamed) %>%
@@ -174,10 +174,10 @@ tbl_ard_strata2 <- function(card,
 }
 
 
-.ard_strata_col_check <- function(card, strata) {
+.ard_strata_col_check <- function(cards, strata) {
   # check the passed strata are groups that appear in `card`
-  if (!all(strata %in% names(dplyr::select(card, cards::all_ard_groups())))) {
-    group_columns <- names(dplyr::select(card, cards::all_ard_groups()))
+  if (!all(strata %in% names(dplyr::select(cards, cards::all_ard_groups())))) {
+    group_columns <- names(dplyr::select(cards, cards::all_ard_groups()))
 
     if (is_empty(group_columns)) {
       cli::cli_abort("The {.arg card} argument input must contain grouping columns.")
@@ -189,7 +189,7 @@ tbl_ard_strata2 <- function(card,
   }
 
   # check the group variables are a single variable
-  group_columns <- intersect(strata, dplyr::select(card, cards::all_ard_groups("name")))
+  group_columns <- intersect(strata, dplyr::select(cards, cards::all_ard_groups("name")))
   for (i in seq_along(group_columns)) {
     if (any(card[[group_columns[i]]] != card[[group_columns[1]]])) {
       cli::cli_inform(
