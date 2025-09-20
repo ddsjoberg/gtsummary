@@ -6,7 +6,7 @@
 \title{Stratified gtsummary tables from ARD}
 \usage{
 tbl_ard_strata(
-  card,
+  cards,
   strata,
   .tbl_fun,
   ...,
@@ -17,7 +17,7 @@ tbl_ard_strata(
 )
 
 tbl_ard_strata2(
-  card,
+  cards,
   strata,
   .tbl_fun,
   ...,
@@ -28,6 +28,9 @@ tbl_ard_strata2(
 )
 }
 \arguments{
+\item{cards}{(\code{card})\cr
+An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()} functions.}
+
 \item{strata}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 the grouping columns to stratify by.
 Must select \code{'group#'} and \code{'group#_level'} pairs.
