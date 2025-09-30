@@ -199,3 +199,100 @@ test_that("tbl_summary-arg:missing_stat works", {
     "All Participants  \nN = 200"
   )
 })
+
+
+# pkgwide-str:print_engine -----------------------------------------------------
+test_that("pkgwide-str:print_engine changes print methods as expected", {
+
+    
+    # When setting `pkgwide-str:print_engine` equal to `flextable`, the output 
+    # has expected class `flextable`
+   capture.output( 
+     expect_equal(with_gtsummary_theme(
+      x = list("pkgwide-str:print_engine" = "flextable"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "no") |>
+        print() |>
+        class()
+    ),
+    "flextable"
+    )
+    )
+  
+  # When setting `pkgwide-str:print_engine` equal to `huxtable`, the output 
+  # has expected class "huxtable",  "data.frame"
+  capture.output(
+    expect_equal(with_gtsummary_theme(
+    x = list("pkgwide-str:print_engine" = "huxtable"),
+    expr =
+      trial |>
+      tbl_summary(by = trt, include = age, missing = "no") |>
+      print() |>
+      class()
+  ),
+  c("huxtable", "data.frame")
+  )
+    )
+    
+    # When setting `pkgwide-str:print_engine` equal to `tibble`, the output 
+    # has expected class `tbl_df`, `tbl`, `data.frame`
+    capture.output(
+      expect_equal(with_gtsummary_theme(
+      x = list("pkgwide-str:print_engine" = "tibble"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "no") |>
+        print() |>
+        class()
+    ),
+    c("tbl_df", "tbl", "data.frame")
+    )
+      )
+
+    # When setting `pkgwide-str:print_engine` equal to `kable`, the output 
+    # has expected class `knitr_kable`
+    capture.output(
+      expect_equal(with_gtsummary_theme(
+      x = list("pkgwide-str:print_engine" = "kable"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "no") |>
+        print() |>
+        class()
+    ),
+    "knitr_kable"
+    )
+    )
+    
+    # When setting `pkgwide-str:print_engine` equal to `kable_extra`, the output 
+    # has expected class `kableExtra`, `knitr_kable`
+ capture.output(
+   expect_equal(with_gtsummary_theme(
+      x = list("pkgwide-str:print_engine" = "kable_extra"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "no") |>
+        print() |>
+        class()
+    ),
+    c("kableExtra", "knitr_kable")
+    )
+   )
+    
+    # When setting `pkgwide-str:print_engine` equal to `gt`, the output 
+    # has expected class `gt_tbl`, `list`
+    capture.output(
+      expect_equal(with_gtsummary_theme(
+      x = list("pkgwide-str:print_engine" = "gt"),
+      expr =
+        trial |>
+        tbl_summary(by = trt, include = age, missing = "no") |>
+        print() |>
+        class()
+    ),
+    c("gt_tbl", "list")
+    )
+    )
+ 
+})
