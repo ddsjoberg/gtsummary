@@ -4,6 +4,8 @@
 
 * Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
 
+* When a data frame is passed in the `tbl_summary(percent)` argument, the headers are now tabulated with this data frame. (#2322)
+
 # gtsummary 2.4.0
 
 ### New Features and Functions
