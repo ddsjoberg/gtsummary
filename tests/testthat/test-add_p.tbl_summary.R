@@ -1,6 +1,38 @@
 skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx"))
 
+test_that("Regression test for system-dependent test for pvalue", {
+  # wilcox.test for mpg and hp only. More might be added if other system tests differ
+  variables <- c("mpg", "hp")
+  by <- "am"
+  dat <- mtcars |> select(all_of(c(variables, by)))
+  conf.level <- 0.95
+
+  # tbl generation with cardx code stats::wilcox.test()
+  suppressMessages( # cannot compute exact p-value with ties
+    tbl <- tbl_summary(dat, by = am) |>
+      add_p(pvalue_fun = label_style_pvalue(digits = 3)) |>
+      as.data.frame()
+  )
+
+  tbl_pvalue <- tbl$`**p-value**`
+
+  for (i in seq_along(variables)) {
+    variable <- variables[i]
+
+    # test that the p-value in the table matches the p-value from stats::wilcox.test()
+    expect_equal(
+      tbl_pvalue[i],
+      suppressWarnings(
+        stats::wilcox.test(dat[[variable]] ~ dat[[by]], conf.level = conf.level) |>
+          broom::tidy() |>
+          dplyr::pull("p.value") |>
+          label_style_pvalue(digits = 3)()
+      )
+    )
+  }
+})
+
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
     tbl_summary(trial, by = grade) |>
