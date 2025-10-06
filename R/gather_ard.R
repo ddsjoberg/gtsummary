@@ -38,6 +38,6 @@ gather_ard <- function(x) {
   if (!is_empty(x[["cards"]])) return(x[["cards"]]) # styler: off
 
   # if no ARD found, print note
-  cli::cli_inform("No ARD found for {.cls {class(x)}} table.")
+  cli::cli_inform("No ARD present for passed {.cls {class(x)}} table.")
   invisible()
 }
