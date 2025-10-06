@@ -58,7 +58,7 @@ When sorting a table that includes an overall column \code{\link[=add_overall]{a
 \emph{before} \code{sort_hierarchical()} is called.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 theme_gtsummary_compact()
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
