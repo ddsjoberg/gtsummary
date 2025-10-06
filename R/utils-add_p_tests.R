@@ -430,7 +430,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   }
   # styler: on
 
-  cardx::ard_emmeans_mean_difference(
+  cardx::ard_emmeans_contrast(
     data = data,
     formula = formula,
     method = method,
