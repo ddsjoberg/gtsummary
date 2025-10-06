@@ -9,7 +9,7 @@ test_that("Regression test for system-dependent test for pvalue", {
   conf.level <- 0.95
 
   # tbl generation with cardx code stats::wilcox.test()
-  suppressMessages( # cannot compute exact p-value with ties
+  suppressMessages( # cannot compute exact p-value with ties # older R versions
     tbl <- tbl_summary(dat, by = am) |>
       add_p(pvalue_fun = label_style_pvalue(digits = 3)) |>
       as.data.frame()
@@ -33,18 +33,52 @@ test_that("Regression test for system-dependent test for pvalue", {
   }
 })
 
+test_that("pvalue estimations with ties work with R-devel built on or after 2025-09-03", {
+  # 1. Extract the build date string using a regular expression
+  r_build_date_str <- sub(".*\\((\\d{4}-\\d{2}-\\d{2})\\).*", "\\1", R.version$version.string)
+
+  # 2. Convert to Date objects for a robust comparison
+  r_build_date <- as.Date(r_build_date_str)
+  target_date <- as.Date("2025-09-03")
+
+  # 3. Skip the test if the condition is met
+  skip_if(r_build_date < target_date, message = paste("This feature requires R built on or after", target_date))
+
+
+  expect_equal(
+    tbl_summary(mtcars, by = am) |>
+      add_p() |>
+      as.data.frame() |>
+      dplyr::select("**p-value**") |>
+      unlist(use.names = FALSE),
+    c(
+      "0.001", "0.009", NA, NA, NA, "<0.001", "0.044", "<0.001",
+      "<0.001", "0.3", "0.3", "<0.001", NA, NA, NA, "0.3",
+      NA, NA, NA, NA, NA, NA
+    )
+  )
+
+  expect_message(
+    tbl_summary(mtcars, by = am) |>
+      add_p(
+        test = list(
+          mpg = "t.test",
+          hp = "oneway.test",
+          cyl = "chisq.test.no.correct",
+          carb = "mood.test"
+        )
+      ) |>
+      as.data.frame(),
+    '"statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect'
+  )
+})
+
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
     tbl_summary(trial, by = grade) |>
       add_p() |>
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
-  )
-
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
-      add_p() |>
-      as.data.frame()
   )
 
   expect_snapshot(
@@ -139,19 +173,6 @@ test_that("add_p() creates errors with bad args", {
 })
 
 test_that("add_p.tbl_summary() works well", {
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
-      add_p(
-        test = list(
-          mpg = "t.test",
-          hp = "oneway.test",
-          cyl = "chisq.test.no.correct",
-          carb = "mood.test"
-        )
-      ) |>
-      as.data.frame()
-  )
-
   expect_snapshot(
     tbl_summary(mtcars, by = am, include = c(mpg, disp)) |>
       add_p(
