@@ -120,7 +120,7 @@ but you can use stored formulas with \code{rlang::inject(survfit(!!my_formula, l
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("survival")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("survival")) withAutoprint(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------

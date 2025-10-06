@@ -142,6 +142,13 @@ test_that("gather_ard(x) works with `tbl_*()` functions", {
   )
 })
 
+test_that("gather_ard(x) messaging", {
+  expect_snapshot(
+    as_gtsummary(mtcars[1:2, 1:2]) |>
+      gather_ard()
+  )
+})
+
 test_that("gather_ard(x) works with `tbl_ard_*()` functions", {
   # tbl_ard_summary()
   expect_false(

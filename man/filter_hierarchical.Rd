@@ -101,7 +101,7 @@ treatment groups observed more than 3 AEs
 }
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
                                 "EAR AND LABYRINTH DISORDERS")) |>
