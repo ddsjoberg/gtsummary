@@ -432,7 +432,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
 
 test_that("Groups arg and lme4", {
   skip_if_not(is_pkg_installed(c("lme4", "broom.mixed"), ref = "cardx"))
-  withr::local_package("broom")
+  withr::local_package("broom.mixed")
   withr::local_package("lme4")
 
   trial_group <-

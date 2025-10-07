@@ -161,6 +161,14 @@
       1                mpg 17.3 (14.7, 19.2) 22.8 (21.0, 30.4)       0.001
       2               disp    276 (168, 360)     120 (79, 160)      <0.001
 
+# Groups arg and lme4
+
+    Code
+      as.data.frame(tbl_groups)
+    Output
+        **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102 **p-value**
+      1                Age          46 (37, 60)           48 (39, 56)         0.8
+
 # add_p.tbl_summary() can be run after add_difference()
 
     Code
