@@ -34,16 +34,12 @@ test_that("Regression test for system-dependent test for pvalue", {
 })
 
 test_that("pvalue estimations with ties work with R-devel built on or after 2025-09-03", {
-  # 1. Extract the build date string using a regular expression
-  r_build_date_str <- sub(".*\\((\\d{4}-\\d{2}-\\d{2})\\).*", "\\1", R.version$version.string)
+  r_build_date <- paste(R.version$year, R.version$month, R.version$day, sep = "-") |>
+    as.Date.character()
 
-  # 2. Convert to Date objects for a robust comparison
-  r_build_date <- as.Date(r_build_date_str)
-  target_date <- as.Date("2025-09-03")
+  target_date <- "2025-09-03" |> as.Date.character()
 
-  # 3. Skip the test if the condition is met
-  skip_if(r_build_date < target_date, message = paste("This feature requires R built on or after", target_date))
-
+  skip_if(r_build_date < target_date, message = "This feature requires R built on or after 2025-09-03")
 
   expect_equal(
     tbl_summary(mtcars, by = am) |>
