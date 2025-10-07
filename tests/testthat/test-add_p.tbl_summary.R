@@ -1,18 +1,80 @@
 skip_on_cran()
 skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx"))
 
+test_that("Regression test for system-dependent test for pvalue", {
+  # wilcox.test for mpg and hp only. More might be added if other system tests differ
+  variables <- c("mpg", "hp")
+  by <- "am"
+  dat <- mtcars |> select(all_of(c(variables, by)))
+  conf.level <- 0.95
+
+  # tbl generation with cardx code stats::wilcox.test()
+  suppressMessages( # cannot compute exact p-value with ties # older R versions
+    tbl <- tbl_summary(dat, by = am) |>
+      add_p(pvalue_fun = label_style_pvalue(digits = 3)) |>
+      as.data.frame()
+  )
+
+  tbl_pvalue <- tbl$`**p-value**`
+
+  for (i in seq_along(variables)) {
+    variable <- variables[i]
+
+    # test that the p-value in the table matches the p-value from stats::wilcox.test()
+    expect_equal(
+      tbl_pvalue[i],
+      suppressWarnings(
+        stats::wilcox.test(dat[[variable]] ~ dat[[by]], conf.level = conf.level) |>
+          broom::tidy() |>
+          dplyr::pull("p.value") |>
+          label_style_pvalue(digits = 3)()
+      )
+    )
+  }
+})
+
+test_that("pvalue estimations with ties work with R-devel built on or after 2025-09-03", {
+  r_build_date <- paste(R.version$year, R.version$month, R.version$day, sep = "-") |>
+    as.Date.character()
+
+  target_date <- "2025-09-03" |> as.Date.character()
+
+  skip_if(r_build_date < target_date, message = "This feature requires R built on or after 2025-09-03")
+
+  expect_equal(
+    tbl_summary(mtcars, by = am) |>
+      add_p() |>
+      as.data.frame() |>
+      dplyr::select("**p-value**") |>
+      unlist(use.names = FALSE),
+    c(
+      "0.001", "0.009", NA, NA, NA, "<0.001", "0.044", "<0.001",
+      "<0.001", "0.3", "0.3", "<0.001", NA, NA, NA, "0.3",
+      NA, NA, NA, NA, NA, NA
+    )
+  )
+
+  expect_message(
+    tbl_summary(mtcars, by = am) |>
+      add_p(
+        test = list(
+          mpg = "t.test",
+          hp = "oneway.test",
+          cyl = "chisq.test.no.correct",
+          carb = "mood.test"
+        )
+      ) |>
+      as.data.frame(),
+    '"statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect'
+  )
+})
+
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
     tbl_summary(trial, by = grade) |>
       add_p() |>
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
-  )
-
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
-      add_p() |>
-      as.data.frame()
   )
 
   expect_snapshot(
@@ -107,19 +169,6 @@ test_that("add_p() creates errors with bad args", {
 })
 
 test_that("add_p.tbl_summary() works well", {
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
-      add_p(
-        test = list(
-          mpg = "t.test",
-          hp = "oneway.test",
-          cyl = "chisq.test.no.correct",
-          carb = "mood.test"
-        )
-      ) |>
-      as.data.frame()
-  )
-
   expect_snapshot(
     tbl_summary(mtcars, by = am, include = c(mpg, disp)) |>
       add_p(
@@ -383,7 +432,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
 
 test_that("Groups arg and lme4", {
   skip_if_not(is_pkg_installed(c("lme4", "broom.mixed"), ref = "cardx"))
-  withr::local_package("broom")
+  withr::local_package("broom.mixed")
   withr::local_package("lme4")
 
   trial_group <-
