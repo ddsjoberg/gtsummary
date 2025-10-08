@@ -775,5 +775,17 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
       percent = trial["age"]
     )
   )
+
+  # check error message when class of `by` column does not match
+  expect_snapshot(
+    error = TRUE,
+    cards::ADSL |>
+      tbl_summary(
+        by = ARM,
+        include = AGEGR1,
+        percent = cards::ADSL |> dplyr::mutate(ARM = factor(ARM))
+      )
+  )
+
 })
 

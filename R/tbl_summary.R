@@ -222,6 +222,13 @@ tbl_summary <- function(data,
         call = get_cli_abort_call()
       )
     }
+    if (!is_empty(by) && !identical(class(data[[by]]), class(percent[[by]]))) {
+      cli::cli_abort(
+        "The class of the {.val {by}} column in {.arg data} data frame ({.cls {class(data[[by]])}})
+          must match the class in the {.arg percent} data frame ({.cls {class(percent[[by]])}}) .",
+        call = get_cli_abort_call()
+      )
+    }
   }
   else if (!is_integerish(percent)) {
     cli::cli_abort(
