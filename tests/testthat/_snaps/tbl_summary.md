@@ -462,3 +462,12 @@
       Error in `tbl_summary()`:
       ! The <data.frame> passed in the `percent` argument must contain the "trt" column.
 
+---
+
+    Code
+      tbl_summary(cards::ADSL, by = ARM, include = AGEGR1, percent = dplyr::mutate(
+        cards::ADSL, ARM = factor(ARM)))
+    Condition
+      Error in `tbl_summary()`:
+      ! The class of the "ARM" column in `data` data frame (<character>) must match the class in the `percent` data frame (<factor>) .
+
