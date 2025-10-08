@@ -786,6 +786,5 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
         percent = cards::ADSL |> dplyr::mutate(ARM = factor(ARM))
       )
   )
-
 })
 
