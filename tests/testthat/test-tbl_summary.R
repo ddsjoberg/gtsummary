@@ -744,7 +744,7 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
       dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)) |>
       tbl_summary(
         include = DCREASCD,
-        percent = cards::ADSL,
+        percent = dplyr::bind_rows(cards::ADSL, cards::ADSL),
         statistic = all_categorical() ~ "{n} / {N} ({p}%)",
         missing = "no"
       )
@@ -759,10 +759,21 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
       cards::ADSL |>
         dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)),
       variables = "DCREASCD",
-      denominator = cards::ADSL
+      denominator = dplyr::bind_rows(cards::ADSL, cards::ADSL)
     ) |>
       dplyr::select(-fmt_fun),
     ignore_attr = TRUE
+  )
+
+  # when data frame does not include the by variable
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      by = trt,
+      include = age,
+      percent = trial["age"]
+    )
   )
 })
 
