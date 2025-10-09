@@ -67,7 +67,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_variables(),
         -fmt_fun
       ),
-    cardx::ard_emmeans_mean_difference(
+    cardx::ard_emmeans_contrast(
       data = trial,
       formula = ttdeath ~ trt,
       method = "lm",
@@ -96,7 +96,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_variables(),
         -fmt_fun
       ),
-    cardx::ard_emmeans_mean_difference(
+    cardx::ard_emmeans_contrast(
       data = trial,
       formula = ttdeath ~ trt + (1 | grade),
       method = "lmer",
@@ -126,7 +126,7 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
         -cards::all_ard_variables(),
         -fmt_fun
       ),
-    cardx::ard_emmeans_mean_difference(
+    cardx::ard_emmeans_contrast(
       data = trial,
       formula = response ~ trt,
       method = "glm",

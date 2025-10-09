@@ -78,7 +78,7 @@ test_that("add_p.tbl_svysummary(test)", {
     tbl$table_body |>
       dplyr::filter(variable == "response_emmeans", row_type == "label") |>
       dplyr::pull(p.value),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        method.args = list(family = binomial),
                                        formula = response_emmeans ~ trt,
@@ -93,7 +93,7 @@ test_that("add_p.tbl_svysummary(test)", {
     tbl$table_body |>
       dplyr::filter(variable == "age_emmeans", row_type == "label") |>
       dplyr::pull(p.value),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        formula = age_emmeans ~ trt,
                                        response_type = "continuous") |>
