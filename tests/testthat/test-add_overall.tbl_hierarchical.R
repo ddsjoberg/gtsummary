@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("withr"))
+skip_if_pkg_not_installed("withr")
 
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(

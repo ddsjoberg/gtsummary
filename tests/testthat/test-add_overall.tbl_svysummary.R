@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survey"))
+skip_if_pkg_not_installed("survey")
 
 svy_mtcars <- survey::svydesign(~1, data = mtcars, weights = ~1)
 

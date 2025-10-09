@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("kableExtra", "knitr", "broom.helpers")))
+skip_if_pkg_not_installed(c("kableExtra", "knitr", "broom.helpers"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -86,7 +86,7 @@ test_that("as_kable_extra(addtl_fmt) works as expected", {
 })
 
 test_that("as_kable_extra works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival"))
+  skip_if_pkg_not_installed("survival")
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
     tbl_regression(exponentiate = TRUE)

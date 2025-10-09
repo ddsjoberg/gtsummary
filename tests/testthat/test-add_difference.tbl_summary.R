@@ -1,8 +1,8 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c(
-  "broom", "broom.helpers", "lme4", "smd",
-  "effectsize", "emmeans"
-), ref = "cardx"))
+skip_if_pkg_not_installed(
+  c("broom", "broom.helpers", "lme4", "smd", "effectsize", "emmeans"),
+  ref = "cardx"
+)
 
 test_that("add_difference.tbl_summary() works with basic usage", {
   expect_error(
@@ -51,7 +51,7 @@ test_that("add_difference.tbl_summary() works with basic usage", {
 })
 
 test_that("add_difference.tbl_summary(tests = 'emmeans')", {
-  skip_if_not(is_pkg_installed("emmeans", ref = "cardx"))
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
   tbl1 <-
     trial |>
     tbl_summary(
