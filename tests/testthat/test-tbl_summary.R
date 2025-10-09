@@ -634,7 +634,7 @@ test_that("tbl_summary(percent)", {
 
 test_that("tbl_summary() with hms times", {
   # originally reported in https://github.com/ddsjoberg/gtsummary/issues/1893
-  skip_if_not_installed("hms")
+  skip_if_pkg_not_installed("hms")
   withr::local_package("hms")
 
   trial2 <- trial |> dplyr::mutate(time_hms = hms(seconds = 15))

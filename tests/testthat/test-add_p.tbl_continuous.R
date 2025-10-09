@@ -82,7 +82,7 @@ test_that("add_p.tbl_continuous(test.args) works", {
 })
 
 test_that("add_p.tbl_continuous(group) works", {
-  skip_if_not(is_pkg_installed("lme4"))
+  skip_if_pkg_not_installed("lme4")
 
   expect_silent(
     tbl4 <- trial |>
