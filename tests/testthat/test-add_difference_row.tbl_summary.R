@@ -1,8 +1,8 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c(
-  "broom", "broom.helpers", "lme4", "smd",
-  "effectsize", "emmeans"
-), ref = "cardx"))
+skip_if_pkg_not_installed(
+  c("broom", "broom.helpers", "lme4", "smd", "effectsize", "emmeans"),
+  ref = "cardx"
+)
 
 test_that("add_difference_row() works", {
   expect_silent(

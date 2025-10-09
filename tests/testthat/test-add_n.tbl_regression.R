@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom", "broom.helpers")))
+skip_if_pkg_not_installed(c("broom", "broom.helpers"))
 
 test_that("add_n.tbl_regression() works", {
   tbl <-

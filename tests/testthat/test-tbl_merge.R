@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "broom.helpers")))
+skip_if_pkg_not_installed(c("survival", "broom.helpers"))
 
 # univariate regression models
 t0 <-
@@ -212,7 +212,7 @@ test_that("tbl_merge throws expected errors", {
 })
 
 test_that("tbl_merge() merges mixed-type from .$table_styling$header$modify_* columns", {
-  skip_if_not(is_pkg_installed(c("survey", "broom", "withr")))
+  skip_if_pkg_not_installed(c("survey", "broom", "withr"))
   withr::local_seed(123)
 
   num_rows <- 10
