@@ -42,6 +42,19 @@ test_that("tbl_hierarchical(denominator) works properly", {
     error = TRUE,
     tbl_hierarchical(data = trial2, variables = trt, denominator = "test", id = id)
   )
+
+
+  # check error message when class of `by` column does not match
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical(
+      data = cards::ADAE,
+      by = TRTA,
+      variables = AEDECOD,
+      denominator = cards::ADSL |> dplyr::mutate(TRTA = factor(TRTA)),
+      id = USUBJID
+    )
+  )
 })
 
 # tbl_hierarchical(include) ------------------------------------------------------------
