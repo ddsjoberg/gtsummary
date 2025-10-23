@@ -228,7 +228,7 @@ test_that("add_stat(location) for 'tbl_continuous'", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("add_stat() with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed("survey"))
+  skip_if_pkg_not_installed("survey")
 
   return_three_10s <- function(...) rep_len(10, 3)
   expect_equal(
