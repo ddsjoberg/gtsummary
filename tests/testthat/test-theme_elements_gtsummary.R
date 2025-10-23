@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "broom.helpers", "survey")))
+skip_if_pkg_not_installed(c("survival", "broom.helpers", "survey"))
 
 # pkgwide-fn:prependpvalue_fun -------------------------------------------------
 test_that("pkgwide-fn:prependpvalue_fun", {
