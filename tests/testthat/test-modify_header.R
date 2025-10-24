@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("broom.helpers"))
+skip_if_pkg_not_installed("broom.helpers")
 
 # first, testing deprecation
 test_that("modify_header(update,quiet) are deprecated", {
@@ -152,7 +152,7 @@ test_that("modify_header(text_interpret) works", {
 })
 
 test_that("modify_header() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed("survey"))
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -212,7 +212,7 @@ test_that("modify_header() works with tbl_cross()", {
 })
 
 test_that("modify_header() works with tbl_regression()", {
-  skip_if_not(is_pkg_installed("broom.helpers"))
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("broom.helpers"))
+skip_if_pkg_not_installed("broom.helpers")
 
 lmod <- lm(
   age ~ marker + I(marker^2) + stage,
@@ -52,7 +52,7 @@ test_that("combine_terms(label) works as expected", {
 })
 
 test_that("combine_terms works with add_global_p", {
-  skip_if_not(is_pkg_installed("parameters"))
+  skip_if_pkg_not_installed("parameters")
 
   expect_silent(
     tbl <- lmod |>
@@ -100,7 +100,7 @@ test_that("combine_terms works with logistic regression models", {
 })
 
 test_that("combine_terms works with Cox models", {
-  skip_if_not(is_pkg_installed("survival"))
+  skip_if_pkg_not_installed("survival")
 
   mod <- survival::coxph(
     survival::Surv(ttdeath, death) ~ age + stage,
@@ -124,7 +124,7 @@ test_that("combine_terms works with Cox models", {
 })
 
 test_that("combine_terms works with GEE models", {
-  skip_if_not(is_pkg_installed("geepack"))
+  skip_if_pkg_not_installed("geepack")
 
   mod <- geepack::geeglm(
     as.formula("weight ~ Diet + Time"),
