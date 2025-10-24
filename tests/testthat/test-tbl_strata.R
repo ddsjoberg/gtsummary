@@ -265,7 +265,7 @@ test_that("tbl_strata2(.quiet) produces deprecation warning", {
 })
 
 test_that("tbl_strata works with survey objects", {
-  skip_if_not(is_pkg_installed("survey"))
+  skip_if_pkg_not_installed("survey")
 
   svy_obj <- survey::svydesign(~1, data = trial, weights = ~1)
 

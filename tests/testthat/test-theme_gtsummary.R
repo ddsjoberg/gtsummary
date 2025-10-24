@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("huxtable", "broom.helpers")))
+skip_if_pkg_not_installed(c("huxtable", "broom.helpers"))
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(
@@ -195,7 +195,7 @@ test_that("theme_gtsummary_journal('nejm') works", {
 })
 
 test_that("theme_gtsummary_journal('jama') works", {
-  skip_if_not(is_pkg_installed("survey"))
+  skip_if_pkg_not_installed("survey")
 
   # check that we get
   #  - IQR separated with emdash in table
