@@ -27,7 +27,7 @@
 #' for example, `bold_labels()` will bold the incorrect rows after running
 #' this function.
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car", "broom", "broom.helpers", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "broom", "broom.helpers", "parameters"))
 #' # Example 1 ----------------------------------
 #' set.seed(11234)
 #' data.frame(

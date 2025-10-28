@@ -35,6 +35,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Xing Bai [contributor]
+  \item Malcolm Barrett (\href{https://orcid.org/0000-0003-0299-5825}{ORCID}) [contributor]
   \item Esther Drill (\href{https://orcid.org/0000-0002-3315-4538}{ORCID}) [contributor]
   \item Jessica Flynn (\href{https://orcid.org/0000-0001-8310-6684}{ORCID}) [contributor]
   \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID}) [contributor]

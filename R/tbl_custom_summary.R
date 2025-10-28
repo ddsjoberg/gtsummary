@@ -406,7 +406,7 @@ tbl_custom_summary <- function(data,
       cards::ard_total_n(data),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
-        cards::ard_categorical(data,
+        cards::ard_tabulate(data,
                                variables = all_of(by),
                                stat_label = ~ default_stat_labels()
         )

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom", "broom.helpers")))
+skip_if_pkg_not_installed(c("broom", "broom.helpers"))
 
 mod_lm <- lm(hp ~ am, data = mtcars)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)

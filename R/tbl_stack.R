@@ -8,7 +8,7 @@
 #'   List of gtsummary objects
 #' @param group_header (`character`)\cr
 #'   Character vector with table headers where length matches the length of `tbls`
-#' @param attr_order (`integer`) `r lifecycle::badge("experimental")` \cr
+#' @param attr_order (`integer`) \cr
 #'   Set the order table attributes are set.
 #'   Tables are stacked in the order they are passed in the `tbls` argument:
 #'   use `attr_order` to specify the order the table attributes take precedent.
@@ -16,12 +16,17 @@
 #'   Default is to set precedent in the order tables are passed.
 #' @param quiet (scalar `logical`)\cr
 #'   Logical indicating whether to suppress additional messaging. Default is `FALSE`.
+#' @param tbl_id_lbls (`vector`)\cr
+#'   Optional vector of the same length `tbls`.
+#'   When specified a new, hidden column is added to the returned `.$table_body`
+#'   with these labels. _The most common use case of this argument is for
+#'   the development of other functions._
 #'
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A `tbl_stack` object
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("survival", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survival", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' # stacking two tbl_regression objects
 #' t1 <-
@@ -64,7 +69,12 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #'
 #' tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
-tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq_along(tbls), tbl_ids = NULL) {
+tbl_stack <- function(tbls,
+                      group_header = NULL,
+                      quiet = FALSE,
+                      attr_order = seq_along(tbls),
+                      tbl_ids = NULL,
+                      tbl_id_lbls = NULL) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
@@ -78,6 +88,9 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
   check_class(tbl_ids, cls = "character", allow_empty = TRUE)
   if (!is_empty(tbl_ids)) {
     check_identical_length(tbls, tbl_ids)
+  }
+  if (!is_empty(tbl_id_lbls)) {
+    check_identical_length(tbls, tbl_id_lbls)
   }
 
   # will return call, and all arguments passed to tbl_stack
@@ -95,13 +108,21 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
       function(tbl, id) {
         # adding a table ID and group header
         table_body <- tbl[["table_body"]] |> dplyr::mutate("{tbl_id_colname}" := id)
+
+        # add ID label column if specified
+        if (!is_empty(tbl_id_lbls)) {
+          table_body <- table_body |>
+            dplyr::mutate("{tbl_id_colname}_lbl" := tbl_id_lbls[id])
+        }
+
         if (!is.null(group_header)) {
           table_body <-
             table_body |>
             dplyr::mutate(groupname_col = group_header[id])
         }
 
-        table_body |> dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), everything())
+        table_body |>
+          dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), matches("^tbl_id\\d+_lbl$"), everything())
       }
     ) %>%
     dplyr::bind_rows()
@@ -191,31 +212,39 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = FALSE, attr_order = seq
 
 # function prints changes to column labels and spanning headers
 .print_stack_differences <- function(tbls) {
-  tbl_differences <-
-    map2(
-      tbls, seq_len(length(tbls)),
-      ~ .x[["table_styling"]][["header"]] |>
-        dplyr::mutate(..tbl_id.. = .y)
+  any_header_difference <-
+    lapply(
+      tbls,
+      FUN = \(x) {
+        x[["table_styling"]][["header"]] |>
+          dplyr::filter(!.data$hide) |>
+          dplyr::select("column", "label")
+      }
     ) |>
     dplyr::bind_rows() |>
-    dplyr::select("..tbl_id..", "column", "label") |>
-    tidyr::pivot_longer(cols = c("label")) |>
-    dplyr::group_by(.data$column, .data$name) |>
     dplyr::mutate(
-      new_value = .data$value[1],
-      name_fmt = dplyr::case_when(
-        name == "label" ~ "Column header"
-      )
+      .by = "column",
+      label_difference = .data$label != .data$label[1]
     ) |>
-    dplyr::filter(.data$new_value != .data$value) |>
-    dplyr::ungroup() |>
-    dplyr::arrange(.data$name != "label", .data$name_fmt, .data$..tbl_id..)
+    dplyr::pull("label_difference") |>
+    any()
 
-  if (nrow(tbl_differences) > 0) {
+  # if there are difference, print them to the console
+  if (any_header_difference) {
     cli::cli_inform(
-      c("Column headers among stacked tables differ. Headers from the first table are used.",
-        i = "Check the header is correct and use {.fun modify_header} to update,
-             or {.code quiet = TRUE} to suppress this message.")
+      c("Column headers among stacked tables differ.",
+        i = "Use {.fun modify_header} to update or {.code quiet = TRUE} to suppress this message.")
+    )
+
+    walk(
+      seq_along(tbls),
+      ~ tbls[[.x]] |>
+        getElement("table_styling") |>
+        getElement("header") |>
+        dplyr::filter(!hide) |>
+        dplyr::select("column", "label") |>
+        dplyr::mutate(label =  cli::cli_format(.data$label)) |>
+        tibble_as_cli(label = list(column = glue("Table {.x} Column Name"), label = "Header"))
     )
   }
 

@@ -4,35 +4,43 @@
 \alias{sort_hierarchical}
 \alias{sort_hierarchical.tbl_hierarchical}
 \alias{sort_hierarchical.tbl_hierarchical_count}
+\alias{sort_hierarchical.tbl_ard_hierarchical}
 \title{Sort Hierarchical Tables}
 \usage{
 sort_hierarchical(x, ...)
 
-\method{sort_hierarchical}{tbl_hierarchical}(x, sort = c("descending", "alphanumeric"), ...)
+\method{sort_hierarchical}{tbl_hierarchical}(x, sort = everything() ~ "descending", ...)
 
-\method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = c("descending", "alphanumeric"), ...)
+\method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = everything() ~ "descending", ...)
+
+\method{sort_hierarchical}{tbl_ard_hierarchical}(x, sort = everything() ~ "descending", ...)
 }
 \arguments{
-\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count})\cr
-a hierarchical gtsummary table of class \code{'tbl_hierarchical'} or \code{'tbl_hierarchical_count'}.}
+\item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count}, \code{tbl_ard_hierarchical})\cr
+a hierarchical gtsummary table of class \code{'tbl_hierarchical'}, \code{'tbl_hierarchical_count'},
+or \code{'tbl_ard_hierarchical'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
-\item{sort}{(\code{string})\cr
-type of sorting to perform. Value must be one of:
+\item{sort}{(\code{\link[=syntax]{formula-list-selector}}, \code{string})\cr
+a named list, a list of formulas, a single formula where the list element is a named list of functions
+(or the RHS of a formula), or a string specifying the types of sorting to perform at each hierarchy level.
+If the sort method for any variable is not specified then the method will default to \code{"descending"}. If a single
+unnamed string is supplied it is applied to all hierarchy levels. For each variable, the value specified must
+be one of:
 \itemize{
-\item \code{"alphanumeric"} - at each hierarchy level of the table, rows are ordered alphanumerically (i.e. A to Z)
-by label text.
-\item \code{"descending"} - at each hierarchy level of the table, count sums are calculated for each row and rows are
-sorted in descending order by sum. If \code{sort = "descending"}, the \code{n} statistic is used to calculate row sums if
-included in \code{statistic} for all variables, otherwise \code{p} is used. If neither \code{n} nor \code{p} are present in \code{x} for
-all variables, an error will occur.
+\item \code{"alphanumeric"} - at the specified hierarchy level, groups are ordered alphanumerically (i.e. A to Z) by
+\code{variable_level} text.
+\item \code{"descending"} - at the specified hierarchy level, count sums are calculated for each row and rows are sorted in
+descending order by sum. If \code{sort} is \code{"descending"} for a given variable and \code{n} is included in \code{statistic} for
+the variable then \code{n} is used to calculate row sums, otherwise \code{p} is used. If neither \code{n} nor \code{p} are present
+in \code{x} for the variable, an error will occur.
 }
 
-Defaults to \code{"descending"}.}
+Defaults to \code{everything() ~ "descending"}.}
 }
 \value{
-A \code{gtsummary} of the same class as \code{x}.
+a gtsummary table of the same class as \code{x}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
@@ -45,8 +53,12 @@ sorted in descending order by sum (default).
 sorts tables in alphanumeric order.
 }
 }
+\note{
+When sorting a table that includes an overall column \code{\link[=add_overall]{add_overall()}} must be called to add the overall column
+\emph{before} \code{sort_hierarchical()} is called.
+}
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 theme_gtsummary_compact()
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(AEBODSYS \%in\% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
@@ -58,18 +70,23 @@ tbl <-
     data = ADAE_subset,
     variables = c(AEBODSYS, AEDECOD),
     by = TRTA,
-    denominator = cards::ADSL |> mutate(TRTA = ARM),
+    denominator = cards::ADSL,
     id = USUBJID,
     overall_row = TRUE
   ) |>
   add_overall()
 
-
-# Example 1 - Descending Frequency Sort ------------------
+# Example 1 ----------------------------------------------
+# Sort all variables by descending frequency (default)
 sort_hierarchical(tbl)
 
-# Example 2 - Alphanumeric Sort --------------------------
-sort_hierarchical(tbl, sort = "alphanumeric")
+# Example 2 ----------------------------------------------
+# Sort all variables alphanumerically
+sort_hierarchical(tbl, sort = everything() ~ "alphanumeric")
+
+# Example 3 ----------------------------------------------
+# Sort `AEBODSYS` alphanumerically, `AEDECOD` by descending frequency
+sort_hierarchical(tbl, sort = list(AEBODSYS = "alphanumeric", AEDECOD = "descending"))
 
 reset_gtsummary_theme()
 \dontshow{\}) # examplesIf}

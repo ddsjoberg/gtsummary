@@ -38,7 +38,7 @@ for example, \code{bold_labels()} will bold the incorrect rows after running
 this function.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "car", "broom", "broom.helpers", "parameters"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "broom", "broom.helpers", "parameters"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 set.seed(11234)
 data.frame(

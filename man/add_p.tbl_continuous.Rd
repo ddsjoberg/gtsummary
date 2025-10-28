@@ -51,7 +51,7 @@ Default is \code{NULL}. See \link{tests} for methods that utilize the \code{grou
 Add p-values
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   tbl_continuous(variable = age, by = trt, include = grade) |>

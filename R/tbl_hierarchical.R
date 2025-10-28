@@ -1,6 +1,6 @@
 #' Hierarchical Table
 #'
-#' @description `r lifecycle::badge('experimental')`\cr
+#' @description
 #' Use these functions to generate hierarchical tables.
 #'
 #' - `tbl_hierarchical()`: Calculates *rates* of events (e.g. adverse events)
@@ -73,7 +73,7 @@
 #'   data = ADAE_subset,
 #'   variables = c(AESOC, AETERM),
 #'   by = TRTA,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'   denominator = cards::ADSL,
 #'   id = USUBJID,
 #'   digits = everything() ~ list(p = 1),
 #'   overall_row = TRUE,
@@ -86,7 +86,7 @@
 #'   variables = c(AESOC, AESEV),
 #'   by = TRTA,
 #'   id = USUBJID,
-#'   denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'   denominator = cards::ADSL,
 #'   include = AESEV,
 #'   label = list(AESEV = "Highest Severity")
 #' )
@@ -129,25 +129,38 @@ tbl_hierarchical <- function(data,
     )
   }
 
+  if (is.data.frame(denominator) && !is_empty(by) && !identical(class(data[[by]]), class(denominator[[by]]))) {
+    cli::cli_abort(
+      "The class of the {.val {by}} column in {.arg data} data frame ({.cls {class(data[[by]])}})
+          must match the class in the {.arg denominator} data frame ({.cls {class(denominator[[by]])}}) .",
+      call = get_cli_abort_call()
+    )
+  }
+
   # check the id argument is not empty
   if (is_empty(id)) {
     cli::cli_abort("Argument {.arg id} cannot be empty.", call = get_cli_abort_call())
   }
 
   # create table ---------------------------------------------------------------
-  internal_tbl_hierarchical(
-    data = data,
-    variables = variables,
-    by = by,
-    id = id,
-    denominator = denominator,
-    include = {{ include }},
-    statistic = {{ statistic }},
-    overall_row = overall_row,
-    label = label,
-    digits = {{ digits }},
-    calling_fun = "tbl_hierarchical"
-  )
+  x <-
+    internal_tbl_hierarchical(
+      data = data,
+      variables = variables,
+      by = by,
+      id = id,
+      denominator = denominator,
+      include = {{ include }},
+      statistic = {{ statistic }},
+      overall_row = overall_row,
+      label = label,
+      digits = {{ digits }},
+      calling_fun = "tbl_hierarchical"
+    )
+
+  # running any additional mods
+  get_theme_element("tbl_hierarchical-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 }
 
 #' @rdname tbl_hierarchical
@@ -180,19 +193,24 @@ tbl_hierarchical_count <- function(data,
   }
 
   # create table ---------------------------------------------------------------
-  internal_tbl_hierarchical(
-    data = data,
-    variables = variables,
-    by = by,
-    id = NULL,
-    denominator = denominator,
-    include = {{ include }},
-    statistic = statistic,
-    overall_row = overall_row,
-    label = label,
-    digits = digits,
-    calling_fun = "tbl_hierarchical_count"
-  )
+  x <-
+    internal_tbl_hierarchical(
+      data = data,
+      variables = variables,
+      by = by,
+      id = NULL,
+      denominator = denominator,
+      include = {{ include }},
+      statistic = statistic,
+      overall_row = overall_row,
+      label = label,
+      digits = digits,
+      calling_fun = "tbl_hierarchical_count"
+    )
+
+  # running any additional mods
+  get_theme_element("tbl_hierarchical_count-fn:addnl-fn-to-run", default = identity) |>
+    do.call(list(x))
 }
 
 internal_tbl_hierarchical <- function(data,

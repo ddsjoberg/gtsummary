@@ -10,13 +10,12 @@
 
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_t_test(
       data = .data_pre_processing(data, factor = by),
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
       !!!test.args
@@ -25,13 +24,12 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 }
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_wilcox_test(
       data = .data_pre_processing(data, factor = by, numeric = variable),
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.int = TRUE,
       conf.level = conf.level,
@@ -49,7 +47,6 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0
 
 
 add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
@@ -57,7 +54,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
   rlang::inject(
     cardx::ard_stats_mcnemar_test_long(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       id = all_of(group),
       !!!test.args
@@ -66,13 +63,12 @@ add_p_test_mcnemar.test <- function(data, variable, by, group, test.args, ...) {
 }
 
 add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mcnemar_test(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       !!!test.args
     )
@@ -80,13 +76,12 @@ add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args, ...) {
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_chisq_test(
       data = .data_pre_processing(data, factor = by),
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       !!!test.args
     )
@@ -108,13 +103,12 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, test.args, ...)
 }
 
 add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_mood_test(
       data = .data_pre_processing(data, factor = by),
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       !!!test.args
     )
@@ -123,24 +117,22 @@ add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
 
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_stats_kruskal_test(
     data = .data_pre_processing(data, factor = by),
-    variable = all_of(variable),
+    variables = all_of(variable),
     by = all_of(by)
   )
 }
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_stats_fisher_test(
       data = .data_pre_processing(data, factor = by),
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
       !!!test.args
@@ -156,7 +148,6 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
-  check_pkg_installed("cardx")
   cli::cli_warn(c(
     "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
     i = "The same functionality is covered in {.val oneway.test} with argument `var.equal = TRUE`."
@@ -167,7 +158,6 @@ add_p_test_aov <- function(data, variable, by, ...) {
 }
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
@@ -180,7 +170,6 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, ...) {
-  check_pkg_installed("cardx")
   check_pkg_installed("lme4", ref = "cardx")
   check_empty(c("test.args", "adj.vars"), ...)
 
@@ -210,7 +199,6 @@ add_p_test_lme4 <- function(data, variable, by, group, ...) {
 
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
   check_empty(c("adj.vars"), ...)
@@ -218,7 +206,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
   rlang::inject(
     cardx::ard_stats_paired_t_test(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       id = all_of(group),
       conf.level = conf.level,
@@ -228,7 +216,6 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group, test.args
 }
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
@@ -236,7 +223,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
   rlang::inject(
     cardx::ard_stats_paired_wilcox_test(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       id = all_of(group),
       conf.level = conf.level,
@@ -246,7 +233,6 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group, test
 }
 
 add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.95, tbl, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("adj.vars", "group"), ...)
 
   # convert variable to lgl using the `value` argument
@@ -258,7 +244,7 @@ add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.9
   rlang::inject(
     cardx::ard_stats_prop_test(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
       !!!test.args
@@ -267,7 +253,6 @@ add_p_test_prop.test <- function(data, variable, by, test.args, conf.level = 0.9
 }
 
 add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "test.args"), ...)
   check_n_levels(data[[by]], 2L, message = "The {.arg by} column must have {.val {length}} levels.")
 
@@ -311,13 +296,12 @@ add_p_test_ancova <- function(data, variable, by, adj.vars = NULL, ...) {
 
 
 add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_cohens_d(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
       verbose = FALSE,
@@ -327,7 +311,6 @@ add_p_test_cohens_d <- function(data, variable, by, test.args, conf.level = 0.95
 }
 
 add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
@@ -335,7 +318,7 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
   rlang::inject(
     cardx::ard_effectsize_paired_cohens_d(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       id = all_of(group),
       conf.level = conf.level,
@@ -346,13 +329,12 @@ add_p_test_paired_cohens_d <- function(data, variable, by, test.args, group, con
 }
 
 add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars"), ...)
 
   rlang::inject(
     cardx::ard_effectsize_hedges_g(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       conf.level = conf.level,
       verbose = FALSE,
@@ -362,7 +344,6 @@ add_p_test_hedges_g <- function(data, variable, by, test.args, conf.level = 0.95
 }
 
 add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("adj.vars"), ...)
   check_length(group, 1L)
   warn_unbalanced_pairs(data, by, variable, group)
@@ -370,7 +351,7 @@ add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, con
   rlang::inject(
     cardx::ard_effectsize_paired_hedges_g(
       data = data,
-      variable = all_of(variable),
+      variables = all_of(variable),
       by = all_of(by),
       id = all_of(group),
       conf.level = conf.level,
@@ -381,12 +362,11 @@ add_p_test_paired_hedges_g <- function(data, variable, by, test.args, group, con
 }
 
 add_p_test_smd <- function(data, variable, by, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("group", "adj.vars", "test.args"), ...)
 
   cardx::ard_smd_smd(
     data = data,
-    variable = all_of(variable),
+    variables = all_of(variable),
     by = all_of(by),
     std.error = TRUE
   )
@@ -394,7 +374,6 @@ add_p_test_smd <- function(data, variable, by, ...) {
 
 add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
                                type, group = NULL, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
 
   if (!is_empty(group)) check_pkg_installed("lme4", ref = "cardx")
@@ -451,7 +430,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   }
   # styler: on
 
-  cardx::ard_emmeans_mean_difference(
+  cardx::ard_emmeans_contrast(
     data = data,
     formula = formula,
     method = method,
@@ -470,7 +449,6 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
 }
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
   check_length(group, 1L)
 
@@ -521,12 +499,11 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
 
 # tbl_svysummary ---------------------------------------------------------------
 add_p_test_svy.t.test <- function(data, variable, by, conf.level = 0.95, ...) {
-  check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
 
   cardx::ard_survey_svyttest(
     data = data,
-    variable = all_of(variable),
+    variables = all_of(variable),
     by = all_of(by),
     conf.level = conf.level
   )
@@ -536,14 +513,13 @@ add_p_test_svy.svyranktest <- function(data,
                                        variable,
                                        by,
                                        test = c("wilcoxon", "vanderWaerden", "median", "KruskalWallis"), ...) {
-  check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
   test <- arg_match(test)
 
 
   cardx::ard_survey_svyranktest(
     data = data,
-    variable = all_of(variable),
+    variables = all_of(variable),
     by = all_of(by),
     test = test
   )
@@ -554,14 +530,13 @@ add_p_test_svychisq.test <- function(data,
                                       by,
                                       statistic = c("F", "Chisq", "Wald", "adjWald", "lincom",
                                                     "saddlepoint", "wls-score"), ...) {
-  check_pkg_installed("cardx")
   check_empty(c("test.args"), ...)
   statistic <- arg_match(statistic)
 
 
   cardx::ard_survey_svychisq(
     data = data,
-    variable = all_of(variable),
+    variables = all_of(variable),
     by = all_of(by),
     statistic = statistic
   )
@@ -638,7 +613,7 @@ extract_formula_data_call <- function(x) {
 }
 
 add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
-  check_pkg_installed(c("cardx", "survival"))
+  check_pkg_installed("survival")
 
   # formula and data calls
   formula_data_call <-
@@ -662,7 +637,7 @@ add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
 }
 
 add_p_tbl_survfit_coxph <- function(data, variable, test_type = c("log", "sc", "wald"), test.args, ...) {
-  check_pkg_installed(c("cardx", "survival", "broom"))
+  check_pkg_installed(c("survival", "broom"))
   test_type <- arg_match(test_type)
 
   # formula and data calls

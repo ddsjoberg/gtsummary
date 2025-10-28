@@ -1,6 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "car", "aod", "cardx", "parameters")))
-
+skip_if_pkg_not_installed(c("broom.helpers", "car", "aod", "parameters"))
 
 test_that("add_global_p.tbl_regression works with standard use", {
   tbl <- glm(response ~ age + grade, trial, family = binomial()) |>

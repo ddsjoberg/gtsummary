@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_pkg_not_installed("broom.helpers")
 
 test_that("modify_table_body() works", {
   expect_snapshot(

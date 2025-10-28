@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx"))
+skip_if_pkg_not_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx")
 
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
@@ -64,7 +64,7 @@ test_that("add_p.tbl_summary() error messaging with bad inputs", {
 })
 
 test_that("add_p.tbl_summary() & lme4", {
-  skip_if_not(is_pkg_installed("lme4", ref = "cardx"))
+  skip_if_pkg_not_installed("lme4", ref = "cardx")
 
   # errors with expected use
   expect_snapshot(
@@ -382,7 +382,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
 })
 
 test_that("Groups arg and lme4", {
-  skip_if_not(is_pkg_installed(c("lme4", "broom.mixed"), ref = "cardx"))
+  skip_if_pkg_not_installed(c("lme4", "broom.mixed"), ref = "cardx")
   withr::local_package("broom")
   withr::local_package("lme4")
 
@@ -436,7 +436,7 @@ test_that("no error with missing data", {
 })
 
 test_that("add_p.tbl_summary() can be run after add_difference()", {
-  skip_if_not(is_pkg_installed("parameters"))
+  skip_if_pkg_not_installed("parameters")
 
   expect_error(
     trial |>

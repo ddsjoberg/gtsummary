@@ -6,7 +6,7 @@
 \alias{modify_spanning_header}
 \alias{remove_spanning_header}
 \alias{show_header_names}
-\title{Modify column headers, footnotes, and spanning headers}
+\title{Modify column headers and spanning headers}
 \usage{
 modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
 
@@ -90,7 +90,7 @@ for the number of events (when applicable).
 }
 
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 # create summary table
 tbl <- trial |>
   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
