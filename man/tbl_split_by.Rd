@@ -11,6 +11,7 @@ tbl_split_by_rows(
   x,
   variables = NULL,
   row_numbers = NULL,
+  variable_level = NULL,
   footnotes = c("all", "first", "last"),
   caption = c("all", "first", "last")
 )
@@ -29,9 +30,17 @@ tbl_split_by_columns(
 \item{x}{(\code{gtsummary} or \code{list})\cr
 gtsummary table.}
 
-\item{variables, row_numbers}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}} or \code{integer})\cr
-variables or row numbers at which to split the gtsummary table rows (tables
-will be separated after each of these variables).}
+\item{variables, row_numbers, variable_level}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}} or \code{integer})\cr
+Specifies where the table will be split.
+\itemize{
+\item \code{variables}: Tables will be separated after each of the variables specified.
+The \code{x$table_body} data frame must contains a \code{'variable'}
+column to use this argument.
+\item \code{row_numbers}: Row numbers after which the table will be split.
+\item \code{variable_level}: A single column name in \code{x$table_body}. When specified,
+the table will be split at each unique level of the
+variable.
+}}
 
 \item{footnotes, caption}{(\code{string}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 can be either \code{"first"}, \code{"all"}, or \code{"last"}, to locate global footnotes or
@@ -70,27 +79,27 @@ row is selected, the split will not happen as it is supposed to happen after
 the last row.
 }
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Split by rows
 trial |>
   tbl_summary(by = trt) |>
   tbl_split_by_rows(variables = c(marker, grade)) |>
-  tail(n = 1) # Print only last table for simplicity
+  dplyr::last() # Print only last table for simplicity
 
 # Example 2 ----------------------------------
 # Split by rows with row numbers
 trial |>
   tbl_summary(by = trt) |>
   tbl_split_by_rows(row_numbers = c(5, 7)) |>
-  tail(n = 1) # Print only last table for simplicity
+  dplyr::last() # Print only last table for simplicity
 
 # Example 3 ----------------------------------
 # Split by columns
 trial |>
   tbl_summary(by = trt, include = c(death, ttdeath)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-  tail(n = 1) # Print only last table for simplicity
+  dplyr::last() # Print only last table for simplicity
 
 # Example 4 ----------------------------------
 # Both row and column splitting
@@ -98,7 +107,7 @@ trial |>
   tbl_summary(by = trt) |>
   tbl_split_by_rows(variables = c(marker, grade)) |>
   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-  tail(n = 1) # Print only last table for simplicity
+  dplyr::last() # Print only last table for simplicity
 
 # Example 5 ------------------------------
 # Split by rows with footnotes and caption
@@ -125,7 +134,6 @@ trial |>
   ) |>
   modify_source_note("Some source note!") |>
   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
-  tail(n = 2) |>
-  head(n = 1) # Print only one but not last table for simplicity
+  dplyr::nth(n = 2) # Print only one but not last table for simplicity
 \dontshow{\}) # examplesIf}
 }

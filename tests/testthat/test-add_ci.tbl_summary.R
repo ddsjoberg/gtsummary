@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("cardx") && is_pkg_installed("broom", ref = "cardx"))
+skip_if_pkg_not_installed("broom", ref = "cardx")
 
 test_that("add_ci(method) with no `by`", {
   # create a tbl with all the methods present

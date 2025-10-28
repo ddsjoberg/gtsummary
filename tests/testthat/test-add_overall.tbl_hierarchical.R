@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("withr"))
+skip_if_pkg_not_installed("withr")
 
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
@@ -16,7 +16,7 @@ test_that("add_overall.tbl_hierarchical() works", {
         data = ADAE_subset,
         variables = c(AESOC, AETERM),
         by = TRTA,
-        denominator = cards::ADSL |> mutate(TRTA = ARM),
+        denominator = cards::ADSL,
         id = USUBJID,
         digits = everything() ~ list(p = 1),
         overall_row = TRUE,

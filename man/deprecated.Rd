@@ -2,14 +2,11 @@
 % Please edit documentation in R/deprecated.R
 \name{deprecated}
 \alias{deprecated}
-\alias{modify_cols_merge}
 \alias{modify_column_indent}
 \alias{tbl_split}
 \alias{tbl_split.gtsummary}
 \title{Deprecated functions}
 \usage{
-modify_cols_merge(...)
-
 modify_column_indent(...)
 
 tbl_split(x, ...)

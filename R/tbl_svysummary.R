@@ -72,7 +72,7 @@
 #' @return A `'tbl_svysummary'` object
 #'
 #' @author Joseph Larmarange
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "survey"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey")
 #' # Example 1 ----------------------------------
 #' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
 #'   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
@@ -100,7 +100,7 @@ tbl_svysummary <- function(data,
                            percent = c("column", "row", "cell"),
                            include = everything()) {
   set_cli_abort_call()
-  check_pkg_installed(c("cardx", "survey"))
+  check_pkg_installed("survey")
 
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
@@ -278,6 +278,15 @@ tbl_svysummary <- function(data,
   # if a user only requests missingness stats, there are no "continuous" stats to calculate
   variables_continuous <- intersect(variables_continuous, names(statistic_continuous))
 
+  # any categorical `deff` statistics requested, when TRUE, deff is returned for all categorical statistics.
+  any_cat_deff <- c(variables_categorical, variables_dichotomous) |>
+    some(~"deff" %in% .extract_glue_elements(statistic[[.x]]))
+  cat_statistics <-
+    c(
+      c("n", "N", "p", "p.std.error", "n_unweighted", "N_unweighted", "p_unweighted"),
+      if(any_cat_deff) "deff" # styler: off
+    )
+
   cards <-
     cards::bind_ard(
       # attributes for summary columns
@@ -292,31 +301,33 @@ tbl_svysummary <- function(data,
                          stat_label = ~ default_stat_labels()),
       # tabulate by variable for header stats
       if (!is_empty(by)) {
-        cardx::ard_categorical(data,
+        cardx::ard_tabulate(data,
                                variables = all_of(by),
                                stat_label = ~ default_stat_labels())
       },
       # tabulate categorical summaries
-      cardx::ard_categorical(
+      cardx::ard_tabulate(
         data,
         by = all_of(by),
         variables = all_of(variables_categorical),
+        statistic = everything() ~ cat_statistics,
         fmt_fun = digits[variables_categorical],
         denominator = percent,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cardx::ard_dichotomous(
+      cardx::ard_tabulate_value(
         data,
         by = all_of(by),
         variables = all_of(variables_dichotomous),
+        statistic = everything() ~ cat_statistics,
         fmt_fun = digits[variables_dichotomous],
         denominator = percent,
         value = value[variables_dichotomous],
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cardx::ard_continuous(
+      cardx::ard_summary(
         data,
         by = all_of(by),
         variables = all_of(variables_continuous),

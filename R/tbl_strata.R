@@ -65,7 +65,7 @@
 #' @author Daniel D. Sjoberg
 #' @name tbl_strata
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(age, grade, stage, trt) |>
@@ -279,7 +279,7 @@ tbl_strata_internal <- function(data,
   if (.combine_with == "tbl_merge") {
     tbl <- inject(tbl_merge(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args))
   } else if (.combine_with == "tbl_stack") {
-    tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args))
+    tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, !!!.combine_args, tbl_id_lbls = df_tbls$strata))
   }
 
   # return tbl -----------------------------------------------------------------

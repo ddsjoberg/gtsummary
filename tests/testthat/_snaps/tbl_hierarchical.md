@@ -5,8 +5,8 @@
         id = id))
     Output
         **Chemotherapy Treatment** **N = 200**
-      1                     Drug A    45 (46%)
-      2                     Drug B    44 (43%)
+      1                     Drug A    45 (23%)
+      2                     Drug B    44 (22%)
 
 ---
 
@@ -31,10 +31,10 @@
         denominator = trial2, id = id))
     Output
         **T Stage** **Drug A**  \nN = 98 **Drug B**  \nN = 102
-      1          T1             22 (79%)              22 (88%)
-      2          T2             20 (80%)              22 (76%)
-      3          T3             20 (91%)              18 (86%)
-      4          T4             21 (91%)              21 (78%)
+      1          T1             22 (22%)              22 (22%)
+      2          T2             20 (20%)              22 (22%)
+      3          T3             20 (20%)              18 (18%)
+      4          T4             21 (21%)              21 (21%)
 
 ---
 
@@ -65,6 +65,15 @@
       Error in `tbl_hierarchical()`:
       ! The `denominator` argument must be a <data.frame> or an <integer>, not a string.
 
+---
+
+    Code
+      tbl_hierarchical(data = cards::ADAE, by = TRTA, variables = AEDECOD,
+      denominator = dplyr::mutate(cards::ADSL, TRTA = factor(TRTA)), id = USUBJID)
+    Condition
+      Error in `tbl_hierarchical()`:
+      ! The class of the "TRTA" column in `data` data frame (<character>) must match the class in the `denominator` data frame (<factor>) .
+
 # tbl_hierarchical(include) works properly
 
     Code
@@ -73,21 +82,21 @@
     Output
          **T Stage**  \n    **Grade** **N = 200**
       1                            T1        <NA>
-      2                             I    14 (82%)
-      3                            II    20 (87%)
-      4                           III    12 (92%)
+      2                             I   14 (7.0%)
+      3                            II    20 (10%)
+      4                           III   12 (6.0%)
       5                            T2        <NA>
-      6                             I    16 (89%)
-      7                            II    15 (88%)
-      8                           III    17 (89%)
+      6                             I   16 (8.0%)
+      7                            II   15 (7.5%)
+      8                           III   17 (8.5%)
       9                            T3        <NA>
-      10                            I    16 (89%)
-      11                           II     9 (82%)
-      12                          III   14 (100%)
+      10                            I   16 (8.0%)
+      11                           II    9 (4.5%)
+      12                          III   14 (7.0%)
       13                           T4        <NA>
-      14                            I    14 (93%)
-      15                           II    14 (82%)
-      16                          III   18 (100%)
+      14                            I   14 (7.0%)
+      15                           II   14 (7.0%)
+      16                          III   18 (9.0%)
 
 ---
 
@@ -97,21 +106,21 @@
     Output
          **T Stage**  \n    **Grade** **Drug A**  \nN = 98 **Drug B**  \nN = 102
       1                            T1                 <NA>                  <NA>
-      2                             I              7 (88%)               8 (89%)
-      3                            II             12 (86%)              9 (100%)
-      4                           III             6 (100%)               6 (86%)
+      2                             I             7 (7.1%)              8 (7.8%)
+      3                            II             12 (12%)              9 (8.8%)
+      4                           III             6 (6.1%)              6 (5.9%)
       5                            T2                 <NA>                  <NA>
-      6                             I              7 (88%)             10 (100%)
-      7                            II             8 (100%)               7 (78%)
-      8                           III              8 (89%)               9 (90%)
+      6                             I             7 (7.1%)             10 (9.8%)
+      7                            II             8 (8.2%)              7 (6.9%)
+      8                           III             8 (8.2%)              9 (8.8%)
       9                            T3                 <NA>                  <NA>
-      10                            I             10 (91%)              7 (100%)
-      11                           II             5 (100%)              6 (100%)
-      12                          III             6 (100%)              8 (100%)
+      10                            I             10 (10%)              7 (6.9%)
+      11                           II             5 (5.1%)              6 (5.9%)
+      12                          III             6 (6.1%)              8 (7.8%)
       13                           T4                 <NA>                  <NA>
-      14                            I             8 (100%)              7 (100%)
-      15                           II             5 (100%)              10 (83%)
-      16                          III            10 (100%)              8 (100%)
+      14                            I             8 (8.2%)              7 (6.9%)
+      15                           II             5 (5.1%)             10 (9.8%)
+      16                          III             10 (10%)              8 (7.8%)
 
 ---
 
@@ -130,23 +139,23 @@
       as.data.frame(tbl_hierarchical(data = trial2, variables = c(stage, grade),
       denominator = trial2, id = id, statistic = ~"{n}, {N}, {p}"))
     Output
-         **T Stage**  \n    **Grade** **N = 200**
-      1                            T1  36, 53, 68
-      2                             I  14, 17, 82
-      3                            II  20, 23, 87
-      4                           III  12, 13, 92
-      5                            T2  37, 54, 69
-      6                             I  16, 18, 89
-      7                            II  15, 17, 88
-      8                           III  17, 19, 89
-      9                            T3  32, 43, 74
-      10                            I  16, 18, 89
-      11                           II   9, 11, 82
-      12                          III 14, 14, 100
-      13                           T4  35, 50, 70
-      14                            I  14, 15, 93
-      15                           II  14, 17, 82
-      16                          III 18, 18, 100
+         **T Stage**  \n    **Grade**  **N = 200**
+      1                            T1  36, 200, 18
+      2                             I 14, 200, 7.0
+      3                            II  20, 200, 10
+      4                           III 12, 200, 6.0
+      5                            T2  37, 200, 19
+      6                             I 16, 200, 8.0
+      7                            II 15, 200, 7.5
+      8                           III 17, 200, 8.5
+      9                            T3  32, 200, 16
+      10                            I 16, 200, 8.0
+      11                           II  9, 200, 4.5
+      12                          III 14, 200, 7.0
+      13                           T4  35, 200, 18
+      14                            I 14, 200, 7.0
+      15                           II 14, 200, 7.0
+      16                          III 18, 200, 9.0
 
 ---
 
@@ -164,8 +173,8 @@
     Output
            **Chemotherapy Treatment** **N = 200**
       1 Number of patients with event    50 (25%)
-      2                        Drug A    45 (46%)
-      3                        Drug B    44 (43%)
+      2                        Drug A    45 (23%)
+      3                        Drug B    44 (22%)
 
 ---
 
@@ -174,8 +183,8 @@
     Output
            **Chemotherapy Treatment** **I**  \nN = 68 **II**  \nN = 68 **III**  \nN = 64
       1 Number of patients with event        40 (59%)         38 (56%)          39 (61%)
-      2                        Drug A        25 (71%)         27 (84%)          23 (74%)
-      3                        Drug B        24 (73%)         26 (72%)          26 (79%)
+      2                        Drug A        25 (37%)         27 (40%)          23 (36%)
+      3                        Drug B        24 (35%)         26 (38%)          26 (41%)
 
 ---
 
@@ -191,22 +200,22 @@
       as.data.frame(res)
     Output
          **My Stage**  \n    **My Grade** **N = 200**
-      1                                T1    36 (68%)
-      2                                 I    14 (82%)
-      3                                II    20 (87%)
-      4                               III    12 (92%)
-      5                                T2    37 (69%)
-      6                                 I    16 (89%)
-      7                                II    15 (88%)
-      8                               III    17 (89%)
-      9                                T3    32 (74%)
-      10                                I    16 (89%)
-      11                               II     9 (82%)
-      12                              III   14 (100%)
-      13                               T4    35 (70%)
-      14                                I    14 (93%)
-      15                               II    14 (82%)
-      16                              III   18 (100%)
+      1                                T1    36 (18%)
+      2                                 I   14 (7.0%)
+      3                                II    20 (10%)
+      4                               III   12 (6.0%)
+      5                                T2    37 (19%)
+      6                                 I   16 (8.0%)
+      7                                II   15 (7.5%)
+      8                               III   17 (8.5%)
+      9                                T3    32 (16%)
+      10                                I   16 (8.0%)
+      11                               II    9 (4.5%)
+      12                              III   14 (7.0%)
+      13                               T4    35 (18%)
+      14                                I   14 (7.0%)
+      15                               II   14 (7.0%)
+      16                              III   18 (9.0%)
 
 ---
 
@@ -227,23 +236,23 @@
     Code
       as.data.frame(res)
     Output
-         **T Stage**  \n    **Grade**     **N = 200**
-      1                            T1        36 (68%)
-      2                             I  14,0 (82.353%)
-      3                            II  20,0 (86.957%)
-      4                           III  12,0 (92.308%)
-      5                            T2        37 (69%)
-      6                             I  16,0 (88.889%)
-      7                            II  15,0 (88.235%)
-      8                           III  17,0 (89.474%)
-      9                            T3        32 (74%)
-      10                            I  16,0 (88.889%)
-      11                           II   9,0 (81.818%)
-      12                          III 14,0 (100.000%)
-      13                           T4        35 (70%)
-      14                            I  14,0 (93.333%)
-      15                           II  14,0 (82.353%)
-      16                          III 18,0 (100.000%)
+         **T Stage**  \n    **Grade**    **N = 200**
+      1                            T1       36 (18%)
+      2                             I  14,0 (7.000%)
+      3                            II 20,0 (10.000%)
+      4                           III  12,0 (6.000%)
+      5                            T2       37 (19%)
+      6                             I  16,0 (8.000%)
+      7                            II  15,0 (7.500%)
+      8                           III  17,0 (8.500%)
+      9                            T3       32 (16%)
+      10                            I  16,0 (8.000%)
+      11                           II   9,0 (4.500%)
+      12                          III  14,0 (7.000%)
+      13                           T4       35 (18%)
+      14                            I  14,0 (7.000%)
+      15                           II  14,0 (7.000%)
+      16                          III  18,0 (9.000%)
 
 ---
 
@@ -952,15 +961,15 @@
          row_type group1                       group1_level group2 group2_level                                         var_label variable                     label                                                stat_1   stat_2   stat_3  
          <chr>    <chr>                        <chr>        <chr>  <chr>                                                <chr>     <chr>                        <chr>                                                <chr>    <chr>    <chr>   
        1 level    ..ard_hierarchical_overall.. <NA>         <NA>   <NA>                                                 <NA>      ..ard_hierarchical_overall.. Number of patients with event                        26 (30%) 42 (50%) 40 (48%)
-       2 level    SEX                          F            <NA>   <NA>                                                 <NA>      SEX                          F                                                    13 (25%) 18 (45%) 23 (46%)
-       3 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AESOC                        CARDIAC DISORDERS                                    0 (0%)   1 (2.5%) 0 (0%)  
-       4 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AETERM                       ATRIOVENTRICULAR BLOCK SECOND DEGREE                 0 (0%)   1 (2.5%) 0 (0%)  
-       5 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AESOC                        GASTROINTESTINAL DISORDERS                           3 (5.7%) 0 (0%)   3 (6.0%)
-       6 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AETERM                       DIARRHOEA                                            3 (5.7%) 0 (0%)   3 (6.0%)
-       7 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AESOC                        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS 5 (9.4%) 11 (28%) 13 (26%)
-       8 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE ERYTHEMA                            2 (3.8%) 5 (13%)  5 (10%) 
-       9 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE PRURITUS                            4 (7.5%) 10 (25%) 12 (24%)
-      10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (11%)  7 (18%)  9 (18%) 
+       2 level    SEX                          F            <NA>   <NA>                                                 <NA>      SEX                          F                                                    13 (15%) 18 (21%) 23 (27%)
+       3 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AESOC                        CARDIAC DISORDERS                                    0 (0%)   1 (1.2%) 0 (0%)  
+       4 level    SEX                          F            AESOC  CARDIAC DISORDERS                                    <NA>      AETERM                       ATRIOVENTRICULAR BLOCK SECOND DEGREE                 0 (0%)   1 (1.2%) 0 (0%)  
+       5 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AESOC                        GASTROINTESTINAL DISORDERS                           3 (3.5%) 0 (0%)   3 (3.6%)
+       6 level    SEX                          F            AESOC  GASTROINTESTINAL DISORDERS                           <NA>      AETERM                       DIARRHOEA                                            3 (3.5%) 0 (0%)   3 (3.6%)
+       7 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AESOC                        GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS 5 (5.8%) 11 (13%) 13 (15%)
+       8 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE ERYTHEMA                            2 (2.3%) 5 (6.0%) 5 (6.0%)
+       9 level    SEX                          F            AESOC  GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS <NA>      AETERM                       APPLICATION SITE PRURITUS                            4 (4.7%) 10 (12%) 12 (14%)
+      10 level    SEX                          F            AESOC  SKIN AND SUBCUTANEOUS TISSUE DISORDERS               <NA>      AESOC                        SKIN AND SUBCUTANEOUS TISSUE DISORDERS               6 (7.0%) 7 (8.3%) 9 (11%) 
       # i 11 more rows
 
 # tbl_hierarchical works with one arm level present

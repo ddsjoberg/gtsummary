@@ -8,9 +8,15 @@
 #'
 #' @param x (`gtsummary` or `list`)\cr
 #'   gtsummary table.
-#' @param variables,row_numbers ([`tidy-select`][dplyr::dplyr_tidy_select] or `integer`)\cr
-#'   variables or row numbers at which to split the gtsummary table rows (tables
-#'   will be separated after each of these variables).
+#' @param variables,row_numbers,variable_level ([`tidy-select`][dplyr::dplyr_tidy_select] or `integer`)\cr
+#'    Specifies where the table will be split.
+#'    - `variables`: Tables will be separated after each of the variables specified.
+#'                   The `x$table_body` data frame must contains a `'variable'`
+#'                   column to use this argument.
+#'    - `row_numbers`: Row numbers after which the table will be split.
+#'    - `variable_level`: A single column name in `x$table_body`. When specified,
+#'                        the table will be split at each unique level of the
+#'                        variable.
 #' @param keys ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   columns to be repeated in each table split. It defaults to the first column
 #'   if missing (usually label column).
@@ -42,21 +48,21 @@
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 2 ----------------------------------
 #' # Split by rows with row numbers
 #' trial |>
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(row_numbers = c(5, 7)) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 3 ----------------------------------
 #' # Split by columns
 #' trial |>
 #'   tbl_summary(by = trt, include = c(death, ttdeath)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 4 ----------------------------------
 #' # Both row and column splitting
@@ -64,7 +70,7 @@
 #'   tbl_summary(by = trt) |>
 #'   tbl_split_by_rows(variables = c(marker, grade)) |>
 #'   tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
-#'   tail(n = 1) # Print only last table for simplicity
+#'   dplyr::last() # Print only last table for simplicity
 #'
 #' # Example 5 ------------------------------
 #' # Split by rows with footnotes and caption
@@ -91,8 +97,7 @@
 #'   ) |>
 #'   modify_source_note("Some source note!") |>
 #'   tbl_split_by_rows(variables = c(marker, stage, grade), footnotes = "last", caption = "first") |>
-#'   tail(n = 2) |>
-#'   head(n = 1) # Print only one but not last table for simplicity
+#'   dplyr::nth(n = 2) # Print only one but not last table for simplicity
 #'
 #' @name tbl_split_by
 NULL
@@ -102,6 +107,7 @@ NULL
 tbl_split_by_rows <- function(x,
                               variables = NULL,
                               row_numbers = NULL,
+                              variable_level = NULL,
                               footnotes = c("all", "first", "last"),
                               caption = c("all", "first", "last")) {
   set_cli_abort_call()
@@ -121,23 +127,31 @@ tbl_split_by_rows <- function(x,
     )
   }
 
-  # check inputs ---------------------------------------------------------------
+  # check/process inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-
-  # if the table doesn't have a 'variable' column, user must specify `row_numbers`
-  if (!"variable" %in% names(x$table_body) && is_empty(row_numbers)) {
+  if ("variable" %in% names(x$table_body)) {
+    cards::process_selectors(scope_table_body(x$table_body), variables = {{ variables }})
+  }
+  else if (tryCatch(!is_empty(variables), error = \(e) TRUE)) {
     cli::cli_abort(
-      "The {.arg row_numbers} argument must be specified when the passed table does
-       not contain a {.val variable} column in {.code x$table_body}.",
+      "The {.arg variables} argument cannot be specified when {.code x$table_body}
+       does not have a column named {.val variable}.",
       call = get_cli_abort_call()
     )
   }
 
-  # process inputs -------------------------------------------------------------
-  if ("variable" %in% names(x$table_body)) {
-    cards::process_selectors(
-      data = scope_table_body(x$table_body),
-      variables = {{ variables }}
+  cards::process_selectors(x$table_body, variable_level = {{ variable_level }})
+  check_scalar(
+    variable_level,
+    allow_empty = TRUE,
+    message = "The {.arg variable_level} argument may only select a single column when specified."
+  )
+
+  # can only specify one of `variable`, `row_numbers`, and `variable_level`
+  if (sum(c(!is_empty(variables), !is_empty(row_numbers), !is_empty(variable_level))) != 1L) {
+    cli::cli_abort(
+      "One and only one of the following arguments may be specified: {.arg variables}, {.arg row_numbers}, and {.arg variable_level}",
+      call = get_cli_abort_call()
     )
   }
 
@@ -156,14 +170,6 @@ tbl_split_by_rows <- function(x,
     allow_empty = TRUE
   )
 
-  # only one of `variables` and `row_numbers` may be specified
-  if (is_empty(variables) + is_empty(row_numbers) != 1L) {
-    cli::cli_abort(
-      "Please select only one and only one between {.arg row_numbers} and {.arg variables} arguments.",
-      call = get_cli_abort_call()
-    )
-  }
-
   # adding last variable
   if (!is_empty(variables)) {
     variables <- variables |> union(dplyr::last(x$table_body$variable))
@@ -175,14 +181,15 @@ tbl_split_by_rows <- function(x,
 
   # merging split points -------------------------------------------------------
   # convert list of table_body into list of gtsummary objects
-  if (is_empty(row_numbers)) {
+  if (!is_empty(variables)) {
     # Create a new column to indicate split groups by variables
     tbl_body_with_groups <- x$table_body |>
       dplyr::left_join(
         dplyr::tibble(variable = variables, ..group.. = variables),
         by = "variable"
       )
-  } else {
+  }
+  else if (!is_empty(row_numbers)) {
     # If last row is added as a split point nothing changes as split is after the last row
     row_numbers <- sort(unique(c(row_numbers, nrow(x$table_body))))
 
@@ -198,6 +205,11 @@ tbl_split_by_rows <- function(x,
         )
       )
   }
+  else if (!is_empty(variable_level)) {
+    # Create a new column to indicate split groups by variables
+    tbl_body_with_groups <- x$table_body |>
+      dplyr::mutate(..group.. = .data[[variable_level]])
+  }
 
   # Split the table body into groups and add decorations
   tbl_list <- tbl_body_with_groups |>
@@ -205,10 +217,21 @@ tbl_split_by_rows <- function(x,
     tidyr::nest(data = -"..group..") |>
     dplyr::pull("data") |>
     map(
-      ~ list(.) |>
-        set_names("table_body") |>
-        c(utils::modifyList(x, val = list(table_body = NULL))) |> # add the other parts of the gtsummary table
-        `class<-`(class(x)) # add original class from `x`
+      \(.x) {
+        tbl <- list(.x) |>
+          set_names("table_body") |>
+          c(utils::modifyList(x, val = list(table_body = NULL)))
+
+        # add original class from `x`
+        class(tbl) <- class(x)
+
+        # add attr with the level splitting value, if `variable_level` specified
+        if (!is_empty(variable_level)) {
+          attr(tbl, "variable_level") <- .x[[variable_level]][[1]]
+        }
+
+        tbl
+      }
     )
 
   # caption/footnotes handling -----------------------------------------------
@@ -343,5 +366,18 @@ tbl_split_by_columns <- function(x, keys, groups,
 #' @rdname tbl_split_by
 print.tbl_split <- function(x, ...) {
   check_dots_empty()
-  walk(x, print)
+  tot_tbls <- length(x)
+  cli::cli_h2("Printing {.val {tot_tbls}} Table{?s}")
+  walk(
+    seq_along(x),
+    \(i) {
+      msg <-  "Table {.val {i}} of {.val {tot_tbls}}"
+      if (!is_empty(attr(x[[i]], "variable_level"))) {
+        msg <- paste(msg, attr(x[[i]], "variable_level"), sep = ": ")
+      }
+
+      cli::cli_h3(msg)
+      print(x[[i]])
+    }
+  )
 }

@@ -283,3 +283,35 @@ test_that("tbl_split_by_rows(row_numbers, variables) throws an error", {
       tbl_split_by_rows(row_numbers = c(2), variables = grade)
   )
 })
+
+test_that("tbl_split_by_rows(variable_level)", {
+  tbl_split <- trial |>
+    tbl_summary(include = c(age, marker), by = trt, missing = "no") |>
+    tbl_split_by_rows(variable_level = "variable")
+
+  # check table split into two
+  expect_length(tbl_split, n = 2L)
+
+  # check attribute is present
+  expect_equal(
+    attr(tbl_split[[2]], "variable_level"),
+    "marker"
+  )
+
+  # check attributes retained when further split by column
+  expect_equal(
+    tbl_split |>
+      tbl_split_by_columns(keys = "label", groups = list("stat_1", "stat_2")) |>
+      map_chr(~attr(.x, "variable_level")),
+    c("age", "age", "marker", "marker")
+  )
+})
+
+test_that("tbl_split_by_rows(variable_level) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(include = c(age, marker), by = trt, missing = "no") |>
+      tbl_split_by_rows(variable_level = all_stat_cols())
+  )
+})

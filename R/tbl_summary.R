@@ -52,7 +52,8 @@
 #'
 #'   In rarer cases, you may need to define/override the typical denominators.
 #'   In these cases, pass an integer or a data frame. Refer to the
-#'   [`?cards::ard_categorical(denominator)`][cards::ard_categorical] help file for details.
+#'   [`?cards::ard_tabulate(denominator)`][cards::ard_tabulate] help file for details.
+#'   When a data frame is passed, this data frame is used to calculate header counts.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`.
 #'
@@ -214,7 +215,22 @@ tbl_summary <- function(data,
   if (is.character(percent)) {
     percent <- arg_match(percent, values = c("column", "row", "cell"))
   }
-  else if (!is.data.frame(percent) && !is_integerish(percent)) {
+  else if (is.data.frame(percent)) {
+    if (!is_empty(by) && !by %in% names(percent)) {
+      cli::cli_abort(
+        "The {.cls data.frame} passed in the {.arg percent} argument must contain the {.val {by}} column.",
+        call = get_cli_abort_call()
+      )
+    }
+    if (!is_empty(by) && !identical(class(data[[by]]), class(percent[[by]]))) {
+      cli::cli_abort(
+        "The class of the {.val {by}} column in {.arg data} data frame ({.cls {class(data[[by]])}})
+          must match the class in the {.arg percent} data frame ({.cls {class(percent[[by]])}}) .",
+        call = get_cli_abort_call()
+      )
+    }
+  }
+  else if (!is_integerish(percent)) {
     cli::cli_abort(
       "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
          or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
@@ -337,7 +353,7 @@ tbl_summary <- function(data,
   cards <-
     cards::bind_ard(
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cards::ard_tabulate(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_categorical(FALSE),
@@ -346,7 +362,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cards::ard_tabulate_value(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_dichotomous(),
@@ -356,7 +372,7 @@ tbl_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
         by = all_of(by),
         variables = all_continuous(),
@@ -375,12 +391,14 @@ tbl_summary <- function(data,
                          stat_label = ~ default_stat_labels()
       ),
       # adding total N
-      cards::ard_total_n(data),
+      cards::ard_total_n(
+        data = case_switch(is.data.frame(percent) ~ percent, .default = data)
+      ),
       # tabulate by variable for header stats
       case_switch(
         !is_empty(by) ~
-          cards::ard_categorical(
-            data,
+          cards::ard_tabulate(
+            data = case_switch(is.data.frame(percent) ~ percent, .default = data),
             variables = all_of(by),
             stat_label = ~ default_stat_labels()
           ),
@@ -538,7 +556,9 @@ tbl_summary <- function(data,
 
   for (i in seq_along(sort[intersect(names(sort), names(data))])) {
     if (sort[[i]] %in% "frequency") {
+      lbl <- attr(data[[names(sort)[i]]], "label")
       data[[names(sort)[i]]] <- fct_infreq(data[[names(sort)[i]]])
+      attr(data[[names(sort)[i]]], "label") <- lbl
     }
   }
 

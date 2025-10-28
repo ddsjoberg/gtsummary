@@ -1,6 +1,5 @@
 #' Likert Summary
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' Create a table of ordered categorical variables in a wide format.
 #'
 #' @inheritParams tbl_summary
@@ -137,7 +136,7 @@ tbl_likert <- function(data,
         fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
-      cards::ard_categorical(
+      cards::ard_tabulate(
         data = data,
         variables = all_of(include),
         fmt_fun = digits,

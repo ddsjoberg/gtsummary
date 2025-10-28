@@ -1,6 +1,5 @@
 #' Wide summary table
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' This function is similar to `tbl_summary()`, but places summary statistics
 #' wide, in separate columns.
 #' All included variables must be of the same summary type, e.g. all continuous
@@ -134,7 +133,7 @@ tbl_wide_summary <- function(data,
                          stat_label = ~ default_stat_labels()
       ),
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cards::ard_tabulate(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_categorical(FALSE),
         fmt_fun = digits,
@@ -142,7 +141,7 @@ tbl_wide_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cards::ard_tabulate_value(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_dichotomous(),
         fmt_fun = digits,
@@ -151,7 +150,7 @@ tbl_wide_summary <- function(data,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_continuous(),
         statistic =

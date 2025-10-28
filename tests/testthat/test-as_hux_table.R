@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("huxtable", "withr", "broom.helpers")))
+skip_if_pkg_not_installed(c("huxtable", "withr", "broom.helpers"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -32,7 +32,7 @@ test_that("as_hux_table(return_calls) works as expected", {
 })
 
 test_that("as_hux_table works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival"))
+  skip_if_pkg_not_installed("survival")
   withr::local_options(list(width = 120))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
@@ -209,7 +209,8 @@ test_that("as_hux_table passes captions correctly", {
 
   expect_equal(
     attr(ht, "caption"),
-    "My table caption"
+    "My table caption",
+    ignore_attr = TRUE
   )
 })
 
@@ -255,7 +256,7 @@ test_that("as_hux_table passes missing symbols correctly", {
 # as_hux_xlsx ----
 
 test_that("as_hux_xlsx works with standard use", {
-  skip_if_not(is_pkg_installed("openxlsx"))
+  skip_if_pkg_not_installed("openxlsx")
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf))
@@ -263,7 +264,7 @@ test_that("as_hux_xlsx works with standard use", {
 })
 
 test_that("as_hux_xlsx(bold_header_rows) works", {
-  skip_if_not(is_pkg_installed("openxlsx"))
+  skip_if_pkg_not_installed("openxlsx")
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf, bold_header_rows = FALSE))

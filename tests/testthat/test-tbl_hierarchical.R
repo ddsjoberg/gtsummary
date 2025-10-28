@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("withr"))
+skip_if_pkg_not_installed("withr")
 
 trial2 <- trial |>
   mutate(id = rep(1:50, length.out = nrow(trial)))
@@ -41,6 +41,19 @@ test_that("tbl_hierarchical(denominator) works properly", {
   expect_snapshot(
     error = TRUE,
     tbl_hierarchical(data = trial2, variables = trt, denominator = "test", id = id)
+  )
+
+
+  # check error message when class of `by` column does not match
+  expect_snapshot(
+    error = TRUE,
+    tbl_hierarchical(
+      data = cards::ADAE,
+      by = TRTA,
+      variables = AEDECOD,
+      denominator = cards::ADSL |> dplyr::mutate(TRTA = factor(TRTA)),
+      id = USUBJID
+    )
   )
 })
 
@@ -151,7 +164,7 @@ test_that("tbl_hierarchical(digits) works properly", {
     digits = grade ~ list(n = label_style_number(digits = 1, decimal.mark = ","), p = 3)
   )
   expect_snapshot(res |> as.data.frame())
-  expect_equal(res$table_body$stat_0[1], "36 (68%)")
+  expect_equal(res$table_body$stat_0[1], "36 (18%)")
 
   # testing passing vector
   expect_equal(
@@ -162,7 +175,7 @@ test_that("tbl_hierarchical(digits) works properly", {
       as.data.frame(col_labels = FALSE) |>
       dplyr::pull(stat_0) |>
       dplyr::last(),
-    "18.00 (100.00%)"
+    "18.00 (9.00%)"
   )
   expect_equal(
     tbl_hierarchical(
@@ -172,9 +185,8 @@ test_that("tbl_hierarchical(digits) works properly", {
       as.data.frame(col_labels = FALSE) |>
       dplyr::pull(stat_0) |>
       dplyr::last(),
-    "18 (100.00%)"
+    "18 (9.00%)"
   )
-
 
   # errors thrown when bad digits argument passed
   expect_snapshot(
@@ -196,7 +208,7 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
   # unordered variable
   res_uo <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV
+    denominator = cards::ADSL, include = AESEV
   )
 
   # ordered variable
@@ -204,7 +216,7 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
 
   res_o <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), include = AESEV, label = list(AESEV = "Highest Severity")
+    denominator = cards::ADSL, include = AESEV, label = list(AESEV = "Highest Severity")
   ) |> suppressMessages()
   expect_snapshot(res_o |> as.data.frame())
 
@@ -214,14 +226,14 @@ test_that("tbl_hierarchical works properly when last variable of hierarchy is or
   # ordered variable, no by
   res <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV),
-    denominator = cards::ADSL |> mutate(TRTA = ARM), id = USUBJID
+    denominator = cards::ADSL, id = USUBJID
   ) |> suppressMessages()
   expect_snapshot(res |> as.data.frame())
 
   # ordered variable, include all variables
   res_o <- tbl_hierarchical(
     data = data, variables = c(AESOC, AESEV), by = TRTA, id = USUBJID,
-    denominator = cards::ADSL |> mutate(TRTA = ARM), label = list(AESEV = "Highest Severity")
+    denominator = cards::ADSL, label = list(AESEV = "Highest Severity")
   ) |> suppressMessages()
   expect_snapshot(res_o |> as.data.frame())
 })
@@ -378,7 +390,7 @@ test_that("tbl_hierarchical_count table_body enables sorting", {
       data = ADAE_subset,
       variables = c(SEX, AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID,
       overall_row = TRUE
     )

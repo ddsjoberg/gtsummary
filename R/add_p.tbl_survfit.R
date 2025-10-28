@@ -41,7 +41,7 @@
 #' If you utilize the `tbl_survfit.data.frame()` S3 method, this is handled for you.
 #'
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survival", "broom"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #'
 #' gts_survfit <-

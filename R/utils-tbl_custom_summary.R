@@ -30,7 +30,6 @@ continuous_summary <- function(variable) {
 
 #' Summarize the ratio of two variables
 #'
-#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing the ratio of two continuous variables and its confidence interval.
 #'
@@ -102,7 +101,6 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 
 #' Summarize a proportion
 #'
-#' `r lifecycle::badge('experimental')`\cr
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing a proportion and its confidence interval.
 #'
@@ -142,7 +140,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'
 #' @export
 #' @author Joseph Larmarange
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' Titanic |>
 #'   as.data.frame() |>

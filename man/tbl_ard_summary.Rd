@@ -90,8 +90,8 @@ library(cards)
 
 ard_stack(
   data = ADSL,
-  ard_categorical(variables = "AGEGR1"),
-  ard_continuous(variables = "AGE"),
+  ard_tabulate(variables = "AGEGR1"),
+  ard_summary(variables = "AGE"),
   .attributes = TRUE,
   .missing = TRUE,
   .total_n = TRUE
@@ -101,8 +101,8 @@ ard_stack(
 ard_stack(
   data = ADSL,
   .by = ARM,
-  ard_categorical(variables = "AGEGR1"),
-  ard_continuous(variables = "AGE"),
+  ard_tabulate(variables = "AGEGR1"),
+  ard_summary(variables = "AGE"),
   .attributes = TRUE,
   .missing = TRUE,
   .total_n = TRUE
@@ -112,8 +112,8 @@ ard_stack(
 ard_stack(
   data = ADSL,
   .by = ARM,
-  ard_categorical(variables = "AGEGR1"),
-  ard_continuous(variables = "AGE"),
+  ard_tabulate(variables = "AGEGR1"),
+  ard_summary(variables = "AGE"),
   .attributes = TRUE,
   .missing = TRUE,
   .total_n = TRUE,

@@ -1,7 +1,7 @@
 # tbl_ard_continuous(cards)
 
     Code
-      as.data.frame(tbl_ard_continuous(cards::ard_continuous(trial, by = grade,
+      as.data.frame(tbl_ard_continuous(cards::ard_summary(trial, by = grade,
         variables = age), variable = "age", include = "grade"))
     Output
         **Characteristic**       **Overall**
@@ -13,9 +13,9 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_continuous(cards::bind_ard(cards::ard_continuous(trial,
-        by = c(trt, grade), variables = age), cards::ard_categorical(trial, trt)),
-      variable = "age", include = "grade", by = "trt"))
+      as.data.frame(tbl_ard_continuous(cards::bind_ard(cards::ard_summary(trial, by = c(
+        trt, grade), variables = age), cards::ard_tabulate(trial, trt)), variable = "age",
+      include = "grade", by = "trt"))
     Output
         **Characteristic**        **Drug A**        **Drug B**
       1              grade              <NA>              <NA>
@@ -26,7 +26,7 @@
 ---
 
     Code
-      as.data.frame(tbl_ard_continuous(cards::ard_continuous(trial, by = c(trt, grade),
+      as.data.frame(tbl_ard_continuous(cards::ard_summary(trial, by = c(trt, grade),
       variables = age), by = trt, variable = age, include = grade))
     Output
         **Characteristic**        **Drug A**        **Drug B**
@@ -38,8 +38,8 @@
 # tbl_ard_continuous(cards) error messaging
 
     Code
-      tbl_ard_continuous(cards::bind_ard(cards::ard_continuous(trial, by = c(trt,
-        grade), variables = age)), variable = "trt", include = "grade", by = "age")
+      tbl_ard_continuous(cards::bind_ard(cards::ard_summary(trial, by = c(trt, grade),
+      variables = age)), variable = "trt", include = "grade", by = "age")
     Condition
       Error in `tbl_ard_continuous()`:
       ! The continuous variable specified in argument `variable` must appear in the column `cards$variable`.
@@ -47,8 +47,8 @@
 ---
 
     Code
-      tbl_ard_continuous(cards::bind_ard(cards::ard_continuous(trial, by = c(trt,
-        grade), variables = age)), variable = "age", include = "trt", by = "grade")
+      tbl_ard_continuous(cards::bind_ard(cards::ard_summary(trial, by = c(trt, grade),
+      variables = age)), variable = "age", include = "trt", by = "grade")
     Condition
       Error in `tbl_ard_continuous()`:
       ! All variables specified in argument `include` must appear in the column `cards$group2`.
@@ -56,7 +56,7 @@
 # tbl_ard_continuous(statistic) error messaging
 
     Code
-      tbl_ard_continuous(cards::ard_continuous(trial, by = grade, variables = age),
+      tbl_ard_continuous(cards::ard_summary(trial, by = grade, variables = age),
       variable = "age", include = "grade", statistic = everything() ~ c("{mean}",
         "{median}"))
     Condition
@@ -66,7 +66,7 @@
 # tbl_ard_continuous(value) messaging
 
     Code
-      tbl_ard_continuous(cards::ard_continuous(trial, by = c(trt, grade), variables = age),
+      tbl_ard_continuous(cards::ard_summary(trial, by = c(trt, grade), variables = age),
       by = "trt", variable = "age", include = "grade", value = grade ~ "XXXXXXX")
     Condition
       Error in `tbl_ard_continuous()`:
@@ -76,7 +76,7 @@
 ---
 
     Code
-      tbl_ard_continuous(cards::ard_continuous(trial, by = c(trt, grade), variables = age),
+      tbl_ard_continuous(cards::ard_summary(trial, by = c(trt, grade), variables = age),
       by = "trt", variable = "age", include = "grade", value = grade ~ letters)
     Condition
       Error in `tbl_ard_continuous()`:

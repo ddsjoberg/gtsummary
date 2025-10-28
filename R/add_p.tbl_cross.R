@@ -55,7 +55,7 @@ add_p.tbl_cross <- function(x,
     test <- get_theme_element("add_p.tbl_cross-arg:test", default = test)
   }
   if (missing(test.args)) {
-    test <- get_theme_element("add_p.tbl_cross-arg:test.args", default = test.args)
+    test.args <- get_theme_element("add_p.tbl_cross-arg:test.args", default = test.args)
   }
 
   if (missing(source_note)) {
