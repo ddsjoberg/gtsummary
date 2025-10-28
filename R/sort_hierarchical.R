@@ -228,9 +228,9 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
       x_sum_rows <- x |>
         dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
         dplyr::group_map(function(.df, .g) {
+          stat_nm <- setdiff(.df$stat_name, "N")[1]
           # get pseudo-summary row stat value for descending sort
           if (!is.null(sort) && sort[v] == "descending") {
-            stat_nm <- setdiff(.df$stat_name, "N")[1]
             sum <- .df |>
               dplyr::filter(.data$stat_name == !!stat_nm) |>
               dplyr::summarize(sum_stat = sum(unlist(.data$stat))) |>
