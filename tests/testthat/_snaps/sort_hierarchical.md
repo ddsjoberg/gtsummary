@@ -30,6 +30,38 @@
       24                                           AMERICAN INDIAN OR ALASKA NATIVE                0 (0%)                           1 (1.2%)                            0 (0%)
       25                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                            0 (0%)
 
+# sort_hierarchical() works when some variables not included in x
+
+    Code
+      as.data.frame(sort_hierarchical(tbl))
+    Message
+      Not all hierarchy variables present in the table were included in the `include` argument. These variables ("AESOC" and "AETERM") do not have event rate data available so the total sum of the event rates for this hierarchy section will be used instead. To use true event rates for all sections of the table, set `include = everything()` when creating your table.
+    Output
+         **Primary System Organ Class**  \n    **Reported Term for the Adverse Event**  \n        **Severity/Intensity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                                                                    Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)
+      2                                                             GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS                  <NA>                               <NA>                              <NA>
+      3                                                                                        APPLICATION SITE PRURITUS                  <NA>                               <NA>                              <NA>
+      4                                                                                                             MILD              6 (7.0%)                           17 (20%)                          19 (23%)
+      5                                                                                                         MODERATE              1 (1.2%)                           12 (14%)                           9 (11%)
+      6                                                                                                           SEVERE                0 (0%)                             0 (0%)                          1 (1.2%)
+      7                                                                                        APPLICATION SITE ERYTHEMA                  <NA>                               <NA>                              <NA>
+      8                                                                                                             MILD              3 (3.5%)                           12 (14%)                           9 (11%)
+      9                                                                                                         MODERATE                0 (0%)                           6 (7.1%)                          7 (8.3%)
+      10                                                                                                          SEVERE                0 (0%)                             0 (0%)                          2 (2.4%)
+      11                                                                          SKIN AND SUBCUTANEOUS TISSUE DISORDERS                  <NA>                               <NA>                              <NA>
+      12                                                                                                        ERYTHEMA                  <NA>                               <NA>                              <NA>
+      13                                                                                                            MILD              7 (8.1%)                           12 (14%)                          8 (9.5%)
+      14                                                                                                        MODERATE              4 (4.7%)                           4 (4.8%)                          8 (9.5%)
+      15                                                                                      GASTROINTESTINAL DISORDERS                  <NA>                               <NA>                              <NA>
+      16                                                                                                       DIARRHOEA                  <NA>                               <NA>                              <NA>
+      17                                                                                                            MILD               9 (10%)                           2 (2.4%)                          5 (6.0%)
+      18                                                                                                        MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      19                                                                                               CARDIAC DISORDERS                  <NA>                               <NA>                              <NA>
+      20                                                                            ATRIOVENTRICULAR BLOCK SECOND DEGREE                  <NA>                               <NA>                              <NA>
+      21                                                                                                            MILD              1 (1.2%)                           1 (1.2%)                            0 (0%)
+      22                                                                                                        MODERATE                0 (0%)                           2 (2.4%)                            0 (0%)
+      23                                                                                                          SEVERE              1 (1.2%)                             0 (0%)                            0 (0%)
+
 # sort_hierarchical() error messaging works
 
     Code

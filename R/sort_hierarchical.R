@@ -218,7 +218,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   if (length(not_incl) > 0) {
     cli::cli_inform(
       "Not all hierarchy variables present in the table were included in the {.arg include} argument.
-      These variables ({not_incl}) do not have event rate data available so the total sum of the event rates
+      These variables ({.val {not_incl}}) do not have event rate data available so the total sum of the event rates
       for this hierarchy section will be used instead. To use true event rates for all sections of the table,
       set {.code include = everything()} when creating your table."
     )
@@ -239,13 +239,15 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
           g_cur <- .g[[ncol(.g) - 1]]
           if (!is.na(g_cur) && g_cur == v) {
             # dummy summary row to add in
-            .df[1, ] |> mutate(
-              variable = g_cur,
-              variable_level = .g[[ncol(.g)]],
-              stat_name = if (!is.null(sort) && sort[v] == "descending") stat_nm else "no_stat",
-              stat = if (!is.null(sort) && sort[v] == "descending") list(sum) else list(0),
-              tmp = TRUE
-            )
+            .df[.df$stat_name == stat_nm, ][1, ] |>
+              select(-cards::all_ard_group_n(i:length(ard_args$variables))) |>
+              mutate(
+                variable = g_cur,
+                variable_level = .g[[ncol(.g)]],
+                stat_name = if (!is.null(sort) && sort[v] == "descending") stat_nm else "no_stat",
+                stat = if (!is.null(sort) && sort[v] == "descending") list(sum) else list(0),
+                tmp = TRUE
+              )
           } else {
             NULL
           }
