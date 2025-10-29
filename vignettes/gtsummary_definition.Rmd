@@ -18,12 +18,14 @@ knitr::opts_chunk$set(
 This vignette is meant for those who wish to contribute to {gtsummary}, or users who wish to gain an understanding of the inner-workings of a {gtsummary} object so they may more easily modify them to suit your own needs.
 If this does not describe you, please refer to the [{gtsummary} website](https://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
 
-_This overview is for informational purposes, and is not mean the internal structures of the package won't be updated; and if they are updated, this is not considered a breaking change._
+_This overview is for informational purposes. Documenting the internal structures does not mean the internal structures of the package won't be updated. If they are updated, this is not considered a breaking change._
 
 ## Introduction
 
 Every {gtsummary} table has a few characteristics common among all tables created with the package.
 Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.
+
+We begin by creating two common {gtsummary} tables to be used as illustrative examples.
 
 ```{r setup, message=FALSE}
 library(gtsummary)
@@ -49,7 +51,7 @@ Every {gtsummary} object is a list comprising of, at minimum, these elements:
 #### table_body
 
 The `.$table_body` object is the data frame that will ultimately be printed as the output.
-The table must include columns `"label"`, `"row_type"`, and `"variable"`.
+To utilize all functions that work with {gtsummary} tables (e.g. {gtsummary} selectors), the table must include columns `"label"`, `"row_type"`, and `"variable"`.
 The `"label"` column is printed, and the other two are hidden from the final output.
 
 ```{r}
