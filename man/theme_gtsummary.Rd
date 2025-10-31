@@ -63,7 +63,7 @@ String indicating language. Must be one of \code{"de"} (German),
 \code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"kr"} (Korean),
 \code{"nl"} (Dutch), \code{"mr"} (Marathi), \code{"no"} (Norwegian), \code{"pt"} (Portuguese),
 \code{"se"} (Swedish), \code{"zh-cn"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional),
-\code{"ba"} (Bosnian),
+\code{"ba"} (Bosnian)
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
