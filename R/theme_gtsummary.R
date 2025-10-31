@@ -348,7 +348,7 @@ theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra
 #' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
 #' `"nl"` (Dutch), `"mr"` (Marathi), `"no"` (Norwegian), `"pt"` (Portuguese),
 #' `"se"` (Swedish), `"zh-cn"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional),
-#' `"ba"` (Bosnian),
+#' `"ba"` (Bosnian)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
