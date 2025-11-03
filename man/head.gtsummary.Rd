@@ -21,6 +21,7 @@ Display the first rows of a gtsummary table
 }
 \examples{
 trial |>
-  head(n = 2L)
+  tbl_summary(by = trt) |>
+  tail(n = 2L)
 
 }

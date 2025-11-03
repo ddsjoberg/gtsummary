@@ -24,5 +24,4 @@ trial |>
   tbl_summary(by = trt) |>
   tail(n = 2L)
 
-  @export
 }
