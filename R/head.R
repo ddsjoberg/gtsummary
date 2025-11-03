@@ -34,7 +34,7 @@ head.gtsummary <- function(x, n = 6L, ...) {
 #'   tbl_summary(by = trt) |>
 #'   tail(n = 2L)
 #'
-#'   @export
+#' @export
 tail.gtsummary <- function(x, n = 6L, ...) {
   set_cli_abort_call()
   if (!inherits(x, "gtsummary")) {
