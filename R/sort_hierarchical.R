@@ -219,8 +219,9 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
     cli::cli_inform(
       "Not all hierarchy variables present in the table were included in the {.arg include} argument.
       These variables ({.val {not_incl}}) do not have event rate data available so the total sum of the event rates
-      for this hierarchy section will be used instead. To use true event rates for all sections of the table,
-      set {.code include = everything()} when creating your table."
+      from the {.val {dplyr::last(ard_args$include)}} variable for these hierarchy sections will be used
+      instead. To use true event rates for all sections of the table, set {.code include = everything()} when creating
+      your table."
     )
 
     for (v in not_incl) {
