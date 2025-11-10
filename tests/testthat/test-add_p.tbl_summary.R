@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_if_pkg_not_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx")
+r_version <- paste0(R.version$major, ".", R.version$minor) |> package_version()
 
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
@@ -9,6 +10,8 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       select(-all_stat_cols())
   )
 
+
+  skip_if(r_version < package_version("4.6.0"))
   expect_snapshot(
     tbl_summary(mtcars, by = am) |>
       add_p() |>

@@ -26,29 +26,15 @@
 
     Code
       as.data.frame(add_p(tbl_summary(mtcars, by = am)))
-    Message
-      The following warnings were returned during `add_p()`:
-      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `hp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `hp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
     Output
          **Characteristic**      **0**  \nN = 19      **1**  \nN = 13 **p-value**
-      1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)       0.002
+      1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)       0.001
       2                 cyl                 <NA>                 <NA>       0.009
       3                   4              3 (16%)              8 (62%)        <NA>
       4                   6              4 (21%)              3 (23%)        <NA>
       5                   8             12 (63%)              2 (15%)        <NA>
       6                disp       276 (168, 360)        120 (79, 160)      <0.001
-      7                  hp       175 (110, 205)        109 (66, 113)       0.046
+      7                  hp       175 (110, 205)        109 (66, 113)       0.044
       8                drat    3.15 (3.07, 3.70)    4.08 (3.85, 4.22)      <0.001
       9                  wt    3.52 (3.44, 3.85)    2.32 (1.94, 2.78)      <0.001
       10               qsec 17.82 (17.05, 19.44) 17.02 (16.46, 18.61)         0.3
@@ -202,14 +188,6 @@
     Message
       The following warnings were returned during `add_p()`:
       ! For variable `cyl` (`am`) and "statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect
-      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `disp` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `drat` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `qsec` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
-      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact p-value with ties
-      ! For variable `wt` (`am`) and "estimate", "statistic", "p.value", "conf.low", and "conf.high" statistics: cannot compute exact confidence intervals with ties
     Output
          **Characteristic**      **0**  \nN = 19      **1**  \nN = 13 **p-value**
       1                 mpg    17.3 (14.7, 19.2)    22.8 (21.0, 30.4)       0.001
