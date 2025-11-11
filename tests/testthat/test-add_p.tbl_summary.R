@@ -9,6 +9,15 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       select(-all_stat_cols())
   )
 
+  expect_equal(
+    tbl_summary(mtcars, by = am, include = mpg) |>
+      add_p() |>
+      getElement("table_body") |>
+      dplyr::pull("p.value") |>
+      unname(),
+    wilcox.test(mpg ~ am, data = mtcars)$p.value
+  )
+
   expect_snapshot(
     tbl_summary(mtcars, by = am, include = c(cyl, gear, vs)) |>
       add_p() |>
