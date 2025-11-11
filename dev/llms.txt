@@ -1,0 +1,651 @@
+## gtsummary [![](reference/figures/logo.png)](https://github.com/ddsjoberg/gtsummary)
+
+The {gtsummary} package provides an elegant and flexible way to create
+publication-ready analytical and summary tables using the **R**
+programming language. The {gtsummary} package summarizes data sets,
+regression models, and more, using sensible defaults with highly
+customizable capabilities.
+
+- [**Summarize data frames or
+  tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+  easily in **R**. Perfect for presenting descriptive statistics,
+  comparing group **demographics** (e.g creating a **Table 1** for
+  medical journals), and more. Automatically detects continuous,
+  categorical, and dichotomous variables in your data set, calculates
+  appropriate descriptive statistics, and also includes amount of
+  missingness in each variable.
+
+- [**Summarize regression
+  models**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+  in R and include reference rows for categorical variables. Common
+  regression models, such as logistic regression and Cox proportional
+  hazards regression, are automatically identified and the tables are
+  pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard
+  Ratio).
+
+- [**Customize gtsummary
+  tables**](https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
+  using a growing list of formatting/styling functions.
+  **[Bold](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+  labels,
+  **[italicize](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+  levels, **[add
+  p-value](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
+  to summary tables,
+  **[style](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
+  the statistics however you choose,
+  **[merge](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
+  or
+  **[stack](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
+  tables to present results side by side… there are so many
+  possibilities to create the table of your dreams!
+
+- **[Report statistics
+  inline](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
+  from summary tables and regression summary tables in **R markdown**.
+  Make your reports completely reproducible!
+
+By leveraging [{broom}](https://broom.tidymodels.org/),
+[{gt}](https://gt.rstudio.com/), and
+[{labelled}](http://larmarange.github.io/labelled/) packages,
+{gtsummary} creates beautifully formatted, ready-to-share summary and
+result tables in a single line of R code!
+
+Check out the examples below, review the
+[vignettes](https://www.danieldsjoberg.com/gtsummary/articles/) for a
+detailed exploration of the output options, and view the
+[gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
+for various customization examples.
+
+## Installation
+
+The {gtsummary} package was written as a companion to the
+[{gt}](https://gt.rstudio.com/) package from RStudio. You can install
+{gtsummary} with the following code.
+
+``` r
+install.packages("gtsummary")
+```
+
+Install the development version with
+`pak::pkg_install("ddsjoberg/gtsummary", dependencies = TRUE)`
+
+## Examples
+
+### Summary Table
+
+Use
+[`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
+to summarize a data frame.
+
+![animated](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif)
+
+Example basic table:
+
+``` r
+library(gtsummary)
+
+# summarize the data with our package
+table1 <-
+  trial |> 
+  tbl_summary(include = c(age, grade, response))
+```
+
+![](reference/figures/README-tbl_summary_print_simple-1.png)
+
+There are many **customization options** to **add information** (like
+comparing groups) and **format results** (like bold labels) in your
+table. See the
+[`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+tutorial for many more options, or below for one example.
+
+``` r
+table2 <-
+  tbl_summary(
+    trial,
+    include = c(age, grade, response),
+    by = trt, # split table by group
+    missing = "no" # don't list missing data separately
+  ) |> 
+  add_n() |> # add column with total number of non-missing observations
+  add_p() |> # test for a difference between groups
+  modify_header(label = "**Variable**") |> # update the column header
+  bold_labels()
+```
+
+![](reference/figures/README-tbl_summary_print_extra-1.png)
+
+### Regression Models
+
+Use
+[`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html)
+to easily and beautifully display regression model results in a table.
+See the
+[tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+for customization options.
+
+``` r
+mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
+
+t1 <- tbl_regression(mod1, exponentiate = TRUE)
+```
+
+![](reference/figures/README-tbl_regression_printa-1.png)
+
+### Side-by-side Regression Models
+
+You can also present side-by-side regression model results using
+[`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
+
+``` r
+library(survival)
+
+# build survival model table
+t2 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) |> 
+  tbl_regression(exponentiate = TRUE)
+
+# merge tables
+tbl_merge_ex1 <-
+  tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+```
+
+![](reference/figures/README-tbl_merge_ex1-1.png)
+
+Review even more output options in the **[table
+gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
+
+## gtsummary + R Markdown
+
+The **{gtsummary}** package was written to be a companion to the
+**{gt}** package from RStudio. But not all output types are supported by
+the **{gt}** package. Therefore, we have made it possible to print
+**{gtsummary}** tables with various engines.
+
+Review the **[gtsummary + R
+Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
+vignette for details.
+
+[![](reference/figures/gt_output_formats.PNG)](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)
+
+## Save Individual Tables
+
+{gtsummary} tables can also be saved directly to file as an image, HTML,
+Word, RTF, and LaTeX file.
+
+``` r
+tbl |> 
+  as_gt() |> 
+  gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
+```
+
+## Additional Resources
+
+- The best resources are the gtsummary vignettes: [table
+  gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
+  [`tbl_summary()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
+  [`tbl_regression()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
+  [`inline_text()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
+  [gtsummary
+  themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
+  [gtsummary+R
+  markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
+
+- The R Journal Article [*Reproducible Summary Tables with the gtsummary
+  Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
+
+- The [RStudio Education
+  Blog](https://education.rstudio.com/blog/2020/07/gtsummary/) includes
+  a post with a brief introduction to the package.
+
+- A [recording of a
+  presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
+  the Weill Cornell Biostatistics Department and the Memorial Sloan
+  Kettering R Users Group.
+
+## Cite gtsummary
+
+``` text
+> citation("gtsummary")
+
+To cite gtsummary in publications use:
+
+  Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible summary tables with the gtsummary package.
+  The R Journal 2021;13:570–80. https://doi.org/10.32614/RJ-2021-053.
+
+A BibTeX entry for LaTeX users is
+
+  @Article{gtsummary,
+    author = {Daniel D. Sjoberg and Karissa Whiting and Michael Curry and Jessica A. Lavery and Joseph Larmarange},
+    title = {Reproducible Summary Tables with the gtsummary Package},
+    journal = {{The R Journal}},
+    year = {2021},
+    url = {https://doi.org/10.32614/RJ-2021-053},
+    doi = {10.32614/RJ-2021-053},
+    volume = {13},
+    issue = {1},
+    pages = {570-580},
+  }
+```
+
+## Contributing
+
+Big thank you to `@jeffreybears` for the hex sticker!
+
+Please note that the {gtsummary} project is released with a [Contributor
+Code of
+Conduct](https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms. Thank
+you to all contributors!
+
+# Package index
+
+## Data Summary Tables
+
+### Standard Summary Tables
+
+- [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  : Summary table
+- [`add_p(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_summary.md)
+  : Add p-values
+- [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)
+  : Add multiple comparison adjustment
+- [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  : Add overall column
+- [`add_difference(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_summary.md)
+  : Add differences between groups
+- [`add_difference_row(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference_row.tbl_summary.md)
+  **\[experimental\]** : Add differences rows between groups
+- [`add_n(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_likert>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  : Add column with N
+- [`add_ci()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_ci.md)
+  : Add CI Column
+- [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
+  **\[questioning\]** : Add statistic labels
+- [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)
+  : Add a custom statistic
+- [`add_variable_group_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_variable_group_header.md)
+  : Variable Group Header
+- [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/separate_p_footnotes.md)
+  **\[questioning\]** : Create footnotes for individual p-values
+
+### Cross Tables
+
+- [`tbl_cross()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_cross.md)
+  : Cross table
+- [`add_p(`*`<tbl_cross>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_cross.md)
+  : Add p-value
+
+### Continuous Variable Summary
+
+- [`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_continuous.md)
+  : Summarize continuous variable
+- [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  : Add overall column
+- [`add_p(`*`<tbl_continuous>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_continuous.md)
+  : Add p-values
+- [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)
+  : Add a custom statistic
+
+### Wide Summary Tables
+
+- [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_wide_summary.md)
+  : Wide summary table
+
+### Hierarchical Summary Tables
+
+- [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
+  [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
+  : Hierarchical Table
+- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  **\[experimental\]** : Sort Hierarchical Tables
+- [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  **\[experimental\]** : Filter Hierarchical Tables
+- [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  : Add overall column
+
+### Likert Summary Tables
+
+- [`tbl_likert()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_likert.md)
+  : Likert Summary
+- [`add_n(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_likert>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  : Add column with N
+
+### Time-to-event Summary Tables
+
+- [`tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_survfit.md)
+  : Survival table
+- [`add_p(`*`<tbl_survfit>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_survfit.md)
+  : Add p-value
+- [`add_n(`*`<tbl_survfit>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n.tbl_survfit.md)
+  : Add N
+- [`add_nevent(`*`<tbl_survfit>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_nevent.tbl_survfit.md)
+  : Add event N
+- [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)
+  : Add multiple comparison adjustment
+
+### Survey Design Summary Tables
+
+- [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.md)
+  : Create a table of summary statistics from a survey object
+- [`add_p(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_svysummary.md)
+  : Add p-values
+- [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)
+  : Add multiple comparison adjustment
+- [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  : Add overall column
+- [`add_difference(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_svysummary.md)
+  : Add differences between groups
+- [`add_ci(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_ci.tbl_svysummary.md)
+  : Add CI Column
+- [`add_n(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  [`add_n(`*`<tbl_likert>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
+  : Add column with N
+- [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
+  **\[questioning\]** : Add statistic labels
+- [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)
+  : Add a custom statistic
+- [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/separate_p_footnotes.md)
+  **\[questioning\]** : Create footnotes for individual p-values
+
+### Custom Summary Tables
+
+- [`tbl_custom_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_custom_summary.md)
+  **\[experimental\]** : Create a table of summary statistics using a
+  custom summary function
+- [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  : Add overall column
+- [`proportion_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/proportion_summary.md)
+  : Summarize a proportion
+- [`ratio_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/ratio_summary.md)
+  : Summarize the ratio of two variables
+
+## Regression Model Summary Tables
+
+- [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)
+  : Regression model summary
+- [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_uvregression.md)
+  : Univariable regression model summary
+- [`add_global_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_global_p.md)
+  : Add the global p-values
+- [`add_n(`*`<tbl_regression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_regression.md)
+  [`add_n(`*`<tbl_uvregression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_regression.md)
+  : Add N to regression table
+- [`add_nevent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_nevent_regression.md)
+  : Add event N
+- [`combine_terms()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/combine_terms.md)
+  : Combine terms
+- [`add_glance_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_glance.md)
+  [`add_glance_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_glance.md)
+  : Add model statistics
+- [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)
+  : Add multiple comparison adjustment
+- [`add_significance_stars()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_significance_stars.md)
+  : Add significance stars
+- [`add_vif()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_vif.md)
+  : Add Variance Inflation Factor
+- [`plot(`*`<tbl_regression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/plot.md)
+  [`plot(`*`<tbl_uvregression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/plot.md)
+  : Plot Regression Coefficients
+
+## Inline Reporting
+
+- [`inline_text(`*`<tbl_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_summary.md)
+  [`inline_text(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_summary.md)
+  : Report statistics from summary tables inline
+- [`inline_text(`*`<tbl_regression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_regression.md)
+  : Report statistics from regression summary tables inline
+- [`inline_text(`*`<tbl_uvregression>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_uvregression.md)
+  : Report statistics from regression summary tables inline
+- [`inline_text(`*`<tbl_survfit>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_survfit.md)
+  : Report statistics from survfit tables inline
+- [`inline_text(`*`<tbl_cross>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_cross.md)
+  : Report statistics from cross table inline
+- [`inline_text(`*`<tbl_continuous>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.tbl_continuous.md)
+  : Report statistics from summary tables inline
+- [`inline_text(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.gtsummary.md)
+  : Report statistics from summary tables inline
+
+## Output Types
+
+- [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+  : Convert gtsummary object to gt
+- [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md)
+  : Convert gtsummary object to a flextable object
+- [`as_kable()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable.md)
+  : Convert gtsummary object to a kable object
+- [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable_extra.md)
+  : Convert gtsummary object to a kableExtra object
+- [`as_hux_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md)
+  [`as_hux_xlsx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md)
+  : Convert gtsummary object to a huxtable object
+- [`as_tibble(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_tibble.gtsummary.md)
+  [`as.data.frame(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_tibble.gtsummary.md)
+  : Convert gtsummary object to a tibble
+
+## Other Functions
+
+### Merge, Stack, Stratify, or Split Summary Tables
+
+- [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
+  : Merge tables
+- [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md)
+  : Stack tables
+- [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md)
+  [`tbl_strata2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md)
+  : Stratified gtsummary tables
+- [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
+  : Stratified Nested Stacking
+- [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
+  [`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
+  [`print(`*`<tbl_split>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
+  **\[experimental\]** : Split gtsummary table by rows and/or columns
+- [`tbl_butcher()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_butcher.md)
+  : Butcher table
+
+### Style Summary Tables
+
+- [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
+  [`remove_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
+  [`show_header_names()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
+  : Modify column headers and spanning headers
+- [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  [`modify_footnote_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  [`remove_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  [`remove_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  [`remove_footnote_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
+  : Modify Footnotes
+- [`modify_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_source_note.md)
+  [`remove_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_source_note.md)
+  : Modify source note
+- [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
+  [`remove_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
+  : Modify Abbreviations
+- [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md)
+  : Modify table caption
+- [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)
+  [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)
+  [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)
+  [`italicize_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)
+  : Bold or Italicize
+- [`bold_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_p.md)
+  : Bold significant p-values
+- [`sort_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_filter_p.md)
+  [`filter_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_filter_p.md)
+  : Sort/filter by p-values
+- [`remove_row_type()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/remove_row_type.md)
+  : Remove rows
+
+### Style/Format Numeric Vectors
+
+- [`style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_percent.md)
+  : Style percentages
+- [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_pvalue.md)
+  : Style p-values
+- [`style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_sigfig.md)
+  : Style significant figure-like rounding
+- [`style_ratio()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_ratio.md)
+  : Style ratios
+- [`style_number()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_number.md)
+  : Style numbers
+- [`label_style_number()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  [`label_style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  [`label_style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  [`label_style_ratio()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  [`label_style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  : Style Functions
+
+### Themes
+
+- [`set_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  [`reset_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  [`get_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  [`with_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  [`check_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  : Set gtsummary theme
+- [`theme_gtsummary_journal()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_compact()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_printer()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_language()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_continuous2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_mean_sd()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  [`theme_gtsummary_eda()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md)
+  : Available gtsummary themes
+
+### Advanced modifiers
+
+- [`modify_table_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_body.md)
+  : Modify Table Body
+- [`modify_bold()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_bold_italic.md)
+  [`remove_bold()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_bold_italic.md)
+  [`modify_italic()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_bold_italic.md)
+  [`remove_italic()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_bold_italic.md)
+  : Modify Bold and Italic
+- [`modify_column_hide()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_hide.md)
+  [`modify_column_unhide()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_hide.md)
+  : Modify hidden columns
+- [`modify_column_alignment()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_alignment.md)
+  : Modify column alignment
+- [`modify_fmt_fun()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_fmt_fun.md)
+  : Modify formatting functions
+- [`modify_post_fmt_fun()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_post_fmt_fun.md)
+  **\[experimental\]** : Modify post formatting
+- [`modify_column_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_merge.md)
+  [`remove_column_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_merge.md)
+  : Modify Column Merging
+- [`modify_indent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_indent.md)
+  : Modify column indentation
+- [`modify_missing_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_missing_symbol.md)
+  : Modify Missing Substitution
+
+### Select Helpers
+
+- [`all_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_continuous2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_categorical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_dichotomous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_tests()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_intercepts()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_interaction()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_contrasts()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  [`all_stat_cols()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md)
+  : Select helper functions
+
+### Custom Tidiers
+
+- [`tidy_standardize()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  [`tidy_bootstrap()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  [`tidy_robust()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  [`pool_and_tidy_mice()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  [`tidy_gam()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  [`tidy_wald_test()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md)
+  : Custom tidiers
+
+### ARD Constructors
+
+- [`tbl_ard_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_continuous.md)
+  **\[experimental\]** : Summarize continuous variable
+- [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md)
+  **\[experimental\]** : ARD Hierarchical Table
+- [`tbl_ard_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_summary.md)
+  **\[experimental\]** : ARD summary table
+- [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
+  **\[experimental\]** : Wide ARD summary table
+- [`add_overall(`*`<tbl_ard_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall_ard.md)
+  : ARD add overall column
+- [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
+  **\[questioning\]** : Add statistic labels
+- [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  **\[experimental\]** : Filter Hierarchical Tables
+- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  **\[experimental\]** : Sort Hierarchical Tables
+- [`gather_ard()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/gather_ard.md)
+  : Extract ARDs
+
+### Construction Helpers
+
+- [`as_gtsummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gtsummary.md)
+  : Create gtsummary table
+- [`brdg_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_continuous.md)
+  : Continuous Summary Table Bridges
+- [`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md)
+  [`pier_summary_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md)
+  : Hierarchy table bridge
+- [`brdg_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  [`pier_summary_dichotomous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  [`pier_summary_categorical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  [`pier_summary_continuous2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  [`pier_summary_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  [`pier_summary_missing_row()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md)
+  : Summary table bridge
+- [`brdg_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_wide_summary.md)
+  : Wide summary table bridge
+- [`assign_summary_digits()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_summary_digits.md)
+  : Assign Default Digits
+- [`assign_summary_type()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_summary_type.md)
+  : Assign Default Summary Type
+- [`assign_tests()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_tests.md)
+  : Assign Test
+
+### Data
+
+- [`trial`](https://www.danieldsjoberg.com/gtsummary/dev/reference/trial.md)
+  : Results from a simulated study of two chemotherapy agents
+
+# Articles
+
+### All vignettes
+
+- [FAQ +
+  Gallery](https://www.danieldsjoberg.com/gtsummary/dev/articles/gallery.md):
+- [Definition of a gtsummary
+  Object](https://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_definition.md):
+- [inline_text()
+  tutorial](https://www.danieldsjoberg.com/gtsummary/dev/articles/inline_text.md):
+- [Modifier
+  Functions](https://www.danieldsjoberg.com/gtsummary/dev/articles/modify-functions.md):
+- [gtsummary +
+  Quarto/Rmarkdown](https://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.md):
+- [gtsummary +
+  Shiny](https://www.danieldsjoberg.com/gtsummary/dev/articles/shiny.md):
+- [ARD-first
+  Tables](https://www.danieldsjoberg.com/gtsummary/dev/articles/tbl_ard-functions.md):
+- [tbl_regression()
+  tutorial](https://www.danieldsjoberg.com/gtsummary/dev/articles/tbl_regression.md):
+- [tbl_summary()
+  tutorial](https://www.danieldsjoberg.com/gtsummary/dev/articles/tbl_summary.md):
+- [gtsummary
+  themes](https://www.danieldsjoberg.com/gtsummary/dev/articles/themes.md):
