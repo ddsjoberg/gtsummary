@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("broom.helpers"))
+skip_if_pkg_not_installed("broom.helpers")
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>

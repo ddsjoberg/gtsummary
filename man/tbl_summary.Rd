@@ -73,7 +73,8 @@ Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.
 
 In rarer cases, you may need to define/override the typical denominators.
 In these cases, pass an integer or a data frame. Refer to the
-\code{\link[cards:ard_tabulate]{?cards::ard_tabulate(denominator)}} help file for details.}
+\code{\link[cards:ard_tabulate]{?cards::ard_tabulate(denominator)}} help file for details.
+When a data frame is passed, this data frame is used to calculate header counts.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}.}

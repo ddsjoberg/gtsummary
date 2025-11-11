@@ -65,6 +65,15 @@
       Error in `tbl_hierarchical()`:
       ! The `denominator` argument must be a <data.frame> or an <integer>, not a string.
 
+---
+
+    Code
+      tbl_hierarchical(data = cards::ADAE, by = TRTA, variables = AEDECOD,
+      denominator = dplyr::mutate(cards::ADSL, TRTA = factor(TRTA)), id = USUBJID)
+    Condition
+      Error in `tbl_hierarchical()`:
+      ! The class of the "TRTA" column in `data` data frame (<character>) must match the class in the `denominator` data frame (<factor>) .
+
 # tbl_hierarchical(include) works properly
 
     Code

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed("survey"))
+skip_if_pkg_not_installed("survey")
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
@@ -100,7 +100,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       dplyr::select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))) |>
       unlist() |>
       as.list(),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        formula = age_emmeans ~ trt,
                                        response_type = "continuous") |>
@@ -114,7 +114,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       dplyr::select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))) |>
       unlist() |>
       as.list(),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        method.args = list(family = binomial),
                                        formula = response_emmeans ~ trt,

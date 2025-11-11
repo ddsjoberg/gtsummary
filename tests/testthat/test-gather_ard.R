@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "car", "parameters")))
+skip_if_pkg_not_installed(c("broom.helpers", "car", "parameters"))
 
 test_that("gather_ard(x) works with `tbl_*()` functions", {
   # tbl_summary()
@@ -139,6 +139,13 @@ test_that("gather_ard(x) works with `tbl_*()` functions", {
       ) |>
       gather_ard() |>
       is_empty()
+  )
+})
+
+test_that("gather_ard(x) messaging", {
+  expect_snapshot(
+    as_gtsummary(mtcars[1:2, 1:2]) |>
+      gather_ard()
   )
 })
 
