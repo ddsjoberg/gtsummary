@@ -1,4 +1,4 @@
-# Display the first or last rows of a gtsummary table
+# Display the first or last rows
 
 These functions allow you to view the first
 ([`head()`](https://rdrr.io/r/utils/head.html)) or last

@@ -194,7 +194,7 @@
 
 - [`head(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/head.gtsummary.md)
   [`tail(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/head.gtsummary.md)
-  : Display the first or last rows of a gtsummary table
+  : Display the first or last rows
 
 ### Merge, Stack, Stratify, or Split Summary Tables
 
