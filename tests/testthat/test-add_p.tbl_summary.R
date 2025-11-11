@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx"))
+skip_if_pkg_not_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx")
 
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
@@ -9,18 +9,28 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       select(-all_stat_cols())
   )
 
+  expect_equal(
+    tbl_summary(mtcars, by = am, include = mpg) |>
+      add_p() |>
+      getElement("table_body") |>
+      dplyr::pull("p.value") |>
+      unname() |>
+      suppressMessages(),
+    wilcox.test(mpg ~ am, data = mtcars)$p.value |>
+      suppressWarnings()
+  )
+
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(cyl, gear, vs)) |>
       add_p() |>
       as.data.frame()
   )
 
   expect_snapshot(
     trial |>
-      tbl_summary(by = trt) |>
+      tbl_summary(by = trt, include = c(grade, response)) |>
       add_p() |>
-      as.data.frame(col_labels = FALSE) |>
-      select(-all_stat_cols())
+      as.data.frame(col_labels = FALSE)
   )
 })
 
@@ -64,7 +74,7 @@ test_that("add_p.tbl_summary() error messaging with bad inputs", {
 })
 
 test_that("add_p.tbl_summary() & lme4", {
-  skip_if_not(is_pkg_installed("lme4", ref = "cardx"))
+  skip_if_pkg_not_installed("lme4", ref = "cardx")
 
   # errors with expected use
   expect_snapshot(
@@ -108,7 +118,7 @@ test_that("add_p() creates errors with bad args", {
 
 test_that("add_p.tbl_summary() works well", {
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(mpg, hp, cyl, carb)) |>
       add_p(
         test = list(
           mpg = "t.test",
@@ -382,7 +392,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
 })
 
 test_that("Groups arg and lme4", {
-  skip_if_not(is_pkg_installed(c("lme4", "broom.mixed"), ref = "cardx"))
+  skip_if_pkg_not_installed(c("lme4", "broom.mixed"), ref = "cardx")
   withr::local_package("broom")
   withr::local_package("lme4")
 
@@ -436,7 +446,7 @@ test_that("no error with missing data", {
 })
 
 test_that("add_p.tbl_summary() can be run after add_difference()", {
-  skip_if_not(is_pkg_installed("parameters"))
+  skip_if_pkg_not_installed("parameters")
 
   expect_error(
     trial |>

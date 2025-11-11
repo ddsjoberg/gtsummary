@@ -129,6 +129,14 @@ tbl_hierarchical <- function(data,
     )
   }
 
+  if (is.data.frame(denominator) && !is_empty(by) && !identical(class(data[[by]]), class(denominator[[by]]))) {
+    cli::cli_abort(
+      "The class of the {.val {by}} column in {.arg data} data frame ({.cls {class(data[[by]])}})
+          must match the class in the {.arg denominator} data frame ({.cls {class(denominator[[by]])}}) .",
+      call = get_cli_abort_call()
+    )
+  }
+
   # check the id argument is not empty
   if (is_empty(id)) {
     cli::cli_abort("Argument {.arg id} cannot be empty.", call = get_cli_abort_call())
