@@ -190,6 +190,12 @@
 
 ## Other Functions
 
+### Head or Tail Tables
+
+- [`head(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/head.gtsummary.md)
+  [`tail(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/head.gtsummary.md)
+  : Display the first or last rows of a gtsummary table
+
 ### Merge, Stack, Stratify, or Split Summary Tables
 
 - [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)

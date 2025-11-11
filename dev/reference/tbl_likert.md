@@ -96,13 +96,13 @@ recommend_friend
 
 20
 
-7 (35%)
+8 (40%)
 
-5 (25%)
-
-6 (30%)
+4 (20%)
 
 2 (10%)
+
+6 (30%)
 
 regret_purchase
 
@@ -131,5 +131,5 @@ as.numeric)), statistic = [c](https://rdrr.io/r/base/c.html)("{mean}",
 
 | **Characteristic** | **N** | **Strongly Disagree** | **Disagree** | **Agree** | **Strongly Agree** | **Mean** | **SD** |
 |:-------------------|:-----:|:---------------------:|:------------:|:---------:|:------------------:|:--------:|:------:|
-| recommend_friend   |  20   |        7 (35%)        |   5 (25%)    |  6 (30%)  |      2 (10%)       |   2.15   |  1.04  |
+| recommend_friend   |  20   |        8 (40%)        |   4 (20%)    |  2 (10%)  |      6 (30%)       |   2.30   |  1.30  |
 | regret_purchase    |  20   |        3 (15%)        |   3 (15%)    |  6 (30%)  |      8 (40%)       |   2.95   |  1.10  |

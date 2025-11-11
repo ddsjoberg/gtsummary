@@ -2,6 +2,13 @@
 
 ## gtsummary (development version)
 
+- Added AI chat bot to homepage, powered by `kapa.ai`.
+
+- Added [`head()`](https://rdrr.io/r/utils/head.html) and
+  [`tail()`](https://rdrr.io/r/utils/head.html) S3 methods for
+  `gtsummary` objects.
+  ([\#2335](https://github.com/ddsjoberg/gtsummary/issues/2335))
+
 - Updated
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md)
   to pre-process non-standard hierarchical ARDs so sorting can be
