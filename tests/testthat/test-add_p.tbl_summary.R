@@ -14,8 +14,10 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       add_p() |>
       getElement("table_body") |>
       dplyr::pull("p.value") |>
-      unname(),
-    wilcox.test(mpg ~ am, data = mtcars)$p.value
+      unname() |>
+      suppressMessages(),
+    wilcox.test(mpg ~ am, data = mtcars)$p.value |>
+      suppressWarnings()
   )
 
   expect_snapshot(
