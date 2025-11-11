@@ -116,7 +116,7 @@ test_that("add_p() creates errors with bad args", {
 
 test_that("add_p.tbl_summary() works well", {
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(mpg, hp, cyl, carb)) |>
       add_p(
         test = list(
           mpg = "t.test",
