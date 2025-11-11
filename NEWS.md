@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added AI chat bot to homepage, powered by `kapa.ai`.
+
+* Added `head()` and `tail()` S3 methods for `gtsummary` objects. (#2335) 
+
 * Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
 
 * Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
