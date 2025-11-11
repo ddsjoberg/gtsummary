@@ -1,4 +1,4 @@
-#' Display the first or last rows of a {gtsummary} table
+#' Display the first or last rows
 #'
 #' @description
 #' These functions allow you to view the first (`head()`) or last (`tail()`) `n`

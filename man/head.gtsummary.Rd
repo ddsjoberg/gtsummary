@@ -3,7 +3,7 @@
 \name{head.gtsummary}
 \alias{head.gtsummary}
 \alias{tail.gtsummary}
-\title{Display the first or last rows of a {gtsummary} table}
+\title{Display the first or last rows}
 \usage{
 \method{head}{gtsummary}(x, n = 6L, ...)
 
