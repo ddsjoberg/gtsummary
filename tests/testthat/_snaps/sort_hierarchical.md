@@ -35,7 +35,8 @@
     Code
       as.data.frame(sort_hierarchical(tbl))
     Message
-      Not all hierarchy variables present in the table were included in the `include` argument. These variables ("AESOC" and "AETERM") do not have event rate data available so the total sum of the event rates from the "AESEV" variable within these hierarchy sections will be used instead. To use true event rates for all sections of the table, set `include = everything()` when creating your table.
+      As "AESOC" was not specified in `include` the event rates for variable "AESOC" were estimated by summing the rates for variable "AESEV" within each level of "AESOC". Due to unique counting of events by `id` these sums may not accurately reflect the true event rates in the data.
+      As "AETERM" was not specified in `include` the event rates for variable "AETERM" were estimated by summing the rates for variable "AESEV" within each level of "AETERM". Due to unique counting of events by `id` these sums may not accurately reflect the true event rates in the data.
     Output
          **Primary System Organ Class**  \n    **Reported Term for the Adverse Event**  \n        **Severity/Intensity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
       1                                                                                    Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)

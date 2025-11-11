@@ -216,13 +216,15 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   # add dummy rows for variables not in include so their label rows are sorted correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
-    cli::cli_inform(
-      "Not all hierarchy variables present in the table were included in the {.arg include} argument.
-      These variables ({.val {not_incl}}) do not have event rate data available so the total sum of the event rates
-      from the {.val {dplyr::last(ard_args$include)}} variable within these hierarchy sections will be used
-      instead. To use true event rates for all sections of the table, set {.code include = everything()} when creating
-      your table."
-    )
+    if ("hierarchical" %in% x$context) { # do not print message for hierarchical count tables
+      for (v in not_incl) {
+        cli::cli_inform(
+          "As {.val {v}} was not specified in {.arg include} the event rates for variable {.val {v}} were estimated by
+          summing the rates for variable {.val {dplyr::last(ard_args$include)}} within each level of {.val {v}}. Due to
+          unique counting of events by {.arg id} these sums may not accurately reflect the true event rates in the data."
+        )
+      }
+    }
 
     for (v in not_incl) {
       i <- length(ard_args$by) + which(ard_args$variables == v)
