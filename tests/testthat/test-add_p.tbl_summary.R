@@ -9,18 +9,28 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       select(-all_stat_cols())
   )
 
+  expect_equal(
+    tbl_summary(mtcars, by = am, include = mpg) |>
+      add_p() |>
+      getElement("table_body") |>
+      dplyr::pull("p.value") |>
+      unname() |>
+      suppressMessages(),
+    wilcox.test(mpg ~ am, data = mtcars)$p.value |>
+      suppressWarnings()
+  )
+
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(cyl, gear, vs)) |>
       add_p() |>
       as.data.frame()
   )
 
   expect_snapshot(
     trial |>
-      tbl_summary(by = trt) |>
+      tbl_summary(by = trt, include = c(grade, response)) |>
       add_p() |>
-      as.data.frame(col_labels = FALSE) |>
-      select(-all_stat_cols())
+      as.data.frame(col_labels = FALSE)
   )
 })
 
@@ -108,7 +118,7 @@ test_that("add_p() creates errors with bad args", {
 
 test_that("add_p.tbl_summary() works well", {
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(mpg, hp, cyl, carb)) |>
       add_p(
         test = list(
           mpg = "t.test",
