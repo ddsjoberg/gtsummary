@@ -10,6 +10,8 @@
 
 * When a data frame is passed in the `tbl_summary(percent)` argument, the headers are now tabulated with this data frame. (#2322)
 
+* Corrected handling in `tbl_summary()` of character vectors that contains `"NULL"` values. (#2345)
+
 # gtsummary 2.4.0
 
 ### New Features and Functions
