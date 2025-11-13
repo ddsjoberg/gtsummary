@@ -22,6 +22,11 @@
   the headers are now tabulated with this data frame.
   ([\#2322](https://github.com/ddsjoberg/gtsummary/issues/2322))
 
+- Corrected handling in
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  of character vectors that contains `"NULL"` values.
+  ([\#2345](https://github.com/ddsjoberg/gtsummary/issues/2345))
+
 ## gtsummary 2.4.0
 
 CRAN release: 2025-08-28
