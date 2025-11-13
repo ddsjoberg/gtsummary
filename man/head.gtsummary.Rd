@@ -22,7 +22,7 @@ A \code{gtsummary} object with only the first or last \code{n} rows in \code{tab
 }
 \description{
 These functions allow you to view the first (\code{head()}) or last (\code{tail()}) \code{n}
-rows of a {gtsummary} table.
+rows of a gtsummary table.
 }
 \examples{
 # head() example
