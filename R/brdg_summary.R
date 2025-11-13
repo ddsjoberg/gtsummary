@@ -218,7 +218,7 @@ pier_summary_categorical <- function(cards,
         lst_variable_stats <-
           cards::get_ard_statistics(
             df_variable_stats,
-            .data$variable_level %in% list(NULL),
+            map_lgl(.data$variable_level, is.null),
             .column = "stat_fmt"
           )
 
@@ -228,7 +228,7 @@ pier_summary_categorical <- function(cards,
         dplyr::mutate(
           .data = df_groups_and_variable,
           df_stats =
-            dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
+            dplyr::filter(df_variable_stats, !map_lgl(.data$variable_level, is.null)) |>
             dplyr::group_by(.data$variable_level) |>
             dplyr::group_map(
               function(df_variable_level_stats, df_variable_levels) {
