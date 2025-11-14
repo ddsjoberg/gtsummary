@@ -34,7 +34,6 @@
 #'     .combine_with = "tbl_stack",
 #'     .combine_args = list(group_header = NULL)
 #'   )
-
 NULL
 
 #' @rdname tbl_ard_strata
@@ -107,7 +106,11 @@ tbl_ard_strata2 <- function(cards,
                                      .parent_fun) {
   check_string(.header)
   check_class(cards, cls = "card")
-  cards::process_selectors(cards, strata = {{ strata }})
+  # strata can only be ARD groups
+  cards::process_selectors(
+    cards |> select(cards::all_ard_groups()),
+    strata = {{ strata }}
+  )
   .ard_strata_col_check(cards, strata)
 
   card_renamed <- cards |>
@@ -175,26 +178,21 @@ tbl_ard_strata2 <- function(cards,
 
 
 .ard_strata_col_check <- function(cards, strata) {
-  # check the passed strata are groups that appear in `card`
-  if (!all(strata %in% names(dplyr::select(cards, cards::all_ard_groups())))) {
-    group_columns <- names(dplyr::select(cards, cards::all_ard_groups()))
-
-    if (is_empty(group_columns)) {
-      cli::cli_abort("The {.arg cards} argument input must contain grouping columns.")
-    }
+  if (is_empty(strata)) {
     cli::cli_abort(
-      c("The columns selected in the {.arg strata} argument must select grouping columns from {.arg cards}.",
-        i = " Select from {.val {group_columns}}.")
+      "No columns were selected in the {.arg strata} argument.",
+      call = get_cli_abort_call()
     )
   }
 
   # check the group variables are a single variable
-  group_columns <- intersect(strata, dplyr::select(cards, cards::all_ard_groups("names")))
+  group_columns <- intersect(strata, names(dplyr::select(cards, cards::all_ard_groups("names"))))
   for (i in seq_along(group_columns)) {
-    if (any(cards[[group_columns[i]]] != cards[[group_columns[1]]])) {
-      cli::cli_inform(
-        c("The {.val {group_columns[i]}} column is not the same variable for all rows.",
-          i = "This may cause unexpected results.")
+    if (any(cards[[group_columns[i]]] != cards[[group_columns[i]]][1])) {
+      cli::cli_abort(
+        c("The {.val {group_columns[i]}} column must be the same value for all rows.",
+          i = "The following levels are present: {.val {unique(cards[[group_columns[i]]])}}"),
+        call = get_cli_abort_call()
       )
     }
   }
