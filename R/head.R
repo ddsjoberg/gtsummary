@@ -1,8 +1,8 @@
-#' Display the first or last rows of a {gtsummary} table
+#' Display the first or last rows
 #'
 #' @description
 #' These functions allow you to view the first (`head()`) or last (`tail()`) `n`
-#' rows of a {gtsummary} table.
+#' rows of a gtsummary table.
 #'
 #' @param x A `gtsummary` object.
 #' @param n Number of rows to return. Default is `6L` as default in [utils::head()] and

@@ -3,7 +3,7 @@
 \name{head.gtsummary}
 \alias{head.gtsummary}
 \alias{tail.gtsummary}
-\title{Display the first or last rows of a {gtsummary} table}
+\title{Display the first or last rows}
 \usage{
 \method{head}{gtsummary}(x, n = 6L, ...)
 
@@ -22,7 +22,7 @@ A \code{gtsummary} object with only the first or last \code{n} rows in \code{tab
 }
 \description{
 These functions allow you to view the first (\code{head()}) or last (\code{tail()}) \code{n}
-rows of a {gtsummary} table.
+rows of a gtsummary table.
 }
 \examples{
 # head() example
