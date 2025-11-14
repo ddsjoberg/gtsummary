@@ -217,13 +217,12 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
     if ("hierarchical" %in% x$context) { # do not print message for hierarchical count tables
-      for (v in not_incl) {
-        cli::cli_inform(
-          "As {.val {v}} was not specified in {.arg include} the event rates for variable {.val {v}} were estimated by
-          summing the rates for variable {.val {dplyr::last(ard_args$include)}} within each level of {.val {v}}. Due to
-          unique counting of events by {.arg id} these sums may not accurately reflect the true event rates in the data."
-        )
-      }
+      cli::cli_inform(
+        c("!" = "The rates for {.val {not_incl}} have been {.emph estimated} by
+          summing the {.val {dplyr::last(ard_args$include)}} rates.",
+          "i" = "Due to unique counting of values within {.val {c(ard_args$id, ard_args$variables)}},
+          the summed rates {.emph may not} reflect the true rates.")
+      )
     }
 
     for (v in not_incl) {
