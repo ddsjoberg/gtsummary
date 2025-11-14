@@ -35,8 +35,8 @@
     Code
       as.data.frame(sort_hierarchical(tbl))
     Message
-      As "AESOC" was not specified in `include` the event rates for variable "AESOC" were estimated by summing the rates for variable "AESEV" within each level of "AESOC". Due to unique counting of events by `id` these sums may not accurately reflect the true event rates in the data.
-      As "AETERM" was not specified in `include` the event rates for variable "AETERM" were estimated by summing the rates for variable "AESEV" within each level of "AETERM". Due to unique counting of events by `id` these sums may not accurately reflect the true event rates in the data.
+      ! The rates for "AESOC" and "AETERM" have been estimated by summing the "AESEV" rates.
+      i Due to unique counting of values within "USUBJID", "AESOC", "AETERM", and "AESEV", the summed rates may not reflect the true rates.
     Output
          **Primary System Organ Class**  \n    **Reported Term for the Adverse Event**  \n        **Severity/Intensity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
       1                                                                                    Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)

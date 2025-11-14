@@ -111,7 +111,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   )
 
   # add row indices match structure of ard to x$table_body
-  reshape_x <- .reshape_ard_compare(x, x_ard, ard_args, sort)
+  reshape_x <- .reshape_ard_compare(x, x_ard, c(ard_args, list(id = x$inputs$id)), sort)
   x <- reshape_x$x
   x_ard <- reshape_x$x_ard
 
@@ -216,7 +216,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   # add dummy rows for variables not in include so their label rows are sorted correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
-    if ("hierarchical" %in% x$context) { # do not print message for hierarchical count tables
+    if (!"tbl_hierarchical_count" %in% names(tbl$call_list)) { # do not print message for hierarchical count tables
       cli::cli_inform(
         c("!" = "The rates for {.val {not_incl}} have been {.emph estimated} by
           summing the {.val {dplyr::last(ard_args$include)}} rates.",
