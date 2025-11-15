@@ -160,6 +160,9 @@ test_that("sort_hierarchical() works with only one variable in x", {
 })
 
 test_that("sort_hierarchical() works when some variables not included in x", {
+  withr::local_options(width = 250)
+
+  # 3 variables, 2 in include
   tbl <- tbl_hierarchical(
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
@@ -171,6 +174,19 @@ test_that("sort_hierarchical() works when some variables not included in x", {
   )
 
   expect_message(sort_hierarchical(tbl))
+
+  # 3 variables, 1 in include
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AESOC, AETERM, AESEV),
+    include = AESEV,
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID,
+    overall_row = TRUE
+  )
+
+  expect_snapshot(sort_hierarchical(tbl) |> as.data.frame())
 })
 
 test_that("sort_hierarchical() works with no by variable", {
