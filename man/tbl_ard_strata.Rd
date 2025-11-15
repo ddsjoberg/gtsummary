@@ -35,8 +35,8 @@ An ARD object of class \code{"card"} typically created with \verb{cards::ard_*()
 the grouping columns to stratify by.
 Must select \code{'group#'} and \code{'group#_level'} pairs.
 Importantly, the function expects the \code{'group#'} columns to be the same variable,
-e.g. stratifying my a single variable.
-The \code{'group#_level'} value is available to place in header (and more) in the \code{{strata}} element.}
+e.g. stratifying by a single variable.
+The \code{'group#_level'} value is available to place in header (and more) via the \code{{strata}} element.}
 
 \item{.tbl_fun}{(\code{function})
 A function or formula. If a \emph{function}, it is used as is.
