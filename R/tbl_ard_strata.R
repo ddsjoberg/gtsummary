@@ -11,7 +11,7 @@
 #'  Must select `'group#'` and `'group#_level'` pairs.
 #'  Importantly, the function expects the `'group#'` columns to be the same variable,
 #'  e.g. stratifying by a single variable.
-#'  The `'group#_level'` value is available to place in header (and more) in the `{strata}` element.
+#'  The `'group#_level'` value is available to place in header (and more) via the `{strata}` element.
 #'
 #' @returns a 'gtsummary' table
 #' @name tbl_ard_strata
