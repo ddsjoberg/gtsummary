@@ -93,6 +93,7 @@ a gtsummary table of class 'tbl_wide_summary'
 ## Examples
 
 ``` r
+# Example 1 ----------------------------------
 trial |>
   tbl_wide_summary(include = c(response, grade))
 
@@ -136,7 +137,7 @@ Grade
 
 32%
 
-trial \|\>
+\# Example 2 ---------------------------------- trial \|\>
 [tbl_strata](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md)(
 strata = trt, ~tbl_wide_summary(.x, include =
 [c](https://rdrr.io/r/base/c.html)(age, marker)) )

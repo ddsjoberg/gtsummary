@@ -93,8 +93,13 @@ tbl_strata2(
   when `.combine_with = "tbl_stack"`. Items placed in curly brackets
   will be evaluated according to
   [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  syntax. - `strata` stratum levels - `n` N within stratum - `N` Overall
-  N
+  syntax.
+
+      - `strata` stratum levels
+
+      - `n` N within stratum
+
+      - `N` Overall N
 
   The evaluated value of `.header` is also available within
   `tbl_strata2(.tbl_fun)`

@@ -96,25 +96,25 @@ recommend_friend
 
 20
 
-8 (40%)
-
 4 (20%)
 
-2 (10%)
+3 (15%)
 
-6 (30%)
+5 (25%)
+
+8 (40%)
 
 regret_purchase
 
 20
 
-3 (15%)
-
-3 (15%)
+4 (20%)
 
 6 (30%)
 
-8 (40%)
+5 (25%)
+
+5 (25%)
 
 \# Example 2 ---------------------------------- \# Add continuous
 summary of the likert scores [list](https://rdrr.io/r/base/list.html)(
@@ -131,5 +131,5 @@ as.numeric)), statistic = [c](https://rdrr.io/r/base/c.html)("{mean}",
 
 | **Characteristic** | **N** | **Strongly Disagree** | **Disagree** | **Agree** | **Strongly Agree** | **Mean** | **SD** |
 |:-------------------|:-----:|:---------------------:|:------------:|:---------:|:------------------:|:--------:|:------:|
-| recommend_friend   |  20   |        8 (40%)        |   4 (20%)    |  2 (10%)  |      6 (30%)       |   2.30   |  1.30  |
-| regret_purchase    |  20   |        3 (15%)        |   3 (15%)    |  6 (30%)  |      8 (40%)       |   2.95   |  1.10  |
+| recommend_friend   |  20   |        4 (20%)        |   3 (15%)    |  5 (25%)  |      8 (40%)       |   2.85   |  1.18  |
+| regret_purchase    |  20   |        4 (20%)        |   6 (30%)    |  5 (25%)  |      5 (25%)       |   2.55   |  1.10  |

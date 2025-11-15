@@ -53,9 +53,7 @@ Source notes are not supported by
 # Example 1 ----------------------------------
 tbl <- tbl_summary(trial, include = c(marker, grade), missing = "no") |>
   modify_source_note("Results as of June 26, 2015")
-
-# Example 2 ----------------------------------
-remove_source_note(tbl, source_note_id = 1)
+tbl
 
 
   
@@ -86,3 +84,10 @@ Grade
 64 (32%)
 
 ¹ Median (Q1, Q3); n (%)
+
+Results as of June 26, 2015
+
+\# Example 2 ---------------------------------- remove_source_note(tbl,
+source_note_id = 1)
+
+[TABLE]

@@ -4,6 +4,9 @@
 
 - Added AI chat bot to homepage, powered by `kapa.ai`.
 
+- Adding functions `tlb_ard_strata()` and `tlb_ard_strata2()`.
+  ([\#1852](https://github.com/ddsjoberg/gtsummary/issues/1852))
+
 - Added [`head()`](https://rdrr.io/r/utils/head.html) and
   [`tail()`](https://rdrr.io/r/utils/head.html) S3 methods for
   `gtsummary` objects.
