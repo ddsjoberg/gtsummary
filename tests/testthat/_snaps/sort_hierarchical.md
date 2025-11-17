@@ -37,6 +37,7 @@
     Message
       ! The rates for "AESOC" and "AETERM" have been estimated by summing the "AESEV" rates.
       i Due to unique counting of values within "USUBJID", "AESOC", "AETERM", and "AESEV", the summed rates may not reflect the true rates.
+      i See the `Details` section of `sort_hierarchical()` for an alternative method that uses true rates.
     Output
          **Primary System Organ Class**  \n    **Reported Term for the Adverse Event**  \n        **Severity/Intensity** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
       1                                                                                    Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)

@@ -32,6 +32,20 @@
 #' When sorting a table that includes an overall column [add_overall()] must be called to add the overall column
 #' _before_ `sort_hierarchical()` is called.
 #'
+#' @details
+#' If you do not want to display rates for a hierarchy variable from table `x` but you would like to sort by descending
+#' frequency for that variable, the recommended method is to keep the variable in `include` when calling
+#' `tbl_hierarchical()` so that rates for this variable are available, sort the table as needed using
+#' `sort_hierarchical()`, and then finally remove these rates from the table using `modify_table_body()`.
+#'
+#' For example, to remove rates from the `AESOC` rows in hierarchy table `x`, you can call:
+#'
+#' ```
+#' x |>
+#'   modify_table_body(
+#'     \(df) mutate(df, dplyr::across(all_stat_cols(), ~ifelse(variable %in% "AESOC", NA, .)))
+#'   )
+#' ```
 #'
 #' @return a gtsummary table of the same class as `x`.
 #'
@@ -158,7 +172,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   by_cols <- if (length(ard_args$by) > 0) c("group1", "group1_level") else NULL
 
   # add dummy rows for variables not in include so their label rows are sorted correctly
-  x_ard <- x_ard |> .append_not_incl(ard_args, sort)
+  x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort)
 
   # add indices to ARD
   x_ard <- x_ard |>
@@ -212,16 +226,19 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   list(x = x, x_ard = x_ard)
 }
 
-.append_not_incl <- function(x, ard_args, sort = NULL) {
+.append_not_incl <- function(x, ard_args, call_list, sort = NULL) {
   # add dummy rows for variables not in include so their label rows are sorted correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
-    if (!"tbl_hierarchical_count" %in% names(tbl$call_list)) { # do not print message for hierarchical count tables
+    if (!"tbl_hierarchical_count" %in% names(call_list)) { # do not print message for hierarchical count tables
       cli::cli_inform(
         c("!" = "The rates for {.val {not_incl}} have been {.emph estimated} by
           summing the {.val {dplyr::last(ard_args$include)}} rates.",
           "i" = "Due to unique counting of values within {.val {c(ard_args$id, ard_args$variables)}},
-          the summed rates {.emph may not} reflect the true rates.")
+          the summed rates {.emph may not} reflect the true rates.",
+          "i" = "See the `Details` section of {.fun sort_hierarchical} for an alternative method that uses true
+          rates."
+        )
       )
     }
 
