@@ -120,6 +120,43 @@ cards::ADLB |>
     .combine_with = "tbl_stack",
     .combine_args = list(group_header = NULL)
   )
+#> Called from: .tbl_ard_strata_internal(cards = cards, strata = {
+#>     {
+#>         strata
+#>     }
+#> }, .tbl_fun = .tbl_fun, ..., .sep = .sep, .combine_with = .combine_with, 
+#>     .combine_args = .combine_args, .header = .header, .parent_fun = "tbl_ard_strata2")
+#> debug: df_tbls <- dplyr::mutate(dplyr::ungroup(dplyr::mutate(dplyr::rowwise(dplyr::rename(dplyr::arrange(tidyr::nest(card_renamed, 
+#>     data = -all_of(.env$strata_renamed)), !!!syms(strata_renamed)), 
+#>     !!!syms(new_strata_names))), data = list(cards::as_card(.data$data)), 
+#>     strata = paste(!!!syms(names(new_strata_names)), sep = .sep), 
+#>     header = glue::glue(.header))), tbl = switch(.parent_fun, 
+#>     tbl_ard_strata = map(.data$data, .tbl_fun, ...), tbl_ard_strata2 = map2(.data$data, 
+#>         .data$header, .tbl_fun, ...)))
+#> debug: df_tbls$tbl_id <- dplyr::pull(dplyr::mutate(df_tbls[names(new_strata_names)], 
+#>     across(everything(), .fns = ~paste(new_strata_names[[dplyr::cur_column()]], 
+#>         cli::cli_format(.x), sep = "=")), strata = paste(!!!syms(names(new_strata_names)), 
+#>         sep = ",")), "strata")
+#> debug: .combine_args <- utils::modifyList(switch(.combine_with, tbl_merge = list(tab_spanner = df_tbls$header), 
+#>     tbl_stack = list(group_header = df_tbls$header)), val = .combine_args %||% 
+#>     list())
+#> debug: if (.combine_with == "tbl_merge") {
+#>     tbl <- inject(tbl_merge(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, 
+#>         !!!.combine_args))
+#> } else if (.combine_with == "tbl_stack") {
+#>     tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, 
+#>         !!!.combine_args, tbl_id_lbls = df_tbls$strata))
+#> }
+#> debug: if (.combine_with == "tbl_stack") {
+#>     tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, 
+#>         !!!.combine_args, tbl_id_lbls = df_tbls$strata))
+#> }
+#> debug: tbl <- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, 
+#>     !!!.combine_args, tbl_id_lbls = df_tbls$strata))
+#> debug: tbl$df_strata <- df_tbls %>% dplyr::select(starts_with("strata_"), 
+#>     "header")
+#> debug: class(tbl) <- c("tbl_ard_strata", .combine_with, "gtsummary")
+#> debug: tbl
 
 
   
