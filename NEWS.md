@@ -14,6 +14,8 @@
 
 * Corrected handling in `tbl_summary()` of character vectors that contains `"NULL"` values. (#2345)
 
+* Fixed bug in `sort_hierarchical()` causing variable labels to disappear from table when not all variables are in `include`. (#2332)
+
 # gtsummary 2.4.0
 
 ### New Features and Functions
