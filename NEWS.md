@@ -6,6 +6,8 @@
 
 * Added `head()` and `tail()` S3 methods for `gtsummary` objects. (#2335) 
 
+* Added additional messaging to `tbl_merge()` when tables _may not_ merge properly. (#2348)
+
 * Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
 
 * Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
