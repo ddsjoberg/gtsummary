@@ -12,6 +12,11 @@
   `gtsummary` objects.
   ([\#2335](https://github.com/ddsjoberg/gtsummary/issues/2335))
 
+- Added additional messaging to
+  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
+  when tables *may not* merge properly.
+  ([\#2348](https://github.com/ddsjoberg/gtsummary/issues/2348))
+
 - Updated
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md)
   to pre-process non-standard hierarchical ARDs so sorting can be

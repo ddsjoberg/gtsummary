@@ -11,7 +11,13 @@ rows can be updated with `modify_table_body(~dplyr::arrange(.x, ...))`.
 ## Usage
 
 ``` r
-tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL)
+tbl_merge(
+  tbls,
+  tab_spanner = NULL,
+  merge_vars = NULL,
+  tbl_ids = NULL,
+  quiet = FALSE
+)
 ```
 
 ## Arguments
@@ -45,6 +51,12 @@ tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL)
   Optional character vector of IDs that will be assigned to the input
   tables. The ID is assigned by assigning a name to the `tbls` list,
   which is returned in `x$tbls`.
+
+- quiet:
+
+  (scalar `logical`)  
+  When `FALSE`, a message is printed when unlike tables are merged
+  warning users of potential row ordering issues.
 
 ## Value
 

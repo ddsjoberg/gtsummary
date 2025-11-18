@@ -10,8 +10,8 @@ data frame as its first argument can be stratified.
   level are passed to `.tbl_fun=`, e.g.
   `purrr::map2(data, strata, .tbl_fun)`.
 
-When merging, keep in mind that merging works best with **like tables**.
-See
+Tables are created *independently* within each stratum. When merging,
+keep in mind that merging works best with **like tables**. See
 [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
 for details.
 

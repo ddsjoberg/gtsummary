@@ -21,7 +21,7 @@ The ordering of rows can be updated with modify_table_body(~dplyr::arrange(.x, .
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9007</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,13 @@ The ordering of rows can be updated with <code>modify_table_body(~dplyr::arrange
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_merge</span><span class="op">(</span><span class="va">tbls</span>, tab_spanner <span class="op">=</span> <span class="cn">NULL</span>, merge_vars <span class="op">=</span> <span class="cn">NULL</span>, tbl_ids <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_merge</span><span class="op">(</span></span>
+<span>  <span class="va">tbls</span>,</span>
+<span>  tab_spanner <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  merge_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tbl_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -104,6 +110,12 @@ be removed.</p></dd>
 Optional character vector of IDs that will be assigned to the input tables.
 The ID is assigned by assigning a name to the <code>tbls</code> list, which is
 returned in <code>x$tbls</code>.</p></dd>
+
+
+<dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
+<dd><p>(scalar <code>logical</code>)<br>
+When <code>FALSE</code>, a message is printed when unlike tables are merged warning
+users of potential row ordering issues.</p></dd>
 
 </dl></div>
     <div class="section level2">
