@@ -82,6 +82,7 @@ function in \verb{.tbl_fun=}, e.g. \code{purrr::map(data, .tbl_fun)}.
 are passed to \verb{.tbl_fun=}, e.g. \code{purrr::map2(data, strata, .tbl_fun)}.
 }
 
+Tables are created \emph{independently} within each stratum.
 When merging, keep in mind that merging works best with \strong{like tables}.
 See \code{\link[=tbl_merge]{tbl_merge()}} for details.
 }
