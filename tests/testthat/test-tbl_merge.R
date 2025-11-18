@@ -306,4 +306,10 @@ test_that("tbl_merge() test unlike table merge messaging", {
     tbl_merge(list(t1, t1), merge_vars = "variable"),
     "*columns to do uniquely identify rows*"
   )
+
+  expect_message(
+    list(t1, t1 |> modify_table_body(~.x[-1,])) |>
+    tbl_merge(),
+    "*number rows in the tables to be merged do not match*"
+  )
 })
