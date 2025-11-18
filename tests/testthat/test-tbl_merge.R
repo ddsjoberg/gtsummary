@@ -168,13 +168,6 @@ test_that("tbl_merge works with more complex merge", {
   reset_gtsummary_theme()
 })
 
-test_that("tbl_merge returns expected message when nonunique columns present", {
-  expect_message(
-    tbl_merge(list(tbl_stack(list(t1, t1)))),
-    "do not uniquely identify rows for each table.*merge may fail or result in a malformed table"
-  )
-})
-
 test_that("tbl_merge throws expected errors", {
   # input must be a list
   expect_snapshot(
@@ -304,5 +297,18 @@ test_that("tbl_merge() works with tbl_hierarchical()", {
     tbl |>
     as.data.frame(col_labels = FALSE) |>
       dplyr::pull("label")
+  )
+})
+
+
+test_that("tbl_merge() test unlike table merge messaging", {
+  expect_message(
+    tbl_merge(list(t1, t1), merge_vars = "variable"),
+    "*columns to do uniquely identify rows*"
+  )
+
+  expect_message(
+    tbl_merge(list(tbl_stack(list(t1, t1)))),
+    "do not uniquely identify rows for each table.*merge may fail or result in a malformed table"
   )
 })
