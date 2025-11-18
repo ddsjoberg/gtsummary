@@ -70,6 +70,26 @@ sort_hierarchical(x, sort = everything() ~ "descending", ...)
 
 a gtsummary table of the same class as `x`.
 
+## Details
+
+If you do not want to display rates for a hierarchy variable from table
+`x` but you would like to sort by descending frequency for that
+variable, the recommended method is to keep the variable in `include`
+when calling
+[`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
+so that rates for this variable are available, sort the table as needed
+using `sort_hierarchical()`, and then finally remove these rates from
+the table using
+[`modify_table_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_body.md).
+
+For example, to remove rates from the `AESOC` rows in hierarchy table
+`x`, you can call:
+
+    x |>
+      modify_table_body(
+        \(df) mutate(df, dplyr::across(all_stat_cols(), ~ifelse(variable %in% "AESOC", NA, .)))
+      )
+
 ## Note
 
 When sorting a table that includes an overall column

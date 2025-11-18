@@ -11,7 +11,7 @@ instead of a data frame."><meta property="og:image" content="https://www.danield
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,43 +161,6 @@ curly brackets will be evaluated according to <code><a href="https://glue.tidyve
 <span class="r-in"><span>    .combine_with <span class="op">=</span> <span class="st">"tbl_stack"</span>,</span></span>
 <span class="r-in"><span>    .combine_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>group_header <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Called from: .tbl_ard_strata_internal(cards = cards, strata = {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         strata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }, .tbl_fun = .tbl_fun, ..., .sep = .sep, .combine_with = .combine_with, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .combine_args = .combine_args, .header = .header, .parent_fun = "tbl_ard_strata2")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: df_tbls &lt;- dplyr::mutate(dplyr::ungroup(dplyr::mutate(dplyr::rowwise(dplyr::rename(dplyr::arrange(tidyr::nest(card_renamed, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     data = -all_of(.env$strata_renamed)), !!!syms(strata_renamed)), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     !!!syms(new_strata_names))), data = list(cards::as_card(.data$data)), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strata = paste(!!!syms(names(new_strata_names)), sep = .sep), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     header = glue::glue(.header))), tbl = switch(.parent_fun, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tbl_ard_strata = map(.data$data, .tbl_fun, ...), tbl_ard_strata2 = map2(.data$data, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         .data$header, .tbl_fun, ...)))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: df_tbls$tbl_id &lt;- dplyr::pull(dplyr::mutate(df_tbls[names(new_strata_names)], </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     across(everything(), .fns = ~paste(new_strata_names[[dplyr::cur_column()]], </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         cli::cli_format(.x), sep = "=")), strata = paste(!!!syms(names(new_strata_names)), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         sep = ",")), "strata")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: .combine_args &lt;- utils::modifyList(switch(.combine_with, tbl_merge = list(tab_spanner = df_tbls$header), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tbl_stack = list(group_header = df_tbls$header)), val = .combine_args %||% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     list())</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: if (.combine_with == "tbl_merge") {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tbl &lt;- inject(tbl_merge(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         !!!.combine_args))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> } else if (.combine_with == "tbl_stack") {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tbl &lt;- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         !!!.combine_args, tbl_id_lbls = df_tbls$strata))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: if (.combine_with == "tbl_stack") {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     tbl &lt;- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         !!!.combine_args, tbl_id_lbls = df_tbls$strata))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: tbl &lt;- inject(tbl_stack(tbls = df_tbls$tbl, tbl_ids = df_tbls$tbl_id, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     !!!.combine_args, tbl_id_lbls = df_tbls$strata))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: tbl$df_strata &lt;- df_tbls %&gt;% dplyr::select(starts_with("strata_"), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "header")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: class(tbl) &lt;- c("tbl_ard_strata", .combine_with, "gtsummary")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> debug: tbl</span>
 <div class="gt-table"><div id="aehzxiywwx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
   <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF"><thead style="border-style: none;"><tr class="gt_col_headings" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3;"><th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left"><span class="gt_from_md"><strong style="margin-top: 0; margin-bottom: 0;">Characteristic</strong></span></th>

@@ -30,6 +30,12 @@
   of character vectors that contains `"NULL"` values.
   ([\#2345](https://github.com/ddsjoberg/gtsummary/issues/2345))
 
+- Fixed bug in
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  causing variable labels to disappear from table when not all variables
+  are in `include`.
+  ([\#2332](https://github.com/ddsjoberg/gtsummary/issues/2332))
+
 ## gtsummary 2.4.0
 
 CRAN release: 2025-08-28

@@ -21,7 +21,7 @@ sorts tables in alphanumeric order.
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,6 +110,18 @@ in <code>x</code> for the variable, an error will occur.</p></li>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a gtsummary table of the same class as <code>x</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>If you do not want to display rates for a hierarchy variable from table <code>x</code> but you would like to sort by descending
+frequency for that variable, the recommended method is to keep the variable in <code>include</code> when calling
+<code><a href="tbl_hierarchical.html">tbl_hierarchical()</a></code> so that rates for this variable are available, sort the table as needed using
+<code>sort_hierarchical()</code>, and then finally remove these rates from the table using <code><a href="modify_table_body.html">modify_table_body()</a></code>.</p>
+<p>For example, to remove rates from the <code>AESOC</code> rows in hierarchy table <code>x</code>, you can call:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>x <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="fu">modify_table_body</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    \(df) <span class="fu">mutate</span>(df, dplyr<span class="sc">::</span><span class="fu">across</span>(<span class="fu">all_stat_cols</span>(), <span class="sc">~</span><span class="fu">ifelse</span>(variable <span class="sc">%in%</span> <span class="st">"AESOC"</span>, <span class="cn">NA</span>, .)))</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  )</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
