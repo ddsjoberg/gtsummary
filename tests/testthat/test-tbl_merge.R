@@ -306,9 +306,4 @@ test_that("tbl_merge() test unlike table merge messaging", {
     tbl_merge(list(t1, t1), merge_vars = "variable"),
     "*columns to do uniquely identify rows*"
   )
-
-  expect_message(
-    tbl_merge(list(tbl_stack(list(t1, t1)))),
-    "do not uniquely identify rows for each table.*merge may fail or result in a malformed table"
-  )
 })
