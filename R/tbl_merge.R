@@ -372,7 +372,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
     if (tbl1_nrow != nrow(tbls[[i]]$table_body)) {
       cli::cli_inform(
         c("The number rows in the tables to be merged do not match,
-           which may result in rows appearing out of order.",
+           which {.emph may} result in rows appearing out of order.",
           i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
                Use {.code quiet=TRUE} to silence message."),
         call = get_cli_abort_call()
