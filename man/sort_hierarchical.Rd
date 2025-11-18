@@ -53,6 +53,20 @@ sorted in descending order by sum (default).
 sorts tables in alphanumeric order.
 }
 }
+\details{
+If you do not want to display rates for a hierarchy variable from table \code{x} but you would like to sort by descending
+frequency for that variable, the recommended method is to keep the variable in \code{include} when calling
+\code{tbl_hierarchical()} so that rates for this variable are available, sort the table as needed using
+\code{sort_hierarchical()}, and then finally remove these rates from the table using \code{modify_table_body()}.
+
+For example, to remove rates from the \code{AESOC} rows in hierarchy table \code{x}, you can call:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{x |>
+  modify_table_body(
+    \\(df) mutate(df, dplyr::across(all_stat_cols(), ~ifelse(variable \%in\% "AESOC", NA, .)))
+  )
+}\if{html}{\out{</div>}}
+}
 \note{
 When sorting a table that includes an overall column \code{\link[=add_overall]{add_overall()}} must be called to add the overall column
 \emph{before} \code{sort_hierarchical()} is called.
