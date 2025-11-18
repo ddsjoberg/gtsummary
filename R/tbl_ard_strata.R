@@ -123,7 +123,6 @@ tbl_ard_strata2 <- function(cards,
     as.list(strata_renamed) %>%
     set_names(paste0("strata_", seq_len(length(strata_renamed))))
 
-  browser()
   df_tbls <- card_renamed |>
     tidyr::nest(data = -all_of(.env$strata_renamed)) |>
     dplyr::arrange(!!!syms(strata_renamed)) |>
