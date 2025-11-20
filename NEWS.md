@@ -4,7 +4,7 @@
 
 * Adding functions `tlb_ard_strata()` and `tlb_ard_strata2()`. (#1852)
 
-* Added `head()` and `tail()` S3 methods for `gtsummary` objects. (#2335) 
+* Added `head()`, `tail()`, and `[` S3 methods for `gtsummary` objects. (#2335, #2350) 
 
 * Added additional messaging to `tbl_merge()` when tables _may not_ merge properly. (#2348)
 
