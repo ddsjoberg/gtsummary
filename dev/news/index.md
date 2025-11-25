@@ -41,6 +41,11 @@
   are in `include`.
   ([\#2332](https://github.com/ddsjoberg/gtsummary/issues/2332))
 
+- Added the `"add_overall.tbl_svysummary-arg:col_label"` theme element
+  to control the default value for
+  `add_overall.tbl_svysummary(col_label)` argument.
+  ([\#2354](https://github.com/ddsjoberg/gtsummary/issues/2354))
+
 ## gtsummary 2.4.0
 
 CRAN release: 2025-08-28
