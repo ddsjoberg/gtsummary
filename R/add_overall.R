@@ -70,11 +70,15 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
 
   # translating the col_label, if nothing passed by user
   if (missing(col_label)) {
+    col_label_default <- paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
     col_label <-
-      get_theme_element(
-        "add_overall.tbl_summary-arg:col_label",
-        default = paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
-      )
+      case_switch(
+        inherits(x, "tbl_summary") ~
+          get_theme_element("add_overall.tbl_summary-arg:col_label", default = col_label_default),
+        inherits(x, "tbl_svysummary") ~
+          get_theme_element("add_overall.tbl_svysummary-arg:col_label", default = col_label_default)
+      ) %||%
+      get_theme_element("add_overall.tbl_summary-arg:col_label", default = col_label_default)
   }
 
   add_overall_generic(
