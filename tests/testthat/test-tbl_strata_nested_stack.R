@@ -196,3 +196,41 @@ test_that("tbl_strata_nested_stack() unobserved combinations", {
     )
   )
 })
+
+test_that("tbl_strata_nested_stack() works with tables without prior indentation in first column", {
+  expect_silent(
+    tbl <-
+      tbl_strata_nested_stack(
+        trial,
+        strata = trt,
+        ~ .x |>
+          tbl_summary(include = c(age, grade), missing = "no") |>
+          modify_header(all_stat_cols() ~ "**Summary Statistics**") |>
+          # add column without prior indentation
+          modify_column_unhide("var_label")
+      )
+  )
+
+  # no indentation in second column labels
+  expect_true(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% 2:3) |>
+      dplyr::pull(n_spaces) |>
+      is_empty()
+  )
+  # correct indentation in first column labels
+  expect_equal(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "var_label", row_numbers %in% 2:3) |>
+      dplyr::pull(n_spaces),
+    c(4L, 4L)
+  )
+})
