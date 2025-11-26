@@ -2,6 +2,8 @@
 
 * Added AI chat bot to homepage, powered by `kapa.ai`.
 
+* Fixed bug in `tbl_strata_nested_stack()` causing incorrect column indentation in non-standard tables. (#2272)
+
 * Adding functions `tlb_ard_strata()` and `tlb_ard_strata2()`. (#1852)
 
 * Added `head()` and `tail()` S3 methods for `gtsummary` objects. (#2335) 
