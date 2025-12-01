@@ -387,6 +387,29 @@ x |>
 
 [TABLE]
 
+## Footnotes vs Source Notes vs Abbreviations
+
+Within gtsummary, there are three types of notes that appear under a
+table:
+[footnotes](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote2.html),
+[source
+notes](https://www.danieldsjoberg.com/gtsummary/reference/modify_source_note.html),
+and
+[abbreviations](https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.html).
+Adding, modify, and removing these notes require functions tailored for
+each type of note.
+
+- Footnotes place notes with markers that appear in the table, and the
+  marker appears again next to the note below the table: a very standard
+  footnote.
+
+- Source notes are similar to footnotes, expect there is no marker
+  associated with the note.
+
+- Abbreviations are a special type of source note. All abbreviations
+  that appear in a table are collected and placed in a single note at
+  the bottom of the table.
+
 ## Advanced Modifiers
 
 **These functions should be used by developers or advanced users only.**

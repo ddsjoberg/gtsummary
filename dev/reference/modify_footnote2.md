@@ -92,6 +92,11 @@ remove_footnote_spanning_header(x, columns = everything(), level = 1L)
 
 Updated gtsummary object
 
+## See also
+
+[Footnotes vs Source Notes vs
+Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+
 ## Examples
 
 ``` r

@@ -1,7 +1,7 @@
 # Modify Abbreviations
 
 All abbreviations will be coalesced when printing the final table into a
-single source note.
+single specialized source note.
 
 ## Usage
 
@@ -35,6 +35,11 @@ remove_abbreviation(x, abbreviation = NULL)
 ## Value
 
 Updated gtsummary object
+
+## See also
+
+[Footnotes vs Source Notes vs
+Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
 
 ## Examples
 

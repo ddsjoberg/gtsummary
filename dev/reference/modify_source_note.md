@@ -47,6 +47,11 @@ gtsummary object
 Source notes are not supported by
 [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable_extra.md).
 
+## See also
+
+[Footnotes vs Source Notes vs
+Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+
 ## Examples
 
 ``` r

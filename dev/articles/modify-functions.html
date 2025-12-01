@@ -5516,6 +5516,26 @@ N = 102</span><span class="gt_footnote_marks" style="white-space:nowrap;font-sty
 </div>
 </div>
 <div class="section level2">
+<h2 id="footnotes-vs-source-notes-vs-abbreviations">Footnotes vs Source Notes vs Abbreviations<a class="anchor" aria-label="anchor" href="#footnotes-vs-source-notes-vs-abbreviations"></a>
+</h2>
+<p>Within gtsummary, there are three types of notes that appear under a
+table: <a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote2.html">footnotes</a>,
+<a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_source_note.html">source
+notes</a>, and <a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.html">abbreviations</a>.
+Adding, modify, and removing these notes require functions tailored for
+each type of note.</p>
+<ul>
+<li><p>Footnotes place notes with markers that appear in the table, and
+the marker appears again next to the note below the table: a very
+standard footnote.</p></li>
+<li><p>Source notes are similar to footnotes, expect there is no marker
+associated with the note.</p></li>
+<li><p>Abbreviations are a special type of source note. All
+abbreviations that appear in a table are collected and placed in a
+single note at the bottom of the table.</p></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="advanced-modifiers">Advanced Modifiers<a class="anchor" aria-label="anchor" href="#advanced-modifiers"></a>
 </h2>
 <p><strong>These functions should be used by developers or advanced
