@@ -100,19 +100,13 @@ add_ci.tbl_summary <- function(x,
 
   if (is.null(method))
     method <- list(
-      as.formula(
-        paste0(
-          "all_continuous() ~ \"",
-          get_theme_element("add_ci.tbl_summary-attr:method.continuous", default = "t.test"),
-          "\""
-        )
+      rlang::new_formula(
+        rlang::expr(all_continuous()),
+        get_theme_element("add_ci.tbl_summary-attr:method.continuous", default = "t.test")
       ),
-      as.formula(
-        paste0(
-          "all_categorical() ~ \"",
-          get_theme_element("add_ci.tbl_summary-attr:method.categorical", default = "wilson"),
-          "\""
-        )
+      rlang::new_formula(
+        rlang::expr(all_categorical()),
+        get_theme_element("add_ci.tbl_summary-attr:method.categorical", default = "wilson")
       )
     )
 
