@@ -48,3 +48,6 @@ tbl
 remove_source_note(tbl, source_note_id = 1)
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
+}
