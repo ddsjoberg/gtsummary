@@ -76,19 +76,13 @@ add_ci.tbl_svysummary <- function(x,
 
   if (is.null(method))
     method <- list(
-      as.formula(
-        paste0(
-          "all_continuous() ~ \"",
-          get_theme_element("add_ci.tbl_svysummary-attr:method.continuous", default = "svymean"),
-          "\""
-        )
+      rlang::new_formula(
+        rlang::expr(all_continuous()),
+        get_theme_element("add_ci.tbl_svysummary-attr:method.continuous", default = "svymean")
       ),
-      as.formula(
-        paste0(
-          "all_categorical() ~ \"",
-          get_theme_element("add_ci.tbl_svysummary-attr:method.categorical", default = "svyprop.logit"),
-          "\""
-        )
+      rlang::new_formula(
+        rlang::expr(all_categorical()),
+        get_theme_element("add_ci.tbl_svysummary-attr:method.categorical", default = "svyprop.logit")
       )
     )
 
