@@ -44,7 +44,7 @@
 #'   modify_header(all_stat_cols() ~ "**{level}**") |>
 #'   modify_spanning_header(all_stat_cols() ~ "**Survived**")
 add_ci.tbl_svysummary <- function(x,
-                                  method = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"),
+                                  method = NULL,
                                   include = everything(),
                                   statistic =
                                     list(all_continuous() ~ "{conf.low}, {conf.high}",
@@ -73,6 +73,24 @@ add_ci.tbl_svysummary <- function(x,
     data = scope_table_body(x$table_body),
     include = {{ include }}
   )
+
+  if (is.null(method))
+    method <- list(
+      as.formula(
+        paste0(
+          "all_continuous() ~ \"",
+          get_theme_element("add_ci.tbl_svysummary-attr:method.continuous", default = "svymean"),
+          "\""
+        )
+      ),
+      as.formula(
+        paste0(
+          "all_categorical() ~ \"",
+          get_theme_element("add_ci.tbl_svysummary-attr:method.categorical", default = "svyprop.logit"),
+          "\""
+        )
+      )
+    )
 
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),

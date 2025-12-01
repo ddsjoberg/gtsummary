@@ -73,7 +73,7 @@ add_ci <- function(x, ...) {
 #' @rdname add_ci
 #' @export
 add_ci.tbl_summary <- function(x,
-                               method = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"),
+                               method = NULL,
                                include = everything(),
                                statistic =
                                  list(all_continuous() ~ "{conf.low}, {conf.high}",
@@ -97,6 +97,24 @@ add_ci.tbl_summary <- function(x,
     data = scope_table_body(x$table_body),
     include = {{ include }}
   )
+
+  if (is.null(method))
+    method <- list(
+      as.formula(
+        paste0(
+          "all_continuous() ~ \"",
+          get_theme_element("add_ci.tbl_summary-attr:method.continuous", default = "t.test"),
+          "\""
+        )
+      ),
+      as.formula(
+        paste0(
+          "all_categorical() ~ \"",
+          get_theme_element("add_ci.tbl_summary-attr:method.categorical", default = "wilson"),
+          "\""
+        )
+      )
+    )
 
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
