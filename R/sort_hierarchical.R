@@ -32,6 +32,20 @@
 #' When sorting a table that includes an overall column [add_overall()] must be called to add the overall column
 #' _before_ `sort_hierarchical()` is called.
 #'
+#' @details
+#' If you do not want to display rates for a hierarchy variable from table `x` but you would like to sort by descending
+#' frequency for that variable, the recommended method is to keep the variable in `include` when calling
+#' `tbl_hierarchical()` so that rates for this variable are available, sort the table as needed using
+#' `sort_hierarchical()`, and then finally remove these rates from the table using `modify_table_body()`.
+#'
+#' For example, to remove rates from the `AESOC` rows in hierarchy table `x`, you can call:
+#'
+#' ```
+#' x |>
+#'   modify_table_body(
+#'     \(df) mutate(df, dplyr::across(all_stat_cols(), ~ifelse(variable %in% "AESOC", NA, .)))
+#'   )
+#' ```
 #'
 #' @return a gtsummary table of the same class as `x`.
 #'
@@ -111,7 +125,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   )
 
   # add row indices match structure of ard to x$table_body
-  reshape_x <- .reshape_ard_compare(x, x_ard, ard_args, sort)
+  reshape_x <- .reshape_ard_compare(x, x_ard, c(ard_args, list(id = x$inputs$id)), sort)
   x <- reshape_x$x
   x_ard <- reshape_x$x_ard
 
@@ -158,7 +172,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   by_cols <- if (length(ard_args$by) > 0) c("group1", "group1_level") else NULL
 
   # add dummy rows for variables not in include so their label rows are sorted correctly
-  x_ard <- x_ard |> .append_not_incl(ard_args, sort)
+  x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort)
 
   # add indices to ARD
   x_ard <- x_ard |>
@@ -212,40 +226,47 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   list(x = x, x_ard = x_ard)
 }
 
-.append_not_incl <- function(x, ard_args, sort = NULL) {
+.append_not_incl <- function(x, ard_args, call_list, sort = NULL) {
   # add dummy rows for variables not in include so their label rows are sorted correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
-    cli::cli_inform(
-      "Not all hierarchy variables present in the table were included in the {.arg include} argument.
-      These variables ({not_incl}) do not have event rate data available so the total sum of the event rates
-      for this hierarchy section will be used instead. To use true event rates for all sections of the table,
-      set {.code include = everything()} when creating your table."
-    )
+    if (!"tbl_hierarchical_count" %in% names(call_list)) { # do not print message for hierarchical count tables
+      cli::cli_inform(
+        c("!" = "The rates for {.val {not_incl}} have been {.emph estimated} by
+          summing the {.val {dplyr::last(ard_args$include)}} rates.",
+          "i" = "Due to unique counting of values within {.val {c(ard_args$id, ard_args$variables)}},
+          the summed rates {.emph may not} reflect the true rates.",
+          "i" = "See the `Details` section of {.fun sort_hierarchical} for an alternative method that uses true
+          rates."
+        )
+      )
+    }
 
     for (v in not_incl) {
       i <- length(ard_args$by) + which(ard_args$variables == v)
       x_sum_rows <- x |>
         dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
         dplyr::group_map(function(.df, .g) {
+          stat_nm <- setdiff(.df$stat_name, "N")[1]
           # get pseudo-summary row stat value for descending sort
           if (!is.null(sort) && sort[v] == "descending") {
-            stat_nm <- setdiff(.df$stat_name, "N")[1]
             sum <- .df |>
-              dplyr::filter(.data$stat_name == !!stat_nm) |>
+              dplyr::filter(.data$variable == dplyr::last(ard_args$include) & .data$stat_name == !!stat_nm) |>
               dplyr::summarize(sum_stat = sum(unlist(.data$stat))) |>
               dplyr::pull("sum_stat")
           }
           g_cur <- .g[[ncol(.g) - 1]]
           if (!is.na(g_cur) && g_cur == v) {
             # dummy summary row to add in
-            .df[1, ] |> mutate(
-              variable = g_cur,
-              variable_level = .g[[ncol(.g)]],
-              stat_name = if (!is.null(sort) && sort[v] == "descending") stat_nm else "no_stat",
-              stat = if (!is.null(sort) && sort[v] == "descending") list(sum) else list(0),
-              tmp = TRUE
-            )
+            .df[.df$stat_name == stat_nm, ][1, ] |>
+              select(-cards::all_ard_group_n(i:length(ard_args$variables))) |>
+              mutate(
+                variable = g_cur,
+                variable_level = .g[[ncol(.g)]],
+                stat_name = if (!is.null(sort) && sort[v] == "descending") stat_nm else "no_stat",
+                stat = if (!is.null(sort) && sort[v] == "descending") list(sum) else list(0),
+                tmp = TRUE
+              )
           } else {
             NULL
           }

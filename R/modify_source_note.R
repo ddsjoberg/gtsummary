@@ -26,6 +26,7 @@
 #' # Example 1 ----------------------------------
 #' tbl <- tbl_summary(trial, include = c(marker, grade), missing = "no") |>
 #'   modify_source_note("Results as of June 26, 2015")
+#' tbl
 #'
 #' # Example 2 ----------------------------------
 #' remove_source_note(tbl, source_note_id = 1)
