@@ -29,6 +29,9 @@
 #'   Optional character vector of IDs that will be assigned to the input tables.
 #'   The ID is assigned by assigning a name to the `tbls` list, which is
 #'   returned in `x$tbls`.
+#' @param quiet (scalar `logical`)\cr
+#'   When `FALSE`, a message is printed when unlike tables are merged warning
+#'   users of potential row ordering issues.
 #'
 #' @author Daniel D. Sjoberg
 #' @export
@@ -69,7 +72,8 @@
 #'
 #' tbl_merge(tbls = list(t3, t4)) %>%
 #'   modify_spanning_header(everything() ~ NA_character_)
-tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL) {
+tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL,
+                      quiet = FALSE) {
   set_cli_abort_call()
 
   # input checks ---------------------------------------------------------------
@@ -120,6 +124,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
 
   tbls_length <- length(tbls)
 
+  # check whether tables are mis-matched in any way ----------------------------
+  if (isFALSE(quiet)) .check_merge_likeness(tbls, merge_vars)
+
   # adding tab spanners if requested -------------------------------------------
   if (!isFALSE(tab_spanner)) {
     # if tab spanner is null, default is Table 1, Table 2, etc....
@@ -159,19 +166,20 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
     )
 
   # check that the merge variables are unique in all table bodies
-  if (some(lst_table_body, ~anyDuplicated(.x[merge_vars]) > 0L)) {
-    cli::cli_inform(c(
-      "The merging columns ({.val {merge_vars}}) do not uniquely identify rows for
-       each table in {.arg tbls}, and the merge may fail or result in a malformed table.",
-      "i" = "If you previously called {.fun tbl_stack} on your tables,
-         then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
-    ))
-  }
+  # if (some(lst_table_body, ~anyDuplicated(.x[merge_vars]) > 0L)) {
+  #   cli::cli_inform(c(
+  #     "The merging columns ({.val {merge_vars}}) do not uniquely identify rows for
+  #      each table in {.arg tbls}, and the merge may fail or result in a malformed table.",
+  #     "i" = "If you previously called {.fun tbl_stack} on your tables,
+  #        then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
+  #   ))
+  # }
 
   # now merge all the table bodies together
   table_body <-
     lst_table_body |>
     reduce(.f = dplyr::full_join, by = merge_vars) |>
+    suppressWarnings() |> # suppress many to many merge warning
     dplyr::relocate(all_of(merge_vars), .before = 1L)
 
   # renaming columns in stylings and updating ----------------------------------
@@ -354,5 +362,37 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
   }
 
   pattern
+}
+
+.check_merge_likeness <- function(tbls, merge_vars) {
+  tbl1_nrow <- nrow(tbls[[1]]$table_body)
+
+  # check the number of rows is the same in all tbls
+  for (i in seq_along(tbls)[-1]) {
+    if (tbl1_nrow != nrow(tbls[[i]]$table_body)) {
+      cli::cli_inform(
+        c("The number rows in the tables to be merged do not match,
+           which {.emph may} result in rows appearing out of order.",
+          i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
+               Use {.code quiet=TRUE} to silence message."),
+        call = get_cli_abort_call()
+      )
+      return(invisible())
+    }
+  }
+
+  # check merge-on variables uniquely identify the rows
+  for (i in seq_along(tbls)) {
+    if (nrow(tbls[[i]]$table_body) != nrow(dplyr::distinct(tbls[[i]]$table_body[merge_vars]))) {
+      cli::cli_inform(
+        c("The {.arg merge_vars} columns to do uniquely identify rows in all {.arg tbls},
+           which may result in rows appearing out of order.",
+          i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
+               Use {.code quiet=TRUE} to silence message."),
+        call = get_cli_abort_call()
+      )
+      return(invisible())
+    }
+  }
 }
 

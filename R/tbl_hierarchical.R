@@ -1,6 +1,6 @@
 #' Hierarchical Table
 #'
-#' @description
+#' @description `r lifecycle::badge('experimental')`\cr
 #' Use these functions to generate hierarchical tables.
 #'
 #' - `tbl_hierarchical()`: Calculates *rates* of events (e.g. adverse events)

@@ -1,10 +1,26 @@
 # gtsummary (development version)
 
+* Added AI chat bot to homepage, powered by `kapa.ai`.
+
+* Fixed bug in `tbl_strata_nested_stack()` causing incorrect column indentation in non-standard tables. (#2272)
+
+* Adding functions `tlb_ard_strata()` and `tlb_ard_strata2()`. (#1852)
+
+* Added `head()` and `tail()` S3 methods for `gtsummary` objects. (#2335) 
+
+* Added additional messaging to `tbl_merge()` when tables _may not_ merge properly. (#2348)
+
 * Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
 
 * Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
 
 * When a data frame is passed in the `tbl_summary(percent)` argument, the headers are now tabulated with this data frame. (#2322)
+
+* Corrected handling in `tbl_summary()` of character vectors that contains `"NULL"` values. (#2345)
+
+* Fixed bug in `sort_hierarchical()` causing variable labels to disappear from table when not all variables are in `include`. (#2332)
+
+* Added the `"add_overall.tbl_svysummary-arg:col_label"` theme element to control the default value for `add_overall.tbl_svysummary(col_label)` argument. (#2354)
 
 # gtsummary 2.4.0
 
