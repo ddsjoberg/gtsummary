@@ -1,7 +1,7 @@
 #' Modify Abbreviations
 #'
 #' All abbreviations will be coalesced when printing the final table into
-#' a single source note.
+#' a single specialized source note.
 #'
 #' @inheritParams modify_footnote2
 #' @param abbreviation (`string`)\cr
@@ -10,6 +10,7 @@
 #'
 #' @return Updated gtsummary object
 #' @name modify_abbreviation
+#' @seealso [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
