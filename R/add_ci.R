@@ -98,17 +98,17 @@ add_ci.tbl_summary <- function(x,
     include = {{ include }}
   )
 
-  if (is.null(method))
-    method <- list(
-      rlang::new_formula(
-        rlang::expr(all_continuous()),
-        get_theme_element("add_ci.tbl_summary-attr:method.continuous", default = "t.test")
-      ),
-      rlang::new_formula(
-        rlang::expr(all_categorical()),
-        get_theme_element("add_ci.tbl_summary-attr:method.categorical", default = "wilson")
-      )
+  default_method <- list(
+    rlang::new_formula(
+      rlang::expr(all_continuous()),
+      get_theme_element("add_ci.tbl_summary-attr:method.continuous", default = "t.test")
+    ),
+    rlang::new_formula(
+      rlang::expr(all_categorical()),
+      get_theme_element("add_ci.tbl_summary-attr:method.categorical", default = "wilson")
     )
+  )
+  if (is.null(method)) method <- default_method
 
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
@@ -118,7 +118,7 @@ add_ci.tbl_summary <- function(x,
   )
   cards::fill_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
-    method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["method"]]),
+    method = default_method,
     statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["statistic"]]),
     style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["style_fun"]])
   )
