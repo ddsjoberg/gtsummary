@@ -98,8 +98,9 @@ add_ci.tbl_summary <- function(x,
     include = {{ include }}
   )
 
+  default_method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
   if (missing(method)) {
-    method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
+    method <- default_method
   }
 
   cards::process_formula_selectors(
@@ -110,7 +111,7 @@ add_ci.tbl_summary <- function(x,
   )
   cards::fill_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
-    method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["method"]]),
+    method = default_method,
     statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["statistic"]]),
     style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_summary"]])[["style_fun"]])
   )
