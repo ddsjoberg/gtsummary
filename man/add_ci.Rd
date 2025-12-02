@@ -9,7 +9,7 @@ add_ci(x, ...)
 
 \method{add_ci}{tbl_summary}(
   x,
-  method = NULL,
+  method = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"),
   include = everything(),
   statistic = list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~
     "{conf.low}\%, {conf.high}\%"),

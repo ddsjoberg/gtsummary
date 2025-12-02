@@ -22,7 +22,7 @@
 
 * Added the `"add_overall.tbl_svysummary-arg:col_label"` theme element to control the default value for `add_overall.tbl_svysummary(col_label)` argument. (#2354)
 
-* Added theme elements `add_ci.tbl_summary-attr:method.categorical`, `add_ci.tbl_summary-attr:method.continuous`, `add_ci.tbl_svysummary-attr:method.categorical` and `add_ci.tbl_svysummary-attr:method.continuous` to control the default value for `add_ci.tbl_summary(method)`/`add_ci.tbl_svysummary(method)` argument. (#2356)
+* Added theme elements `add_ci.tbl_summary-arg:method`, and `add_ci.tbl_svysummary-arg:method` to control the default value for `add_ci.tbl_summary(method)` / `add_ci.tbl_svysummary(method)` argument. (#2356)
 
 # gtsummary 2.4.0
 

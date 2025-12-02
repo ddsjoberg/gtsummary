@@ -6,7 +6,7 @@
 \usage{
 \method{add_ci}{tbl_svysummary}(
   x,
-  method = NULL,
+  method = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"),
   include = everything(),
   statistic = list(all_continuous() ~ "{conf.low}, {conf.high}", all_categorical() ~
     "{conf.low}\%, {conf.high}\%"),
