@@ -74,8 +74,9 @@ add_ci.tbl_svysummary <- function(x,
     include = {{ include }}
   )
 
+  default_method <- get_theme_element("add_ci.tbl_svysummary-arg:method", default = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"))
   if (missing(method)) {
-    method <- get_theme_element("add_ci.tbl_svysummary-arg:method", default = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"))
+    method <- default_method
   }
 
   cards::process_formula_selectors(
@@ -86,7 +87,7 @@ add_ci.tbl_svysummary <- function(x,
   )
   cards::fill_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
-    method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["method"]]),
+    method = default_method,
     statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["statistic"]]),
     style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["style_fun"]])
   )
