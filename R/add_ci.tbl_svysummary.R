@@ -86,7 +86,7 @@ add_ci.tbl_svysummary <- function(x,
   )
   cards::fill_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
-    method = default_method,
+    method = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["method"]]),
     statistic = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["statistic"]]),
     style_fun = eval(formals(asNamespace("gtsummary")[["add_ci.tbl_svysummary"]])[["style_fun"]])
   )
