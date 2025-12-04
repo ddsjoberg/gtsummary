@@ -98,9 +98,9 @@ add_ci.tbl_summary <- function(x,
     include = {{ include }}
   )
 
-  default_method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
+ 
   if (missing(method)) {
-    method <- default_method
+    method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
   }
 
   cards::process_formula_selectors(
