@@ -3,10 +3,10 @@
 Most regression models are handled by
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md),
 which uses
-[`broom::tidy()`](https://broom.tidymodels.org/reference/reexports.html)
-to perform initial tidying of results. There are, however, some model
-types that have modified default printing behavior. Those methods are
-listed below.
+[`broom::tidy()`](https://rdrr.io/pkg/broom/man/reexports.html) to
+perform initial tidying of results. There are, however, some model types
+that have modified default printing behavior. Those methods are listed
+below.
 
 ## Usage
 

@@ -51,6 +51,12 @@
   `add_overall.tbl_svysummary(col_label)` argument.
   ([\#2354](https://github.com/ddsjoberg/gtsummary/issues/2354))
 
+- Added theme elements `add_ci.tbl_summary-arg:method`, and
+  `add_ci.tbl_svysummary-arg:method` to control the default value for
+  `add_ci.tbl_summary(method)` / `add_ci.tbl_svysummary(method)`
+  argument.
+  ([\#2356](https://github.com/ddsjoberg/gtsummary/issues/2356))
+
 ## gtsummary 2.4.0
 
 CRAN release: 2025-08-28
