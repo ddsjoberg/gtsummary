@@ -303,45 +303,36 @@ test_that("pkgwide-str:print_engine changes print methods as expected", {
   )
 })
 
-
+# add_ci.tbl_summary-arg:method ------------------------------------------------
 test_that("theme element add_ci.tbl_summary-arg:method", {
-  with_gtsummary_theme(
-    x = list("add_ci.tbl_summary-arg:method" = list(all_continuous() ~ "wilcox.test", all_categorical() ~ "wald")),
-    expr = {
-      expect_silent(
-        tbl1 <-
-          trial |>
-          select(
-            age = age,
-            grade = grade,
-          ) %>%
-          tbl_summary(
-            missing = "no",
-            statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
-          ) |>
-          add_ci(
-            style_fun =
-              list(all_continuous() ~ label_style_sigfig(digits = 4),
-                   all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
-          )
+  tbl0 <- trial |>
+    tbl_summary(
+      include = c(age, grade),
+      missing = "no",
+      statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
+    )
+
+  expect_silent(
+    tbl1 <-
+      with_gtsummary_theme(
+        x = list("add_ci.tbl_summary-arg:method" = list(all_continuous() ~ "wilcox.test", all_categorical() ~ "wald")),
+        expr = {
+          tbl0 |>
+            add_ci(
+              style_fun =
+                list(all_continuous() ~ label_style_sigfig(digits = 4),
+                     all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
+            )
+        }
       )
-    }
   )
 
   tbl2 <-
-    trial |>
-    select(
-      age_wilcox.test = age,
-      grade_wald = grade
-    ) %>%
-    tbl_summary(
-      missing = "no",
-      statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
-    ) |>
+    tbl0 |>
     add_ci(
       method = list(
-        ends_with("wilcox.test") ~ "wilcox.test",
-        ends_with("wald") ~ "wald"
+        age = "wilcox.test",
+        grade ~ "wald"
       ),
       style_fun =
         list(all_continuous() ~ label_style_sigfig(digits = 4),
@@ -353,7 +344,7 @@ test_that("theme element add_ci.tbl_summary-arg:method", {
       dplyr::filter(variable == "age") |>
       dplyr::pull(ci_stat_0),
     tbl2$table_body |>
-      dplyr::filter(variable == "age_wilcox.test") |>
+      dplyr::filter(variable == "age") |>
       dplyr::pull(ci_stat_0)
   )
 
@@ -362,53 +353,44 @@ test_that("theme element add_ci.tbl_summary-arg:method", {
       dplyr::filter(variable == "grade") |>
       dplyr::pull(ci_stat_0),
     tbl2$table_body |>
-      dplyr::filter(variable == "grade_wald") |>
+      dplyr::filter(variable == "grade") |>
       dplyr::pull(ci_stat_0)
   )
 })
 
 
+# add_ci.tbl_svysummary-arg:method ---------------------------------------------
 test_that("theme element add_ci.tbl_svysummary-arg:method", {
-  svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
-    svy_trial$variables <-
-    svy_trial$variables |>
-    dplyr::mutate(
-      age_svymedian.mean = age,
-      grade_svyprop.beta = grade
-    )
+    tbl0 <-
+      survey::svydesign(~1, data = trial, weights = ~1) |>
+      tbl_svysummary(
+        include = c(age, grade),
+        missing = "no",
+        statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
+      )
 
-    with_gtsummary_theme(
-      x = list("add_ci.tbl_svysummary-arg:method" = list(all_continuous() ~ "svymedian.mean", all_categorical() ~ "svyprop.beta")),
-      expr = {
-        expect_silent(
-          tbl1 <-
-            svy_trial |>
-            tbl_svysummary(
-              include = c(age, grade),
-              missing = "no",
-              statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
-            ) |>
-            add_ci(
+    expect_silent(
+      tbl1 <-
+        with_gtsummary_theme(
+          x = list("add_ci.tbl_svysummary-arg:method" = list(all_continuous() ~ "svymedian.mean", all_categorical() ~ "svyprop.beta")),
+          expr = {
+            tbl0 |>
+              add_ci(
               style_fun =
                 list(all_continuous() ~ label_style_sigfig(digits = 4),
                      all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
             )
+          }
         )
-      }
     )
 
     expect_silent(
       tbl2 <-
-        svy_trial |>
-        tbl_svysummary(
-          include = c(age_svymedian.mean, grade_svyprop.beta),
-          missing = "no",
-          statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
-        ) |>
+        tbl0 |>
         add_ci(
           method = list(
-            ends_with("svymedian.mean") ~ "svymedian.mean",
-            ends_with("svyprop.beta") ~ "svyprop.beta"
+            age = "svymedian.mean",
+            grade = "svyprop.beta"
           ),
           style_fun =
             list(all_continuous() ~ label_style_sigfig(digits = 4),
@@ -421,7 +403,7 @@ test_that("theme element add_ci.tbl_svysummary-arg:method", {
         dplyr::filter(variable == "age") |>
         dplyr::pull(ci_stat_0),
       tbl2$table_body |>
-        dplyr::filter(variable == "age_svymedian.mean") |>
+        dplyr::filter(variable == "age") |>
         dplyr::pull(ci_stat_0)
     )
 
@@ -430,7 +412,7 @@ test_that("theme element add_ci.tbl_svysummary-arg:method", {
         dplyr::filter(variable == "grade") |>
         dplyr::pull(ci_stat_0),
       tbl2$table_body |>
-        dplyr::filter(variable == "grade_svyprop.beta") |>
+        dplyr::filter(variable == "grade") |>
         dplyr::pull(ci_stat_0)
     )
 })
