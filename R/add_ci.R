@@ -98,7 +98,6 @@ add_ci.tbl_summary <- function(x,
     include = {{ include }}
   )
 
- 
   if (missing(method)) {
     method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
   }
