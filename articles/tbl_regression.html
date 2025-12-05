@@ -17,6 +17,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="tbl_regression() tutorial">
+<script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="d8054f2b-d9bc-4717-a20b-524e957ae5f6" data-project-name="gtsummary" data-project-color="#4F4F52" data-project-logo="https://www.danieldsjoberg.com/gtsummary/reference/figures/logo.png"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -623,7 +624,7 @@ option to add labels later.</p></li>
 <td headers="Label" class="gt_row gt_left">Months to Death/Censor</td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes"><tr>
+<tfoot><tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="3">Includes mix of continuous, dichotomous, and categorical variables</td>
     </tr></tfoot>
 </table>
@@ -1153,7 +1154,7 @@ and present these results in just one line of code from
 <td headers="p.value" class="gt_row gt_center">0.6</td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes"><tr>
+<tfoot><tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</span></td>
     </tr></tfoot>
 </table>
@@ -3183,11 +3184,11 @@ completed with {gtsummary} functions.</p>
 <td headers="p.value" class="gt_row gt_center">0.6</td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes">
-<tr>
+<tfoot>
+<tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</span></td>
     </tr>
-<tr>
+<tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="4"><span class="gt_from_md"><em>This data is simulated</em></span></td>
     </tr>
 </tfoot>
@@ -3711,7 +3712,7 @@ are <strong>bold</strong><br>
 <td headers="p.value" class="gt_row gt_center"><br></td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes"><tr>
+<tfoot><tr class="gt_sourcenotes">
 <td class="gt_sourcenote" colspan="4"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</span></td>
     </tr></tfoot>
 </table>
@@ -4250,14 +4251,16 @@ ways to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></c
 <td headers="q.value" class="gt_row gt_center"><br></td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes"><tr>
-<td class="gt_sourcenote" colspan="7"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</span></td>
-    </tr></tfoot>
-<tfoot class="gt_footnotes"><tr>
+<tfoot>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="7">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">False discovery rate correction for multiple testing</span>
 </td>
-    </tr></tfoot>
+    </tr>
+<tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="7"><span class="gt_from_md">Abbreviations: CI = Confidence Interval, OR = Odds Ratio</span></td>
+    </tr>
+</tfoot>
 </table>
 </div>
 </div>
@@ -4866,6 +4869,10 @@ below.</p>
 <td headers="notes" class="gt_row gt_left"><span class="gt_from_md">Use <code>tidy_zeroinfl()</code> as <code>tidy_fun</code>.</span></td>
 </tr>
 <tr>
+<td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://rdrr.io/pkg/quantreg/man/rq.html" class="external-link">quantreg::rq()</a></code></span></td>
+<td headers="notes" class="gt_row gt_left"><span class="gt_from_md">If several quantiles are estimated, use <code>tidy_with_broom_or_parameters()</code> tidier, the default tidier used by <code>tidy_plus_plus()</code>.</span></td>
+</tr>
+<tr>
 <td headers="model" class="gt_row gt_left"><span class="gt_from_md"><code>rstanarm::stan_glm()</code></span></td>
 <td headers="notes" class="gt_row gt_left"><span class="gt_from_md"><code>broom.mixed</code> package required</span></td>
 </tr>
@@ -4944,7 +4951,7 @@ below.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

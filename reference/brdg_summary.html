@@ -35,7 +35,7 @@ attributes ARD. The attributes ARD is used for labeling. The ARD data frame
 passed to this function must include a "gts_column" column, which is
 added in brdg_summary().
 
-'><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"></head><body>
+'><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="d8054f2b-d9bc-4717-a20b-524e957ae5f6" data-project-name="gtsummary" data-project-color="#4F4F52" data-project-logo="https://www.danieldsjoberg.com/gtsummary/reference/figures/logo.png"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -43,7 +43,7 @@ added in brdg_summary().
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -177,9 +177,9 @@ Possible values are <code>N_miss</code>, <code>N_obs</code>, <code>N_nonmiss</co
 <span class="r-in"><span><span class="va">cards</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html" class="external-link">ard_stack</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">mtcars</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"am"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"am"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    .missing <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>    .attributes <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -273,7 +273,7 @@ Possible values are <code>N_miss</code>, <code>N_obs</code>, <code>N_nonmiss</co
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

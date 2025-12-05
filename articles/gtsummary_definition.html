@@ -17,6 +17,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Definition of a gtsummary Object">
+<script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="d8054f2b-d9bc-4717-a20b-524e957ae5f6" data-project-name="gtsummary" data-project-color="#4F4F52" data-project-logo="https://www.danieldsjoberg.com/gtsummary/reference/figures/logo.png"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,15 +84,18 @@ them to suit your own needs. If this does not describe you, please refer
 to the <a href="https://www.danieldsjoberg.com/gtsummary/">{gtsummary}
 website</a> to an introduction on how to use the package’s functions and
 tutorials on advanced use.</p>
-<p><em>This overview is for informational purposes, and is not mean the
-internal structures of the package won’t be updated; and if they are
-updated, this is not considered a breaking change.</em></p>
+<p><em>This overview is for informational purposes. Documenting the
+internal structures does not mean the internal structures of the package
+won’t be updated. If they are updated, this is not considered a breaking
+change.</em></p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>Every {gtsummary} table has a few characteristics common among all
 tables created with the package. Here, we review those characteristics,
 and provide instructions on how to construct a {gtsummary} object.</p>
+<p>We begin by creating two common {gtsummary} tables to be used as
+illustrative examples.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
 <span></span>
@@ -114,8 +118,9 @@ elements:</p>
 <h4 id="table_body">table_body<a class="anchor" aria-label="anchor" href="#table_body"></a>
 </h4>
 <p>The <code>.$table_body</code> object is the data frame that will
-ultimately be printed as the output. The table must include columns
-<code>"label"</code>, <code>"row_type"</code>, and
+ultimately be printed as the output. To utilize all functions that work
+with {gtsummary} tables (e.g. {gtsummary} selectors), the table must
+include columns <code>"label"</code>, <code>"row_type"</code>, and
 <code>"variable"</code>. The <code>"label"</code> column is printed, and
 the other two are hidden from the final output.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -5180,7 +5185,7 @@ details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

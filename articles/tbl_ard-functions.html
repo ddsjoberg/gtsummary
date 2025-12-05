@@ -17,6 +17,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="ARD-first Tables">
+<script async src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="d8054f2b-d9bc-4717-a20b-524e957ae5f6" data-project-name="gtsummary" data-project-color="#4F4F52" data-project-logo="https://www.danieldsjoberg.com/gtsummary/reference/figures/logo.png"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -714,7 +715,7 @@ using <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> we 
 <span>  <span class="fu"><a href="../reference/tbl_hierarchical.html">tbl_hierarchical</a></span><span class="op">(</span></span>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AESOC</span>, <span class="va">AETERM</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="va">TRTA</span>,</span>
-<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TRTA <span class="op">=</span> <span class="va">ARM</span><span class="op">)</span>,</span>
+<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span>
 <span>    id <span class="op">=</span> <span class="va">USUBJID</span>,</span>
 <span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>..ard_hierarchical_overall.. <span class="op">=</span> <span class="st">"Any Adverse Event"</span><span class="op">)</span></span>
@@ -1236,7 +1237,7 @@ N = 84</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <td headers="stat_3" class="gt_row gt_center">22 (26%)</td>
 </tr>
 </tbody>
-<tfoot class="gt_footnotes"><tr>
+<tfoot><tr class="gt_footnotes">
 <td class="gt_footnote" colspan="5">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">n (%)</span>
 </td>
@@ -1330,10 +1331,10 @@ Guidelines. This table has variables: a continuous variable summary for
 AGE, a categorical variable summaries for AGEGR1 and SEX.</p>
 <p><strong>Data ➡ ARD</strong></p>
 <p>The {cards} package can be utilized to create the ARD from a data
-frame. The package includes functions <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous()</a></code> for
-continuous summaries, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical()</a></code> for categorical
-summaries, and <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous()</a></code> for dichotomous variables
-(and more).</p>
+frame. The package includes functions <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> for
+continuous summaries, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> for categorical
+summaries, and <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> for dichotomous
+variables (and more).</p>
 <p>The package also exports a helper function, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html" class="external-link">ard_stack()</a></code>
 to simultaneously build these summaries along with optional ancillary
 results for a nicer display.</p>
@@ -1345,8 +1346,8 @@ results for a nicer display.</p>
 <span>    <span class="co"># stratify all results by ARM</span></span>
 <span>    .by <span class="op">=</span> <span class="va">ARM</span>, </span>
 <span>    <span class="co"># these are the results that will be calculated</span></span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="co"># optional arguments for additional results</span></span>
 <span>    .attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    .total_n <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1981,11 +1982,11 @@ a similar structure to the simple ARDs we extracted from the
 <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> results above.</p>
 <ul>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_survival_survfit.html" class="external-link">cardx::ard_survival_survfit()</a></code> ARD looks like the
-<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_categorical.html" class="external-link">ard_categorical()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> result.</li>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_stats_t_test_onesample.html" class="external-link">cardx::ard_stats_t_test_onesample()</a></code> ARD looks like
-the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_continuous.html" class="external-link">ard_continuous()</a></code> result.</li>
+the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> result.</li>
 <li>The <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_categorical_ci.html" class="external-link">cardx::ard_categorical_ci()</a></code> ARD looks like the
-<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_dichotomous.html" class="external-link">ard_dichotomous()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> result.</li>
 </ul>
 <p>With the created ARD, we can now build a summary table.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -2497,24 +2498,24 @@ the <code><a href="https://insightsengineering.github.io/cards/latest-tag/refere
 <td headers="stat_2" class="gt_row gt_center">34% (95% CI 25%, 43%)</td>
 </tr>
 </tbody>
-<tfoot class="gt_sourcenotes"><tr>
-<td class="gt_sourcenote" colspan="3"><span class="gt_from_md">Abbreviation: CI = Confidence Interval</span></td>
-    </tr></tfoot>
-<tfoot class="gt_footnotes">
-<tr>
+<tfoot>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">Kaplan-Meier estimate</span>
 </td>
     </tr>
-<tr>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> <span class="gt_from_md">t-distribution based mean and CI</span>
 </td>
     </tr>
-<tr>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="3">
 <span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span> <span class="gt_from_md">Wilson CI</span>
 </td>
+    </tr>
+<tr class="gt_sourcenotes">
+<td class="gt_sourcenote" colspan="3"><span class="gt_from_md">Abbreviation: CI = Confidence Interval</span></td>
     </tr>
 </tfoot>
 </table>
@@ -2550,7 +2551,7 @@ styling that is available for all gtsummary tables.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
