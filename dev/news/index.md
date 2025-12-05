@@ -8,7 +8,10 @@
 
 - Added AI chat bot to homepage, powered by `kapa.ai`.
 
-- Added functions `tlb_ard_strata()` and `tlb_ard_strata2()`.
+- Added functions
+  [`tbl_ard_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_strata.md)
+  and
+  [`tbl_ard_strata2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_strata.md).
   ([\#1852](https://github.com/ddsjoberg/gtsummary/issues/1852))
 
 #### Other Updates
