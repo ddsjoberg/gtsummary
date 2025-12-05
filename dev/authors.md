@@ -47,7 +47,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ddsjoberg/gtsummary/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/ddsjoberg/gtsummary/blob/v2.5.0/inst/CITATION)
 
 Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible
 summary tables with the gtsummary package. The R Journal 2021;13:570–80.

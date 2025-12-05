@@ -72,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>FAQ + Gallery</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/vignettes/articles/gallery.Rmd" class="external-link"><code>vignettes/articles/gallery.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.0/vignettes/articles/gallery.Rmd" class="external-link"><code>vignettes/articles/gallery.Rmd</code></a></small>
       <div class="d-none name"><code>gallery.Rmd</code></div>
     </div>
 
@@ -8645,7 +8645,7 @@ the sandwich package.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>subject_id <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span></span>
 <span><span class="va">lmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">grade</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu">sandwich</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sandwich/man/vcovCL.html" class="external-link">vcovCL</a></span><span class="op">(</span><span class="va">lmod</span>, cluster <span class="op">=</span> <span class="op">~</span> <span class="va">subject_id</span>, vcov_type <span class="op">=</span> <span class="st">"HC0"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu">sandwich</span><span class="fu">::</span><span class="fu"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovCL.html" class="external-link">vcovCL</a></span><span class="op">(</span><span class="va">lmod</span>, cluster <span class="op">=</span> <span class="op">~</span> <span class="va">subject_id</span>, vcov_type <span class="op">=</span> <span class="st">"HC0"</span><span class="op">)</span></span></code></pre></div>
 <p>Once you have the robust variance-covariance matrix, you can use it
 with <code>tidy_robust</code> to calculate adjusted confidence intervals
 and p-values.</p>
