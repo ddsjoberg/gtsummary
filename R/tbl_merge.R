@@ -165,16 +165,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
       }
     )
 
-  # check that the merge variables are unique in all table bodies
-  # if (some(lst_table_body, ~anyDuplicated(.x[merge_vars]) > 0L)) {
-  #   cli::cli_inform(c(
-  #     "The merging columns ({.val {merge_vars}}) do not uniquely identify rows for
-  #      each table in {.arg tbls}, and the merge may fail or result in a malformed table.",
-  #     "i" = "If you previously called {.fun tbl_stack} on your tables,
-  #        then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
-  #   ))
-  # }
-
   # now merge all the table bodies together
   table_body <-
     lst_table_body |>
