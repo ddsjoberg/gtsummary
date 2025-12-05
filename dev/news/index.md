@@ -2,25 +2,28 @@
 
 ## gtsummary (development version)
 
+#### New Features and Functions
+
 - Added AI chat bot to homepage, powered by `kapa.ai`.
 
-- Fixed bug in
-  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
-  causing incorrect column indentation in non-standard tables.
-  ([\#2272](https://github.com/ddsjoberg/gtsummary/issues/2272))
-
-- Adding functions `tlb_ard_strata()` and `tlb_ard_strata2()`.
+- Added functions `tlb_ard_strata()` and `tlb_ard_strata2()`.
   ([\#1852](https://github.com/ddsjoberg/gtsummary/issues/1852))
 
-- Added [`head()`](https://rdrr.io/r/utils/head.html) and
-  [`tail()`](https://rdrr.io/r/utils/head.html) S3 methods for
-  `gtsummary` objects.
-  ([\#2335](https://github.com/ddsjoberg/gtsummary/issues/2335))
+#### Other Updates
 
 - Added additional messaging to
   [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
   when tables *may not* merge properly.
   ([\#2348](https://github.com/ddsjoberg/gtsummary/issues/2348))
+
+- When a data frame is passed in the `tbl_summary(percent)` argument,
+  the header counts are now tabulated using this data frame.
+  ([\#2322](https://github.com/ddsjoberg/gtsummary/issues/2322))
+
+- Added [`head()`](https://rdrr.io/r/utils/head.html) and
+  [`tail()`](https://rdrr.io/r/utils/head.html) S3 methods for
+  `'gtsummary'` objects.
+  ([\#2335](https://github.com/ddsjoberg/gtsummary/issues/2335))
 
 - Updated
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md)
@@ -30,21 +33,6 @@
 
 - Added theme element `"assign_summary_type-arg:cat_threshold"` for
   greater control over default summary types.
-
-- When a data frame is passed in the `tbl_summary(percent)` argument,
-  the headers are now tabulated with this data frame.
-  ([\#2322](https://github.com/ddsjoberg/gtsummary/issues/2322))
-
-- Corrected handling in
-  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
-  of character vectors that contains `"NULL"` values.
-  ([\#2345](https://github.com/ddsjoberg/gtsummary/issues/2345))
-
-- Fixed bug in
-  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
-  causing variable labels to disappear from table when not all variables
-  are in `include`.
-  ([\#2332](https://github.com/ddsjoberg/gtsummary/issues/2332))
 
 - Added the `"add_overall.tbl_svysummary-arg:col_label"` theme element
   to control the default value for
@@ -56,6 +44,24 @@
   `add_ci.tbl_summary(method)` / `add_ci.tbl_svysummary(method)`
   argument.
   ([\#2356](https://github.com/ddsjoberg/gtsummary/issues/2356))
+
+#### Bug Fixes
+
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
+  causing incorrect column indentation in non-standard tables.
+  ([\#2272](https://github.com/ddsjoberg/gtsummary/issues/2272))
+
+- Fixed bug in
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  causing variable labels to disappear from table when not all variables
+  are in `include`.
+  ([\#2332](https://github.com/ddsjoberg/gtsummary/issues/2332))
+
+- Corrected handling in
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  of character vectors that contains `"NULL"` values.
+  ([\#2345](https://github.com/ddsjoberg/gtsummary/issues/2345))
 
 ## gtsummary 2.4.0
 
