@@ -1,5 +1,3 @@
-# gtsummary (development version)
-
 # gtsummary 2.5.0
 
 ### New Features and Functions
