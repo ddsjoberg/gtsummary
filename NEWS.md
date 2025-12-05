@@ -6,7 +6,7 @@
 
 * Added AI chat bot to homepage, powered by `kapa.ai`.
 
-* Added functions `tlb_ard_strata()` and `tlb_ard_strata2()`. (#1852)
+* Added functions `tbl_ard_strata()` and `tbl_ard_strata2()`. (#1852)
 
 ### Other Updates
 
