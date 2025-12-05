@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9011</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,18 +38,21 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.5.0" id="gtsummary-250">gtsummary 2.5.0<a class="anchor" aria-label="anchor" href="#gtsummary-250"></a></h2>
 <div class="section level4">
-<h4 id="new-features-and-functions-development-version">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-development-version"></a></h4>
+<h4 id="new-features-and-functions-2-5-0">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-2-5-0"></a></h4>
 <ul><li><p>Added AI chat bot to homepage, powered by <code>kapa.ai</code>.</p></li>
 <li><p>Added functions <code>tlb_ard_strata()</code> and <code>tlb_ard_strata2()</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1852" class="external-link">#1852</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
+<h4 id="other-updates-2-5-0">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-2-5-0"></a></h4>
 <ul><li><p>Added additional messaging to <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> when tables <em>may not</em> merge properly. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2348" class="external-link">#2348</a>)</p></li>
 <li><p>When a data frame is passed in the <code>tbl_summary(percent)</code> argument, the header counts are now tabulated using this data frame. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2322" class="external-link">#2322</a>)</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/utils/head.html" class="external-link">head()</a></code> and <code><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail()</a></code> S3 methods for <code>'gtsummary'</code> objects. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2335" class="external-link">#2335</a>)</p></li>
@@ -59,7 +62,7 @@
 <li><p>Added theme elements <code>add_ci.tbl_summary-arg:method</code>, and <code>add_ci.tbl_svysummary-arg:method</code> to control the default value for <code>add_ci.tbl_summary(method)</code> / <code>add_ci.tbl_svysummary(method)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2356" class="external-link">#2356</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-2-5-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-5-0"></a></h4>
 <ul><li><p>Fixed bug in <code><a href="../reference/tbl_strata_nested_stack.html">tbl_strata_nested_stack()</a></code> causing incorrect column indentation in non-standard tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2272" class="external-link">#2272</a>)</p></li>
 <li><p>Fixed bug in <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> causing variable labels to disappear from table when not all variables are in <code>include</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2332" class="external-link">#2332</a>)</p></li>
 <li><p>Corrected handling in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> of character vectors that contains <code>"NULL"</code> values. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2345" class="external-link">#2345</a>)</p></li>

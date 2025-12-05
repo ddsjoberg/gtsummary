@@ -2,6 +2,8 @@
 
 ## gtsummary (development version)
 
+## gtsummary 2.5.0
+
 #### New Features and Functions
 
 - Added AI chat bot to homepage, powered by `kapa.ai`.
