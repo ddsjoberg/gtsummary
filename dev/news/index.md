@@ -4,6 +4,8 @@
 
 ## gtsummary 2.5.0
 
+CRAN release: 2025-12-05
+
 #### New Features and Functions
 
 - Added AI chat bot to homepage, powered by `kapa.ai`.
