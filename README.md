@@ -8,7 +8,8 @@
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test
 coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
-[![downloads](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
+[![gtsummary
+downloads](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
 
@@ -184,7 +185,8 @@ Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
 <a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.PNG" alt="Comparison of engines and their output compatibility" width="55%" /> </a>
+<img src="man/figures/gt_output_formats.PNG" alt="Comparison of engines and their output compatibility" width="55%" />
+</a>
 
 ## Save Individual Tables
 
