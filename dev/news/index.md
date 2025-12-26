@@ -2,6 +2,9 @@
 
 ## gtsummary (development version)
 
+- Add alternative text to figures on website.
+  ([\#1958](https://github.com/ddsjoberg/gtsummary/issues/1958))
+
 ## gtsummary 2.5.0
 
 CRAN release: 2025-12-05

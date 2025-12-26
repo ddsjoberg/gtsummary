@@ -176,7 +176,9 @@ accepts formulas will accept each of these variations.
 | `list(all_continuous() ~ "{mean}")` | `c(age, marker) ~ "{mean}"`       | —                                         |
 | —                                   | `list(c(age, marker) ~ "{mean}")` | —                                         |
 
-![](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/crayon_images/crayon-selectors.png)
+![Example modifying tbl_summary() using Lists, Select Helpers, and
+Variable Name
+selection](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/crayon_images/crayon-selectors.png)
 
 ### {gtsummary} functions to add information
 

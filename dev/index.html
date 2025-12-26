@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="index.html"><span class="fa fa-home"></span></a></li>
+<li class="active nav-item"><a class="nav-link" href="index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -69,7 +69,7 @@
 <div class="row">
   <main id="main" class="col-md-9">
 <div class="section level2">
-<h2 id="gtsummary-">gtsummary <a href="https://github.com/ddsjoberg/gtsummary" class="external-link"><img src="reference/figures/logo.png" align="right" height="120"></a>
+<h2 id="gtsummary-">gtsummary <a href="https://github.com/ddsjoberg/gtsummary" class="external-link"><img src="reference/figures/logo.png" alt="Logo of gtsummary" align="right" height="120"></a>
 <a class="anchor" aria-label="anchor" href="#gtsummary-"></a>
 </h2>
 <p>The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the <strong>R</strong> programming language. The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.</p>
@@ -106,7 +106,7 @@
 <span><span class="va">table1</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-tbl_summary_print_simple-1.png" width="25%"></p>
+<p><img src="reference/figures/README-tbl_summary_print_simple-1.png" alt="Example of basic table" width="25%"></p>
 <p>There are many <strong>customization options</strong> to <strong>add information</strong> (like comparing groups) and <strong>format results</strong> (like bold labels) in your table. See the <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code></a> tutorial for many more options, or below for one example.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table2</span> <span class="op">&lt;-</span></span>
@@ -120,7 +120,7 @@
 <span>  <span class="fu"><a href="reference/add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># test for a difference between groups</span></span>
 <span>  <span class="fu"><a href="reference/modify.html">modify_header</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"**Variable**"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># update the column header</span></span>
 <span>  <span class="fu"><a href="reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-tbl_summary_print_extra-1.png" width="55%"></p>
+<p><img src="reference/figures/README-tbl_summary_print_extra-1.png" alt="Example of table with customize options" width="55%"></p>
 </div>
 <div class="section level3">
 <h3 id="regression-models">Regression Models<a class="anchor" aria-label="anchor" href="#regression-models"></a>
@@ -130,7 +130,7 @@
 <code class="sourceCode R"><span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-tbl_regression_printa-1.png" width="40%"></p>
+<p><img src="reference/figures/README-tbl_regression_printa-1.png" alt="Example of table using tbl_regression" width="40%"></p>
 </div>
 <div class="section level3">
 <h3 id="side-by-side-regression-models">Side-by-side Regression Models<a class="anchor" aria-label="anchor" href="#side-by-side-regression-models"></a>
@@ -150,7 +150,7 @@
 <span>    tbls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">t1</span>, <span class="va">t2</span><span class="op">)</span>,</span>
 <span>    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>
+<p><img src="reference/figures/README-tbl_merge_ex1-1.png" alt="Example of tables merged with tbl_merge" width="60%"></p>
 <p>Review even more output options in the <strong><a href="https://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a></strong>.</p>
 </div>
 </div>
@@ -159,7 +159,7 @@
 </h2>
 <p>The <strong>{gtsummary}</strong> package was written to be a companion to the <strong>{gt}</strong> package from RStudio. But not all output types are supported by the <strong>{gt}</strong> package. Therefore, we have made it possible to print <strong>{gtsummary}</strong> tables with various engines.</p>
 <p>Review the <strong><a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">gtsummary + R Markdown</a></strong> vignette for details.</p>
-<p><a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html"> <img src="reference/figures/gt_output_formats.PNG" width="55%"></a></p>
+<p><a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html"> <img src="reference/figures/gt_output_formats.PNG" alt="Comparison of engines and their output compatibility" width="55%"></a></p>
 </div>
 <div class="section level2">
 <h2 id="save-individual-tables">Save Individual Tables<a class="anchor" aria-label="anchor" href="#save-individual-tables"></a>
@@ -272,7 +272,7 @@ A BibTeX entry for LaTeX users is
 <li><a href="https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://cran.r-project.org/package=gtsummary" class="external-link"><img src="https://www.r-pkg.org/badges/version/gtsummary" alt="CRAN status"></a></li>
 <li><a href="https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main" class="external-link"><img src="https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://cran.r-project.org/package=gtsummary" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/gtsummary"></a></li>
+<li><a href="https://cran.r-project.org/package=gtsummary" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/gtsummary" alt="gtsummary downloads"></a></li>
 <li><a href="https://doi.org/10.32614/RJ-2021-053" class="external-link"><img src="https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg" alt="DOI:10.32614/RJ-2021-053"></a></li>
 </ul>
 </div>
