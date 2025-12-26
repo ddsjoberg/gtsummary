@@ -171,23 +171,26 @@ test_that("tbl_summary-arg:missing_stat works", {
 })
 
 # add_overall.tbl_summary-arg:col_label ----------------------------------------
-test_that("tbl_summary-arg:missing_stat works", {
+test_that("tbl_summary-arg:col_label works", {
   expect_equal(
     with_gtsummary_theme(
       x = list("add_overall.tbl_summary-arg:col_label" = "All Participants  \nN = {style_number(N)}"),
       expr =
         tbl_summary(trial, include = age, by = trt) |>
-          add_overall(last = TRUE) |>
-          as.data.frame() |>
-          names() |>
-          dplyr::last()
+        add_overall(last = TRUE) |>
+        as.data.frame() |>
+        names() |>
+        dplyr::last()
     ),
     "All Participants  \nN = 200"
   )
+})
 
+# add_overall.tbl_svysummary-arg:col_label ----------------------------------------
+test_that("tbl_svysummary-arg:col_label works", {
   expect_equal(
     with_gtsummary_theme(
-      x = list("add_overall.tbl_summary-arg:col_label" = "All Participants  \nN = {style_number(N)}"),
+      x = list("add_overall.tbl_svysummary-arg:col_label" = "All Participants  \nN = {style_number(N)}"),
       expr =
         survey::svydesign(~1, data = trial, weights = ~1) |>
           tbl_svysummary(by = trt, include = age) |>
@@ -298,4 +301,118 @@ test_that("pkgwide-str:print_engine changes print methods as expected", {
       c("gt_tbl", "list")
     )
   )
+})
+
+# add_ci.tbl_summary-arg:method ------------------------------------------------
+test_that("theme element add_ci.tbl_summary-arg:method", {
+  tbl0 <- trial |>
+    tbl_summary(
+      include = c(age, grade),
+      missing = "no",
+      statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
+    )
+
+  expect_silent(
+    tbl1 <-
+      with_gtsummary_theme(
+        x = list("add_ci.tbl_summary-arg:method" = list(all_continuous() ~ "wilcox.test", all_categorical() ~ "wald")),
+        expr = {
+          tbl0 |>
+            add_ci(
+              style_fun =
+                list(all_continuous() ~ label_style_sigfig(digits = 4),
+                     all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
+            )
+        }
+      )
+  )
+
+  tbl2 <-
+    tbl0 |>
+    add_ci(
+      method = list(
+        age = "wilcox.test",
+        grade ~ "wald"
+      ),
+      style_fun =
+        list(all_continuous() ~ label_style_sigfig(digits = 4),
+             all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
+    )
+
+  expect_equal(
+    tbl1$table_body |>
+      dplyr::filter(variable == "age") |>
+      dplyr::pull(ci_stat_0),
+    tbl2$table_body |>
+      dplyr::filter(variable == "age") |>
+      dplyr::pull(ci_stat_0)
+  )
+
+  expect_equal(
+    tbl1$table_body |>
+      dplyr::filter(variable == "grade") |>
+      dplyr::pull(ci_stat_0),
+    tbl2$table_body |>
+      dplyr::filter(variable == "grade") |>
+      dplyr::pull(ci_stat_0)
+  )
+})
+
+
+# add_ci.tbl_svysummary-arg:method ---------------------------------------------
+test_that("theme element add_ci.tbl_svysummary-arg:method", {
+    tbl0 <-
+      survey::svydesign(~1, data = trial, weights = ~1) |>
+      tbl_svysummary(
+        include = c(age, grade),
+        missing = "no",
+        statistic = list(all_continuous() ~ "{median}", all_categorical() ~ "{p}%")
+      )
+
+    expect_silent(
+      tbl1 <-
+        with_gtsummary_theme(
+          x = list("add_ci.tbl_svysummary-arg:method" = list(all_continuous() ~ "svymedian.mean", all_categorical() ~ "svyprop.beta")),
+          expr = {
+            tbl0 |>
+              add_ci(
+              style_fun =
+                list(all_continuous() ~ label_style_sigfig(digits = 4),
+                     all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
+            )
+          }
+        )
+    )
+
+    expect_silent(
+      tbl2 <-
+        tbl0 |>
+        add_ci(
+          method = list(
+            age = "svymedian.mean",
+            grade = "svyprop.beta"
+          ),
+          style_fun =
+            list(all_continuous() ~ label_style_sigfig(digits = 4),
+                 all_categorical() ~ label_style_sigfig(digits = 4, scale =  100))
+        )
+    )
+
+    expect_equal(
+      tbl1$table_body |>
+        dplyr::filter(variable == "age") |>
+        dplyr::pull(ci_stat_0),
+      tbl2$table_body |>
+        dplyr::filter(variable == "age") |>
+        dplyr::pull(ci_stat_0)
+    )
+
+    expect_equal(
+      tbl1$table_body |>
+        dplyr::filter(variable == "grade") |>
+        dplyr::pull(ci_stat_0),
+      tbl2$table_body |>
+        dplyr::filter(variable == "grade") |>
+        dplyr::pull(ci_stat_0)
+    )
 })

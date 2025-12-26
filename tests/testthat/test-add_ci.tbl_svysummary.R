@@ -799,4 +799,3 @@ test_that("add_ci.tbl_svysummary() ordering for factors", {
       dplyr::pull(ci_stat_2)
   )
 })
-

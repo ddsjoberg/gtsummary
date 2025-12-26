@@ -104,3 +104,6 @@ tbl |>
   remove_footnote_body(columns = label, rows = variable == "grade" & row_type == "label")
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
+}
