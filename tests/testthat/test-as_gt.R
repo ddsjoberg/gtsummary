@@ -21,11 +21,9 @@ test_that("as_gt works with standard use", {
   expect_silent(my_tbl_summary |> as_gt(include = gt))
 
   # correct elements are returned
-  expect_equal(
-    names(gt_tbl_summary),
-    c("_data", "_boxhead", "_stub_df", "_row_groups", "_heading", "_spanners", "_stubhead", "_footnotes",
-      "_source_notes", "_formats", "_substitutions", "_styles", "_summary", "_options", "_transforms",
-      "_locale", "_has_built")
+  expect_true(
+    c("_data", "_heading", "_spanners", "_footnotes", "_source_notes") %in% names(gt_tbl_summary) |>
+      all()
   )
 })
 

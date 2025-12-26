@@ -74,6 +74,10 @@ add_ci.tbl_svysummary <- function(x,
     include = {{ include }}
   )
 
+  if (missing(method)) {
+    method <- get_theme_element("add_ci.tbl_svysummary-arg:method", default = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"))
+  }
+
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
     method = method,

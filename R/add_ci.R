@@ -98,6 +98,10 @@ add_ci.tbl_summary <- function(x,
     include = {{ include }}
   )
 
+  if (missing(method)) {
+    method <- get_theme_element("add_ci.tbl_summary-arg:method", default = list(all_continuous() ~ "t.test", all_categorical() ~ "wilson"))
+  }
+
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
     method = method,
