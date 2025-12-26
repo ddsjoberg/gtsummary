@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Add alternative text to figures on website. (#1958)
+
 # gtsummary 2.5.0
 
 ### New Features and Functions

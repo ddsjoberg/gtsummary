@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
-[![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
+[![gtsummary downloads](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
 
-## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
+## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' alt = "Logo of gtsummary" align="right" height="120" /></a>
 
 The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the **R** programming language.  The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.
 
@@ -76,7 +76,7 @@ table1 <-
 gt::gtsave(as_gt(table1), file = "man/figures/README-tbl_summary_print_simple-1.png")
 ```
 
-```{r out.width = "25%", echo = FALSE}
+```{r out.width = "25%", echo = FALSE, fig.alt="Example of basic table"}
 knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
 ```
 
@@ -102,7 +102,7 @@ gt::gtsave(as_gt(table2), file = "man/figures/README-tbl_summary_print_extra-1.p
 ```
 
 
-```{r out.width = "55%", echo = FALSE}
+```{r out.width = "55%", echo = FALSE, fig.alt="Example of table with customize options"}
 knitr::include_graphics("man/figures/README-tbl_summary_print_extra-1.png")
 ```
 
@@ -121,7 +121,7 @@ gt::gtsave(as_gt(t1), file = "man/figures/README-tbl_regression_printa-1.png")
 ```
 
 
-```{r out.width = "40%", echo = FALSE}
+```{r out.width = "40%", echo = FALSE, fig.alt="Example of table using tbl_regression"}
 knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
 ```
 
@@ -150,7 +150,7 @@ gt::gtsave(as_gt(tbl_merge_ex1), file = "man/figures/README-tbl_merge_ex1-1.png"
 ```
 
 
-```{r out.width = "60%", echo = FALSE}
+```{r out.width = "60%", echo = FALSE, fig.alt="Example of tables merged with tbl_merge"}
 knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
 ```
 
@@ -165,7 +165,7 @@ Therefore, we have made it possible to print **{gtsummary}** tables with various
 Review the **[gtsummary + R Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)** vignette for details.
 
 <a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
-```{r out.width = "55%", echo = FALSE}
+```{r out.width = "55%", echo = FALSE, fig.alt="Comparison of engines and their output compatibility"}
 knitr::include_graphics("man/figures/gt_output_formats.PNG")
 ```
 </a>
