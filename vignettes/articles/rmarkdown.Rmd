@@ -57,6 +57,7 @@ gt_markdown_key <-
   text_transform(
     locations = cells_body(columns = c(figure)),
     fn = function(x) {
+      # the `sub()` call is adding the alt text tag to the HTML image, e.g. `<img src='smile.png' alt='smiling face emoji'>`, `gt::local_image()` returns a character string.
       dplyr::case_when(
         x == 1 ~ sub(">$", " alt=\"smiling face emoji\">", local_image(filename = path_figure[[1]], height = 20)),
         x == 2 ~ sub(">$", " alt=\"neutral face emoji\">", local_image(filename = path_figure[[2]], height = 20)),
@@ -140,6 +141,7 @@ tidyr::expand_grid(
   text_transform(
     locations = cells_body(columns = c(HTML, PDF, RTF, Word)),
     fn = function(x) {
+      # the `sub()` call is adding the alt text tag to the HTML image, e.g. `<img src='smile.png' alt='smiling face emoji'>`, `gt::local_image()` returns a character string.
       dplyr::case_when(
         x == 1 ~ sub(">$", " alt=\"smiling face emoji\">", local_image(filename = path_figure[[1]])),
         x == 2 ~ sub(">$", " alt=\"neutral face emoji\">", local_image(filename = path_figure[[2]])),
