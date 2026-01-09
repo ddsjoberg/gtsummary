@@ -1,5 +1,7 @@
 #' Update Header Statistics
 #'
+#' @description
+#' `r lifecycle::badge('experimental')`\cr
 #' Use this function to update the statistics that can be injected into
 #' gtsummary table headers.
 #' Tables must have underlying columns statistic columns (e.g. 'stat_1', 'stat_2'); typical in tables

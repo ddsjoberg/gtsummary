@@ -18,8 +18,11 @@ The ARD must be a univariate tabulation.}
 gtsummary object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Use this function to update the statistics that can be injected into
 gtsummary table headers.
+Tables must have underlying columns statistic columns (e.g. 'stat_1', 'stat_2'); typical in tables
+generated from \code{tbl_summary(by)}.
 }
 \examples{
 # Example 1 ----------------------------------
