@@ -111,7 +111,7 @@ for details.
 \item \code{"lancet"} \emph{The Lancet}
 \itemize{
 \item Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
-\item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR
+\item \code{tbl_summary()} Use em-dash to separate IQR
 }
 \item \code{"nejm"} \emph{The New England Journal of Medicine}
 \itemize{

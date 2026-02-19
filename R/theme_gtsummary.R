@@ -21,7 +21,7 @@
 #'       - `tbl_regression()`/`tbl_uvregression()` show coefficient and CI in same column
 #'   - `"lancet"` _The Lancet_
 #'       - Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
-#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
+#'       - `tbl_summary()` Use em-dash to separate IQR
 #'   - `"nejm"` _The New England Journal of Medicine_
 #'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
