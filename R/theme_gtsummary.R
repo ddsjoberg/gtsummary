@@ -21,7 +21,7 @@
 #'       - `tbl_regression()`/`tbl_uvregression()` show coefficient and CI in same column
 #'   - `"lancet"` _The Lancet_
 #'       - Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
-#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
+#'       - `tbl_summary()` Use en-dash to separate IQR
 #'   - `"nejm"` _The New England Journal of Medicine_
 #'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
@@ -356,12 +356,12 @@ theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra
 #' String indicating separator for the default IQR in `tbl_summary()`.
 #' If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to an en dash
+#' will default to an en-dash
 #' @param ci.sep (`string`)\cr
 #' String indicating separator for confidence intervals.
 #' If `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to an en dash
+#' will default to an en-dash
 #' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c(
