@@ -72,7 +72,7 @@ tbl_ard_wide_summary <- function(cards,
       cards[c("variable", "context")] |>
       dplyr::mutate(
         context =
-          dplyr::case_match(
+          dplyr::recode_values(
             .data$context,
             "summary" ~ "continuous",
             "tabulate" ~ "categorical",
