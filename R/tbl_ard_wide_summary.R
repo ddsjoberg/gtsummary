@@ -77,7 +77,7 @@ tbl_ard_wide_summary <- function(cards,
             "summary" ~ "continuous",
             "tabulate" ~ "categorical",
             "tabulate_value" ~ "dichotomous",
-            .default = .data$context
+            default = .data$context
           )
       ) |>
       dplyr::filter(.data$context %in% c("continuous", "categorical", "dichotomous")) |>
