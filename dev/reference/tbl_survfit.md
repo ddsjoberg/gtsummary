@@ -227,7 +227,7 @@ event for death (cancer vs other causes)
 warn.conflicts = FALSE, quietly = TRUE) trial2 \<- trial \|\>
 dplyr::[mutate](https://dplyr.tidyverse.org/reference/mutate.html)(
 death_cr =
-dplyr::[case_when](https://dplyr.tidyverse.org/reference/case_when.html)(
+dplyr::[case_when](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)(
 death == 0 ~ "censor",
 [runif](https://rdrr.io/r/stats/Uniform.html)([n](https://dplyr.tidyverse.org/reference/context.html)())
 \< 0.5 ~ "death from cancer", TRUE ~ "death other causes" ) \|\>
