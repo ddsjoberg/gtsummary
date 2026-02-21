@@ -101,7 +101,7 @@ theme_gtsummary_eda(set_theme = TRUE)
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md).
   If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma separator,
   however, can look odd when `decimal.mark = ","`. In this case the
-  argument will default to an en dash
+  argument will default to an en-dash
 
 - ci.sep:
 
@@ -109,7 +109,7 @@ theme_gtsummary_eda(set_theme = TRUE)
   String indicating separator for confidence intervals. If
   `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma separator,
   however, can look odd when `decimal.mark = ","`. In this case the
-  argument will default to an en dash
+  argument will default to an en-dash
 
 - statistic:
 
@@ -137,7 +137,7 @@ theme_gtsummary_eda(set_theme = TRUE)
       decimal places; separate confidence intervals with `"ll to ul"`.
 
     - [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
-      Doesn't show percent symbol; use em-dash to separate IQR
+      Use en-dash to separate IQR
 
   - `"nejm"` *The New England Journal of Medicine*
 
