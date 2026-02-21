@@ -85,7 +85,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
                                            all_categorical() ~ "{n} ({p})"),
         "tbl_svysummary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
-                                           all_categorical() ~ "{n} ({p})"),
+                                              all_categorical() ~ "{n} ({p})"),
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
           add_stat_label(x) |>
             modify_table_body(
