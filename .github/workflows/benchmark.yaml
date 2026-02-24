@@ -22,6 +22,7 @@ jobs:
           extra-packages: |
             any::bench
             any::knitr
+            any::gert
           cache: true
           cache-key: 1
 
@@ -52,7 +53,8 @@ jobs:
 
             # 2. Benchmark Main
             message("--- Benchmarking Main ---")
-            system("git checkout main")
+            # system("git checkout main")
+            gert::git_branch_checkout(branch = "main")
             install.packages(".", repos = NULL, type = "source")
             # remotes::install_github("ddsjoberg/gtsummary")
             main_res <- run_gt_bench()
