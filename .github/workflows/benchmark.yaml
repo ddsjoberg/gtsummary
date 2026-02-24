@@ -18,6 +18,8 @@ jobs:
       - name: Install Dependencies & Cache
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # 'hard' installs only Depends, Imports, and LinkingTo
+          dependencies-type: 'hard'
           extra-packages: |
             any::bench
             any::tibble
@@ -34,12 +36,8 @@ jobs:
             run_gt_bench <- function() {
               library(gtsummary)
               bench::mark(
-                summary_table = trial |> tbl_summary(by = trt) |> add_p(),
-                regression_table = trial |> tbl_regression(
-                  method = glm,
-                  formula = response ~ age + grade,
-                  family = binomial
-                ),
+                summary_table = glm(response ~ age + grade, data = trial, family = binomial()) |>
+                    tbl_regression(exponentiate = TRUE),
                 iterations = 20,
                 check = FALSE
               )
