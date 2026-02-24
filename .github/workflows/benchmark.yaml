@@ -32,7 +32,7 @@ jobs:
             run_gt_bench <- function() {
               on.exit(detach("package:gtsummary", unload = TRUE, character.only = TRUE))
               library(gtsummary)
-              packageVersion("gtsummary")
+              print(packageVersion("gtsummary"))
 
               bench::mark(
                 tbl_summary =
