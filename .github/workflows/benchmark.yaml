@@ -34,10 +34,10 @@ jobs:
             run_gt_bench <- function() {
               bench::mark(
                 tbl_summary =
-                  gtsummary::trial |>
-                  gtsummary::tbl_summary(by = trt, include = c(age, response, grade)) |>
-                  gtsummary::add_overall() |>
-                  gtsummary::add_p(),
+                  trial |>
+                  tbl_summary(by = trt, include = c(age, response, grade)) |>
+                  add_overall() |>
+                  add_p(),
                 iterations = 40,
                 check = FALSE
               )
@@ -45,13 +45,15 @@ jobs:
 
             # 1. Benchmark PR
             message("--- Benchmarking PR ---")
-            install.packages(".", repos = NULL, type = "source")
+            devtools::load_all()
+            # install.packages(".", repos = NULL, type = "source")
             pr_res <- run_gt_bench()
 
             # 2. Benchmark Main
             message("--- Benchmarking Main ---")
             system("git checkout main")
-            install.packages(".", repos = NULL, type = "source")
+            devtools::load_all()
+            # install.packages(".", repos = NULL, type = "source")
             main_res <- run_gt_bench()
 
             # 3. Explicitly construct the Markdown Table
