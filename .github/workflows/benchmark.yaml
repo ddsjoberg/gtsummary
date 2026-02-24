@@ -32,9 +32,12 @@ jobs:
 
             # Function to run a standard gtsummary test suite
             run_gt_bench <- function() {
-              library(gtsummary)
               bench::mark(
-                tbl_summary = trial |> tbl_summary(by = trt, include = c(age, response, grade)) |> add_p(),
+                tbl_summary =
+                  gtsummary::trial |>
+                  gtsummary::tbl_summary(by = trt, include = c(age, response, grade)) |>
+                  gtsummary::add_overall() |>
+                  gtsummary::add_p(),
                 iterations = 40,
                 check = FALSE
               )
