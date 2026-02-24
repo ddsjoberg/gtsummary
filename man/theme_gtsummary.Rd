@@ -81,13 +81,13 @@ Default is \code{","}, except when \code{decimal.mark = ","} when the default is
 String indicating separator for the default IQR in \code{tbl_summary()}.
 If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma
 separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
-will default to an en dash}
+will default to an en-dash}
 
 \item{ci.sep}{(\code{string})\cr
 String indicating separator for confidence intervals.
 If \verb{decimal.mark=} is NULL, \verb{ci.sep=} is \code{", "}. The comma
 separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
-will default to an en dash}
+will default to an en-dash}
 
 \item{statistic}{Default statistic continuous variables}
 }
@@ -111,7 +111,7 @@ for details.
 \item \code{"lancet"} \emph{The Lancet}
 \itemize{
 \item Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
-\item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR
+\item \code{tbl_summary()} Use en-dash to separate IQR
 }
 \item \code{"nejm"} \emph{The New England Journal of Medicine}
 \itemize{
