@@ -22,17 +22,17 @@ jobs:
           extra-packages: |
             any::bench
             any::knitr
-            any::devtools
           cache: true
           cache-key: 1
 
       - name: Run Benchmarks
         run: |
           Rscript -e '
-            library(bench)
-
             # Function to run a standard gtsummary test suite
             run_gt_bench <- function() {
+              on.exit(detach("package:gtsummary", unload = TRUE, character.only = TRUE))
+              library(gtsummary)
+
               bench::mark(
                 tbl_summary =
                   trial |>
@@ -46,15 +46,14 @@ jobs:
 
             # 1. Benchmark PR
             message("--- Benchmarking PR ---")
-            devtools::load_all()
-            # install.packages(".", repos = NULL, type = "source")
+            install.packages(".", repos = NULL, type = "source")
             pr_res <- run_gt_bench()
 
             # 2. Benchmark Main
             message("--- Benchmarking Main ---")
-            system("git checkout main")
-            devtools::load_all()
+            # system("git checkout main")
             # install.packages(".", repos = NULL, type = "source")
+            remotes::install_github("ddsjoberg/gtsummary")
             main_res <- run_gt_bench()
 
             # 3. Explicitly construct the Markdown Table
