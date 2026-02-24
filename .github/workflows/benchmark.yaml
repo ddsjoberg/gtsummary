@@ -32,6 +32,7 @@ jobs:
 
             # Function to run a standard gtsummary test suite
             run_gt_bench <- function() {
+            on.exit(detach("package:gtsummary", unload=TRUE))
               bench::mark(
                 tbl_summary =
                   gtsummary::trial |>
@@ -50,7 +51,6 @@ jobs:
 
             # 2. Benchmark Main
             message("--- Benchmarking Main ---")
-            detach("package:gtsummary", unload = TRUE)
             system("git checkout main")
             install.packages(".", repos = NULL, type = "source")
             main_res <- run_gt_bench()
