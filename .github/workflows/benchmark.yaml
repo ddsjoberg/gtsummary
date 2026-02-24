@@ -1,0 +1,78 @@
+name: Performance Benchmark
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install Dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::bench
+            any::tibble
+            any::readr
+
+      - name: Run Benchmarks
+        run: |
+          Rscript -e '
+            library(bench)
+
+            # Function to run a standard gtsummary test suite
+            run_gt_bench <- function() {
+              library(gtsummary)
+              bench::mark(
+                summary_table = trial |> tbl_summary(by = trt) |> add_p(),
+                regression_table = trial |> tbl_regression(
+                  method = glm,
+                  formula = response ~ age + grade,
+                  family = binomial
+                ),
+                iterations = 20,
+                check = FALSE
+              )
+            }
+
+            # 1. Benchmark PR branch (already checked out)
+            print("Benchmarking PR...")
+            install.packages(".", repos = NULL, type = "source")
+            pr_results <- run_gt_bench()
+
+            # 2. Switch to Main and Benchmark
+            print("Benchmarking Main...")
+            system("git checkout main")
+            install.packages(".", repos = NULL, type = "source")
+            main_results <- run_gt_bench()
+
+            # 3. Format Comparison
+            comparison <- tibble::tibble(
+              Expression = pr_results$expression,
+              `Main (Median)` = main_results$median,
+              `PR (Median)` = pr_results$median,
+              `Change (%)` = (as.numeric(pr_results$median) / as.numeric(main_results$median) - 1) * 100
+            )
+
+            readr::write_csv(comparison, "bench_summary.csv")
+            print(comparison)
+          '
+
+      - name: Post Comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            ### ⚡ Performance Benchmark Results
+            Comparing this PR against `main`:
+
+            | Test | Main (Median) | PR (Median) | Change |
+            | :--- | :--- | :--- | :--- |
+            | `tbl_summary` | ${{ steps.bench.outputs.main_sum }} | ${{ steps.bench.outputs.pr_sum }} | ... |
