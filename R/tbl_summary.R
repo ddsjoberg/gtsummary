@@ -173,6 +173,7 @@ tbl_summary <- function(data,
                         percent = c("column", "row", "cell"),
                         include = everything()) {
   set_cli_abort_call()
+  Sys.sleep(5)
 
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
