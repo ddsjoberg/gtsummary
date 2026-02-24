@@ -36,8 +36,7 @@ jobs:
             run_gt_bench <- function() {
               library(gtsummary)
               bench::mark(
-                summary_table = glm(response ~ age + grade, data = trial, family = binomial()) |>
-                    tbl_regression(exponentiate = TRUE),
+                summary_table = trial |> tbl_summary(by = trt, include = c(age, response, grade)) |> add_p(),
                 iterations = 20,
                 check = FALSE
               )
