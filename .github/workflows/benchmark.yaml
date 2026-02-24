@@ -18,12 +18,10 @@ jobs:
       - name: Install Dependencies & Cache
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          # 'hard' installs only Depends, Imports, and LinkingTo
-          dependencies-type: 'hard'
+          dependencies: '"hard"'
           extra-packages: |
             any::bench
-            any::tibble
-            any::readr
+            any::knitr
           cache: true
           cache-key: 1
 
@@ -36,42 +34,43 @@ jobs:
             run_gt_bench <- function() {
               library(gtsummary)
               bench::mark(
-                summary_table = trial |> tbl_summary(by = trt, include = c(age, response, grade)) |> add_p(),
-                iterations = 20,
+                tbl_summary = trial |> tbl_summary(by = trt, include = c(age, response, grade)) |> add_p(),
+                iterations = 40,
                 check = FALSE
               )
             }
 
-            # 1. Benchmark PR branch (already checked out)
-            print("Benchmarking PR...")
+            # 1. Benchmark PR
+            message("--- Benchmarking PR ---")
             install.packages(".", repos = NULL, type = "source")
-            pr_results <- run_gt_bench()
+            pr_res <- run_gt_bench()
 
-            # 2. Switch to Main and Benchmark
-            print("Benchmarking Main...")
+            # 2. Benchmark Main
+            message("--- Benchmarking Main ---")
             system("git checkout main")
             install.packages(".", repos = NULL, type = "source")
-            main_results <- run_gt_bench()
+            main_res <- run_gt_bench()
 
-            # 3. Format Comparison
-            comparison <- tibble::tibble(
-              Expression = pr_results$expression,
-              `Main (Median)` = main_results$median,
-              `PR (Median)` = pr_results$median,
-              `Change (%)` = (as.numeric(pr_results$median) / as.numeric(main_results$median) - 1) * 100
-            )
+            # 3. Explicitly construct the Markdown Table
+            res_tab <-
+              main_res[c("expression", "median")] |>
+              dplyr::left_join(pr_res[c("expression", "median")], by = "expression", suffix = c(".main", ".pr")) |>
+              dplyr::mutate(
+                diff = round((median.pr - median.main) / median.main, 2) |> unclass() |> paste0("%")
+                dplyr::across(dplyr::everything(), as.character)
+              ) |>
+              knitr::kable()
 
-            readr::write_csv(comparison, "bench_summary.csv")
-            print(comparison)
-          '
+            # Write to a file that the next step can read
+            writeLines(res_tab, "bench_report.md")
+
+            # Also print to console for debugging
+            res_tab
+        '
 
       - name: Post Comment
         uses: mshick/add-pr-comment@v2
         with:
-          message: |
-            ### ⚡ Performance Benchmark Results
-            Comparing this PR against `main`:
-
-            | Test | Main (Median) | PR (Median) | Change |
-            | :--- | :--- | :--- | :--- |
-            | `tbl_summary` | ${{ steps.bench.outputs.main_sum }} | ${{ steps.bench.outputs.pr_sum }} | ... |
+          # This reads the exact Markdown file we just wrote
+          message-path: bench_report.md
+          refresh-main-comment: true
