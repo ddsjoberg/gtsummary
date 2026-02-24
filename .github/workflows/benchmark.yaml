@@ -56,7 +56,7 @@ jobs:
               main_res[c("expression", "median")] |>
               dplyr::left_join(pr_res[c("expression", "median")], by = "expression", suffix = c(".main", ".pr")) |>
               dplyr::mutate(
-                diff = round((median.pr - median.main) / median.main, 2) |> unclass() |> paste0("%")
+                diff = round((median.pr - median.main) / median.main * 100, 2) |> unclass() |> paste0("%")
                 dplyr::across(dplyr::everything(), as.character)
               ) |>
               knitr::kable()
