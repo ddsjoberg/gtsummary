@@ -32,7 +32,6 @@ jobs:
 
             # Function to run a standard gtsummary test suite
             run_gt_bench <- function() {
-            on.exit(detach("package:gtsummary", unload=TRUE))
               bench::mark(
                 tbl_summary =
                   gtsummary::trial |>
