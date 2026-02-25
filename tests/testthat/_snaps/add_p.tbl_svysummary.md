@@ -39,7 +39,7 @@
       3     2nd    <NA>
       4     3rd    <NA>
       5    Crew    <NA>
-      6     Sex   0.048
+      6     Sex   0.051
       7    Male    <NA>
       8  Female    <NA>
       9     Age     0.4
