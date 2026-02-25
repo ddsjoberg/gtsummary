@@ -464,7 +464,7 @@ internal_tbl_hierarchical <- function(data,
 
   cards <- cards |>
     dplyr::ungroup() |>
-    cards::as_card()
+    cards::as_card(check = FALSE)
 
   # re-add dropped args attribute
   attr(cards, "args") <- args
