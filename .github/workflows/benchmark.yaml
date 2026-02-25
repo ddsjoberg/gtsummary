@@ -42,7 +42,20 @@ jobs:
                   trial |>
                   tbl_summary(by = trt, include = c(age, response, grade)) |>
                   add_overall() |>
-                  add_p(),
+                  add_p() |>
+                  as_gt(),
+                tbl_hierarchical =
+                  tbl_hierarchical(
+                    data = cards::ADAE,
+                    variables = c(AESOC, AETERM, AESEV),
+                    by = TRTA,
+                    id = USUBJID,
+                    denominator = cards::ADSL,
+                    overall_row = TRUE,
+                    label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+                  ) |>
+                  add_overall() |>
+                  as_gt(),
                 iterations = 40,
                 check = FALSE
               )
