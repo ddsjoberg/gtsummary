@@ -183,7 +183,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   gps <- x_ard |>
     dplyr::group_keys() |>
     dplyr::mutate(pre_idx = dplyr::row_number()) |>
-    cards::as_card()
+    cards::as_card(check = FALSE)
 
   # if by variable present, shift grouping columns
   if (!is_empty(by_cols)) gps <- gps |> cards::rename_ard_groups_shift(shift = -1)
@@ -220,7 +220,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   # re-add dropped args attribute
   x_ard <- x_ard |>
     dplyr::ungroup() |>
-    cards::as_card()
+    cards::as_card(check = FALSE)
   attr(x_ard, "args") <- ard_args
 
   list(x = x, x_ard = x_ard)
