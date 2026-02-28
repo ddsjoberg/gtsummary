@@ -14,7 +14,11 @@ creating Shiny applications with gt tables here:
 Below is an example of a Shiny app using the gtsummary package to
 provide dynamic patient characteristic summaries.
 
-Age Range
+# An error has occurred
+
+The application failed to start.
+
+signal: aborted (core dumped)
 
 If the Shiny app has run out of its free server usage, see below for
 instructions on running the app locally on your machine.
