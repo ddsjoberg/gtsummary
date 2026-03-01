@@ -1,0 +1,49 @@
+name: Bump Dev Version
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'DESCRIPTION'
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'Bump version')"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install usethis
+        run: Rscript -e 'install.packages("usethis")'
+
+      - name: Check if Dev Version and Bump
+        run: |
+          # Extract version from DESCRIPTION
+          VERSION=$(grep '^Version:' DESCRIPTION | awk '{print $2}')
+
+          # Check if version has 4 components (e.g., 1.0.0.9000)
+          if [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Dev version detected ($VERSION). Bumping..."
+
+            # Configure git
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+            # Run the bump
+            Rscript -e 'usethis::use_version(which = "dev")'
+
+            # Commit and push
+            git add DESCRIPTION
+            git commit -m "Bump version [skip ci]"
+            git push
+          else
+            echo "Stable version detected ($VERSION). Skipping bump."
+          fi
