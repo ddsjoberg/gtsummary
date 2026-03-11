@@ -43,33 +43,33 @@
 #'   .table_styling_expr_to_row_number()
 .table_styling_expr_to_row_number <- function(x) {
   set_cli_abort_call()
+  all_rows <- seq_len(nrow(x$table_body))
+  cols_shown <- .cols_to_show(x)
+
   # text_format ----------------------------------------------------------------
-  x$table_styling$text_format <-
-    x$table_styling$text_format %>%
-    dplyr::filter(.data$column %in% .cols_to_show(x)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(
-            x$table_body, .data$rows,
-            return_when_null = seq_len(nrow(x$table_body))
-          ) %>%
-          list(),
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers, .data$format_type) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::filter(.data$undo_text_format == FALSE) %>%
-    # dropping undoing cmds
-    dplyr::group_by(.data$column, .data$format_type) %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) %>%
-    dplyr::select("column", "row_numbers", everything()) %>%
-    dplyr::ungroup()
+  x$table_styling$text_format <- {
+    df <- x$table_styling$text_format %>%
+      dplyr::filter(.data$column %in% cols_shown)
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows, return_when_null = all_rows)
+      )
+      df <- df %>%
+        dplyr::select(-"rows") %>%
+        tidyr::unnest("row_numbers") %>%
+        dplyr::filter(.by = c("column", "row_numbers", "format_type"), dplyr::row_number() == dplyr::n()) %>%
+        dplyr::filter(.data$undo_text_format == FALSE) %>%
+        tidyr::nest(row_numbers = "row_numbers", .by = c("column", "format_type")) %>%
+        dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) %>%
+        dplyr::select("column", "row_numbers", everything())
+    } else {
+      df %>%
+        dplyr::select(-"rows") %>%
+        dplyr::mutate(row_numbers = list(integer(0))) %>%
+        dplyr::select("column", "row_numbers", everything())
+    }
+  }
 
   # source_note ----------------------------------------------------------------
   x$table_styling$source_note <-
@@ -77,55 +77,51 @@
     dplyr::filter(.data$remove == FALSE)
 
   # indentation ----------------------------------------------------------------
-  x$table_styling$indent <-
-    x$table_styling$indent %>%
-    dplyr::filter(.data$column %in% .cols_to_show(x)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(
-            x$table_body, .data$rows,
-            return_when_null = seq_len(nrow(x$table_body))
-          ) %>%
-          list(),
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::select("column", "row_numbers", "n_spaces") %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
-    dplyr::ungroup() |>
-    dplyr::filter(.data$n_spaces != 0)
+  x$table_styling$indent <- {
+    df <- x$table_styling$indent %>%
+      dplyr::filter(.data$column %in% cols_shown)
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows, return_when_null = all_rows)
+      )
+      df %>%
+        dplyr::select(-"rows") %>%
+        tidyr::unnest("row_numbers") %>%
+        dplyr::filter(.by = c("column", "row_numbers"), dplyr::row_number() == dplyr::n()) %>%
+        dplyr::select("column", "row_numbers", "n_spaces") %>%
+        tidyr::nest(row_numbers = "row_numbers") %>%
+        dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) |>
+        dplyr::filter(.data$n_spaces != 0)
+    } else {
+      df %>%
+        dplyr::select(-"rows") %>%
+        dplyr::mutate(row_numbers = list(integer(0)))
+    }
+  }
 
   # fmt_missing ----------------------------------------------------------------
-  x$table_styling$fmt_missing <-
-    x$table_styling$fmt_missing %>%
-    dplyr::filter(.data$column %in% .cols_to_show(x)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::select("column", "row_numbers", "symbol") %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
-    dplyr::ungroup()
+  x$table_styling$fmt_missing <- {
+    df <- x$table_styling$fmt_missing %>%
+      dplyr::filter(.data$column %in% cols_shown)
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows)
+      )
+      df %>%
+        dplyr::select(-"rows") %>%
+        tidyr::unnest("row_numbers") %>%
+        dplyr::filter(.by = c("column", "row_numbers"), dplyr::row_number() == dplyr::n()) %>%
+        dplyr::select("column", "row_numbers", "symbol") %>%
+        tidyr::nest(row_numbers = "row_numbers") %>%
+        dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+    } else {
+      df %>%
+        dplyr::select(-"rows") %>%
+        dplyr::mutate(row_numbers = list(integer(0)))
+    }
+  }
 
   # spanning_header ------------------------------------------------------------
   x$table_styling$spanning_header <-
@@ -213,65 +209,64 @@
     dplyr::arrange(.data$abbreviation)
 
   # fmt_fun --------------------------------------------------------------------
-  x$table_styling$fmt_fun <-
-    x$table_styling$fmt_fun %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-               integer(0)
-        ) %||%
-        .rows_expr_to_row_numbers(x$table_body, .data$rows,
-                                  return_when_null = seq_len(nrow(x$table_body))
-        ) %>% list()
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+  x$table_styling$fmt_fun <- {
+    df <- x$table_styling$fmt_fun
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows, return_when_null = all_rows)
+      )
+      df %>%
+        dplyr::select(-"rows") %>%
+        tidyr::unnest("row_numbers") %>%
+        dplyr::filter(.by = c("column", "row_numbers"), dplyr::row_number() == dplyr::n()) %>%
+        tidyr::nest(row_numbers = "row_numbers") %>%
+        dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+    } else {
+      df %>%
+        dplyr::select(-"rows") %>%
+        dplyr::mutate(row_numbers = list(integer(0)))
+    }
+  }
 
   # post_fmt_fun --------------------------------------------------------------------
-  x$table_styling$post_fmt_fun <-
-    x$table_styling$post_fmt_fun %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(x$table_body, .data$rows,
-            return_when_null = seq_len(nrow(x$table_body))
-          ) %>% list()
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+  x$table_styling$post_fmt_fun <- {
+    df <- x$table_styling$post_fmt_fun
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows, return_when_null = all_rows)
+      )
+      df %>%
+        dplyr::select(-"rows") %>%
+        tidyr::unnest("row_numbers") %>%
+        dplyr::filter(.by = c("column", "row_numbers"), dplyr::row_number() == dplyr::n()) %>%
+        tidyr::nest(row_numbers = "row_numbers") %>%
+        dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+    } else {
+      df %>%
+        dplyr::select(-"rows") %>%
+        dplyr::mutate(row_numbers = list(integer(0)))
+    }
+  }
 
   # cols_merge -----------------------------------------------------------------
-  x$table_styling$cols_merge <-
-    x$table_styling$cols_merge %>%
-    dplyr::group_by(.data$column) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(
-            x$table_body, .data$rows,
-            return_when_null = seq_len(nrow(x$table_body))
-          ) %>%
-          list(),
-    ) %>%
-    dplyr::select(-"rows", rows = "row_numbers")
+  x$table_styling$cols_merge <- {
+    df <- x$table_styling$cols_merge %>%
+      dplyr::filter(.by = "column", dplyr::row_number() == dplyr::n(), !is.na(.data$pattern))
+    if (nrow(df) > 0L) {
+      df$row_numbers <- map(
+        df$rows,
+        function(rows) .rows_expr_to_row_numbers(x$table_body, rows, return_when_null = all_rows)
+      )
+      df %>%
+        dplyr::select(-"rows", rows = "row_numbers")
+    } else {
+      df %>%
+        dplyr::mutate(row_numbers = list(integer(0))) %>%
+        dplyr::select(-"rows", rows = "row_numbers")
+    }
+  }
 
   class(x) <- "list"
   x

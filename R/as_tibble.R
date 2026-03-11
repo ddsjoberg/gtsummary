@@ -213,21 +213,14 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
 }
 
 .apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from = data) {
-  # apply formatting functions
-  df_updated <-
-    update_from[row_numbers, columns, drop = FALSE] %>%
-    map(~ fmt_fun(.x)) |>
-    dplyr::bind_cols()
-
-  # convert underlying column to character if updated col is character
+  # apply formatting function directly to each column, avoiding intermediate tibble
   for (v in columns) {
-    if (is.character(df_updated[[v]]) && !is.character(data[[v]])) {
+    formatted <- fmt_fun(update_from[[v]][row_numbers])
+    if (is.character(formatted) && !is.character(data[[v]])) {
       data[[v]] <- as.character(data[[v]])
     }
+    data[[v]][row_numbers] <- formatted
   }
-
-  # update data and return
-  data[row_numbers, columns, drop = FALSE] <- df_updated
 
   data
 }

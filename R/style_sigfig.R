@@ -53,16 +53,16 @@ style_sigfig <- function(x,
   }
 
   # calculating the number of digits to round number
-  d <-
-    paste0(
-      "cards::round5(abs(x * scale), digits = ", digits:1 + 1L, ") ",
-      "< 10^(", 1:digits - 1, ") - 0.5 * 10^(", -(digits:1), ") ~ ", digits:1,
-      collapse = ", "
-    ) %>%
-    {paste0("dplyr::case_when(", ., ", TRUE ~ 0)")} %>% # styler: off
-    # converting strings into expressions to run
-    parse(text = .) %>%
-    eval()
+  # Assigns fewest digits first, then overwrites with more digits for smaller values.
+  # This replicates case_when() semantics where the first (most-digits) match wins.
+  abs_scaled <- abs(x * scale)
+  d <- rep(0L, length(x))
+  for (i in rev(seq_len(digits))) {
+    dig <- digits - i + 1L
+    round_digits <- dig + 1L
+    threshold <- 10^(i - 1) - 0.5 * 10^(-dig)
+    d[cards::round5(abs_scaled, digits = round_digits) < threshold] <- dig
+  }
 
   # formatting number
   style_number(x, digits = d, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
