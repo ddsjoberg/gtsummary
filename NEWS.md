@@ -2,6 +2,8 @@
 
 * Add alternative text to figures on website. (#1958)
 
+* Improved efficiency of `style_number()`. There is a slight change to a small subset of rounded values. For example, the difference between two dates was previously formatted to `'0 days'`, and now it is formatted to `'0'`.
+
 # gtsummary 2.5.0
 
 ### New Features and Functions
