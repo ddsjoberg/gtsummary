@@ -33,7 +33,7 @@ jobs:
         run: |
           Rscript -e '
             # Function to run a standard gtsummary test suite
-            run_gt_bench <- function() {
+            run_bench <- function() {
               on.exit(detach("package:gtsummary", unload = TRUE, character.only = TRUE))
               library(gtsummary)
               print(packageVersion("gtsummary"))
@@ -58,25 +58,24 @@ jobs:
                   ) |>
                   add_overall() |>
                   as_gt(),
-                style_number1 =
+                style_number =
                     list(
                       c(1:100) |> style_number(digits = 0),
                       c(1:100) |> style_number(digits = rep_len(c(0, 1, 2), 100))
                     ),
-                iterations = 40,
+                iterations = 100,
                 check = FALSE
               )
             }
 
             # 1. Benchmark PR
             message("--- Benchmarking PR ---")
-            # install.packages(".", repos = NULL, type = "source")
-            pr_res <- run_gt_bench()
+            pr_res <- run_bench()
 
             # 2. Benchmark Main
             message("--- Benchmarking Main ---")
             remotes::install_github("ddsjoberg/gtsummary")
-            main_res <- run_gt_bench()
+            main_res <- run_bench()
 
             # 3. Explicitly construct the Markdown Table
             res_tab <-
