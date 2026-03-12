@@ -44,6 +44,7 @@ jobs:
                   tbl_summary(by = trt, include = c(age, response, grade)) |>
                   add_overall() |>
                   add_p() |>
+                  bold_labels() |>
                   as_gt(),
                 tbl_hierarchical =
                   tbl_hierarchical(
@@ -57,14 +58,20 @@ jobs:
                   ) |>
                   add_overall() |>
                   as_gt(),
-                iterations = 30,
+                style_number1 =
+                    list(
+                      c(1:100) |> style_number(digits = 0),
+                      c(1:100) |> style_number(digits = rep_len(c(0, 1, 2), 100))
+                    )
+
+                iterations = 40,
                 check = FALSE
               )
             }
 
             # 1. Benchmark PR
             message("--- Benchmarking PR ---")
-            install.packages(".", repos = NULL, type = "source")
+            # install.packages(".", repos = NULL, type = "source")
             pr_res <- run_gt_bench()
 
             # 2. Benchmark Main
