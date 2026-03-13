@@ -28,6 +28,11 @@ test_that("style_number() works", {
   )
 
   expect_equal(
+    style_number(c(-1000.55, 1000.55), big.mark = ".", decimal.mark = ",", digits = 1),
+    c("-1.000,6", "1.000,6")
+  )
+
+  expect_equal(
     style_number(c(-1:1, NA), digits = 1, prefix = "$", suffix = "*"),
     c("$-1.0*", "$0.0*", "$1.0*",  NA)
   )
