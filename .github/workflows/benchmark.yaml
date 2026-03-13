@@ -5,6 +5,7 @@ on:
 
 jobs:
   benchmark:
+    if: startsWith(github.event.pull_request.title, 'perf')
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
