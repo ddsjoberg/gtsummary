@@ -117,14 +117,18 @@ test_that("add_p() creates errors with bad args", {
 })
 
 test_that("add_p.tbl_summary() works well", {
+  # Use wt + row index to create a tie-free variable for mood.test,
+  # since mood.test's tie-correction changed in R-devel.
   expect_snapshot(
-    tbl_summary(mtcars, by = am, include = c(mpg, hp, cyl, carb)) |>
+    mtcars |>
+      dplyr::mutate(wt2 = wt + dplyr::row_number() / 1000) |>
+      tbl_summary(by = am, include = c(mpg, hp, cyl, wt2)) |>
       add_p(
         test = list(
           mpg = "t.test",
           hp = "oneway.test",
           cyl = "chisq.test.no.correct",
-          carb = "mood.test"
+          wt2 = "mood.test"
         )
       ) |>
       as.data.frame()
