@@ -26,72 +26,166 @@ jobs:
             any::knitr
             any::gert
             any::remotes
+            any::broom
+            any::pkgload
           cache: true
-          cache-version: 1
+          cache-version: 2
 
       - name: Run Benchmarks
         run: |
           Rscript -e '
-            # Function to run a standard gtsummary test suite
-            run_gt_bench <- function() {
-              on.exit(detach("package:gtsummary", unload = TRUE, character.only = TRUE))
-              library(gtsummary)
-              print(packageVersion("gtsummary"))
+            # ── 1. Load PR version and capture functions ──
+            message("--- Loading PR version ---")
+            pkgload::load_all(".")
+            pr_version <- as.character(packageVersion("gtsummary"))
+            message("PR version: ", pr_version)
 
-              bench::mark(
-                tbl_summary =
-                  trial |>
-                  tbl_summary(by = trt, include = c(age, response, grade)) |>
-                  add_overall() |>
-                  add_p() |>
-                  as_gt(),
-                tbl_hierarchical =
-                  tbl_hierarchical(
-                    data = cards::ADAE,
-                    variables = c(AESOC, AETERM, AESEV),
-                    by = TRTA,
-                    id = USUBJID,
-                    denominator = cards::ADSL,
-                    overall_row = TRUE,
-                    label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
-                  ) |>
-                  add_overall() |>
-                  as_gt(),
-                iterations = 30,
-                check = FALSE
-              )
+            pr_style_number <- gtsummary::style_number
+            pr_style_sigfig <- gtsummary::style_sigfig
+
+            # Capture pipeline functions as closures so they use the PR namespace
+            pr_tbl_summary <- function() {
+              gtsummary::trial |>
+                gtsummary::tbl_summary(by = trt, include = c(age, response, grade)) |>
+                gtsummary::add_overall() |>
+                gtsummary::add_p() |>
+                gtsummary::bold_labels() |>
+                gtsummary::as_gt()
+            }
+            pr_tbl_hierarchical <- function() {
+              gtsummary::tbl_hierarchical(
+                data = cards::ADAE,
+                variables = c(AESOC, AETERM, AESEV),
+                by = TRTA,
+                id = USUBJID,
+                denominator = cards::ADSL,
+                overall_row = TRUE,
+                label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+              ) |>
+                gtsummary::add_overall() |>
+                gtsummary::as_gt()
             }
 
-            # 1. Benchmark PR
-            message("--- Benchmarking PR ---")
-            install.packages(".", repos = NULL, type = "source")
-            pr_res <- run_gt_bench()
+            # Force-run closures once to verify they work before unloading
+            pr_tbl_summary()
+            pr_tbl_hierarchical()
 
-            # 2. Benchmark Main
-            message("--- Benchmarking Main ---")
-            remotes::install_github("ddsjoberg/gtsummary")
-            main_res <- run_gt_bench()
+            pkgload::unload("gtsummary")
 
-            # 3. Explicitly construct the Markdown Table
-            res_tab <-
-              main_res[c("expression", "median")] |>
-              dplyr::left_join(pr_res[c("expression", "median")], by = "expression", suffix = c(".main", ".pr")) |>
-              dplyr::mutate(
-                diff = round((median.pr - median.main) / median.main * 100, 2) |> unclass() |> paste0("%"),
-                dplyr::across(dplyr::everything(), as.character)
+            # ── 2. Install and load main version, capture functions ──
+            message("--- Installing main version ---")
+            remotes::install_github("ddsjoberg/gtsummary", quiet = TRUE)
+            library(gtsummary)
+            main_version <- as.character(packageVersion("gtsummary"))
+            message("Main version: ", main_version)
+
+            main_style_number <- gtsummary::style_number
+            main_style_sigfig <- gtsummary::style_sigfig
+
+            main_tbl_summary <- function() {
+              gtsummary::trial |>
+                gtsummary::tbl_summary(by = trt, include = c(age, response, grade)) |>
+                gtsummary::add_overall() |>
+                gtsummary::add_p() |>
+                gtsummary::bold_labels() |>
+                gtsummary::as_gt()
+            }
+            main_tbl_hierarchical <- function() {
+              gtsummary::tbl_hierarchical(
+                data = cards::ADAE,
+                variables = c(AESOC, AETERM, AESEV),
+                by = TRTA,
+                id = USUBJID,
+                denominator = cards::ADSL,
+                overall_row = TRUE,
+                label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
               ) |>
-              knitr::kable(format = "markdown")
+                gtsummary::add_overall() |>
+                gtsummary::as_gt()
+            }
 
-            # Write to a file that the next step can read
-            writeLines(res_tab, "bench_report.md")
+            # ── 3. Side-by-side benchmarks ──
+            # Style functions use larger inputs (10k elements) for stable signal
+            set.seed(42)
+            x <- rnorm(10000)
+            d <- rep_len(c(0L, 1L, 2L), 10000)
 
-            # Also print to console for debugging
-            res_tab
+            message("--- Running side-by-side benchmarks ---")
+
+            style_res <- bench::mark(
+              `style_number (main)` = main_style_number(x, digits = 2),
+              `style_number (pr)`   = pr_style_number(x, digits = 2),
+              `style_number varying digits (main)` = main_style_number(x, digits = d),
+              `style_number varying digits (pr)`   = pr_style_number(x, digits = d),
+              `style_sigfig (main)` = main_style_sigfig(x),
+              `style_sigfig (pr)`   = pr_style_sigfig(x),
+              iterations = 50,
+              check = FALSE
+            )
+
+            pipeline_res <- bench::mark(
+              `tbl_summary (main)`      = main_tbl_summary(),
+              `tbl_summary (pr)`        = pr_tbl_summary(),
+              `tbl_hierarchical (main)` = main_tbl_hierarchical(),
+              `tbl_hierarchical (pr)`   = pr_tbl_hierarchical(),
+              iterations = 20,
+              check = FALSE
+            )
+
+            # ── 4. Build comparison table ──
+            build_comparison <- function(res) {
+              df <- as.data.frame(res[c("expression", "median")])
+              df$expression <- as.character(df$expression)
+              df$group <- sub(" \\((main|pr)\\)$", "", df$expression)
+              df$version <- ifelse(grepl("(main)", df$expression, fixed = TRUE), "main", "pr")
+              df$median_ms <- as.numeric(df$median) * 1000
+
+              tidyr::pivot_wider(
+                df[c("group", "version", "median_ms")],
+                names_from = version, values_from = median_ms
+              ) |>
+                dplyr::mutate(
+                  diff_pct = round((pr - main) / main * 100, 1),
+                  verdict = dplyr::case_when(
+                    diff_pct < -10 ~ paste0("\U2705 ", diff_pct, "%"),
+                    diff_pct >  10 ~ paste0("\U274C +", diff_pct, "%"),
+                    TRUE           ~ paste0("\U2796 ", ifelse(diff_pct >= 0, "+", ""), diff_pct, "%")
+                  ),
+                  main = paste0(round(main, 1), "ms"),
+                  pr   = paste0(round(pr, 1), "ms")
+                ) |>
+                dplyr::select(expression = group, main, pr, change = verdict)
+            }
+
+            style_tab <- build_comparison(style_res)
+            pipeline_tab <- build_comparison(pipeline_res)
+
+            header <- paste0(
+              "## Performance Benchmark\n\n",
+              "Comparing **main** (`", main_version, "`) vs **PR** (`", pr_version, "`)\n\n",
+              "Benchmarks run side-by-side in the same process to minimize noise.\n",
+              "Differences within \U00B110% are treated as neutral (\U2796).\n\n"
+            )
+
+            style_section <- paste0(
+              "### Style functions (10k elements)\n\n",
+              paste(knitr::kable(style_tab, format = "markdown"), collapse = "\n"),
+              "\n\n"
+            )
+
+            pipeline_section <- paste0(
+              "### Pipeline benchmarks\n\n",
+              paste(knitr::kable(pipeline_tab, format = "markdown"), collapse = "\n"),
+              "\n"
+            )
+
+            report <- paste0(header, style_section, pipeline_section)
+            writeLines(report, "bench_report.md")
+            cat(report)
           '
 
       - name: Post Comment
         uses: mshick/add-pr-comment@v2
         with:
-          # This reads the exact Markdown file we just wrote
           message-path: bench_report.md
           refresh-main-comment: true
