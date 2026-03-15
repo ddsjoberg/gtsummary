@@ -159,9 +159,9 @@
 # add_p.tbl_summary() works well
 
     Code
-      as.data.frame(add_p(tbl_summary(dplyr::mutate(mtcars, wt2 = wt + dplyr::row_number()/
+      as.data.frame(add_p(tbl_summary(dplyr::mutate(mtcars, wt2 = wt + dplyr::row_number() /
         1000), by = am, include = c(mpg, hp, cyl, wt2)), test = list(mpg = "t.test",
-      hp = "oneway.test", cyl = "chisq.test.no.correct", wt2 = "mood.test")))
+        hp = "oneway.test", cyl = "chisq.test.no.correct", wt2 = "mood.test")))
     Message
       The following warnings were returned during `add_p()`:
       ! For variable `cyl` (`am`) and "statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect
