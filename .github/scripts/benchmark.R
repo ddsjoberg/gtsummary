@@ -6,6 +6,7 @@ message("PR version: ", pr_version)
 
 pr_style_number <- gtsummary::style_number
 pr_style_sigfig <- gtsummary::style_sigfig
+pr_translate_string <- gtsummary:::translate_string
 
 # Capture pipeline functions as closures so they use the PR namespace
 pr_tbl_summary <- function() {
@@ -45,6 +46,7 @@ message("Main version: ", main_version)
 
 main_style_number <- gtsummary::style_number
 main_style_sigfig <- gtsummary::style_sigfig
+main_translate_string <- gtsummary:::translate_string
 
 main_tbl_summary <- function() {
   gtsummary::trial |>
@@ -90,6 +92,27 @@ style_rounds <- lapply(seq_len(n_rounds), function(r) {
     `style_sigfig (main)` = main_style_sigfig(x),
     `style_sigfig (pr)`   = pr_style_sigfig(x),
     iterations = 30,
+    check = FALSE
+  )
+  data.frame(
+    expression = as.character(res$expression),
+    median_s = as.numeric(res$median),
+    round = r
+  )
+}) |> do.call(what = rbind)
+
+strings <- c("Characteristic", "Overall", "p-value", "Unknown", "Mean",
+             "Median", "SD", "N", "CI", "Variable")
+
+message("--- Running translation benchmarks (", n_rounds, " rounds) ---")
+translation_rounds <- lapply(seq_len(n_rounds), function(r) {
+  message("  Round ", r)
+  res <- bench::mark(
+    `translate_string en (main)` = for (s in strings) main_translate_string(s),
+    `translate_string en (pr)`   = for (s in strings) pr_translate_string(s),
+    `translate_string es (main)` = for (s in strings) main_translate_string(s, language = "es"),
+    `translate_string es (pr)`   = for (s in strings) pr_translate_string(s, language = "es"),
+    iterations = 500,
     check = FALSE
   )
   data.frame(
@@ -163,6 +186,7 @@ build_comparison <- function(rounds_df) {
 }
 
 style_tab <- build_comparison(style_rounds)
+translation_tab <- build_comparison(translation_rounds)
 pipeline_tab <- build_comparison(pipeline_rounds)
 
 header <- paste0(
@@ -180,12 +204,18 @@ style_section <- paste0(
   "\n\n"
 )
 
+translation_section <- paste0(
+  "### Translation (10 strings per iteration)\n\n",
+  paste(knitr::kable(translation_tab, format = "markdown"), collapse = "\n"),
+  "\n\n"
+)
+
 pipeline_section <- paste0(
   "### Pipeline benchmarks\n\n",
   paste(knitr::kable(pipeline_tab, format = "markdown"), collapse = "\n"),
   "\n"
 )
 
-report <- paste0(header, style_section, pipeline_section)
+report <- paste0(header, style_section, translation_section, pipeline_section)
 writeLines(report, "bench_report.md")
 cat(report)
