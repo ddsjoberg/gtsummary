@@ -29,16 +29,18 @@ lst_translations <- lapply(
     # only include non-NA translations
     keep <- !is.na(translated)
     env <- new.env(hash = TRUE, parent = emptyenv(), size = sum(keep))
+    # Mark all strings as UTF-8 so they survive on Windows
+    translated_utf8 <- enc2utf8(translated[keep])
     mapply(
       function(key, val) assign(key, val, envir = env),
-      en[keep], translated[keep]
+      en[keep], translated_utf8
     )
     env
   }
 )
 
 special_char <- list()
-special_char$interpunct <- "·"
+special_char$interpunct <- "\u00B7"
 
 usethis::use_data(
   df_theme_elements,
