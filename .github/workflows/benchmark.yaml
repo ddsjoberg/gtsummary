@@ -5,6 +5,7 @@ on:
 
 jobs:
   benchmark:
+    if: startsWith(github.event.pull_request.title, 'perf')
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -27,77 +28,15 @@ jobs:
             any::gert
             any::remotes
             any::broom
+            any::pkgload
           cache: true
-          cache-version: 1
+          cache-version: 3
 
       - name: Run Benchmarks
-        run: |
-          Rscript -e '
-            # Function to run a standard gtsummary test suite
-            run_bench <- function() {
-              on.exit(detach("package:gtsummary", unload = TRUE, character.only = TRUE))
-              library(gtsummary)
-              print(packageVersion("gtsummary"))
-
-              bench::mark(
-                tbl_summary =
-                  trial |>
-                  tbl_summary(by = trt, include = c(age, response, grade)) |>
-                  add_overall() |>
-                  add_p() |>
-                  bold_labels() |>
-                  as_gt(),
-                tbl_hierarchical =
-                  tbl_hierarchical(
-                    data = cards::ADAE,
-                    variables = c(AESOC, AETERM, AESEV),
-                    by = TRTA,
-                    id = USUBJID,
-                    denominator = cards::ADSL,
-                    overall_row = TRUE,
-                    label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
-                  ) |>
-                  add_overall() |>
-                  as_gt(),
-                style_number =
-                    list(
-                      c(1:100) |> style_number(digits = 0),
-                      c(1:100) |> style_number(digits = rep_len(c(0, 1, 2), 100))
-                    ),
-                iterations = 100,
-                check = FALSE
-              )
-            }
-
-            # 1. Benchmark PR
-            message("--- Benchmarking PR ---")
-            pr_res <- run_bench()
-
-            # 2. Benchmark Main
-            message("--- Benchmarking Main ---")
-            remotes::install_github("ddsjoberg/gtsummary")
-            main_res <- run_bench()
-
-            # 3. Explicitly construct the Markdown Table
-            res_tab <-
-              main_res[c("expression", "median")] |>
-              dplyr::left_join(pr_res[c("expression", "median")], by = "expression", suffix = c(".main", ".pr")) |>
-              dplyr::mutate(
-                diff = round((median.pr - median.main) / median.main * 100, 2) |> unclass() |> paste0("%"),
-                dplyr::across(dplyr::everything(), as.character)
-              ) |>
-              knitr::kable(format = "markdown")
-
-            # Write to a file that the next step can read
-            writeLines(res_tab, "bench_report.md")
-
-            # Also print to console for debugging
-            res_tab
-          '
+        run: Rscript .github/scripts/benchmark.R
 
       - name: Post Comment
         uses: mshick/add-pr-comment@v2
         with:
-          # This reads the exact Markdown file we just wrote
           message-path: bench_report.md
           refresh-main-comment: true
