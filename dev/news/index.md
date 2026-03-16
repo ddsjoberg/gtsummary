@@ -5,6 +5,12 @@
 - Add alternative text to figures on website.
   ([\#1958](https://github.com/ddsjoberg/gtsummary/issues/1958))
 
+- Improved efficiency of
+  [`style_number()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_number.md).
+  There is a slight change to a small subset of rounded values. For
+  example, the difference between two dates was previously formatted to
+  `'0 days'`, and now it is formatted to `'0'`.
+
 ## gtsummary 2.5.0
 
 CRAN release: 2025-12-05
