@@ -207,7 +207,7 @@ assign_tests.tbl_survfit <- function(x,
   set_cli_abort_call()
 
   all_possible_tests <-
-    c("logrank", "tarone", "survdiff", "petopeto_gehanwilcoxon", "coxph_lrt", "coxph_wald", "coxph_score")
+    c("logrank", "survdiff", "petopeto_gehanwilcoxon", "coxph_lrt", "coxph_wald", "coxph_score")
   if (is_string(test)) {
     test <- arg_match(test, values = all_possible_tests)
     test <- inject(everything() ~ !!test)
