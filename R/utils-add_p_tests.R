@@ -629,7 +629,10 @@ add_p_tbl_survfit_logrank <- function(data, variable, ...) {
 }
 
 add_p_tbl_survfit_tarone <- function(data, variable, ...) {
-  add_p_tbl_survfit_survdiff(data = data, variable = variable, test.args = list(rho = 1.5))
+  lifecycle::deprecate_stop(
+    when = "2.5.1",
+    what = I('gtsummary::add_p(test = "tarone")')
+  )
 }
 
 add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
