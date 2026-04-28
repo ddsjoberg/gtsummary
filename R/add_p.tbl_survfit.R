@@ -5,7 +5,7 @@
 #' @param x (`tbl_survfit`)\cr
 #'   Object of class `"tbl_survfit"`
 #' @param test (`string`)\cr
-#'   string indicating test to use. Must be one of `"logrank"`, `"tarone"`, `"survdiff"`,
+#'   string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
 #'   `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score"`.
 #'   See details below
 #' @param test.args (named `list`)\cr
