@@ -44,7 +44,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   gt_calls <- table_styling_to_gt_calls(x = x, ...)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds", eval = TRUE)
   gt_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
