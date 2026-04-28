@@ -156,7 +156,7 @@ gtsummary:::df_theme_elements %>%
   gt::sub_missing(columns = everything(), missing_text = "") %>%
   gt::tab_footnote(
     footnote = "Objects here are evaluated upon being read inside the package.",
-    locations = cells_column_labels(columns = "eval")
+    locations = gt::cells_column_labels(columns = "eval")
   ) %>%
   gt::tab_options(
     table.font.size = "small",
