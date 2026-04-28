@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed `test = "tarone"` from `add_p.tbl_survfit()`. The previous implementation used `survdiff(rho = 1.5)`, which does not correctly compute the Tarone-Ware test. Users who need a G-rho family test can use `test = "survdiff"` with `test.args = list(rho = )`. (#2391)
+
 * Add alternative text to figures on website. (#1958)
 
 * Improved efficiency of `style_number()`. There is a slight change to a small subset of rounded values. For example, the difference between two dates was previously formatted to `'0 days'`, and now it is formatted to `'0'`.
