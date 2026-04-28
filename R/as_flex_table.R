@@ -48,7 +48,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
   flextable_calls <- table_styling_to_flextable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds", eval = TRUE)
   flextable_calls <-
     reduce(
       .x = seq_along(insert_expr_after),

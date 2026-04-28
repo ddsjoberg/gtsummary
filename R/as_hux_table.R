@@ -44,7 +44,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE) {
   huxtable_calls <- table_styling_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds", eval = TRUE)
   huxtable_calls <-
     reduce(
       .x = seq_along(insert_expr_after),

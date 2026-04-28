@@ -139,18 +139,25 @@ gtsummary:::df_theme_elements %>%
   dplyr::select(-argument, -deprecated) %>%
   dplyr::mutate(
     name = ifelse(!is.na(name), glue::glue("`{name}`"), NA_character_),
-    example = ifelse(!is.na(example), glue::glue("`{example}`"), NA_character_)
+    example = ifelse(!is.na(example), glue::glue("`{example}`"), NA_character_),
+    eval = ifelse(eval, "Yes", NA)
   ) %>%
+  dplyr::relocate("eval", .after = "example") %>%
   dplyr::group_by(fn) %>%
   dplyr::arrange(dplyr::desc(fn == "Package-wide")) %>%
   gt::gt() %>%
   gt::cols_align(columns = everything(), align = "left") %>%
   gt::cols_label(
     name = "Theme Element", desc = "Description",
-    example = "Example"
+    example = "Example",
+    eval = "Evaluated"
   ) %>%
   gt::fmt_markdown(columns = c(name, desc, example)) %>%
   gt::sub_missing(columns = everything(), missing_text = "") %>%
+  gt::tab_footnote(
+    footnote = "Objects here are evaluated upon being read inside the package.",
+    locations = cells_column_labels(columns = "eval")
+  ) %>%
   gt::tab_options(
     table.font.size = "small",
     data_row.padding = gt::px(1),
