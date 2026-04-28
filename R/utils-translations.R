@@ -1,11 +1,18 @@
 # translation function ---------------------------------------------------------
-translate_string <- function(x, language = get_theme_element("pkgwide-str:language", default = "en")) {
+
+# Fast language lookup that avoids eval_tidy() overhead in get_theme_element().
+# The language theme element is always a plain string, so direct access is safe.
+.get_language <- function() {
+  env_gtsummary_theme[["pkgwide-str:language"]] %||% "en"
+}
+
+translate_string <- function(x, language = .get_language()) {
   if (language == "en" || is_empty(x)) return(x) # styler: off
 
   .translate_grab_one(x, language)
 }
 
-translate_vector <- function(x, language = get_theme_element("pkgwide-str:language", default = "en")) {
+translate_vector <- function(x, language = .get_language()) {
   if (language == "en" || is_empty(x)) return(x) # styler: off
 
   env <- lst_translations[[language]]
