@@ -200,10 +200,10 @@ check_gtsummary_theme <- function(x) {
 # ------------------------------------------------------------------------------
 # this function grabs a gtsummary theme element if it exists
 # otherwise returns the default value
-get_theme_element <- function(x, default = NULL, eval = TRUE, env = caller_env()) {
+get_theme_element <- function(x, default = NULL, eval = FALSE, env = caller_env()) {
   # returning theme element
   # if eval is FALSE, then returning the un-evaluated theme element
-  if (isFALSE(eval)) {
+  if (!eval) {
     return(env_gtsummary_theme[[x]] %||% default)
   }
 
