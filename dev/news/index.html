@@ -43,7 +43,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Add alternative text to figures on website. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1958" class="external-link">#1958</a>)</p></li>
+<ul><li><p>Removed <code>test = "tarone"</code> from <code><a href="../reference/add_p.tbl_survfit.html">add_p.tbl_survfit()</a></code>. The previous implementation used <code>survdiff(rho = 1.5)</code>, which does not correctly compute the Tarone-Ware test. Users who need a G-rho family test can use <code>test = "survdiff"</code> with <code>test.args = list(rho = )</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2391" class="external-link">#2391</a>)</p></li>
+<li><p>Add alternative text to figures on website. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1958" class="external-link">#1958</a>)</p></li>
 <li><p>Improved efficiency of <code><a href="../reference/style_number.html">style_number()</a></code>. There is a slight change to a small subset of rounded values. For example, the difference between two dates was previously formatted to <code>'0 days'</code>, and now it is formatted to <code>'0'</code>.</p></li>
 </ul></div>
     <div class="section level2">

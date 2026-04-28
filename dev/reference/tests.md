@@ -55,16 +55,15 @@ variance, use
 
 ## `tbl_survfit() %>% add_p()`
 
-|                            |                                                 |                                                           |
-|----------------------------|-------------------------------------------------|-----------------------------------------------------------|
-| **alias**                  | **description**                                 | **pseudo-code**                                           |
-| `'logrank'`                | Log-rank test                                   | `survival::survdiff(Surv(.) ~ variable, data, rho = 0)`   |
-| `'tarone'`                 | Tarone-Ware test                                | `survival::survdiff(Surv(.) ~ variable, data, rho = 1.5)` |
-| `'petopeto_gehanwilcoxon'` | Peto & Peto modification of Gehan-Wilcoxon test | `survival::survdiff(Surv(.) ~ variable, data, rho = 1)`   |
-| `'survdiff'`               | G-rho family test                               | `survival::survdiff(Surv(.) ~ variable, data, ...)`       |
-| `'coxph_lrt'`              | Cox regression (LRT)                            | `survival::coxph(Surv(.) ~ variable, data, ...)`          |
-| `'coxph_wald'`             | Cox regression (Wald)                           | `survival::coxph(Surv(.) ~ variable, data, ...)`          |
-| `'coxph_score'`            | Cox regression (Score)                          | `survival::coxph(Surv(.) ~ variable, data, ...)`          |
+|                            |                                                 |                                                         |
+|----------------------------|-------------------------------------------------|---------------------------------------------------------|
+| **alias**                  | **description**                                 | **pseudo-code**                                         |
+| `'logrank'`                | Log-rank test                                   | `survival::survdiff(Surv(.) ~ variable, data, rho = 0)` |
+| `'petopeto_gehanwilcoxon'` | Peto & Peto modification of Gehan-Wilcoxon test | `survival::survdiff(Surv(.) ~ variable, data, rho = 1)` |
+| `'survdiff'`               | G-rho family test                               | `survival::survdiff(Surv(.) ~ variable, data, ...)`     |
+| `'coxph_lrt'`              | Cox regression (LRT)                            | `survival::coxph(Surv(.) ~ variable, data, ...)`        |
+| `'coxph_wald'`             | Cox regression (Wald)                           | `survival::coxph(Surv(.) ~ variable, data, ...)`        |
+| `'coxph_score'`            | Cox regression (Score)                          | `survival::coxph(Surv(.) ~ variable, data, ...)`        |
 
 ## `tbl_continuous() %>% add_p()`
 

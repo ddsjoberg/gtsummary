@@ -2,6 +2,13 @@
 
 ## gtsummary (development version)
 
+- Removed `test = "tarone"` from
+  [`add_p.tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_survfit.md).
+  The previous implementation used `survdiff(rho = 1.5)`, which does not
+  correctly compute the Tarone-Ware test. Users who need a G-rho family
+  test can use `test = "survdiff"` with `test.args = list(rho = )`.
+  ([\#2391](https://github.com/ddsjoberg/gtsummary/issues/2391))
+
 - Add alternative text to figures on website.
   ([\#1958](https://github.com/ddsjoberg/gtsummary/issues/1958))
 

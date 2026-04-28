@@ -124,7 +124,7 @@ trial |>
 #>         "method" & .data$stat %in% "Wilcoxon rank sum test with continuity correction" ~ 
 #>         list("Wilcoxon rank sum test"), .default = .data$stat))
 #> }
-#> <bytecode: 0x556535157f60>
+#> <bytecode: 0x5574a3390ef8>
 #> <environment: namespace:gtsummary>
 #> attr(,"test_name")
 #> [1] "wilcox.test"
@@ -135,7 +135,7 @@ trial |>
 #>     add_p_test_chisq.test(data = data, variable = variable, by = by, 
 #>         test.args = c(list(correct = FALSE), test.args), ...)
 #> }
-#> <bytecode: 0x55653c0b2be8>
+#> <bytecode: 0x5574a655d660>
 #> <environment: namespace:gtsummary>
 #> attr(,"test_name")
 #> [1] "chisq.test.no.correct"

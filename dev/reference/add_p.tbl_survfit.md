@@ -29,7 +29,7 @@ add_p(
 - test:
 
   (`string`)  
-  string indicating test to use. Must be one of `"logrank"`, `"tarone"`,
+  string indicating test to use. Must be one of `"logrank"`,
   `"survdiff"`, `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`,
   `"coxph_wald"`, `"coxph_score"`. See details below
 
