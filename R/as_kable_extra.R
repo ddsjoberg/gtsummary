@@ -114,7 +114,7 @@ as_kable_extra <- function(x,
     )
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds", eval = TRUE)
   kable_extra_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
