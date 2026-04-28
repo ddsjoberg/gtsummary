@@ -2,6 +2,12 @@
 
 ## gtsummary (development version)
 
+- Theme elements are no longer ‘evaluated’ by default,
+  e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`,
+  `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`,
+  `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are
+  evaluated.
+
 - Removed `test = "tarone"` from
   [`add_p.tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_survfit.md).
   The previous implementation used `survdiff(rho = 1.5)`, which does not
