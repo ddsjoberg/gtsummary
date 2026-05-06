@@ -212,10 +212,11 @@ tbl_strata_internal <- function(data,
   # calculating df_by ----------------------------------------------------------
   data_for_strata <- data
   if (!is_survey(data_for_strata)) {
-    df_by <-
-      data_for_strata %>%
-      dplyr::mutate(strata = paste(!!!syms(strata), sep = .sep)) %>%
-      df_by(by = "strata")
+    # base R paste instead of dplyr::mutate for strata column
+    strata_pasted <- do.call(paste, c(as.data.frame(data_for_strata)[strata], list(sep = .sep)))
+    data_tmp <- as.data.frame(data_for_strata)
+    data_tmp[["strata"]] <- strata_pasted
+    df_by <- df_by(data_tmp, by = "strata")
   } else {
     data_for_strata$variables <-
       data_for_strata$variables %>%
@@ -224,49 +225,43 @@ tbl_strata_internal <- function(data,
       data_for_strata %>%
       df_by(by = "strata")
   }
-  df_by <-
-    df_by %>%
-    dplyr::select(
-      strata = "by",
-      any_of(c(
-        "n", "N", "p",
-        "n_unweighted", "N_unweighted", "p_unweighted"
-      ))
-    ) %>%
-    dplyr::mutate(header = glue::glue(.header))
+  # base R column select + rename instead of dplyr::select + dplyr::mutate
+  keep_cols <- intersect(
+    c("n", "N", "p", "n_unweighted", "N_unweighted", "p_unweighted"),
+    names(df_by)
+  )
+  df_by <- df_by[, c("by", keep_cols), drop = FALSE]
+  names(df_by)[names(df_by) == "by"] <- "strata"
+  df_by$header <- as.character(glue::glue_data(
+    setNames(as.list(df_by), names(df_by)), .header))
 
   # nesting data and building tbl objects --------------------------------------
   df_tbls <-
     nest_df_and_svy(data, strata) %>%
     dplyr::arrange(!!!syms(strata)) %>%
-    dplyr::rename(!!!syms(new_strata_names)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      strata = paste(!!!syms(names(new_strata_names)), sep = .sep)
-    ) %>%
-    dplyr::ungroup() %>%
+    dplyr::rename(!!!syms(new_strata_names))
+
+  # vectorized paste instead of rowwise + mutate + ungroup
+  df_tbls$strata <- do.call(paste, c(df_tbls[names(new_strata_names)], list(sep = .sep)))
+
+  df_tbls <-
     dplyr::left_join(
-      df_by %>% select("strata", "header"),
+      df_tbls,
+      df_by[, c("strata", "header"), drop = FALSE],
       by = "strata"
-    ) %>%
-    dplyr::mutate(
-      tbl =
-        switch(.parent_fun,
-               "tbl_strata" = map(.data$data, .tbl_fun, ...),
-               "tbl_strata2" = map2(.data$data, .data$header, .tbl_fun, ...)
-        )
     )
-  # add the column to be used for the tbl_id
-  df_tbls$tbl_id <-
-    df_tbls[names(new_strata_names)] |>
-    dplyr::mutate(
-      across(
-        everything(),
-        .fns = ~ paste(new_strata_names[[dplyr::cur_column()]], cli::cli_format(.x), sep = "=")
-      ),
-      strata = paste(!!!syms(names(new_strata_names)), sep = ",")
-    ) |>
-    dplyr::pull("strata")
+
+  # direct assignment instead of dplyr::mutate
+  df_tbls$tbl <-
+    switch(.parent_fun,
+           "tbl_strata" = map(df_tbls$data, .tbl_fun, ...),
+           "tbl_strata2" = map2(df_tbls$data, df_tbls$header, .tbl_fun, ...)
+    )
+
+  # base R tbl_id instead of across + cur_column
+  tbl_id_parts <- lapply(names(new_strata_names), function(col)
+    paste(new_strata_names[[col]], cli::cli_format(df_tbls[[col]]), sep = "="))
+  df_tbls$tbl_id <- do.call(paste, c(tbl_id_parts, list(sep = ",")))
 
 
 
@@ -293,9 +288,26 @@ tbl_strata_internal <- function(data,
 }
 
 nest_df_and_svy <- function(data, strata) {
-  # if data frame, return nested tibble
+  # if data frame, use base R split instead of tidyr::nest
   if (is.data.frame(data)) {
-    return(tidyr::nest(data, data = -all_of(.env$strata)))
+    non_strata <- setdiff(names(data), strata)
+    if (length(strata) == 1L) {
+      grp <- data[[strata]]
+      keys <- if (is.factor(grp)) levels(grp) else sort(unique(grp))
+      split_data <- split(data[non_strata], grp)
+      result <- vctrs::new_data_frame(setNames(list(keys), strata))
+    } else {
+      grp_df <- data[strata]
+      grp_key <- do.call(paste, c(grp_df, list(sep = "\x01")))
+      split_data_raw <- split(data[non_strata], grp_key)
+      unique_idx <- !duplicated(grp_key)
+      result <- grp_df[unique_idx, , drop = FALSE]
+      rownames(result) <- NULL
+      split_keys <- do.call(paste, c(result, list(sep = "\x01")))
+      split_data <- split_data_raw[split_keys]
+    }
+    result[["data"]] <- unname(lapply(split_data, function(d) { rownames(d) <- NULL; d }))
+    return(tibble::as_tibble(result))
   }
 
   if (length(strata) > 1) {
@@ -335,25 +347,40 @@ df_by <- function(data, by) {
   }
 
   if (!is_survey(data)) {
-    # classic data.frame
-    result <-
-      data %>%
-      dplyr::select(by = all_of(by)) %>%
-      dplyr::count(!!sym("by"), .drop = FALSE) %>%
-      dplyr::arrange(!!sym("by")) %>%
-      dplyr::mutate(
-        N = sum(.data$n),
-        p = .data$n / .data$N,
-        by_id = 1:dplyr::n(), # 'by' variable ID
-        by_chr = as.character(.data$by), # Character version of 'by' variable
-        by_fct = # factor version of 'by' variable
-          switch(inherits(.data$by, "factor"),
-                 factor(.data$by, levels = attr(.data$by, "levels"), ordered = FALSE)
-          ) %||%
-          factor(.data$by),
-        by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
-      ) %>%
-      dplyr::select(starts_with("by"), everything())
+    # classic data.frame — base R tabulation instead of dplyr pipeline
+    by_vec <- data[[by]]
+
+    if (is.factor(by_vec)) {
+      levs <- levels(by_vec)
+      counts <- tabulate(by_vec, nbins = length(levs))
+      by_col_vals <- factor(levs, levels = levs)
+      by_fct_vals <- factor(levs, levels = levs, ordered = FALSE)
+    } else {
+      tab <- table(by_vec, dnn = NULL)
+      levs_chr <- names(tab)
+      counts <- as.integer(tab)
+      # preserve original type (integer stays integer, character stays character)
+      by_col_vals <- utils::type.convert(levs_chr, as.is = TRUE)
+      if (!identical(class(by_col_vals), class(by_vec)))
+        by_col_vals <- as(levs_chr, class(by_vec)[1]) # nocov
+      by_fct_vals <- factor(by_col_vals)
+      levs <- levs_chr
+    }
+
+    n_levs <- length(levs)
+    N_total <- sum(counts)
+    by_ids <- seq_len(n_levs)
+
+    result <- vctrs::new_data_frame(list(
+      by = by_col_vals,
+      by_id = by_ids,
+      by_chr = as.character(levs),
+      by_fct = by_fct_vals,
+      by_col = paste0("stat_", by_ids),
+      n = counts,
+      N = rep(N_total, n_levs),
+      p = counts / N_total
+    ))
   } else {
     # survey object
     svy_table <- survey::svytable(c_form(right = by), data, round = TRUE) %>%
@@ -367,8 +394,6 @@ df_by <- function(data, by) {
     result <- df_by(data$variables, by) %>%
       dplyr::rename(n_unweighted = "n", N_unweighted = "N", p_unweighted = "p") %>%
       dplyr::left_join(svy_table, by = "by")
-
-    result
   }
 
   attr(result$by, "label") <- NULL

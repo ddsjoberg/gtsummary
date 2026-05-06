@@ -142,12 +142,22 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
       )
     }
 
-    # adding tab_spanners
-    tbls <-
-      map2(
-        tbls, seq_along(tbls),
-        ~ modify_spanning_header(.x, -all_of(merge_vars) ~ tab_spanner[.y])
+    # build spanning_header rows directly instead of calling
+    # modify_spanning_header() per table (avoids tidyselect eval overhead)
+    for (i in seq_along(tbls)) {
+      cols <- setdiff(names(tbls[[i]]$table_body), merge_vars)
+      nc <- length(cols)
+      tbls[[i]]$table_styling$spanning_header <- vctrs::vec_rbind(
+        tbls[[i]]$table_styling$spanning_header,
+        vctrs::new_data_frame(list(
+          level = rep(1L, nc),
+          column = cols,
+          spanning_header = rep(unname(tab_spanner[i]), nc),
+          text_interpret = rep("gt::md", nc),
+          remove = rep(FALSE, nc)
+        ))
       )
+    }
   }
 
 
@@ -190,72 +200,90 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
 }
 
 .tbl_merge_update_table_styling <- function(x, tbls, merge_vars) {
-  # update table_styling$header
-  x$table_styling$header <-
-    map2(
-      tbls, seq_along(tbls),
-      ~ .x$table_styling$header %>%
-        dplyr::filter(!(.data$column %in% .env$merge_vars & .y != 1)) %>%
-        dplyr::mutate(
-          column = ifelse(
-            .data$column %in% .env$merge_vars & .y == 1,
-            .data$column,
-            paste0(.data$column, "_", .y)
-          )
-        )
-    ) %>%
-    reduce(.rows_update_table_styling_header, .init = x$table_styling$header)
+  # update table_styling$header using base R match/update instead of
+  # reduce(.rows_update_table_styling_header) which runs
+  # as.data.frame → match → update → as_tibble + left_join per iteration
+  result <- as.data.frame(x$table_styling$header)
+  for (i in seq_along(tbls)) {
+    h <- as.data.frame(tbls[[i]]$table_styling$header)
+    # for table i>1, drop merge_var rows; for table 1, keep them
+    if (i > 1L) h <- h[!h$column %in% merge_vars, , drop = FALSE]
+    # rename non-merge columns: append _i
+    non_merge <- !h$column %in% merge_vars
+    h$column[non_merge] <- paste0(h$column[non_merge], "_", i)
+
+    common_cols <- intersect(names(result), names(h))
+    idx <- match(h$column, result$column)
+    existing <- !is.na(idx)
+
+    # update existing rows
+    if (any(existing)) {
+      for (col in setdiff(common_cols, "column")) {
+        result[idx[existing], col] <- h[existing, col]
+      }
+    }
+
+    # add new rows
+    if (any(!existing)) {
+      new_rows <- h[!existing, , drop = FALSE]
+      for (col in setdiff(names(result), names(new_rows))) new_rows[[col]] <- NA
+      for (col in setdiff(names(new_rows), names(result))) result[[col]] <- NA
+      result <- rbind(result, new_rows[, names(result), drop = FALSE])
+    }
+
+    # add new columns from h
+    new_cols <- setdiff(names(h), names(result))
+    if (length(new_cols) > 0L) {
+      for (col in new_cols) {
+        result[[col]] <- NA
+        idx2 <- match(h$column, result$column)
+        result[idx2[!is.na(idx2)], col] <- h[!is.na(idx2), col]
+      }
+    }
+  }
+  x$table_styling$header <- tibble::as_tibble(result)
 
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
                        "footnote_spanning_header", "abbreviation", "source_note",
                        "fmt_fun", "post_fmt_fun", "indent", "text_format",
                        "fmt_missing", "cols_merge")) {
-    x$table_styling[[style_type]] <-
-      map(
-        rev(seq_along(tbls)),
-        function(i) {
-          style_updated <- tbls[[i]]$table_styling[[style_type]]
+    parts <- vector("list", length(tbls))
+    for (i in rev(seq_along(tbls))) {
+      style_updated <- tbls[[i]]$table_styling[[style_type]]
 
-          # return if there are no rows
-          if (!is.data.frame(style_updated) || nrow(style_updated) == 0) {
-            return(style_updated)
-          }
+      # skip if there are no rows
+      if (!is.data.frame(style_updated) || nrow(style_updated) == 0L) next
 
-          # renaming column variable
-          if ("column" %in% names(style_updated)) {
-            style_updated$column <-
-              ifelse(
-                style_updated$column %in% merge_vars | is.na(style_updated$column),
-                style_updated$column,
-                paste0(style_updated$column, "_", i)
-              ) %>%
-              as.character()
-          }
-
-          # updating column names in rows expr/quo
-          if ("rows" %in% names(style_updated)) {
-            style_updated$rows <-
-              map(
-                style_updated$rows,
-                \(.x) {
-                  .rename_variables_in_expression(.x, i, tbls[[i]], merge_vars = merge_vars)
-                }
-              )
-          }
-
-          # updating column names in pattern string
-          if ("pattern" %in% names(style_updated)) {
-            style_updated$pattern <-
-              map_chr(
-                style_updated$pattern,
-                ~ .rename_variables_in_pattern(.x, i, tbls[[i]], merge_vars = merge_vars)
-              )
-          }
-
-          style_updated
+      # renaming column variable
+      if ("column" %in% names(style_updated)) {
+        needs_rename <- !style_updated$column %in% merge_vars & !is.na(style_updated$column)
+        if (any(needs_rename)) {
+          style_updated$column[needs_rename] <- paste0(style_updated$column[needs_rename], "_", i)
         }
-      ) |>
-      dplyr::bind_rows()
+        style_updated$column <- as.character(style_updated$column)
+      }
+
+      # updating column names in rows expr/quo
+      if ("rows" %in% names(style_updated)) {
+        style_updated$rows <-
+          lapply(style_updated$rows, function(.x)
+            .rename_variables_in_expression(.x, i, tbls[[i]], merge_vars = merge_vars))
+      }
+
+      # updating column names in pattern string
+      if ("pattern" %in% names(style_updated)) {
+        style_updated$pattern <-
+          vapply(style_updated$pattern, function(.x)
+            .rename_variables_in_pattern(.x, i, tbls[[i]], merge_vars = merge_vars),
+            character(1))
+      }
+
+      parts[[i]] <- style_updated
+    }
+    parts <- Filter(Negate(is.null), rev(parts))
+    if (length(parts) > 0L) {
+      x$table_styling[[style_type]] <- tibble::as_tibble(vctrs::vec_rbind(!!!parts))
+    }
   }
 
   # take the first non-NULL element from tbls[[.]]
@@ -265,7 +293,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
       reduce(.f = \(.x, .y) .x %||% .y)
   }
 
-  # # rename variables in expressions, and take first non-NULL element
+  # rename variables in expressions, and take first non-NULL element
   for (style_type in "horizontal_line_above") {
     x$table_styling[[style_type]] <-
       map(

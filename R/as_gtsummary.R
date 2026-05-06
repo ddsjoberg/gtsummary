@@ -24,89 +24,59 @@ as_gtsummary <- function(table_body, ...) {
   x$table_body <- table_body
 
   # table_styling --------------------------------------------------------------
+  cn <- names(x$table_body)
+  nc <- length(cn)
+
   x$table_styling$header <-
-    dplyr::tibble(
-      column = names(x$table_body),
-      hide = FALSE,
-      align = "center",
-      interpret_label = "gt::md"
-    ) %>%
-    dplyr::mutate(
-      label = map_chr(.data$column, ~attr(table_body[[.x]], "label") %||% .x),
-      align = ifelse(.data$column %in% "label", "left", .data$align)
-    )
+    vctrs::new_data_frame(list(
+      column = cn,
+      hide = rep(FALSE, nc),
+      align = ifelse(cn == "label", "left", "center"),
+      interpret_label = rep("gt::md", nc),
+      label = unname(vapply(cn, function(col) attr(table_body[[col]], "label") %||% col, character(1)))
+    ))
+
+  ec <- character(0L)
+  el <- logical(0L)
+  ei <- integer(0L)
 
   x$table_styling$spanning_header <-
-    dplyr::tibble(
-      level = integer(),
-      column = character(),
-      spanning_header = character(),
-      text_interpret = character(),
-      remove = logical()
-    )
+    vctrs::new_data_frame(list(level = ei, column = ec, spanning_header = ec, text_interpret = ec, remove = el))
 
   x$table_styling$footnote_header <-
-    dplyr::tibble(
-      column = character(),
-      footnote = character(), text_interpret = character(),
-      replace = logical(), remove = logical()
-    )
+    vctrs::new_data_frame(list(column = ec, footnote = ec, text_interpret = ec, replace = el, remove = el))
 
   x$table_styling$footnote_body <-
-    dplyr::tibble(
-      column = character(), rows = list(),
-      footnote = character(), text_interpret = character(),
-      replace = logical(), remove = logical()
-    )
+    vctrs::new_data_frame(list(column = ec, rows = list(), footnote = ec, text_interpret = ec, replace = el, remove = el))
 
   x$table_styling$footnote_spanning_header <-
-    dplyr::tibble(
-      column = character(), footnote = character(),
-      level = integer(), text_interpret = character(),
-      replace = logical(), remove = logical()
-    )
+    vctrs::new_data_frame(list(column = ec, footnote = ec, level = ei, text_interpret = ec, replace = el, remove = el))
 
   x$table_styling$abbreviation <-
-    dplyr::tibble(
-      column = character(),
-      abbreviation = character(),
-      text_interpret = character()
-    )
+    vctrs::new_data_frame(list(column = ec, abbreviation = ec, text_interpret = ec))
 
   x$table_styling$source_note <-
-    dplyr::tibble(
-      id = integer(),
-      source_note = character(),
-      text_interpret = character(),
-      remove = logical()
-    )
+    vctrs::new_data_frame(list(id = ei, source_note = ec, text_interpret = ec, remove = el))
 
   x$table_styling$text_format <-
-    dplyr::tibble(
-      column = character(), rows = list(),
-      format_type = character(), undo_text_format = logical()
-    )
+    vctrs::new_data_frame(list(column = ec, rows = list(), format_type = ec, undo_text_format = el))
 
   x$table_styling$indent <-
     # if there is a label column, make it indent 0 (which makes it easier to modify later)
-    if ("label" %in% x$table_styling$header$column) {
-      dplyr::tibble(
-        column = "label",
-        rows = list(rlang::expr(TRUE)),
-        n_spaces = 0L
-      )
+    if ("label" %in% cn) {
+      vctrs::new_data_frame(list(column = "label", rows = list(rlang::expr(TRUE)), n_spaces = 0L))
     } else {
-      dplyr::tibble(column = character(), rows = list(), n_spaces = integer())
+      vctrs::new_data_frame(list(column = ec, rows = list(), n_spaces = ei))
     }
 
   x$table_styling$fmt_missing <-
-    dplyr::tibble(column = character(), rows = list(), symbol = character())
+    vctrs::new_data_frame(list(column = ec, rows = list(), symbol = ec))
   x$table_styling$fmt_fun <-
-    dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
+    vctrs::new_data_frame(list(column = ec, rows = list(), fmt_fun = list()))
   x$table_styling$cols_merge <-
-    dplyr::tibble(column = character(), rows = list(), pattern = character())
+    vctrs::new_data_frame(list(column = ec, rows = list(), pattern = ec))
   x$table_styling$post_fmt_fun <-
-    dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
+    vctrs::new_data_frame(list(column = ec, rows = list(), fmt_fun = list()))
 
   # adding other objects to list -----------------------------------------------
   x <- c(x, list(...))

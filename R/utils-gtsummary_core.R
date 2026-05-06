@@ -11,9 +11,11 @@
 #' @keywords internal
 #' @return gtsummary object
 .create_gtsummary_object <- function(table_body, ...) {
-  as_gtsummary(table_body, ...) |>
-    # the original function left the "label" column unhidden
-    modify_column_hide(columns = -any_of("label"))
+  x <- as_gtsummary(table_body, ...)
+  # hide all columns except "label" (equivalent to modify_column_hide(-any_of("label"))
+  # but avoids the tidyselect evaluation overhead)
+  x$table_styling$header$hide <- x$table_styling$header$column != "label"
+  x
 }
 
 .purrr_when <- function(...) {
