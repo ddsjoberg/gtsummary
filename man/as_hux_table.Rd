@@ -21,6 +21,8 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
+\item{file}{File path for the output.}
+
 \item{bold_header_rows}{(scalar \code{logical})\cr
 logical indicating whether to bold header rows. Default is \code{TRUE}}
 }
