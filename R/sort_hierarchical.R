@@ -221,7 +221,6 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   }
   x$table_body <- x$table_body |> dplyr::left_join(gps, by = names(gps) |> utils::head(-1))
 
-  # Make sure as_card runs BEFORE restoring attributes
   x_ard <- x_ard |>
     dplyr::ungroup() |>
     cards::as_card(check = FALSE)
