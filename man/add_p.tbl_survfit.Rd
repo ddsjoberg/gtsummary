@@ -93,7 +93,7 @@ gts_survfit |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other tbl_survfit tools: 
-\code{\link{add_nevent.tbl_survfit}()}
+Other tbl_survfit tools:
+\code{\link[=add_nevent.tbl_survfit]{add_nevent.tbl_survfit()}}
 }
 \concept{tbl_survfit tools}

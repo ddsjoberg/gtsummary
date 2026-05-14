@@ -86,8 +86,8 @@ lm(marker ~ age + grade, trial) |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other Advanced modifiers: 
-\code{\link{modify_indent}()},
-\code{\link{modify_table_styling}()}
+Other Advanced modifiers:
+\code{\link[=modify_indent]{modify_indent()}},
+\code{\link[=modify_table_styling]{modify_table_styling()}}
 }
 \concept{Advanced modifiers}

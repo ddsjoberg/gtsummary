@@ -26,6 +26,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr:reexports]{\%>\%}}, \code{\link[dplyr:reexports]{all_of}}, \code{\link[dplyr:reexports]{any_of}}, \code{\link[dplyr:reexports]{as_tibble}}, \code{\link[dplyr:reexports]{contains}}, \code{\link[dplyr:reexports]{ends_with}}, \code{\link[dplyr:reexports]{everything}}, \code{\link[dplyr:reexports]{last_col}}, \code{\link[dplyr:reexports]{matches}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr:reexports]{num_range}}, \code{\link[dplyr:reexports]{one_of}}, \code{\link[dplyr]{select}}, \code{\link[dplyr:reexports]{starts_with}}, \code{\link[dplyr]{vars}}, \code{\link[dplyr:reexports]{where}}}
+  \item{dplyr}{\code{\link[dplyr:\%>\%]{\%>\%}}, \code{\link[dplyr:all_of]{all_of}}, \code{\link[dplyr:any_of]{any_of}}, \code{\link[dplyr:as_tibble]{as_tibble}}, \code{\link[dplyr:contains]{contains}}, \code{\link[dplyr:ends_with]{ends_with}}, \code{\link[dplyr:everything]{everything}}, \code{\link[dplyr:last_col]{last_col}}, \code{\link[dplyr:matches]{matches}}, \code{\link[dplyr:mutate]{mutate()}}, \code{\link[dplyr:num_range]{num_range}}, \code{\link[dplyr:one_of]{one_of}}, \code{\link[dplyr:select]{select()}}, \code{\link[dplyr:starts_with]{starts_with}}, \code{\link[dplyr:vars]{vars()}}, \code{\link[dplyr:where]{where}}}
 }}
 
