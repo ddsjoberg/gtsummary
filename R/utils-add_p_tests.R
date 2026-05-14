@@ -430,8 +430,6 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   }
   # styler: on
 
-  browser()
-
   cardx::ard_emmeans_contrast(
     data = data,
     formula = formula,

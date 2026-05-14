@@ -164,7 +164,6 @@ add_difference.tbl_svysummary <- function(x,
   )
 
   # calculate tests ------------------------------------------------------------
-  browser()
   x <-
     calculate_and_add_test_results(
       x = x, include = include, group = group, test.args = test.args, adj.vars = adj.vars,
