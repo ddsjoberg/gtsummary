@@ -71,8 +71,6 @@ Adds difference to tables created by \code{\link[=tbl_summary]{tbl_summary()}}.
 The difference between two groups (typically mean or rate difference) is added
 to the table along with the difference's confidence interval and a p-value (when applicable).
 }
-<<<<<<< HEAD
-=======
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
@@ -85,4 +83,3 @@ survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   add_difference()
 \dontshow{\}) # examplesIf}
 }
->>>>>>> d76aeabdbaa9e269869f9ef4b1aba538df10c084
