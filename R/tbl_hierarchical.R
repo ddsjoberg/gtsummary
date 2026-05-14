@@ -317,6 +317,9 @@ internal_tbl_hierarchical <- function(data,
     statistic = NULL,
     overall_row = overall_row
   )
+  # save class attributes ------------------------------------------------------
+  orig_class <- class(cards)
+  orig_args <- attributes(cards)$args
 
   # apply digits ---------------------------------------------------------------
   cards <-
@@ -332,6 +335,10 @@ internal_tbl_hierarchical <- function(data,
       unmatched = "ignore"
     ) |>
     cards::apply_fmt_fun()
+
+  # restore class correct class attributes -------------------------------------
+  attr(cards, "args") <- orig_args
+  class(cards) <- orig_class
 
   # print all warnings and errors that occurred while calculating requested stats
   cards::print_ard_conditions(cards)
@@ -441,8 +448,9 @@ internal_tbl_hierarchical <- function(data,
 }
 
 .add_gts_column_to_cards_hierarchical <- function(cards, variables, by) {
-  args <- attributes(cards)$args
-
+  # save class attributes ------------------------------------------------------
+  orig_class <- class(cards)
+  orig_args <- attributes(cards)$args
   # adding the name of the column the stats will populate
   if (is_empty(by)) {
     cards$gts_column <-
@@ -466,8 +474,8 @@ internal_tbl_hierarchical <- function(data,
     dplyr::ungroup() |>
     cards::as_card(check = FALSE)
 
-  # re-add dropped args attribute
-  attr(cards, "args") <- args
-
+  # restore correct class attributes -------------------------------------------
+  attr(cards, "args") <- orig_args
+  class(cards) <- orig_class
   cards
 }

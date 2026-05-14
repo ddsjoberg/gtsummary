@@ -444,3 +444,44 @@ test_that("tbl_hierarchical table_body group variables are correct with no by", 
 
   expect_snapshot(as.data.frame(res$table_body))
 })
+
+test_that("filter_hierarchical() produces no warnings on tbl_hierarchical output", {
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(AEBODSYS %in% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                  "EAR AND LABYRINTH DISORDERS")) |>
+    dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
+  
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AEBODSYS, AEDECOD),
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID,
+    overall_row = TRUE
+  )
+  
+  # quiet = TRUE silences the standard informational message so we only test for actual warnings
+  expect_no_warning(
+    filter_hierarchical(tbl, abs(p_2 - p_3) > 0.03, quiet = TRUE)
+  )
+})
+
+test_that("sort_hierarchical() produces no warnings on tbl_hierarchical output", {
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(AEBODSYS %in% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                  "EAR AND LABYRINTH DISORDERS")) |>
+    dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
+  
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AEBODSYS, AEDECOD),
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID,
+    overall_row = TRUE
+  )
+  
+  expect_no_warning(
+    sort_hierarchical(tbl)
+  )
+})
