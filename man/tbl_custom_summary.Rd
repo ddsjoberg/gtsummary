@@ -127,7 +127,7 @@ encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, ...)} (see examples).
 
-The user-defined function should return a one row \code{\link[dplyr:reexports]{dplyr::tibble()}} with
+The user-defined function should return a one row \code{\link[dplyr:tibble]{dplyr::tibble()}} with
 one column per summary statistics (see examples).
 }
 
