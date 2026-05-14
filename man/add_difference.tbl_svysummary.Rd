@@ -73,5 +73,13 @@ to the table along with the difference's confidence interval and a p-value (when
 }
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
+Example 1 ----------------------------------
+survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+  tbl_svysummary(
+    by = Survived,
+    value = list(Class ~ "1st", Age = "Child"),
+    include = c(Class, Age)
+  ) |>
+  add_difference()
 \dontshow{\}) # examplesIf}
 }
