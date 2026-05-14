@@ -171,6 +171,10 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
 .reshape_ard_compare <- function(x, x_ard, ard_args, sort = NULL) {
   by_cols <- if (length(ard_args$by) > 0) c("group1", "group1_level") else NULL
 
+  # SAVE ALL ATTRIBUTES (NEW CODE)
+  orig_class <- class(x_ard)
+  orig_args <- attributes(x_ard)$args
+
   # add dummy rows for variables not in include so their label rows are sorted correctly
   x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort)
 
@@ -217,11 +221,14 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   }
   x$table_body <- x$table_body |> dplyr::left_join(gps, by = names(gps) |> utils::head(-1))
 
-  # re-add dropped args attribute
+  # Make sure as_card runs BEFORE restoring attributes
   x_ard <- x_ard |>
     dplyr::ungroup() |>
     cards::as_card(check = FALSE)
-  attr(x_ard, "args") <- ard_args
+  
+  # restore all custom attributes
+  class(x_ard) <- orig_class
+  attr(x_ard, "args") <- orig_args
 
   list(x = x, x_ard = x_ard)
 }
