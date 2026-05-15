@@ -25,6 +25,14 @@
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' # Example 1 ----------------------------------
+#' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+#'   tbl_svysummary(
+#'     by = Survived,
+#'     value = list(Class ~ "1st", Age = "Child"),
+#'     include = c(Class, Age)
+#'   ) |>
+#'   add_difference()
 add_difference.tbl_svysummary <- function(x,
                                           test = NULL,
                                           group = NULL,

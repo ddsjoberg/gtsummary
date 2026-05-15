@@ -8,6 +8,8 @@
 
 * Improved efficiency of `style_number()`. There is a slight change to a small subset of rounded values. For example, the difference between two dates was previously formatted to `'0 days'`, and now it is formatted to `'0'`.
 
+* Fixed bug in `tbl_hierarchical()`, `filter_hierarchical()` and `sort_hierarchical()` that was dropping class attributes. (#2397, @jszczypinski ) 
+
 # gtsummary 2.5.0
 
 ### New Features and Functions

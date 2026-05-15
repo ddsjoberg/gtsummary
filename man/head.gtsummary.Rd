@@ -13,9 +13,9 @@
 \item{x}{A \code{gtsummary} object.}
 
 \item{n}{Number of rows to return. Default is \code{6L} as default in \code{\link[utils:head]{utils::head()}} and
-\code{\link[utils:head]{utils::tail()}}.}
+\code{\link[utils:tail]{utils::tail()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[utils:head]{utils::head()}} or \code{\link[utils:head]{utils::tail()}}.}
+\item{...}{Additional arguments passed to \code{\link[utils:head]{utils::head()}} or \code{\link[utils:tail]{utils::tail()}}.}
 }
 \value{
 A \code{gtsummary} object with only the first or last \code{n} rows in \code{table_body}.

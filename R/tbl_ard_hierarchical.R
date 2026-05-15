@@ -105,13 +105,16 @@ tbl_ard_hierarchical <- function(cards,
   )[c(variables, if ("overall" %in% names(label)) "overall")]
 
   # add hierarchical ARD args attribute and sort if not directly using a hierarchical ARD
-  if (!"args" %in% names(attributes(cards))) {
+  if (!inherits(cards, c("ard_stack_hierarchical", "ard_stack_hierarchical_count"))) {
     attr(cards, "args") <- list(
       by = by,
       variables = variables,
       include = include
     )
-    cards <- cards |> cards::sort_ard_hierarchical("alphanumeric")
+    cards <-
+      suppressWarnings( # suppressing warning about class
+        cards |> cards::sort_ard_hierarchical("alphanumeric")
+      )
   }
 
   brdg_hierarchical(
