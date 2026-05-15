@@ -36,6 +36,7 @@ the model results if needed.
 Before going through the tutorial, install and load {gtsummary}.
 
 ``` r
+
 # install.packages("gtsummary")
 library(gtsummary)
 ```
@@ -59,17 +60,17 @@ data set which is included in the {gtsummary} package.
   data frame without labels will simply print variable names, or there
   is an option to add labels later.
 
-| Variable                                                           | Class     | Label                  |
-|--------------------------------------------------------------------|-----------|------------------------|
-| `trt`                                                              | character | Chemotherapy Treatment |
-| `age`                                                              | numeric   | Age                    |
-| `marker`                                                           | numeric   | Marker Level (ng/mL)   |
-| `stage`                                                            | factor    | T Stage                |
-| `grade`                                                            | factor    | Grade                  |
-| `response`                                                         | integer   | Tumor Response         |
-| `death`                                                            | integer   | Patient Died           |
-| `ttdeath`                                                          | numeric   | Months to Death/Censor |
-| Includes mix of continuous, dichotomous, and categorical variables |           |                        |
+| Variable | Class | Label |
+|----|----|----|
+| `trt` | character | Chemotherapy Treatment |
+| `age` | numeric | Age |
+| `marker` | numeric | Marker Level (ng/mL) |
+| `stage` | factor | T Stage |
+| `grade` | factor | Grade |
+| `response` | integer | Tumor Response |
+| `death` | integer | Patient Died |
+| `ttdeath` | numeric | Months to Death/Censor |
+| Includes mix of continuous, dichotomous, and categorical variables |  |  |
 
 ## Basic Usage
 
@@ -83,6 +84,7 @@ is meant to be publication ready.
   data set.
 
 ``` r
+
 # build logistic regression model
 m1 <- glm(response ~ age + stage, trial, family = binomial)
 
@@ -100,6 +102,7 @@ summary(m1)$coefficients
   these results in just one line of code from {gtsummary}.
 
 ``` r
+
 tbl_regression(m1, exponentiate = TRUE)
 ```
 
@@ -143,17 +146,17 @@ The
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)
 function includes many arguments for modifying the appearance.
 
-| Argument          | Description                                                                                                                                                                                       |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `label`           | modify variable labels in table                                                                                                                                                                   |
-| `exponentiate`    | exponentiate model coefficients                                                                                                                                                                   |
-| `include`         | names of variables to include in output. Default is all variables                                                                                                                                 |
+| Argument | Description |
+|----|----|
+| `label` | modify variable labels in table |
+| `exponentiate` | exponentiate model coefficients |
+| `include` | names of variables to include in output. Default is all variables |
 | `show_single_row` | By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here. |
-| `conf.level`      | confidence level of confidence interval                                                                                                                                                           |
-| `intercept`       | indicates whether to include the intercept                                                                                                                                                        |
-| `estimate_fun`    | function to round and format coefficient estimates                                                                                                                                                |
-| `pvalue_fun`      | function to round and format p-values                                                                                                                                                             |
-| `tidy_fun`        | function to specify/customize tidier function                                                                                                                                                     |
+| `conf.level` | confidence level of confidence interval |
+| `intercept` | indicates whether to include the intercept |
+| `estimate_fun` | function to round and format coefficient estimates |
+| `pvalue_fun` | function to round and format p-values |
+| `tidy_fun` | function to specify/customize tidier function |
 
 ### {gtsummary} functions to add information
 
@@ -163,30 +166,30 @@ from
 The following functions add columns and/or information to the regression
 table.
 
-| Function                                                                                           | Description                                                  |
-|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| [`add_global_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_global_p.md)         | adds the global p-value for a categorical variables          |
-| [`add_glance_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_glance.md) | adds statistics from \`broom::glance()\` as source note      |
-| [`add_vif()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_vif.md)                   | adds column of the variance inflation factors (VIF)          |
-| [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)                       | add a column of q values to control for multiple comparisons |
+| Function | Description |
+|----|----|
+| [`add_global_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_global_p.md) | adds the global p-value for a categorical variables |
+| [`add_glance_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_glance.md) | adds statistics from \`broom::glance()\` as source note |
+| [`add_vif()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_vif.md) | adds column of the variance inflation factors (VIF) |
+| [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md) | add a column of q values to control for multiple comparisons |
 
 ### {gtsummary} functions to format table
 
 The {gtsummary} package comes with functions specifically made to modify
 and format summary tables.
 
-| Function                                                                                                       | Description                   |
-|----------------------------------------------------------------------------------------------------------------|-------------------------------|
-| [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)                          | update column headers         |
-| [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)       | update column header footnote |
-| [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)         | update table body footnote    |
-| [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)                 | update spanning headers       |
-| [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md)                 | update table caption/title    |
-| [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)      | bold variable labels          |
-| [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)      | bold variable levels          |
-| [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable labels     |
-| [`italicize_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable levels     |
-| [`bold_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_p.md)                                 | bold significant p-values     |
+| Function | Description |
+|----|----|
+| [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) | update column headers |
+| [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md) | update column header footnote |
+| [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md) | update table body footnote |
+| [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) | update spanning headers |
+| [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md) | update table caption/title |
+| [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | bold variable labels |
+| [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | bold variable levels |
+| [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable labels |
+| [`italicize_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable levels |
+| [`bold_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_p.md) | bold significant p-values |
 
 ### {gt} functions to format table
 
@@ -202,6 +205,7 @@ function after modifications have been completed with {gtsummary}
 functions.
 
 ``` r
+
 m1 |>
   tbl_regression(exponentiate = TRUE) |>
   as_gt() |>
@@ -221,6 +225,7 @@ rounded to **two decimal places**
 - Variable levels are **italicized**
 
 ``` r
+
 # format results into data frame with global p-values
 m1 |>
   tbl_regression(
@@ -247,6 +252,7 @@ function’s results can be modified in similar ways to
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md).
 
 ``` r
+
 trial |>
   tbl_uvregression(
     method = glm,
@@ -287,54 +293,54 @@ Below is a listing of known and tested models supported by
 If a model follows a standard format and has a tidier, it’s likely to be
 supported as well, even if not listed below.
 
-| Model                                                                           | Details                                                                                                                                                                                                                                                                     |
-|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `betareg::betareg()`                                                            | Use `tidy_parameters()` as `tidy_fun` with `component` argument to control with coefficients to return. [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) does not support the `exponentiate` argument for betareg models, use `tidy_parameters()` instead. |
-| `biglm::bigglm()`                                                               |                                                                                                                                                                                                                                                                             |
-| `brms::brm()`                                                                   | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| [`cmprsk::crr()`](https://rdrr.io/pkg/cmprsk/man/crr.html)                      | Limited support. It is recommended to use `tidycmprsk::crr()` instead.                                                                                                                                                                                                      |
-| `fixest::feglm()`                                                               | May fail with R \<= 4.0.                                                                                                                                                                                                                                                    |
-| `fixest::femlm()`                                                               | May fail with R \<= 4.0.                                                                                                                                                                                                                                                    |
-| `fixest::feNmlm()`                                                              | May fail with R \<= 4.0.                                                                                                                                                                                                                                                    |
-| `fixest::feols()`                                                               | May fail with R \<= 4.0.                                                                                                                                                                                                                                                    |
-| `gam::gam()`                                                                    |                                                                                                                                                                                                                                                                             |
-| [`geepack::geeglm()`](https://rdrr.io/pkg/geepack/man/geeglm.html)              |                                                                                                                                                                                                                                                                             |
-| `glmmTMB::glmmTMB()`                                                            | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| `glmtoolbox::glmgee()`                                                          |                                                                                                                                                                                                                                                                             |
-| `lavaan::lavaan()`                                                              | Limited support for categorical variables                                                                                                                                                                                                                                   |
-| `lfe::felm()`                                                                   |                                                                                                                                                                                                                                                                             |
-| [`lme4::glmer.nb()`](https://rdrr.io/pkg/lme4/man/glmer.nb.html)                | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html)                      | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html)                        | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| `logitr::logitr()`                                                              | Requires logitr \>= 0.8.0                                                                                                                                                                                                                                                   |
-| [`MASS::glm.nb()`](https://rdrr.io/pkg/MASS/man/glm.nb.html)                    |                                                                                                                                                                                                                                                                             |
-| [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html)                        |                                                                                                                                                                                                                                                                             |
-| [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html)                          | Use default tidier [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) for smooth terms only, or [`gtsummary::tidy_gam()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md) to include parametric terms                              |
-| [`mice::mira`](https://amices.org/mice/reference/mira.html)                     | Limited support. If `mod` is a `mira` object, use `tidy_fun = function(x, ...) {mice::pool(x) |> mice::tidy(...)}`                                                                                                                                                          |
-| `mmrm::mmrm()`                                                                  |                                                                                                                                                                                                                                                                             |
-| `multgee::nomLORgee()`                                                          | Use `tidy_multgee()` as `tidy_fun`.                                                                                                                                                                                                                                         |
-| `multgee::ordLORgee()`                                                          | Use `tidy_multgee()` as `tidy_fun`.                                                                                                                                                                                                                                         |
-| [`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html)                |                                                                                                                                                                                                                                                                             |
-| [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html)                    | Limited support for models with nominal predictors.                                                                                                                                                                                                                         |
-| [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html)                  | Limited support for models with nominal predictors.                                                                                                                                                                                                                         |
-| [`parsnip::model_fit`](https://parsnip.tidymodels.org/reference/model_fit.html) | Supported as long as the type of model and the engine is supported.                                                                                                                                                                                                         |
-| `plm::plm()`                                                                    |                                                                                                                                                                                                                                                                             |
-| `pscl::hurdle()`                                                                | Use `tidy_zeroinfl()` as `tidy_fun`.                                                                                                                                                                                                                                        |
-| `pscl::zeroinfl()`                                                              | Use `tidy_zeroinfl()` as `tidy_fun`.                                                                                                                                                                                                                                        |
-| [`quantreg::rq()`](https://rdrr.io/pkg/quantreg/man/rq.html)                    | If several quantiles are estimated, use `tidy_with_broom_or_parameters()` tidier, the default tidier used by `tidy_plus_plus()`.                                                                                                                                            |
-| `rstanarm::stan_glm()`                                                          | `broom.mixed` package required                                                                                                                                                                                                                                              |
-| [`stats::aov()`](https://rdrr.io/r/stats/aov.html)                              | Reference rows are not relevant for such models.                                                                                                                                                                                                                            |
-| [`stats::glm()`](https://rdrr.io/r/stats/glm.html)                              |                                                                                                                                                                                                                                                                             |
-| [`stats::lm()`](https://rdrr.io/r/stats/lm.html)                                |                                                                                                                                                                                                                                                                             |
-| [`stats::nls()`](https://rdrr.io/r/stats/nls.html)                              | Limited support                                                                                                                                                                                                                                                             |
-| [`survey::svycoxph()`](https://rdrr.io/pkg/survey/man/svycoxph.html)            |                                                                                                                                                                                                                                                                             |
-| [`survey::svyglm()`](https://rdrr.io/pkg/survey/man/svyglm.html)                |                                                                                                                                                                                                                                                                             |
-| [`survey::svyolr()`](https://rdrr.io/pkg/survey/man/svyolr.html)                |                                                                                                                                                                                                                                                                             |
-| [`survival::cch()`](https://rdrr.io/pkg/survival/man/cch.html)                  | Experimental support.                                                                                                                                                                                                                                                       |
-| [`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html)            |                                                                                                                                                                                                                                                                             |
-| [`survival::coxph()`](https://rdrr.io/pkg/survival/man/coxph.html)              |                                                                                                                                                                                                                                                                             |
-| [`survival::survreg()`](https://rdrr.io/pkg/survival/man/survreg.html)          |                                                                                                                                                                                                                                                                             |
-| `svyVGAM::svy_vglm()`                                                           | Experimental support. It is recommended to use `tidy_svy_vglm()` as `tidy_fun`.                                                                                                                                                                                             |
-| `tidycmprsk::crr()`                                                             |                                                                                                                                                                                                                                                                             |
-| `VGAM::vgam()`                                                                  | Experimental support. It is recommended to use `tidy_vgam()` as `tidy_fun`.                                                                                                                                                                                                 |
-| `VGAM::vglm()`                                                                  | Experimental support. It is recommended to use `tidy_vgam()` as `tidy_fun`.                                                                                                                                                                                                 |
+| Model | Details |
+|----|----|
+| `betareg::betareg()` | Use `tidy_parameters()` as `tidy_fun` with `component` argument to control with coefficients to return. [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) does not support the `exponentiate` argument for betareg models, use `tidy_parameters()` instead. |
+| `biglm::bigglm()` |  |
+| `brms::brm()` | `broom.mixed` package required |
+| [`cmprsk::crr()`](https://rdrr.io/pkg/cmprsk/man/crr.html) | Limited support. It is recommended to use `tidycmprsk::crr()` instead. |
+| `fixest::feglm()` | May fail with R \<= 4.0. |
+| `fixest::femlm()` | May fail with R \<= 4.0. |
+| `fixest::feNmlm()` | May fail with R \<= 4.0. |
+| `fixest::feols()` | May fail with R \<= 4.0. |
+| `gam::gam()` |  |
+| [`geepack::geeglm()`](https://rdrr.io/pkg/geepack/man/geeglm.html) |  |
+| `glmmTMB::glmmTMB()` | `broom.mixed` package required |
+| `glmtoolbox::glmgee()` |  |
+| `lavaan::lavaan()` | Limited support for categorical variables |
+| `lfe::felm()` |  |
+| [`lme4::glmer.nb()`](https://rdrr.io/pkg/lme4/man/glmer.nb.html) | `broom.mixed` package required |
+| [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html) | `broom.mixed` package required |
+| [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) | `broom.mixed` package required |
+| `logitr::logitr()` | Requires logitr \>= 0.8.0 |
+| [`MASS::glm.nb()`](https://rdrr.io/pkg/MASS/man/glm.nb.html) |  |
+| [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) |  |
+| [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html) | Use default tidier [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) for smooth terms only, or [`gtsummary::tidy_gam()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/custom_tidiers.md) to include parametric terms |
+| [`mice::mira`](https://amices.org/mice/reference/mira.html) | Limited support. If `mod` is a `mira` object, use `tidy_fun = function(x, ...) {mice::pool(x) |> mice::tidy(...)}` |
+| `mmrm::mmrm()` |  |
+| `multgee::nomLORgee()` | Use `tidy_multgee()` as `tidy_fun`. |
+| `multgee::ordLORgee()` | Use `tidy_multgee()` as `tidy_fun`. |
+| [`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html) |  |
+| [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) | Limited support for models with nominal predictors. |
+| [`ordinal::clmm()`](https://rdrr.io/pkg/ordinal/man/clmm.html) | Limited support for models with nominal predictors. |
+| [`parsnip::model_fit`](https://parsnip.tidymodels.org/reference/model_fit.html) | Supported as long as the type of model and the engine is supported. |
+| `plm::plm()` |  |
+| `pscl::hurdle()` | Use `tidy_zeroinfl()` as `tidy_fun`. |
+| `pscl::zeroinfl()` | Use `tidy_zeroinfl()` as `tidy_fun`. |
+| [`quantreg::rq()`](https://rdrr.io/pkg/quantreg/man/rq.html) | If several quantiles are estimated, use `tidy_with_broom_or_parameters()` tidier, the default tidier used by `tidy_plus_plus()`. |
+| `rstanarm::stan_glm()` | `broom.mixed` package required |
+| [`stats::aov()`](https://rdrr.io/r/stats/aov.html) | Reference rows are not relevant for such models. |
+| [`stats::glm()`](https://rdrr.io/r/stats/glm.html) |  |
+| [`stats::lm()`](https://rdrr.io/r/stats/lm.html) |  |
+| [`stats::nls()`](https://rdrr.io/r/stats/nls.html) | Limited support |
+| [`survey::svycoxph()`](https://rdrr.io/pkg/survey/man/svycoxph.html) |  |
+| [`survey::svyglm()`](https://rdrr.io/pkg/survey/man/svyglm.html) |  |
+| [`survey::svyolr()`](https://rdrr.io/pkg/survey/man/svyolr.html) |  |
+| [`survival::cch()`](https://rdrr.io/pkg/survival/man/cch.html) | Experimental support. |
+| [`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) |  |
+| [`survival::coxph()`](https://rdrr.io/pkg/survival/man/coxph.html) |  |
+| [`survival::survreg()`](https://rdrr.io/pkg/survival/man/survreg.html) |  |
+| `svyVGAM::svy_vglm()` | Experimental support. It is recommended to use `tidy_svy_vglm()` as `tidy_fun`. |
+| `tidycmprsk::crr()` |  |
+| `VGAM::vgam()` | Experimental support. It is recommended to use `tidy_vgam()` as `tidy_fun`. |
+| `VGAM::vglm()` | Experimental support. It is recommended to use `tidy_vgam()` as `tidy_fun`. |

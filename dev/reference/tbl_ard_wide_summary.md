@@ -93,23 +93,3 @@ ard_stack(
 
 Characteristic
 ```
-
-**Median**
-
-**Q1, Q3**
-
-Age
-
-47.0
-
-38.0, 57.0
-
-[ard_stack](https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html)(
-trial,
-[ard_tabulate_value](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)(variables
-= response),
-[ard_tabulate](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)(variables
-= grade), .missing = TRUE, .attributes = TRUE, .total_n = TRUE ) \|\>
-tbl_ard_wide_summary()
-
-[TABLE]

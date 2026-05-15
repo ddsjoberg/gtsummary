@@ -54,35 +54,3 @@ lm(marker ~ trt, data = trial) |>
 
 Characteristic
 ```
-
-**Beta**
-
-**95% CI**
-
-**p-value**
-
-Chemotherapy Treatment
-
-  
-
-  
-
-  
-
-    Drug A
-
-Ref.
-
-Ref.
-
-  
-
-    Drug B
-
--0.20
-
--0.44, 0.05
-
-0.12
-
-Abbreviation: CI = Confidence Interval

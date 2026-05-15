@@ -21,6 +21,7 @@ We begin by creating two common {gtsummary} tables to be used as
 illustrative examples.
 
 ``` r
+
 library(gtsummary)
 
 tbl_regression_ex <-
@@ -51,6 +52,7 @@ columns `"label"`, `"row_type"`, and `"variable"`. The `"label"` column
 is printed, and the other two are hidden from the final output.
 
 ``` r
+
 tbl_summary_ex$table_body
 #> # A tibble: 8 × 7
 #>   variable var_type    row_type var_label      label          stat_1      stat_2
@@ -81,42 +83,42 @@ The `header` table has the following columns and is one row per column
 found in `.$table_body`. The table contains styling information that
 applies to entire column or the columns headers.
 
-| Column                | Description                                                                                                                                                                                                                            |
-|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| column                | Column name from `.$table_body`                                                                                                                                                                                                        |
-| hide                  | Logical indicating whether the column is hidden in the output. This column is also scoped in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and friends) to be used in a selecting environment |
-| align                 | Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’                                                                                                                                                           |
-| label                 | Label that will be displayed (if column is displayed in output)                                                                                                                                                                        |
-| interpret_label       | the {gt} function that is used to interpret the column label, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html)                                                     |
-| modify_stat\_{\*}     | any column beginning with `modify_stat_` is a statistic available to report in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and others)                                                      |
-| modify_selector\_{\*} | any column beginning with `modify_selector_` is a column that is scoped in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and friends) to be used in a selecting environment                   |
+| Column | Description |
+|----|----|
+| column | Column name from `.$table_body` |
+| hide | Logical indicating whether the column is hidden in the output. This column is also scoped in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and friends) to be used in a selecting environment |
+| align | Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’ |
+| label | Label that will be displayed (if column is displayed in output) |
+| interpret_label | the {gt} function that is used to interpret the column label, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
+| modify_stat\_{\*} | any column beginning with `modify_stat_` is a statistic available to report in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and others) |
+| modify_selector\_{\*} | any column beginning with `modify_selector_` is a column that is scoped in [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) (and friends) to be used in a selecting environment |
 
 **`footnote_header`**
 
 Each {gtsummary} table may contain footnotes in the column headers.
 Updates/changes to footnote are appended to the bottom of the tibble.
 
-| Column         | Description                                                                                                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| column         | Column name from `.$table_body`                                                                                                                                                   |
-| footnote       | string containing footnote to add to column/row                                                                                                                                   |
+| Column | Description |
+|----|----|
+| column | Column name from `.$table_body` |
+| footnote | string containing footnote to add to column/row |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
-| replace        | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)                                           |
-| remove         | logical indicating whether to remove all footnotes in the column header                                                                                                           |
+| replace | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE) |
+| remove | logical indicating whether to remove all footnotes in the column header |
 
 **`footnote_body`**
 
 Each {gtsummary} table may include footnotes in the body of the table.
 Updates/changes to footnote are appended to the bottom of the tibble.
 
-| Column         | Description                                                                                                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| column         | Column name from `.$table_body`                                                                                                                                                   |
-| rows           | expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header                                                                                             |
-| footnote       | string containing footnote to add to column/row                                                                                                                                   |
+| Column | Description |
+|----|----|
+| column | Column name from `.$table_body` |
+| rows | expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header |
+| footnote | string containing footnote to add to column/row |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
-| replace        | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)                                           |
-| remove         | logical indicating whether to remove all footnotes in the column header                                                                                                           |
+| replace | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE) |
+| remove | logical indicating whether to remove all footnotes in the column header |
 
 **`footnote_spanning_header`**
 
@@ -124,24 +126,24 @@ Each {gtsummary} table may include footnotes in the spanning headers of
 the table. Updates/changes to footnote are appended to the bottom of the
 tibble.
 
-| Column         | Description                                                                                                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| level          | Integer specifying the spanning header level, similar to `gt::tab_spanner(level)`                                                                                                 |
-| column         | Column name from `.$table_body`                                                                                                                                                   |
-| footnote       | string containing footnote to add to column/row                                                                                                                                   |
+| Column | Description |
+|----|----|
+| level | Integer specifying the spanning header level, similar to `gt::tab_spanner(level)` |
+| column | Column name from `.$table_body` |
+| footnote | string containing footnote to add to column/row |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
-| replace        | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE)                                           |
-| remove         | logical indicating whether to remove all footnotes in the column header                                                                                                           |
+| replace | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE) |
+| remove | logical indicating whether to remove all footnotes in the column header |
 
 **`abbreviation`**
 
 Abbreviations are added one at a time, and at the time of table
 rendering, they are coalesced into a single source note.
 
-| Column         | Description                                                                                                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| column         | Optional column name from `.$table_body`. When present, the abbreviation is only printed when the column appears in the rendered table                                            |
-| abbreviation   | string containing the abbreviation to add                                                                                                                                         |
+| Column | Description |
+|----|----|
+| column | Optional column name from `.$table_body`. When present, the abbreviation is only printed when the column appears in the rendered table |
+| abbreviation | string containing the abbreviation to add |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
 
 **`source_note`**
@@ -151,12 +153,12 @@ an ID based on the order it is added to the table. Source notes are
 added one at a time and present much like footnotes, but are not linked
 to a header or cell in the table.
 
-| Column         | Description                                                                                                                                                                       |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| id             | Integer idenitfying the source note                                                                                                                                               |
-| source_note    | string containing the abbreviation to add                                                                                                                                         |
+| Column | Description |
+|----|----|
+| id | Integer idenitfying the source note |
+| source_note | string containing the abbreviation to add |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
-| remove         | logical indicating whether the source note should be included or removed from final table                                                                                         |
+| remove | logical indicating whether the source note should be included or removed from final table |
 
 **`fmt_fun`**
 
@@ -176,11 +178,11 @@ Columns/rows are styled with bold, italic, or indenting stored in
 `text_format`. Updates/changes to styling functions are appended to the
 bottom of the tibble.
 
-| Column           | Description                                                                 |
-|------------------|-----------------------------------------------------------------------------|
-| column           | Column name from `.$table_body`                                             |
-| rows             | expression selecting rows in `.$table_body`                                 |
-| format_type      | one of `c('bold', 'italic', 'indent')`                                      |
+| Column | Description |
+|----|----|
+| column | Column name from `.$table_body` |
+| rows | expression selecting rows in `.$table_body` |
+| format_type | one of `c('bold', 'italic', 'indent')` |
 | undo_text_format | logical indicating where the formatting indicated should be undone/removed. |
 
 **`fmt_missing`**
@@ -208,10 +210,10 @@ will be updated after
 [`gt::cols_label()`](https://gt.rstudio.com/reference/cols_label.html)
 gains a `rows=` argument.
 
-| Column  | Description                                                                                                            |
-|---------|------------------------------------------------------------------------------------------------------------------------|
-| column  | Column name from `.$table_body`                                                                                        |
-| rows    | expression selecting rows in `.$table_body`                                                                            |
+| Column | Description |
+|----|----|
+| column | Column name from `.$table_body` |
+| rows | expression selecting rows in `.$table_body` |
 | pattern | glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in ‘column’. |
 
 **`caption`**
@@ -228,6 +230,7 @@ Example from
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)
 
 ``` r
+
 tbl_regression_ex$table_styling
 #> $header
 #> # A tibble: 24 × 6
@@ -340,6 +343,7 @@ family of functions, and merging {gtsummary} tables with
 [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md).
 
 ``` r
+
 tbl_regression_ex %>%
   getElement("table_body") %>%
   select(variable, row_type, label)
@@ -410,6 +414,7 @@ While the actual print function is slightly more involved, it is
 basically this:
 
 ``` r
+
 print.gtsummary <- function(x) {
   get_theme_element("pkgwide-str:print_engine") %>%
     switch(
@@ -434,6 +439,7 @@ format them, and more. See the {cards} package documentation for
 details.
 
 ``` r
+
 tbl_summary_ex$cards[["tbl_summary"]]
 #> {cards} data frame: 76 x 12
 #>    group1 group1_level variable variable_level stat_name stat_label  stat

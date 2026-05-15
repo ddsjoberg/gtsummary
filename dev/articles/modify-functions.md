@@ -1,6 +1,7 @@
 # Modifier Functions
 
 ``` r
+
 library(gtsummary)
 theme_gtsummary_compact()
 #> Setting theme "Compact"
@@ -35,6 +36,7 @@ In the following sections, we will showcase how to use a variety of
 table modifier functions by applying them to this basic table.
 
 ``` r
+
 x <- trial |>
   tbl_summary(
     by = trt,
@@ -64,6 +66,7 @@ predicate expression, as demonstrated in several of the following
 examples.
 
 ``` r
+
 show_header_names(x, show_hidden = TRUE)
 #> Column Name   Header                    level*         N*          n*          p*             
 #> variable†     "variable"                               200 <int>                              
@@ -102,6 +105,7 @@ For each of these functions the column(s) on which to operate must be
 specified via the `columns` argument.
 
 ``` r
+
 x |>
   # unhide the standard error column
   modify_column_unhide(columns = std.error) |>
@@ -139,6 +143,7 @@ function will undo column merging that was previously specified via
 [`modify_column_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_column_merge.md).
 
 ``` r
+
 x |>
   # merge the estimate and p.value columns in rows with non-NA p.value
   modify_column_merge(pattern = "{estimate} (p = {p.value})", rows = !is.na(p.value))
@@ -175,6 +180,7 @@ If both `columns` and `rows` are specified (and not
 indentation will be applied to specific cells in the table.
 
 ``` r
+
 x |>
   # remove indentation across the label column
   modify_indent(columns = label, indent = 0L) |>
@@ -204,6 +210,7 @@ default, but cell locations can be specified if needed via the `columns`
 and `rows` arguments.
 
 ``` r
+
 x |>
   # bold contents of label column in label rows
   modify_bold(columns = label, rows = row_type == "label") |>
@@ -250,6 +257,7 @@ The function can be called consecutively if different row subsets should
 be updated in each column.
 
 ``` r
+
 x |>
   # update missing value symbol from '' to 'NA' for the p.value column in label rows
   modify_missing_symbol(symbol = "<NA>", columns = p.value, rows = row_type == "label") |>
@@ -281,6 +289,7 @@ See the function documentation for details on the customization options
 available when modifying headers.
 
 ``` r
+
 x |>
   # update header for the estimate column, remove header from label column
   modify_header(
@@ -324,6 +333,7 @@ table part by default.
 See the function documentation for custom footnote removal options.
 
 ``` r
+
 x |>
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received (N = {N})**") |>
   # add footnote associated with the grade label within the label column
@@ -380,6 +390,7 @@ by all table engines.
 See the individual function documentation for details.
 
 ``` r
+
 x |>
   modify_source_note("Results as of June 26, 2015") |>
   modify_abbreviation("I = Grade 1")

@@ -1,6 +1,7 @@
 # ARD-first Tables
 
 ``` r
+
 library(gtsummary)
 library(cards)
 theme_gtsummary_compact()
@@ -43,6 +44,7 @@ Begin by building the summary table with
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md).
 
 ``` r
+
 tbl_demo <-
   ADSL |> 
   dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))) |> 
@@ -65,6 +67,7 @@ tbl_demo
 Now that we have a summary table, we can extract and save the ARD.
 
 ``` r
+
 gather_ard(tbl_demo) |> bind_ard()
 #> ℹ 8 rows with duplicated statistic values have been removed.
 #> • See cards::bind_ard(.distinct) (`?cards::bind_ard()`) for details.
@@ -94,6 +97,7 @@ we use
 [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md).
 
 ``` r
+
 tbl_ae <-
   ADAE |>
   # filter the data frame to print fewer AEs
@@ -118,6 +122,7 @@ tbl_ae
 [TABLE]
 
 ``` r
+
 
 # return ARDs
 gather_ard(tbl_ae) |> bind_ard()
@@ -214,6 +219,7 @@ to simultaneously build these summaries along with optional ancillary
 results for a nicer display.
 
 ``` r
+
 ard_demo <-
   ADSL |> 
   dplyr::mutate(AGEGR1 = factor(AGEGR1, levels = c("<65", "65-80", ">80"))) |> 
@@ -260,6 +266,7 @@ After the ARD has been created, we can now create the summary table with
 [`tbl_ard_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_summary.md).
 
 ``` r
+
 ard_demo |> 
   tbl_ard_summary(
     by = ARM, 
@@ -289,6 +296,7 @@ them with
 [`cards::bind_ard()`](https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html).
 
 ``` r
+
 # ARD with the Kaplan-Meier survival estimates
 ard_survival <-
   trial |> 
@@ -345,6 +353,7 @@ results above.
 With the created ARD, we can now build a summary table.
 
 ``` r
+
 ard_outcomes |> 
   tbl_ard_summary(
     by = trt, 

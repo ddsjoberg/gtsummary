@@ -24,6 +24,15 @@
   example, the difference between two dates was previously formatted to
   `'0 days'`, and now it is formatted to `'0'`.
 
+- Fixed bug in
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
+  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  and
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  that was dropping class attributes.
+  ([\#2397](https://github.com/ddsjoberg/gtsummary/issues/2397),
+  [@jszczypinski](https://github.com/jszczypinski) )
+
 ## gtsummary 2.5.0
 
 CRAN release: 2025-12-05
@@ -1458,6 +1467,7 @@ CRAN release: 2022-12-06
   the overall column and the stratified columns:
 
   ``` r
+
   trial %>%
     tbl_summary(by = trt) %>%
     add_overall() %>%
@@ -4081,6 +4091,7 @@ CRAN release: 2019-08-19
   version
 
 ``` r
+
     bold_p()            <-  tab_style_bold_p()  
     bold_labels()       <-  tab_style_bold_labels()  
     bold_levels()       <-  tab_style_bold_levels()  
@@ -4173,6 +4184,7 @@ also been updated. Review documentation and vignettes for details.
 #### Updated Function Names
 
 ``` r
+
     tbl_summary()       <-  fmt_table1()  
     tbl_regression()    <-  fmt_regression()  
     tbl_uvregression()  <-  fmt_uni_regression()  

@@ -19,6 +19,7 @@ additions to an existing table summary object.
 Before going through the tutorial, install and load {gtsummary}.
 
 ``` r
+
 # install.packages("gtsummary")
 library(gtsummary)
 ```
@@ -41,19 +42,20 @@ data set throughout this example.
   print variable names in place of variable labels; there is also an
   option to add labels later.
 
-| Variable                                                           | Class     | Label                  |
-|--------------------------------------------------------------------|-----------|------------------------|
-| `trt`                                                              | character | Chemotherapy Treatment |
-| `age`                                                              | numeric   | Age                    |
-| `marker`                                                           | numeric   | Marker Level (ng/mL)   |
-| `stage`                                                            | factor    | T Stage                |
-| `grade`                                                            | factor    | Grade                  |
-| `response`                                                         | integer   | Tumor Response         |
-| `death`                                                            | integer   | Patient Died           |
-| `ttdeath`                                                          | numeric   | Months to Death/Censor |
-| Includes mix of continuous, dichotomous, and categorical variables |           |                        |
+| Variable | Class | Label |
+|----|----|----|
+| `trt` | character | Chemotherapy Treatment |
+| `age` | numeric | Age |
+| `marker` | numeric | Marker Level (ng/mL) |
+| `stage` | factor | T Stage |
+| `grade` | factor | Grade |
+| `response` | integer | Tumor Response |
+| `death` | integer | Patient Died |
+| `ttdeath` | numeric | Months to Death/Censor |
+| Includes mix of continuous, dichotomous, and categorical variables |  |  |
 
 ``` r
+
 head(trial)
 #> # A tibble: 6 × 8
 #>   trt      age marker stage grade response death ttdeath
@@ -79,6 +81,7 @@ function can take, at minimum, a data frame as the only input, and
 returns descriptive statistics for each column in the data frame.
 
 ``` r
+
 trial |> tbl_summary(include = c(trt, age, grade))
 ```
 
@@ -104,6 +107,7 @@ with the function call, which detects variable type and uses an
 appropriate statistical test.
 
 ``` r
+
 trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   add_p()
@@ -130,24 +134,25 @@ The
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
 function includes many input options for modifying the appearance.
 
-| Argument       | Description                                                      |
-|----------------|------------------------------------------------------------------|
-| `label`        | specify the variable labels printed in table                     |
-| `type`         | specify the variable type (e.g. continuous, categorical, etc.)   |
-| `statistic`    | change the summary statistics presented                          |
-| `digits`       | number of digits the summary statistics will be rounded to       |
-| `missing`      | whether to display a row with the number of missing observations |
-| `missing_text` | text label for the missing number row                            |
-| `missing_stat` | statistic(s) to show on the missing row                          |
-| `sort`         | change the sorting of categorical levels by frequency            |
-| `percent`      | print column, row, or cell percentages                           |
-| `include`      | list of variables to include in summary table                    |
+| Argument | Description |
+|----|----|
+| `label` | specify the variable labels printed in table |
+| `type` | specify the variable type (e.g. continuous, categorical, etc.) |
+| `statistic` | change the summary statistics presented |
+| `digits` | number of digits the summary statistics will be rounded to |
+| `missing` | whether to display a row with the number of missing observations |
+| `missing_text` | text label for the missing number row |
+| `missing_stat` | statistic(s) to show on the missing row |
+| `sort` | change the sorting of categorical levels by frequency |
+| `percent` | print column, row, or cell percentages |
+| `include` | list of variables to include in summary table |
 
 Example modifying
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
 arguments.
 
 ``` r
+
 trial |>
   tbl_summary(
     by = trt,
@@ -170,11 +175,11 @@ table shows equivalent ways to specify the mean statistic for continuous
 variables `age` and `marker.` Any {gtsummary} function argument that
 accepts formulas will accept each of these variations.
 
-| **Select with Helpers**             | **Select by Variable Name**       | **Select with Named List**                |
-|-------------------------------------|-----------------------------------|-------------------------------------------|
-| `all_continuous() ~ "{mean}"`       | `c("age", "marker") ~ "{mean}"`   | `list(age = "{mean}", marker = "{mean}")` |
-| `list(all_continuous() ~ "{mean}")` | `c(age, marker) ~ "{mean}"`       | —                                         |
-| —                                   | `list(c(age, marker) ~ "{mean}")` | —                                         |
+| **Select with Helpers** | **Select by Variable Name** | **Select with Named List** |
+|----|----|----|
+| `all_continuous() ~ "{mean}"` | `c("age", "marker") ~ "{mean}"` | `list(age = "{mean}", marker = "{mean}")` |
+| `list(all_continuous() ~ "{mean}")` | `c(age, marker) ~ "{mean}"` | — |
+| — | `list(c(age, marker) ~ "{mean}")` | — |
 
 ![Example modifying tbl_summary() using Lists, Select Helpers, and
 Variable Name
@@ -187,39 +192,40 @@ statistics to
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
 tables.
 
-| Function                                                                                       | Description                                                                   |
-|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| [`add_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.md)                   | add p-values to the output comparing values across groups                     |
-| [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)       | add a column with overall summary statistics                                  |
-| [`add_n()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n.md)                   | add a column with N (or N missing) for each variable                          |
+| Function | Description |
+|----|----|
+| [`add_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.md) | add p-values to the output comparing values across groups |
+| [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md) | add a column with overall summary statistics |
+| [`add_n()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n.md) | add a column with N (or N missing) for each variable |
 | [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md) | add column for difference between two group, confidence interval, and p-value |
-| [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md) | add label for the summary statistics shown in each row                        |
-| [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)             | generic function to add a column with user-defined values                     |
-| [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md)                   | add a column of q values to control for multiple comparisons                  |
+| [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md) | add label for the summary statistics shown in each row |
+| [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md) | generic function to add a column with user-defined values |
+| [`add_q()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_q.md) | add a column of q values to control for multiple comparisons |
 
 ### {gtsummary} functions to format table
 
 The {gtsummary} package comes with functions specifically made to modify
 and format summary tables.
 
-| Function                                                                                                       | Description                   |
-|----------------------------------------------------------------------------------------------------------------|-------------------------------|
-| [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)                          | update column headers         |
-| [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)       | update column header footnote |
-| [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)         | update table body footnote    |
-| [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)                 | update spanning headers       |
-| [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md)                 | update table caption/title    |
-| [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)      | bold variable labels          |
-| [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md)      | bold variable levels          |
-| [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable labels     |
-| [`italicize_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable levels     |
-| [`bold_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_p.md)                                 | bold significant p-values     |
+| Function | Description |
+|----|----|
+| [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) | update column headers |
+| [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md) | update column header footnote |
+| [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md) | update table body footnote |
+| [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md) | update spanning headers |
+| [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md) | update table caption/title |
+| [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | bold variable labels |
+| [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | bold variable levels |
+| [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable labels |
+| [`italicize_levels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md) | italicize variable levels |
+| [`bold_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_p.md) | bold significant p-values |
 
 Example adding
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)-family
 functions
 
 ``` r
+
 trial |>
   tbl_summary(by = trt, includ = c(age, grade)) |>
   add_p(pvalue_fun = label_style_pvalue(digits = 2)) |>
@@ -234,7 +240,8 @@ trial |>
 
 [TABLE]
 
-**Table 1. Patient Characteristics**
+**Table 1. Patient Characteristics** {.table .gt_table
+quarto-disable-processing="false" quarto-bootstrap="false"}
 
 ### {gt} functions to format table
 
@@ -249,6 +256,7 @@ function after modifications have been completed with {gtsummary}
 functions.
 
 ``` r
+
 trial |>
   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
   add_n() |>
@@ -292,6 +300,7 @@ use:
       variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
       ``` r
+
       all_continuous()
       all_categorical()
       ```
@@ -307,6 +316,7 @@ on multiple lines, update the summary type to `"continuous2"` (for
 summaries on two or more lines).
 
 ``` r
+
 trial |>
   tbl_summary(
     by = trt,
@@ -330,9 +340,9 @@ trial |>
 
 The {gtsummary} table has two important internal objects:
 
-| Internal Object   | Description                                                   |
-|-------------------|---------------------------------------------------------------|
-| `.$table_body`    | data frame that is printed as the gtsummary output table      |
+| Internal Object | Description |
+|----|----|
+| `.$table_body` | data frame that is printed as the gtsummary output table |
 | `.$table_styling` | contains instructions for styling `.$table_body` when printed |
 
 When you print output from the
@@ -347,6 +357,7 @@ example of the first few calls saved with
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md):
 
 ``` r
+
 tbl_summary(trial) |>
   as_gt(return_calls = TRUE) |>
   head(n = 4)
@@ -385,6 +396,7 @@ function is run, additional formatting may be added to the table using
 table.
 
 ``` r
+
 tbl_summary(trial, by = trt, include = c(age, grade)) |>
   as_gt(include = -cols_align) |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
@@ -429,10 +441,12 @@ as well.
 To begin, install the {survey} package and load the `apiclus1` data set.
 
 ``` r
+
 install.packages("survey")
 ```
 
 ``` r
+
 # loading the api data set
 data(api, package = "survey")
 ```
@@ -442,6 +456,7 @@ registering the ID and weighting columns, and setting the finite
 population correction column.
 
 ``` r
+
 svy_apiclus1 <-
   survey::svydesign(
     id = ~dnum,
@@ -472,6 +487,7 @@ functions](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary
 package to calculate weighted statistics.
 
 ``` r
+
 svy_apiclus1 |>
   tbl_svysummary(
     # stratify summary statistics by the "both" column
@@ -495,6 +511,7 @@ can also handle weighted survey data where each row represents several
 individuals:
 
 ``` r
+
 Titanic |>
   as_tibble() |>
   survey::svydesign(data = _, ids = ~1, weights = ~n) |>
@@ -522,6 +539,7 @@ that:
   through the `missing` argument).
 
 ``` r
+
 trial |>
   tbl_cross(
     row = stage,

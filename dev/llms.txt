@@ -64,6 +64,7 @@ The {gtsummary} package was written as a companion to the
 {gtsummary} with the following code.
 
 ``` r
+
 install.packages("gtsummary")
 ```
 
@@ -83,6 +84,7 @@ to summarize a data frame.
 Example basic table:
 
 ``` r
+
 library(gtsummary)
 
 # summarize the data with our package
@@ -101,6 +103,7 @@ table. See the
 tutorial for many more options, or below for one example.
 
 ``` r
+
 table2 <-
   tbl_summary(
     trial,
@@ -127,6 +130,7 @@ See the
 for customization options.
 
 ``` r
+
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t1 <- tbl_regression(mod1, exponentiate = TRUE)
@@ -141,6 +145,7 @@ You can also present side-by-side regression model results using
 [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)
 
 ``` r
+
 library(survival)
 
 # build survival model table
@@ -182,6 +187,7 @@ compatibility](reference/figures/gt_output_formats.PNG)](https://www.danieldsjob
 Word, RTF, and LaTeX file.
 
 ``` r
+
 tbl |> 
   as_gt() |> 
   gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
@@ -213,6 +219,10 @@ tbl |>
   presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
   the Weill Cornell Biostatistics Department and the Memorial Sloan
   Kettering R Users Group.
+
+  # An error occurred.
+
+  Unable to execute JavaScript.
 
 ## Cite gtsummary
 

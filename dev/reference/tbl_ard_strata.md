@@ -126,27 +126,3 @@ cards::ADLB |>
 
 Characteristic
 ```
-
-**Placebo**¹
-
-**Xanomeline High Dose**¹
-
-**Xanomeline Low Dose**¹
-
-Albumin (g/L)
-
-39.0 (38.0, 40.0)
-
-41.0 (39.0, 43.0)
-
-40.0 (38.0, 42.0)
-
-Blood Urea Nitrogen (mmol/L)
-
-5.0 (4.3, 6.4)
-
-4.6 (4.3, 6.1)
-
-6.1 (5.0, 7.5)
-
-¹ Median (Q1, Q3)

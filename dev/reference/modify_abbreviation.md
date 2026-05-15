@@ -59,36 +59,3 @@ tbl_summary(
 
 Characteristic
 ```
-
-**Drug A**  
-N = 98
-
-**Drug B**  
-N = 102
-
-Age
-
-  
-
-  
-
-    Median (IQR)
-
-46 (37, 60)
-
-48 (39, 56)
-
-    Unknown
-
-7
-
-4
-
-Abbreviation: IQR = Interquartile Range
-
-\# Example 2 ----------------------------------
-[lm](https://rdrr.io/r/stats/lm.html)(marker ~ trt, trial) \|\>
-[tbl_regression](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)()
-\|\> remove_abbreviation("CI = Confidence Interval")
-
-[TABLE]

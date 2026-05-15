@@ -4,6 +4,7 @@ FAQ and Gallery showing various tables possible with the {gtsummary}
 package.
 
 ``` r
+
 library(gtsummary)
 ```
 
@@ -118,6 +119,7 @@ formats the labels as bold, but labels can also be italicized using
 or combined to format with both bold and italics.
 
 ``` r
+
 trial |> 
   tbl_summary(
     by = trt,
@@ -144,6 +146,7 @@ function can be used instead to create bold text, or both functions can
 be used together to get text that is both bold and in italics.
 
 ``` r
+
 trial |> 
   tbl_summary(
     by = trt,
@@ -168,6 +171,7 @@ updating tumor response header, and add a correction for multiple
 testing.
 
 ``` r
+
 trial |> 
   mutate(response = factor(response, labels = c("No Tumor Response", "Tumor Responded"))) |> 
   tbl_summary(
@@ -188,6 +192,7 @@ Include missing tumor response as column using
 [`forcats::fct_na_value_to_level()`](https://forcats.tidyverse.org/reference/fct_na_value_to_level.html).
 
 ``` r
+
 trial |> 
   mutate(
     response = 
@@ -210,6 +215,7 @@ randomized trials. In this example, we report the difference in tumor
 response and marker level between two chemotherapy treatments.
 
 ``` r
+
 trial |> 
   tbl_summary(
     by = trt,
@@ -225,13 +231,13 @@ trial |>
   modify_header(all_stat_cols() ~ "**{level}**")
 ```
 
-| **Characteristic**                                                                              | **N** | **Drug A**¹ | **Drug B**¹ | **Difference**² | **95% CI**² | **p-value**² |
-|-------------------------------------------------------------------------------------------------|-------|-------------|-------------|-----------------|-------------|--------------|
-| Tumor Response                                                                                  | 193   | 29%         | 34%         | -4.2%           | -18%, 9.9%  | 0.6          |
-| Marker Level (ng/mL)                                                                            | 190   | 1.02 (0.89) | 0.82 (0.83) | 0.20            | -0.05, 0.44 | 0.12         |
-| ¹ %; Mean (SD)                                                                                  |       |             |             |                 |             |              |
-| ² 2-sample test for equality of proportions with continuity correction; Welch Two Sample t-test |       |             |             |                 |             |              |
-| Abbreviation: CI = Confidence Interval                                                          |       |             |             |                 |             |              |
+| **Characteristic** | **N** | **Drug A**¹ | **Drug B**¹ | **Difference**² | **95% CI**² | **p-value**² |
+|----|----|----|----|----|----|----|
+| Tumor Response | 193 | 29% | 34% | -4.2% | -18%, 9.9% | 0.6 |
+| Marker Level (ng/mL) | 190 | 1.02 (0.89) | 0.82 (0.83) | 0.20 | -0.05, 0.44 | 0.12 |
+| ¹ %; Mean (SD) |  |  |  |  |  |  |
+| ² 2-sample test for equality of proportions with continuity correction; Welch Two Sample t-test |  |  |  |  |  |  |
+| Abbreviation: CI = Confidence Interval |  |  |  |  |  |  |
 
 ------------------------------------------------------------------------
 
@@ -239,6 +245,7 @@ Paired t-test and McNemar’s test. The data is expected in a long format
 with 2 rows per participant.
 
 ``` r
+
 # imagine that each patient received Drug A and Drug B (adding ID showing their paired measurements)
 trial_paired <-
   trial |> 
@@ -267,6 +274,7 @@ trial_paired |>
 Include p-values comparing all groups to a single reference group.
 
 ``` r
+
 # table summarizing data with no p-values
 small_trial <- trial |> select(grade, age, response)
 t0 <- small_trial |> 
@@ -306,6 +314,7 @@ tbl_merge(list(t0, t1, t2)) |>
 Add 95% confidence interval around the mean as an additional column
 
 ``` r
+
 trial |> 
   tbl_summary(
     include = c(age, marker),
@@ -332,6 +341,7 @@ than two categorical variables, use `tbl_continuous` in conjunction with
 `tbl_strata` (see an example of `tbl_strata` [here](#tbl_strata)).
 
 ``` r
+
 trial |> 
   tbl_continuous(variable = marker, by = trt, include = grade) |> 
   modify_spanning_header(all_stat_cols() ~ "**Treatment Assignment**")
@@ -344,6 +354,7 @@ trial |>
 Build a summary table stratified by more than one variable.
 
 ``` r
+
 trial |> 
   select(trt, grade, age, stage) |> 
   mutate(grade = paste("Grade", grade)) |> 
@@ -365,6 +376,7 @@ Include number of observations and the number of events in a univariate
 regression table.
 
 ``` r
+
 trial |> 
   tbl_uvregression(
     method = glm,
@@ -385,6 +397,7 @@ also use the compact table theme that reduces cell padding and font
 size.
 
 ``` r
+
 gt_r1 <- glm(response ~ trt + grade, trial, family = binomial) |> 
   tbl_regression(exponentiate = TRUE)
 gt_r2 <- survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade, trial) |> 
@@ -410,6 +423,7 @@ tbl_merge(
 Include the number of events at each level of a categorical predictor.
 
 ``` r
+
 trial |> 
   tbl_uvregression(
     method = survival::coxph,
@@ -429,6 +443,7 @@ Regression model where the covariate remains the same, and the outcome
 changes.
 
 ``` r
+
 trial |> 
   tbl_uvregression(
     method = lm,
@@ -442,12 +457,12 @@ trial |>
   modify_footnote_header("Values larger than 0 indicate larger values in the Drug B group.", columns = estimate)
 ```
 
-| **Model Outcome**                                                  | **Treatment Coef.**¹ | **95% CI**  | **p-value** |
-|--------------------------------------------------------------------|----------------------|-------------|-------------|
-| Age                                                                | 0.44                 | -3.7, 4.6   | 0.8         |
-| Marker Level (ng/mL)                                               | -0.20                | -0.44, 0.05 | 0.12        |
-| ¹ Values larger than 0 indicate larger values in the Drug B group. |                      |             |             |
-| Abbreviation: CI = Confidence Interval                             |                      |             |             |
+| **Model Outcome** | **Treatment Coef.**¹ | **95% CI** | **p-value** |
+|----|----|----|----|
+| Age | 0.44 | -3.7, 4.6 | 0.8 |
+| Marker Level (ng/mL) | -0.20 | -0.44, 0.05 | 0.12 |
+| ¹ Values larger than 0 indicate larger values in the Drug B group. |  |  |  |
+| Abbreviation: CI = Confidence Interval |  |  |  |
 
 ------------------------------------------------------------------------
 
@@ -456,6 +471,7 @@ confidence intervals are calculated using
 [`confint.default()`](https://rdrr.io/r/stats/confint.html).
 
 ``` r
+
 my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
   dplyr::bind_cols(
     broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
@@ -480,6 +496,7 @@ lm(age ~ grade + marker, trial) |>
 Use significance stars on estimates with low p-values.
 
 ``` r
+
 trial |> 
   tbl_uvregression(
     method = survival::coxph,
@@ -500,6 +517,7 @@ modified via an appropriate function, such as `vcovCL` from the sandwich
 package.
 
 ``` r
+
 dat <- trial |> 
   mutate(subject_id = dplyr::row_number(), .by = trt)
 lmod <- glm(response ~ trt + grade, data = dat, family = binomial(link = "logit"))
@@ -517,6 +535,7 @@ digits for p-values.
 A standard, non-robust regression table can be made as follows:
 
 ``` r
+
 tbl_standard <- 
   tbl_regression(
     lmod,
@@ -532,6 +551,7 @@ In order to use the robust errors, pass the variance-covariance matrix
 to the `tidy_robust` function, as shown below.
 
 ``` r
+
 tbl_robust <- 
   tbl_regression(
     lmod,
@@ -547,6 +567,7 @@ Comparing the tables side-by-side, we see that the confidence intervals
 and p-values are very similar.
 
 ``` r
+
 tbl_merge(
   list(tbl_standard, tbl_robust), 
   tab_spanner = c("**Standard errors**", "**Robust errors**")
@@ -561,6 +582,7 @@ demonstrates the non-robust approach and the robust approach
 side-by-side.
 
 ``` r
+
 tbl_merge(
   list(
     tbl_standard |> add_global_p(anova_fun = tidy_wald_test),

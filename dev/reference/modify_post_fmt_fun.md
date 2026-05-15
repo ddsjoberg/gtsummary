@@ -55,19 +55,3 @@ data.frame(x = FALSE) |>
 
 Characteristic
 ```
-
-**N = 1**¹
-
-x
-
-  
-
-    FALSE
-
-1 (100%)
-
-    TRUE
-
-0
-
-¹ n (%)

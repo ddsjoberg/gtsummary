@@ -59,30 +59,3 @@ trial |>
 
 Characteristic
 ```
-
-**N = 200**¹
-
-Grade
-
-  
-
-I
-
-68 (34%)
-
-II
-
-68 (34%)
-
-III
-
-64 (32%)
-
-¹ n (%)
-
-\# increase indentation in \`tbl_summary\` trial \|\>
-[tbl_summary](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)(include
-= grade) \|\> modify_indent(columns = label, rows = !row_type
-[%in%](https://rdrr.io/r/base/match.html) 'label', indent = 8L)
-
-[TABLE]

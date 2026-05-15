@@ -65,34 +65,3 @@ tbl
 
 Characteristic
 ```
-
-**N = 200**¹
-
-Marker Level (ng/mL)
-
-0.64 (0.22, 1.41)
-
-Grade
-
-  
-
-    I
-
-68 (34%)
-
-    II
-
-68 (34%)
-
-    III
-
-64 (32%)
-
-¹ Median (Q1, Q3); n (%)
-
-Results as of June 26, 2015
-
-\# Example 2 ---------------------------------- remove_source_note(tbl,
-source_note_id = 1)
-
-[TABLE]

@@ -67,35 +67,3 @@ tbl_summary(trial, include = c("trt", "age", "response")) |>
 
 Characteristic
 ```
-
-**N = 200**¹
-
-Chemotherapy Treatment
-
-  
-
-    Drug A
-
-98 (49%)
-
-    Drug B
-
-102 (51%)
-
-Age
-
-47 (38, 57)
-
-    Unknown
-
-11
-
-Tumor Response
-
-61 (32%)
-
-    Unknown
-
-7
-
-¹ n (%); Median (Q1, Q3)
