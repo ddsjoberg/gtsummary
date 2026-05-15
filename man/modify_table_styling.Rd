@@ -141,9 +141,9 @@ internally with care, and it is \emph{not} recommended for users.
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
-Other Advanced modifiers: 
-\code{\link{modify_column_merge}()},
-\code{\link{modify_indent}()}
+Other Advanced modifiers:
+\code{\link[=modify_column_merge]{modify_column_merge()}},
+\code{\link[=modify_indent]{modify_indent()}}
 }
 \concept{Advanced modifiers}
 \keyword{internal}
