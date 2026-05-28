@@ -11,7 +11,7 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
   )
-
+  skip_if_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_titanic, by = Survived) |>
       add_difference() |>
@@ -26,7 +26,7 @@ test_that("add_difference.tbl_svysummary(x) messaging", {
     tbl_svysummary(svy_trial, include = age) |>
       add_difference()
   )
-
+  skip_if_not_installed("smd")
   expect_snapshot(
     tbl <- tbl_svysummary(svy_trial, by = trt, percent = "row", include = grade) |>
       add_difference()
@@ -79,7 +79,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       {.[order(names(.))]}, # styler: off
     ignore_attr = TRUE
   )
-
+  skip_if_not_installed("smd")
   expect_equal(
     tbl$table_body |>
       dplyr::filter(variable == "grade_smd", row_type == "label") |>
