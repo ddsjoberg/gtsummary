@@ -31,7 +31,7 @@
   [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
   that was dropping class attributes.
   ([\#2397](https://github.com/ddsjoberg/gtsummary/issues/2397),
-  [@jszczypinski](https://github.com/jszczypinski) )
+  [@jszczypinski](https://github.com/jszczypinski))
 
 ## gtsummary 2.5.0
 
