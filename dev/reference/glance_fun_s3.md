@@ -41,6 +41,6 @@ glance_fun_s3(mod)
 #> {
 #>     UseMethod("glance")
 #> }
-#> <bytecode: 0x55836745a710>
+#> <bytecode: 0x55f78584cd78>
 #> <environment: namespace:generics>
 ```
