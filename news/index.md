@@ -1,6 +1,42 @@
 # Changelog
 
+## gtsummary 2.5.1
+
+CRAN release: 2026-05-30
+
+- Theme elements are no longer ‘evaluated’ by default,
+  e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`,
+  `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`,
+  `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are
+  evaluated.
+
+- Removed `test = "tarone"` from
+  [`add_p.tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.tbl_survfit.md).
+  Users who need a G-rho family test can use `test = "survdiff"` with
+  `test.args = list(rho = )`.
+  ([\#2391](https://github.com/ddsjoberg/gtsummary/issues/2391))
+
+- Add alternative text to figures on website.
+  ([\#1958](https://github.com/ddsjoberg/gtsummary/issues/1958))
+
+- Improved efficiency of
+  [`style_number()`](https://www.danieldsjoberg.com/gtsummary/reference/style_number.md).
+  There is a slight change to a small subset of rounded values. For
+  example, the difference between two dates was previously formatted to
+  `'0 days'`, and now it is formatted to `'0'`.
+
+- Fixed bug in
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.md),
+  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/filter_hierarchical.md)
+  and
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/sort_hierarchical.md)
+  that was dropping class attributes.
+  ([\#2397](https://github.com/ddsjoberg/gtsummary/issues/2397),
+  [@jszczypinski](https://github.com/jszczypinski))
+
 ## gtsummary 2.5.0
+
+CRAN release: 2025-12-05
 
 #### New Features and Functions
 
@@ -1432,6 +1468,7 @@ CRAN release: 2022-12-06
   the overall column and the stratified columns:
 
   ``` r
+
   trial %>%
     tbl_summary(by = trt) %>%
     add_overall() %>%
@@ -4055,6 +4092,7 @@ CRAN release: 2019-08-19
   version
 
 ``` r
+
     bold_p()            <-  tab_style_bold_p()  
     bold_labels()       <-  tab_style_bold_labels()  
     bold_levels()       <-  tab_style_bold_levels()  
@@ -4147,6 +4185,7 @@ also been updated. Review documentation and vignettes for details.
 #### Updated Function Names
 
 ``` r
+
     tbl_summary()       <-  fmt_table1()  
     tbl_regression()    <-  fmt_regression()  
     tbl_uvregression()  <-  fmt_uni_regression()  

@@ -101,7 +101,7 @@ theme_gtsummary_eda(set_theme = TRUE)
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md).
   If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma separator,
   however, can look odd when `decimal.mark = ","`. In this case the
-  argument will default to an en dash
+  argument will default to an en-dash
 
 - ci.sep:
 
@@ -109,7 +109,7 @@ theme_gtsummary_eda(set_theme = TRUE)
   String indicating separator for confidence intervals. If
   `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma separator,
   however, can look odd when `decimal.mark = ","`. In this case the
-  argument will default to an en dash
+  argument will default to an en-dash
 
 - statistic:
 
@@ -137,7 +137,7 @@ theme_gtsummary_eda(set_theme = TRUE)
       decimal places; separate confidence intervals with `"ll to ul"`.
 
     - [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
-      Doesn't show percent symbol; use em-dash to separate IQR
+      Use en-dash to separate IQR
 
   - `"nejm"` *The New England Journal of Medicine*
 
@@ -228,48 +228,3 @@ trial |>
 
 Characteristic
 ```
-
-**Drug A**  
-N = 98
-
-**Drug B**  
-N = 102
-
-Age, Median (IQR)
-
-46 (37 – 60)
-
-48 (39 – 56)
-
-    Unknown
-
-7
-
-4
-
-Grade, n (%)
-
-  
-
-  
-
-    I
-
-35 (36)
-
-33 (32)
-
-    II
-
-32 (33)
-
-36 (35)
-
-    III
-
-31 (32)
-
-33 (32)
-
-\# reset gtsummary themes
-[reset_gtsummary_theme](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)()

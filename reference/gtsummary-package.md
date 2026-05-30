@@ -26,6 +26,9 @@ Useful links:
 
 Authors:
 
+- Daniel D. Sjoberg <danield.sjoberg@gmail.com>
+  ([ORCID](https://orcid.org/0000-0003-0862-2018))
+
 - Joseph Larmarange ([ORCID](https://orcid.org/0000-0001-7097-700X))
 
 - Michael Curry ([ORCID](https://orcid.org/0000-0002-0261-4044))

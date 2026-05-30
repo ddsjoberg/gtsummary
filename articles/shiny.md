@@ -24,6 +24,7 @@ instructions on running the app locally on your machine.
 ## Shiny Code
 
 ``` r
+
 library(gtsummary)
 library(shiny)
 library(gt)

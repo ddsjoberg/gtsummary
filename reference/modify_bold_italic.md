@@ -53,29 +53,3 @@ tbl
 
 Characteristic
 ```
-
-**N = 200**¹
-
-Grade
-
-  
-
-    I
-
-68 (34%)
-
-    II
-
-68 (34%)
-
-    III
-
-64 (32%)
-
-¹ n (%)
-
-\# Example 2 ---------------------------------- tbl \|\>
-remove_bold(columns = label, rows = row_type == "label") \|\>
-remove_italic(columns = label, rows = row_type == "level")
-
-[TABLE]

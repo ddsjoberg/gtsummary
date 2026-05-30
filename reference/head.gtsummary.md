@@ -51,29 +51,3 @@ trial |>
 
 Characteristic
 ```
-
-**Drug A**  
-N = 98¹
-
-**Drug B**  
-N = 102¹
-
-Age
-
-46 (37, 60)
-
-48 (39, 56)
-
-    Unknown
-
-7
-
-4
-
-¹ Median (Q1, Q3); n (%)
-
-\# tail() example trial \|\>
-[tbl_summary](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)(by
-= trt) \|\> [tail](https://rdrr.io/r/utils/head.html)(n = 2L)
-
-[TABLE]

@@ -17,6 +17,7 @@ table above. For example, the code below prints a **{gtsummary}** table
 as a **{flextable}** table, instead of the default **{gt}** table.
 
 ``` r
+
 tbl_summary(trial) %>%
   as_flex_table()
 ```
@@ -28,6 +29,7 @@ with the package. To open the example file, run the following command in
 the R console.
 
 ``` r
+
 library(gtsummary)
 system.file(package = "gtsummary") %>%
   file.path("rmarkdown_example/gtsummary_rmarkdown_html.Rmd") %>%
@@ -40,6 +42,7 @@ To print {gtsummary} tables using LaTeX, utilize one of the supporting
 print engines.
 
 ``` r
+
 # build gtsummary table
 tbl <- tbl_summary(trial)
 
@@ -63,6 +66,7 @@ Use the {gt} package’s
 to save images of {gtsummary} tables.
 
 ``` r
+
 tbl_summary(trial) |>  # build gtsummary table
   as_gt() |>  # convert to gt table
   gt::gtsave( # save table as image

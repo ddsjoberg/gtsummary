@@ -1,4 +1,4 @@
-## gtsummary [![](reference/figures/logo.png)](https://github.com/ddsjoberg/gtsummary)
+## gtsummary [![Logo of gtsummary](reference/figures/logo.png)](https://github.com/ddsjoberg/gtsummary)
 
 The {gtsummary} package provides an elegant and flexible way to create
 publication-ready analytical and summary tables using the **R**
@@ -64,6 +64,7 @@ The {gtsummary} package was written as a companion to the
 {gtsummary} with the following code.
 
 ``` r
+
 install.packages("gtsummary")
 ```
 
@@ -83,6 +84,7 @@ to summarize a data frame.
 Example basic table:
 
 ``` r
+
 library(gtsummary)
 
 # summarize the data with our package
@@ -91,7 +93,8 @@ table1 <-
   tbl_summary(include = c(age, grade, response))
 ```
 
-![](reference/figures/README-tbl_summary_print_simple-1.png)
+![Example of basic
+table](reference/figures/README-tbl_summary_print_simple-1.png)
 
 There are many **customization options** to **add information** (like
 comparing groups) and **format results** (like bold labels) in your
@@ -100,6 +103,7 @@ table. See the
 tutorial for many more options, or below for one example.
 
 ``` r
+
 table2 <-
   tbl_summary(
     trial,
@@ -113,7 +117,8 @@ table2 <-
   bold_labels()
 ```
 
-![](reference/figures/README-tbl_summary_print_extra-1.png)
+![Example of table with customize
+options](reference/figures/README-tbl_summary_print_extra-1.png)
 
 ### Regression Models
 
@@ -125,12 +130,14 @@ See the
 for customization options.
 
 ``` r
+
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-![](reference/figures/README-tbl_regression_printa-1.png)
+![Example of table using
+tbl_regression](reference/figures/README-tbl_regression_printa-1.png)
 
 ### Side-by-side Regression Models
 
@@ -138,6 +145,7 @@ You can also present side-by-side regression model results using
 [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.md)
 
 ``` r
+
 library(survival)
 
 # build survival model table
@@ -153,7 +161,8 @@ tbl_merge_ex1 <-
   )
 ```
 
-![](reference/figures/README-tbl_merge_ex1-1.png)
+![Example of tables merged with
+tbl_merge](reference/figures/README-tbl_merge_ex1-1.png)
 
 Review even more output options in the **[table
 gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
@@ -169,7 +178,8 @@ Review the **[gtsummary + R
 Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
-[![](reference/figures/gt_output_formats.PNG)](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)
+[![Comparison of engines and their output
+compatibility](reference/figures/gt_output_formats.PNG)](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)
 
 ## Save Individual Tables
 
@@ -177,6 +187,7 @@ vignette for details.
 Word, RTF, and LaTeX file.
 
 ``` r
+
 tbl |> 
   as_gt() |> 
   gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
@@ -208,6 +219,10 @@ tbl |>
   presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
   the Weill Cornell Biostatistics Department and the Memorial Sloan
   Kettering R Users Group.
+
+  # An error occurred.
+
+  Unable to execute JavaScript.
 
 ## Cite gtsummary
 

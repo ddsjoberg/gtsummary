@@ -68,39 +68,3 @@ trial |>
 
 Characteristic
 ```
-
-**Case N**
-
-**Control N**
-
-**OR**
-
-**95% CI**
-
-**p-value**
-
-Age
-
-58
-
-125
-
-1.02
-
-1.00, 1.04
-
-0.10
-
-Marker Level (ng/mL)
-
-57
-
-126
-
-1.35
-
-0.94, 1.93
-
-0.10
-
-Abbreviations: CI = Confidence Interval, OR = Odds Ratio

@@ -104,4 +104,24 @@ a gtsummary table of class `"tbl_summary"`
 ## Examples
 
 ``` r
+# Example 1 ----------------------------------
+survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+  tbl_svysummary(
+    by = Survived,
+    value = list(Class ~ "1st", Age = "Child"),
+    include = c(Class, Age)
+  ) |>
+  add_difference()
+#> The following warnings were returned during `add_difference()`:
+#> ! For variable `Age` (`Survived`) and "estimate", "std.error", "conf.low",
+#>   "conf.high", and "p.value" statistics: non-integer #successes in a binomial
+#>   glm!
+#> ! For variable `Class` (`Survived`) and "estimate", "std.error", "conf.low",
+#>   "conf.high", and "p.value" statistics: non-integer #successes in a binomial
+#>   glm!
+
+
+  
+
+Characteristic
 ```

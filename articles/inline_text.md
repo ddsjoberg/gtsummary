@@ -16,6 +16,7 @@ markdown](https://rmarkdown.rstudio.com/lesson-1.html) report.
 Before going through the tutorial, install and load {gtsummary}.
 
 ``` r
+
 # install.packages("gtsummary")
 library(gtsummary)
 ```
@@ -39,6 +40,7 @@ vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
 for detailed overview of this function if needed).
 
 ``` r
+
 tab1 <- tbl_summary(trial, by = trt, include = c(marker, stage))
 tab1
 ```
@@ -77,6 +79,7 @@ if you need detailed guidance on using these functions.
 Let’s first create a regression model.
 
 ``` r
+
 # build logistic regression model
 m1 <- glm(response ~ age + stage, data = trial, family = binomial(link = "logit"))
 ```
@@ -86,6 +89,7 @@ Now summarize the results with
 exponentiate to get the odds ratios.
 
 ``` r
+
 tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
 tbl_m1
 ```

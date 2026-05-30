@@ -58,19 +58,3 @@ bind_ard(
 
 Characteristic
 ```
-
-**Mean**
-
-**SD**
-
-Age
-
-47.2
-
-14.3
-
-Marker Level (ng/mL)
-
-0.9
-
-0.9

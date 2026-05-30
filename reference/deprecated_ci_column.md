@@ -37,42 +37,42 @@ column it will be unhidden. Code that changes the header of `"ci"` will
 likely lead to duplicate columns appearing in your table (that is, the
 `"ci"` column and the merged `"conf.low"` and `"conf.high"` columns).
 
-|                                             |                                                   |
-|---------------------------------------------|---------------------------------------------------|
-| **Old Code**                                | **Updated Code**                                  |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `modify_header(ci = "Confidence Interval")` | `modify_header(conf.low = "Confidence Interval")` |
 
 ### [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md)
 
-|                                                      |                                                            |
-|------------------------------------------------------|------------------------------------------------------------|
-| **Old Code**                                         | **Updated Code**                                           |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `modify_spanning_header(ci = "Confidence Interval")` | `modify_spanning_header(conf.low = "Confidence Interval")` |
 
 ### [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md)
 
-|                                                      |                                                            |
-|------------------------------------------------------|------------------------------------------------------------|
-| **Old Code**                                         | **Updated Code**                                           |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `modify_spanning_header(ci = "Confidence Interval")` | `modify_spanning_header(conf.low = "Confidence Interval")` |
 
 ### [`modify_column_merge()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_column_merge.md)
 
-|                                                      |                                                                        |
-|------------------------------------------------------|------------------------------------------------------------------------|
-| **Old Code**                                         | **Updated Code**                                                       |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `modify_column_merge(pattern = "{estimate} ({ci})")` | `modify_column_merge(pattern = "{estimate} ({conf.low}, {conf.high})"` |
 
 ### [`modify_column_hide()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_column_hide.md)
 
-|                                      |                                            |
-|--------------------------------------|--------------------------------------------|
-| **Old Code**                         | **Updated Code**                           |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `modify_column_hide(columns = "ci")` | `modify_column_hide(columns = "conf.low")` |
 
 ### [`inline_text()`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.md)
 
-|                                                     |                                                                        |
-|-----------------------------------------------------|------------------------------------------------------------------------|
-| **Old Code**                                        | **Updated Code**                                                       |
+|  |  |
+|----|----|
+| **Old Code** | **Updated Code** |
 | `inline_text(pattern = "{estimate} (95% CI {ci})")` | `inline_text(pattern = "{estimate} (95% CI {conf.low}, {conf.high})")` |

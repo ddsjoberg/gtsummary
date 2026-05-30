@@ -75,37 +75,3 @@ Study Exclusion Criteria
   
 Characteristic
 ```
-
-**N = 20**¹
-
-Exclusion Reason
-
-  
-
-    Age
-
-9 (45%)
-
-    Metastatic Disease
-
-10 (50%)
-
-    Physician
-
-8 (40%)
-
-¹ n (%)
-
-\# Example 2 ----------------------------------
-[lm](https://rdrr.io/r/stats/lm.html)(marker ~ trt + grade + age, data =
-trial) \|\>
-[tbl_regression](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.md)()
-\|\>
-[add_global_p](https://www.danieldsjoberg.com/gtsummary/reference/add_global_p.md)(keep
-= TRUE, include = grade) \|\> add_variable_group_header( header =
-"Treatment:", variables = trt ) \|\> add_variable_group_header( header =
-"Covariate:", variables = -trt ) \|\> \# indent levels 8 spaces
-[modify_indent](https://www.danieldsjoberg.com/gtsummary/reference/modify_indent.md)(
-columns = "label", rows = row_type == "level", indent = 8L )
-
-[TABLE]
