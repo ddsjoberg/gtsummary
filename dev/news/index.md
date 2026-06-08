@@ -8,6 +8,14 @@
   using a non-English language theme.
   ([\#2368](https://github.com/ddsjoberg/gtsummary/issues/2368))
 
+- Fixed bug in
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md)
+  where duplicate footnote superscripts appeared on column headers when
+  stacking tables with identical footnotes, e.g. when using
+  [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_uvregression.md)
+  with `theme_gtsummary_journal("qjecon")`.
+  ([\#2404](https://github.com/ddsjoberg/gtsummary/issues/2404))
+
 ## gtsummary 2.5.1
 
 CRAN release: 2026-05-30
