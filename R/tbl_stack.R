@@ -165,6 +165,12 @@ tbl_stack <- function(tbls,
       dplyr::bind_rows()
   }
 
+  # deduplicate header-level footnotes (no `rows` column) to avoid
+
+  # duplicate superscripts when stacking tables with identical footnotes
+  results$table_styling$footnote_header <-
+    dplyr::distinct(results$table_styling$footnote_header)
+
   # combining rows spec for same column
   if (nrow(results$table_styling$cols_merge) > 0) {
     results$table_styling$cols_merge <-
