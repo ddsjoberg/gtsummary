@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   Array.prototype.forEach.call(els, function(template) {
+      if (template.querySelector("table.no-shadow-dom")) {
+        return;
+      }
       const dest = document.createElement("div");
       template.parentNode.insertBefore(dest, template.nextSibling)
       dest.setAttribute("class", "flextable-shadow-host");
@@ -17,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       }
   });
 
-  const shadowHosts = document.querySelectorAll('.flextable-shadow-host:not(:has(div > table.no-shadow-dom))');
+  const shadowHosts = document.querySelectorAll('.flextable-shadow-host');
   shadowHosts.forEach(host => {
     if (host.shadowRoot) {
       const spanElements = host.shadowRoot.querySelector('div > table > caption > span[id]');

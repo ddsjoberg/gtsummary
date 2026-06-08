@@ -2,6 +2,16 @@
 
 ## gtsummary (development version)
 
+- Fixed bug in
+  [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/separate_p_footnotes.md)
+  where statistical test names in footnotes were not translated when
+  using a non-English language theme.
+  ([\#2368](https://github.com/ddsjoberg/gtsummary/issues/2368))
+
+## gtsummary 2.5.1
+
+CRAN release: 2026-05-30
+
 - Theme elements are no longer ‘evaluated’ by default,
   e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`,
   `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`,
@@ -10,9 +20,8 @@
 
 - Removed `test = "tarone"` from
   [`add_p.tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_survfit.md).
-  The previous implementation used `survdiff(rho = 1.5)`, which does not
-  correctly compute the Tarone-Ware test. Users who need a G-rho family
-  test can use `test = "survdiff"` with `test.args = list(rho = )`.
+  Users who need a G-rho family test can use `test = "survdiff"` with
+  `test.args = list(rho = )`.
   ([\#2391](https://github.com/ddsjoberg/gtsummary/issues/2391))
 
 - Add alternative text to figures on website.
