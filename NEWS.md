@@ -1,3 +1,7 @@
+# gtsummary (development version)
+
+* Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
+
 # gtsummary 2.5.1
 
 * Theme elements are no longer 'evaluated' by default, e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`, `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`, `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are evaluated.
