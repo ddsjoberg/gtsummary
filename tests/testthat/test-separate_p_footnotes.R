@@ -42,6 +42,25 @@ test_that("separate_p_footnotes() messaging", {
 })
 
 
+test_that("separate_p_footnotes() translates footnotes", {
+  footnotes <-
+    with_gtsummary_theme(
+      theme_gtsummary_language("es"),
+      expr = trial |>
+        tbl_summary(by = trt, include = c(age, grade)) |>
+        add_p() |>
+        separate_p_footnotes() |>
+        getElement("table_styling") |>
+        getElement("footnote_body") |>
+        dplyr::pull("footnote")
+    )
+
+  # footnotes must contain Spanish translations, not English originals
+  expect_true(any(grepl("prueba chi cuadrado", footnotes, fixed = TRUE)))
+  expect_false(any(grepl("Pearson's Chi-squared test", footnotes, fixed = TRUE)))
+  expect_false(any(grepl("Wilcoxon rank sum test", footnotes, fixed = TRUE)))
+})
+
 # adding test against a `tbl_svysummary()` object
 test_that("separate_p_footnotes() with tbl_svysummary()", {
   skip_if_pkg_not_installed("survey")
