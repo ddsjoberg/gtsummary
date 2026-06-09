@@ -16,6 +16,14 @@
   with `theme_gtsummary_journal("qjecon")`.
   ([\#2404](https://github.com/ddsjoberg/gtsummary/issues/2404))
 
+- [`style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_sigfig.md),
+  [`style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_percent.md),
+  [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_pvalue.md),
+  and
+  [`style_ratio()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_ratio.md)
+  now work with matrix input.
+  ([\#2409](https://github.com/ddsjoberg/gtsummary/issues/2409))
+
 ## gtsummary 2.5.1
 
 CRAN release: 2026-05-30
