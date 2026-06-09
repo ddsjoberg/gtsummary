@@ -47,16 +47,29 @@ style_percent <- function(x,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  y <- dplyr::case_when(
-    x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
-    x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...),
-    x > 0 ~ paste0("<", style_number(
-      x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
-      decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...
-    )),
-    x == 0 ~ paste0(prefix, "0", suffix),
-    is.na(x) ~ na
-  )
+  y <- rep(NA_character_, length(x))
+
+  na_mask <- is.na(x)
+  y[na_mask] <- na
+
+  idx <- !na_mask & x == 0
+  y[idx] <- paste0(prefix, "0", suffix)
+
+  idx <- !na_mask & x > 0 & x * 100 < 10^(-(digits + 1))
+  y[idx] <- paste0("<", style_number(
+    x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
+    decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...
+  ))
+
+  idx <- !na_mask & x * 100 >= 10^(-(digits + 1)) & x * 100 < 10
+  if (any(idx)) {
+    y[idx] <- style_number(x[idx] * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
+  }
+
+  idx <- !na_mask & x * 100 >= 10
+  if (any(idx)) {
+    y[idx] <- style_number(x[idx] * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
+  }
 
   attributes(y) <- attributes(unclass(x))
   return(y)
