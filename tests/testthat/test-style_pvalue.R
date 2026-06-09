@@ -61,3 +61,14 @@ test_that("style_pvalue() messaging", {
     style_pvalue(0.05, digits = 8)
   )
 })
+
+test_that("style_pvalue() works with matrix input", {
+  vec <- c(0.5, 0.001, 0.0001, NA)
+  mat <- matrix(vec, nrow = 2, dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  result <- style_pvalue(mat)
+
+  expect_true(is.matrix(result))
+  expect_equal(dim(result), c(2L, 2L))
+  expect_equal(dimnames(result), list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(as.vector(result), style_pvalue(vec))
+})
