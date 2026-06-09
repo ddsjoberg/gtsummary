@@ -252,6 +252,17 @@ assign_tests.tbl_survfit <- function(x,
     return(test_to_return)
   }
 
+  # if the test is a known internal test but not available for the current calling function
+  if (is_string(test) && isTRUE(test %in% df_add_p_tests$test_name[df_add_p_tests$class %in% class])) {
+    other_fun <- setdiff(c("add_p", "add_difference"), calling_fun)
+    cli::cli_abort(
+      c("Test {.val {test}} is not available for {.fun {calling_fun}} for variable {.val {variable}}.",
+        i = "This test does not return a difference estimate.",
+        i = "Use {.fun {other_fun}} instead, or select a different test."),
+      call = get_cli_abort_call()
+    )
+  }
+
   # if the test is character and it's NOT an internal test
   if (is_string(test)) {
     test_return <- tryCatch(
