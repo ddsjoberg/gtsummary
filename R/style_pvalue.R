@@ -41,81 +41,85 @@ style_pvalue <- function(x,
   }
 
   # rounding large p-values to 1 digits
+  na_mask <- is.na(x)
+  p_fmt <- rep(NA_character_, length(x))
+  p_fmt[na_mask] <- na
+
+  # allowing some leeway for numeric storage errors
+  out_of_range <- !na_mask & (x > 1 + 1e-15 | x < 0 - 1e-15)
+
+  lt_str <- paste0("<", style_number(
+    x = 0.001, digits = 3, big.mark = big.mark,
+    decimal.mark = decimal.mark, na = na, ...
+  ))
+
   if (digits == 1) {
-    p_fmt <-
-      dplyr::case_when(
-        # allowing some leeway for numeric storage errors
-        x > 1 + 1e-15 ~ NA_character_,
-        x < 0 - 1e-15 ~ NA_character_,
-        x > 0.9 ~ paste0(">", style_number(
-          x = 0.9, digits = 1, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        cards::round5(x, 1) >= 0.2 ~ style_number(x,
-                                                  digits = 1, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        cards::round5(x, 2) >= 0.1 ~ style_number(x,
-                                                  digits = 2, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        x >= 0.001 ~ style_number(x,
-                                  digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        x < 0.001 ~ paste0("<", style_number(
-          x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        is.na(x) ~ na
-      )
+    idx <- !na_mask & !out_of_range & x < 0.001
+    p_fmt[idx] <- lt_str
+
+    idx <- !na_mask & !out_of_range & x >= 0.001 & !(cards::round5(x, 2) >= 0.1)
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 3, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & cards::round5(x, 2) >= 0.1 & !(cards::round5(x, 1) >= 0.2)
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 2, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & cards::round5(x, 1) >= 0.2 & x <= 0.9
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 1, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & x > 0.9
+    p_fmt[idx] <- paste0(">", style_number(
+      x = 0.9, digits = 1, big.mark = big.mark,
+      decimal.mark = decimal.mark, na = na, ...
+    ))
   }
   # rounding large p-values to 2 digits
   else if (digits == 2) {
-    p_fmt <-
-      dplyr::case_when(
-        x > 1 + 1e-15 ~ NA_character_,
-        x < 0 - 1e-15 ~ NA_character_,
-        x > 0.99 ~ paste0(">", style_number(
-          x = 0.99, digits = 2, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        cards::round5(x, 2) >= 0.1 ~ style_number(x,
-                                                  digits = 2, big.mark = big.mark,
-                                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        x >= 0.001 ~ style_number(x,
-                                  digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        x < 0.001 ~ paste0("<", style_number(
-          x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        is.na(x) ~ na
-      )
-  }
+    idx <- !na_mask & !out_of_range & x < 0.001
+    p_fmt[idx] <- lt_str
 
+    idx <- !na_mask & !out_of_range & x >= 0.001 & !(cards::round5(x, 2) >= 0.1)
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 3, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & cards::round5(x, 2) >= 0.1 & x <= 0.99
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 2, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & x > 0.99
+    p_fmt[idx] <- paste0(">", style_number(
+      x = 0.99, digits = 2, big.mark = big.mark,
+      decimal.mark = decimal.mark, na = na, ...
+    ))
+  }
   # rounding large pvalues to 3 digit
   else if (digits == 3) {
-    p_fmt <-
-      dplyr::case_when(
-        x > 1 + 1e-15 ~ NA_character_,
-        x < 0 - 1e-15 ~ NA_character_,
-        x > 0.999 ~ paste0(">", style_number(
-          x = 0.999, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        x >= 0.001 ~ style_number(x,
-                                  digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, na = na, ...
-        ),
-        x < 0.001 ~ paste0("<", style_number(
-          x = 0.001, digits = 3, big.mark = big.mark,
-          decimal.mark = decimal.mark, na = na, ...
-        )),
-        is.na(x) ~ na
-      )
+    idx <- !na_mask & !out_of_range & x < 0.001
+    p_fmt[idx] <- lt_str
+
+    idx <- !na_mask & !out_of_range & x >= 0.001 & x <= 0.999
+    if (any(idx)) {
+      p_fmt[idx] <- style_number(x[idx], digits = 3, big.mark = big.mark,
+                                 decimal.mark = decimal.mark, na = na, ...)
+    }
+
+    idx <- !na_mask & !out_of_range & x > 0.999
+    p_fmt[idx] <- paste0(">", style_number(
+      x = 0.999, digits = 3, big.mark = big.mark,
+      decimal.mark = decimal.mark, na = na, ...
+    ))
   } else {
     cli::cli_abort(
       "The {.arg digits} argument must be one of {.val {1:3}}.",
@@ -125,12 +129,12 @@ style_pvalue <- function(x,
 
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
-    p_fmt <- dplyr::case_when(
-      is.na(p_fmt) ~ NA_character_,
-      (is.na(na) & is.na(p_fmt)) | p_fmt == na ~ na,
-      grepl(pattern = "<|>", x = p_fmt) ~ paste0("p", p_fmt),
-      TRUE ~ paste0("p=", p_fmt)
-    )
+    has_ltgt <- !is.na(p_fmt) & grepl(pattern = "<|>", x = p_fmt)
+    is_na_val <- is.na(p_fmt) | (!is.na(na) & p_fmt == na)
+    idx <- !is_na_val & has_ltgt
+    p_fmt[idx] <- paste0("p", p_fmt[idx])
+    idx <- !is_na_val & !has_ltgt
+    p_fmt[idx] <- paste0("p=", p_fmt[idx])
   }
 
   attributes(p_fmt) <- attributes(unclass(x))

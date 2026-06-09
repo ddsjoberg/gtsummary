@@ -4,6 +4,8 @@
 
 * Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)
 
+* `style_sigfig()`, `style_percent()`, `style_pvalue()`, and `style_ratio()` now work with matrix input. (#2409)
+
 # gtsummary 2.5.1
 
 * Theme elements are no longer 'evaluated' by default, e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`, `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`, `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are evaluated.

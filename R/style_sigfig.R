@@ -53,16 +53,17 @@ style_sigfig <- function(x,
   }
 
   # calculating the number of digits to round number
-  d <-
-    paste0(
-      "cards::round5(abs(x * scale), digits = ", digits:1 + 1L, ") ",
-      "< 10^(", 1:digits - 1, ") - 0.5 * 10^(", -(digits:1), ") ~ ", digits:1,
-      collapse = ", "
-    ) %>%
-    {paste0("dplyr::case_when(", ., ", TRUE ~ 0)")} %>% # styler: off
-    # converting strings into expressions to run
-    parse(text = .) %>%
-    eval()
+  # process from least-specific (fewest digits) to most-specific so later
+  # assignments overwrite earlier ones, matching the original case_when order
+  d <- rep(0L, length(x))
+  digit_seq <- digits:1  # e.g. c(2, 1) for digits=2
+  for (i in rev(seq_along(digit_seq))) {
+    dig <- digit_seq[i]
+    threshold <- 10^(i - 1) - 0.5 * 10^(-dig)
+    mask <- cards::round5(abs(x * scale), digits = dig + 1L) < threshold
+    mask[is.na(mask)] <- FALSE
+    d[mask] <- dig
+  }
 
   # formatting number
   style_number(x, digits = d, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
