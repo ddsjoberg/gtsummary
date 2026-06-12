@@ -51,9 +51,11 @@ trial |>
   add_p()
 
 # Example 2 ----------------------------------
-trial |>
-  tbl_cross(row = stage, col = trt) |>
-  add_p(source_note = TRUE)
+if (requireNamespace("broom", quietly = TRUE)) {
+  trial |>
+    tbl_cross(row = stage, col = trt) |>
+    add_p(source_note = TRUE)
+}
 }
 \author{
 Karissa Whiting, Daniel D. Sjoberg
