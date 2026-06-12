@@ -66,7 +66,7 @@ knit_print.gtsummary <- function(x,
 }
 
 #' @rdname print_gtsummary
-#' @export
+#' @exportS3Method pkgdown::pkgdown_print
 pkgdown_print.gtsummary <- function(x, visible = TRUE) {
   check_installed("htmltools")
 
