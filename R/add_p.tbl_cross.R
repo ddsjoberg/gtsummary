@@ -31,12 +31,11 @@
 #'   tbl_cross(row = stage, col = trt) |>
 #'   add_p()
 #'
+#' @examplesIf gtsummary:::is_pkg_installed("broom")
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("broom", quietly = TRUE)) {
-#'   trial |>
-#'     tbl_cross(row = stage, col = trt) |>
-#'     add_p(source_note = TRUE)
-#' }
+#' trial |>
+#'   tbl_cross(row = stage, col = trt) |>
+#'   add_p(source_note = TRUE)
 add_p.tbl_cross <- function(x,
                             test = NULL,
                             pvalue_fun =
