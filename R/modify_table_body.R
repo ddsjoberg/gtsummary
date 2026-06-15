@@ -21,7 +21,7 @@
 #' @export
 #' @return A 'gtsummary' object
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 --------------------------------
 #' # Add number of cases and controls to regression table
 #' trial |>
