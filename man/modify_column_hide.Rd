@@ -21,12 +21,15 @@ Use these functions to hide or unhide columns in a gtsummary table.
 Use \code{show_header_names(show_hidden=TRUE)} to print available columns to update.
 }
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
+
 # Example 1 ----------------------------------
 # hide 95\% CI, and replace with standard error
 lm(age ~ marker + grade, trial) |>
   tbl_regression() |>
   modify_column_hide(conf.low) |>
   modify_column_unhide(columns = std.error)
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg

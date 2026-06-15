@@ -50,12 +50,12 @@ trial |>
   tbl_cross(row = stage, col = trt) |>
   add_p()
 
+\dontshow{if (gtsummary:::is_pkg_installed("broom")) withAutoprint(\{ # examplesIf}
 # Example 2 ----------------------------------
-if (requireNamespace("broom", quietly = TRUE)) {
-  trial |>
-    tbl_cross(row = stage, col = trt) |>
-    add_p(source_note = TRUE)
-}
+trial |>
+  tbl_cross(row = stage, col = trt) |>
+  add_p(source_note = TRUE)
+\dontshow{\}) # examplesIf}
 }
 \author{
 Karissa Whiting, Daniel D. Sjoberg
