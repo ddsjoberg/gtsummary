@@ -19,7 +19,8 @@ knit_print(
   ...
 )
 
-pkgdown_print.gtsummary(x, visible = TRUE)
+# S3 method for class 'gtsummary'
+pkgdown_print(x, visible = TRUE)
 ```
 
 ## Arguments

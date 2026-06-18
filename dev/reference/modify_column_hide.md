@@ -31,6 +31,7 @@ Daniel D. Sjoberg
 ## Examples
 
 ``` r
+
 # Example 1 ----------------------------------
 # hide 95% CI, and replace with standard error
 lm(age ~ marker + grade, trial) |>

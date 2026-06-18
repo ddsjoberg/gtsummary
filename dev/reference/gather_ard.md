@@ -83,7 +83,6 @@ tbl_summary(trial, by = trt, include = age) |>
 #> ℹ 3 more variables: fmt_fun, warning, error
 #> 
 #> 
-
 glm(response ~ trt, data = trial, family = binomial()) |>
   tbl_regression() |>
   gather_ard()

@@ -24,10 +24,12 @@ illustrative examples.
 
 library(gtsummary)
 
-tbl_regression_ex <-
-  lm(age ~ grade + marker, trial) |> 
-  tbl_regression() |> 
-  bold_p(t = 0.5)
+if (requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)) {
+  tbl_regression_ex <-
+    lm(age ~ grade + marker, trial) |> 
+    tbl_regression() |> 
+    bold_p(t = 0.5)
+}
 
 tbl_summary_ex <-
   trial |> 
