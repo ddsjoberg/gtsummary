@@ -272,6 +272,7 @@ test_that("pkgwide-str:print_engine changes print methods as expected", {
 
   # When setting `pkgwide-str:print_engine` equal to `kable_extra`, the output
   # has expected class `kableExtra`, `knitr_kable`
+  gtsummary:::skip_if_pkg_not_installed("kableExtra")
   capture.output(
     expect_equal(
       with_gtsummary_theme(
