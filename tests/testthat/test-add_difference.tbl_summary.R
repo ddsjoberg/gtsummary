@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed(
+gtsummary:::skip_if_pkg_not_installed(
   c("broom", "broom.helpers", "lme4", "smd", "effectsize", "emmeans"),
   ref = "cardx"
 )
@@ -51,7 +51,7 @@ test_that("add_difference.tbl_summary() works with basic usage", {
 })
 
 test_that("add_difference.tbl_summary(tests = 'emmeans')", {
-  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+  gtsummary:::skip_if_pkg_not_installed("emmeans", ref = "cardx")
   tbl1 <-
     trial |>
     tbl_summary(

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed(c("broom", "smd", "withr"))
+gtsummary:::skip_if_pkg_not_installed(c("broom", "smd", "withr"))
 
 test_that("separate_p_footnotes()", {
   withr::local_options(list(width = 130))
@@ -63,7 +63,7 @@ test_that("separate_p_footnotes() translates footnotes", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("separate_p_footnotes() with tbl_svysummary()", {
-  skip_if_pkg_not_installed("survey")
+  gtsummary:::skip_if_pkg_not_installed("survey")
 
   expect_error(
     survey::svydesign(~1, data = trial, weights = ~1) |>

@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed(c("broom", "broom.helpers"))
+gtsummary:::skip_if_pkg_not_installed(c("broom", "broom.helpers"))
 
 test_that("modify_abbreviation()", {
   expect_silent(
