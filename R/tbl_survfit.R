@@ -80,7 +80,7 @@
 #' but you can use stored formulas with `rlang::inject(survfit(!!my_formula, lung))`.
 #'
 #' @author Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("survival")
+#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #'
 #' # Example 1 ----------------------------------
@@ -121,7 +121,6 @@
 #'       ) |>
 #'       factor()
 #'   )
-#'
 #' survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
 #'   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 NULL

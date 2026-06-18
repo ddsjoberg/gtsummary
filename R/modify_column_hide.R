@@ -8,7 +8,8 @@
 #' @name modify_column_hide
 #' @author Daniel D. Sjoberg
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
+#'
 #' # Example 1 ----------------------------------
 #' # hide 95% CI, and replace with standard error
 #' lm(age ~ marker + grade, trial) |>

@@ -14,6 +14,7 @@
 #'   add_p() |>
 #'   gather_ard()
 #'
+#' @examplesIf gtsummary:::is_pkg_installed(c('cardx', 'broom'))
 #' glm(response ~ trt, data = trial, family = binomial()) |>
 #'   tbl_regression() |>
 #'   gather_ard()
