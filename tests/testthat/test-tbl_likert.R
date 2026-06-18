@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed("withr")
+gtsummary:::skip_if_pkg_not_installed("withr")
 
 levels <- c("Strongly Disagree", "Disagree", "Agree", "Strongly Agree")
 df_likert <-

@@ -1,6 +1,6 @@
 skip_on_cran()
-skip_if_pkg_not_installed(c("survey", "withr"))
-skip_if_pkg_not_installed("broom", ref = "cardx")
+gtsummary:::skip_if_pkg_not_installed(c("survey", "withr"))
+gtsummary:::skip_if_pkg_not_installed("broom", ref = "cardx")
 
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 

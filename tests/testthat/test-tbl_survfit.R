@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed(c("survival", "broom"))
+gtsummary:::skip_if_pkg_not_installed(c("survival", "broom"))
 
 test_that("tbl_survfit(times) works", {
   expect_silent(

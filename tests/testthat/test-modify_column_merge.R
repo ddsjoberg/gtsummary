@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed("broom.helpers")
+gtsummary:::skip_if_pkg_not_installed("broom.helpers")
 
 mod <- lm(marker ~ age + grade, trial) |> tbl_regression()
 
