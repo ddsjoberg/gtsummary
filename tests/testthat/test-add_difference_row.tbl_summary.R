@@ -141,7 +141,7 @@ test_that("add_difference_row.tbl_summary(group)", {
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     withr::with_package(
       package = "lme4",
-      lmer(age ~ fct_rev(factor(trt)) + (1 | id), trial_group)
+      lmer(age ~ forcats::fct_rev(factor(trt)) + (1 | id), trial_group)
     ) %>%
       {withr::with_package("broom.mixed", tidy(., conf.int = TRUE, effects = "fixed"))} |> # styler: off
       dplyr::slice(dplyr::n()) |>

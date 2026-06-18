@@ -156,8 +156,8 @@ test_that("combine_terms works when used in map/apply", {
     res <- data |>
       mutate(
         mod = map(outcome, ~ glm(as.formula(paste0(.x, " ~ age + stage")), data = trial, family = gaussian)),
-        tbl = map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
-        tbl2 = map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
+        tbl = purrr::map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
+        tbl2 = purrr::map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
       )
   )
 })

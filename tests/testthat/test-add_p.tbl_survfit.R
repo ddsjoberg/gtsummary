@@ -24,7 +24,7 @@ test_that("add_p.tbl_survfit(test) works", {
     ) |>
     add_p(test = "petopeto_gehanwilcoxon")
 
-    compare <- cardx::ard_survival_survdiff(survival::Surv(ttdeath, death) ~ trt, trial, rho = 1)
+  compare <- cardx::ard_survival_survdiff(survival::Surv(ttdeath, death) ~ trt, trial, rho = 1)
 
   expect_equal(
     tbl1$table_body$p.value[1],

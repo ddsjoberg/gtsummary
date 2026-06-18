@@ -162,7 +162,7 @@ test_that("add_glance_table(glance_fun) for mice models", {
       getElement("table_styling") |>
       getElement("source_note") |>
       getElement("source_note"),
-    imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
+    purrr::imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
     ignore_attr = TRUE
   )
 })

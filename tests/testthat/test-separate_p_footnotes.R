@@ -16,7 +16,7 @@ test_that("separate_p_footnotes()", {
       getElement("table_styling") |>
       getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% c(dplyr::n(), dplyr::n() - 1L)) |>
-      dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
+      dplyr::mutate(rows = purrr::map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()
   )
 
@@ -26,7 +26,7 @@ test_that("separate_p_footnotes()", {
       getElement("table_styling") |>
       getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% seq(dplyr::n(), dplyr::n() - 4L)) |>
-      dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
+      dplyr::mutate(rows = purrr::map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()
   )
 })
