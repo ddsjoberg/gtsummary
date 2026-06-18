@@ -21,12 +21,12 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
 })
 
 test_that("add_difference.tbl_svysummary(x) messaging", {
+  gtsummary:::skip_if_pkg_not_installed("smd")
   expect_snapshot(
     error = TRUE,
     tbl_svysummary(svy_trial, include = age) |>
       add_difference()
   )
-  gtsummary:::skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl <- tbl_svysummary(svy_trial, by = trt, percent = "row", include = grade) |>
       add_difference()
