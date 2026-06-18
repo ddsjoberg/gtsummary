@@ -302,7 +302,7 @@ test_that("tbl_split_by_rows(variable_level)", {
   expect_equal(
     tbl_split |>
       tbl_split_by_columns(keys = "label", groups = list("stat_1", "stat_2")) |>
-      map_chr(~attr(.x, "variable_level")),
+      purrr::map_chr(~attr(.x, "variable_level")),
     c("age", "age", "marker", "marker")
   )
 })

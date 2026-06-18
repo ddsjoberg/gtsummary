@@ -206,14 +206,14 @@ test_that("add_stat(location) for 'tbl_continuous'", {
 
   p_vals <- trial |>
     dplyr::group_split(grade) |>
-    map_dbl(~ t.test(.x[["age"]] ~ .x[["trt"]])$p.value)|>
+    purrr::map_dbl(~ t.test(.x[["age"]] ~ .x[["trt"]])$p.value)|>
     round(3) |>
     as.character()
 
   add_stat_test2 <- function(data, variable, by, tbl, ...) {
     data |>
       dplyr::group_split(!!sym(tbl$inputs$include)) |>
-      map_dbl(~ t.test(.x[[tbl$inputs$variable]] ~ .x[[by]])$p.value)
+      purrr::map_dbl(~ t.test(.x[[tbl$inputs$variable]] ~ .x[[by]])$p.value)
   }
 
   expect_equal(

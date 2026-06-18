@@ -269,7 +269,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
         values_fn = unlist
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    table(trial$trt, factor(trial$response) %>% fct_rev()) |>
+    table(trial$trt, factor(trial$response) %>% forcats::fct_rev()) |>
       prop.test() %>%
       {
         withr::with_package("broom", tidy(.))
@@ -289,7 +289,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
         values_fn = unlist
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    table(trial$trt, factor(trial$response) %>% fct_rev()) |>
+    table(trial$trt, factor(trial$response) %>% forcats::fct_rev()) |>
       prop.test(alternative = "greater") %>%
       {
         withr::with_package("broom", tidy(.))
@@ -309,7 +309,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
         values_fn = unlist
       ) |>
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    lm(age ~ fct_rev(trt), trial) %>%
+    lm(age ~ forcats::fct_rev(trt), trial) %>%
       {
         withr::with_package("broom", tidy(., conf.int = TRUE))
       } |>
@@ -338,7 +338,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
     ) |>
       dplyr::as_tibble() |>
       select(-CI) |>
-      set_names(c("estimate", "conf.low", "conf.high")),
+      rlang::set_names(c("estimate", "conf.low", "conf.high")),
     ignore_attr = TRUE
   )
 
@@ -362,7 +362,7 @@ test_that("statistics are replicated within add_difference.tbl_summary()", {
     ) |>
       dplyr::as_tibble() |>
       select(-CI) |>
-      set_names(c("estimate", "conf.low", "conf.high")),
+      rlang::set_names(c("estimate", "conf.low", "conf.high")),
     ignore_attr = TRUE
   )
 })
@@ -421,7 +421,7 @@ test_that("statistics are replicated within add_difference.tbl_summary(group)", 
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
     withr::with_package(
       package = "lme4",
-      lmer(age ~ fct_rev(factor(trt)) + (1 | id), trial_group)
+      lmer(age ~ forcats::fct_rev(factor(trt)) + (1 | id), trial_group)
     ) %>%
       {
         withr::with_package("broom.mixed", tidy(., conf.int = TRUE, effects = "fixed"))

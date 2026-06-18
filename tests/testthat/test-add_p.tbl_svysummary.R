@@ -50,7 +50,7 @@ test_that("add_p.tbl_svysummary(test)", {
         svy_trial2,
         by = trt,
         include = c(starts_with("age_"), starts_with("grade_"), response_emmeans),
-        label = svy_trial2$variables |> imap(~.y),
+        label = svy_trial2$variables |> purrr::imap(~.y),
         missing = "no"
       ) |>
       add_p(

@@ -7,7 +7,7 @@ test_that("modify_column_alignment() works", {
     tbl_regression()
 
   expect_equal(
-    map_chr(
+    purrr::map_chr(
       c("left", "right", "center"),
       ~ tbl |>
         modify_column_alignment(columns = everything(), align = .x) |>

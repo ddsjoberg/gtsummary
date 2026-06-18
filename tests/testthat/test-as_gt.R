@@ -223,8 +223,8 @@ test_that("as_gt passes table text interpreters correctly", {
     tbl2$`_spanners` |>
       dplyr::select(vars, spanner_label, spanner_level) |>
       dplyr::mutate(
-        vars = map_chr(vars, ~paste(.x, collapse = ", ")),
-        spanner_label = map_chr(spanner_label, as.character)
+        vars = purrr::map_chr(vars, ~paste(.x, collapse = ", ")),
+        spanner_label = purrr::map_chr(spanner_label, as.character)
       ),
     data.frame(
       stringsAsFactors = FALSE,
