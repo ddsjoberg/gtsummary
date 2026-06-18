@@ -30,10 +30,12 @@ We begin by creating two common {gtsummary} tables to be used as illustrative ex
 ```{r setup, message=FALSE}
 library(gtsummary)
 
-tbl_regression_ex <-
-  lm(age ~ grade + marker, trial) |> 
-  tbl_regression() |> 
-  bold_p(t = 0.5)
+if (requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)) {
+  tbl_regression_ex <-
+    lm(age ~ grade + marker, trial) |> 
+    tbl_regression() |> 
+    bold_p(t = 0.5)
+}
 
 tbl_summary_ex <-
   trial |> 
@@ -343,7 +345,7 @@ Expression identifying a row where a horizontal line is placed above in the tabl
 
 Example from `tbl_regression()`
 
-```{r} 
+```{r, eval=requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)} 
 tbl_regression_ex$table_styling
 ```
 
@@ -357,7 +359,7 @@ Of these columns, only the `"label"` column will be printed with the final resul
 The `"row_type"` column typically will control whether or not the label column is indented.
 The `"variable"` column is often used in the `inline_text()` family of functions, and merging {gtsummary} tables with `tbl_merge()`.
 
-```{r}
+```{r, eval=requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)}
 tbl_regression_ex %>%
   getElement("table_body") %>%
   select(variable, row_type, label)
