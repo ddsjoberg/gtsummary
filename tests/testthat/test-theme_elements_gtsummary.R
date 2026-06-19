@@ -224,6 +224,7 @@ test_that("pkgwide-str:print_engine changes print methods as expected", {
 
   # When setting `pkgwide-str:print_engine` equal to `huxtable`, the output
   # has expected class "huxtable",  "data.frame"
+  gtsummary:::skip_if_pkg_not_installed("huxtable")
   capture.output(
     expect_equal(
       with_gtsummary_theme(
