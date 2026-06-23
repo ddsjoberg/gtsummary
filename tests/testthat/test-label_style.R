@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("withr")
+skip_if_pkg_not_installed("withr")
 
 test_that("label_style_*()", {
   expect_equal(

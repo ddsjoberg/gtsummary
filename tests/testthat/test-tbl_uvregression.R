@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("broom.helpers", "broom", "survival", "survey"))
+skip_if_pkg_not_installed(c("broom.helpers", "broom", "survival", "survey"))
 
 test_that("tbl_uvregression(x)", {
   expect_silent(

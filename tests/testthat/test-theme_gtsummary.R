@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("huxtable", "broom.helpers"))
+skip_if_pkg_not_installed(c("huxtable", "broom.helpers"))
 
 test_that("theme_gtsummary_compact() works", {
   expect_error(
@@ -25,7 +25,7 @@ test_that("theme_gtsummary_compact() works", {
     ),
     NA
   )
- gtsummary:::skip_if_pkg_not_installed("kableExtra")
+ skip_if_pkg_not_installed("kableExtra")
   expect_error(
     with_gtsummary_theme(
       theme_gtsummary_compact(),
@@ -195,7 +195,7 @@ test_that("theme_gtsummary_journal('nejm') works", {
 })
 
 test_that("theme_gtsummary_journal('jama') works", {
-  gtsummary:::skip_if_pkg_not_installed("survey")
+  skip_if_pkg_not_installed("survey")
 
   # check that we get
   #  - IQR separated with emdash in table

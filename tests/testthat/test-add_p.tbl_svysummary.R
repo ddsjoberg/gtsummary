@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("survey")
+skip_if_pkg_not_installed("survey")
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
@@ -50,7 +50,7 @@ test_that("add_p.tbl_svysummary(test)", {
         svy_trial2,
         by = trt,
         include = c(starts_with("age_"), starts_with("grade_"), response_emmeans),
-        label = svy_trial2$variables |> purrr::imap(~.y),
+        label = svy_trial2$variables |> imap(~.y),
         missing = "no"
       ) |>
       add_p(

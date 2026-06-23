@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed("broom.helpers")
 
 # add_glance_source_note() -----------------------------------------------------
 test_that("add_glance_source_note(x)", {
@@ -132,7 +132,7 @@ test_that("add_glance_table(glance_fun)", {
 })
 
 test_that("add_glance_table(glance_fun) for mice models", {
-  gtsummary:::skip_if_pkg_not_installed("mice")
+  skip_if_pkg_not_installed("mice")
 
   tbl <- mice::mice(mice::nhanes2, print = FALSE, maxit = 1) |>
     with(lm(bmi ~ age)) |>
@@ -162,7 +162,7 @@ test_that("add_glance_table(glance_fun) for mice models", {
       getElement("table_styling") |>
       getElement("source_note") |>
       getElement("source_note"),
-    purrr::imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
+    imap(glance, ~paste0(.y, " = ", .x)) |> unlist() |> paste(collapse = "; "),
     ignore_attr = TRUE
   )
 })

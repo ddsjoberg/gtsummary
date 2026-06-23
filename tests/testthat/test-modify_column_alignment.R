@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed("broom.helpers")
 
 test_that("modify_column_alignment() works", {
   tbl <-
@@ -7,7 +7,7 @@ test_that("modify_column_alignment() works", {
     tbl_regression()
 
   expect_equal(
-    purrr::map_chr(
+    map_chr(
       c("left", "right", "center"),
       ~ tbl |>
         modify_column_alignment(columns = everything(), align = .x) |>

@@ -1,11 +1,11 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("survey")
+skip_if_pkg_not_installed("survey")
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
-  gtsummary:::skip_if_pkg_not_installed("smd")
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_trial, by = trt) |>
       add_difference() |>
@@ -21,7 +21,7 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
 })
 
 test_that("add_difference.tbl_svysummary(x) messaging", {
-  gtsummary:::skip_if_pkg_not_installed("smd")
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     error = TRUE,
     tbl_svysummary(svy_trial, include = age) |>
@@ -46,7 +46,7 @@ test_that("add_difference.tbl_svysummary(test)", {
         svy_trial2,
         by = trt,
         include = c(starts_with("age_"), starts_with("grade_"), response_emmeans),
-        label = svy_trial2$variables |> purrr::imap(~.y),
+        label = svy_trial2$variables |> imap(~.y),
         missing = "no"
       ) |>
       add_difference(
@@ -79,7 +79,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       {.[order(names(.))]}, # styler: off
     ignore_attr = TRUE
   )
-  gtsummary:::skip_if_pkg_not_installed("smd")
+  skip_if_pkg_not_installed("smd")
   expect_equal(
     tbl$table_body |>
       dplyr::filter(variable == "grade_smd", row_type == "label") |>
@@ -135,7 +135,7 @@ test_that("add_difference.tbl_svysummary(test)", {
 })
 
 test_that("add_difference.tbl_svysummary() + add_p.tbl_svysummary()", {
-  gtsummary:::skip_if_pkg_not_installed("smd")
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     svy_trial |>
       tbl_svysummary(by = trt, include = c(age, response, grade), missing = "no") |>

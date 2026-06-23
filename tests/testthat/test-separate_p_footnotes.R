@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("broom", "smd", "withr"))
+skip_if_pkg_not_installed(c("broom", "smd", "withr"))
 
 test_that("separate_p_footnotes()", {
   withr::local_options(list(width = 130))
@@ -16,7 +16,7 @@ test_that("separate_p_footnotes()", {
       getElement("table_styling") |>
       getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% c(dplyr::n(), dplyr::n() - 1L)) |>
-      dplyr::mutate(rows = purrr::map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
+      dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()
   )
 
@@ -26,7 +26,7 @@ test_that("separate_p_footnotes()", {
       getElement("table_styling") |>
       getElement("footnote_body") |>
       dplyr::filter(dplyr::row_number() %in% seq(dplyr::n(), dplyr::n() - 4L)) |>
-      dplyr::mutate(rows = purrr::map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
+      dplyr::mutate(rows = map_chr(rows, ~quo_squash(.x) |> expr_deparse())) |>
       as.data.frame()
   )
 })
@@ -63,7 +63,7 @@ test_that("separate_p_footnotes() translates footnotes", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("separate_p_footnotes() with tbl_svysummary()", {
-  gtsummary:::skip_if_pkg_not_installed("survey")
+  skip_if_pkg_not_installed("survey")
 
   expect_error(
     survey::svydesign(~1, data = trial, weights = ~1) |>

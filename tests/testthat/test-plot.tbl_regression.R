@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("ggstats", "broom.helpers"))
+skip_if_pkg_not_installed(c("ggstats", "broom.helpers"))
 
 test_that("plot.tbl_regression() works", {
   plot_obj <-

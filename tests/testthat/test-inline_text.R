@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("survival", "broom.helpers"))
+skip_if_pkg_not_installed(c("survival", "broom.helpers"))
 
 # inline_text.tbl_summary tests ------------------------------------------------
 test_inline1 <- trial |> tbl_summary()
@@ -274,7 +274,7 @@ test_that("inline_text.tbl_cross() messaging", {
   )
 })
 
-# gtsummary:::skip_if_pkg_not_installed("survey")
+# skip_if_pkg_not_installed("survey")
 #
 # # inline_text.tbl_svysummary tests --------------
 # test_inline1 <- trial %>%
@@ -341,7 +341,7 @@ test_that("inline_text.tbl_cross() messaging", {
 # })
 
 # test_that("inline_text.tbl_svysummary: no errors with empty string selection", {
-#   gtsummary:::skip_if_pkg_not_installed("survey")
+#   skip_if_pkg_not_installed("survey")
 #   expect_error(
 #     trial %>%
 #       select(grade) %>%

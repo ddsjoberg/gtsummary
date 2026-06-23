@@ -8,7 +8,7 @@ my_ttest2 <- function(data, variable, by, ...) {
   tt <- t.test(data[[variable]] ~ as.factor(data[[by]]))
 
   # returning test statistic and pvalue
-  glue::glue(
+  glue(
     "t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"
   )
 }
@@ -206,14 +206,14 @@ test_that("add_stat(location) for 'tbl_continuous'", {
 
   p_vals <- trial |>
     dplyr::group_split(grade) |>
-    purrr::map_dbl(~ t.test(.x[["age"]] ~ .x[["trt"]])$p.value)|>
+    map_dbl(~ t.test(.x[["age"]] ~ .x[["trt"]])$p.value)|>
     round(3) |>
     as.character()
 
   add_stat_test2 <- function(data, variable, by, tbl, ...) {
     data |>
       dplyr::group_split(!!sym(tbl$inputs$include)) |>
-      purrr::map_dbl(~ t.test(.x[[tbl$inputs$variable]] ~ .x[[by]])$p.value)
+      map_dbl(~ t.test(.x[[tbl$inputs$variable]] ~ .x[[by]])$p.value)
   }
 
   expect_equal(
@@ -228,7 +228,7 @@ test_that("add_stat(location) for 'tbl_continuous'", {
 
 # adding test against a `tbl_svysummary()` object
 test_that("add_stat() with tbl_svysummary()", {
-  gtsummary:::skip_if_pkg_not_installed("survey")
+  skip_if_pkg_not_installed("survey")
 
   return_three_10s <- function(...) rep_len(10, 3)
   expect_equal(
