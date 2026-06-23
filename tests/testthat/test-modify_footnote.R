@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed("broom.helpers")
 
 # first, testing deprecation
 test_that("modify_footnote(update,quiet) are deprecated", {
@@ -157,7 +157,7 @@ test_that("modify_footnote() with tbl_svysummary()", {
 })
 
 test_that("modify_footnote() works with tbl_svysummary()", {
-  gtsummary:::skip_if_pkg_not_installed("survey")
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -206,7 +206,7 @@ test_that("modify_footnote() works with tbl_cross()", {
 })
 
 test_that("modify_footnote() works with tbl_regression()", {
-  gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>

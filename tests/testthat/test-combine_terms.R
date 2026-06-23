@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed("broom.helpers")
 
 lmod <- lm(
   age ~ marker + I(marker^2) + stage,
@@ -52,7 +52,7 @@ test_that("combine_terms(label) works as expected", {
 })
 
 test_that("combine_terms works with add_global_p", {
-  gtsummary:::skip_if_pkg_not_installed("parameters")
+  skip_if_pkg_not_installed("parameters")
 
   expect_silent(
     tbl <- lmod |>
@@ -100,7 +100,7 @@ test_that("combine_terms works with logistic regression models", {
 })
 
 test_that("combine_terms works with Cox models", {
-  gtsummary:::skip_if_pkg_not_installed("survival")
+  skip_if_pkg_not_installed("survival")
 
   mod <- survival::coxph(
     survival::Surv(ttdeath, death) ~ age + stage,
@@ -124,7 +124,7 @@ test_that("combine_terms works with Cox models", {
 })
 
 test_that("combine_terms works with GEE models", {
-  gtsummary:::skip_if_pkg_not_installed("geepack")
+  skip_if_pkg_not_installed("geepack")
 
   mod <- geepack::geeglm(
     as.formula("weight ~ Diet + Time"),
@@ -156,8 +156,8 @@ test_that("combine_terms works when used in map/apply", {
     res <- data |>
       mutate(
         mod = map(outcome, ~ glm(as.formula(paste0(.x, " ~ age + stage")), data = trial, family = gaussian)),
-        tbl = purrr::map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
-        tbl2 = purrr::map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
+        tbl = map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
+        tbl2 = map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
       )
   )
 })

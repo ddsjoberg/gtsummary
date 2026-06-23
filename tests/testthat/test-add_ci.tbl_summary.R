@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom", ref = "cardx")
+skip_if_pkg_not_installed("broom", ref = "cardx")
 
 test_that("add_ci(method) with no `by`", {
   # create a tbl with all the methods present
@@ -19,7 +19,7 @@ test_that("add_ci(method) with no `by`", {
       ) %>%
       tbl_summary(
         missing = "no",
-        label = as.list(names(.)) |> rlang::set_names(names(.)),
+        label = as.list(names(.)) |> set_names(names(.)),
         statistic = list(all_continuous() ~ "{mean}", all_categorical() ~ "{p}%")
       ) |>
       add_ci(
@@ -47,14 +47,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_t_test_onesample(trial, variables = age) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilcox.test results
@@ -64,14 +64,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_wilcox_test_onesample(trial, variables = age, conf.int = TRUE) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson
@@ -81,14 +81,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson.no.correct
@@ -98,14 +98,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wald
@@ -115,14 +115,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "waldcc") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wald.no.correct
@@ -132,14 +132,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wald") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check exact
@@ -149,14 +149,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check agresti.coull
@@ -166,14 +166,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check jeffreys
@@ -183,14 +183,14 @@ test_that("add_ci(method) with no `by`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
@@ -214,7 +214,7 @@ test_that("add_ci(method) with `by`", {
       tbl_summary(
         by = trt,
         missing = "no",
-        label = as.list(names(.)) |> rlang::set_names(names(.)),
+        label = as.list(names(.)) |> set_names(names(.)),
         statistic = list(all_continuous() ~ "{mean}", all_categorical() ~ "{p}%")
       ) |>
       add_ci(
@@ -241,14 +241,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_stats_t_test_onesample(trial, variables = age, by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilcox.test results
@@ -259,14 +259,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_stats_wilcox_test_onesample(trial, variables = age, by = trt, conf.int = TRUE) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson
@@ -277,14 +277,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson.no.correct
@@ -295,14 +295,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check exact
@@ -313,14 +313,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check agresti.coull
@@ -331,14 +331,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check jeffreys
@@ -349,14 +349,14 @@ test_that("add_ci(method) with `by`", {
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys", by = trt) |>
       dplyr::filter(group1_level %in% "Drug A") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
@@ -380,7 +380,7 @@ test_that("add_ci(method) after `add_overall()`", {
       tbl_summary(
         by = trt,
         missing = "no",
-        label = as.list(names(.)) |> rlang::set_names(names(.)),
+        label = as.list(names(.)) |> set_names(names(.)),
         statistic = list(all_continuous() ~ "{mean}", all_categorical() ~ "{p}%")
       ) |>
       add_overall() |>
@@ -407,14 +407,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_t_test_onesample(trial, variables = age) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilcox.test results
@@ -424,14 +424,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_wilcox_test_onesample(trial, variables = age, conf.int = TRUE) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson
@@ -441,14 +441,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson.no.correct
@@ -458,14 +458,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check exact
@@ -475,14 +475,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check agresti.coull
@@ -492,14 +492,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check jeffreys
@@ -509,14 +509,14 @@ test_that("add_ci(method) after `add_overall()`", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys") |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 
@@ -580,7 +580,7 @@ test_that("add_ci(conf.level)", {
       ) %>%
       tbl_summary(
         missing = "no",
-        label = as.list(names(.)) |> rlang::set_names(names(.)),
+        label = as.list(names(.)) |> set_names(names(.)),
         statistic = list(all_continuous() ~ "{mean}", all_categorical() ~ "{p}%")
       ) |>
       add_ci(
@@ -607,14 +607,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_t_test_onesample(trial, variables = age, conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilcox.test results
@@ -624,14 +624,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_stats_wilcox_test_onesample(trial, variables = age, conf.int = TRUE, conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), label_style_sigfig(digits = 4), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson
@@ -641,14 +641,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilsoncc", conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check wilson.no.correct
@@ -658,14 +658,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "wilson", conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check exact
@@ -675,14 +675,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "clopper-pearson", conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check agresti.coull
@@ -692,14 +692,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "agresti-coull", conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 
   # check jeffreys
@@ -709,14 +709,14 @@ test_that("add_ci(conf.level)", {
       dplyr::pull(ci_stat_0),
     cardx::ard_categorical_ci(trial, variables = grade, value = ~"I", method = "jeffreys", conf.level = 0.80) |>
       dplyr::mutate(
-        fmt_fun = purrr::map2(
+        fmt_fun = map2(
           fmt_fun, stat_name,
           ~ ifelse(.y %in% c("conf.low", "conf.high"), \(x) style_sigfig(x, digits = 4, scale = 100) %>% paste0("%"), .x)
         )
       ) |>
       cards::apply_fmt_fun() |>
       cards::get_ard_statistics(.column = "stat_fmt") |>
-      glue::glue_data("{conf.low}, {conf.high}")
+      glue_data("{conf.low}, {conf.high}")
   )
 })
 

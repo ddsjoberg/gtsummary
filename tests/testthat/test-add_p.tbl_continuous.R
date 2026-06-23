@@ -82,7 +82,7 @@ test_that("add_p.tbl_continuous(test.args) works", {
 })
 
 test_that("add_p.tbl_continuous(group) works", {
-  gtsummary:::skip_if_pkg_not_installed("lme4")
+  skip_if_pkg_not_installed("lme4")
 
   expect_silent(
     tbl4 <- trial |>
@@ -96,8 +96,8 @@ test_that("add_p.tbl_continuous(group) works", {
   compare <- cardx::ard_stats_anova(
     x = trial |>  tidyr::drop_na(any_of(c("trt", "age", "grade"))),
     formulas = list(
-      glue::glue("as.factor(trt) ~ 1 + (1 | stage)") |> stats::as.formula(),
-      glue::glue("as.factor(trt) ~ age + (1 | stage)") |> stats::as.formula()
+      glue("as.factor(trt) ~ 1 + (1 | stage)") |> stats::as.formula(),
+      glue("as.factor(trt) ~ age + (1 | stage)") |> stats::as.formula()
     ),
     method = "glmer",
     method.args = list(family = stats::binomial),

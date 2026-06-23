@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed("broom.helpers")
 
 test_that("remove_row_type(type) works", {
   tbl1 <- tbl_summary(trial, include = c(response, age, grade))

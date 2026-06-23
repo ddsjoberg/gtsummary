@@ -1,5 +1,5 @@
 skip_on_cran()
-gtsummary:::skip_if_pkg_not_installed(c("survival", "broom"), ref = "cardx")
+skip_if_pkg_not_installed(c("survival", "broom"), ref = "cardx")
 
 test_that("add_p.tbl_survfit() works", {
   tbl <- trial |>

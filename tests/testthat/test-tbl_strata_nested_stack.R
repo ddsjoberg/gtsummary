@@ -26,7 +26,7 @@ test_that("tbl_strata_nested_stack() works", {
       dplyr::filter(dplyr::n() == dplyr::row_number())
 
     indent_last_row$n_spaces == 0L &&
-      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L"
+      indent_last_row$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L"
   })
 
   # check the 2nd row is indented
@@ -134,7 +134,7 @@ test_that("tbl_strata_nested_stack() works with unobserved factor levels", {
       dplyr::filter(n_spaces == 0L)
 
     (df_indent$column == "label") &&
-      (df_indent$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L")
+      (df_indent$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L")
   })
 
 })

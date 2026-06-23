@@ -12,7 +12,7 @@ test_that("modify_caption(caption) works", {
 })
 
 test_that("modify_caption() works with tbl_svysummary()", {
-  gtsummary:::skip_if_pkg_not_installed("survey")
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -49,7 +49,7 @@ test_that("modify_caption() works with tbl_cross()", {
 })
 
 test_that("modify_caption() works with tbl_regression()", {
-  gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>
@@ -62,7 +62,7 @@ test_that("modify_caption() works with tbl_regression()", {
 })
 
 test_that("modify_caption() works with tbl_uvregression()", {
-  gtsummary:::skip_if_pkg_not_installed("broom.helpers")
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(tbl_uvregression(trial, method = glm, y = response, method.args = list(family = binomial),
                                 exponentiate = TRUE, include = c("age", "grade")) |>

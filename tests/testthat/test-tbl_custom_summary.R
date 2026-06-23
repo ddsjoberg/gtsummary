@@ -34,7 +34,7 @@ test_that("tbl_custom_summary() basics", {
       dplyr::summarise(mean_age = mean(age), .groups = "drop") |>
       tidyr::pivot_wider(id_cols = grade, names_from = trt, values_from = mean_age) |>
       select(-1) |>
-      rlang::set_names(c("stat_1", "stat_2")) |>
+      set_names(c("stat_1", "stat_2")) |>
       dplyr::mutate_all(~ style_number(., 1)) |>
       as.data.frame()
   )
