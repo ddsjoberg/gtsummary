@@ -175,6 +175,7 @@ test_that("tbl_custom_summary() manage factor levels with no observation", {
 })
 
 test_that("tbl_custom_summary() helpers work as expected", {
+  skip_on_cran()
   # ratio_summary
   expect_error(
     tbl <- trial |>
