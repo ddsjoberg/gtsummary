@@ -5,13 +5,13 @@ svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~F
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_trial, by = trt) |>
       add_difference() |>
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
   )
-  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_titanic, by = Survived) |>
       add_difference() |>
@@ -21,12 +21,12 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
 })
 
 test_that("add_difference.tbl_svysummary(x) messaging", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     error = TRUE,
     tbl_svysummary(svy_trial, include = age) |>
       add_difference()
   )
-  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl <- tbl_svysummary(svy_trial, by = trt, percent = "row", include = grade) |>
       add_difference()
@@ -135,6 +135,7 @@ test_that("add_difference.tbl_svysummary(test)", {
 })
 
 test_that("add_difference.tbl_svysummary() + add_p.tbl_svysummary()", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     svy_trial |>
       tbl_svysummary(by = trt, include = c(age, response, grade), missing = "no") |>
