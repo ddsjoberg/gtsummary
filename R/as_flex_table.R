@@ -238,7 +238,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_header$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
           part = "header",
-          ref_symbols = !!df_footnote_header$footnote_id[[.x]]
+          ref_symbols = !!df_footnote_header$footnote_id[[.x]],
+          # separate multiple footnote reference symbols with a comma, matching
+          # gt output, e.g. "1,2" instead of "12" (#2251)
+          symbol_sep = ","
         )
       )
     )
@@ -261,7 +264,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_body$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_body$footnote[[.x]]),
           part = "body",
-          ref_symbols = !!df_footnote_body$footnote_id[[.x]]
+          ref_symbols = !!df_footnote_body$footnote_id[[.x]],
+          # separate multiple footnote reference symbols with a comma, matching
+          # gt output, e.g. "1,2" instead of "12" (#2251)
+          symbol_sep = ","
         )
       )
     )

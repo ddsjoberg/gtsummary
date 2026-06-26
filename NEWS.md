@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* In `as_flex_table()`, multiple footnote reference symbols on a single cell are now separated by a comma (e.g. `1,2` instead of `12`), matching `gt` output. This requires `flextable (>= 0.9.11)`. (#2251)
+
 * Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
 
 * Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)
