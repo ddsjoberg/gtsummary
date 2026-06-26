@@ -129,12 +129,26 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     ) |>
     dplyr::pull(".....strata.....")
 
+  # NA-out repeated header values so that the later `pivot_longer() |> drop_na()`
+  # keeps only the first occurrence of each value at each level. The
+  # first-occurrence masks must be computed against the *original* strata values,
+  # otherwise NAs introduced for an outer level would corrupt the grouping used
+  # for inner levels and drop valid headers in later groups (#2418).
+  first_occurrence <-
+    map(
+      seq_along(strata[-1]),
+      \(i) {
+        df_headers |>
+          dplyr::mutate(
+            .by = all_of(strata[seq_len(i)]),
+            ...keep... = dplyr::row_number() == 1L
+          ) |>
+          dplyr::pull("...keep...")
+      }
+    )
   for (i in seq_along(strata[-1])) {
-    df_headers <- df_headers |>
-      dplyr::mutate(
-        .by = all_of(strata[seq_len(i)]),
-        "{strata[i]}" := ifelse(dplyr::row_number() == 1, .data[[strata[i]]], NA)
-      )
+    df_headers[[strata[i]]] <-
+      ifelse(first_occurrence[[i]], df_headers[[strata[i]]], NA)
   }
 
   first_non_hidden_col <- .first_unhidden_column(tbls[[1]])

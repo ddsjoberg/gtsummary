@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug in `tbl_strata_nested_stack()` where second-level strata headers were dropped in all but the first group when using three or more strata levels. (#2418)
+
 * Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
 
 * Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)
