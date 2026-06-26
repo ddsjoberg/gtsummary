@@ -477,8 +477,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       add_difference()
   )
 
-  expect_error(
-    tbl <-
+  tbl <- expect_error(
       trial |>
       select(age, trt) |>
       tbl_summary(
@@ -492,6 +491,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       as.data.frame(col_labels = FALSE),
     NA
   )
+
   expect_snapshot(tbl)
 
   expect_equal(
@@ -510,7 +510,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
     tbl %>%
       select(ends_with(".x") | ends_with(".y")) %>%
       names() %>%
-      rlang::is_empty()
+      is_empty()
   )
 })
 
