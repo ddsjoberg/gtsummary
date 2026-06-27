@@ -120,7 +120,10 @@ add_difference.tbl_summary <- function(x,
       cli::cli_abort(call = get_cli_abort_call())
   }
 
-  # process/validate the `levels` argument and subset the data when supplied ----
+  # process/validate the `levels` argument. When supplied, the data stored in
+  # `x` is subset to the two selected levels for the difference calculation; the
+  # original full data is restored on the returned object below.
+  original_inputs_data <- x$inputs$data
   x <- .process_difference_levels(x, levels = levels)
 
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
@@ -240,6 +243,10 @@ add_difference.tbl_summary <- function(x,
       )
   }
 
+  # restore the original full data on the returned object ----------------------
+  # (the subset was only needed for the difference calculation)
+  x$inputs$data <- original_inputs_data
+
   # update call list
   x$call_list <- updated_call_list
 
@@ -334,7 +341,6 @@ add_difference.tbl_summary <- function(x,
   data[[by_var]] <- factor(as.character(data[[by_var]]), levels = as.character(levels))
 
   x$inputs$data <- data
-  x$inputs[[1]] <- data
 
   x
 }
