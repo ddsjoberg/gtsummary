@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added a `levels` argument to `add_difference.tbl_summary()` to select which two `by` groups to compare. This makes `add_difference()` usable when `tbl_summary(by=)` has more than two levels, and lets users flip the direction of the difference for two-level `by` variables. (#2151)
+
 * Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
 
 * Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)

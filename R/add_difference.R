@@ -36,6 +36,13 @@ add_difference <- function(x, ...) {
 #'   to round and format differences and confidence limits.
 #' @param conf.level (`numeric`)\cr
 #'   a scalar in the interval `(0, 1)` indicating the confidence level. Default is 0.95
+#' @param levels (`vector`)\cr
+#'   a length-two vector of the `tbl_summary(by=)` levels to compare. The
+#'   difference is calculated as `levels[1]` minus `levels[2]`.
+#'   This argument is required when the `by` variable has more than two levels, and
+#'   allows the user to select which two groups to compare. When `by` has exactly
+#'   two levels, this argument is optional and can be used to flip the direction of
+#'   the difference (e.g. `levels[2]` minus `levels[1]`). Default is `NULL`.
 #' @inheritParams  add_p.tbl_summary
 #'
 #' @export
@@ -69,12 +76,24 @@ add_difference <- function(x, ...) {
 #'   ) |>
 #'   add_n() |>
 #'   add_difference(adj.vars = c(grade, stage))
+#'
+#' # Example 3 ----------------------------------
+#' # Select two groups to compare when `by=` has 3+ levels
+#' trial |>
+#'   tbl_summary(
+#'     by = grade,
+#'     statistic = all_continuous() ~ "{mean} ({sd})",
+#'     include = c(age, marker),
+#'     missing = "no"
+#'   ) |>
+#'   add_difference(levels = c("I", "III"))
 add_difference.tbl_summary <- function(x,
                                        test = NULL,
                                        group = NULL,
                                        adj.vars = NULL,
                                        test.args = NULL,
                                        conf.level = 0.95,
+                                       levels = NULL,
                                        include = everything(),
                                        pvalue_fun = label_style_pvalue(digits = 1),
                                        estimate_fun = list(
@@ -95,11 +114,14 @@ add_difference.tbl_summary <- function(x,
     )
   }
 
-  # checking that input x has a by var and it has two levels
-  if (is_empty(x$inputs$by) || dplyr::n_distinct(x$inputs$data[[x$inputs$by]], na.rm = TRUE) != 2L) {
-    "Cannot run {.fun add_difference} when {.code tbl_summary(by)} column does not have exactly two levels." |>
+  # checking that input x has a by variable
+  if (is_empty(x$inputs$by)) {
+    "Cannot run {.fun add_difference} when {.code tbl_summary(by)} is not specified." |>
       cli::cli_abort(call = get_cli_abort_call())
   }
+
+  # process/validate the `levels` argument and subset the data when supplied ----
+  x <- .process_difference_levels(x, levels = levels)
 
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
   if (missing(pvalue_fun)) {
@@ -206,6 +228,18 @@ add_difference.tbl_summary <- function(x,
       pvalue_fun = pvalue_fun, estimate_fun = estimate_fun, calling_fun = "add_difference"
     )
 
+  # when `levels` is supplied, note the compared pair and direction ------------
+  if (!is_empty(levels)) {
+    footnote_levels <-
+      glue("{translate_string('Difference')}: {levels[1]} - {levels[2]}")
+    x <-
+      modify_table_styling(
+        x,
+        columns = any_of(c("estimate", "conf.low", "conf.high", "p.value")),
+        footnote = footnote_levels
+      )
+  }
+
   # update call list
   x$call_list <- updated_call_list
 
@@ -213,6 +247,94 @@ add_difference.tbl_summary <- function(x,
   x <-
     get_theme_element("add_difference-fn:addnl-fn-to-run", default = identity) |>
     do.call(list(x))
+
+  x
+}
+
+#' Process the `levels` argument of `add_difference()`
+#'
+#' Validates the `levels` argument and, when supplied, subsets the data stored in
+#' `x$inputs$data` to the two selected `by` levels and re-levels the `by` factor so
+#' the difference is computed as `levels[1]` minus `levels[2]`. The full
+#' `x$table_body` (all summary statistic columns) is left untouched, so the
+#' resulting table keeps every group while the difference is calculated on the
+#' selected pair.
+#'
+#' @param x (`tbl_summary`)\cr a gtsummary table
+#' @param levels (`vector`)\cr the user-supplied `levels` argument (may be `NULL`)
+#'
+#' @return the (possibly modified) gtsummary table `x`
+#' @keywords internal
+#' @noRd
+.process_difference_levels <- function(x, levels) {
+  by_var <- x$inputs$by
+  by_col <- x$inputs$data[[by_var]]
+
+  # the distinct, non-missing levels observed in the `by` column (in level order)
+  if (is.factor(by_col)) {
+    by_levels <- levels(droplevels(by_col))
+  } else {
+    by_levels <- by_col[!is.na(by_col)] |> unique() |> sort()
+  }
+  n_by_levels <- length(by_levels)
+
+  # `levels` not supplied -----------------------------------------------------
+  if (is_empty(levels)) {
+    if (n_by_levels != 2L) {
+      cli::cli_abort(
+        c(
+          "Cannot run {.fun add_difference} when {.code tbl_summary(by)} column
+           does not have exactly two levels.",
+          i = "The {.code by} variable has {n_by_levels} levels
+               ({.val {by_levels}}).",
+          i = "Use the {.arg levels} argument to select the two groups to compare,
+               e.g. {.code levels = c({.val {by_levels[1]}}, {.val {by_levels[2]}})}."
+        ),
+        call = get_cli_abort_call()
+      )
+    }
+    # two-level default path: leave the data untouched for backward compatibility
+    return(x)
+  }
+
+  # `levels` supplied: validate -----------------------------------------------
+  if (length(levels) != 2L) {
+    cli::cli_abort(
+      c(
+        "The {.arg levels} argument must be a length-two vector.",
+        i = "It has length {length(levels)}."
+      ),
+      call = get_cli_abort_call()
+    )
+  }
+  if (anyNA(levels) || levels[1] == levels[2]) {
+    cli::cli_abort(
+      "The {.arg levels} argument must contain two distinct, non-missing values.",
+      call = get_cli_abort_call()
+    )
+  }
+  not_present <- setdiff(as.character(levels), as.character(by_levels))
+  if (!is_empty(not_present)) {
+    cli::cli_abort(
+      c(
+        "Each value in the {.arg levels} argument must be one of the
+         {.code tbl_summary(by)} levels.",
+        i = "{cli::qty(length(not_present))} Value{?s} {.val {not_present}}
+             {cli::qty(length(not_present))} {?is/are} not present.",
+        i = "Valid levels are {.val {by_levels}}."
+      ),
+      call = get_cli_abort_call()
+    )
+  }
+
+  # subset the data to the two selected levels and re-level the `by` factor so
+  # the difference is computed as `levels[1]` minus `levels[2]`
+  data <- x$inputs$data
+  data <- data[as.character(data[[by_var]]) %in% as.character(levels), , drop = FALSE]
+  data[[by_var]] <- factor(as.character(data[[by_var]]), levels = as.character(levels))
+
+  x$inputs$data <- data
+  x$inputs[[1]] <- data
 
   x
 }
