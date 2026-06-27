@@ -90,9 +90,11 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
   check_scalar_logical(bold_header_rows)
 
   # normalize `x` to a (named) list of gtsummary objects -----------------------
+  # note: a data frame is also a list, so it is excluded here and handled by the
+  # validation below
   if (inherits(x, "gtsummary")) {
     tbls <- list(x)
-  } else if (is.list(x)) {
+  } else if (is.list(x) && !is.data.frame(x)) {
     tbls <- x
   } else {
     cli::cli_abort(
@@ -106,8 +108,11 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
   not_gtsummary <- which(!map_lgl(tbls, ~ inherits(.x, "gtsummary")))
   if (length(not_gtsummary) > 0L) {
     cli::cli_abort(
-      "Each element of {.arg x} must be a {.cls gtsummary} object.
-       Review element{?s} {.val {not_gtsummary}}.",
+      c(
+        "Each element of {.arg x} must be a {.cls gtsummary} object.",
+        "i" = "Review {cli::qty(length(not_gtsummary))} element{?s}
+               {.val {not_gtsummary}}."
+      ),
       call = get_cli_abort_call()
     )
   }
