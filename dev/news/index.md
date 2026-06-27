@@ -3,6 +3,12 @@
 ## gtsummary (development version)
 
 - Fixed bug in
+  [`add_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.md)
+  where a warning from a paired test (e.g. `"paired.wilcox.test"`) could
+  be printed twice.
+  ([\#1945](https://github.com/ddsjoberg/gtsummary/issues/1945))
+
+- Fixed bug in
   [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/separate_p_footnotes.md)
   where statistical test names in footnotes were not translated when
   using a non-English language theme.
