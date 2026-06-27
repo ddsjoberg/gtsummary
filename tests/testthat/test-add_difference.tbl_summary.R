@@ -732,6 +732,13 @@ test_that("add_difference.tbl_summary(levels) selects two groups when by has 3+ 
   # difference result columns are added (estimate, CI, p-value)
   expect_true(all(c("estimate", "conf.low", "conf.high", "p.value") %in% names(tbl_diff$table_body)))
 
+  # the returned object retains the original full data (not the subset)
+  expect_equal(nrow(tbl_diff$inputs$data), nrow(trial))
+  expect_setequal(
+    as.character(unique(tbl_diff$inputs$data$grade)),
+    as.character(unique(trial$grade))
+  )
+
   # estimate equals levels[1] - levels[2] (I - III)
   est_I_III <-
     tbl_diff$cards$add_difference$age |>
