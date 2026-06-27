@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug in `add_p()` where a warning from a paired test (e.g. `"paired.wilcox.test"`) could be printed twice. (#1945)
+
 * Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
 
 * Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)
