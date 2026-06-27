@@ -673,13 +673,19 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type = c("log", "sc", "
 }
 
 warn_unbalanced_pairs <- function(data, by, variable, group) {
+  # `pivot_wider()` is used only to detect unbalanced pairs. When the data has
+  # duplicate (group, by) entries it emits a "not uniquely identified" warning
+  # that is unrelated to this function's purpose and would otherwise duplicate a
+  # warning already surfaced by the test itself (#1945). Suppress it here.
   balanced_pairs <-
-    data[c(group, by, variable)] |>
-    tidyr::drop_na() |>
-    tidyr::pivot_wider(
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
+    suppressWarnings(
+      data[c(group, by, variable)] |>
+        tidyr::drop_na() |>
+        tidyr::pivot_wider(
+          id_cols = all_of(group),
+          names_from = all_of(by),
+          values_from = all_of(variable)
+        )
     ) |>
     dplyr::select(-all_of(group)) |>
     dplyr::mutate(across(everything(), is.na)) |>
