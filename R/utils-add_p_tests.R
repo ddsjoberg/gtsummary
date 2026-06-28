@@ -373,11 +373,26 @@ add_p_test_smd <- function(data, variable, by, ...) {
 }
 
 add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
-                               type, group = NULL, ...) {
+                               type, group = NULL, tbl = NULL, ...) {
   check_empty(c("test.args"), ...)
 
   if (!is_empty(group)) check_pkg_installed("lme4", ref = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", ref = "cardx")
+
+  # for dichotomous variables, align the modeled level with the displayed `value`.
+  # emmeans models the probability of the *last* factor level, but gtsummary
+  # displays the proportion of the `value` level. Converting the variable to a
+  # logical (TRUE == displayed value) makes `as.factor()` order the levels
+  # c(FALSE, TRUE), so emmeans models P(displayed value) and the contrast sign
+  # matches the displayed quantity (stat_1 - stat_2). (#2399)
+  if (identical(type, "dichotomous") &&
+      !is_empty(tbl$inputs$value[[variable]])) {
+    if (inherits(data, "survey.design")) {
+      data$variables[[variable]] <- data$variables[[variable]] == tbl$inputs$value[[variable]]
+    } else {
+      data[[variable]] <- data[[variable]] == tbl$inputs$value[[variable]]
+    }
+  }
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
