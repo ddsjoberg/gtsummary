@@ -5,7 +5,6 @@
 \alias{modify_footnote_header}
 \alias{modify_footnote_body}
 \alias{modify_footnote_spanning_header}
-\alias{modify_footnote_symbol}
 \alias{remove_footnote_header}
 \alias{remove_footnote_body}
 \alias{remove_footnote_spanning_header}
@@ -36,8 +35,6 @@ modify_footnote_spanning_header(
   replace = TRUE,
   text_interpret = c("md", "html")
 )
-
-modify_footnote_symbol(x, symbol)
 
 remove_footnote_header(x, columns = everything())
 
@@ -76,16 +73,6 @@ Review \link[=rows_argument]{rows argument details}.}
 
 \item{level}{(\code{integer})\cr
 An integer specifying which level to place the spanning header footnote.}
-
-\item{symbol}{(\code{character})\cr
-a character vector of length 2 or greater giving the ordered symbols used
-to reference footnotes, e.g. \code{c("*", "\\u2020", "\\u2021")}. Symbols are
-assigned to footnotes in the order the footnotes appear in the table. When
-the number of footnotes exceeds the number of symbols supplied, the symbols
-are recycled. A length of at least 2 is required because \code{as_gt()} passes
-these to \code{gt::opt_footnote_marks()}, which interprets a single string as
-the name of a built-in mark scheme. Currently only utilized by \code{as_gt()}
-and \code{as_flex_table()}.}
 }
 \value{
 Updated gtsummary object
@@ -115,15 +102,10 @@ tbl
 tbl |>
   remove_footnote_header(columns = all_stat_cols()) |>
   remove_footnote_body(columns = label, rows = variable == "grade" & row_type == "label")
-
-# Example 3 ----------------------------------
-# use symbols (instead of numbers) to reference footnotes
-trial |>
-  tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
-  add_p() |>
-  modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021"))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=modify_footnote_symbol]{modify_footnote_symbol()}} to customize the symbols used to reference footnotes
+
 \href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
 }
