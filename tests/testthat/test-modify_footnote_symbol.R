@@ -30,7 +30,13 @@ test_that("modify_footnote_symbol() input checks", {
   # empty symbol
   expect_error(
     modify_footnote_symbol(tbl, symbol = character(0)),
-    "non-empty"
+    "length 2 or greater"
+  )
+  # length-1 symbol (gt::opt_footnote_marks() treats a single string as a
+  # built-in scheme name, so a custom symbol set must have length >= 2)
+  expect_error(
+    modify_footnote_symbol(tbl, symbol = "*"),
+    "length 2 or greater"
   )
   # non-gtsummary x
   expect_error(
@@ -97,12 +103,13 @@ test_that("modify_footnote_symbol() works with as_flex_table()", {
   expect_equal(ft_calls$footnote_body[[1]]$ref_symbols, "\u2021")
 
   # symbols recycle when there are more footnotes than symbols
+  # (2 symbols, 3 footnotes -> third footnote wraps to the first symbol)
   ft_calls_recycle <-
     tbl |>
-    modify_footnote_symbol(symbol = "@") |>
+    modify_footnote_symbol(symbol = c("@", "#")) |>
     as_flex_table(return_calls = TRUE)
   expect_equal(ft_calls_recycle$footnote_header[[1]]$ref_symbols, "@")
-  expect_equal(ft_calls_recycle$footnote_header[[2]]$ref_symbols, "@")
+  expect_equal(ft_calls_recycle$footnote_header[[2]]$ref_symbols, "#")
   expect_equal(ft_calls_recycle$footnote_body[[1]]$ref_symbols, "@")
 
   # tables render without error
