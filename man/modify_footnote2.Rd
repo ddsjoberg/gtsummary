@@ -78,11 +78,14 @@ Review \link[=rows_argument]{rows argument details}.}
 An integer specifying which level to place the spanning header footnote.}
 
 \item{symbol}{(\code{character})\cr
-a character vector of the ordered symbols used to reference footnotes,
-e.g. \code{c("*", "\\u2020", "\\u2021")} or \code{letters}. Symbols are assigned to
-footnotes in the order the footnotes appear in the table. When the number
-of footnotes exceeds the number of symbols supplied, the symbols are
-recycled. Currently only utilized by \code{as_gt()} and \code{as_flex_table()}.}
+a character vector of length 2 or greater giving the ordered symbols used
+to reference footnotes, e.g. \code{c("*", "\\u2020", "\\u2021")}. Symbols are
+assigned to footnotes in the order the footnotes appear in the table. When
+the number of footnotes exceeds the number of symbols supplied, the symbols
+are recycled. A length of at least 2 is required because \code{as_gt()} passes
+these to \code{gt::opt_footnote_marks()}, which interprets a single string as
+the name of a built-in mark scheme. Currently only utilized by \code{as_gt()}
+and \code{as_flex_table()}.}
 }
 \value{
 Updated gtsummary object

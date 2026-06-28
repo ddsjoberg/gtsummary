@@ -20,11 +20,14 @@
 #' @param level (`integer`)\cr
 #'   An integer specifying which level to place the spanning header footnote.
 #' @param symbol (`character`)\cr
-#'   a character vector of the ordered symbols used to reference footnotes,
-#'   e.g. `c("*", "\u2020", "\u2021")` or `letters`. Symbols are assigned to
-#'   footnotes in the order the footnotes appear in the table. When the number
-#'   of footnotes exceeds the number of symbols supplied, the symbols are
-#'   recycled. Currently only utilized by `as_gt()` and `as_flex_table()`.
+#'   a character vector of length 2 or greater giving the ordered symbols used
+#'   to reference footnotes, e.g. `c("*", "\u2020", "\u2021")`. Symbols are
+#'   assigned to footnotes in the order the footnotes appear in the table. When
+#'   the number of footnotes exceeds the number of symbols supplied, the symbols
+#'   are recycled. A length of at least 2 is required because `as_gt()` passes
+#'   these to `gt::opt_footnote_marks()`, which interprets a single string as
+#'   the name of a built-in mark scheme. Currently only utilized by `as_gt()`
+#'   and `as_flex_table()`.
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
@@ -190,9 +193,9 @@ modify_footnote_symbol <- function(x, symbol) {
   check_class(x, "gtsummary")
   check_not_missing(symbol)
   check_class(symbol, "character")
-  if (is_empty(symbol)) {
+  if (length(symbol) < 2L) {
     cli::cli_abort(
-      "The {.arg symbol} argument must be a non-empty character vector.",
+      "The {.arg symbol} argument must be a character vector of length 2 or greater.",
       call = get_cli_abort_call()
     )
   }
