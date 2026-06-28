@@ -27,7 +27,7 @@ Updated gtsummary object
 Customize the symbols used to reference footnotes in a gtsummary table. By
 default, footnotes are referenced with sequential numbers (\verb{1, 2, 3, ...}).
 This function replaces those numbers with a user-specified set of symbols,
-e.g. \code{c("*", "\\u2020", "\\u2021")}.
+e.g. \code{c("*", "\\u2020", "\\u2021")} (an asterisk, dagger, and double dagger).
 }
 \details{
 The symbol sequence may also be set for all tables via the
@@ -35,7 +35,7 @@ The symbol sequence may also be set for all tables via the
 \code{modify_footnote_symbol()} takes precedence over the theme element.
 }
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # use symbols (instead of numbers) to reference footnotes
 trial |>
   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
@@ -45,6 +45,4 @@ trial |>
 }
 \seealso{
 \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_footnote_spanning_header]{modify_footnote_spanning_header()}}
-
-\href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
 }
