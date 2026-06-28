@@ -381,22 +381,19 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
 
   # for dichotomous variables, align the modeled level with the displayed `value`.
   # emmeans models the probability of the *last* factor level, but gtsummary
-  # displays the proportion of the `value` level. Releveling the response factor
-  # so the displayed `value` is the last level makes emmeans model
-  # P(displayed value), so the contrast sign matches the displayed quantity
-  # (stat_1 - stat_2). Using a factor (rather than a logical) keeps the real
-  # level names in the returned ARD. (#2399)
+  # displays the proportion of the `value` level. When the displayed `value` is
+  # the first level, reverse the (2-level) factor so it becomes the last level,
+  # making emmeans model P(displayed value) and the contrast sign match the
+  # displayed quantity (stat_1 - stat_2). (#2399)
   if (identical(type, "dichotomous") &&
       !is_empty(tbl$inputs$value[[variable]])) {
-    value <- tbl$inputs$value[[variable]]
-    relevel_value_last <- function(x) {
-      x <- factor(x)
-      factor(x, levels = c(setdiff(levels(x), as.character(value)), as.character(value)))
-    }
-    if (inherits(data, "survey.design")) {
-      data$variables[[variable]] <- relevel_value_last(data$variables[[variable]])
-    } else {
-      data[[variable]] <- relevel_value_last(data[[variable]])
+    fct_var <- factor(.extract_data_frame(data)[[variable]])
+    if (identical(levels(fct_var)[1], as.character(tbl$inputs$value[[variable]]))) {
+      if (inherits(data, "survey.design")) {
+        data$variables[[variable]] <- fct_rev(fct_var)
+      } else {
+        data[[variable]] <- fct_rev(fct_var)
+      }
     }
   }
 
