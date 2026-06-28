@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Fixed bug in `add_difference()` and `add_p()` where the `"emmeans"` method reported the wrong sign for a dichotomous variable whose displayed `value` was the first factor level. The estimate now reflects the displayed proportion difference. (#2399)
+* Fixed bug in `add_difference()` where the `"emmeans"` method reported the wrong sign for a dichotomous variable whose displayed `value` was the first factor level. The estimate now reflects the displayed proportion difference. (#2399)
 
 * Fixed bug in `add_p()` where a warning from a paired test (e.g. `"paired.wilcox.test"`) could be printed twice. (#1945)
 
