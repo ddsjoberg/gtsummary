@@ -19,19 +19,13 @@
 #'   is to replace existing footnotes.
 #' @param level (`integer`)\cr
 #'   An integer specifying which level to place the spanning header footnote.
-#' @param symbol (`character`)\cr
-#'   a character vector of length 2 or greater giving the ordered symbols used
-#'   to reference footnotes, e.g. `c("*", "\u2020", "\u2021")`. Symbols are
-#'   assigned to footnotes in the order the footnotes appear in the table. When
-#'   the number of footnotes exceeds the number of symbols supplied, the symbols
-#'   are recycled. A length of at least 2 is required because `as_gt()` passes
-#'   these to `gt::opt_footnote_marks()`, which interprets a single string as
-#'   the name of a built-in mark scheme. Currently only utilized by `as_gt()`
-#'   and `as_flex_table()`.
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
-#' @seealso [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+#' @seealso
+#'   [`modify_footnote_symbol()`] to customize the symbols used to reference footnotes
+#'
+#'   [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
@@ -54,13 +48,6 @@
 #' tbl |>
 #'   remove_footnote_header(columns = all_stat_cols()) |>
 #'   remove_footnote_body(columns = label, rows = variable == "grade" & row_type == "label")
-#'
-#' # Example 3 ----------------------------------
-#' # use symbols (instead of numbers) to reference footnotes
-#' trial |>
-#'   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
-#'   add_p() |>
-#'   modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021"))
 NULL
 
 #' @export
@@ -178,31 +165,6 @@ modify_footnote_spanning_header <- function(x, footnote, columns,
       text_interpret = text_interpret,
       replace = replace
     )
-
-  # update call list and return table ------------------------------------------
-  x$call_list <- updated_call_list
-  x
-}
-
-#' @export
-#' @rdname modify_footnote2
-modify_footnote_symbol <- function(x, symbol) {
-  set_cli_abort_call()
-
-  # check inputs ---------------------------------------------------------------
-  check_class(x, "gtsummary")
-  check_not_missing(symbol)
-  check_class(symbol, "character")
-  if (length(symbol) < 2L) {
-    cli::cli_abort(
-      "The {.arg symbol} argument must be a character vector of length 2 or greater.",
-      call = get_cli_abort_call()
-    )
-  }
-  updated_call_list <- c(x$call_list, list(modify_footnote_symbol = match.call()))
-
-  # store the ordered symbol sequence ------------------------------------------
-  x$table_styling$footnote_symbol <- symbol
 
   # update call list and return table ------------------------------------------
   x$call_list <- updated_call_list
