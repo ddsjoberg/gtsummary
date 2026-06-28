@@ -34,6 +34,22 @@ The symbol sequence may also be set for all tables via the
 \code{"pkgwide-chr:footnote_symbol"} theme element; a value set with
 \code{modify_footnote_symbol()} takes precedence over the theme element.
 }
+\section{Common footnote marks}{
+
+
+The table below lists common footnote reference marks and their Unicode
+code points. The six marks correspond to those used in
+\code{gt::opt_footnote_marks(marks = "extended")}.\tabular{clll}{
+   Symbol \tab Name \tab Unicode \tab R string \cr
+   \code{*} \tab asterisk \tab \verb{U+002A} \tab \code{"*"} \cr
+   \verb{†} \tab dagger \tab \code{U+2020} \tab \code{"\\\\u2020"} \cr
+   \verb{‡} \tab double dagger \tab \code{U+2021} \tab \code{"\\\\u2021"} \cr
+   \verb{§} \tab section sign \tab \verb{U+00A7} \tab \code{"\\\\u00A7"} \cr
+   \verb{‖} \tab double vertical line \tab \code{U+2016} \tab \code{"\\\\u2016"} \cr
+   \verb{¶} \tab pilcrow (paragraph sign) \tab \verb{U+00B6} \tab \code{"\\\\u00B6"} \cr
+}
+}
+
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # use symbols (instead of numbers) to reference footnotes

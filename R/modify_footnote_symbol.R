@@ -9,6 +9,21 @@
 #' `"pkgwide-chr:footnote_symbol"` theme element; a value set with
 #' `modify_footnote_symbol()` takes precedence over the theme element.
 #'
+#' @section Common footnote marks:
+#'
+#' The table below lists common footnote reference marks and their Unicode
+#' code points. The six marks correspond to those used in
+#' `gt::opt_footnote_marks(marks = "extended")`.
+#'
+#' | Symbol | Name                     | Unicode  | R string    |
+#' | :----: | :----------------------- | :------- | :---------- |
+#' | `*`    | asterisk                 | `U+002A` | `"*"`       |
+#' | `†`    | dagger                   | `U+2020` | `"\\u2020"` |
+#' | `‡`    | double dagger            | `U+2021` | `"\\u2021"` |
+#' | `§`    | section sign             | `U+00A7` | `"\\u00A7"` |
+#' | `‖`    | double vertical line     | `U+2016` | `"\\u2016"` |
+#' | `¶`    | pilcrow (paragraph sign) | `U+00B6` | `"\\u00B6"` |
+#'
 #' @inheritParams modify
 #' @param symbol (`character`)\cr
 #'   a character vector of length 2 or greater giving the ordered symbols used
