@@ -213,7 +213,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
   # resolve custom footnote reference symbols set via `modify_footnote_symbol()`
-  # or the `pkgwide-str:footnote_symbol` theme element. `NULL` keeps the default
+  # or the `pkgwide-chr:footnote_symbol` theme element. `NULL` keeps the default
   # integer reference marks. A small helper maps each footnote's integer id to
   # its reference symbol (recycling when needed).
   footnote_symbol <- .resolve_footnote_symbols(x)

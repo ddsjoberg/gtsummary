@@ -111,11 +111,11 @@ test_that("modify_footnote_symbol() works with as_flex_table()", {
   )
 })
 
-test_that("pkgwide-str:footnote_symbol theme element is respected", {
+test_that("pkgwide-chr:footnote_symbol theme element is respected", {
   skip_if_pkg_not_installed("flextable")
 
   withr::defer(reset_gtsummary_theme())
-  set_gtsummary_theme(list("pkgwide-str:footnote_symbol" = c("a", "b", "c")))
+  set_gtsummary_theme(list("pkgwide-chr:footnote_symbol" = c("a", "b", "c")))
 
   tbl <-
     trial |>
