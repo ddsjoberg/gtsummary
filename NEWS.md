@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `modify_footnote_symbol()` and the `pkgwide-str:footnote_symbol` theme element to control the symbols used for footnote references (e.g. `c("*", "†", "‡")` instead of `1, 2, 3`). Currently supported by `as_gt()` and `as_flex_table()`. (#1445)
+
 * Fixed bug in `add_p()` where a warning from a paired test (e.g. `"paired.wilcox.test"`) could be printed twice. (#1945)
 
 * Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)

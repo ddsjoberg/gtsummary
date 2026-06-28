@@ -418,3 +418,22 @@ test_that("theme element add_ci.tbl_svysummary-arg:method", {
         dplyr::pull(ci_stat_0)
     )
 })
+
+# pkgwide-str:footnote_symbol --------------------------------------------------
+test_that("pkgwide-str:footnote_symbol", {
+  skip_if_pkg_not_installed("flextable")
+
+  # theme element supplies the default footnote reference symbols
+  ft_calls <-
+    with_gtsummary_theme(
+      x = list("pkgwide-str:footnote_symbol" = c("*", "\u2020", "\u2021")),
+      expr =
+        trial |>
+          tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
+          add_p() |>
+          as_flex_table(return_calls = TRUE)
+    )
+
+  expect_equal(ft_calls$footnote_header[[1]]$ref_symbols, "*")
+  expect_equal(ft_calls$footnote_header[[2]]$ref_symbols, "\u2020")
+})

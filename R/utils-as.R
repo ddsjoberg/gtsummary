@@ -333,6 +333,21 @@
 
 
 
+# resolve the ordered footnote reference symbols for a gtsummary object.
+# precedence: value set via `modify_footnote_symbol()` > theme element > NULL.
+# returns `NULL` when no custom symbols are set (engines use default numbering).
+.resolve_footnote_symbols <- function(x) {
+  x$table_styling$footnote_symbol %||%
+    get_theme_element("pkgwide-str:footnote_symbol", default = NULL)
+}
+
+# given a vector of 1-based footnote ids and an ordered symbol vector, return the
+# symbol assigned to each id, recycling the symbols when ids exceed their length.
+.map_footnote_symbols <- function(footnote_id, symbol) {
+  idx <- ((footnote_id - 1L) %% length(symbol)) + 1L
+  symbol[idx]
+}
+
 # this function takes a list expressions and evaluates them with a `%>%` between them
 .eval_list_of_exprs <- function(exprs, env = rlang::caller_env()) {
   exprs %>%
