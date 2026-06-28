@@ -315,7 +315,7 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # opt_footnote_marks ---------------------------------------------------------
   # apply custom footnote reference symbols set via `modify_footnote_symbol()`
-  # or the `pkgwide-str:footnote_symbol` theme element
+  # or the `pkgwide-chr:footnote_symbol` theme element
   footnote_symbol <- .resolve_footnote_symbols(x)
   if (!is.null(footnote_symbol)) {
     gt_calls[["opt_footnote_marks"]] <-

@@ -338,7 +338,7 @@
 # returns `NULL` when no custom symbols are set (engines use default numbering).
 .resolve_footnote_symbols <- function(x) {
   x$table_styling$footnote_symbol %||%
-    get_theme_element("pkgwide-str:footnote_symbol", default = NULL)
+    get_theme_element("pkgwide-chr:footnote_symbol", default = NULL)
 }
 
 # given a vector of 1-based footnote ids and an ordered symbol vector, return the
