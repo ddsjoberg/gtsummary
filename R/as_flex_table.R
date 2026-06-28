@@ -212,6 +212,18 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # autofit --------------------------------------------------------------------
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
+  # resolve custom footnote reference symbols set via `modify_footnote_symbol()`
+  # or the `pkgwide-str:footnote_symbol` theme element. `NULL` keeps the default
+  # integer reference marks. A small helper maps each footnote's integer id to
+  # its reference symbol (recycling when needed).
+  footnote_symbol <- .resolve_footnote_symbols(x)
+  ref_symbol_for <- function(footnote_id) {
+    if (is.null(footnote_symbol)) {
+      return(footnote_id)
+    }
+    .map_footnote_symbols(footnote_id, footnote_symbol)
+  }
+
   # footnote_header ------------------------------------------------------------
   spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()
   df_footnote_header <-
@@ -238,7 +250,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_header$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
           part = "header",
-          ref_symbols = !!df_footnote_header$footnote_id[[.x]]
+          ref_symbols = !!ref_symbol_for(df_footnote_header$footnote_id[[.x]])
         )
       )
     )
@@ -261,7 +273,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_body$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_body$footnote[[.x]]),
           part = "body",
-          ref_symbols = !!df_footnote_body$footnote_id[[.x]]
+          ref_symbols = !!ref_symbol_for(df_footnote_body$footnote_id[[.x]])
         )
       )
     )
