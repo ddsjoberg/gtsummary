@@ -3,7 +3,7 @@
 #' Customize the symbols used to reference footnotes in a gtsummary table. By
 #' default, footnotes are referenced with sequential numbers (`1, 2, 3, ...`).
 #' This function replaces those numbers with a user-specified set of symbols,
-#' e.g. `c("*", "\u2020", "\u2021")`.
+#' e.g. `c("*", "\u2020", "\u2021")` (an asterisk, dagger, and double dagger).
 #'
 #' The symbol sequence may also be set for all tables via the
 #' `"pkgwide-chr:footnote_symbol"` theme element; a value set with
@@ -25,9 +25,7 @@
 #' @seealso
 #'   [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_footnote_spanning_header()`]
 #'
-#'   [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
-#'
-#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # use symbols (instead of numbers) to reference footnotes
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
