@@ -3,6 +3,14 @@
 ## gtsummary (development version)
 
 - Fixed bug in
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
+  where the `"emmeans"` method reported the wrong sign for a dichotomous
+  variable whose displayed `value` was the first factor level (`B - A`
+  instead of `A - B`). The estimate now reflects the displayed
+  proportion difference.
+  ([\#2399](https://github.com/ddsjoberg/gtsummary/issues/2399))
+
+- Fixed bug in
   [`add_p()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.md)
   where a warning from a paired test (e.g. `"paired.wilcox.test"`) could
   be printed twice.
