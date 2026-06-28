@@ -36,7 +36,7 @@ jobs:
         run: Rscript .github/scripts/benchmark.R
 
       - name: Post Comment
-        uses: mshick/add-pr-comment@v2
+        uses: mshick/add-pr-comment@v3
         with:
           message-path: bench_report.md
-          refresh-main-comment: true
+          message-id: 'add-benchmark-pr-comment'
