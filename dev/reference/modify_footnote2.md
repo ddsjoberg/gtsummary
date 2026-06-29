@@ -97,6 +97,9 @@ Updated gtsummary object
 [Footnotes vs Source Notes vs
 Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
 
+[`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md)
+to customize the symbols used to reference footnotes
+
 ## Examples
 
 ``` r

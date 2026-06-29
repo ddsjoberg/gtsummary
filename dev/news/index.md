@@ -2,6 +2,17 @@
 
 ## gtsummary (development version)
 
+- Added
+  [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
+  [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
+  and the `pkgwide-chr:footnote_symbol` theme element to control the
+  symbols used for footnote references (e.g. `c("*", "†", "‡")` instead
+  of `1, 2, 3`). Currently supported by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+  and
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md).
+  ([\#1445](https://github.com/ddsjoberg/gtsummary/issues/1445))
+
 - Fixed bug in
   [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
   where the `"emmeans"` method reported the wrong sign for a dichotomous

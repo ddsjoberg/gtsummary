@@ -77,7 +77,8 @@ styled.
 The list contains the following data frames `header`, `footnote_header`,
 `footnote_body`, `footnote_spanning_header`, `abbreviation`,
 `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and
-the following objects `caption` and `horizontal_line_above`.
+the following objects `caption`, `horizontal_line_above`, and
+`footnote_symbol`.
 
 **`header`**
 
@@ -136,6 +137,21 @@ tibble.
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
 | replace | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE) |
 | remove | logical indicating whether to remove all footnotes in the column header |
+
+**`footnote_symbol`**
+
+An optional character vector of the ordered symbols used to reference
+footnotes, e.g. `c("*", "†", "‡")`. When `NULL` (the default), the print
+engine’s default numeric reference marks (`1, 2, 3, …`) are used. The
+symbols are assigned to footnotes in the order the footnotes appear in
+the table and are recycled when there are more footnotes than symbols.
+This element is set with
+[`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md)
+(or the `pkgwide-chr:footnote_symbol` theme element) and is currently
+utilized by
+[`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+and
+[`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md).
 
 **`abbreviation`**
 

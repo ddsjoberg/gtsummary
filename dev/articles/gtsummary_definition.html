@@ -151,8 +151,9 @@ The list contains the following data frames <code>header</code>,
 <code>footnote_spanning_header</code>, <code>abbreviation</code>,
 <code>source_note</code>, <code>fmt_fun</code>,
 <code>text_format</code>, <code>fmt_missing</code>,
-<code>cols_merge</code> and the following objects <code>caption</code>
-and <code>horizontal_line_above</code>.</p>
+<code>cols_merge</code> and the following objects <code>caption</code>,
+<code>horizontal_line_above</code>, and
+<code>footnote_symbol</code>.</p>
 <p><strong><code>header</code></strong></p>
 <p>The <code>header</code> table has the following columns and is one
 row per column found in <code>.$table_body</code>. The table contains
@@ -2098,6 +2099,16 @@ the tibble.</p>
 </tbody>
 </table>
 </div>
+<p><strong><code>footnote_symbol</code></strong></p>
+<p>An optional character vector of the ordered symbols used to reference
+footnotes, e.g. <code>c("*", "†", "‡")</code>. When <code>NULL</code>
+(the default), the print engine’s default numeric reference marks
+(<code>1, 2, 3, …</code>) are used. The symbols are assigned to
+footnotes in the order the footnotes appear in the table and are
+recycled when there are more footnotes than symbols. This element is set
+with <code><a href="../reference/modify_footnote_symbol.html">modify_footnote_symbol()</a></code> (or the
+<code>pkgwide-chr:footnote_symbol</code> theme element) and is currently
+utilized by <code><a href="../reference/as_gt.html">as_gt()</a></code> and <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>.</p>
 <p><strong><code>abbreviation</code></strong></p>
 <p>Abbreviations are added one at a time, and at the time of table
 rendering, they are coalesced into a single source note.</p>
