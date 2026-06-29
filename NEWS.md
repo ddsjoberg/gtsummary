@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* `as_hux_xlsx()` now accepts a list of gtsummary tables, writing each table to its own worksheet in a single Excel workbook. When the list is named, the names are used as the worksheet names. (#2327)
+
 * Added `without_gtsummary_theme()` to evaluate an expression with the active gtsummary theme temporarily ignored (package defaults in effect), restoring the theme afterward. (#2284)
 
 * The `text_interpret` argument now accepts `"none"` (in addition to `"md"` and `"html"`), which renders text verbatim without markdown/HTML interpretation. The `add_significance_stars()` footnote now uses `"none"` so its asterisks render literally. Honored by `as_gt()`. (#1987)
