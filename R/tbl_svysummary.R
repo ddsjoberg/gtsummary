@@ -227,14 +227,7 @@ tbl_svysummary <- function(data,
           get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
       ),
-    missing =
-      case_switch(
-        missing(missing) ~
-          get_theme_element("tbl_svysummary-arg:missing") %||%
-          get_theme_element("tbl_summary-arg:missing", default = missing),
-        .default = missing
-      ) |>
-      .normalize_missing_arg()
+    missing = missing
   )
 
   # fill in unspecified variables
@@ -254,8 +247,6 @@ tbl_svysummary <- function(data,
       get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_svysummary)[["missing"]])) |>
       .normalize_missing_arg()
   )
-  # validate each variable's resolved missing value
-  .check_missing_arg(missing)
 
   # fill each element of digits argument
   if (!missing(digits)) {
@@ -270,7 +261,8 @@ tbl_svysummary <- function(data,
   .check_haven_labelled(as.data.frame(data)[c(include, by)])
   .check_tbl_summary_args(
     data = as.data.frame(data), label = label, statistic = statistic,
-    digits = digits, type = type, value = value, sort = sort
+    digits = digits, type = type, value = value,
+    missing = missing, sort = sort
   )
   .check_statistic_type_agreement(statistic, type)
 

@@ -317,12 +317,7 @@ tbl_summary <- function(data,
         missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
       ),
-    missing =
-      case_switch(
-        missing(missing) ~ get_theme_element("tbl_summary-arg:missing", default = missing),
-        .default = missing
-      ) |>
-      .normalize_missing_arg()
+    missing = missing
   )
 
   # fill in unspecified variables
@@ -338,8 +333,6 @@ tbl_summary <- function(data,
       get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
       .normalize_missing_arg()
   )
-  # validate each variable's resolved missing value
-  .check_missing_arg(missing)
 
   # fill each element of digits argument
   if (!missing(digits)) {
@@ -354,7 +347,8 @@ tbl_summary <- function(data,
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
-    digits = digits, type = type, value = value, sort = sort
+    digits = digits, type = type, value = value,
+    missing = missing, sort = sort
   )
   .check_statistic_type_agreement(statistic, type)
 
@@ -734,7 +728,7 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, missing, sort = NULL) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
@@ -767,6 +761,12 @@ tbl_summary <- function(data,
     x = sort,
     predicate = function(x) is.null(x) || (is_string(x) && x %in% c("alphanumeric", "frequency")),
     error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}."
+  )
+
+  cards::check_list_elements(
+    x = missing,
+    predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
+    error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
   )
 
 }
@@ -805,11 +805,3 @@ tbl_summary <- function(data,
   missing
 }
 
-# validate that every variable's resolved `missing` value is an accepted option
-.check_missing_arg <- function(missing) {
-  cards::check_list_elements(
-    x = missing,
-    predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
-    error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
-  )
-}
