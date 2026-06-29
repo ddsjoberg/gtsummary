@@ -2,6 +2,10 @@
 
 ## gtsummary (development version)
 
+- Added Bosnian language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@dzanahmed](https://github.com/dzanahmed))
+
 - [`as_hux_xlsx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md)
   now accepts a list of gtsummary tables, writing each table to its own
   worksheet in a single Excel workbook. When the list is named, the
