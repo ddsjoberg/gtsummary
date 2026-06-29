@@ -5,6 +5,7 @@
 \alias{reset_gtsummary_theme}
 \alias{get_gtsummary_theme}
 \alias{with_gtsummary_theme}
+\alias{without_gtsummary_theme}
 \alias{check_gtsummary_theme}
 \title{Set gtsummary theme}
 \usage{
@@ -20,6 +21,8 @@ with_gtsummary_theme(
   env = rlang::caller_env(),
   msg_ignored_elements = NULL
 )
+
+without_gtsummary_theme(expr, env = rlang::caller_env())
 
 check_gtsummary_theme(x)
 }
@@ -47,6 +50,7 @@ Functions to \strong{set}, \strong{reset}, \strong{get}, and evaluate \strong{wi
 \item \code{reset_gtsummary_theme()} reset themes
 \item \code{get_gtsummary_theme()} get a named list with all active theme elements
 \item \code{with_gtsummary_theme()} evaluate an expression with a theme temporarily set
+\item \code{without_gtsummary_theme()} evaluate an expression with no theme set
 \item \code{check_gtsummary_theme()} checks if passed theme is valid
 }
 }
@@ -71,6 +75,13 @@ set_gtsummary_theme_ex1 <-
   tbl_summary(by = trt, include = c(age, grade, trt)) |>
   add_stat_label() |>
   as_gt()
+
+# evaluate an expression with the active theme temporarily ignored
+without_gtsummary_theme(
+  trial |>
+    tbl_summary(by = trt, include = c(age, grade)) |>
+    as_gt()
+)
 
 # reset gtsummary theme
 reset_gtsummary_theme()
