@@ -329,34 +329,34 @@ test_that("character statistic get default fmt_fun, as.character()", {
   )
 })
 
-test_that("tbl_custom_summary(missing) accepts formula-list-selector syntax", {
+test_that("tbl_custom_summary(missing) scalar syntax", {
   mean_age <- function(data, ...) {
     dplyr::tibble(mean_age = mean(data$age, na.rm = TRUE))
   }
 
-  # per-variable: response always shown, grade never shown
+  # "always" shows a missing row for every variable
   expect_equal(
     trial |>
       tbl_custom_summary(
         include = c("grade", "response"),
         stat_fns = ~mean_age,
         statistic = ~"{mean_age}",
-        missing = list(response ~ "always", grade ~ "no")
+        missing = "always"
       ) |>
       getElement("table_body") |>
       dplyr::filter(row_type == "missing") |>
       dplyr::pull("variable"),
-    "response"
+    c("grade", "response")
   )
 
-  # everything() ~ "no" suppresses all missing rows
+  # "no" suppresses all missing rows
   expect_equal(
     trial |>
       tbl_custom_summary(
         include = c("grade", "response"),
         stat_fns = ~mean_age,
         statistic = ~"{mean_age}",
-        missing = everything() ~ "no"
+        missing = "no"
       ) |>
       getElement("table_body") |>
       dplyr::filter(row_type == "missing") |>
@@ -364,32 +364,28 @@ test_that("tbl_custom_summary(missing) accepts formula-list-selector syntax", {
     0L
   )
 
-  # bare-string input still works (back-compat) and matches formula form
+  # "ifany" (default) shows a missing row only for variables with missing values
   expect_equal(
     trial |>
       tbl_custom_summary(
         include = c("grade", "response"),
-        stat_fns = ~mean_age, statistic = ~"{mean_age}",
-        missing = "always"
+        stat_fns = ~mean_age,
+        statistic = ~"{mean_age}"
       ) |>
-      as.data.frame(),
-    trial |>
-      tbl_custom_summary(
-        include = c("grade", "response"),
-        stat_fns = ~mean_age, statistic = ~"{mean_age}",
-        missing = everything() ~ "always"
-      ) |>
-      as.data.frame()
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      dplyr::pull("variable"),
+    "response"
   )
 
-  # invalid per-variable value errors
+  # invalid value errors
   expect_snapshot(
     error = TRUE,
     trial |>
       tbl_custom_summary(
         include = response,
         stat_fns = ~mean_age, statistic = ~"{mean_age}",
-        missing = everything() ~ "NOT AN OPTION"
+        missing = "NOT AN OPTION"
       )
   )
 })

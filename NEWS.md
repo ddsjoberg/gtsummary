@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* The `missing` argument of `tbl_summary()`, `tbl_svysummary()`, and `tbl_custom_summary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)
+* The `missing` argument of `tbl_summary()` and `tbl_svysummary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)
 
 * Updated French language translations. (#2341; @nalimilan)
 
