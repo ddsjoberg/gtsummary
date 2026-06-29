@@ -63,6 +63,9 @@ add_p.tbl_cross <- function(x,
     source_note <- get_theme_element("add_p.tbl_cross-arg:source_note", default = source_note)
   }
   check_scalar_logical(source_note)
+  if (is.na(source_note)) {
+    cli::cli_abort("Argument {.arg source_note} must be {.val {TRUE}} or {.val {FALSE}}.", call = get_cli_abort_call())
+  }
 
   if (missing(pvalue_fun)) {
     pvalue_fun <-

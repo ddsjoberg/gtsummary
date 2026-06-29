@@ -25,7 +25,7 @@ test_that("theme_gtsummary_compact() works", {
     ),
     NA
   )
-
+ skip_if_pkg_not_installed("kableExtra")
   expect_error(
     with_gtsummary_theme(
       theme_gtsummary_compact(),
