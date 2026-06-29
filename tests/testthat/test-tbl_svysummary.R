@@ -473,6 +473,48 @@ test_that("tbl_svysummary(missing)", {
   )
 })
 
+test_that("tbl_svysummary(missing) accepts formula-list-selector syntax", {
+  # per-variable: age always shown, trt never shown
+  expect_equal(
+    tbl_svysummary(
+      svy_trial,
+      include = c(trt, age),
+      missing = list(age ~ "always", trt ~ "no")
+    ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      dplyr::pull("variable"),
+    "age"
+  )
+
+  # everything() ~ "no" suppresses all missing rows
+  expect_equal(
+    tbl_svysummary(
+      svy_trial,
+      include = c(trt, age),
+      missing = everything() ~ "no"
+    ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      nrow(),
+    0L
+  )
+
+  # bare-string input still works (back-compat) and matches formula form
+  expect_equal(
+    tbl_svysummary(svy_trial, include = c(trt, age), missing = "always") |>
+      as.data.frame(),
+    tbl_svysummary(svy_trial, include = c(trt, age), missing = everything() ~ "always") |>
+      as.data.frame()
+  )
+
+  # invalid per-variable value errors
+  expect_snapshot(
+    error = TRUE,
+    tbl_svysummary(svy_trial, include = age, missing = everything() ~ "NOT AN OPTION")
+  )
+})
+
 # tbl_svysummary(missing_text) -------------------------------------------------
 test_that("tbl_svysummary(missing_text)", {
   expect_snapshot(
