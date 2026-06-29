@@ -11,18 +11,19 @@
 #'
 #' @section Common footnote marks:
 #'
-#' The table below lists common footnote reference marks and their Unicode
-#' code points. The six marks correspond to those used in
-#' `gt::opt_footnote_marks(marks = "extended")`.
+#' The table below lists common footnote reference marks and the R strings used
+#' to create them. The six marks correspond to those used in
+#' `gt::opt_footnote_marks(marks = "extended")`. Pass the R string (e.g.
+#' `"\u2020"`) to the `symbol` argument to obtain the corresponding mark.
 #'
-#' | Symbol | Name                     | Unicode  | R string    |
-#' | :----: | :----------------------- | :------- | :---------- |
-#' | `*`    | asterisk                 | `U+002A` | `"*"`      |
-#' | `†`    | dagger                   | `U+2020` | `"\u2020"` |
-#' | `‡`    | double dagger            | `U+2021` | `"\u2021"` |
-#' | `§`    | section sign             | `U+00A7` | `"\u00A7"` |
-#' | `‖`    | double vertical line     | `U+2016` | `"\u2016"` |
-#' | `¶`    | pilcrow (paragraph sign) | `U+00B6` | `"\u00B6"` |
+#' | Name                     | Unicode  | R string   |
+#' | :----------------------- | :------- | :--------- |
+#' | asterisk                 | `U+002A` | `"*"`      |
+#' | dagger                   | `U+2020` | `"\u2020"` |
+#' | double dagger            | `U+2021` | `"\u2021"` |
+#' | section sign             | `U+00A7` | `"\u00A7"` |
+#' | double vertical line     | `U+2016` | `"\u2016"` |
+#' | pilcrow (paragraph sign) | `U+00B6` | `"\u00B6"` |
 #'
 #' @inheritParams modify
 #' @param symbol (`character`)\cr
