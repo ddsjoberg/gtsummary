@@ -477,8 +477,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       add_difference()
   )
 
-  expect_error(
-    tbl <-
+  tbl <- expect_error(
       trial |>
       select(age, trt) |>
       tbl_summary(
@@ -492,6 +491,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       as.data.frame(col_labels = FALSE),
     NA
   )
+
   expect_snapshot(tbl)
 
   expect_equal(
@@ -510,7 +510,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
     tbl %>%
       select(ends_with(".x") | ends_with(".y")) %>%
       names() %>%
-      rlang::is_empty()
+      is_empty()
   )
 })
 
@@ -532,4 +532,56 @@ test_that("addressing GH #1513, where the default test was incorrect", {
       attr("test_name"),
     "fisher.test"
   )
+})
+
+test_that("add_p() does not duplicate warnings (#1945)", {
+  # repro from #1945: a paired test with duplicate (group, by) entries triggered
+  # the tidyr 'not uniquely identified' warning to be captured twice
+  tmax <- data.frame(
+    Subject = c(1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 5, 5, 5, 5),
+    Treatment = c("T", "R", "T", "R", "R", "T", "R", "T", "T", "R", "T", "R", "R", "T", "R", "T"),
+    TMAX = c(1.333, 1.667, 0.667, 1.667, 2, 0.667, 2, 2, 1, 1, 2, 1, 0.667, 1, 2, 1)
+  )
+
+  tbl <-
+    suppressWarnings(suppressMessages(
+      tmax |>
+        tbl_summary(
+          by = Treatment,
+          include = -Subject,
+          missing = "no",
+          type = list(TMAX ~ "continuous")
+        ) |>
+        add_p(
+          test = list(all_continuous() ~ "paired.wilcox.test"),
+          group = Subject
+        )
+    ))
+
+  # the captured warning for the affected variable must contain the message once
+  ard_warning <-
+    dplyr::bind_rows(tbl$cards$add_p) |>
+    dplyr::filter(.data$stat_name == "p.value") |>
+    dplyr::pull("warning") |>
+    getElement(1L)
+
+  expect_equal(length(ard_warning), length(unique(ard_warning)))
+  expect_equal(
+    sum(grepl("not uniquely identified", ard_warning)),
+    1L
+  )
+})
+
+test_that("warn_unbalanced_pairs() still warns on genuinely unbalanced pairs", {
+  # one subject has a missing value in one arm -> unbalanced pair
+  d <- data.frame(
+    Subject = c(1, 1, 2, 2, 3, 3),
+    Treatment = c("R", "T", "R", "T", "R", "T"),
+    val = c(1, 2, 3, 4, 5, NA)
+  )
+  res <- cards::eval_capture_conditions(
+    warn_unbalanced_pairs(data = d, by = "Treatment", variable = "val", group = "Subject")
+  )
+  expect_length(res$warning, 1L)
+  expect_match(res$warning[[1]], "unbalanced missingness")
 })

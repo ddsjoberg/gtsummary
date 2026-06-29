@@ -31,6 +31,7 @@
 #'   tbl_cross(row = stage, col = trt) |>
 #'   add_p()
 #'
+#' @examplesIf gtsummary:::is_pkg_installed("broom")
 #' # Example 2 ----------------------------------
 #' trial |>
 #'   tbl_cross(row = stage, col = trt) |>
@@ -62,6 +63,9 @@ add_p.tbl_cross <- function(x,
     source_note <- get_theme_element("add_p.tbl_cross-arg:source_note", default = source_note)
   }
   check_scalar_logical(source_note)
+  if (is.na(source_note)) {
+    cli::cli_abort("Argument {.arg source_note} must be {.val {TRUE}} or {.val {FALSE}}.", call = get_cli_abort_call())
+  }
 
   if (missing(pvalue_fun)) {
     pvalue_fun <-
@@ -75,8 +79,12 @@ add_p.tbl_cross <- function(x,
 
   # prepping arguments to pass to `add_p.tbl_summary()` ------------------------
   # adding test name if supplied (NULL otherwise)
-  input_test <- switch(!is_empty(test), everything() ~ test)
-  input_test.args <- switch(!is_empty(test.args), everything() ~ test.args)
+  input_test <- switch(!is_empty(test),
+    everything() ~ test
+  )
+  input_test.args <- switch(!is_empty(test.args),
+    everything() ~ test.args
+  )
 
   # calculating test result ----------------------------------------------------
   # running add_p to add the p-value to the output
@@ -125,8 +133,8 @@ add_p.tbl_cross <- function(x,
         ifelse(
           .data$column %in% "p.value",
           str_replace_all(.data$label,
-                          pattern = "\\*\\*(.*?)\\*\\*",
-                          replacement = "\\1"
+            pattern = "\\*\\*(.*?)\\*\\*",
+            replacement = "\\1"
           ),
           .data$label
         )
@@ -135,6 +143,4 @@ add_p.tbl_cross <- function(x,
   # return tbl_cross -----------------------------------------------------------
   x$call_list <- updated_call_list
   x
-
-
 }

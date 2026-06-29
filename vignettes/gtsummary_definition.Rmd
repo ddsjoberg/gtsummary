@@ -30,10 +30,12 @@ We begin by creating two common {gtsummary} tables to be used as illustrative ex
 ```{r setup, message=FALSE}
 library(gtsummary)
 
-tbl_regression_ex <-
-  lm(age ~ grade + marker, trial) |> 
-  tbl_regression() |> 
-  bold_p(t = 0.5)
+if (requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)) {
+  tbl_regression_ex <-
+    lm(age ~ grade + marker, trial) |> 
+    tbl_regression() |> 
+    bold_p(t = 0.5)
+}
 
 tbl_summary_ex <-
   trial |> 
@@ -61,7 +63,7 @@ tbl_summary_ex$table_body
 #### table_styling
 
 The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
-The list contains the following data frames `header`, `footnote_header`, `footnote_body`, `footnote_spanning_header`, `abbreviation`, `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `caption` and `horizontal_line_above`.
+The list contains the following data frames `header`, `footnote_header`, `footnote_body`, `footnote_spanning_header`, `abbreviation`, `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and the following objects `caption`, `horizontal_line_above`, and `footnote_symbol`.
 
 **`header`**
 
@@ -174,6 +176,13 @@ dplyr::tribble(
     row_group.padding = gt::px(1)
   )
 ``` 
+
+**`footnote_symbol`**
+
+An optional character vector of the ordered symbols used to reference footnotes, e.g. `c("*", "†", "‡")`.
+When `NULL` (the default), the print engine's default numeric reference marks (`1, 2, 3, …`) are used.
+The symbols are assigned to footnotes in the order the footnotes appear in the table and are recycled when there are more footnotes than symbols.
+This element is set with `modify_footnote_symbol()` (or the `pkgwide-chr:footnote_symbol` theme element) and is currently utilized by `as_gt()` and `as_flex_table()`.
 
 **`abbreviation`**
 
@@ -343,7 +352,7 @@ Expression identifying a row where a horizontal line is placed above in the tabl
 
 Example from `tbl_regression()`
 
-```{r} 
+```{r, eval=requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)} 
 tbl_regression_ex$table_styling
 ```
 
@@ -357,7 +366,7 @@ Of these columns, only the `"label"` column will be printed with the final resul
 The `"row_type"` column typically will control whether or not the label column is indented.
 The `"variable"` column is often used in the `inline_text()` family of functions, and merging {gtsummary} tables with `tbl_merge()`.
 
-```{r}
+```{r, eval=requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)}
 tbl_regression_ex %>%
   getElement("table_body") %>%
   select(variable, row_type, label)
