@@ -89,3 +89,19 @@ test_that("modify_caption() works with vector of input", {
     ignore_attr = TRUE
   )
 })
+
+test_that("modify_caption(text_interpret = 'none') renders verbatim", {
+  # accepts "none" and stores it on the caption attribute (#1987)
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_caption("*literal caption*", text_interpret = "none")
+  expect_equal(attr(tbl$table_styling$caption, "text_interpret"), "none")
+
+  # invalid values are rejected
+  expect_error(
+    modify_caption(tbl_summary(trial, include = marker), "x", text_interpret = "latex")
+  )
+
+  skip_if_pkg_not_installed("gt")
+  html <- as_gt(tbl) |> gt::as_raw_html()
+  expect_match(html, "\\*literal caption\\*", fixed = FALSE)
+})
