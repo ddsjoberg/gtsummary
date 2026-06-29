@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_pkg_not_installed("broom.helpers")
 
 test_that("select_helpers work", {
   tbl_sum <- trial |> tbl_summary(type = age ~ "continuous2")

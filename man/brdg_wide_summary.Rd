@@ -30,7 +30,7 @@ All bridge functions begin with prefix \verb{brdg_*()}.
 library(cards)
 
 bind_ard(
-  ard_continuous(trial, variables = c(age, marker)),
+  ard_summary(trial, variables = c(age, marker)),
   ard_attributes(trial, variables = c(age, marker))
 ) |>
   brdg_wide_summary(

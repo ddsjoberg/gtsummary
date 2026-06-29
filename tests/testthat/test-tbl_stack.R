@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "survival", "broom.helpers")))
+skip_if_pkg_not_installed(c("survival", "broom.helpers"))
 
 t1_summary <- trial |>
   dplyr::filter(trt == "Drug A") |>
@@ -98,6 +98,20 @@ test_that("tbl_stack(quiet) works", {
   expect_equal(
     tbl |> as_tibble() |> names(),
     c("**Characteristic**", "**Statistic**")
+  )
+})
+
+test_that("tbl_stack(attr_order) works", {
+  tbl1 <- lm(age ~ trt, trial) |> tbl_regression()
+  tbl2 <- glm(response ~ trt, trial, family = binomial()) |> tbl_regression()
+
+  # check that we get the header from the second table (with the OR in the header)
+  expect_equal(
+    tbl_stack(list(tbl1, tbl2), attr_order = 2, quiet = TRUE) |>
+      as.data.frame() |>
+      names() |>
+      getElement(2),
+    "**log(OR)**"
   )
 })
 
@@ -275,10 +289,7 @@ test_that("tbl_stack returns expected message when unique column names are prese
   t2 <- t2_summary |>
     modify_header(stat_0 ~ "Replaced label")
 
-  expect_message(
-    tbl_stack(list(t1, t2)),
-    "Column headers among stacked tables differ"
-  )
+  expect_snapshot(tbl <- tbl_stack(list(t1, t2)))
 })
 
 test_that("tbl_stack() can stack tbl that have been previosly stacked", {
@@ -313,4 +324,34 @@ test_that("tbl_stack throws expected errors", {
     tbl_stack(tbls = list(t1_summary, t2_summary), group_header = c("Table")),
     error = TRUE
   )
+})
+
+test_that("tbl_stack deduplicates identical footnote_header rows", {
+  # stacking two tables with the same footnote_header should not duplicate
+  tbl <- tbl_stack(list(t1_regression, t2_regression))
+
+  expect_equal(
+    nrow(tbl$table_styling$footnote_header),
+    nrow(dplyr::distinct(tbl$table_styling$footnote_header))
+  )
+})
+
+test_that("tbl_stack with qjecon theme does not duplicate footnote superscripts", {
+  tbl <-
+    with_gtsummary_theme(
+      theme_gtsummary_journal("qjecon"),
+      expr = trial |>
+        dplyr::select(age, grade, response) |>
+        tbl_uvregression(
+          method = glm,
+          y = response,
+          method.args = list(family = binomial),
+          exponentiate = TRUE
+        )
+    )
+
+  # should have exactly one significance stars footnote, not one per variable
+  footnote_rows <- tbl$table_styling$footnote_header |>
+    dplyr::filter(.data$column == "estimate")
+  expect_equal(nrow(footnote_rows), 1L)
 })

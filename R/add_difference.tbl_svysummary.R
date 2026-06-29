@@ -8,7 +8,7 @@
 #'   table created with `tbl_summary()`
 #' @param test ([`formula-list-selector`][syntax])\cr
 #'   Specifies the tests/methods to perform for each variable, e.g.
-#'   `list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")`.
+#'   `list(all_continuous() ~ "svy.t.test", all_dichotomous() ~ "emmeans", all_categorical(FALSE) ~ "svy.chisq.test")`.
 #'
 #'   See below for details on default tests and [?tests][tests] for details on available
 #'   tests and creating custom tests.
@@ -24,7 +24,15 @@
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' # Example 1 ----------------------------------
+#' survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+#'   tbl_svysummary(
+#'     by = Survived,
+#'     value = list(Class ~ "1st", Age = "Child"),
+#'     include = c(Class, Age)
+#'   ) |>
+#'   add_difference()
 add_difference.tbl_svysummary <- function(x,
                                           test = NULL,
                                           group = NULL,

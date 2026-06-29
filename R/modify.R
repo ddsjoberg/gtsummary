@@ -1,4 +1,4 @@
-#' Modify column headers, footnotes, and spanning headers
+#' Modify column headers and spanning headers
 #'
 #' @description
 #' These functions assist with modifying the aesthetics/style of a table.
@@ -22,8 +22,10 @@
 #'   Use the `show_header_names()` to see the column names that can be modified.
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
-#'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
-#'   Applies to tables printed with `{gt}`.
+#'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default), `"html"`, or
+#'   `"none"`. `"none"` applies no interpretation, rendering the text verbatim
+#'   (useful when the text contains markdown-significant characters). Applies to tables
+#'   printed with `{gt}`.
 #' @param level (`integer`)\cr
 #'   An integer specifying which level to place the spanning header.
 #' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
@@ -54,7 +56,7 @@
 #' you may use `{N}` to insert the number of observations, and `{N_event}`
 #' for the number of events (when applicable).
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # create summary table
 #' tbl <- trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c("age", "grade", "trt")) |>
@@ -77,14 +79,14 @@ NULL
 
 #' @name modify
 #' @export
-modify_header <- function(x, ..., text_interpret = c("md", "html"),
+modify_header <- function(x, ..., text_interpret = c("md", "html", "none"),
                           quiet, update) {
   set_cli_abort_call()
-  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # checking inputs ------------------------------------------------------------
   check_class(x, "gtsummary")
   text_interpret <- arg_match(text_interpret)
+  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 
   # process inputs -------------------------------------------------------------
   dots <- dots_list(...)
@@ -124,7 +126,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
+modify_spanning_header <- function(x, ..., text_interpret = c("md", "html", "none"),
                                    level = 1L,
                                    quiet, update) {
   set_cli_abort_call()
@@ -217,7 +219,7 @@ remove_spanning_header <- function(x, columns = everything(), level = 1L) {
         level = level,
         column = columns,
         spanning_header = unname(spanning_header),
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         remove = remove
       )
     )

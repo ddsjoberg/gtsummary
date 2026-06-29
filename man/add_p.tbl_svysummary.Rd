@@ -46,7 +46,7 @@ a gtsummary table of class \code{"tbl_svysummary"}
 Adds p-values to tables created by \code{\link[=tbl_svysummary]{tbl_svysummary()}} by comparing values across groups.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survey")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # A simple weighted dataset
 survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>

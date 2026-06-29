@@ -23,7 +23,7 @@
 #' @export
 #' @return a 'gtsummary' table
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("car", "parameters", "broom", "broom.helpers"))
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) |>
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -118,7 +118,15 @@ add_significance_stars <- function(x,
     unlist() |>
     paste(collapse = "; ")
 
-  x <- modify_footnote_header(x, footnote = p_footnote, columns = any_of(pattern_cols[1]), replace = FALSE)
+  x <- modify_footnote_header(
+    x,
+    footnote = p_footnote,
+    columns = any_of(pattern_cols[1]),
+    replace = FALSE,
+    # the footnote contains literal asterisks (e.g. "*p<0.05"); render them
+    # verbatim instead of letting md interpret them as emphasis (#1987)
+    text_interpret = "none"
+  )
 
   # adding stars column --------------------------------------------------------
   thresholds <- union(thresholds, 0L)

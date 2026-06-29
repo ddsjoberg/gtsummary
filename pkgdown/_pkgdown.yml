@@ -9,6 +9,16 @@ template:
     headings-color: "#2e2e2e"
     link-color: "#2e2e2e"
     link-decoration: underline dotted
+  includes:
+    in_header: |
+      <script
+      async
+      src="https://widget.kapa.ai/kapa-widget.bundle.js"
+      data-website-id="d8054f2b-d9bc-4717-a20b-524e957ae5f6"
+      data-project-name="gtsummary"
+      data-project-color="#4F4F52"
+      data-project-logo="https://raw.githubusercontent.com/ddsjoberg/gtsummary/refs/heads/main/data-raw/gtsummary-bot.png"
+      ></script>
 
 
 development:
@@ -33,6 +43,7 @@ navbar:
   left:
   - icon: fa-home
     href: index.html
+    aria-label: View on CRAN
   - text: Reference
     href: reference/index.html
   - text: Articles
@@ -61,6 +72,7 @@ reference:
       - add_q
       - add_overall.tbl_summary
       - add_difference.tbl_summary
+      - add_difference_row.tbl_summary
       - add_n.tbl_summary
       - add_ci
       - add_stat_label
@@ -83,6 +95,8 @@ reference:
   - subtitle: Hierarchical Summary Tables
   - contents:
       - tbl_hierarchical
+      - sort_hierarchical
+      - filter_hierarchical
       - add_overall.tbl_hierarchical
   - subtitle: Likert Summary Tables
   - contents:
@@ -148,13 +162,16 @@ reference:
       - as_tibble.gtsummary
 
   - title: Other Functions
+  - subtitle: Head or Tail Tables
+  - contents:
+      - head.gtsummary
   - subtitle: Merge, Stack, Stratify, or Split Summary Tables
   - contents:
       - tbl_merge
       - tbl_stack
       - tbl_strata
       - tbl_strata_nested_stack
-      - tbl_split
+      - tbl_split_by
       - tbl_butcher
   - subtitle: Style Summary Tables
   - contents:
@@ -163,6 +180,7 @@ reference:
       - modify_source_note
       - modify_abbreviation
       - modify_caption
+      - modify_footnote_symbol
       - bold_italicize_labels_levels
       - bold_p
       - sort_filter_p
@@ -186,8 +204,9 @@ reference:
       - modify_column_hide
       - modify_column_alignment
       - modify_fmt_fun
+      - modify_post_fmt_fun
       - modify_column_merge
-      - modify_column_indent
+      - modify_indent
       - modify_missing_symbol
   - subtitle: Select Helpers
   - contents:
@@ -200,13 +219,11 @@ reference:
       - starts_with("tbl_ard_")
       - contains(".tbl_ard_")
       - gather_ard
-
   - subtitle: Construction Helpers
   - contents:
       - as_gtsummary
       - starts_with("brdg_")
       - starts_with("assign_")
-
   - subtitle: Data
   - contents:
       - trial

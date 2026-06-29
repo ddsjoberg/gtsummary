@@ -8,13 +8,21 @@
 #' @section Excel Output:
 #'
 #' Use the `as_hux_xlsx()` function to save a copy of the table in an excel file.
-#' The file is saved using `huxtable::quick_xlsx()`.
+#'
+#' To export a single table, pass a gtsummary object as `x`; the file is written
+#' with a single worksheet. To export multiple tables to one workbook—one table
+#' per worksheet—pass a (optionally named) list of gtsummary objects as `x`. When
+#' the list is named, the names are used as the worksheet (tab) names; list
+#' elements without a name are assigned a default name of `"Sheet {i}"`.
 #'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
+#' @param x (`gtsummary` or `list`)\cr
+#'   a gtsummary object, or a (optionally named) list of gtsummary objects. When
+#'   a list is passed to `as_hux_xlsx()`, each table is written to its own
+#'   worksheet and the list names are used as the worksheet names.
 #' @param bold_header_rows (scalar `logical`)\cr
 #'   logical indicating whether to bold header rows. Default is `TRUE`
-#' @param strip_md_bold `r lifecycle::badge("deprecated")`
 #'
 #' @name as_hux_table
 #' @return A \{huxtable\} object
@@ -29,19 +37,12 @@ NULL
 
 #' @export
 #' @rdname as_hux_table
-as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = FALSE) {
+as_hux_table <- function(x, include = everything(), return_calls = FALSE) {
   set_cli_abort_call()
   check_class(x, "gtsummary")
   check_pkg_installed("huxtable")
   check_scalar_logical(return_calls)
 
-  if (!isFALSE(strip_md_bold)) {
-    lifecycle::deprecate_stop(
-      "1.6.0", "gtsummary::as_hux_table(strip_md_bold=)",
-      details = "Markdown syntax is now recognized by the {huxtable} package."
-    )
-  }
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
@@ -52,7 +53,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   huxtable_calls <- table_styling_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds", eval = TRUE)
   huxtable_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
@@ -85,10 +86,64 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 #' @rdname as_hux_table
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
   set_cli_abort_call()
-  check_class(x, "gtsummary")
   check_pkg_installed(c("huxtable", "openxlsx"))
   check_scalar_logical(bold_header_rows)
 
+  # normalize `x` to a (named) list of gtsummary objects -----------------------
+  # note: a data frame is also a list, so it is excluded here and handled by the
+  # validation below
+  if (inherits(x, "gtsummary")) {
+    tbls <- list(x)
+  } else if (is.list(x) && !is.data.frame(x)) {
+    tbls <- x
+  } else {
+    cli::cli_abort(
+      "The {.arg x} argument must be a {.cls gtsummary} object or a list of
+       {.cls gtsummary} objects.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # check every element is a gtsummary object ----------------------------------
+  not_gtsummary <- which(!map_lgl(tbls, ~ inherits(.x, "gtsummary")))
+  if (length(not_gtsummary) > 0L) {
+    cli::cli_abort(
+      c(
+        "Each element of {.arg x} must be a {.cls gtsummary} object.",
+        "i" = "Review {cli::qty(length(not_gtsummary))} element{?s}
+               {.val {not_gtsummary}}."
+      ),
+      call = get_cli_abort_call()
+    )
+  }
+
+  # resolve worksheet names ----------------------------------------------------
+  sheet_names <- names(tbls) %||% rep_len("", length(tbls))
+  sheet_names <- ifelse(
+    is.na(sheet_names) | !nzchar(sheet_names),
+    paste("Sheet", seq_along(tbls)),
+    sheet_names
+  )
+
+  # build a huxtable for each table --------------------------------------------
+  huxtable_objs <-
+    map(tbls, ~ .as_hux_xlsx_object(.x, include = {{ include }}, bold_header_rows = bold_header_rows))
+
+  # write the huxtable(s) to a single workbook ---------------------------------
+  wb <- openxlsx::createWorkbook()
+  walk(
+    seq_along(huxtable_objs),
+    ~ huxtable::as_Workbook(ht = huxtable_objs[[.x]], Workbook = wb, sheet = sheet_names[.x])
+  )
+  openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+
+  invisible(x)
+}
+
+# build a fully-formatted huxtable object from a single gtsummary object -------
+# (indentation applied, optional bold header rows). This is the logic shared by
+# single- and multi-worksheet `as_hux_xlsx()` output.
+.as_hux_xlsx_object <- function(x, include = everything(), bold_header_rows = TRUE) {
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
     as_hux_table(x = x, include = {{ include }}, return_calls = TRUE) |>
@@ -134,9 +189,8 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
       expr(huxtable::style_header_rows(bold = TRUE))
   }
 
-  # run hux commands and export to excel ---------------------------------------
-  .eval_list_of_exprs(huxtable_calls) %>%
-    huxtable::quick_xlsx(file = file, open = FALSE)
+  # run hux commands and return the huxtable object ----------------------------
+  .eval_list_of_exprs(huxtable_calls)
 }
 
 # creating huxtable calls from table_styling -----------------------------------

@@ -61,7 +61,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
 #'
@@ -243,7 +243,7 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   if (!missing(quiet)) {
     lifecycle::deprecate_stop(
       when = "2.0.0",
-      what = "gtsummary::tidy_standardize(quiet)",
+      what = "gtsummary::pool_and_tidy_mice(quiet)",
       details = "Argument has been ignored."
     )
   }

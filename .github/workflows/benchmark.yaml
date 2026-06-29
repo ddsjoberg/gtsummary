@@ -1,0 +1,42 @@
+name: Performance Benchmark
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  benchmark:
+    if: startsWith(github.event.pull_request.title, 'perf')
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install Dependencies & Cache
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: |
+            any::bench
+            any::knitr
+            any::gert
+            any::remotes
+            any::broom
+            any::pkgload
+          cache: true
+          cache-version: 3
+
+      - name: Run Benchmarks
+        run: Rscript .github/scripts/benchmark.R
+
+      - name: Post Comment
+        uses: mshick/add-pr-comment@v3
+        with:
+          message-path: bench_report.md
+          message-id: 'add-benchmark-pr-comment'

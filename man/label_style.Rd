@@ -16,6 +16,7 @@ label_style_number(
   scale = 1,
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 
@@ -26,6 +27,7 @@ label_style_sigfig(
   decimal.mark = getOption("OutDec"),
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 
@@ -34,6 +36,7 @@ label_style_pvalue(
   prepend_p = FALSE,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  na = NA_character_,
   ...
 )
 
@@ -43,6 +46,7 @@ label_style_ratio(
   decimal.mark = getOption("OutDec"),
   prefix = "",
   suffix = "",
+  na = NA_character_,
   ...
 )
 
@@ -52,11 +56,12 @@ label_style_percent(
   digits = 0,
   big.mark = ifelse(decimal.mark == ",", " ", ","),
   decimal.mark = getOption("OutDec"),
+  na = NA_character_,
   ...
 )
 }
 \arguments{
-\item{digits, big.mark, decimal.mark, scale, prepend_p, prefix, suffix, ...}{arguments
+\item{digits, big.mark, decimal.mark, scale, prepend_p, prefix, suffix, na, ...}{arguments
 passed to the \verb{style_*()} functions}
 }
 \value{
@@ -71,7 +76,7 @@ my_style <- label_style_number(digits = 1)
 my_style(3.14)
 }
 \seealso{
-Other style tools: 
-\code{\link{style_sigfig}()}
+Other style tools:
+\code{\link[=style_sigfig]{style_sigfig()}}
 }
 \concept{style tools}

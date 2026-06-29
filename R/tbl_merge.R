@@ -1,7 +1,15 @@
 #' Merge tables
 #'
+#' @description
 #' Merge gtsummary tables, e.g. `tbl_regression`, `tbl_uvregression`, `tbl_stack`,
 #' `tbl_summary`, `tbl_svysummary`, etc.
+#'
+#' This function merges **like tables**.
+#' Generally, this means each of the tables being merged
+#' should have the same structure.
+#' When merging tables with different structures, rows may appear
+#' out of order.
+#' The ordering of rows can be updated with `modify_table_body(~dplyr::arrange(.x, ...))`.
 #'
 #' @param tbls (`list`)\cr
 #'   List of gtsummary objects to merge
@@ -17,6 +25,13 @@
 #'   `c(any_of(c("variable", "row_type", "var_label", "label"), cards::all_ard_groups())`.
 #'   Any column name included here that does not appear in all tables, will
 #'   be removed.
+#' @param tbl_ids (`character`)\cr
+#'   Optional character vector of IDs that will be assigned to the input tables.
+#'   The ID is assigned by assigning a name to the `tbls` list, which is
+#'   returned in `x$tbls`.
+#' @param quiet (scalar `logical`)\cr
+#'   When `FALSE`, a message is printed when unlike tables are merged warning
+#'   users of potential row ordering issues.
 #'
 #' @author Daniel D. Sjoberg
 #' @export
@@ -57,7 +72,8 @@
 #'
 #' tbl_merge(tbls = list(t3, t4)) %>%
 #'   modify_spanning_header(everything() ~ NA_character_)
-tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
+tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL,
+                      quiet = FALSE) {
   set_cli_abort_call()
 
   # input checks ---------------------------------------------------------------
@@ -74,6 +90,10 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     error_msg = "All objects in {.arg tbls} list must be class {.cls gtsummary}."
   )
   check_class(merge_vars, cls = "character", allow_empty = TRUE)
+  check_class(tbl_ids, cls = "character", allow_empty = TRUE)
+  if (!is_empty(tbl_ids)) {
+    check_identical_length(tbls, tbl_ids)
+  }
 
   if (!is_empty(tab_spanner) && !isFALSE(tab_spanner) && !is.character(tab_spanner)) {
     cli::cli_abort(
@@ -103,6 +123,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   }
 
   tbls_length <- length(tbls)
+
+  # check whether tables are mis-matched in any way ----------------------------
+  if (isFALSE(quiet)) .check_merge_likeness(tbls, merge_vars)
 
   # adding tab spanners if requested -------------------------------------------
   if (!isFALSE(tab_spanner)) {
@@ -142,20 +165,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
       }
     )
 
-  # check that the merge variables are unique in all table bodies
-  if (some(lst_table_body, ~anyDuplicated(.x[merge_vars]) > 0L)) {
-    cli::cli_inform(c(
-      "The merging columns ({.val {merge_vars}}) do not uniquely identify rows for
-       each table in {.arg tbls}, and the merge may fail or result in a malformed table.",
-      "i" = "If you previously called {.fun tbl_stack} on your tables,
-         then merging with {.fun tbl_merge} before calling {.arg tbl_stack} may resolve the issue."
-    ))
-  }
-
   # now merge all the table bodies together
   table_body <-
     lst_table_body |>
     reduce(.f = dplyr::full_join, by = merge_vars) |>
+    suppressWarnings() |> # suppress many to many merge warning
     dplyr::relocate(all_of(merge_vars), .before = 1L)
 
   # renaming columns in stylings and updating ----------------------------------
@@ -164,6 +178,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
                                 call_list = list(tbl_merge = match.call()))
 
   x <- .tbl_merge_update_table_styling(x = x, tbls = tbls, merge_vars = merge_vars)
+
+  # add tbl_ids, if specified --------------------------------------------------
+  if (!is_empty(tbl_ids)) {
+    names(x$tbls) <- tbl_ids
+  }
 
   # returning results ----------------------------------------------------------
   class(x) <- c("tbl_merge", "gtsummary")
@@ -189,7 +208,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
 
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
                        "footnote_spanning_header", "abbreviation", "source_note",
-                       "fmt_fun", "indent", "text_format", "fmt_missing", "cols_merge")) {
+                       "fmt_fun", "post_fmt_fun", "indent", "text_format",
+                       "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map(
         rev(seq_along(tbls)),
@@ -217,7 +237,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
             style_updated$rows <-
               map(
                 style_updated$rows,
-                ~ .rename_variables_in_expression(.x, i, tbls[[i]])
+                \(.x) {
+                  .rename_variables_in_expression(.x, i, tbls[[i]], merge_vars = merge_vars)
+                }
               )
           }
 
@@ -226,7 +248,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
             style_updated$pattern <-
               map_chr(
                 style_updated$pattern,
-                ~ .rename_variables_in_pattern(.x, i, tbls[[i]])
+                ~ .rename_variables_in_pattern(.x, i, tbls[[i]], merge_vars = merge_vars)
               )
           }
 
@@ -251,7 +273,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
         ~ .rename_variables_in_expression(
           rows = getElement(tbls, .x) |> getElement("table_styling") |> getElement(style_type),
           id = .x,
-          tbl = tbls[[.x]]
+          tbl = tbls[[.x]],
+          merge_vars = merge_vars
         )
       ) %>%
       reduce(.f = \(.x, .y) .x %||% .y)
@@ -260,7 +283,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   x
 }
 
-.rename_variables_in_expression <- function(rows, id, tbl) {
+.rename_variables_in_expression <- function(rows, id, tbl, merge_vars) {
   # if NULL, return rows expression unmodified
   rows_evaluated <- eval_tidy(rows, data = tbl$table_body)
   if (is.null(rows_evaluated)) {
@@ -276,7 +299,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     expr(~ !!expr) %>%
     eval() %>%
     all.vars() %>%
-    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    setdiff(merge_vars) %>%
     intersect(columns)
 
   # if no variables to rename, return rows unaltered
@@ -301,7 +324,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   expr_renamed
 }
 
-.rename_variables_in_pattern <- function(pattern, id, tbl) {
+.rename_variables_in_pattern <- function(pattern, id, tbl, merge_vars) {
   # get all variable names in expression to be renamed
   columns <- tbl$table_styling$header$column
   var_list <-
@@ -309,7 +332,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
     map(~ str_remove_all(.x, pattern = "}", fixed = TRUE)) %>%
     map(~ str_remove_all(.x, pattern = "{", fixed = TRUE)) %>%
     unlist() %>%
-    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    setdiff(merge_vars) %>%
     intersect(columns)
 
   # if no variables to rename, return rows unaltered
@@ -329,5 +352,37 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL) {
   }
 
   pattern
+}
+
+.check_merge_likeness <- function(tbls, merge_vars) {
+  tbl1_nrow <- nrow(tbls[[1]]$table_body)
+
+  # check the number of rows is the same in all tbls
+  for (i in seq_along(tbls)[-1]) {
+    if (tbl1_nrow != nrow(tbls[[i]]$table_body)) {
+      cli::cli_inform(
+        c("The number rows in the tables to be merged do not match,
+           which {.emph may} result in rows appearing out of order.",
+          i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
+               Use {.code quiet=TRUE} to silence message."),
+        call = get_cli_abort_call()
+      )
+      return(invisible())
+    }
+  }
+
+  # check merge-on variables uniquely identify the rows
+  for (i in seq_along(tbls)) {
+    if (nrow(tbls[[i]]$table_body) != nrow(dplyr::distinct(tbls[[i]]$table_body[merge_vars]))) {
+      cli::cli_inform(
+        c("The {.arg merge_vars} columns to do uniquely identify rows in all {.arg tbls},
+           which may result in rows appearing out of order.",
+          i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
+               Use {.code quiet=TRUE} to silence message."),
+        call = get_cli_abort_call()
+      )
+      return(invisible())
+    }
+  }
 }
 

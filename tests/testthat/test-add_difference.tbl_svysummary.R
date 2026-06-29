@@ -1,17 +1,17 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survey", "cardx")))
+skip_if_pkg_not_installed("survey")
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_trial, by = trt) |>
       add_difference() |>
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
   )
-
   expect_snapshot(
     tbl_svysummary(svy_titanic, by = Survived) |>
       add_difference() |>
@@ -21,12 +21,12 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
 })
 
 test_that("add_difference.tbl_svysummary(x) messaging", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     error = TRUE,
     tbl_svysummary(svy_trial, include = age) |>
       add_difference()
   )
-
   expect_snapshot(
     tbl <- tbl_svysummary(svy_trial, by = trt, percent = "row", include = grade) |>
       add_difference()
@@ -79,7 +79,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       {.[order(names(.))]}, # styler: off
     ignore_attr = TRUE
   )
-
+  skip_if_pkg_not_installed("smd")
   expect_equal(
     tbl$table_body |>
       dplyr::filter(variable == "grade_smd", row_type == "label") |>
@@ -100,7 +100,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       dplyr::select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))) |>
       unlist() |>
       as.list(),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        formula = age_emmeans ~ trt,
                                        response_type = "continuous") |>
@@ -114,7 +114,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       dplyr::select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))) |>
       unlist() |>
       as.list(),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        method.args = list(family = binomial),
                                        formula = response_emmeans ~ trt,
@@ -135,6 +135,7 @@ test_that("add_difference.tbl_svysummary(test)", {
 })
 
 test_that("add_difference.tbl_svysummary() + add_p.tbl_svysummary()", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     svy_trial |>
       tbl_svysummary(by = trt, include = c(age, response, grade), missing = "no") |>
@@ -182,5 +183,28 @@ test_that("add_difference.tbl_svysummary(include)", {
       na.omit(),
     1L
   )
+})
+
+test_that("add_difference.tbl_svysummary(test = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic `Age` has levels c("Child", "Adult"); the displayed `value`
+  # ("Child") is the FIRST factor level. Before the fix, emmeans modeled
+  # P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  est_child <-
+    suppressWarnings(
+      tbl_svysummary(svy_titanic, by = Survived, value = list(Age = "Child"), include = Age) |>
+        add_difference(test = list(Age ~ "emmeans"))
+    )$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | group1) - P(Child | group2) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
 })
 

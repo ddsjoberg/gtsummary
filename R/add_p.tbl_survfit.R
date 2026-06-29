@@ -5,7 +5,7 @@
 #' @param x (`tbl_survfit`)\cr
 #'   Object of class `"tbl_survfit"`
 #' @param test (`string`)\cr
-#'   string indicating test to use. Must be one of `"logrank"`, `"tarone"`, `"survdiff"`,
+#'   string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
 #'   `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score"`.
 #'   See details below
 #' @param test.args (named `list`)\cr
@@ -41,7 +41,7 @@
 #' If you utilize the `tbl_survfit.data.frame()` S3 method, this is handled for you.
 #'
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survival", "broom"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #'
 #' gts_survfit <-

@@ -1,3 +1,18 @@
+# tbl_stack returns expected message when unique column names are present
+
+    Code
+      tbl <- tbl_stack(list(t1, t2))
+    Message
+      Column headers among stacked tables differ.
+      i Use `modify_header()` to update or `quiet = TRUE` to suppress this message.
+    Output
+      Table 1 Column Name   Header                  
+      label                 "**Characteristic**"    
+      stat_0                "**Statistic**"         
+      Table 2 Column Name   Header                  
+      label                 "**Characteristic**"    
+      stat_0                "Replaced label"        
+
 # tbl_stack throws expected errors
 
     Code

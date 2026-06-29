@@ -28,7 +28,7 @@ Specify how missing values will be represented in the printed table.
 By default, a blank space is printed for all \code{NA} values.
 }
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Use the abbreivation "Ref." for reference rows instead of the em-dash
 lm(marker ~ trt, data = trial) |>
   tbl_regression() |>

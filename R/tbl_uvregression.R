@@ -51,7 +51,7 @@
 #'
 #' @return A `tbl_uvregression` object
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' tbl_uvregression(
 #'   trial,
@@ -80,7 +80,6 @@ NULL
 #' @name tbl_uvregression
 tbl_uvregression <- function(data, ...) {
   check_not_missing(data)
-  check_pkg_installed("cardx")
   UseMethod("tbl_uvregression")
 }
 
@@ -251,6 +250,7 @@ tbl_uvregression.data.frame <- function(data,
 
   # exporting results ----------------------------------------------------------
   results$inputs <- tbl_uvregression_inputs
+  results$cards <- list(tbl_uvregression = NULL)
   results$call_list <- list(tbl_uvregression = match.call())
 
   results

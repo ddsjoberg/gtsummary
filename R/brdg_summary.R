@@ -44,9 +44,9 @@
 #' cards <-
 #'   ard_stack(
 #'     mtcars,
-#'     ard_continuous(variables = c("mpg", "hp")),
-#'     ard_categorical(variables = "cyl"),
-#'     ard_dichotomous(variables = "am"),
+#'     ard_summary(variables = c("mpg", "hp")),
+#'     ard_tabulate(variables = "cyl"),
+#'     ard_tabulate_value(variables = "am"),
 #'     .missing = TRUE,
 #'     .attributes = TRUE
 #'   ) |>
@@ -206,7 +206,7 @@ pier_summary_categorical <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -218,7 +218,7 @@ pier_summary_categorical <- function(cards,
         lst_variable_stats <-
           cards::get_ard_statistics(
             df_variable_stats,
-            .data$variable_level %in% list(NULL),
+            map_lgl(.data$variable_level, is.null),
             .column = "stat_fmt"
           )
 
@@ -228,7 +228,7 @@ pier_summary_categorical <- function(cards,
         dplyr::mutate(
           .data = df_groups_and_variable,
           df_stats =
-            dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
+            dplyr::filter(df_variable_stats, !map_lgl(.data$variable_level, is.null)) |>
             dplyr::group_by(.data$variable_level) |>
             dplyr::group_map(
               function(df_variable_level_stats, df_variable_levels) {
@@ -329,7 +329,7 @@ pier_summary_continuous2 <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -441,7 +441,7 @@ pier_summary_continuous <- function(cards,
   cards_no_attr <-
     cards |>
     dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fn()
+    cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
   df_glued <-
@@ -518,7 +518,7 @@ pier_summary_missing_row <- function(cards,
     variables <-
       cards |>
       dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
-      dplyr::filter(.data$stat > 0L) |>
+      dplyr::filter(.data$stat > 0) |>
       dplyr::pull("variable") |>
       unique()
   }

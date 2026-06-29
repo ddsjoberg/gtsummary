@@ -12,7 +12,7 @@ test_that("modify_caption(caption) works", {
 })
 
 test_that("modify_caption() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx")))
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -49,7 +49,7 @@ test_that("modify_caption() works with tbl_cross()", {
 })
 
 test_that("modify_caption() works with tbl_regression()", {
-  skip_if_not(is_pkg_installed("broom.helpers"))
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>
@@ -62,6 +62,8 @@ test_that("modify_caption() works with tbl_regression()", {
 })
 
 test_that("modify_caption() works with tbl_uvregression()", {
+  skip_if_pkg_not_installed("broom.helpers")
+
   expect_equal(tbl_uvregression(trial, method = glm, y = response, method.args = list(family = binomial),
                                 exponentiate = TRUE, include = c("age", "grade")) |>
                  modify_caption("**Adding a caption**", text_interpret = "html") |>
@@ -86,4 +88,20 @@ test_that("modify_caption() works with vector of input", {
     c("row one", "row two"),
     ignore_attr = TRUE
   )
+})
+
+test_that("modify_caption(text_interpret = 'none') renders verbatim", {
+  # accepts "none" and stores it on the caption attribute (#1987)
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_caption("*literal caption*", text_interpret = "none")
+  expect_equal(attr(tbl$table_styling$caption, "text_interpret"), "none")
+
+  # invalid values are rejected
+  expect_error(
+    modify_caption(tbl_summary(trial, include = marker), "x", text_interpret = "latex")
+  )
+
+  skip_if_pkg_not_installed("gt")
+  html <- as_gt(tbl) |> gt::as_raw_html()
+  expect_match(html, "\\*literal caption\\*", fixed = FALSE)
 })

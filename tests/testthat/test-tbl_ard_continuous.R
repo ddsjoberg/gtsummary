@@ -3,14 +3,14 @@ skip_on_cran()
 test_that("tbl_ard_continuous(cards)", {
   # works with correct specification
   expect_snapshot(
-    cards::ard_continuous(trial, by = grade, variables = age) |>
+    cards::ard_summary(trial, by = grade, variables = age) |>
       tbl_ard_continuous(variable = "age", include = "grade") |>
       as.data.frame()
   )
   expect_snapshot(
     cards::bind_ard(
-      cards::ard_continuous(trial, by = c(trt, grade), variables = age),
-      cards::ard_categorical(trial, trt)
+      cards::ard_summary(trial, by = c(trt, grade), variables = age),
+      cards::ard_tabulate(trial, trt)
     ) |>
       tbl_ard_continuous(variable = "age", include = "grade", by = "trt") |>
       as.data.frame()
@@ -18,7 +18,7 @@ test_that("tbl_ard_continuous(cards)", {
 
   # no error when no tabulation of the 'by' data is passed
   expect_snapshot(
-    cards::ard_continuous(trial, by = c(trt, grade), variables = age) |>
+    cards::ard_summary(trial, by = c(trt, grade), variables = age) |>
       tbl_ard_continuous(by = trt, variable = age, include = grade) |>
       as.data.frame()
   )
@@ -34,7 +34,7 @@ test_that("tbl_ard_continuous(cards) error messaging", {
   expect_snapshot(
     error = TRUE,
     cards::bind_ard(
-      cards::ard_continuous(trial, by = c(trt, grade), variables = age)
+      cards::ard_summary(trial, by = c(trt, grade), variables = age)
     ) |>
       tbl_ard_continuous(variable = "trt", include = "grade", by = "age")
   )
@@ -42,7 +42,7 @@ test_that("tbl_ard_continuous(cards) error messaging", {
   expect_snapshot(
     error = TRUE,
     cards::bind_ard(
-      cards::ard_continuous(trial, by = c(trt, grade), variables = age)
+      cards::ard_summary(trial, by = c(trt, grade), variables = age)
     ) |>
       tbl_ard_continuous(variable = "age", include = "trt", by = "grade")
   )
@@ -52,7 +52,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::bind_ard(
       # the primary ARD with the results
-      cards::ard_continuous(trial, by = grade, variables = age),
+      cards::ard_summary(trial, by = grade, variables = age),
       # add missing and attributes ARD
       cards::ard_missing(trial, by = grade, variables = age)
     ) |>
@@ -66,7 +66,7 @@ test_that("tbl_ard_summary(label) argument works", {
   expect_equal(
     cards::bind_ard(
       # the primary ARD with the results
-      cards::ard_continuous(trial, by = grade, variables = age),
+      cards::ard_summary(trial, by = grade, variables = age),
       # add missing and attributes ARD
       cards::ard_missing(trial, by = grade, variables = age),
       cards::ard_attributes(trial, variables = c(grade, age))
@@ -83,7 +83,7 @@ test_that("tbl_ard_continuous(statistic) error messaging", {
   # statistic argument is a long vector
   expect_snapshot(
     error = TRUE,
-    cards::ard_continuous(trial, by = grade, variables = age) |>
+    cards::ard_summary(trial, by = grade, variables = age) |>
       tbl_ard_continuous(variable = "age", include = "grade", statistic = everything() ~ c("{mean}", "{median}"))
   )
 })
@@ -91,7 +91,7 @@ test_that("tbl_ard_continuous(statistic) error messaging", {
 test_that("tbl_ard_continuous(value)", {
   # checking results without by variable
   expect_equal(
-    cards::ard_continuous(trial, by = grade, variables = age) |>
+    cards::ard_summary(trial, by = grade, variables = age) |>
       tbl_ard_continuous(variable = "age", include = "grade", value = grade ~ "I") |>
       as.data.frame() %>%
       `[`(1, 2),
@@ -106,7 +106,7 @@ test_that("tbl_ard_continuous(value)", {
 
   # checking results with by variable
   expect_equal(
-    cards::ard_continuous(trial, by = c(trt, grade), variables = age) |>
+    cards::ard_summary(trial, by = c(trt, grade), variables = age) |>
       tbl_ard_continuous(by = "trt", variable = "age", include = "grade", value = grade ~ "I") |>
       as.data.frame() %>%
       `[`(1, 2),
@@ -125,14 +125,14 @@ test_that("tbl_ard_continuous(value) messaging", {
   # specified a level that does not exist
   expect_snapshot(
     error = TRUE,
-    cards::ard_continuous(trial, by = c(trt, grade), variables = age) |>
+    cards::ard_summary(trial, by = c(trt, grade), variables = age) |>
       tbl_ard_continuous(by = "trt", variable = "age", include = "grade", value = grade ~ "XXXXXXX")
   )
 
   # specified a value that is not a single unit in length
   expect_snapshot(
     error = TRUE,
-    cards::ard_continuous(trial, by = c(trt, grade), variables = age) |>
+    cards::ard_summary(trial, by = c(trt, grade), variables = age) |>
       tbl_ard_continuous(by = "trt", variable = "age", include = "grade", value = grade ~ letters)
   )
 })

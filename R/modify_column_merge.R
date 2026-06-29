@@ -3,10 +3,11 @@
 #' Merge two or more columns in a gtsummary table.
 #' Use `show_header_names()` to print underlying column names.
 #'
-#' @param pattern glue syntax string indicating how to merge columns in
-#' `x$table_body`. For example, to construct a confidence interval
-#' use `"{conf.low}, {conf.high}"`.
-#' @inheritParams modify_table_styling
+#' @param pattern (`string`)\cr
+#'   glue syntax string indicating how to merge columns in
+#'   `x$table_body`. For example, to construct a confidence interval
+#'   use `"{conf.low}, {conf.high}"`.
+#' @inheritParams modify_bold_italic
 #'
 #' @section Details:
 #' 1. Calling this function merely records the instructions to merge columns.
@@ -40,7 +41,7 @@
 #' @name modify_column_merge
 #'
 #' @family Advanced modifiers
-#' @examplesIf gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>

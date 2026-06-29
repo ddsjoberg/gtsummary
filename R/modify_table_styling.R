@@ -10,7 +10,7 @@
 #'   [`modify_header()`],
 #'   [`modify_spanning_header()`], [`modify_column_hide()`], [`modify_column_unhide()`],
 #'   [`modify_footnote_header()`], [`modify_footnote_body()`], [`modify_abbreviation()`],
-#'   [`modify_column_alignment()`], [`modify_fmt_fun()`], [`modify_column_indent()`],
+#'   [`modify_column_alignment()`], [`modify_fmt_fun()`], [`modify_indent()`],
 #'   [`modify_column_merge()`], [`modify_missing_symbol()`], [`modify_bold()`],
 #'   [`modify_italic()`].
 #'
@@ -39,9 +39,10 @@
 #'   String indicated which type of text formatting to apply/remove to the rows and columns.
 #'   Must be one of `c("bold", "italic")`.
 #' @param text_interpret (`string`)\cr
-#'   Must be one of `"md"` or `"html"` and indicates the processing function
-#'   as `gt::md()` or `gt::html()`. Use this in conjunction with arguments for
-#'   header and footnotes.
+#'   Must be one of `"md"`, `"html"`, or `"none"`, indicating the processing
+#'   function as `gt::md()`, `gt::html()`, or no interpretation (text rendered
+#'   verbatim). Use this in conjunction with arguments for header and footnotes.
+#'   Applies to tables printed with `{gt}`.
 #' @param fmt_fun (`function`)\cr
 #'   function that formats the statistics in the columns/rows in `columns` and `rows`
 #' @param footnote_abbrev (`string`)\cr
@@ -212,7 +213,7 @@ modify_table_styling <- function(x,
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_label = paste0("gt::", text_interpret), label = label),
+        dplyr::tibble(column = columns, interpret_label = .interpret_fun(text_interpret), label = label),
         by = "column"
       )
   }
@@ -325,7 +326,7 @@ modify_table_styling <- function(x,
       cli::cli_abort("The {.arg indent} argument must be a non-negative scalar integer.")
     }
     x <- x |>
-      .modify_column_indent(columns = columns, rows = !!rows, indent = as.integer(indent))
+      .modify_indent(columns = columns, rows = !!rows, indent = as.integer(indent))
   }
 
   # missing_symbol -------------------------------------------------------------

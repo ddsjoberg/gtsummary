@@ -12,7 +12,7 @@
 #'
 #' @export
 #' @return A string reporting results from a gtsummary table
-#' @examplesIf gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' inline_text_ex1 <-
 #'   trial[c("response", "age", "grade")] %>%
 #'   tbl_uvregression(

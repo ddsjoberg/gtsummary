@@ -106,7 +106,7 @@ inline_text.gtsummary <- function(x,
 
     # extract statistics from cards object
     cards <- cards |>
-      cards::apply_fmt_fn() |>
+      cards::apply_fmt_fun() |>
       dplyr::filter(
         .data$variable %in% .env$variable,
         .data$gts_column %in% .env$column
@@ -218,8 +218,8 @@ inline_text.gtsummary <- function(x,
 }
 
 
-.update_fmt_fn <- function(cards, fmt_fn) {
-  fmt_fn <- fmt_fn |> enframe("stat_name", "fmt_fn")
+.update_fmt_fun <- function(cards, fmt_fun) {
+  fmt_fun <- fmt_fun |> enframe("stat_name", "fmt_fun")
   cards <- cards |>
     map(
       function(x) {
@@ -227,11 +227,11 @@ inline_text.gtsummary <- function(x,
           return(
             dplyr::rows_update(
               x,
-              fmt_fn,
+              fmt_fun,
               by = "stat_name",
               unmatched = "ignore"
             ) |>
-              cards::apply_fmt_fn()
+              cards::apply_fmt_fun()
           )
         } else {
           return(x)

@@ -6,7 +6,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-forcats.R
-# last-updated: 2024-06-05
+# last-updated: 2025-05-03
 # license: https://unlicense.org
 # imports:
 # ---
@@ -16,6 +16,8 @@
 # of programming.
 #
 # ## Changelog
+# 2025-05-03
+#   - `add fct_relevel()` fix for non-factor inputs
 # 2025-02-24
 #   - `add fct_relevel()` function.
 #
@@ -73,6 +75,7 @@ fct_na_value_to_level <- function(f, level = NA) {
 
 
 fct_relevel <- function(f, ..., after = 0L) {
+  if (!inherits(f, "factor")) f <- as.factor(f)
   old_levels <- levels(f)
   # Handle re-leveling function or specified levels
   first_levels <- if (rlang::dots_n(...) == 1L && (is.function(..1) || rlang::is_formula(..1))) {

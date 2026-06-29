@@ -6,7 +6,9 @@
 # * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
 # * https://testthat.r-lib.org/articles/special-files.html
 
-library(testthat)
-library(gtsummary)
+if (gtsummary:::is_pkg_installed("testthat")) {
+  library(testthat)
+  library(gtsummary)
 
-test_check("gtsummary", stop_on_warning = TRUE)
+  test_check("gtsummary", stop_on_warning = TRUE)
+}

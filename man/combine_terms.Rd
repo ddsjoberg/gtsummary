@@ -33,7 +33,7 @@ with a single row in the output table.  The p-value is calculated using
 \code{\link[stats:anova]{stats::anova()}}.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c('cardx', 'broom.helpers'))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c('cardx', 'broom.helpers'))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
 glm(response ~ marker + I(marker^2) + grade,

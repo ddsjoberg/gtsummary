@@ -4,6 +4,8 @@
 #' By default, the remove functions will remove all bold/italic styling.
 #'
 #' @inheritParams modify_footnote2
+#' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
+#'   Selector of columns in `x$table_body`
 #'
 #' @return Updated gtsummary object
 #' @name modify_bold_italic

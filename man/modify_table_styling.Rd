@@ -67,9 +67,10 @@ Must be one of \code{c("bold", "italic")}.}
 An integer indicating how many space to indent text}
 
 \item{text_interpret}{(\code{string})\cr
-Must be one of \code{"md"} or \code{"html"} and indicates the processing function
-as \code{gt::md()} or \code{gt::html()}. Use this in conjunction with arguments for
-header and footnotes.}
+Must be one of \code{"md"}, \code{"html"}, or \code{"none"}, indicating the processing
+function as \code{gt::md()}, \code{gt::html()}, or no interpretation (text rendered
+verbatim). Use this in conjunction with arguments for header and footnotes.
+Applies to tables printed with \code{{gt}}.}
 
 \item{cols_merge_pattern}{(\code{string})\cr
 glue-syntax string indicating how to merge
@@ -87,7 +88,7 @@ functions to make modifications to your table:
 \code{\link[=modify_header]{modify_header()}},
 \code{\link[=modify_spanning_header]{modify_spanning_header()}}, \code{\link[=modify_column_hide]{modify_column_hide()}}, \code{\link[=modify_column_unhide]{modify_column_unhide()}},
 \code{\link[=modify_footnote_header]{modify_footnote_header()}}, \code{\link[=modify_footnote_body]{modify_footnote_body()}}, \code{\link[=modify_abbreviation]{modify_abbreviation()}},
-\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \code{\link[=modify_column_indent]{modify_column_indent()}},
+\code{\link[=modify_column_alignment]{modify_column_alignment()}}, \code{\link[=modify_fmt_fun]{modify_fmt_fun()}}, \code{\link[=modify_indent]{modify_indent()}},
 \code{\link[=modify_column_merge]{modify_column_merge()}}, \code{\link[=modify_missing_symbol]{modify_missing_symbol()}}, \code{\link[=modify_bold]{modify_bold()}},
 \code{\link[=modify_italic]{modify_italic()}}.
 
@@ -141,9 +142,9 @@ internally with care, and it is \emph{not} recommended for users.
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
-Other Advanced modifiers: 
-\code{\link{modify_column_indent}()},
-\code{\link{modify_column_merge}()}
+Other Advanced modifiers:
+\code{\link[=modify_column_merge]{modify_column_merge()}},
+\code{\link[=modify_indent]{modify_indent()}}
 }
 \concept{Advanced modifiers}
 \keyword{internal}

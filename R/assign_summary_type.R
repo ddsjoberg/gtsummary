@@ -27,6 +27,12 @@
 #' )
 assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L) {
   set_cli_abort_call()
+
+  # if not specified, use theme for default value
+  if (missing(cat_threshold)) {
+    cat_threshold <- get_theme_element("assign_summary_type-arg:cat_threshold", default = cat_threshold) # styler: off
+  }
+
   # base classes that can be summarized as continuous
   base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt", "double")
 

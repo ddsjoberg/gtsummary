@@ -17,12 +17,13 @@ Extract the ARDs from a gtsummary table. If needed, results may be combined
 with \code{cards::bind_ard()}.
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed('cardx')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed('cardx')) withAutoprint(\{ # examplesIf}
 tbl_summary(trial, by = trt, include = age) |>
   add_overall() |>
   add_p() |>
   gather_ard()
-
+\dontshow{\}) # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c('cardx', 'broom'))) withAutoprint(\{ # examplesIf}
 glm(response ~ trt, data = trial, family = binomial()) |>
   tbl_regression() |>
   gather_ard()

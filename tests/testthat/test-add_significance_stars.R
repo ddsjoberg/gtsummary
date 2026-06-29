@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers")))
+skip_if_pkg_not_installed("broom.helpers")
 
 tbl1 <-
   lm(time ~ sex + ph.ecog, survival::lung) |>
@@ -105,4 +105,21 @@ test_that("add_significance_stars() footnote", {
     c("Wilcoxon rank sum test; Pearson's Chi-squared test",
       "*p<0.05; **p<0.01; ***p<0.001")
   )
+})
+
+test_that("add_significance_stars() footnote uses text_interpret = 'none' and renders verbatim", {
+  tbl <- lm(age ~ marker + grade, trial) |>
+    tbl_regression() |>
+    add_significance_stars()
+
+  fh <- tbl$table_styling$footnote_header
+  star_row <- fh[!is.na(fh$footnote) & grepl("p<", fh$footnote), ]
+
+  # the stars footnote is stored with the `identity` interpret function (#1987)
+  expect_equal(unique(star_row$text_interpret), "identity")
+
+  skip_if_pkg_not_installed("gt")
+  # the asterisks render literally instead of being interpreted as emphasis
+  html <- as_gt(tbl) |> gt::as_raw_html()
+  expect_match(html, "\\*p&lt;0.05|\\*p<0.05", fixed = FALSE)
 })

@@ -25,7 +25,7 @@
 #'     data = ADAE_subset,
 #'     variables = c(AESOC, AETERM),
 #'     by = TRTA,
-#'     denominator = cards::ADSL |> mutate(TRTA = ARM),
+#'     denominator = cards::ADSL,
 #'     id = USUBJID
 #'   )
 #'
@@ -42,7 +42,7 @@
 #'     data = ADAE_subset,
 #'     variables = c(AESOC, AETERM),
 #'     by = TRTA,
-#'     denominator = cards::ADSL |> mutate(TRTA = ARM)
+#'     denominator = cards::ADSL
 #'   )
 #'
 #' tbl_ard_hierarchical(
@@ -96,13 +96,26 @@ tbl_ard_hierarchical <- function(cards,
   tbl_ard_hierarchical_inputs[["data"]] <- NULL
 
   # apply formatting fns -------------------------------------------------------
-  cards <- cards |> cards::apply_fmt_fn()
+  cards <- cards |> cards::apply_fmt_fun()
 
   # fill in missing labels -----------------------------------------------------
   default_label <- default_label <- names(data) |> as.list() |> stats::setNames(names(data))
   label <- c(
     label, default_label[setdiff(names(default_label), names(label))]
   )[c(variables, if ("overall" %in% names(label)) "overall")]
+
+  # add hierarchical ARD args attribute and sort if not directly using a hierarchical ARD
+  if (!inherits(cards, c("ard_stack_hierarchical", "ard_stack_hierarchical_count"))) {
+    attr(cards, "args") <- list(
+      by = by,
+      variables = variables,
+      include = include
+    )
+    cards <-
+      suppressWarnings( # suppressing warning about class
+        cards |> cards::sort_ard_hierarchical("alphanumeric")
+      )
+  }
 
   brdg_hierarchical(
     cards = cards,

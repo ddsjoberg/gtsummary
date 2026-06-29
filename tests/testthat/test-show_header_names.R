@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_pkg_not_installed("broom.helpers")
 
 test_that("show_header_names() works with tbl_summary()", {
   expect_snapshot(
@@ -78,7 +78,7 @@ test_that("show_header_names() has all values aligned", {
       data = cards::ADAE,
       variables = c(AESOC, AETERM),
       by = TRTA,
-      denominator = cards::ADSL |> mutate(TRTA = ARM),
+      denominator = cards::ADSL,
       id = USUBJID
     )
 

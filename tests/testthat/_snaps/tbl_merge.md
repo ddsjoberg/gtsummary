@@ -3,6 +3,9 @@
     Code
       as.data.frame(modify_spanning_header(tbl_merge(tbls = list(t1, t2)), everything() ~
         NA))
+    Message
+      The number rows in the tables to be merged do not match, which may result in rows appearing out of order.
+      i See `tbl_merge()` (`?gtsummary::tbl_merge()`) help file for details. Use `quiet=TRUE` to silence message.
     Output
         **Characteristic** **N** **Summary Statistics** **HR** **(95% CI)**
       1                Age   189                   <NA> 1.01 (0.99 to 1.02)
@@ -54,4 +57,14 @@
     Condition
       Error in `tbl_merge()`:
       ! The tables in the `tbls` argument do not share any columns specified in `merge_vars` argument and merge cannot be performed.
+
+# tbl_merge(merge_vars)
+
+    Code
+      as.data.frame(tbl)
+    Output
+          **Characteristic** **Beta** **95% CI** **p-value** **Beta** **95% CI**
+      1 Marker Level (ng/mL)    -0.05  -2.5, 2.4        >0.9    -0.05  -2.5, 2.4
+        **p-value**
+      1        >0.9
 

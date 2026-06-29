@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("huxtable", "withr")))
+skip_if_pkg_not_installed(c("huxtable", "withr", "broom.helpers"))
 
 my_tbl_summary <- trial |>
   select(trt, age, death) |>
@@ -25,14 +25,14 @@ test_that("as_hux_table(return_calls) works as expected", {
   # correct elements are returned
   expect_equal(
     names(ht),
-    c("tibble", "fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
+    c("tibble", "fmt", "post_fmt", "cols_merge", "cols_hide", "huxtable", "set_left_padding",
       "add_footnote", "abbreviations", "source_note", "set_bold", "set_italic",
       "fmt_missing", "insert_row", "set_markdown", "align", "set_number_format")
   )
 })
 
 test_that("as_hux_table works with tbl_merge", {
-  skip_if_not(is_pkg_installed("survival"))
+  skip_if_pkg_not_installed("survival")
   withr::local_options(list(width = 120))
 
   t1 <- glm(response ~ trt + grade + age, trial, family = binomial) |>
@@ -209,7 +209,8 @@ test_that("as_hux_table passes captions correctly", {
 
   expect_equal(
     attr(ht, "caption"),
-    "My table caption"
+    "My table caption",
+    ignore_attr = TRUE
   )
 })
 
@@ -223,7 +224,7 @@ test_that("as_hux_table passes table indentation correctly", {
 
   # indentation removed
   tbl <- my_tbl_summary |>
-    modify_column_indent(columns = label, indent = 0)
+    modify_indent(columns = label, indent = 0)
   ht <- tbl |> as_hux_table()
 
   expect_equal(
@@ -252,16 +253,10 @@ test_that("as_hux_table passes missing symbols correctly", {
   )
 })
 
-test_that("as_hux_table(strip_md_bold) causes defunct error", {
-  lifecycle::expect_defunct(
-    my_tbl_summary |> as_hux_table(strip_md_bold = TRUE)
-  )
-})
-
 # as_hux_xlsx ----
 
 test_that("as_hux_xlsx works with standard use", {
-  skip_if_not(is_pkg_installed("openxlsx"))
+  skip_if_pkg_not_installed("openxlsx")
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf))
@@ -269,9 +264,88 @@ test_that("as_hux_xlsx works with standard use", {
 })
 
 test_that("as_hux_xlsx(bold_header_rows) works", {
-  skip_if_not(is_pkg_installed("openxlsx"))
+  skip_if_pkg_not_installed("openxlsx")
 
   tf <- tempfile(fileext = ".xlsx")
   expect_silent(as_hux_xlsx(my_tbl_summary, file = tf, bold_header_rows = FALSE))
   expect_true(file.exists(tf))
+})
+
+test_that("as_hux_xlsx() single object writes a single worksheet", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(as_hux_xlsx(my_tbl_summary, file = tf))
+  expect_equal(openxlsx::getSheetNames(tf), "Sheet 1")
+})
+
+test_that("as_hux_xlsx() writes a named list to multiple named worksheets (#2327)", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(
+    as_hux_xlsx(
+      list("Summary" = my_tbl_summary, "Regression" = my_tbl_regression),
+      file = tf
+    )
+  )
+  expect_true(file.exists(tf))
+  expect_equal(openxlsx::getSheetNames(tf), c("Summary", "Regression"))
+})
+
+test_that("as_hux_xlsx() uses default sheet names for unnamed list elements", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  # fully unnamed list
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(as_hux_xlsx(list(my_tbl_summary, my_tbl_regression), file = tf))
+  expect_equal(openxlsx::getSheetNames(tf), c("Sheet 1", "Sheet 2"))
+
+  # partially named list
+  tf2 <- tempfile(fileext = ".xlsx")
+  expect_silent(
+    as_hux_xlsx(list("Custom" = my_tbl_summary, my_tbl_regression), file = tf2)
+  )
+  expect_equal(openxlsx::getSheetNames(tf2), c("Custom", "Sheet 2"))
+})
+
+test_that("as_hux_xlsx() preserves indentation on each worksheet", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  tf <- tempfile(fileext = ".xlsx")
+  as_hux_xlsx(list("Tab1" = my_tbl_summary), file = tf)
+
+  # the indented rows (e.g. 'Unknown') should carry leading spaces
+  label_col <- openxlsx::read.xlsx(tf, sheet = "Tab1", colNames = FALSE)[[1]]
+  expect_true(any(grepl("^\\s+", label_col)))
+})
+
+test_that("as_hux_xlsx(bold_header_rows) works with a list", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  tf <- tempfile(fileext = ".xlsx")
+  expect_silent(
+    as_hux_xlsx(
+      list("A" = my_tbl_summary, "B" = my_tbl_regression),
+      file = tf,
+      bold_header_rows = FALSE
+    )
+  )
+  expect_equal(openxlsx::getSheetNames(tf), c("A", "B"))
+})
+
+test_that("as_hux_xlsx() errors on non-gtsummary input", {
+  skip_if_pkg_not_installed("openxlsx")
+
+  tf <- tempfile(fileext = ".xlsx")
+  # a list containing a non-gtsummary element
+  expect_error(
+    as_hux_xlsx(list(my_tbl_summary, mtcars), file = tf),
+    "must be a"
+  )
+  # a non-gtsummary, non-list object
+  expect_error(
+    as_hux_xlsx(mtcars, file = tf),
+    "must be a"
+  )
 })

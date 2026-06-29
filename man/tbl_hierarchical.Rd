@@ -35,7 +35,7 @@ tbl_hierarchical_count(
 a data frame.}
 
 \item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-character vector or tidy-selector of columns in data used to create a hierarchy. Hierarchy will be built with
+character vector or tidy-selector of columns in \code{data} used to create a hierarchy. Hierarchy will be built with
 variables in the order given.}
 
 \item{id}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
@@ -52,8 +52,8 @@ a single column from \code{data}. Summary statistics will be stratified by this 
 Default is \code{NULL}.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-variables from \code{hierarchy} for which summary statistics should be returned (on the variable label rows) Including
-the last element of \code{hierarchy} has no effect since each level has its own row for this variable.
+columns from the \code{variables} argument for which summary statistics should be returned (on the variable label rows).
+Including the last element of \code{variables} has no effect since each level has its own row for this variable.
 The default is \code{everything()}.}
 
 \item{statistic}{(\code{\link[=syntax]{formula-list-selector}})\cr
@@ -70,7 +70,7 @@ The default for each variable is the column label attribute, \code{attr(., 'labe
 If no label has been set, the column name is used.}
 
 \item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies how summary statistics are rounded. Values may be either integer(s) or function(s). If not specified,
+specifies how summary statistics are rounded. Values may be either integer(s) or function(s). If not specified,
 default formatting is assigned via \code{label_style_number()} for statistics \code{n} and \code{N}, and
 \code{label_style_percent(digits=1)} for statistic \code{p}.}
 }
@@ -105,7 +105,7 @@ again referencing the \code{'..ard_hierarchical_overall..'} name.
 }
 
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
   dplyr::filter(
     AESOC \%in\% unique(cards::ADAE$AESOC)[1:5],
@@ -117,7 +117,7 @@ tbl_hierarchical(
   data = ADAE_subset,
   variables = c(AESOC, AETERM),
   by = TRTA,
-  denominator = cards::ADSL |> mutate(TRTA = ARM),
+  denominator = cards::ADSL,
   id = USUBJID,
   digits = everything() ~ list(p = 1),
   overall_row = TRUE,
@@ -130,7 +130,7 @@ tbl_hierarchical(
   variables = c(AESOC, AESEV),
   by = TRTA,
   id = USUBJID,
-  denominator = cards::ADSL |> mutate(TRTA = ARM),
+  denominator = cards::ADSL,
   include = AESEV,
   label = list(AESEV = "Highest Severity")
 )

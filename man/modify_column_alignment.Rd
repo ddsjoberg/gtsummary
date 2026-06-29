@@ -20,8 +20,10 @@ String indicating alignment of column, must be one of \code{c("left", "right", "
 Update column alignment/justification in a gtsummary table.
 }
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
   modify_column_alignment(columns = everything(), align = "left")
+\dontshow{\}) # examplesIf}
 }
