@@ -19,7 +19,8 @@
 #'   add_p() %>%
 #'   filter_p(t = 0.8) %>%
 #'   sort_p()
-#'
+
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 2 ----------------------------------
 #' glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%

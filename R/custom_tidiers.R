@@ -61,7 +61,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("effectsize", "mice", "parameters", "broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
 #'
