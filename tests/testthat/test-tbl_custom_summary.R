@@ -328,3 +328,68 @@ test_that("character statistic get default fmt_fun, as.character()", {
     list(as.character)
   )
 })
+
+test_that("tbl_custom_summary(missing) accepts formula-list-selector syntax", {
+  mean_age <- function(data, ...) {
+    dplyr::tibble(mean_age = mean(data$age, na.rm = TRUE))
+  }
+
+  # per-variable: response always shown, grade never shown
+  expect_equal(
+    trial |>
+      tbl_custom_summary(
+        include = c("grade", "response"),
+        stat_fns = ~mean_age,
+        statistic = ~"{mean_age}",
+        missing = list(response ~ "always", grade ~ "no")
+      ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      dplyr::pull("variable"),
+    "response"
+  )
+
+  # everything() ~ "no" suppresses all missing rows
+  expect_equal(
+    trial |>
+      tbl_custom_summary(
+        include = c("grade", "response"),
+        stat_fns = ~mean_age,
+        statistic = ~"{mean_age}",
+        missing = everything() ~ "no"
+      ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      nrow(),
+    0L
+  )
+
+  # bare-string input still works (back-compat) and matches formula form
+  expect_equal(
+    trial |>
+      tbl_custom_summary(
+        include = c("grade", "response"),
+        stat_fns = ~mean_age, statistic = ~"{mean_age}",
+        missing = "always"
+      ) |>
+      as.data.frame(),
+    trial |>
+      tbl_custom_summary(
+        include = c("grade", "response"),
+        stat_fns = ~mean_age, statistic = ~"{mean_age}",
+        missing = everything() ~ "always"
+      ) |>
+      as.data.frame()
+  )
+
+  # invalid per-variable value errors
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_custom_summary(
+        include = response,
+        stat_fns = ~mean_age, statistic = ~"{mean_age}",
+        missing = everything() ~ "NOT AN OPTION"
+      )
+  )
+})

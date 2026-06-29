@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `missing` argument of `tbl_summary()`, `tbl_svysummary()`, and `tbl_custom_summary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)
+
 * Added `without_gtsummary_theme()` to evaluate an expression with the active gtsummary theme temporarily ignored (package defaults in effect), restoring the theme afterward. (#2284)
 
 * The `text_interpret` argument now accepts `"none"` (in addition to `"md"` and `"html"`), which renders text verbatim without markdown/HTML interpretation. The `add_significance_stars()` footnote now uses `"none"` so its asterisks render literally. Honored by `as_gt()`. (#1987)
