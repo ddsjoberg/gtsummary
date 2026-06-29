@@ -2,6 +2,10 @@
 
 * `as_hux_xlsx()` now accepts a list of gtsummary tables, writing each table to its own worksheet in a single Excel workbook. When the list is named, the names are used as the worksheet names. (#2327)
 
+* Added `without_gtsummary_theme()` to evaluate an expression with the active gtsummary theme temporarily ignored (package defaults in effect), restoring the theme afterward. (#2284)
+
+* The `text_interpret` argument now accepts `"none"` (in addition to `"md"` and `"html"`), which renders text verbatim without markdown/HTML interpretation. The `add_significance_stars()` footnote now uses `"none"` so its asterisks render literally. Honored by `as_gt()`. (#1987)
+
 * In `as_flex_table()`, multiple footnote reference symbols on a single cell are now separated by a comma (e.g. `1,2` instead of `12`), matching `gt` output. This requires `flextable (>= 0.9.11)`. (#2251)
 
 * Added `modify_footnote_symbol()`, `remove_footnote_symbol()`, and the `pkgwide-chr:footnote_symbol` theme element to control the symbols used for footnote references (e.g. `c("*", "†", "‡")` instead of `1, 2, 3`). Currently supported by `as_gt()` and `as_flex_table()`. (#1445)

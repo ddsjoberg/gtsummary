@@ -31,7 +31,7 @@ NULL
 
 #' @export
 #' @rdname modify_abbreviation
-modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html")) {
+modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -96,7 +96,7 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
       dplyr::tibble(
         column = column,
         abbreviation = abbreviation,
-        text_interpret = paste0("gt::", text_interpret)
+        text_interpret = .interpret_fun(text_interpret)
       )
     )
   x
