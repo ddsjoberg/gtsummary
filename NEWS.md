@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* `modify_abbreviation()` gains `prefix` and `sep` arguments to customize the abbreviation source note's leading text (e.g. `c("Abbr.", "Abbrs.")`) and the separator between abbreviations (e.g. `"; "`). Defaults are also configurable via the `modify_abbreviation-arg:prefix` and `modify_abbreviation-arg:sep` theme elements. (#2172)
+
 * The `missing` argument of `tbl_summary()` and `tbl_svysummary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)
 
 * Updated French language translations. (#2341; @nalimilan)

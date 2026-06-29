@@ -63,6 +63,122 @@ test_that("remove_abbreviation() messaging", {
   )
 })
 
+test_that("modify_abbreviation(prefix, sep) customizes the source note", {
+  # plural prefix + custom separator
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_abbreviation("Q1 = First Quartile", prefix = c("Abbr", "Abbrs"), sep = "; ") |>
+    modify_abbreviation("Q3 = Third Quartile")
+  expect_equal(
+    as.character(as_gt(tbl)$`_source_notes`[[1]]),
+    "Abbrs: Q1 = First Quartile; Q3 = Third Quartile"
+  )
+
+  # singular prefix when a single abbreviation is present
+  tbl_one <- tbl_summary(trial, include = marker) |>
+    modify_abbreviation("Q1 = First Quartile", prefix = c("Abbr", "Abbrs"))
+  expect_equal(
+    as.character(as_gt(tbl_one)$`_source_notes`[[1]]),
+    "Abbr: Q1 = First Quartile"
+  )
+
+  # empty prefix omits the leading text and ": " glue
+  tbl_empty <- tbl_summary(trial, include = marker) |>
+    modify_abbreviation("Q1 = First Quartile", prefix = c("", ""))
+  expect_equal(
+    as.character(as_gt(tbl_empty)$`_source_notes`[[1]]),
+    "Q1 = First Quartile"
+  )
+})
+
+test_that("modify_abbreviation(prefix, sep) persisted as attributes", {
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_abbreviation("Q1 = First Quartile", prefix = c("Abbr", "Abbrs"), sep = "; ")
+  expect_equal(attr(tbl$table_styling$abbreviation, "prefix"), c("Abbr", "Abbrs"))
+  expect_equal(attr(tbl$table_styling$abbreviation, "sep"), "; ")
+
+  # subsequent calls without prefix/sep do not reset previously set values
+  tbl2 <- tbl |> modify_abbreviation("Q3 = Third Quartile")
+  expect_equal(attr(tbl2$table_styling$abbreviation, "prefix"), c("Abbr", "Abbrs"))
+  expect_equal(attr(tbl2$table_styling$abbreviation, "sep"), "; ")
+
+  # remove_abbreviation() preserves the attributes
+  tbl3 <- tbl2 |> remove_abbreviation("Q3 = Third Quartile")
+  expect_equal(attr(tbl3$table_styling$abbreviation, "prefix"), c("Abbr", "Abbrs"))
+  expect_equal(attr(tbl3$table_styling$abbreviation, "sep"), "; ")
+
+  # removing all abbreviations preserves the attributes
+  tbl4 <- tbl2 |> remove_abbreviation()
+  expect_equal(attr(tbl4$table_styling$abbreviation, "prefix"), c("Abbr", "Abbrs"))
+  expect_equal(attr(tbl4$table_styling$abbreviation, "sep"), "; ")
+})
+
+test_that("modify_abbreviation() defaults controlled by theme elements", {
+  with_gtsummary_theme(
+    list(
+      "modify_abbreviation-arg:prefix" = c("Key", "Keys"),
+      "modify_abbreviation-arg:sep" = " | "
+    ),
+    {
+      tbl <- tbl_summary(trial, include = marker) |>
+        modify_abbreviation("Q1 = First Quartile") |>
+        modify_abbreviation("Q3 = Third Quartile")
+      expect_equal(
+        as.character(as_gt(tbl)$`_source_notes`[[1]]),
+        "Keys: Q1 = First Quartile | Q3 = Third Quartile"
+      )
+    }
+  )
+
+  # an explicit argument overrides the theme element
+  with_gtsummary_theme(
+    list("modify_abbreviation-arg:sep" = " | "),
+    {
+      tbl <- tbl_summary(trial, include = marker) |>
+        modify_abbreviation("Q1 = First Quartile", sep = " / ") |>
+        modify_abbreviation("Q3 = Third Quartile")
+      expect_equal(
+        as.character(as_gt(tbl)$`_source_notes`[[1]]),
+        "Abbreviations: Q1 = First Quartile / Q3 = Third Quartile"
+      )
+    }
+  )
+})
+
+test_that("modify_abbreviation() translates only the default prefix", {
+  # the built-in default prefix is translated
+  with_gtsummary_theme(theme_gtsummary_language("fr"), {
+    tbl <- tbl_summary(trial, include = marker) |>
+      modify_abbreviation("Q1 = First Quartile")
+    expect_equal(
+      as.character(as_gt(tbl)$`_source_notes`[[1]]),
+      "Abr\u00e9viation: Q1 = First Quartile"
+    )
+  })
+
+  # a user-supplied prefix is used literally (not translated)
+  with_gtsummary_theme(theme_gtsummary_language("fr"), {
+    tbl <- tbl_summary(trial, include = marker) |>
+      modify_abbreviation("Q1 = First Quartile", prefix = c("Abbreviation", "Abbreviations"))
+    expect_equal(
+      as.character(as_gt(tbl)$`_source_notes`[[1]]),
+      "Abbreviation: Q1 = First Quartile"
+    )
+  })
+})
+
+test_that("modify_abbreviation(prefix, sep) input checks", {
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = marker) |>
+      modify_abbreviation("Q1 = First Quartile", prefix = "one")
+  )
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = marker) |>
+      modify_abbreviation("Q1 = First Quartile", sep = 1)
+  )
+})
+
 test_that("modify_abbreviation(text_interpret = 'none') stores identity", {
   # accepts "none" and stores the `identity` interpret function (#1987)
   tbl <- tbl_summary(trial, include = marker) |>
