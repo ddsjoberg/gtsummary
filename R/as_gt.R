@@ -94,9 +94,10 @@ table_styling_to_gt_calls <- function(x, ...) {
       caption =
         switch(
           !is.null(x$table_styling$caption),
-          rlang::call2(.fn = attr(x$table_styling$caption, "text_interpret"),
-                       x$table_styling$caption,
-                       .ns = "gt")
+          rlang::call2(
+            .fn = parse_expr(.interpret_fun(attr(x$table_styling$caption, "text_interpret"))),
+            x$table_styling$caption
+          )
         )
     ) |>
     compact()
