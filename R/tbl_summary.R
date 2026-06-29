@@ -317,7 +317,12 @@ tbl_summary <- function(data,
         missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
       ),
-    missing = missing
+    missing =
+      case_switch(
+        missing(missing) ~ get_theme_element("tbl_summary-arg:missing", default = missing),
+        .default = missing
+      ) |>
+      .normalize_missing_arg()
   )
 
   # fill in unspecified variables
@@ -330,9 +335,8 @@ tbl_summary <- function(data,
     digits =
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
     missing =
-      .normalize_missing_arg(
-        get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]]))
-      )
+      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
+      .normalize_missing_arg()
   )
   # validate each variable's resolved missing value
   .check_missing_arg(missing)
