@@ -227,7 +227,14 @@ tbl_svysummary <- function(data,
           get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
       ),
-    missing = missing
+    missing =
+      case_switch(
+        missing(missing) ~
+          get_theme_element("tbl_svysummary-arg:missing") %||%
+          get_theme_element("tbl_summary-arg:missing", default = missing),
+        .default = missing
+      ) |>
+      .normalize_missing_arg()
   )
 
   # fill in unspecified variables
@@ -243,10 +250,9 @@ tbl_svysummary <- function(data,
       get_theme_element("tbl_svysummary-arg:digits") %||%
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_svysummary)[["digits"]])),
     missing =
-      .normalize_missing_arg(
-        get_theme_element("tbl_svysummary-arg:missing") %||%
-          get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_svysummary)[["missing"]]))
-      )
+      get_theme_element("tbl_svysummary-arg:missing") %||%
+      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_svysummary)[["missing"]])) |>
+      .normalize_missing_arg()
   )
   # validate each variable's resolved missing value
   .check_missing_arg(missing)
