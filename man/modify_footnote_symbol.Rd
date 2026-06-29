@@ -2,9 +2,12 @@
 % Please edit documentation in R/modify_footnote_symbol.R
 \name{modify_footnote_symbol}
 \alias{modify_footnote_symbol}
+\alias{remove_footnote_symbol}
 \title{Modify Footnote Symbols}
 \usage{
 modify_footnote_symbol(x, symbol)
+
+remove_footnote_symbol(x)
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
@@ -24,10 +27,15 @@ and \code{as_flex_table()}.}
 Updated gtsummary object
 }
 \description{
-Customize the symbols used to reference footnotes in a gtsummary table. By
-default, footnotes are referenced with sequential numbers (\verb{1, 2, 3, ...}).
-This function replaces those numbers with a user-specified set of symbols,
-e.g. \code{c("*", "\\u2020", "\\u2021")} (an asterisk, dagger, and double dagger).
+\itemize{
+\item \code{modify_footnote_symbol()} customizes the symbols used to reference
+footnotes in a gtsummary table. By default, footnotes are referenced with
+sequential numbers (\verb{1, 2, 3, ...}). This function replaces those numbers
+with a user-specified set of symbols, e.g. \code{c("*", "\\u2020", "\\u2021")}
+(an asterisk, dagger, and double dagger).
+\item \code{remove_footnote_symbol()} resets the footnote reference marks back to the
+default numbering.
+}
 }
 \details{
 The symbol sequence may also be set for all tables via the
@@ -54,10 +62,15 @@ to create them. The six marks correspond to those used in
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # use symbols (instead of numbers) to reference footnotes
-trial |>
+tbl <-
+  trial |>
   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
   add_p() |>
   modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021"))
+tbl
+
+# reset footnotes back to the default numbering
+tbl |> remove_footnote_symbol()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
