@@ -18,12 +18,33 @@ if (nrow(df_translations) != nrow(df_translations |> dplyr::select(en) |> dplyr:
   stop("STOOOOOOOOOPPPPP, error in the translations data")
 }
 
+# Build hashed environments for O(1) lookup per language.
+# Each language gets an environment mapping English strings to translations.
+languages <- setdiff(names(df_translations), c("context", "en"))
+lst_translations <- lapply(
+  stats::setNames(languages, languages),
+  function(lang) {
+    en <- df_translations$en
+    translated <- df_translations[[lang]]
+    # only include non-NA translations
+    keep <- !is.na(translated)
+    env <- new.env(hash = TRUE, parent = emptyenv(), size = sum(keep))
+    # Mark all strings as UTF-8 so they survive on Windows
+    translated_utf8 <- enc2utf8(translated[keep])
+    mapply(
+      function(key, val) assign(key, val, envir = env),
+      en[keep], translated_utf8
+    )
+    env
+  }
+)
+
 special_char <- list()
-special_char$interpunct <- "·"
+special_char$interpunct <- "\u00B7"
 
 usethis::use_data(
   df_theme_elements,
-  df_translations,
+  lst_translations,
   special_char,
   df_add_p_tests,
   internal = TRUE, overwrite = TRUE

@@ -73,6 +73,35 @@ test_that("modify_footnote_spanning_header(footnote)", {
   )
 })
 
+test_that("modify_footnote_spanning_header(text_interpret = 'none') stores identity", {
+  # accepts "none" and stores the `identity` interpret function (#1987)
+  tbl <- base_tbl_summary |>
+    modify_footnote_spanning_header(
+      "*lit*",
+      columns = all_stat_cols(),
+      level = 1,
+      text_interpret = "none"
+    )
+  expect_equal(
+    tbl$table_styling$footnote_spanning_header |>
+      dplyr::filter(footnote == "*lit*") |>
+      dplyr::pull("text_interpret") |>
+      unique(),
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    modify_footnote_spanning_header(
+      base_tbl_summary,
+      "x",
+      columns = all_stat_cols(),
+      level = 1,
+      text_interpret = "latex"
+    )
+  )
+})
+
 test_that("modify_footnote_spanning_header() messaging", {
   expect_snapshot(
     error = TRUE,

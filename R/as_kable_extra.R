@@ -114,7 +114,7 @@ as_kable_extra <- function(x,
     )
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds", eval = TRUE)
   kable_extra_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
@@ -675,7 +675,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 #' @name kableExtra_utils
 #' @keywords internal
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed("kableExtra")
 #' .escape_latex(c("%", "{test}"))
 #' .escape_html(c(">0.9", "line\nbreak"))
 NULL

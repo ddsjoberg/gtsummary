@@ -158,16 +158,26 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   # adding the headers, indenting, and stacking --------------------------------
   # add headers with their associated `tbl_indent_id1`
   for (i in seq_len(nrow(df_headers))) {
-    # indent the innermost table
-    tbls[[i]]$table_styling$indent$n_spaces <-
-      tbls[[i]]$table_styling$indent$n_spaces + length(strata) * 4L
-
     # add nesting header rows
     tbls[[i]]$table_body <-
       dplyr::bind_rows(
         lst_df_headers[[i]],
         tbls[[i]]$table_body |> dplyr::mutate(tbl_indent_id1 = 0L)
       )
+
+    # indent the first non-hidden column of the innermost table
+    if (first_non_hidden_col %in% tbls[[i]]$table_styling$indent$column) {
+      tbls[[i]]$table_styling$indent$n_spaces[tbls[[i]]$table_styling$indent$column == first_non_hidden_col] <-
+        tbls[[i]]$table_styling$indent$n_spaces[tbls[[i]]$table_styling$indent$column == first_non_hidden_col] + length(strata) * 4L
+    } else {
+      tbls[[i]] <-
+        tbls[[i]] |>
+        modify_indent(
+          columns = all_of(first_non_hidden_col),
+          rows = !!expr(.data$tbl_indent_id1 == 0),
+          indent = length(strata) * 4L
+        )
+    }
   }
 
   # stack the tbls

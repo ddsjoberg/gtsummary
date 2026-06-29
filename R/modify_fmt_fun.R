@@ -16,7 +16,7 @@
 #' @inheritSection modify_table_styling rows argument
 #'
 #' @export
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' # show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
 #' lm(age ~ marker + grade, trial) |>

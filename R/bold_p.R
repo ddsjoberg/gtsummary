@@ -19,10 +19,12 @@
 #'   add_p() |>
 #'   bold_p(t = 0.1)
 #'
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 2 ----------------------------------
 #' glm(response ~ trt + grade, trial, family = binomial(link = "logit")) |>
 #'   tbl_regression(exponentiate = TRUE) |>
 #'   bold_p(t = 0.65)
+#'
 bold_p <- function(x, t = 0.05, q = FALSE) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(bold_p = match.call()))

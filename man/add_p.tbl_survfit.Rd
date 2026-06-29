@@ -19,7 +19,7 @@
 Object of class \code{"tbl_survfit"}}
 
 \item{test}{(\code{string})\cr
-string indicating test to use. Must be one of \code{"logrank"}, \code{"tarone"}, \code{"survdiff"},
+string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"},
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \code{"coxph_score"}.
 See details below}
 
@@ -93,7 +93,7 @@ gts_survfit |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other tbl_survfit tools: 
-\code{\link{add_nevent.tbl_survfit}()}
+Other tbl_survfit tools:
+\code{\link[=add_nevent.tbl_survfit]{add_nevent.tbl_survfit()}}
 }
 \concept{tbl_survfit tools}

@@ -4,7 +4,13 @@
 \alias{tbl_merge}
 \title{Merge tables}
 \usage{
-tbl_merge(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NULL)
+tbl_merge(
+  tbls,
+  tab_spanner = NULL,
+  merge_vars = NULL,
+  tbl_ids = NULL,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -28,6 +34,10 @@ be removed.}
 Optional character vector of IDs that will be assigned to the input tables.
 The ID is assigned by assigning a name to the \code{tbls} list, which is
 returned in \code{x$tbls}.}
+
+\item{quiet}{(scalar \code{logical})\cr
+When \code{FALSE}, a message is printed when unlike tables are merged warning
+users of potential row ordering issues.}
 }
 \value{
 A \code{'tbl_merge'} object

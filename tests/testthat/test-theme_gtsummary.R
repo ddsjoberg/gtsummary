@@ -25,7 +25,7 @@ test_that("theme_gtsummary_compact() works", {
     ),
     NA
   )
-
+ skip_if_pkg_not_installed("kableExtra")
   expect_error(
     with_gtsummary_theme(
       theme_gtsummary_compact(),
@@ -321,4 +321,59 @@ test_that("with_gtsummary_theme()", {
       as_kable()
     reset_gtsummary_theme()
   })
+})
+
+test_that("without_gtsummary_theme() ignores the active theme", {
+  on.exit(reset_gtsummary_theme())
+
+  # reference output built with no theme set
+  reset_gtsummary_theme()
+  no_theme_tbl <-
+    trial |>
+    tbl_summary(by = trt, include = c(age, grade)) |>
+    as.data.frame()
+
+  # with a theme set, without_gtsummary_theme() reproduces the no-theme output
+  set_gtsummary_theme(theme_gtsummary_compact())
+  set_gtsummary_theme(theme_gtsummary_journal("jama"))
+  expect_equal(
+    without_gtsummary_theme(
+      trial |>
+        tbl_summary(by = trt, include = c(age, grade)) |>
+        as.data.frame()
+    ),
+    no_theme_tbl
+  )
+})
+
+test_that("without_gtsummary_theme() restores the active theme", {
+  on.exit(reset_gtsummary_theme())
+
+  # the active theme is stored in an (unordered) environment, so compare the
+  # theme as a list sorted by element name
+  sorted_theme <- function() {
+    theme <- get_gtsummary_theme()
+    theme[order(names(theme))]
+  }
+
+  # set a theme and capture it
+  set_gtsummary_theme(theme_gtsummary_compact())
+  set_gtsummary_theme(theme_gtsummary_journal("jama"))
+  theme_before <- sorted_theme()
+
+  # active theme is unchanged after a successful call
+  without_gtsummary_theme(identical(1L, 1L))
+  expect_equal(sorted_theme(), theme_before)
+
+  # active theme is restored even when expr errors
+  expect_error(without_gtsummary_theme(stop("boom")))
+  expect_equal(sorted_theme(), theme_before)
+})
+
+test_that("without_gtsummary_theme() returns expr value and is a no-op with no theme", {
+  on.exit(reset_gtsummary_theme())
+
+  reset_gtsummary_theme()
+  expect_equal(without_gtsummary_theme(1L + 1L), 2L)
+  expect_equal(get_gtsummary_theme(), list())
 })
