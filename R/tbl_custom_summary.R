@@ -191,7 +191,7 @@ tbl_custom_summary <- function(data,
                                digits = NULL,
                                type = NULL,
                                value = NULL,
-                               missing = c("ifany", "no", "always"),
+                               missing = everything() ~ "ifany",
                                missing_text = "Unknown",
                                missing_stat = "{N_miss}",
                                include = everything(),
@@ -209,12 +209,16 @@ tbl_custom_summary <- function(data,
   if (missing(overall_row_label)) overall_row_label <- translate_string(overall_row_label)
   check_string(overall_row_label)
 
+  # resolve `missing` from theme/default; per-variable processing happens below
+  # alongside the other formula-selector arguments
   if (missing(missing)) {
     missing <-
       get_theme_element("tbl_custom_summary-arg:missing") %||%
       get_theme_element("tbl_summary-arg:missing", default = missing)
   }
-  missing <- arg_match(missing, values = c("ifany", "no", "always"))
+  # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
+  # A bare string is permanently supported shorthand for `everything() ~ <string>`.
+  missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
     missing_text <-
@@ -318,8 +322,15 @@ tbl_custom_summary <- function(data,
           get_theme_element("tbl_custom_summary-arg:digits") %||%
           get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
-      )
+      ),
+    missing = missing
   )
+  cards::fill_formula_selectors(
+    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    missing = everything() ~ "ifany"
+  )
+  # validate each variable's resolved missing value
+  .check_missing_arg(missing)
   user_passed_digits <- digits
 
   # fill each element of digits argument
