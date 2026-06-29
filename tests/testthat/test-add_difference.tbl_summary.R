@@ -142,6 +142,55 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
   )
 })
 
+test_that("add_difference.tbl_summary(tests = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic-style data where the displayed `value` ("Child") is the FIRST
+  # factor level of `Age` (levels: "Child", "Adult"). Before the fix, emmeans
+  # modeled P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  df_titanic$Freq <- NULL
+
+  # hand-computed group1 - group2 difference of P(Child)
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  tbl_child <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Child")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | No) - P(Child | Yes) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
+
+  # CI must bracket the sign-correct estimate
+  ci_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::select("conf.low", "conf.high")
+  expect_true(ci_child$conf.low <= est_child && est_child <= ci_child$conf.high)
+
+  # displaying the LAST factor level ("Adult") is the negative of P(Child)
+  # and must be unchanged by the fix (already-correct case)
+  tbl_adult <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Adult")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_adult <-
+    tbl_adult$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  expect_equal(est_adult, -expected_diff, tolerance = 1e-6)
+})
+
 test_that("statistics are replicated within add_difference.tbl_summary()", {
   tbl_test.args <-
     trial |>
@@ -711,6 +760,36 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
       cards::replace_null_statistic() |>
       dplyr::select(-"fmt_fun"),
     ignore_attr = TRUE
+  )
+})
+
+test_that("add_difference() errors when test does not return an estimate", {
+  # custom test that returns only p.value, no estimate
+  no_estimate_test <- function(data, variable, by, ...) {
+    data.frame(p.value = 0.05)
+  }
+
+  expect_error(
+    trial |>
+      tbl_summary(by = trt, include = age) |>
+      add_difference(test = list(age ~ no_estimate_test)),
+    "did not return a difference estimate"
+  )
+})
+
+test_that("add_difference() with mcnemar.test does not error", {
+  trial_paired <-
+    trial |>
+    dplyr::select(trt, response) |>
+    dplyr::mutate(.by = trt, id = dplyr::row_number()) |>
+    tidyr::drop_na() |>
+    dplyr::filter(.by = id, dplyr::n() == 2)
+
+  expect_error(
+    trial_paired |>
+      tbl_summary(by = trt, include = response) |>
+      add_difference(test = list(response ~ "mcnemar.test"), group = "id"),
+    NA
   )
 })
 

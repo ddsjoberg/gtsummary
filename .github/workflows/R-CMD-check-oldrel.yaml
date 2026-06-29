@@ -1,0 +1,98 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+#
+# R CMD check on older R releases (oldrel-2, oldrel-3, oldrel-4).
+#
+# On older R releases some suggested packages (or the minimum versions
+# declared in DESCRIPTION) may not be installable. Hard dependencies
+# (Imports/Depends) are required, while suggested packages are installed on a
+# best-effort basis: when a suggested package or required version is
+# unavailable the install step does not fail the job, and the package's own
+# skip machinery (`skip_if_pkg_not_installed()` and
+# `@examplesIf gtsummary:::is_pkg_installed(...)`) skips the affected
+# tests/examples so `R CMD check` still succeeds.
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+name: R-CMD-check (oldrel)
+
+permissions: read-all
+
+jobs:
+  R-CMD-check-oldrel:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-latest,   r: 'oldrel-2'}
+          - {os: ubuntu-latest,   r: 'oldrel-3'}
+          # oldrel-4 is R 4.1, which is below the DESCRIPTION minimum of
+          # R (>= 4.2). Kept here for reference; enable if the minimum is lowered.
+          # - {os: ubuntu-latest,   r: 'oldrel-4'}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      # Install the hard dependencies (Imports/Depends/LinkingTo) plus the
+      # tooling needed to run the check. Suggested packages are intentionally
+      # excluded here and installed best-effort in the next step.
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      # Best-effort install of suggested packages. On old R releases some of
+      # these (or their required minimum versions) may not be installable; that
+      # must not fail the job. Tests and examples that need an unavailable
+      # suggested package are skipped by the package's own helpers.
+      - name: Install suggested packages (best-effort)
+        continue-on-error: true
+        run: |
+          suggests <- read.dcf("DESCRIPTION", fields = "Suggests")[[1]]
+          if (is.na(suggests) || !nzchar(suggests)) {
+            cat("No suggested packages to install.\n")
+          } else {
+            pkgs <- strsplit(suggests, ",")[[1]] |> trimws()
+            # drop version constraints, e.g. "broom (>= 1.0.5)" -> "broom"
+            pkgs <- sub("\\s*\\(.*\\)$", "", pkgs)
+            pkgs <- pkgs[nzchar(pkgs)]
+            for (p in pkgs) {
+              cat("Attempting to install suggested package:", p, "\n")
+              tryCatch(
+                pak::pkg_install(p, ask = FALSE, upgrade = FALSE),
+                error = function(e) {
+                  cat("  Skipping", p, "- not installable on this R:",
+                      conditionMessage(e), "\n")
+                }
+              )
+            }
+          }
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+        env:
+          # Do not error on missing suggested packages; the package skips
+          # tests/examples that require unavailable suggests.
+          _R_CHECK_FORCE_SUGGESTS_: false

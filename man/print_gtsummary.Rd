@@ -19,7 +19,7 @@
   ...
 )
 
-pkgdown_print.gtsummary(x, visible = TRUE)
+\method{pkgdown_print}{gtsummary}(x, visible = TRUE)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}

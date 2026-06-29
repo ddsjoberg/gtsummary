@@ -28,10 +28,12 @@ trial |>
   add_p() |>
   bold_p(t = 0.1)
 
+\dontshow{if (gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 # Example 2 ----------------------------------
 glm(response ~ trt + grade, trial, family = binomial(link = "logit")) |>
   tbl_regression(exponentiate = TRUE) |>
   bold_p(t = 0.65)
+\dontshow{\}) # examplesIf}
 }
 \author{
 Daniel D. Sjoberg, Esther Drill

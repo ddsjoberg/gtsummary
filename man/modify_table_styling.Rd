@@ -67,9 +67,10 @@ Must be one of \code{c("bold", "italic")}.}
 An integer indicating how many space to indent text}
 
 \item{text_interpret}{(\code{string})\cr
-Must be one of \code{"md"} or \code{"html"} and indicates the processing function
-as \code{gt::md()} or \code{gt::html()}. Use this in conjunction with arguments for
-header and footnotes.}
+Must be one of \code{"md"}, \code{"html"}, or \code{"none"}, indicating the processing
+function as \code{gt::md()}, \code{gt::html()}, or no interpretation (text rendered
+verbatim). Use this in conjunction with arguments for header and footnotes.
+Applies to tables printed with \code{{gt}}.}
 
 \item{cols_merge_pattern}{(\code{string})\cr
 glue-syntax string indicating how to merge
