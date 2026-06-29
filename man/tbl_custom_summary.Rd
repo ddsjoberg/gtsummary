@@ -13,7 +13,7 @@ tbl_custom_summary(
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = everything() ~ "ifany",
+  missing = c("ifany", "no", "always"),
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
   include = everything(),
@@ -61,18 +61,12 @@ Specifies the level of a variable to display on a single row.
 The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
 with this argument. Default is \code{NULL}. See below for details.}
 
-\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
-\itemize{
-\item \code{missing}: specifies whether to include a row of missing/\code{NA} counts.
-Provide a (\code{\link[=syntax]{formula-list-selector}}) where each variable is
-assigned one of \code{c("ifany", "no", "always")} (e.g.
-\code{missing = list(age ~ "always", grade ~ "no")} or
-\code{missing = everything() ~ "no"}). The default is \code{everything() ~ "ifany"},
-which adds a missing row only for variables that have missing values.
-\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
-\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
-Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
-}}
+\item{missing}{(\code{string})\cr
+Must be one of \code{c("ifany", "no", "always")}, indicating whether to include
+a row of missing/\code{NA} counts. The default is \code{"ifany"}, which adds a missing
+row only when there are missing values. The setting applies to all
+variables. (Per-variable formula-list-selector syntax is supported by
+\code{\link[=tbl_summary]{tbl_summary()}} and \code{\link[=tbl_svysummary]{tbl_svysummary()}}, but not by \code{tbl_custom_summary()}.)}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}.}

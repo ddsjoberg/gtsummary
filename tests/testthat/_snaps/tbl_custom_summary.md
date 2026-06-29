@@ -121,12 +121,12 @@
       1                Age     189/200
       2            Unknown          11
 
-# tbl_custom_summary(missing) accepts formula-list-selector syntax
+# tbl_custom_summary(missing) scalar syntax
 
     Code
       tbl_custom_summary(trial, include = response, stat_fns = ~mean_age, statistic = ~
-        "{mean_age}", missing = everything() ~ "NOT AN OPTION")
+        "{mean_age}", missing = "NOT AN OPTION")
     Condition
       Error in `tbl_custom_summary()`:
-      ! Error in argument `missing` for column "response": value must be one of "ifany", "no", and "always".
+      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
 

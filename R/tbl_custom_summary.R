@@ -7,6 +7,12 @@
 #' a custom function in charge of computing the statistics (see Details).
 #'
 #' @inheritParams tbl_summary
+#' @param missing (`string`)\cr
+#'   Must be one of `c("ifany", "no", "always")`, indicating whether to include
+#'   a row of missing/`NA` counts. The default is `"ifany"`, which adds a missing
+#'   row only when there are missing values. The setting applies to all
+#'   variables. (Per-variable formula-list-selector syntax is supported by
+#'   [tbl_summary()] and [tbl_svysummary()], but not by `tbl_custom_summary()`.)
 #' @param stat_fns ([`formula-list-selector`][syntax])\cr
 #'   Specifies the function to be used to compute the statistics
 #'   (see below for details and examples).
@@ -191,7 +197,7 @@ tbl_custom_summary <- function(data,
                                digits = NULL,
                                type = NULL,
                                value = NULL,
-                               missing = everything() ~ "ifany",
+                               missing = c("ifany", "no", "always"),
                                missing_text = "Unknown",
                                missing_stat = "{N_miss}",
                                include = everything(),
@@ -209,16 +215,12 @@ tbl_custom_summary <- function(data,
   if (missing(overall_row_label)) overall_row_label <- translate_string(overall_row_label)
   check_string(overall_row_label)
 
-  # resolve `missing` from theme/default; per-variable processing happens below
-  # alongside the other formula-selector arguments
   if (missing(missing)) {
     missing <-
       get_theme_element("tbl_custom_summary-arg:missing") %||%
       get_theme_element("tbl_summary-arg:missing", default = missing)
   }
-  # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
-  # A bare string is permanently supported shorthand for `everything() ~ <string>`.
-  missing <- .normalize_missing_arg(missing)
+  missing <- arg_match(missing, values = c("ifany", "no", "always"))
 
   if (missing(missing_text)) {
     missing_text <-
@@ -322,19 +324,8 @@ tbl_custom_summary <- function(data,
           get_theme_element("tbl_custom_summary-arg:digits") %||%
           get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
-      ),
-    missing = missing
-  )
-  cards::fill_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
-    missing =
-      .normalize_missing_arg(
-        get_theme_element("tbl_custom_summary-arg:missing") %||%
-          get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_custom_summary)[["missing"]]))
       )
   )
-  # validate each variable's resolved missing value
-  .check_missing_arg(missing)
   user_passed_digits <- digits
 
   # fill each element of digits argument
@@ -470,7 +461,7 @@ tbl_custom_summary <- function(data,
       variables = include,
       statistic = statistic,
       type = type,
-      missing = missing,
+      missing = rep_named(include, list(missing)),
       missing_stat = missing_stat,
       missing_text = missing_text
     ) |>
