@@ -35,7 +35,7 @@ NULL
 
 #' @export
 #' @rdname modify_source_note
-modify_source_note <- function(x, source_note, text_interpret = c("md", "html")) {
+modify_source_note <- function(x, source_note, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_source_note = match.call()))
 
@@ -53,7 +53,7 @@ modify_source_note <- function(x, source_note, text_interpret = c("md", "html"))
       dplyr::tibble(
         id = nrow(x$table_styling$source_note) + 1L,
         source_note = source_note,
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         remove = FALSE
       )
     )

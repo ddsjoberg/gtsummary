@@ -17,7 +17,7 @@
 #' @examples
 #' # Use `modify_footnote_header()`, `modify_footnote_body()`, `modify_abbreviation()` instead.
 modify_footnote <- function(x, ..., abbreviation = FALSE,
-                            text_interpret = c("md", "html"),
+                            text_interpret = c("md", "html", "none"),
                             update, quiet) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
