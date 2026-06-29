@@ -16,9 +16,11 @@
 #' @export
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_wide_summary(include = c(response, grade))
 #'
+#' # Example 2 ----------------------------------
 #' trial |>
 #'   tbl_strata(
 #'     strata = trt,

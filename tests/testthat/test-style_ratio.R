@@ -34,3 +34,14 @@ test_that("style_ratio() works", {
     c("$0.00*", "$1.00*", "$11.0*",  NA)
   )
 })
+
+test_that("style_ratio() works with matrix input", {
+  vec <- c(0.123, 0.9, 1.1234, NA)
+  mat <- matrix(vec, nrow = 2, dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  result <- style_ratio(mat)
+
+  expect_true(is.matrix(result))
+  expect_equal(dim(result), c(2L, 2L))
+  expect_equal(dimnames(result), list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(as.vector(result), style_ratio(vec))
+})

@@ -187,12 +187,12 @@ tbl_ard_summary <- function(cards,
     dplyr::distinct() |>
     dplyr::mutate(
       context =
-        dplyr::case_match(
+        dplyr::recode_values(
           .data$context,
           "summary" ~ "continuous",
           "tabulate" ~ "categorical",
           "tabulate_value" ~ "dichotomous",
-          .default = .data$context
+          default = .data$context
         )
     ) |>
     dplyr::filter(

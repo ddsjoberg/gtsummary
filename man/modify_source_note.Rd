@@ -5,7 +5,7 @@
 \alias{remove_source_note}
 \title{Modify source note}
 \usage{
-modify_source_note(x, source_note, text_interpret = c("md", "html"))
+modify_source_note(x, source_note, text_interpret = c("md", "html", "none"))
 
 remove_source_note(x, source_note_id = NULL)
 }
@@ -18,8 +18,10 @@ A string to add as a source note.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
-Applies to tables printed with \code{{gt}}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
+\code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
+(useful when the text contains markdown-significant characters). Applies to tables
+printed with \code{{gt}}.}
 
 \item{source_note_id}{(\code{integers})\cr
 Integers specifying the IDs of the source notes to remove.
@@ -42,8 +44,12 @@ Source notes are not supported by \code{as_kable_extra()}.
 # Example 1 ----------------------------------
 tbl <- tbl_summary(trial, include = c(marker, grade), missing = "no") |>
   modify_source_note("Results as of June 26, 2015")
+tbl
 
 # Example 2 ----------------------------------
 remove_source_note(tbl, source_note_id = 1)
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
 }

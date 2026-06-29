@@ -58,7 +58,7 @@ inline reporting in an R markdown document. Detailed examples in the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("survival")) withAutoprint(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("survival", "broom"))) withAutoprint(\{ # examplesIf}
 library(survival)
 
 # fit survfit

@@ -8,6 +8,7 @@
 #' - In `tbl_strata2()`, both the stratified data frame and the strata level
 #'   are passed to `.tbl_fun=`, e.g. `purrr::map2(data, strata, .tbl_fun)`.
 #'
+#' Tables are created _independently_ within each stratum.
 #' When merging, keep in mind that merging works best with **like tables**.
 #' See [`tbl_merge()`] for details.
 #'
@@ -34,8 +35,11 @@
 #'   Default is `"**{strata}**"` when `.combine_with = "tbl_merge"` and
 #'   `"{strata}"` when `.combine_with = "tbl_stack"`. Items placed in
 #'   curly brackets will be evaluated according to `glue::glue()` syntax.
+#'
 #'     - `strata` stratum levels
+#'
 #'     - `n` N within stratum
+#'
 #'     - `N` Overall N
 #'
 #'   The evaluated value of `.header` is also available within `tbl_strata2(.tbl_fun)`

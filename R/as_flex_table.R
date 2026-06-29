@@ -48,7 +48,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
   flextable_calls <- table_styling_to_flextable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds", eval = TRUE)
   flextable_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
@@ -212,6 +212,18 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # autofit --------------------------------------------------------------------
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
+  # resolve custom footnote reference symbols set via `modify_footnote_symbol()`
+  # or the `pkgwide-chr:footnote_symbol` theme element. `NULL` keeps the default
+  # integer reference marks. A small helper maps each footnote's integer id to
+  # its reference symbol (recycling when needed).
+  footnote_symbol <- .resolve_footnote_symbols(x)
+  ref_symbol_for <- function(footnote_id) {
+    if (is.null(footnote_symbol)) {
+      return(footnote_id)
+    }
+    .map_footnote_symbols(footnote_id, footnote_symbol)
+  }
+
   # footnote_header ------------------------------------------------------------
   spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()
   df_footnote_header <-
@@ -238,7 +250,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_header$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_header$footnote[[.x]]),
           part = "header",
-          ref_symbols = !!df_footnote_header$footnote_id[[.x]]
+          ref_symbols = !!ref_symbol_for(df_footnote_header$footnote_id[[.x]]),
+          # separate multiple footnote reference symbols with a comma, matching
+          # gt output, e.g. "1,2" instead of "12" (#2251)
+          symbol_sep = ","
         )
       )
     )
@@ -261,7 +276,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
           j = !!df_footnote_body$column_id[[.x]],
           value = flextable::as_paragraph(!!df_footnote_body$footnote[[.x]]),
           part = "body",
-          ref_symbols = !!df_footnote_body$footnote_id[[.x]]
+          ref_symbols = !!ref_symbol_for(df_footnote_body$footnote_id[[.x]]),
+          # separate multiple footnote reference symbols with a comma, matching
+          # gt output, e.g. "1,2" instead of "12" (#2251)
+          symbol_sep = ","
         )
       )
     )

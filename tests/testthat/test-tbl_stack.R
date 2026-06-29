@@ -325,3 +325,33 @@ test_that("tbl_stack throws expected errors", {
     error = TRUE
   )
 })
+
+test_that("tbl_stack deduplicates identical footnote_header rows", {
+  # stacking two tables with the same footnote_header should not duplicate
+  tbl <- tbl_stack(list(t1_regression, t2_regression))
+
+  expect_equal(
+    nrow(tbl$table_styling$footnote_header),
+    nrow(dplyr::distinct(tbl$table_styling$footnote_header))
+  )
+})
+
+test_that("tbl_stack with qjecon theme does not duplicate footnote superscripts", {
+  tbl <-
+    with_gtsummary_theme(
+      theme_gtsummary_journal("qjecon"),
+      expr = trial |>
+        dplyr::select(age, grade, response) |>
+        tbl_uvregression(
+          method = glm,
+          y = response,
+          method.args = list(family = binomial),
+          exponentiate = TRUE
+        )
+    )
+
+  # should have exactly one significance stars footnote, not one per variable
+  footnote_rows <- tbl$table_styling$footnote_header |>
+    dplyr::filter(.data$column == "estimate")
+  expect_equal(nrow(footnote_rows), 1L)
+})

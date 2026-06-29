@@ -44,7 +44,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   gt_calls <- table_styling_to_gt_calls(x = x, ...)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds", eval = TRUE)
   gt_calls <-
     reduce(
       .x = seq_along(insert_expr_after),
@@ -94,9 +94,10 @@ table_styling_to_gt_calls <- function(x, ...) {
       caption =
         switch(
           !is.null(x$table_styling$caption),
-          rlang::call2(.fn = attr(x$table_styling$caption, "text_interpret"),
-                       x$table_styling$caption,
-                       .ns = "gt")
+          rlang::call2(
+            .fn = parse_expr(.interpret_fun(attr(x$table_styling$caption, "text_interpret"))),
+            x$table_styling$caption
+          )
         )
     ) |>
     compact()
@@ -312,6 +313,15 @@ table_styling_to_gt_calls <- function(x, ...) {
         }
       )
     )
+
+  # opt_footnote_marks ---------------------------------------------------------
+  # apply custom footnote reference symbols set via `modify_footnote_symbol()`
+  # or the `pkgwide-chr:footnote_symbol` theme element
+  footnote_symbol <- .resolve_footnote_symbols(x)
+  if (!is.null(footnote_symbol)) {
+    gt_calls[["opt_footnote_marks"]] <-
+      expr(gt::opt_footnote_marks(marks = !!footnote_symbol))
+  }
 
   # horizontal_line ------------------------------------------------------------
   if (!is.null(x$table_styling$horizontal_line_above)) {

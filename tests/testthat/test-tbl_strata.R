@@ -40,7 +40,8 @@ test_that("tbl_strata works with standard use", {
         .tbl_fun = ~ .x |>
           tbl_summary(by = trt) |>
           add_p(test = all_continuous() ~ "t.test")
-      )
+      ) |>
+      suppressMessages()
   )
 
   # df_strata correct

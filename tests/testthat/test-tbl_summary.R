@@ -788,3 +788,20 @@ test_that("tbl_summary(percent = c(<data.frame>))", {
   )
 })
 
+# addressing issue #2345; Character "NULL" handling
+test_that("tbl_summary() handlines character vectors with 'NULL' values", {
+  x <- c(rep("YES", 6), rep("NULL", 4), rep(NA, 10))
+  expect_equal(
+    data.frame(x = x) |>
+      tbl_summary(statistic = ~ "{p}", missing = "no") |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(stat_0) |>
+      na.omit(),
+    table(x) |>
+      prop.table() %>%
+      {100 * .} |> # styler: off
+      as.character(),
+    ignore_attr = TRUE
+  )
+})
+

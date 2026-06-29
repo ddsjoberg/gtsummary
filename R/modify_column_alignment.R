@@ -5,7 +5,7 @@
 #' @inheritParams modify_table_styling
 #'
 #' @export
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' lm(age ~ marker + grade, trial) %>%
 #'   tbl_regression() %>%

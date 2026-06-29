@@ -70,7 +70,7 @@ brdg_hierarchical <- function(cards,
   by_groups <- (cards |> select(cards::all_ard_groups()) |> colnames())[seq_len(2 * length(by))]
   cards <- cards |>
     dplyr::ungroup() |>
-    cards::as_card()
+    cards::as_card(check = FALSE)
 
   if (overall_row) {
     over_row <- pier_summary_hierarchical(

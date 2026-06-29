@@ -160,6 +160,9 @@ test_that("sort_hierarchical() works with only one variable in x", {
 })
 
 test_that("sort_hierarchical() works when some variables not included in x", {
+  withr::local_options(width = 250)
+
+  # 3 variables, 2 in include
   tbl <- tbl_hierarchical(
     data = ADAE_subset,
     variables = c(SEX, RACE, AETERM),
@@ -171,6 +174,19 @@ test_that("sort_hierarchical() works when some variables not included in x", {
   )
 
   expect_message(sort_hierarchical(tbl))
+
+  # 3 variables, 1 in include
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AESOC, AETERM, AESEV),
+    include = AESEV,
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID,
+    overall_row = TRUE
+  )
+
+  expect_snapshot(sort_hierarchical(tbl) |> as.data.frame())
 })
 
 test_that("sort_hierarchical() works with no by variable", {
@@ -252,5 +268,28 @@ test_that("sort_hierarchical() error messaging works", {
   expect_snapshot(
     sort_hierarchical(tbl, "10"),
     error = TRUE
+  )
+})
+
+test_that("sort_hierarchical() retains the internal ard_stack_hierarchical class", {
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(AEBODSYS %in% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                  "EAR AND LABYRINTH DISORDERS")) |>
+    dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
+  
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AEBODSYS, AEDECOD),
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID
+  )
+  
+  tbl_sorted <- sort_hierarchical(tbl)
+  
+  # Verify the internal ARD engine kept its required cards subclass
+  expect_s3_class(
+    tbl_sorted$cards$tbl_hierarchical, 
+    "ard_stack_hierarchical"
   )
 })

@@ -265,3 +265,26 @@ test_that("filter_hierarchical() error messaging works", {
     error = TRUE
   )
 })
+
+test_that("filter_hierarchical() retains the internal ard_stack_hierarchical class", {
+  ADAE_subset <- cards::ADAE |>
+    dplyr::filter(AEBODSYS %in% c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS",
+                                  "EAR AND LABYRINTH DISORDERS")) |>
+    dplyr::filter(.by = AEBODSYS, dplyr::row_number() < 20)
+  
+  tbl <- tbl_hierarchical(
+    data = ADAE_subset,
+    variables = c(AEBODSYS, AEDECOD),
+    by = TRTA,
+    denominator = cards::ADSL,
+    id = USUBJID
+  )
+  
+  tbl_filtered <- filter_hierarchical(tbl, abs(p_2 - p_3) > 0.03, quiet = TRUE)
+  
+  # Verify the internal ARD engine kept its required cards subclass
+  expect_s3_class(
+    tbl_filtered$cards$tbl_hierarchical, 
+    "ard_stack_hierarchical"
+  )
+})
