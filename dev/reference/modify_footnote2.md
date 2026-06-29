@@ -10,7 +10,7 @@ modify_footnote_header(
   footnote,
   columns,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 modify_footnote_body(
@@ -19,7 +19,7 @@ modify_footnote_body(
   columns,
   rows,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 modify_footnote_spanning_header(
@@ -28,7 +28,7 @@ modify_footnote_spanning_header(
   columns,
   level = 1L,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 remove_footnote_header(x, columns = everything())
@@ -73,7 +73,10 @@ remove_footnote_spanning_header(x, columns = everything(), level = 1L)
   String indicates whether text will be interpreted with
   [`gt::md()`](https://gt.rstudio.com/reference/md.html) or
   [`gt::html()`](https://gt.rstudio.com/reference/html.html). Must be
-  `"md"` (default) or `"html"`. Applies to tables printed with `{gt}`.
+  `"md"` (default), `"html"`, or `"none"`. `"none"` applies no
+  interpretation, rendering the text verbatim (useful when the text
+  contains markdown-significant characters). Applies to tables printed
+  with `{gt}`.
 
 - rows:
 

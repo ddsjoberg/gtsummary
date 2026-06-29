@@ -6,7 +6,7 @@ single specialized source note.
 ## Usage
 
 ``` r
-modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
+modify_abbreviation(x, abbreviation, text_interpret = c("md", "html", "none"))
 
 remove_abbreviation(x, abbreviation = NULL)
 ```
@@ -30,7 +30,10 @@ remove_abbreviation(x, abbreviation = NULL)
   String indicates whether text will be interpreted with
   [`gt::md()`](https://gt.rstudio.com/reference/md.html) or
   [`gt::html()`](https://gt.rstudio.com/reference/html.html). Must be
-  `"md"` (default) or `"html"`. Applies to tables printed with `{gt}`.
+  `"md"` (default), `"html"`, or `"none"`. `"none"` applies no
+  interpretation, rendering the text verbatim (useful when the text
+  contains markdown-significant characters). Applies to tables printed
+  with `{gt}`.
 
 ## Value
 

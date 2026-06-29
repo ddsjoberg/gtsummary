@@ -2,6 +2,15 @@
 
 ## gtsummary (development version)
 
+- The `text_interpret` argument now accepts `"none"` (in addition to
+  `"md"` and `"html"`), which renders text verbatim without
+  markdown/HTML interpretation. The
+  [`add_significance_stars()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_significance_stars.md)
+  footnote now uses `"none"` so its asterisks render literally. Honored
+  by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md).
+  ([\#1987](https://github.com/ddsjoberg/gtsummary/issues/1987))
+
 - In
   [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
   multiple footnote reference symbols on a single cell are now separated
