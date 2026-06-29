@@ -675,7 +675,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 #' @name kableExtra_utils
 #' @keywords internal
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed("kableExtra")
 #' .escape_latex(c("%", "{test}"))
 #' .escape_html(c(">0.9", "line\nbreak"))
 NULL

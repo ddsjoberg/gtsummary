@@ -102,6 +102,12 @@ tbl_cross <- function(data,
       call = get_cli_abort_call()
     )
   }
+  if (col %in% row) {
+    cli::cli_abort(
+      "Arguments {.arg col} and {.arg row} cannot select the same column.",
+      call = get_cli_abort_call()
+    )
+  }
 
   cards::process_formula_selectors(
     data = data[c(row, col)],

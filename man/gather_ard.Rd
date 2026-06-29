@@ -22,7 +22,8 @@ tbl_summary(trial, by = trt, include = age) |>
   add_overall() |>
   add_p() |>
   gather_ard()
-
+\dontshow{\}) # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c('cardx', 'broom'))) withAutoprint(\{ # examplesIf}
 glm(response ~ trt, data = trial, family = binomial()) |>
   tbl_regression() |>
   gather_ard()
