@@ -507,6 +507,88 @@ test_that("tbl_summary(missing)", {
   )
 })
 
+test_that("tbl_summary(missing) accepts formula-list-selector syntax", {
+  # per-variable: age always shown, trt never shown
+  tb <-
+    tbl_summary(
+      trial,
+      include = c(trt, age),
+      missing = list(age ~ "always", trt ~ "no")
+    ) |>
+    getElement("table_body")
+  expect_equal(
+    tb |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+    "age"
+  )
+
+  # everything() ~ "no" suppresses all missing rows
+  expect_equal(
+    tbl_summary(
+      trial,
+      include = c(trt, age),
+      missing = everything() ~ "no"
+    ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      nrow(),
+    0L
+  )
+
+  # type-based selectors are supported
+  tb_type <-
+    tbl_summary(
+      trial,
+      include = c(age, grade, response),
+      missing = list(all_continuous() ~ "always", all_categorical() ~ "no")
+    ) |>
+    getElement("table_body")
+  expect_equal(
+    tb_type |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+    "age"
+  )
+
+  # bare-string input still works (back-compat) and matches formula form
+  expect_equal(
+    tbl_summary(trial, include = c(trt, age), missing = "always") |>
+      as.data.frame(),
+    tbl_summary(trial, include = c(trt, age), missing = everything() ~ "always") |>
+      as.data.frame()
+  )
+
+  # default (unspecified) matches everything() ~ "ifany"
+  expect_equal(
+    tbl_summary(trial, include = c(trt, age)) |> as.data.frame(),
+    tbl_summary(trial, include = c(trt, age), missing = everything() ~ "ifany") |>
+      as.data.frame()
+  )
+
+  # invalid per-variable value errors
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = age, missing = everything() ~ "NOT AN OPTION")
+  )
+
+  # a theme value (incl. a bare string) is used to fill variables the user did
+  # not specify in a partial selector
+  with_gtsummary_theme(
+    x = list("tbl_summary-arg:missing" = "no"),
+    expr = {
+      tb_theme <-
+        tbl_summary(
+          trial,
+          include = c(trt, age),
+          missing = list(age ~ "always")
+        ) |>
+        getElement("table_body")
+      # age (explicit "always") shown; trt follows theme "no" -> not shown
+      expect_equal(
+        tb_theme |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+        "age"
+      )
+    }
+  )
+})
+
 # tbl_summary(missing_text) ----------------------------------------------------
 test_that("tbl_summary(missing_text)", {
   expect_snapshot(
