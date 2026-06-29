@@ -728,7 +728,7 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, missing, sort = NULL) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL, missing = NULL) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
