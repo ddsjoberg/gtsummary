@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `modify_footnote_symbol()`, `remove_footnote_symbol()`, and the `pkgwide-chr:footnote_symbol` theme element to control the symbols used for footnote references (e.g. `c("*", "†", "‡")` instead of `1, 2, 3`). Currently supported by `as_gt()` and `as_flex_table()`. (#1445)
+
 * Fixed bug in `add_difference()` where the `"emmeans"` method reported the wrong sign for a dichotomous variable whose displayed `value` was the first factor level (`B - A` instead of `A - B`). The estimate now reflects the displayed proportion difference. (#2399)
 
 * Fixed bug in `add_p()` where a warning from a paired test (e.g. `"paired.wilcox.test"`) could be printed twice. (#1945)

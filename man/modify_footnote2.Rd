@@ -106,4 +106,6 @@ tbl |>
 }
 \seealso{
 \href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
+
+\code{\link[=modify_footnote_symbol]{modify_footnote_symbol()}} to customize the symbols used to reference footnotes
 }
