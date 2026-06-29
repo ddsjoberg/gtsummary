@@ -15,7 +15,7 @@ modify_footnote_header(
   footnote,
   columns,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 modify_footnote_body(
@@ -24,7 +24,7 @@ modify_footnote_body(
   columns,
   rows,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 modify_footnote_spanning_header(
@@ -33,7 +33,7 @@ modify_footnote_spanning_header(
   columns,
   level = 1L,
   replace = TRUE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html", "none")
 )
 
 remove_footnote_header(x, columns = everything())
@@ -64,8 +64,10 @@ is to replace existing footnotes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
-Applies to tables printed with \code{{gt}}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
+\code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
+(useful when the text contains markdown-significant characters). Applies to tables
+printed with \code{{gt}}.}
 
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.

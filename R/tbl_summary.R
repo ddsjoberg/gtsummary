@@ -38,7 +38,12 @@
 #'   See below for details.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing`: specifies whether to include a row of missing/`NA` counts.
+#'     Provide a ([`formula-list-selector`][syntax]) where each variable is
+#'     assigned one of `c("ifany", "no", "always")` (e.g.
+#'     `missing = list(age ~ "always", grade ~ "no")` or
+#'     `missing = everything() ~ "no"`). The default is `everything() ~ "ifany"`,
+#'     which adds a missing row only for variables that have missing values.
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
@@ -166,7 +171,7 @@ tbl_summary <- function(data,
                         digits = NULL,
                         type = NULL,
                         value = NULL,
-                        missing = c("ifany", "no", "always"),
+                        missing = everything() ~ "ifany",
                         missing_text = "Unknown",
                         missing_stat = "{N_miss}",
                         sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -192,11 +197,14 @@ tbl_summary <- function(data,
   include <- setdiff(include, by) # remove by variable from list vars included
 
 
+  # resolve `missing` from theme/default; per-variable processing happens below
+  # alongside the other formula-selector arguments
   if (missing(missing)) {
     missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
   }
-
-  missing <- arg_match(missing, values = c("ifany", "no", "always"))
+  # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
+  # A bare string is supported shorthand (for now) for `everything() ~ <string>`.
+  missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
     missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
@@ -308,7 +316,8 @@ tbl_summary <- function(data,
       case_switch(
         missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
-      )
+      ),
+    missing = missing
   )
 
   # fill in unspecified variables
@@ -319,7 +328,10 @@ tbl_summary <- function(data,
     sort =
       get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
-      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
+      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
+    missing =
+      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
+      .normalize_missing_arg()
   )
 
   # fill each element of digits argument
@@ -335,7 +347,8 @@ tbl_summary <- function(data,
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
-    digits = digits, type = type, value = value, sort = sort
+    digits = digits, type = type, value = value,
+    missing = missing, sort = sort
   )
   .check_statistic_type_agreement(statistic, type)
 
@@ -715,7 +728,7 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL, missing = NULL) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
@@ -750,6 +763,12 @@ tbl_summary <- function(data,
     error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}."
   )
 
+  cards::check_list_elements(
+    x = missing,
+    predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
+    error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
+  )
+
 }
 
 .check_statistic_type_agreement <- function(statistic, type) {
@@ -773,3 +792,16 @@ tbl_summary <- function(data,
     }
   )
 }
+
+# 2026-06-29: the `missing=` argument accepts list/formula + tidyselect syntax
+# (per-variable). A bare string remains supported shorthand (for now) for
+# `everything() ~ <string>`. This helper normalizes a scalar string to that
+# formula so it can flow through `process_formula_selectors()` like the other
+# per-variable arguments.
+.normalize_missing_arg <- function(missing) {
+  if (is_string(missing)) {
+    return(inject(everything() ~ !!missing))
+  }
+  missing
+}
+

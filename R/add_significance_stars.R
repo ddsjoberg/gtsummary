@@ -118,7 +118,15 @@ add_significance_stars <- function(x,
     unlist() |>
     paste(collapse = "; ")
 
-  x <- modify_footnote_header(x, footnote = p_footnote, columns = any_of(pattern_cols[1]), replace = FALSE)
+  x <- modify_footnote_header(
+    x,
+    footnote = p_footnote,
+    columns = any_of(pattern_cols[1]),
+    replace = FALSE,
+    # the footnote contains literal asterisks (e.g. "*p<0.05"); render them
+    # verbatim instead of letting md interpret them as emphasis (#1987)
+    text_interpret = "none"
+  )
 
   # adding stars column --------------------------------------------------------
   thresholds <- union(thresholds, 0L)

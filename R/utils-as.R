@@ -348,6 +348,16 @@
   symbol[idx]
 }
 
+# map a validated `text_interpret` value ("md", "html", or "none") to the
+# function string applied by the print engines. "none" maps to `identity` so
+# the text is passed through uninterpreted (gt has no `none` interpreter). (#1987)
+.interpret_fun <- function(text_interpret) {
+  if (isTRUE(text_interpret == "none")) {
+    return("identity")
+  }
+  paste0("gt::", text_interpret)
+}
+
 # this function takes a list expressions and evaluates them with a `%>%` between them
 .eval_list_of_exprs <- function(exprs, env = rlang::caller_env()) {
   exprs %>%
