@@ -327,7 +327,11 @@ tbl_custom_summary <- function(data,
   )
   cards::fill_formula_selectors(
     scope_table_body(.list2tb(type, "var_type"), data[include]),
-    missing = everything() ~ "ifany"
+    missing =
+      .normalize_missing_arg(
+        get_theme_element("tbl_custom_summary-arg:missing") %||%
+          get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_custom_summary)[["missing"]]))
+      )
   )
   # validate each variable's resolved missing value
   .check_missing_arg(missing)
