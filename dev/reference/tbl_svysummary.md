@@ -16,7 +16,7 @@ tbl_svysummary(
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = c("ifany", "no", "always"),
+  missing = everything() ~ "ifany",
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
   sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -86,7 +86,14 @@ tbl_svysummary(
 
   Arguments dictating how and if missing values are presented:
 
-  - `missing`: must be one of `c("ifany", "no", "always")`.
+  - `missing`: specifies whether to include a row of missing/`NA`
+    counts. Provide a
+    ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))
+    where each variable is assigned one of `c("ifany", "no", "always")`
+    (e.g. `missing = list(age ~ "always", grade ~ "no")` or
+    `missing = everything() ~ "no"`). The default is
+    `everything() ~ "ifany"`, which adds a missing row only for
+    variables that have missing values.
 
   - `missing_text`: string indicating text shown on missing row. Default
     is `"Unknown"`.

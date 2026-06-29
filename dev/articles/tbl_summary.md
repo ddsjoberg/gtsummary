@@ -258,7 +258,7 @@ functions.
 ``` r
 
 trial |>
-  tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
+  tbl_summary(by = trt, include = c(age, grade), missing = everything() ~ "no") |>
   add_n() |>
   as_gt() |>
   gt::tab_source_note(gt::md("*This data is simulated*"))
@@ -327,7 +327,7 @@ trial |>
       "{median} ({p25}, {p75})",
       "{min}, {max}"
     ),
-    missing = "no"
+    missing = everything() ~ "no"
   ) |>
   add_p(pvalue_fun = label_style_pvalue(digits = 2))
 ```

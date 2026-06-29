@@ -2,6 +2,16 @@
 
 ## gtsummary (development version)
 
+- The `missing` argument of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  and
+  [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.md)
+  now accepts the formula-list-selector syntax
+  (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the
+  missing row to be shown for some variables and not others. A bare
+  string (e.g. `missing = "no"`) remains supported.
+  ([\#2283](https://github.com/ddsjoberg/gtsummary/issues/2283))
+
 - Updated French language translations.
   ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
   [@nalimilan](https://github.com/nalimilan))

@@ -141,7 +141,7 @@ A `tbl_custom_summary` object
 Please refer to the help file of
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
 regarding the use of select helpers, and arguments `include`, `by`,
-`type`, `value`, `digits`, `missing` and `missing_text`.
+`type`, `value`, `digits` and `missing_text`.
 
 ## `stat_fns` argument
 

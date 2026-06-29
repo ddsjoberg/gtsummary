@@ -83,18 +83,23 @@ pier_summary_missing_row(
   (`string`)  
   string indicating the stratifying column
 
-- missing, missing_text, missing_stat:
+- missing:
 
-  Arguments dictating how and if missing values are presented:
+  (named `list`)  
+  named list with one element per variable, each assigned one of
+  `c("ifany", "no", "always")`, indicating whether to include a row of
+  missing/`NA` counts for that variable.
 
-  - `missing`: must be one of `c("ifany", "no", "always")`.
+- missing_stat:
 
-  - `missing_text`: string indicating text shown on missing row. Default
-    is `"Unknown"`.
+  (`string`)  
+  statistic to show on missing row. Default is `"{N_miss}"`. Possible
+  values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 
-  - `missing_stat`: statistic to show on missing row. Default is
-    `"{N_miss}"`. Possible values are `N_miss`, `N_obs`, `N_nonmiss`,
-    `p_miss`, `p_nonmiss`.
+- missing_text:
+
+  (`string`)  
+  string indicating text shown on missing row. Default is `"Unknown"`.
 
 ## Value
 
