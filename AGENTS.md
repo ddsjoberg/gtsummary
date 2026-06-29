@@ -47,6 +47,36 @@ Notes:
 - testthat edition 3, parallel enabled. Dev container image:
   `ghcr.io/rocker-org/devcontainer/tidyverse:4`.
 
+### Theme elements / internal data
+
+The set of valid theme elements (used by `set_gtsummary_theme()` /
+`with_gtsummary_theme()`) is **data-driven**, not hand-coded. It lives in
+`data-raw/gtsummary_theme_elements.csv` and is baked into the package as the
+`df_theme_elements` object inside `R/sysdata.rda`.
+
+CSV columns: `deprecated` (logical), `fn` (the function the element applies to),
+`name` (the theme-element name users set, e.g. `tbl_summary-arg:missing_text`),
+`argument` (logical — is it a function argument), `eval` (logical), `desc`
+(description), `example`.
+
+To add, update, or delete a theme element:
+
+1. Edit `data-raw/gtsummary_theme_elements.csv` (add/modify/remove the row).
+2. Regenerate `R/sysdata.rda` by sourcing the build script:
+   ```r
+   Rscript -e 'source("data-raw/internal_data.R")'
+   ```
+   This re-reads the CSV (plus the tests/translations data) and rewrites
+   `R/sysdata.rda` via `usethis::use_data(..., internal = TRUE, overwrite = TRUE)`.
+   Run it from the repo root so the relative CSV paths resolve.
+3. Commit **both** the edited CSV and the regenerated `R/sysdata.rda`.
+4. Update the corresponding docs/vignette (`vignettes/articles/themes.Rmd`) and
+   any affected code in `R/` if you added/removed an element name.
+
+Never edit `R/sysdata.rda` by hand — it is generated. The same script also
+rebuilds `df_add_p_tests`, `lst_translations`, and `special_char` from their
+respective `data-raw/` sources, so expect those to be re-serialized too.
+
 ## Conventions
 
 - Follow the tidyverse style guide. Use `styler`, but don't restyle unrelated code.

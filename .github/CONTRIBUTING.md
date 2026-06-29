@@ -49,6 +49,38 @@ Notes:
 (e.g. `broom.helpers`, `survey`, `flextable`, `cardx`); those tests `skip`
 when the package is not installed.
 
+### Theme elements and internal data
+
+The valid theme elements recognized by `set_gtsummary_theme()` and
+`with_gtsummary_theme()` are not hard-coded — they are defined in
+`data-raw/gtsummary_theme_elements.csv` and compiled into the package as the
+internal `df_theme_elements` object stored in `R/sysdata.rda`.
+
+The CSV columns are `deprecated`, `fn` (the function the element applies to),
+`name` (the theme-element name users set), `argument`, `eval`, `desc`
+(description), and `example`.
+
+To **add, update, or delete** a theme element:
+
+1.  Edit `data-raw/gtsummary_theme_elements.csv` — add, change, or remove the
+relevant row.  
+2.  Regenerate `R/sysdata.rda` by sourcing the build script from the repo root
+(the relative CSV paths depend on it):
+
+```r
+source("data-raw/internal_data.R")
+```
+
+This script re-reads the CSV and rewrites `R/sysdata.rda` via
+`usethis::use_data(..., internal = TRUE, overwrite = TRUE)`. It also rebuilds the
+other internal objects (`df_add_p_tests`, `lst_translations`, `special_char`)
+from their `data-raw/` sources, so they may be re-serialized as well.  
+3.  Commit **both** the edited CSV and the regenerated `R/sysdata.rda`.  
+4.  If you added or removed an element name, update the themes vignette
+(`vignettes/articles/themes.Rmd`) and any affected code under `R/`.  
+
+Never edit `R/sysdata.rda` by hand — it is a generated artifact.
+
 ### Code conventions
 
 *  **Style.** New code should follow the tidyverse
