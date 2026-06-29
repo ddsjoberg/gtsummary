@@ -117,6 +117,22 @@ test_that("modify_spanning_header(text_interpret) works", {
       dplyr::pull(text_interpret),
     "gt::html"
   )
+
+  # "none" stores the `identity` interpret function (#1987)
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_spanning_header(label = "Variable", text_interpret = "none") |>
+      getElement("table_styling") |>
+      getElement("spanning_header") |>
+      dplyr::pull(text_interpret),
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    tbl_summary(trial, include = marker) |>
+      modify_spanning_header(label = "Variable", text_interpret = "latex")
+  )
 })
 
 test_that("modify_spanning_header() works with tbl_svysummary()", {

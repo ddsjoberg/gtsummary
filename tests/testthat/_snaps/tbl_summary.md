@@ -313,7 +313,15 @@
       tbl_summary(trial, missing = "NOT AN OPTION")
     Condition
       Error in `tbl_summary()`:
-      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
+      ! Error in argument `missing` for column "trt": value must be one of "ifany", "no", and "always".
+
+# tbl_summary(missing) accepts formula-list-selector syntax
+
+    Code
+      tbl_summary(trial, include = age, missing = everything() ~ "NOT AN OPTION")
+    Condition
+      Error in `tbl_summary()`:
+      ! Error in argument `missing` for column "age": value must be one of "ifany", "no", and "always".
 
 # tbl_summary(missing_text)
 
