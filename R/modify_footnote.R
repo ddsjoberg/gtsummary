@@ -22,7 +22,10 @@
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
-#' @seealso [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+#' @seealso
+#'   [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+#'
+#'   [`modify_footnote_symbol()`] to customize the symbols used to reference footnotes
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
@@ -49,7 +52,7 @@ NULL
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_interpret = c("md", "html")) {
+modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_header = match.call()))
 
@@ -85,7 +88,7 @@ modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_in
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, text_interpret = c("md", "html")) {
+modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -125,7 +128,7 @@ modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, tex
 #' @rdname modify_footnote2
 modify_footnote_spanning_header <- function(x, footnote, columns,
                                             level = 1L, replace = TRUE,
-                                            text_interpret = c("md", "html")) {
+                                            text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -294,7 +297,7 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
       dplyr::tibble(
         column = names(lst_footnotes),
         footnote = unlist(lst_footnotes) |> unname(),
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         replace = replace,
         remove = remove
       )
@@ -313,7 +316,7 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
         column = names(lst_footnotes),
         rows = list(enquo(rows)),
         footnote = unlist(lst_footnotes) |> unname(),
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         replace = replace,
         remove = remove
       )
@@ -335,7 +338,7 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
         column = names(lst_footnotes),
         footnote = unlist(lst_footnotes) |> unname(),
         level = as.integer(level),
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         replace = replace,
         remove = remove
       )

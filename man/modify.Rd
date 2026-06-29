@@ -8,12 +8,12 @@
 \alias{show_header_names}
 \title{Modify column headers and spanning headers}
 \usage{
-modify_header(x, ..., text_interpret = c("md", "html"), quiet, update)
+modify_header(x, ..., text_interpret = c("md", "html", "none"), quiet, update)
 
 modify_spanning_header(
   x,
   ...,
-  text_interpret = c("md", "html"),
+  text_interpret = c("md", "html", "none"),
   level = 1L,
   quiet,
   update
@@ -39,8 +39,10 @@ Use the \code{show_header_names()} to see the column names that can be modified.
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
-Applies to tables printed with \code{{gt}}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
+\code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
+(useful when the text contains markdown-significant characters). Applies to tables
+printed with \code{{gt}}.}
 
 \item{update, quiet}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 

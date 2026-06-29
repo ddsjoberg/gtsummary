@@ -62,3 +62,18 @@ test_that("remove_abbreviation() messaging", {
       remove_abbreviation("Q3 = Third Quartile")
   )
 })
+
+test_that("modify_abbreviation(text_interpret = 'none') stores identity", {
+  # accepts "none" and stores the `identity` interpret function (#1987)
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_abbreviation("Q1 = First Quartile", text_interpret = "none")
+  expect_equal(
+    tbl$table_styling$abbreviation$text_interpret,
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    modify_abbreviation(tbl_summary(trial, include = marker), "x = y", text_interpret = "latex")
+  )
+})
