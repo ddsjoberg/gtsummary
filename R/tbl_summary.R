@@ -203,7 +203,7 @@ tbl_summary <- function(data,
     missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
   }
   # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
-  # A bare string is permanently supported shorthand for `everything() ~ <string>`.
+  # A bare string is supported shorthand (for now) for `everything() ~ <string>`.
   missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
@@ -794,7 +794,7 @@ tbl_summary <- function(data,
 }
 
 # 2026-06-29: the `missing=` argument accepts list/formula + tidyselect syntax
-# (per-variable). A bare string remains permanently supported as shorthand for
+# (per-variable). A bare string remains supported shorthand (for now) for
 # `everything() ~ <string>`. This helper normalizes a scalar string to that
 # formula so it can flow through `process_formula_selectors()` like the other
 # per-variable arguments.

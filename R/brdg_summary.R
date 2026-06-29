@@ -518,7 +518,7 @@ pier_summary_missing_row <- function(cards,
 
   # 2026-06-29: `missing=` may be a per-variable named list (one of
   # "ifany"/"no"/"always" per variable) or a single scalar string. A scalar is
-  # permanently supported shorthand and is expanded to apply to all variables.
+  # supported shorthand (for now) and is expanded to apply to all variables.
   if (!is.list(missing)) {
     missing <- rep_named(variables, list(missing))
   }
