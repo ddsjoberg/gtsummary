@@ -30,6 +30,34 @@ test_that("modify_footnote_body(footnote)", {
   )
 })
 
+test_that("modify_footnote_body(text_interpret = 'none') stores identity", {
+  # accepts "none" and stores the `identity` interpret function (#1987)
+  tbl <- base_tbl_summary |>
+    modify_footnote_body(
+      footnote = "*lit*",
+      columns = label,
+      rows = row_type == "label",
+      text_interpret = "none"
+    )
+  expect_equal(
+    tbl$table_styling$footnote_body |>
+      dplyr::filter(footnote == "*lit*") |>
+      dplyr::pull("text_interpret"),
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    modify_footnote_body(
+      base_tbl_summary,
+      footnote = "x",
+      columns = label,
+      rows = row_type == "label",
+      text_interpret = "latex"
+    )
+  )
+})
+
 test_that("modify_footnote_body(rows) messaging", {
   expect_snapshot(
     error = TRUE,
