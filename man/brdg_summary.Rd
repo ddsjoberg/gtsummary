@@ -52,18 +52,17 @@ named list of summary statistic names}
 \item{by}{(\code{string})\cr
 string indicating the stratifying column}
 
-\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
-\itemize{
-\item \code{missing}: specifies whether to include a row of missing/\code{NA} counts.
-Provide a (\code{\link[=syntax]{formula-list-selector}}) where each variable is
-assigned one of \code{c("ifany", "no", "always")} (e.g.
-\code{missing = list(age ~ "always", grade ~ "no")} or
-\code{missing = everything() ~ "no"}). The default is \code{everything() ~ "ifany"},
-which adds a missing row only for variables that have missing values.
-\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
-\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
-Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
-}}
+\item{missing}{(named \code{list})\cr
+named list with one element per variable, each assigned one of
+\code{c("ifany", "no", "always")}, indicating whether to include a row of
+missing/\code{NA} counts for that variable.}
+
+\item{missing_stat}{(\code{string})\cr
+statistic to show on missing row. Default is \code{"{N_miss}"}. Possible values
+are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.}
+
+\item{missing_text}{(\code{string})\cr
+string indicating text shown on missing row. Default is \code{"Unknown"}.}
 }
 \value{
 a gtsummary object
