@@ -567,6 +567,26 @@ test_that("tbl_summary(missing) accepts formula-list-selector syntax", {
     error = TRUE,
     tbl_summary(trial, include = age, missing = everything() ~ "NOT AN OPTION")
   )
+
+  # a theme value (incl. a bare string) is used to fill variables the user did
+  # not specify in a partial selector
+  with_gtsummary_theme(
+    x = list("tbl_summary-arg:missing" = "no"),
+    expr = {
+      tb_theme <-
+        tbl_summary(
+          trial,
+          include = c(trt, age),
+          missing = list(age ~ "always")
+        ) |>
+        getElement("table_body")
+      # age (explicit "always") shown; trt follows theme "no" -> not shown
+      expect_equal(
+        tb_theme |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+        "age"
+      )
+    }
+  )
 })
 
 # tbl_summary(missing_text) ----------------------------------------------------

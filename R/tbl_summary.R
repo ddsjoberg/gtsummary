@@ -330,7 +330,9 @@ tbl_summary <- function(data,
     digits =
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
     missing =
-      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]]))
+      .normalize_missing_arg(
+        get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]]))
+      )
   )
   # validate each variable's resolved missing value
   .check_missing_arg(missing)
