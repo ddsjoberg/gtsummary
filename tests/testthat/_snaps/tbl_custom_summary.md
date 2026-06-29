@@ -121,12 +121,3 @@
       1                Age     189/200
       2            Unknown          11
 
-# tbl_custom_summary(missing) scalar syntax
-
-    Code
-      tbl_custom_summary(trial, include = response, stat_fns = ~mean_age, statistic = ~
-        "{mean_age}", missing = "NOT AN OPTION")
-    Condition
-      Error in `tbl_custom_summary()`:
-      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
-

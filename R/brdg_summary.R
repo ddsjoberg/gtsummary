@@ -32,7 +32,15 @@
 #'   named list of summary types
 #' @param statistic (named `list`)\cr
 #'   named list of summary statistic names
-#' @inheritParams tbl_summary
+#' @param missing (named `list`)\cr
+#'   named list with one element per variable, each assigned one of
+#'   `c("ifany", "no", "always")`, indicating whether to include a row of
+#'   missing/`NA` counts for that variable.
+#' @param missing_text (`string`)\cr
+#'   string indicating text shown on missing row. Default is `"Unknown"`.
+#' @param missing_stat (`string`)\cr
+#'   statistic to show on missing row. Default is `"{N_miss}"`. Possible values
+#'   are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #'
 #' @return a gtsummary object
 #' @name brdg_summary

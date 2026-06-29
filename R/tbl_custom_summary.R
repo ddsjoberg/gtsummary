@@ -29,7 +29,7 @@
 #'
 #' @section Similarities with `tbl_summary()`:
 #' Please refer to the help file of [tbl_summary()] regarding the use of select
-#' helpers, and arguments `include`, `by`, `type`, `value`, `digits`, `missing` and
+#' helpers, and arguments `include`, `by`, `type`, `value`, `digits` and
 #' `missing_text`.
 #'
 #' @section `stat_fns` argument:

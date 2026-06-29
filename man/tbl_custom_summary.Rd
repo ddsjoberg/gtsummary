@@ -95,7 +95,7 @@ a custom function in charge of computing the statistics (see Details).
 \section{Similarities with \code{tbl_summary()}}{
 
 Please refer to the help file of \code{\link[=tbl_summary]{tbl_summary()}} regarding the use of select
-helpers, and arguments \code{include}, \code{by}, \code{type}, \code{value}, \code{digits}, \code{missing} and
+helpers, and arguments \code{include}, \code{by}, \code{type}, \code{value}, \code{digits} and
 \code{missing_text}.
 }
 
