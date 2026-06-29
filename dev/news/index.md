@@ -2,6 +2,12 @@
 
 ## gtsummary (development version)
 
+- [`as_hux_xlsx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md)
+  now accepts a list of gtsummary tables, writing each table to its own
+  worksheet in a single Excel workbook. When the list is named, the
+  names are used as the worksheet names.
+  ([\#2327](https://github.com/ddsjoberg/gtsummary/issues/2327))
+
 - Added
   [`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
   to evaluate an expression with the active gtsummary theme temporarily

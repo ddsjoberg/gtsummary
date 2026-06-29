@@ -67,8 +67,10 @@ to PDF via LaTeX, as well as HTML and Word.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>(<code>gtsummary</code>)<br>
-An object of class <code>"gtsummary"</code></p></dd>
+<dd><p>(<code>gtsummary</code> or <code>list</code>)<br>
+a gtsummary object, or a (optionally named) list of gtsummary objects. When
+a list is passed to <code>as_hux_xlsx()</code>, each table is written to its own
+worksheet and the list names are used as the worksheet names.</p></dd>
 
 
 <dt id="arg-include">include<a class="anchor" aria-label="anchor" href="#arg-include"></a></dt>
@@ -101,8 +103,12 @@ logical indicating whether to bold header rows. Default is <code>TRUE</code></p>
 
 
 
-<p>Use the <code>as_hux_xlsx()</code> function to save a copy of the table in an excel file.
-The file is saved using <code><a href="https://hughjonesd.github.io/huxtable/reference/quick-output.html" class="external-link">huxtable::quick_xlsx()</a></code>.</p>
+<p>Use the <code>as_hux_xlsx()</code> function to save a copy of the table in an excel file.</p>
+<p>To export a single table, pass a gtsummary object as <code>x</code>; the file is written
+with a single worksheet. To export multiple tables to one workbook—one table
+per worksheet—pass a (optionally named) list of gtsummary objects as <code>x</code>. When
+the list is named, the names are used as the worksheet (tab) names; list
+elements without a name are assigned a default name of <code>"Sheet {i}"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
