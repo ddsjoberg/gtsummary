@@ -185,3 +185,26 @@ test_that("add_difference.tbl_svysummary(include)", {
   )
 })
 
+test_that("add_difference.tbl_svysummary(test = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic `Age` has levels c("Child", "Adult"); the displayed `value`
+  # ("Child") is the FIRST factor level. Before the fix, emmeans modeled
+  # P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  est_child <-
+    suppressWarnings(
+      tbl_svysummary(svy_titanic, by = Survived, value = list(Age = "Child"), include = Age) |>
+        add_difference(test = list(Age ~ "emmeans"))
+    )$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | group1) - P(Child | group2) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
+})
+
