@@ -96,6 +96,9 @@ means that the table will be split after each of these row numbers. If
 the last row is selected, the split will not happen as it is supposed to
 happen after the last row.
 
+To paginate gtsummary tables, you can use the [pager R
+package](https://insightsengineering.github.io/pager/).
+
 ## Examples
 
 ``` r
