@@ -2,6 +2,10 @@
 
 ## gtsummary (development version)
 
+- Updated French language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@nalimilan](https://github.com/nalimilan))
+
 - Added Bosnian language translations.
   ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
   [@dzanahmed](https://github.com/dzanahmed))
