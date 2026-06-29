@@ -4,7 +4,14 @@
 \alias{tbl_stack}
 \title{Stack tables}
 \usage{
-tbl_stack(tbls, group_header = NULL, quiet = FALSE)
+tbl_stack(
+  tbls,
+  group_header = NULL,
+  quiet = FALSE,
+  attr_order = seq_along(tbls),
+  tbl_ids = NULL,
+  tbl_id_lbls = NULL
+)
 }
 \arguments{
 \item{tbls}{(\code{list})\cr
@@ -15,6 +22,24 @@ Character vector with table headers where length matches the length of \code{tbl
 
 \item{quiet}{(scalar \code{logical})\cr
 Logical indicating whether to suppress additional messaging. Default is \code{FALSE}.}
+
+\item{attr_order}{(\code{integer}) \cr
+Set the order table attributes are set.
+Tables are stacked in the order they are passed in the \code{tbls} argument:
+use \code{attr_order} to specify the order the table attributes take precedent.
+For example, to use the header from the second table specify \code{attr_order=2}.
+Default is to set precedent in the order tables are passed.}
+
+\item{tbl_ids}{(\code{character})\cr
+Optional character vector of IDs that will be assigned to the input tables.
+The ID is assigned by assigning a name to the \code{tbls} list, which is
+returned in \code{x$tbls}.}
+
+\item{tbl_id_lbls}{(\code{vector})\cr
+Optional vector of the same length \code{tbls}.
+When specified a new, hidden column is added to the returned \code{.$table_body}
+with these labels. \emph{The most common use case of this argument is for
+the development of other functions.}}
 }
 \value{
 A \code{tbl_stack} object
@@ -22,11 +47,9 @@ A \code{tbl_stack} object
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more gtsummary tables.
-Column attributes, including number formatting and column footnotes, are
-retained from the first passed gtsummary object.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("survival", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survival", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # stacking two tbl_regression objects
 t1 <-

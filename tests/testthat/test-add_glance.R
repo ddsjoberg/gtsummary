@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom.helpers", "cardx")))
+skip_if_pkg_not_installed("broom.helpers")
 
 # add_glance_source_note() -----------------------------------------------------
 test_that("add_glance_source_note(x)", {
@@ -28,7 +28,7 @@ test_that("add_glance_source_note(include,label)", {
   )
 })
 
-test_that("add_glance_source_note(fmt_fn)", {
+test_that("add_glance_source_note(fmt_fun)", {
   expect_equal(
     lm(age ~ trt, trial) |>
       tbl_regression() |>
@@ -106,7 +106,7 @@ test_that("add_glance_table(include,label)", {
   )
 })
 
-test_that("add_glance_table(fmt_fn)", {
+test_that("add_glance_table(fmt_fun)", {
   expect_equal(
     lm(age ~ trt, trial) |>
       tbl_regression() |>
@@ -132,8 +132,7 @@ test_that("add_glance_table(glance_fun)", {
 })
 
 test_that("add_glance_table(glance_fun) for mice models", {
-  skip_if_not(is_pkg_installed("mice"))
-
+  skip_if_pkg_not_installed("mice")
 
   tbl <- mice::mice(mice::nhanes2, print = FALSE, maxit = 1) |>
     with(lm(bmi ~ age)) |>

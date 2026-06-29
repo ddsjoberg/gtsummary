@@ -10,7 +10,7 @@
 #' @param source_note (`string`)\cr
 #'   A string to add as a source note.
 #' @param source_note_id (`integers`)\cr
-#'   Integers specifying the ID of the source note to remove.
+#'   Integers specifying the IDs of the source notes to remove.
 #'   Source notes are indexed sequentially at the time of creation.
 #'   Default is `NULL`, which removes all source notes.
 #' @inheritParams modify
@@ -21,11 +21,13 @@
 #'
 #' @return gtsummary object
 #' @name modify_source_note
+#' @seealso [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' tbl <- tbl_summary(trial, include = c(marker, grade), missing = "no") |>
 #'   modify_source_note("Results as of June 26, 2015")
+#' tbl
 #'
 #' # Example 2 ----------------------------------
 #' remove_source_note(tbl, source_note_id = 1)
@@ -33,7 +35,7 @@ NULL
 
 #' @export
 #' @rdname modify_source_note
-modify_source_note <- function(x, source_note, text_interpret = c("md", "html")) {
+modify_source_note <- function(x, source_note, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_source_note = match.call()))
 
@@ -51,7 +53,7 @@ modify_source_note <- function(x, source_note, text_interpret = c("md", "html"))
       dplyr::tibble(
         id = nrow(x$table_styling$source_note) + 1L,
         source_note = source_note,
-        text_interpret = paste0("gt::", text_interpret),
+        text_interpret = .interpret_fun(text_interpret),
         remove = FALSE
       )
     )

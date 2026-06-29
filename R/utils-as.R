@@ -2,7 +2,7 @@
 .rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
   rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
 
-  # if a single lgl value, then expand it to the length of the tabel_body
+  # if a single lgl value, then expand it to the length of the table_body
   if (is_scalar_logical(rows_evaluated)) {
     rows_evaluated <- rep_len(rows_evaluated, length.out = nrow(table_body))
   }
@@ -215,7 +215,27 @@
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
     x$table_styling$fmt_fun %>%
-    # filter(.data$column %in% .cols_to_show(x)) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      row_numbers =
+        switch(nrow(.) == 0,
+               integer(0)
+        ) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows,
+                                  return_when_null = seq_len(nrow(x$table_body))
+        ) %>% list()
+    ) %>%
+    dplyr::select(-"rows") %>%
+    tidyr::unnest("row_numbers") %>%
+    dplyr::group_by(.data$column, .data$row_numbers) %>%
+    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
+    dplyr::ungroup() %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
+    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+
+  # post_fmt_fun --------------------------------------------------------------------
+  x$table_styling$post_fmt_fun <-
+    x$table_styling$post_fmt_fun %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       row_numbers =
@@ -253,6 +273,7 @@
     ) %>%
     dplyr::select(-"rows", rows = "row_numbers")
 
+  class(x) <- "list"
   x
 }
 
@@ -311,6 +332,31 @@
 }
 
 
+
+# resolve the ordered footnote reference symbols for a gtsummary object.
+# precedence: value set via `modify_footnote_symbol()` > theme element > NULL.
+# returns `NULL` when no custom symbols are set (engines use default numbering).
+.resolve_footnote_symbols <- function(x) {
+  x$table_styling$footnote_symbol %||%
+    get_theme_element("pkgwide-chr:footnote_symbol", default = NULL)
+}
+
+# given a vector of 1-based footnote ids and an ordered symbol vector, return the
+# symbol assigned to each id, recycling the symbols when ids exceed their length.
+.map_footnote_symbols <- function(footnote_id, symbol) {
+  idx <- ((footnote_id - 1L) %% length(symbol)) + 1L
+  symbol[idx]
+}
+
+# map a validated `text_interpret` value ("md", "html", or "none") to the
+# function string applied by the print engines. "none" maps to `identity` so
+# the text is passed through uninterpreted (gt has no `none` interpreter). (#1987)
+.interpret_fun <- function(text_interpret) {
+  if (isTRUE(text_interpret == "none")) {
+    return("identity")
+  }
+  paste0("gt::", text_interpret)
+}
 
 # this function takes a list expressions and evaluates them with a `%>%` between them
 .eval_list_of_exprs <- function(exprs, env = rlang::caller_env()) {

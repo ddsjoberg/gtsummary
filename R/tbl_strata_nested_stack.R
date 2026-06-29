@@ -66,7 +66,7 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   .tbl_fun <- rlang::as_function(.tbl_fun, call = get_cli_abort_call())
 
   # nest data and create tables within each level ------------------------------
-  tbls <-
+  df_tbls <-
     cards::nest_for_ard(data, strata = strata) |>
     dplyr::mutate(
       tbl =
@@ -78,20 +78,22 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
               message = c("The following {type} occured while building a table:", x = "{condition}")
             )
         )
-    ) |>
-    dplyr::pull("tbl")
+    )
+
+  tbls <- df_tbls$tbl
 
   # process the headers --------------------------------------------------------
   lst_headers <-
     map(
       seq_along(strata),
       \(i) {
-        # for factors, remove unobserved rows
-        case_switch(
-          is.factor(data[[strata[i]]]) ~ dplyr::mutate(data, "{strata[i]}" := factor(.data[[strata[i]]])),
-          .default = data
-        ) |>
-        cards::ard_categorical(variables = all_of(strata[i]), strata = any_of(strata[seq_len(i - 1L)])) |>
+        data |>
+        cards::ard_tabulate(variables = all_of(strata[i]), strata = any_of(strata[seq_len(i - 1L)])) |>
+          # remove any unobserved levels/combination of levels
+          dplyr::filter(
+            .by = c(cards::all_ard_groups(), cards::all_ard_variables()),
+            !any(.data$stat == 0)
+          ) |>
           dplyr::select(cards::all_ard_groups(), cards::all_ard_variables(), "stat_name", "stat") |>
           dplyr::arrange(dplyr::pick(c(cards::all_ard_groups(), cards::all_ard_variables()))) |>
           tidyr::pivot_wider(
@@ -103,7 +105,8 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
           dplyr::mutate(
             strata = .data$variable_level |> unlist(),
             "{strata[i]}_strata" := glue::glue(row_header)
-          ) |>
+          ) %>%
+          structure(., class = c("card", class(.))) |>
           cards::rename_ard_columns() |>
           dplyr::select(any_of(strata), all_of(glue::glue("{strata[i]}_strata")))
       }
@@ -114,6 +117,17 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y)))) |>
     dplyr::select(-all_of(strata)) |>
     dplyr::rename_with(.fn = ~str_remove(.x, "_strata$"))
+
+  tbl_ids <-
+    df_headers |>
+    dplyr::mutate(
+      across(
+        everything(),
+        .fns = ~ paste(dplyr::cur_column(), cli::cli_format(.x), sep = "=")
+      ),
+      .....strata..... = paste(!!!syms(names(df_headers)), sep = ",")
+    ) |>
+    dplyr::pull(".....strata.....")
 
   for (i in seq_along(strata[-1])) {
     df_headers <- df_headers |>
@@ -144,25 +158,35 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   # adding the headers, indenting, and stacking --------------------------------
   # add headers with their associated `tbl_indent_id1`
   for (i in seq_len(nrow(df_headers))) {
-    # indent the innermost table
-    tbls[[i]]$table_styling$indent$n_spaces <-
-      tbls[[i]]$table_styling$indent$n_spaces + length(strata) * 4L
-
     # add nesting header rows
     tbls[[i]]$table_body <-
       dplyr::bind_rows(
         lst_df_headers[[i]],
         tbls[[i]]$table_body |> dplyr::mutate(tbl_indent_id1 = 0L)
       )
+
+    # indent the first non-hidden column of the innermost table
+    if (first_non_hidden_col %in% tbls[[i]]$table_styling$indent$column) {
+      tbls[[i]]$table_styling$indent$n_spaces[tbls[[i]]$table_styling$indent$column == first_non_hidden_col] <-
+        tbls[[i]]$table_styling$indent$n_spaces[tbls[[i]]$table_styling$indent$column == first_non_hidden_col] + length(strata) * 4L
+    } else {
+      tbls[[i]] <-
+        tbls[[i]] |>
+        modify_indent(
+          columns = all_of(first_non_hidden_col),
+          rows = !!expr(.data$tbl_indent_id1 == 0),
+          indent = length(strata) * 4L
+        )
+    }
   }
 
   # stack the tbls
-  tbl <- tbl_stack(tbls = tbls, quiet = quiet)
+  tbl <- tbl_stack(tbls = tbls, quiet = quiet, tbl_ids = tbl_ids)
 
   # cycle over the depth and indenting nesting headers
   for (d in seq_along(strata)) {
     tbl <- tbl |>
-      modify_column_indent(
+      modify_indent(
         columns = all_of(first_non_hidden_col),
         rows = !!expr(.data$tbl_indent_id1 == !!d),
         indent = (d - 1L) * 4L
@@ -172,7 +196,6 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
   # return table ---------------------------------------------------------------
   tbl$call_list <- list(tbl_row_split = match.call())
   tbl$inputs = list(tbl_row_split = func_inputs)
-  tbl$tbls <- NULL
   tbl |>
     structure(class = c("tbl_strata_nested_stack", "tbl_stack", "gtsummary"))
 }

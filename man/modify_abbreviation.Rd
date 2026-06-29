@@ -5,7 +5,7 @@
 \alias{remove_abbreviation}
 \title{Modify Abbreviations}
 \usage{
-modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
+modify_abbreviation(x, abbreviation, text_interpret = c("md", "html", "none"))
 
 remove_abbreviation(x, abbreviation = NULL)
 }
@@ -19,18 +19,20 @@ will remove all abbreviation source notes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
-Applies to tables printed with \code{{gt}}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
+\code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
+(useful when the text contains markdown-significant characters). Applies to tables
+printed with \code{{gt}}.}
 }
 \value{
 Updated gtsummary object
 }
 \description{
 All abbreviations will be coalesced when printing the final table into
-a single source note.
+a single specialized source note.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 tbl_summary(
   trial,
@@ -46,4 +48,7 @@ lm(marker ~ trt, trial) |>
   tbl_regression() |>
   remove_abbreviation("CI = Confidence Interval")
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\href{https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html}{Footnotes vs Source Notes vs Abbreviations}
 }

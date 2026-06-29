@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx"))
+skip_if_pkg_not_installed(c("broom", "lme4", "broom.helpers"), ref = "cardx")
 
 test_that("add_p.tbl_summary() snapshots of common outputs", {
   expect_snapshot(
@@ -9,18 +9,28 @@ test_that("add_p.tbl_summary() snapshots of common outputs", {
       select(-all_stat_cols())
   )
 
+  expect_equal(
+    tbl_summary(mtcars, by = am, include = mpg) |>
+      add_p() |>
+      getElement("table_body") |>
+      dplyr::pull("p.value") |>
+      unname() |>
+      suppressMessages(),
+    wilcox.test(mpg ~ am, data = mtcars)$p.value |>
+      suppressWarnings()
+  )
+
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    tbl_summary(mtcars, by = am, include = c(cyl, gear, vs)) |>
       add_p() |>
       as.data.frame()
   )
 
   expect_snapshot(
     trial |>
-      tbl_summary(by = trt) |>
+      tbl_summary(by = trt, include = c(grade, response)) |>
       add_p() |>
-      as.data.frame(col_labels = FALSE) |>
-      select(-all_stat_cols())
+      as.data.frame(col_labels = FALSE)
   )
 })
 
@@ -64,7 +74,7 @@ test_that("add_p.tbl_summary() error messaging with bad inputs", {
 })
 
 test_that("add_p.tbl_summary() & lme4", {
-  skip_if_not(is_pkg_installed("lme4", ref = "cardx"))
+  skip_if_pkg_not_installed("lme4", ref = "cardx")
 
   # errors with expected use
   expect_snapshot(
@@ -107,14 +117,18 @@ test_that("add_p() creates errors with bad args", {
 })
 
 test_that("add_p.tbl_summary() works well", {
+  # Use wt + row index to create a tie-free variable for mood.test,
+  # since mood.test's tie-correction changed in R-devel.
   expect_snapshot(
-    tbl_summary(mtcars, by = am) |>
+    mtcars |>
+      dplyr::mutate(wt2 = wt + dplyr::row_number() / 1000) |>
+      tbl_summary(by = am, include = c(mpg, hp, cyl, wt2)) |>
       add_p(
         test = list(
           mpg = "t.test",
           hp = "oneway.test",
           cyl = "chisq.test.no.correct",
-          carb = "mood.test"
+          wt2 = "mood.test"
         )
       ) |>
       as.data.frame()
@@ -154,9 +168,10 @@ test_that("add_p with custom p-value function", {
       as.data.frame()
   )
 
-
   expect_equal(
-    tbl$cards$add_p$response$p.value,
+    tbl$cards$add_p$response |>
+      cards::get_ard_statistics() |>
+      getElement("p.value"),
     stats::mcnemar.test(trial[["response"]], trial[["trt"]])$p.value
   )
 })
@@ -175,8 +190,6 @@ test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
     )
   )
 })
-
-
 
 
 test_that("p-values are replicated within tbl_summary()", {
@@ -383,7 +396,7 @@ test_that("p-values are replicated within tbl_summary() with groups", {
 })
 
 test_that("Groups arg and lme4", {
-  skip_if_not(is_pkg_installed(c("lme4", "broom.mixed"), ref = "cardx"))
+  skip_if_pkg_not_installed(c("lme4", "broom.mixed"), ref = "cardx")
   withr::local_package("broom")
   withr::local_package("lme4")
 
@@ -437,7 +450,7 @@ test_that("no error with missing data", {
 })
 
 test_that("add_p.tbl_summary() can be run after add_difference()", {
-  skip_if_not(is_pkg_installed("parameters"))
+  skip_if_pkg_not_installed("parameters")
 
   expect_error(
     trial |>
@@ -464,8 +477,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       add_difference()
   )
 
-  expect_error(
-    tbl <-
+  tbl <- expect_error(
       trial |>
       select(age, trt) |>
       tbl_summary(
@@ -479,6 +491,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
       as.data.frame(col_labels = FALSE),
     NA
   )
+
   expect_snapshot(tbl)
 
   expect_equal(
@@ -497,7 +510,7 @@ test_that("add_p.tbl_summary() can be run after add_difference()", {
     tbl %>%
       select(ends_with(".x") | ends_with(".y")) %>%
       names() %>%
-      rlang::is_empty()
+      is_empty()
   )
 })
 
@@ -519,4 +532,56 @@ test_that("addressing GH #1513, where the default test was incorrect", {
       attr("test_name"),
     "fisher.test"
   )
+})
+
+test_that("add_p() does not duplicate warnings (#1945)", {
+  # repro from #1945: a paired test with duplicate (group, by) entries triggered
+  # the tidyr 'not uniquely identified' warning to be captured twice
+  tmax <- data.frame(
+    Subject = c(1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 5, 5, 5, 5),
+    Treatment = c("T", "R", "T", "R", "R", "T", "R", "T", "T", "R", "T", "R", "R", "T", "R", "T"),
+    TMAX = c(1.333, 1.667, 0.667, 1.667, 2, 0.667, 2, 2, 1, 1, 2, 1, 0.667, 1, 2, 1)
+  )
+
+  tbl <-
+    suppressWarnings(suppressMessages(
+      tmax |>
+        tbl_summary(
+          by = Treatment,
+          include = -Subject,
+          missing = "no",
+          type = list(TMAX ~ "continuous")
+        ) |>
+        add_p(
+          test = list(all_continuous() ~ "paired.wilcox.test"),
+          group = Subject
+        )
+    ))
+
+  # the captured warning for the affected variable must contain the message once
+  ard_warning <-
+    dplyr::bind_rows(tbl$cards$add_p) |>
+    dplyr::filter(.data$stat_name == "p.value") |>
+    dplyr::pull("warning") |>
+    getElement(1L)
+
+  expect_equal(length(ard_warning), length(unique(ard_warning)))
+  expect_equal(
+    sum(grepl("not uniquely identified", ard_warning)),
+    1L
+  )
+})
+
+test_that("warn_unbalanced_pairs() still warns on genuinely unbalanced pairs", {
+  # one subject has a missing value in one arm -> unbalanced pair
+  d <- data.frame(
+    Subject = c(1, 1, 2, 2, 3, 3),
+    Treatment = c("R", "T", "R", "T", "R", "T"),
+    val = c(1, 2, 3, 4, 5, NA)
+  )
+  res <- cards::eval_capture_conditions(
+    warn_unbalanced_pairs(data = d, by = "Treatment", variable = "val", group = "Subject")
+  )
+  expect_length(res$warning, 1L)
+  expect_match(res$warning[[1]], "unbalanced missingness")
 })

@@ -19,7 +19,7 @@
 Object of class \code{"tbl_survfit"}}
 
 \item{test}{(\code{string})\cr
-string indicating test to use. Must be one of \code{"logrank"}, \code{"tarone"}, \code{"survdiff"},
+string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"},
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \code{"coxph_score"}.
 See details below}
 
@@ -72,7 +72,7 @@ If you utilize the \code{tbl_survfit.data.frame()} S3 method, this is handled fo
 }
 
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survival", "broom"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("survival", "broom"))) withAutoprint(\{ # examplesIf}
 library(survival)
 
 gts_survfit <-
@@ -93,7 +93,7 @@ gts_survfit |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other tbl_survfit tools: 
-\code{\link{add_nevent.tbl_survfit}()}
+Other tbl_survfit tools:
+\code{\link[=add_nevent.tbl_survfit]{add_nevent.tbl_survfit()}}
 }
 \concept{tbl_survfit tools}

@@ -10,6 +10,15 @@ test_that("tbl_strata_nested_stack() works", {
       )
   )
 
+  # check the tbl_ids have been applied correctly
+  expect_equal(
+    names(tbl$tbls),
+    unique(trial$trt) |>
+      sort() |>
+      cli::cli_format() %>%
+      paste("trt", ., sep = "=")
+  )
+
   # check indenting of first row, which should not be indented
   expect_true({
     indent_last_row <- tbl$table_styling$indent |>
@@ -17,7 +26,7 @@ test_that("tbl_strata_nested_stack() works", {
       dplyr::filter(dplyr::n() == dplyr::row_number())
 
     indent_last_row$n_spaces == 0L &&
-      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L"
+      indent_last_row$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L"
   })
 
   # check the 2nd row is indented
@@ -65,6 +74,14 @@ test_that("tbl_strata_nested_stack() works", {
           modify_header(all_stat_cols() ~ "**Summary Statistics**")
       )
   )
+
+  # check the tbl_ids
+  expect_equal(
+    names(tbl$tbls),
+    c('trt=\"Drug A\",grade=\"I\"', 'trt=\"Drug A\",grade=\"II\"', 'trt=\"Drug A\",grade=\"III\"',
+      'trt=\"Drug B\",grade=\"I\"', 'trt=\"Drug B\",grade=\"II\"', 'trt=\"Drug B\",grade=\"III\"')
+  )
+
   # check correct indentation
   expect_equal(
     tbl |>
@@ -117,7 +134,7 @@ test_that("tbl_strata_nested_stack() works with unobserved factor levels", {
       dplyr::filter(n_spaces == 0L)
 
     (df_indent$column == "label") &&
-      (df_indent$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L")
+      (df_indent$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L")
   })
 
 })
@@ -163,5 +180,57 @@ test_that("tbl_strata_nested_stack() messaging", {
         )
       }
     )
+  )
+})
+
+# addressing issue #2179
+test_that("tbl_strata_nested_stack() unobserved combinations", {
+  # no error when there are unobserved combinations of the strata variables
+  expect_silent(
+    tbl_strata_nested_stack(
+      cards::ADTTE,
+      strata = c(SEX, RACE),
+      .tbl_fun = ~ .x |>
+        tbl_summary(include = AGE, type = AGE ~ "continuous"),
+      quiet = TRUE
+    )
+  )
+})
+
+test_that("tbl_strata_nested_stack() works with tables without prior indentation in first column", {
+  expect_silent(
+    tbl <-
+      tbl_strata_nested_stack(
+        trial,
+        strata = trt,
+        ~ .x |>
+          tbl_summary(include = c(age, grade), missing = "no") |>
+          modify_header(all_stat_cols() ~ "**Summary Statistics**") |>
+          # add column without prior indentation
+          modify_column_unhide("var_label")
+      )
+  )
+
+  # no indentation in second column labels
+  expect_true(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "label", row_numbers %in% 2:3) |>
+      dplyr::pull(n_spaces) |>
+      is_empty()
+  )
+  # correct indentation in first column labels
+  expect_equal(
+    tbl |>
+      .table_styling_expr_to_row_number() |>
+      getElement("table_styling") |>
+      getElement("indent") |>
+      tidyr::unnest(row_numbers) |>
+      dplyr::filter(column == "var_label", row_numbers %in% 2:3) |>
+      dplyr::pull(n_spaces),
+    c(4L, 4L)
   )
 })

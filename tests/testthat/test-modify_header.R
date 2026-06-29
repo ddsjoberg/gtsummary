@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("cardx", "broom.helpers")))
+skip_if_pkg_not_installed("broom.helpers")
 
 # first, testing deprecation
 test_that("modify_header(update,quiet) are deprecated", {
@@ -149,10 +149,27 @@ test_that("modify_header(text_interpret) works", {
       dplyr::pull(interpret_label),
     "gt::html"
   )
+
+  # "none" stores the `identity` interpret function (#1987)
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_header(label = "Variable", text_interpret = "none") |>
+      getElement("table_styling") |>
+      getElement("header") |>
+      dplyr::filter(column %in% "label") |>
+      dplyr::pull(interpret_label),
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    tbl_summary(trial, include = marker) |>
+      modify_header(label = "Variable", text_interpret = "latex")
+  )
 })
 
 test_that("modify_header() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx")))
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -212,7 +229,7 @@ test_that("modify_header() works with tbl_cross()", {
 })
 
 test_that("modify_header() works with tbl_regression()", {
-  skip_if_not(is_pkg_installed("broom.helpers"))
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(glm(response ~ age + grade, trial, family = binomial()) |>
                  tbl_regression(exponentiate = TRUE) |>

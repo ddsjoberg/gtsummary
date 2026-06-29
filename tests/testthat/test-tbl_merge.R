@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survival", "cardx", "broom.helpers")))
+skip_if_pkg_not_installed(c("survival", "broom.helpers"))
 
 # univariate regression models
 t0 <-
@@ -168,13 +168,6 @@ test_that("tbl_merge works with more complex merge", {
   reset_gtsummary_theme()
 })
 
-test_that("tbl_merge returns expected message when nonunique columns present", {
-  expect_message(
-    tbl_merge(list(tbl_stack(list(t1, t1)))),
-    "do not uniquely identify rows for each table.*merge may fail or result in a malformed table"
-  )
-})
-
 test_that("tbl_merge throws expected errors", {
   # input must be a list
   expect_snapshot(
@@ -212,7 +205,7 @@ test_that("tbl_merge throws expected errors", {
 })
 
 test_that("tbl_merge() merges mixed-type from .$table_styling$header$modify_* columns", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx", "broom", "withr")))
+  skip_if_pkg_not_installed(c("survey", "broom", "withr"))
   withr::local_seed(123)
 
   num_rows <- 10
@@ -269,6 +262,13 @@ test_that("tbl_merge(merge_vars)", {
       1L,     "cyl_1",    "**Table 1**",        "gt::md",   FALSE
     )
   )
+
+  # no errors when merging doesn't include row_type (and other defaults)
+  expect_silent({
+    tbl0 <- lm(age ~ marker, trial) |> tbl_regression()
+    tbl <- tbl_merge(list(tbl0, tbl0), merge_vars = "label")
+  })
+  expect_snapshot(as.data.frame(tbl))
 })
 
 test_that("tbl_merge() works with tbl_hierarchical()", {
@@ -297,5 +297,19 @@ test_that("tbl_merge() works with tbl_hierarchical()", {
     tbl |>
     as.data.frame(col_labels = FALSE) |>
       dplyr::pull("label")
+  )
+})
+
+
+test_that("tbl_merge() test unlike table merge messaging", {
+  expect_message(
+    tbl_merge(list(t1, t1), merge_vars = "variable"),
+    "*columns to do uniquely identify rows*"
+  )
+
+  expect_message(
+    list(t1, t1 |> modify_table_body(~.x[-1,])) |>
+    tbl_merge(),
+    "*number rows in the tables to be merged do not match*"
   )
 })

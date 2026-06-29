@@ -585,6 +585,15 @@ test_that("tbl_summary(sort)", {
       dplyr::pull(label),
     c("8", "4", "6")
   )
+
+  # check that sorting does not remove variable label
+  expect_equal(
+    tbl_summary(trial, include = stage, sort = list(stage = "frequency")) |>
+      getElement("table_body") |>
+      getElement("label") |>
+      dplyr::first(),
+    "T Stage"
+  )
 })
 
 test_that("tbl_summary(sort) errors properly", {
@@ -625,7 +634,7 @@ test_that("tbl_summary(percent)", {
 
 test_that("tbl_summary() with hms times", {
   # originally reported in https://github.com/ddsjoberg/gtsummary/issues/1893
-  skip_if_not_installed("hms")
+  skip_if_pkg_not_installed("hms")
   withr::local_package("hms")
 
   trial2 <- trial |> dplyr::mutate(time_hms = hms(seconds = 15))
@@ -715,3 +724,84 @@ test_that("tbl_summary(statistic) double curly bracket escaping", {
     glue("Me{{an: {{{style_number(mean(trial$ttdeath), 1)}}}")
   )
 })
+
+# addressing issue #2188
+test_that("tbl_summary() column order for lgl by variable", {
+  expect_equal(
+    mtcars |>
+      dplyr::mutate(am = as.logical(am)) |>
+      tbl_summary(by = am, include = mpg) |>
+      add_overall() |>
+      as.data.frame(col_label = FALSE) |>
+      names(),
+    c("label", "stat_0", "stat_1", "stat_2")
+  )
+})
+
+test_that("tbl_summary(percent = c(<data.frame>))", {
+  expect_silent(
+    tbl <- cards::ADSL |>
+      dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)) |>
+      tbl_summary(
+        include = DCREASCD,
+        percent = dplyr::bind_rows(cards::ADSL, cards::ADSL),
+        statistic = all_categorical() ~ "{n} / {N} ({p}%)",
+        missing = "no"
+      )
+  )
+  expect_snapshot(as.data.frame(tbl))
+  expect_equal(
+    gather_ard(tbl) |>
+      getElement("tbl_summary") |>
+      dplyr::filter(variable == "DCREASCD", context == "tabulate") |>
+      dplyr::select(-gts_column, -fmt_fun),
+    cards::ard_tabulate(
+      cards::ADSL |>
+        dplyr::mutate(DCREASCD = ifelse(DCREASCD == "Completed", NA, DCREASCD)),
+      variables = "DCREASCD",
+      denominator = dplyr::bind_rows(cards::ADSL, cards::ADSL)
+    ) |>
+      dplyr::select(-fmt_fun),
+    ignore_attr = TRUE
+  )
+
+  # when data frame does not include the by variable
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(
+      trial,
+      by = trt,
+      include = age,
+      percent = trial["age"]
+    )
+  )
+
+  # check error message when class of `by` column does not match
+  expect_snapshot(
+    error = TRUE,
+    cards::ADSL |>
+      tbl_summary(
+        by = ARM,
+        include = AGEGR1,
+        percent = cards::ADSL |> dplyr::mutate(ARM = factor(ARM))
+      )
+  )
+})
+
+# addressing issue #2345; Character "NULL" handling
+test_that("tbl_summary() handlines character vectors with 'NULL' values", {
+  x <- c(rep("YES", 6), rep("NULL", 4), rep(NA, 10))
+  expect_equal(
+    data.frame(x = x) |>
+      tbl_summary(statistic = ~ "{p}", missing = "no") |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(stat_0) |>
+      na.omit(),
+    table(x) |>
+      prop.table() %>%
+      {100 * .} |> # styler: off
+      as.character(),
+    ignore_attr = TRUE
+  )
+})
+

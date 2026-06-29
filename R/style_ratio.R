@@ -28,6 +28,7 @@ style_ratio <- function(x,
                         decimal.mark = getOption("OutDec"),
                         prefix = "",
                         suffix = "",
+                        na = NA_character_,
                         ...) {
   set_cli_abort_call()
 
@@ -41,15 +42,24 @@ style_ratio <- function(x,
       get_theme_element("style_number-arg:big.mark", default = ifelse(decimal.mark == ",", "\U2009", ","))
   }
 
-  x_fmt <-
-    dplyr::case_when(
-      cards::round5(abs(x), digits = digits) < 1 ~
-        style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
-      x > 0 ~
-        style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
-      x < 0 ~
-        style_sigfig(pmin(-1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, ...),
-    )
+  na_mask <- is.na(x)
+  x_fmt <- rep(NA_character_, length(x))
+  x_fmt[na_mask] <- na
+
+  idx <- !na_mask & cards::round5(abs(x), digits = digits) < 1
+  if (any(idx)) {
+    x_fmt[idx] <- style_sigfig(x[idx], digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
+  }
+
+  idx <- !na_mask & x > 0 & cards::round5(abs(x), digits = digits) >= 1
+  if (any(idx)) {
+    x_fmt[idx] <- style_sigfig(pmax(1, x[idx]), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
+  }
+
+  idx <- !na_mask & x < 0 & cards::round5(abs(x), digits = digits) >= 1
+  if (any(idx)) {
+    x_fmt[idx] <- style_sigfig(pmin(-1, x[idx]), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, prefix = prefix, suffix = suffix, na = na, ...)
+  }
 
   attributes(x_fmt) <- attributes(unclass(x))
   x_fmt

@@ -27,8 +27,18 @@ test_that("style_pvalue() works", {
     c(NA, '>0.999', '0.999', '0.500', '0.250', '0.200', '0.120', '0.100', '0.060', '0.030', '0.002', '<0.001', '<0.001', NA)
   )
   expect_equal(
-    style_pvalue(pvals, digits = 3, prepend_p = TRUE),
+    style_pvalue(pvals, digits = 3, prepend_p = TRUE, na = "NE"),
     c(NA, 'p>0.999', 'p=0.999', 'p=0.500', 'p=0.250', 'p=0.200', 'p=0.120', 'p=0.100', 'p=0.060', 'p=0.030', 'p=0.002', 'p<0.001', 'p<0.001', NA)
+  )
+
+  expect_equal(
+    style_pvalue(NA, na = "NE"),
+    "NE"
+  )
+
+  expect_equal(
+    style_pvalue(c(1.5, NA, -1, 1), digits = 3, prepend_p = TRUE, na = "NE"),
+    c(NA, 'NE', NA, "p>0.999")
   )
 
   vec2 <- c(one = 0.99, two = 0.0005)
@@ -50,4 +60,15 @@ test_that("style_pvalue() messaging", {
     error = TRUE,
     style_pvalue(0.05, digits = 8)
   )
+})
+
+test_that("style_pvalue() works with matrix input", {
+  vec <- c(0.5, 0.001, 0.0001, NA)
+  mat <- matrix(vec, nrow = 2, dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  result <- style_pvalue(mat)
+
+  expect_true(is.matrix(result))
+  expect_equal(dim(result), c(2L, 2L))
+  expect_equal(dimnames(result), list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(as.vector(result), style_pvalue(vec))
 })

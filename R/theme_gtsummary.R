@@ -21,7 +21,7 @@
 #'       - `tbl_regression()`/`tbl_uvregression()` show coefficient and CI in same column
 #'   - `"lancet"` _The Lancet_
 #'       - Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
-#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
+#'       - `tbl_summary()` Use en-dash to separate IQR
 #'   - `"nejm"` _The New England Journal of Medicine_
 #'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
@@ -85,7 +85,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_summary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
                                            all_categorical() ~ "{n} ({p})"),
         "tbl_svysummary-arg:statistic" = list(all_continuous() ~ "{median} ({p25} \U2013 {p75})",
-                                           all_categorical() ~ "{n} ({p})"),
+                                              all_categorical() ~ "{n} ({p})"),
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
           add_stat_label(x) |>
             modify_table_body(
@@ -347,7 +347,8 @@ theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra
 #' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
 #' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
 #' `"nl"` (Dutch), `"mr"` (Marathi), `"no"` (Norwegian), `"pt"` (Portuguese),
-#' `"se"` (Swedish), `"zh-cn"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional)
+#' `"se"` (Swedish), `"zh-cn"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional),
+#' `"ba"` (Bosnian)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
@@ -356,17 +357,17 @@ theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra
 #' String indicating separator for the default IQR in `tbl_summary()`.
 #' If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to an en dash
+#' will default to an en-dash
 #' @param ci.sep (`string`)\cr
 #' String indicating separator for confidence intervals.
 #' If `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to an en dash
+#' will default to an en-dash
 #' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c(
   "de", "en", "es", "fr", "gu", "hi", "is", "ja",
-  "kr", "mr", "nl", "no", "pt", "se", "zh-cn", "zh-tw"),
+  "kr", "mr", "nl", "no", "pt", "se", "zh-cn", "zh-tw", "ba"),
   decimal.mark = NULL, big.mark = NULL,
   iqr.sep = NULL,
   ci.sep = NULL,

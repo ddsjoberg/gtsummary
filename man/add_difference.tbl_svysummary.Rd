@@ -25,7 +25,7 @@ table created with \code{tbl_summary()}}
 
 \item{test}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the tests/methods to perform for each variable, e.g.
-\code{list(all_continuous() ~ "t.test", all_dichotomous() ~ "prop.test", all_categorical(FALSE) ~ "smd")}.
+\code{list(all_continuous() ~ "svy.t.test", all_dichotomous() ~ "emmeans", all_categorical(FALSE) ~ "svy.chisq.test")}.
 
 See below for details on default tests and \link[=tests]{?tests} for details on available
 tests and creating custom tests.}
@@ -72,6 +72,14 @@ The difference between two groups (typically mean or rate difference) is added
 to the table along with the difference's confidence interval and a p-value (when applicable).
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
+# Example 1 ----------------------------------
+survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
+  tbl_svysummary(
+    by = Survived,
+    value = list(Class ~ "1st", Age = "Child"),
+    include = c(Class, Age)
+  ) |>
+  add_difference()
 \dontshow{\}) # examplesIf}
 }

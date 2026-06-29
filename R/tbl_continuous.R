@@ -136,12 +136,12 @@ tbl_continuous <- function(data,
           )
 
         # calculate the continuous summary stats
-        cards::ard_continuous(
+        cards::ard_summary(
           data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
           variables = all_of(variable),
           by = any_of(c(by, cat_variable)),
           statistic = .continuous_statistics_chr_to_fun(statistic)[cat_variable] |> set_names(variable),
-          fmt_fn = variable_digits,
+          fmt_fun = variable_digits,
           stat_label = ~ default_stat_labels()
         ) |>
           # add the missingness information
@@ -150,7 +150,7 @@ tbl_continuous <- function(data,
               data = data |> tidyr::drop_na(all_of(c(by, cat_variable))),
               variables = all_of(variable),
               by = any_of(c(by, cat_variable)),
-              fmt_fn = variable_digits,
+              fmt_fun = variable_digits,
               stat_label = ~ default_stat_labels()
             )
           )
@@ -163,7 +163,7 @@ tbl_continuous <- function(data,
     dplyr::bind_rows(
       cards,
       cards::ard_attributes(data, variables = all_of(c(variable, by, include)), label = label),
-      cards::ard_categorical(data, variables = any_of(by), stat_label = ~ default_stat_labels()),
+      cards::ard_tabulate(data, variables = any_of(by), stat_label = ~ default_stat_labels()),
       cards::ard_total_n(data)
     )
 

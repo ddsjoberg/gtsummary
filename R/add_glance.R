@@ -31,7 +31,9 @@
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether source note text
 #'   will be interpreted with
-#'   [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#'   [gt::md()] or [gt::html()]. Must be `"md"` (default), `"html"`, or
+#'   `"none"`. `"none"` applies no interpretation, rendering the text verbatim.
+#'   Applies to tables printed with `{gt}`.
 #'
 #' @return gtsummary table
 #' @name add_glance
@@ -46,7 +48,7 @@
 #'   modify_table_body(~.x |> dplyr::arrange(row_type == "glance_statistic"))
 #' ````
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "broom", "broom.helpers"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' mod <- lm(age ~ marker + grade, trial) |> tbl_regression()
 #'
 #' # Example 1 ----------------------------------
@@ -129,7 +131,7 @@ add_glance_source_note <- function(x,
                                        c(where(is.integer), starts_with("df")) ~ label_style_number()
                                      ),
                                    glance_fun = glance_fun_s3(x$inputs$x),
-                                   text_interpret = c("md", "html"),
+                                   text_interpret = c("md", "html", "none"),
                                    sep1 = " = ", sep2 = "; ") {
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()
@@ -203,7 +205,7 @@ add_glance_source_note <- function(x,
   )
   cards::fill_formula_selectors(
     data = df_glance_orig,
-    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fn"]] |> eval()
+    fmt_fun = formals(gtsummary::add_glance_table)[["fmt_fun"]] |> eval()
   )
 
   df_label <-

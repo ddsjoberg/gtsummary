@@ -24,8 +24,10 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Daniel D. Sjoberg \email{danield.sjoberg@gmail.com} (\href{https://orcid.org/0000-0003-0862-2018}{ORCID})
   \item Joseph Larmarange (\href{https://orcid.org/0000-0001-7097-700X}{ORCID})
   \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID})
+  \item Emily de la Rua (\href{https://orcid.org/0009-0000-8738-5561}{ORCID})
   \item Jessica Lavery (\href{https://orcid.org/0000-0002-2746-5647}{ORCID})
   \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
   \item Emily C. Zabor (\href{https://orcid.org/0000-0002-1402-4498}{ORCID})
@@ -34,6 +36,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Xing Bai [contributor]
+  \item Malcolm Barrett (\href{https://orcid.org/0000-0003-0299-5825}{ORCID}) [contributor]
   \item Esther Drill (\href{https://orcid.org/0000-0002-3315-4538}{ORCID}) [contributor]
   \item Jessica Flynn (\href{https://orcid.org/0000-0001-8310-6684}{ORCID}) [contributor]
   \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID}) [contributor]

@@ -1,6 +1,5 @@
 #' Likert Summary
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' Create a table of ordered categorical variables in a wide format.
 #'
 #' @inheritParams tbl_summary
@@ -131,11 +130,16 @@ tbl_likert <- function(data,
         variables = all_of(include),
         label = label
       ),
-      cards::ard_missing(data, variables = all_of(include)),
-      cards::ard_categorical(
+      cards::ard_missing(
+        data,
+        variables = all_of(include),
+        fmt_fun = digits,
+        stat_label = ~ default_stat_labels()
+      ),
+      cards::ard_tabulate(
         data = data,
         variables = all_of(include),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         stat_label = ~ default_stat_labels()
       )
@@ -250,5 +254,11 @@ pier_likert <- function(cards, variables, statistic) {
       dplyr::mutate(group1 = .data$variable, group1_level = .data$variable_level),
     variables = variables,
     statistic = statistic
-  )
+  ) |>
+    # put variables in the order requested by user
+    dplyr::left_join(
+      x = data.frame(variable = variables),
+      y = _,
+      by = "variable"
+    )
 }

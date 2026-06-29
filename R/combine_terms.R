@@ -37,7 +37,6 @@
 combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(combine_terms = match.call()))
-  check_pkg_installed("cardx")
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {

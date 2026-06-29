@@ -31,7 +31,7 @@
 #' @export
 #' @name add_ci.tbl_svysummary
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("cardx", "survey")) && gtsummary:::is_pkg_installed("broom",  ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey") && gtsummary:::is_pkg_installed("broom",  ref = "cardx")
 #' data(api, package = "survey")
 #' survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) |>
 #'   tbl_svysummary(
@@ -73,6 +73,10 @@ add_ci.tbl_svysummary <- function(x,
     data = scope_table_body(x$table_body),
     include = {{ include }}
   )
+
+  if (missing(method)) {
+    method <- get_theme_element("add_ci.tbl_svysummary-arg:method", default = list(all_continuous() ~ "svymean", all_categorical() ~ "svyprop.logit"))
+  }
 
   cards::process_formula_selectors(
     data = scope_table_body(x$table_body |> dplyr::filter(.data$variable %in% .env$include)),
@@ -188,11 +192,11 @@ add_ci.tbl_svysummary <- function(x,
     imap(
       ~dplyr::mutate(
         .x,
-        fmt_fn = ifelse(.data$stat_name %in% c("estimate", "conf.low", "conf.high"),
+        fmt_fun = ifelse(.data$stat_name %in% c("estimate", "conf.low", "conf.high"),
                         list(style_fun[[.y]]),
-                        .data$fmt_fn)
+                        .data$fmt_fun)
       ) |>
-        cards::apply_fmt_fn()
+        cards::apply_fmt_fun()
     ) |>
     dplyr::bind_rows() |>
     cards::tidy_ard_column_order()

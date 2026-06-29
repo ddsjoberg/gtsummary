@@ -66,6 +66,10 @@ as_gtsummary <- function(table_body, ...) {
       replace = logical(), remove = logical()
     )
 
+  # ordered sequence of symbols used for footnote reference marks;
+  # NULL (default) means the print engine's default numeric marks are used.
+  x$table_styling$footnote_symbol <- NULL
+
   x$table_styling$abbreviation <-
     dplyr::tibble(
       column = character(),
@@ -105,6 +109,8 @@ as_gtsummary <- function(table_body, ...) {
     dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
   x$table_styling$cols_merge <-
     dplyr::tibble(column = character(), rows = list(), pattern = character())
+  x$table_styling$post_fmt_fun <-
+    dplyr::tibble(column = character(), rows = list(), fmt_fun = list())
 
   # adding other objects to list -----------------------------------------------
   x <- c(x, list(...))

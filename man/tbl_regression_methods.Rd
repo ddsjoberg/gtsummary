@@ -15,7 +15,6 @@
 \alias{tbl_regression.brmsfit}
 \alias{tbl_regression.gam}
 \alias{tbl_regression.crr}
-\alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
 \method{tbl_regression}{model_fit}(x, ...)
@@ -72,8 +71,6 @@
 \method{tbl_regression}{gam}(x, tidy_fun = tidy_gam, ...)
 
 \method{tbl_regression}{crr}(x, ...)
-
-\method{tbl_regression}{multinom}(x, ...)
 }
 \arguments{
 \item{x}{(regression model)\cr
@@ -88,7 +85,7 @@ If an error occurs, the tidying of the model is attempted with
 }
 \description{
 Most regression models are handled by \code{\link[=tbl_regression]{tbl_regression()}},
-which uses \code{\link[broom:reexports]{broom::tidy()}} to perform initial tidying of results. There are,
+which uses \code{\link[broom:tidy]{broom::tidy()}} to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.
 }

@@ -117,10 +117,26 @@ test_that("modify_spanning_header(text_interpret) works", {
       dplyr::pull(text_interpret),
     "gt::html"
   )
+
+  # "none" stores the `identity` interpret function (#1987)
+  expect_equal(
+    tbl_summary(trial, include = marker) |>
+      modify_spanning_header(label = "Variable", text_interpret = "none") |>
+      getElement("table_styling") |>
+      getElement("spanning_header") |>
+      dplyr::pull(text_interpret),
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    tbl_summary(trial, include = marker) |>
+      modify_spanning_header(label = "Variable", text_interpret = "latex")
+  )
 })
 
 test_that("modify_spanning_header() works with tbl_svysummary()", {
-  skip_if_not(is_pkg_installed(c("survey", "cardx")))
+  skip_if_pkg_not_installed("survey")
 
   expect_equal(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
@@ -160,7 +176,7 @@ test_that("modify_spanning_header() works with tbl_cross()", {
 })
 
 test_that("modify_spanning_header() works with tbl_regression()", {
-  skip_if_not(is_pkg_installed("broom.helpers"))
+  skip_if_pkg_not_installed("broom.helpers")
 
   expect_equal(
     glm(response ~ age + grade, trial, family = binomial()) |>
@@ -174,6 +190,8 @@ test_that("modify_spanning_header() works with tbl_regression()", {
 })
 
 test_that("modify_spanning_header() works with tbl_uvregression()", {
+  skip_if_pkg_not_installed("broom.helpers")
+
   expect_equal(
     tbl_uvregression(trial, method = glm, y = response, method.args = list(family = binomial),
                      exponentiate = TRUE, include = c("age", "grade")) |>

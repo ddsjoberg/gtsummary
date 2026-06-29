@@ -41,7 +41,6 @@ ascending order (the default) or descending.}
 a 'tbl_likert' gtsummary table
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Create a table of ordered categorical variables in a wide format.
 }
 \examples{

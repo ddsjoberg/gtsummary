@@ -38,7 +38,7 @@ library(cards)
 
 bind_ard(
   # the primary ARD with the results
-  ard_continuous(trial, by = grade, variables = age),
+  ard_summary(trial, by = grade, variables = age),
   # add missing and attributes ARD
   ard_missing(trial, by = grade, variables = age),
   ard_attributes(trial, variables = c(grade, age))

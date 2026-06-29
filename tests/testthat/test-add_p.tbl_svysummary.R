@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(is_pkg_installed(c("survey", "cardx")))
+skip_if_pkg_not_installed("survey")
 
 svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
@@ -78,7 +78,7 @@ test_that("add_p.tbl_svysummary(test)", {
     tbl$table_body |>
       dplyr::filter(variable == "response_emmeans", row_type == "label") |>
       dplyr::pull(p.value),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        method.args = list(family = binomial),
                                        formula = response_emmeans ~ trt,
@@ -93,7 +93,7 @@ test_that("add_p.tbl_svysummary(test)", {
     tbl$table_body |>
       dplyr::filter(variable == "age_emmeans", row_type == "label") |>
       dplyr::pull(p.value),
-    cardx::ard_emmeans_mean_difference(svy_trial2,
+    cardx::ard_emmeans_contrast(svy_trial2,
                                        method = survey::svyglm,
                                        formula = age_emmeans ~ trt,
                                        response_type = "continuous") |>

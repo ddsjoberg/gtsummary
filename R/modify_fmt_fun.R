@@ -6,7 +6,7 @@
 #' @param ... [`dynamic-dots`][rlang::dyn-dots]\cr
 #'   Used to assign updates to formatting functions.
 #'
-#'   Use `modify_fmt_fun(colname = <fmt fn>)` to update a single column. Using a
+#'   Use `modify_fmt_fun(colname = <fmt fun>)` to update a single column. Using a
 #'   formula will invoke tidyselect, e.g. `modify_fmt_fun(c(estimate, conf.low, conf.high) ~ <fmt_fun>)`.
 #'
 #'   Use the `show_header_names()` to see the column names that can be modified.
@@ -16,7 +16,7 @@
 #' @inheritSection modify_table_styling rows argument
 #'
 #' @export
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' # show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
 #' lm(age ~ marker + grade, trial) |>

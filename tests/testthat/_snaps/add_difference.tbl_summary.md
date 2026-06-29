@@ -100,12 +100,14 @@
 # ordering in add_difference.tbl_summary() with paired tests
 
     Code
-      as.data.frame(modify_column_hide(add_difference(mutate(mtcars, .by = am, id = dplyr::row_number(),
-      am = factor(am, levels = c(0, 1))) %>% tbl_summary(by = am, include = mpg),
-      test = ~"paired.t.test", group = id), all_stat_cols()))
+      tbl <- add_difference(mutate(mtcars, .by = am, id = dplyr::row_number(), am = factor(
+        am, levels = c(0, 1))) %>% tbl_summary(by = am, include = mpg), test = ~
+      "paired.t.test", group = id)
     Message
-      The following warning was returned in `add_difference()` for variable "mpg"
-      ! Some observations included in the stratified summary statistics were omitted from the comparison due to unbalanced missingness within group.
+      The following warnings were returned during `add_difference()`:
+      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "parameter", "conf.low", and "conf.high" statistics: Some observations included in the stratified summary statistics were omitted from the comparison due to unbalanced missingness within group.
+    Code
+      as.data.frame(modify_column_hide(tbl, all_stat_cols()))
     Output
         **Characteristic** **Difference** **95% CI** **p-value**
       1                mpg           -7.0  -10, -3.6      <0.001
@@ -113,12 +115,14 @@
 ---
 
     Code
-      as.data.frame(modify_column_hide(add_difference(tbl_summary(mutate(mtcars, .by = am,
-        id = dplyr::row_number(), am = factor(am, levels = c(1, 0))), by = am,
-      include = mpg), test = ~"paired.t.test", group = id), all_stat_cols()))
+      tbl <- add_difference(tbl_summary(mutate(mtcars, .by = am, id = dplyr::row_number(),
+      am = factor(am, levels = c(1, 0))), by = am, include = mpg), test = ~
+      "paired.t.test", group = id)
     Message
-      The following warning was returned in `add_difference()` for variable "mpg"
-      ! Some observations included in the stratified summary statistics were omitted from the comparison due to unbalanced missingness within group.
+      The following warnings were returned during `add_difference()`:
+      ! For variable `mpg` (`am`) and "estimate", "statistic", "p.value", "parameter", "conf.low", and "conf.high" statistics: Some observations included in the stratified summary statistics were omitted from the comparison due to unbalanced missingness within group.
+    Code
+      as.data.frame(modify_column_hide(tbl, all_stat_cols()))
     Output
         **Characteristic** **Difference** **95% CI** **p-value**
       1                mpg            7.0    3.6, 10      <0.001

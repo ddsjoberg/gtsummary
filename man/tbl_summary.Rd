@@ -56,8 +56,8 @@ with this argument. Default is \code{NULL}. See below for details.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
-\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
-\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}.
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
 }}
@@ -69,7 +69,12 @@ Default is \code{all_categorical(FALSE) ~ "alphanumeric"}.}
 
 \item{percent}{(\code{string})\cr
 Indicates the type of percentage to return.
-Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.}
+Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.
+
+In rarer cases, you may need to define/override the typical denominators.
+In these cases, pass an integer or a data frame. Refer to the
+\code{\link[cards:ard_tabulate]{?cards::ard_tabulate(denominator)}} help file for details.
+When a data frame is passed, this data frame is used to calculate header counts.}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}.}
@@ -159,7 +164,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   select(age, grade, response) |>

@@ -5,18 +5,15 @@
 \alias{as_hux_xlsx}
 \title{Convert gtsummary object to a huxtable object}
 \usage{
-as_hux_table(
-  x,
-  include = everything(),
-  return_calls = FALSE,
-  strip_md_bold = FALSE
-)
+as_hux_table(x, include = everything(), return_calls = FALSE)
 
 as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 }
 \arguments{
-\item{x}{(\code{gtsummary})\cr
-An object of class \code{"gtsummary"}}
+\item{x}{(\code{gtsummary} or \code{list})\cr
+a gtsummary object, or a (optionally named) list of gtsummary objects. When
+a list is passed to \code{as_hux_xlsx()}, each table is written to its own
+worksheet and the list names are used as the worksheet names.}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -25,8 +22,6 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{strip_md_bold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{file}{File path for the output.}
 
@@ -46,11 +41,16 @@ to PDF via LaTeX, as well as HTML and Word.
 
 
 Use the \code{as_hux_xlsx()} function to save a copy of the table in an excel file.
-The file is saved using \code{huxtable::quick_xlsx()}.
+
+To export a single table, pass a gtsummary object as \code{x}; the file is written
+with a single worksheet. To export multiple tables to one workbook—one table
+per worksheet—pass a (optionally named) list of gtsummary objects as \code{x}. When
+the list is named, the names are used as the worksheet (tab) names; list
+elements without a name are assigned a default name of \code{"Sheet {i}"}.
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("huxtable")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed("huxtable")) withAutoprint(\{ # examplesIf}
 trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   add_p() |>

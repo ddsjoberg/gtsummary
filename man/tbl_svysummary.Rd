@@ -57,8 +57,8 @@ with this argument. Default is \code{NULL}. See below for details.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
-\item \code{missing}: must be one of \code{c("ifany", "no", "always")}
-\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}.
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
 }}
@@ -97,8 +97,8 @@ For categorical variables the following statistics are available to display.
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
 \item \code{{p}} proportion
-\item \code{{p.std.error}} standard error of the sample proportion (on the 0 to 1 scale) computed with \code{\link[survey:surveysummary]{survey::svymean()}}
-\item \code{{deff}} design effect of the sample proportion computed with \code{\link[survey:surveysummary]{survey::svymean()}}
+\item \code{{p.std.error}} standard error of the sample proportion (on the 0 to 1 scale) computed with \code{\link[survey:svymean]{survey::svymean()}}
+\item \code{{deff}} design effect of the sample proportion computed with \code{\link[survey:svymean]{survey::svymean()}}
 \item \code{{n_unweighted}} unweighted frequency
 \item \code{{N_unweighted}} unweighted denominator
 \item \code{{p_unweighted}} unweighted formatted percentage
@@ -107,8 +107,8 @@ For continuous variables the following statistics are available to display.
 \itemize{
 \item \code{{median}} median
 \item \code{{mean}} mean
-\item \code{{mean.std.error}} standard error of the sample mean computed with \code{\link[survey:surveysummary]{survey::svymean()}}
-\item \code{{deff}} design effect of the sample mean computed with \code{\link[survey:surveysummary]{survey::svymean()}}
+\item \code{{mean.std.error}} standard error of the sample mean computed with \code{\link[survey:svymean]{survey::svymean()}}
+\item \code{{deff}} design effect of the sample mean computed with \code{\link[survey:svymean]{survey::svymean()}}
 \item \code{{sd}} standard deviation
 \item \code{{var}} variance
 \item \code{{min}} minimum
@@ -161,7 +161,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("cardx", "survey"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("survey")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
   tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))

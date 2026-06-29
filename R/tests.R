@@ -1,6 +1,8 @@
-#' Tests/methods available in `add_p()` and `add_difference()`
+#' Comparison tests/methods available
 #'
-#' @description Below is a listing of tests available internally within gtsummary.
+#' @description
+#' Below is a listing of tests available internally within gtsummary.
+#' These methods are available to be called in `add_p()`, `add_difference()`, and `add_difference_row()`
 #'
 #' Tests listed with `...` may have additional arguments
 #' passed to them using `add_p(test.args=)`. For example, to
@@ -20,7 +22,7 @@
 #'
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -34,7 +36,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -48,7 +50,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_survfit", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -62,7 +64,7 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_continuous", add_p == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code,
@@ -71,12 +73,12 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_summary() %>% add_difference():
+#' @section `tbl_summary() %>% add_difference()/add_difference_row()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_difference == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
@@ -86,12 +88,12 @@
 #'   knitr::kable()
 #' ```
 #'
-#' @section tbl_svysummary() %>% add_difference():
+#' @section `tbl_svysummary() %>% add_difference()`:
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_difference == TRUE, !test_name %in% 'aov') %>%
-#'   dplyr::mutate(test_name = shQuote(test_name) %>% {glue::glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name, type = "sh") %>% {glue::glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,

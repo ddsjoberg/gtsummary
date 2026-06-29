@@ -1,22 +1,198 @@
 # gtsummary (development version)
 
+* Added Bosnian language translations. (#2341; @dzanahmed)
+
+* `as_hux_xlsx()` now accepts a list of gtsummary tables, writing each table to its own worksheet in a single Excel workbook. When the list is named, the names are used as the worksheet names. (#2327)
+
+* Added `without_gtsummary_theme()` to evaluate an expression with the active gtsummary theme temporarily ignored (package defaults in effect), restoring the theme afterward. (#2284)
+
+* The `text_interpret` argument now accepts `"none"` (in addition to `"md"` and `"html"`), which renders text verbatim without markdown/HTML interpretation. The `add_significance_stars()` footnote now uses `"none"` so its asterisks render literally. Honored by `as_gt()`. (#1987)
+
+* In `as_flex_table()`, multiple footnote reference symbols on a single cell are now separated by a comma (e.g. `1,2` instead of `12`), matching `gt` output. This requires `flextable (>= 0.9.11)`. (#2251)
+
+* Added `modify_footnote_symbol()`, `remove_footnote_symbol()`, and the `pkgwide-chr:footnote_symbol` theme element to control the symbols used for footnote references (e.g. `c("*", "†", "‡")` instead of `1, 2, 3`). Currently supported by `as_gt()` and `as_flex_table()`. (#1445)
+
+* Fixed bug in `add_difference()` where the `"emmeans"` method reported the wrong sign for a dichotomous variable whose displayed `value` was the first factor level (`B - A` instead of `A - B`). The estimate now reflects the displayed proportion difference. (#2399)
+
+* Fixed bug in `add_p()` where a warning from a paired test (e.g. `"paired.wilcox.test"`) could be printed twice. (#1945)
+
+* Fixed bug in `separate_p_footnotes()` where statistical test names in footnotes were not translated when using a non-English language theme. (#2368)
+
+* Fixed bug in `tbl_stack()` where duplicate footnote superscripts appeared on column headers when stacking tables with identical footnotes, e.g. when using `tbl_uvregression()` with `theme_gtsummary_journal("qjecon")`. (#2404)
+
+* `style_sigfig()`, `style_percent()`, `style_pvalue()`, and `style_ratio()` now work with matrix input. (#2409)
+
+# gtsummary 2.5.1
+
+* Theme elements are no longer 'evaluated' by default, e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`, `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`, `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are evaluated.
+
+* Removed `test = "tarone"` from `add_p.tbl_survfit()`. Users who need a G-rho family test can use `test = "survdiff"` with `test.args = list(rho = )`. (#2391)
+
+* Add alternative text to figures on website. (#1958)
+
+* Improved efficiency of `style_number()`. There is a slight change to a small subset of rounded values. For example, the difference between two dates was previously formatted to `'0 days'`, and now it is formatted to `'0'`.
+
+* Fixed bug in `tbl_hierarchical()`, `filter_hierarchical()` and `sort_hierarchical()` that was dropping class attributes. (#2397, @jszczypinski) 
+
+# gtsummary 2.5.0
+
+### New Features and Functions
+
+* Added AI chat bot to homepage, powered by `kapa.ai`.
+
+* Added functions `tbl_ard_strata()` and `tbl_ard_strata2()`. (#1852)
+
+### Other Updates
+
+* Added additional messaging to `tbl_merge()` when tables _may not_ merge properly. (#2348)
+
+* When a data frame is passed in the `tbl_summary(percent)` argument, the header counts are now tabulated using this data frame. (#2322)
+
+* Added `head()` and `tail()` S3 methods for `'gtsummary'` objects. (#2335) 
+
+* Updated `tbl_ard_hierarchical()` to pre-process non-standard hierarchical ARDs so sorting can be applied. (#2308)
+
+* Added theme element `"assign_summary_type-arg:cat_threshold"` for greater control over default summary types.
+
+* Added the `"add_overall.tbl_svysummary-arg:col_label"` theme element to control the default value for `add_overall.tbl_svysummary(col_label)` argument. (#2354)
+
+* Added theme elements `add_ci.tbl_summary-arg:method`, and `add_ci.tbl_svysummary-arg:method` to control the default value for `add_ci.tbl_summary(method)` / `add_ci.tbl_svysummary(method)` argument. (#2356)
+
+### Bug Fixes
+
+* Fixed bug in `tbl_strata_nested_stack()` causing incorrect column indentation in non-standard tables. (#2272)
+
+* Fixed bug in `sort_hierarchical()` causing variable labels to disappear from table when not all variables are in `include`. (#2332)
+
+* Corrected handling in `tbl_summary()` of character vectors that contains `"NULL"` values. (#2345)
+
+# gtsummary 2.4.0
+
+### New Features and Functions
+
+* Greatly improved messaging when column headers differ in `tbl_stack()`. (#2266)
+
+* Added the `tbl_split_by_rows(variable_level)` argument to split a table by the levels of a column in `x$table_body`.
+
+* The `tbl_stack(tbl_id_lbls)` argument has been added. When specified, a new column is added to the resulting `.$table_body` labeling the rows associated with each table ID. This argument is utilized in `tbl_strata()` and all returned tables include a hidden column with the stratum levels. (#2288)
+
+* Refactored `sort_hierarchical()` to allow for different sorting methods at each hierarchy variable level.
+
+* Updated `sort_hierarchical()` and `filter_hierarchical()` to always keep attribute and total N rows at the bottom of the ARD.
+
+* Added parameters `var` and `quiet` to `filter_hierarchical()` to allow for filtering by specific hierarchy variables and to silence messages, respectively.
+
+### Other Updates
+
+* No longer calculating `deff` by default in `tbl_svysummary(type='categorical')`.
+
+* Improved the print method for class `'tbl_split'` to be more informative.
+
+* Added a `dim()` S3 method for `'gtsummary'` class, which also allows for `nrow()` calls on gtsummary objects.
+
+* The {cardx} package is now a strong dependency. (#2256)
+
+* Added a method for class `"tbl_ard_hierarchical"` to `sort_hierarchical()` and `filter_hierarchical()`.
+
+### Bug Fixes
+
+* Bug fix in `add_p.tbl_cross()` when custom p-value methods were created without any additional arguments. The test and test label would revert to the default, and this is resolved.
+
+# gtsummary 2.3.0
+
+### New Features and Functions
+
+* Added `tbl_split_by_rows()` and `tbl_split_by_columns()` to split tables horizontally (row-wise) and vertically (column-wise). (#2216)
+
+* Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
+
+* Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 
+
+* Adding new function `add_difference_row()`. The function is similar to `add_difference()`, except that differences are placed on the rows below the summary statistics. (#2138)
+
+* The `style_*()` and `label_style_*()` functions have gained the `na` argument allowing users to specify how `NA` values are returned.
+
+* The `tbl_stack(attr_order)` argument has been added that allows users to specify the order in which the individual attributes take precedent when they are stacked. For example, to use the headers from the second table, specify `attr_order=2`. (#2202)
+
+* The `tbl_regression()` function now takes advantage of a new feature in {broom.helpers} to support multicomponent models, such as, multinomial models and mixed-effects models. Review `broom.helpers::tidy_group_by()` for details. (#1540)
+
+### Other Updates
+
+* Added an article on `modify_*()` functions. (#2209)
+
+* Added theme elements `tbl_hierarchical_count-fn:addnl-fn-to-run` and `tbl_hierarchical_count-fn:addnl-fn-to-run`. (#2262)
+
+* Added the `"add_overall.tbl_summary-arg:col_label"` theme element to control the default value of `add_overall.tbl_summary(col_label)`. (#2246)
+
+* Variable labels are now retained with `tbl_summary(sort=~'frequency')`. (#2260)
+
+* Functions `sort_hierarchical()` and `filter_hierarchical()` are now S3 generics.
+
+* The `add_overall()` function no longer returns an error when an unstratified table is passed. Rather, a message is printed and the unaltered table is returned.
+
+### Lifecycle Updates
+
+* Updated the function name of `modify_column_indent()` to the more accurately named `modify_indent()` as the function operates on cells rather than columns.
+
+### Bug Fixes
+
+* Fix in `tbl_svysummary()` when there are missing values in the `by` column. 
+
+* Fixed bug in `tbl_hierarchical()` causing the overall row label to be incorrectly used as a variable label.
+
+* Fixed bug in `sort_hierarchical()` causing some rows to be dropped when sorting unstratified tables. (#2237)
+
+* Fixed bug in `filter_hierarchical()` causing an error for unstratified tables.
+
+* Fix in `gather_ard()` for `tbl_regression()` and `tbl_uvregression()`. Previously, only the ARD for the primary regression model(s) would be returned, and now all ARDs are returned including those from subsequent calls to `add_*()` functions. (#2208)
+
+* Fix in `tbl_merge(merge_vars)` argument when a table contained a `"row_type"` column and the tables were not merged by this variable (which is included in the default). (#2205)
+
+* Fix in `add_overall()` where not all table styling were copied from the overall table to the newly merged table. This did not affect any native gtsummary tables, but did appear in an extension package.
+
+* Fix in experimental function `modify_post_fmt_fun()` when tables including this call, did not specify the `rows` argument, and were later stacked. The `enquo` environment associated with the `rows` argument was empty when the argument is not specified, and the empty environment caused an issue with evaluation if the table was later stacked.
+
+* Fix in `tbl_svysummary(missing='ifany')` when the weighted number of missing observations was <= 0.5. Previously, these counts were coerced to integer and rounded to zero, and therefore, did not appear in the table. (#2229)
+
+* Fix in `gather_ard()` for `tbl_strata_nested_stack()` tables, where the function returned an empty list. (#2223)
+ 
+# gtsummary 2.2.0
+
+### New Features and Functions
+
+* Added function `modify_post_fmt_fun()` to perform formatting on cells after the primary formatting function has been applied. The functionality is similar to `gt::text_transform()`. (#2014)
+
+* Data pre-processing has now been re-introduced for calculations in `add_p()` and `add_difference()`. Data pre-processing steps  were removed in the v2.0 release; however, in some cases---particularly `add_difference()` for dichotomous variables---the reduced functionality was affecting the user experience. See `?tests` for details on data pre-processing. (#2165)
+
+* The `add_variable_group_header()` function has been generalized to work with any gtsummary table, where previously only `'tbl_summary'` were accepted. (#2197)
+
 * The footnote placed on the p-value column by `add_significance_stars()` no longer replaces any existing footnote. Rather the footnote is added to any existing footnote. (#2184)
-
-* Fixed bug in `tbl_cross()` when a column was named `'missing'`. (#2182)
-
-* Corrected bug causing an error in `tbl_hierarchical()` when more than one `by` variable level had been filtered out of the data. (#2173)
 
 * The `remove_*()` family of functions default argument values have been updated to remove _all_ footnotes, source notes, abbreviations, column merging, bold and italic styling by default, so the users are not longer required to remove, for example, one source note at a time. The one exception is `remove_spanning_headers()`, which will remove the first level spanning headers be default. (#2161)
 
-* The `tbl_strata_nested_stack(quiet)` argument documentation was updated. (#2164)
+* Added a new theme element `tbl_svysummary-arg:missing_stat`
+
+* Added functions `sort_hierarchical()` and `filter_hierarchical()` to sort and filter hierarchical tables. (#2096)
+
+### Bug Fixes
+
+* Fixed a bug in `tbl_hierarchical()` where the `group*` variables of the resulting `table_body` were not fully populated. (#2192)
+
+* Corrected bug causing an error in `tbl_hierarchical()` when more than one `by` variable level had been filtered out of the data. (#2173)
 
 * Corrected the class of objects returned from `tbl_strata_nested_stack()`.
 
-* Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Pervasively, the indentation of the single strata level was not correct.
+* Corrected bug in `tbl_strata_nested_stack()` when the strata variable had a single level. Previously, the indentation of the single strata level was not correct.
+
+* Fix in `tbl_strata_nested_stack()` when there are unobserved combinations of strata levels. (#2179)
+
+* Fixed bug in `tbl_cross()` when a column was named `'missing'`. (#2182)
 
 * Fix in theme element `tbl_summary-arg:missing_stat` that was not being applied. (#2176)
 
-* Added a new theme element `tbl_svysummary-arg:missing_stat`
+* Corrected bug in `tbl_likert()` where variables in table always appeared in alphabetical order. (#2195) 
+
+* Corrected bug in `add_n.tbl_likert()` where the Ns were not formatted with `style_number()`. (#2195)
 
 # gtsummary 2.1.0
 

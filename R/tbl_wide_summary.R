@@ -1,6 +1,5 @@
 #' Wide summary table
 #'
-#' `r lifecycle::badge("experimental")`\cr
 #' This function is similar to `tbl_summary()`, but places summary statistics
 #' wide, in separate columns.
 #' All included variables must be of the same summary type, e.g. all continuous
@@ -17,9 +16,11 @@
 #' @export
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' # Example 1 ----------------------------------
 #' trial |>
 #'   tbl_wide_summary(include = c(response, grade))
 #'
+#' # Example 2 ----------------------------------
 #' trial |>
 #'   tbl_strata(
 #'     strata = trt,
@@ -130,35 +131,35 @@ tbl_wide_summary <- function(data,
       cards::ard_attributes(data, variables = all_of(include), label = label),
       cards::ard_missing(data,
                          variables = all_of(include),
-                         fmt_fn = digits,
+                         fmt_fun = digits,
                          stat_label = ~ default_stat_labels()
       ),
       # tabulate categorical summaries
-      cards::ard_categorical(
+      cards::ard_tabulate(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_categorical(FALSE),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         stat_label = ~ default_stat_labels()
       ),
       # tabulate dichotomous summaries
-      cards::ard_dichotomous(
+      cards::ard_tabulate_value(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_dichotomous(),
-        fmt_fn = digits,
+        fmt_fun = digits,
         denominator = "column",
         value = value,
         stat_label = ~ default_stat_labels()
       ),
       # calculate continuous summaries
-      cards::ard_continuous(
+      cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
         variables = all_continuous(),
         statistic =
           .continuous_statistics_chr_to_fun(
             statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
           ),
-        fmt_fn = digits,
+        fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       )
     ) |>

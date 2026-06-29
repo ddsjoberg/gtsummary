@@ -11,16 +11,16 @@ remove_column_merge(x, columns = everything())
 }
 \arguments{
 \item{x}{(\code{gtsummary})\cr
-gtsummary object}
+A gtsummary object}
 
-\item{pattern}{glue syntax string indicating how to merge columns in
+\item{pattern}{(\code{string})\cr
+glue syntax string indicating how to merge columns in
 \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}.}
 
 \item{rows}{(predicate \code{expression})\cr
 Predicate expression to select rows in \code{x$table_body}.
-Can be used to style footnote, formatting functions, missing symbols,
-and text formatting. Default is \code{NULL}. See details below.}
+Review \link[=rows_argument]{rows argument details}.}
 
 \item{columns}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Selector of columns in \code{x$table_body}}
@@ -67,7 +67,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 trial |>
   tbl_summary(by = trt, missing = "no", include = c(age, marker, trt)) |>
@@ -86,8 +86,8 @@ lm(marker ~ age + grade, trial) |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other Advanced modifiers: 
-\code{\link{modify_column_indent}()},
-\code{\link{modify_table_styling}()}
+Other Advanced modifiers:
+\code{\link[=modify_indent]{modify_indent()}},
+\code{\link[=modify_table_styling]{modify_table_styling()}}
 }
 \concept{Advanced modifiers}

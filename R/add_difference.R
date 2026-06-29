@@ -41,7 +41,7 @@ add_difference <- function(x, ...) {
 #' @export
 #' @return a gtsummary table of class `"tbl_summary"`
 #'
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("cardx") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # Example 1 ----------------------------------
 #' trial |>
 #'   select(trt, age, marker, response, death) %>%
@@ -85,7 +85,7 @@ add_difference.tbl_summary <- function(x,
                                        ...) {
   set_cli_abort_call()
   # check/process inputs -------------------------------------------------------
-  check_dots_empty()
+  check_dots_empty(call = get_cli_abort_call())
   updated_call_list <- c(x$call_list, list(add_difference = match.call()))
 
   if (rlang::is_function(estimate_fun)) {
