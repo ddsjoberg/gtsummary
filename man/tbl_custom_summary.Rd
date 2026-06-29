@@ -61,12 +61,13 @@ Specifies the level of a variable to display on a single row.
 The gtsummary type selectors, e.g. \code{all_dichotomous()}, cannot be used
 with this argument. Default is \code{NULL}. See below for details.}
 
-\item{missing}{(\code{string})\cr
-Must be one of \code{c("ifany", "no", "always")}, indicating whether to include
-a row of missing/\code{NA} counts. The default is \code{"ifany"}, which adds a missing
-row only when there are missing values. The setting applies to all
-variables. (Per-variable formula-list-selector syntax is supported by
-\code{\link[=tbl_summary]{tbl_summary()}} and \code{\link[=tbl_svysummary]{tbl_svysummary()}}, but not by \code{tbl_custom_summary()}.)}
+\item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
+\itemize{
+\item \code{missing}: must be one of \code{c("ifany", "no", "always")}.
+\item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
+\item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
+Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
+}}
 
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in the summary table. Default is \code{everything()}.}

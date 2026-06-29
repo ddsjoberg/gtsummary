@@ -7,12 +7,12 @@
 #' a custom function in charge of computing the statistics (see Details).
 #'
 #' @inheritParams tbl_summary
-#' @param missing (`string`)\cr
-#'   Must be one of `c("ifany", "no", "always")`, indicating whether to include
-#'   a row of missing/`NA` counts. The default is `"ifany"`, which adds a missing
-#'   row only when there are missing values. The setting applies to all
-#'   variables. (Per-variable formula-list-selector syntax is supported by
-#'   [tbl_summary()] and [tbl_svysummary()], but not by `tbl_custom_summary()`.)
+#' @param missing,missing_text,missing_stat
+#'   Arguments dictating how and if missing values are presented:
+#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
+#'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
+#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param stat_fns ([`formula-list-selector`][syntax])\cr
 #'   Specifies the function to be used to compute the statistics
 #'   (see below for details and examples).
