@@ -142,6 +142,55 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
   )
 })
 
+test_that("add_difference.tbl_summary(tests = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic-style data where the displayed `value` ("Child") is the FIRST
+  # factor level of `Age` (levels: "Child", "Adult"). Before the fix, emmeans
+  # modeled P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  df_titanic$Freq <- NULL
+
+  # hand-computed group1 - group2 difference of P(Child)
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  tbl_child <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Child")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | No) - P(Child | Yes) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
+
+  # CI must bracket the sign-correct estimate
+  ci_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::select("conf.low", "conf.high")
+  expect_true(ci_child$conf.low <= est_child && est_child <= ci_child$conf.high)
+
+  # displaying the LAST factor level ("Adult") is the negative of P(Child)
+  # and must be unchanged by the fix (already-correct case)
+  tbl_adult <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Adult")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_adult <-
+    tbl_adult$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  expect_equal(est_adult, -expected_diff, tolerance = 1e-6)
+})
+
 test_that("statistics are replicated within add_difference.tbl_summary()", {
   tbl_test.args <-
     trial |>

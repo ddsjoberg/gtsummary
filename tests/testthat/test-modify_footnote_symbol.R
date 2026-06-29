@@ -17,6 +17,47 @@ test_that("modify_footnote_symbol() stores the symbol sequence", {
   expect_true("modify_footnote_symbol" %in% names(tbl$call_list))
 })
 
+test_that("remove_footnote_symbol() resets to the default", {
+  tbl <-
+    trial |>
+    tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
+    add_p() |>
+    modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021")) |>
+    remove_footnote_symbol()
+
+  # footnote symbols are reset to NULL (default numbering)
+  expect_null(tbl$table_styling$footnote_symbol)
+
+  # call is recorded in the call list
+  expect_true("remove_footnote_symbol" %in% names(tbl$call_list))
+
+  # input check: non-gtsummary x
+  expect_error(
+    remove_footnote_symbol(letters),
+    class = "check_class"
+  )
+})
+
+test_that("remove_footnote_symbol() restores default marks in print engines", {
+  skip_if_pkg_not_installed(c("gt", "flextable"))
+
+  tbl <-
+    trial |>
+    tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
+    add_p() |>
+    modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021")) |>
+    remove_footnote_symbol()
+
+  # as_gt() does not emit an opt_footnote_marks() call after reset
+  gt_calls <- tbl |> as_gt(return_calls = TRUE)
+  expect_false("opt_footnote_marks" %in% names(gt_calls))
+
+  # as_flex_table() uses default integer reference marks after reset
+  ft_calls <- tbl |> as_flex_table(return_calls = TRUE)
+  expect_equal(ft_calls$footnote_header[[1]]$ref_symbols, 1L)
+  expect_equal(ft_calls$footnote_header[[2]]$ref_symbols, 2L)
+})
+
 test_that("modify_footnote_symbol() input checks", {
   tbl <- tbl_summary(trial, include = marker)
 
