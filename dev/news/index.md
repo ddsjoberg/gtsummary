@@ -2,6 +2,13 @@
 
 ## gtsummary (development version)
 
+- In
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
+  multiple footnote reference symbols on a single cell are now separated
+  by a comma (e.g. `1,2` instead of `12`), matching `gt` output. This
+  requires `flextable (>= 0.9.11)`.
+  ([\#2251](https://github.com/ddsjoberg/gtsummary/issues/2251))
+
 - Added
   [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
   [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
