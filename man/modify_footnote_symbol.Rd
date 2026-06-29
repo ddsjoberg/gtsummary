@@ -37,16 +37,17 @@ The symbol sequence may also be set for all tables via the
 \section{Common footnote marks}{
 
 
-The table below lists common footnote reference marks and their Unicode
-code points. The six marks correspond to those used in
-\code{gt::opt_footnote_marks(marks = "extended")}.\tabular{clll}{
-   Symbol \tab Name \tab Unicode \tab R string \cr
-   \code{*} \tab asterisk \tab \verb{U+002A} \tab \code{"*"} \cr
-   \verb{†} \tab dagger \tab \code{U+2020} \tab \code{"\\u2020"} \cr
-   \verb{‡} \tab double dagger \tab \code{U+2021} \tab \code{"\\u2021"} \cr
-   \verb{§} \tab section sign \tab \verb{U+00A7} \tab \code{"\\u00A7"} \cr
-   \verb{‖} \tab double vertical line \tab \code{U+2016} \tab \code{"\\u2016"} \cr
-   \verb{¶} \tab pilcrow (paragraph sign) \tab \verb{U+00B6} \tab \code{"\\u00B6"} \cr
+The table below lists common footnote reference marks and the R strings used
+to create them. The six marks correspond to those used in
+\code{gt::opt_footnote_marks(marks = "extended")}. Pass the R string (e.g.
+\code{"\\u2020"}) to the \code{symbol} argument to obtain the corresponding mark.\tabular{lll}{
+   Name \tab Unicode \tab R string \cr
+   asterisk \tab \verb{U+002A} \tab \code{"*"} \cr
+   dagger \tab \code{U+2020} \tab \code{"\\u2020"} \cr
+   double dagger \tab \code{U+2021} \tab \code{"\\u2021"} \cr
+   section sign \tab \verb{U+00A7} \tab \code{"\\u00A7"} \cr
+   double vertical line \tab \code{U+2016} \tab \code{"\\u2016"} \cr
+   pilcrow (paragraph sign) \tab \verb{U+00B6} \tab \code{"\\u00B6"} \cr
 }
 }
 
