@@ -2179,6 +2179,17 @@ N = 102</span></th>
 <code><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>To build a single table with the active theme temporarily
+ignored—without clearing the theme for the rest of your session—wrap the
+code in <code><a href="../reference/set_gtsummary_theme.html">without_gtsummary_theme()</a></code>. The expression is
+evaluated with the package defaults in effect, and the active theme is
+restored afterward.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># active theme is ignored only for this table</span></span>
+<span><span class="fu"><a href="../reference/set_gtsummary_theme.html">without_gtsummary_theme</a></span><span class="op">(</span></span>
+<span>  <span class="va">trial</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -2192,7 +2203,7 @@ with theme elements. To construct a personalized theme, create a named
 list of at least one theme element. Here’s an example of a theme that
 modifies the function that styles p-values and updates the default
 statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_theme</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="co"># round large p-values to two places</span></span>
@@ -2205,7 +2216,7 @@ statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary
 <p>Once you create the theme, first check the structure using
 <code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code>. Then apply or set the theme with
 <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme</a></span><span class="op">(</span><span class="va">my_theme</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">

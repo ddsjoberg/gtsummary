@@ -96,6 +96,22 @@ All {gtsummary} tables can be translated into another language using
 reset_gtsummary_theme()
 ```
 
+To build a single table with the active theme temporarily
+ignored—without clearing the theme for the rest of your session—wrap the
+code in
+[`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md).
+The expression is evaluated with the package defaults in effect, and the
+active theme is restored afterward.
+
+``` r
+
+# active theme is ignored only for this table
+without_gtsummary_theme(
+  trial |> 
+    tbl_summary(by = trt, include = c(age, grade))
+)
+```
+
 ## Writing Themes
 
 ### Theme Structure

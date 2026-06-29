@@ -13,6 +13,8 @@ gtsummary themes.
 - `with_gtsummary_theme()` evaluate an expression with a theme
   temporarily set
 
+- `without_gtsummary_theme()` evaluate an expression with no theme set
+
 - `check_gtsummary_theme()` checks if passed theme is valid
 
 ## Usage
@@ -30,6 +32,8 @@ with_gtsummary_theme(
   env = rlang::caller_env(),
   msg_ignored_elements = NULL
 )
+
+without_gtsummary_theme(expr, env = rlang::caller_env())
 
 check_gtsummary_theme(x)
 ```
@@ -101,6 +105,15 @@ set_gtsummary_theme_ex1 <-
 #> `add_stat_label()` has previously been applied. Returning gtsummary table
 #> unaltered.
 
-# reset gtsummary theme
-reset_gtsummary_theme()
+# evaluate an expression with the active theme temporarily ignored
+without_gtsummary_theme(
+  trial |>
+    tbl_summary(by = trt, include = c(age, grade)) |>
+    as_gt()
+)
+
+
+  
+
+Characteristic
 ```

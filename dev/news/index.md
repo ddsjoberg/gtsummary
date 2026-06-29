@@ -2,6 +2,12 @@
 
 ## gtsummary (development version)
 
+- Added
+  [`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/set_gtsummary_theme.md)
+  to evaluate an expression with the active gtsummary theme temporarily
+  ignored (package defaults in effect), restoring the theme afterward.
+  ([\#2284](https://github.com/ddsjoberg/gtsummary/issues/2284))
+
 - The `text_interpret` argument now accepts `"none"` (in addition to
   `"md"` and `"html"`), which renders text verbatim without
   markdown/HTML interpretation. The
