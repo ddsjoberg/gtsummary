@@ -1,9 +1,12 @@
 #' Modify Footnote Symbols
 #'
-#' Customize the symbols used to reference footnotes in a gtsummary table. By
-#' default, footnotes are referenced with sequential numbers (`1, 2, 3, ...`).
-#' This function replaces those numbers with a user-specified set of symbols,
-#' e.g. `c("*", "\u2020", "\u2021")` (an asterisk, dagger, and double dagger).
+#' - `modify_footnote_symbol()` customizes the symbols used to reference
+#'   footnotes in a gtsummary table. By default, footnotes are referenced with
+#'   sequential numbers (`1, 2, 3, ...`). This function replaces those numbers
+#'   with a user-specified set of symbols, e.g. `c("*", "\u2020", "\u2021")`
+#'   (an asterisk, dagger, and double dagger).
+#' - `remove_footnote_symbol()` resets the footnote reference marks back to the
+#'   default numbering.
 #'
 #' The symbol sequence may also be set for all tables via the
 #' `"pkgwide-chr:footnote_symbol"` theme element; a value set with
@@ -43,10 +46,15 @@
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # use symbols (instead of numbers) to reference footnotes
-#' trial |>
+#' tbl <-
+#'   trial |>
 #'   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
 #'   add_p() |>
 #'   modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021"))
+#' tbl
+#'
+#' # reset footnotes back to the default numbering
+#' tbl |> remove_footnote_symbol()
 NULL
 
 #' @export
@@ -68,6 +76,23 @@ modify_footnote_symbol <- function(x, symbol) {
 
   # store the ordered symbol sequence ------------------------------------------
   x$table_styling$footnote_symbol <- symbol
+
+  # update call list and return table ------------------------------------------
+  x$call_list <- updated_call_list
+  x
+}
+
+#' @export
+#' @rdname modify_footnote_symbol
+remove_footnote_symbol <- function(x) {
+  set_cli_abort_call()
+
+  # check inputs ---------------------------------------------------------------
+  check_class(x, "gtsummary")
+  updated_call_list <- c(x$call_list, list(remove_footnote_symbol = match.call()))
+
+  # reset footnote symbols to the default --------------------------------------
+  x$table_styling$footnote_symbol <- NULL
 
   # update call list and return table ------------------------------------------
   x$call_list <- updated_call_list
