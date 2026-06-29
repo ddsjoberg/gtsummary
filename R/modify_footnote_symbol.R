@@ -46,15 +46,10 @@
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true") && gtsummary:::is_pkg_installed("broom", ref = "cardx")
 #' # use symbols (instead of numbers) to reference footnotes
-#' tbl <-
-#'   trial |>
+#' trial |>
 #'   tbl_summary(by = trt, include = c(age, grade), missing = "no") |>
 #'   add_p() |>
 #'   modify_footnote_symbol(symbol = c("*", "\u2020", "\u2021"))
-#' tbl
-#'
-#' # reset footnotes back to the default numbering
-#' tbl |> remove_footnote_symbol()
 NULL
 
 #' @export
