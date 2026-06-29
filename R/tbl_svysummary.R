@@ -128,7 +128,7 @@ tbl_svysummary <- function(data,
       get_theme_element("tbl_summary-arg:missing", default = missing)
   }
   # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
-  # A bare string is permanently supported shorthand for `everything() ~ <string>`.
+  # A bare string is supported shorthand (for now) for `everything() ~ <string>`.
   missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
