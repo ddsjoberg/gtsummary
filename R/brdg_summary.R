@@ -32,7 +32,15 @@
 #'   named list of summary types
 #' @param statistic (named `list`)\cr
 #'   named list of summary statistic names
-#' @inheritParams tbl_summary
+#' @param missing (named `list`)\cr
+#'   named list with one element per variable, each assigned one of
+#'   `c("ifany", "no", "always")`, indicating whether to include a row of
+#'   missing/`NA` counts for that variable.
+#' @param missing_text (`string`)\cr
+#'   string indicating text shown on missing row. Default is `"Unknown"`.
+#' @param missing_stat (`string`)\cr
+#'   statistic to show on missing row. Default is `"{N_miss}"`. Possible values
+#'   are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #'
 #' @return a gtsummary object
 #' @name brdg_summary
@@ -552,19 +560,41 @@ pier_summary_missing_row <- function(cards,
                                      missing_text = "Unknown") {
   set_cli_abort_call()
 
-  # return empty tibble if no missing row requested
-  if (is_empty(variables) || missing == "no") {
+  # 2026-06-29: `missing=` may be a per-variable named list (one of
+  # "ifany"/"no"/"always" per variable) or a single scalar string. A scalar is
+  # supported shorthand (for now) and is expanded to apply to all variables.
+  if (!is.list(missing)) {
+    missing <- rep_named(variables, list(missing))
+  }
+
+  # return empty tibble if no variables or no missing row requested for any var
+  variables <- intersect(variables, names(missing))
+  if (is_empty(variables)) {
     return(dplyr::tibble())
   }
 
-  # if "ifany", replace the variables vector with those that have missing values
-  if (missing == "ifany") {
-    variables <-
+  # drop variables whose missing setting is "no"
+  variables <- variables[map_chr(missing[variables], identity) != "no"]
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
+  }
+
+  # for "ifany" variables, keep only those that actually have missing values
+  ifany_vars <- variables[map_chr(missing[variables], identity) == "ifany"]
+  if (!is_empty(ifany_vars)) {
+    ifany_with_miss <-
       cards |>
-      dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$variables) |>
+      dplyr::filter(.data$stat_name == "N_miss", .data$variable %in% .env$ifany_vars) |>
       dplyr::filter(.data$stat > 0) |>
       dplyr::pull("variable") |>
       unique()
+    # drop "ifany" variables that have no missing values (preserve order)
+    drop_ifany <- setdiff(ifany_vars, ifany_with_miss)
+    variables <- setdiff(variables, drop_ifany)
+  }
+
+  if (is_empty(variables)) {
+    return(dplyr::tibble())
   }
 
   # slightly modifying the `x` object for missing value calculations -----------
