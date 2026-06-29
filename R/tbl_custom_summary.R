@@ -7,6 +7,12 @@
 #' a custom function in charge of computing the statistics (see Details).
 #'
 #' @inheritParams tbl_summary
+#' @param missing,missing_text,missing_stat
+#'   Arguments dictating how and if missing values are presented:
+#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
+#'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
+#'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
 #' @param stat_fns ([`formula-list-selector`][syntax])\cr
 #'   Specifies the function to be used to compute the statistics
 #'   (see below for details and examples).
@@ -23,7 +29,7 @@
 #'
 #' @section Similarities with `tbl_summary()`:
 #' Please refer to the help file of [tbl_summary()] regarding the use of select
-#' helpers, and arguments `include`, `by`, `type`, `value`, `digits`, `missing` and
+#' helpers, and arguments `include`, `by`, `type`, `value`, `digits` and
 #' `missing_text`.
 #'
 #' @section `stat_fns` argument:
@@ -455,7 +461,7 @@ tbl_custom_summary <- function(data,
       variables = include,
       statistic = statistic,
       type = type,
-      missing = missing,
+      missing = rep_named(include, list(missing)),
       missing_stat = missing_stat,
       missing_text = missing_text
     ) |>
