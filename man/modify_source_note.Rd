@@ -20,8 +20,7 @@ A string to add as a source note.}
 String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
 \code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
-(useful when the text contains markdown-significant characters such as the
-asterisks in \code{add_significance_stars()} footnotes). Applies to tables
+(useful when the text contains markdown-significant characters). Applies to tables
 printed with \code{{gt}}.}
 
 \item{source_note_id}{(\code{integers})\cr

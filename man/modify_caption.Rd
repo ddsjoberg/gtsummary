@@ -19,8 +19,7 @@ for those outputs, only a string is accepted.}
 String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
 \code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
-(useful when the text contains markdown-significant characters such as the
-asterisks in \code{add_significance_stars()} footnotes). Applies to tables
+(useful when the text contains markdown-significant characters). Applies to tables
 printed with \code{{gt}}.}
 }
 \value{

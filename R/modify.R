@@ -24,8 +24,7 @@
 #'   String indicates whether text will be interpreted with
 #'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default), `"html"`, or
 #'   `"none"`. `"none"` applies no interpretation, rendering the text verbatim
-#'   (useful when the text contains markdown-significant characters such as the
-#'   asterisks in `add_significance_stars()` footnotes). Applies to tables
+#'   (useful when the text contains markdown-significant characters). Applies to tables
 #'   printed with `{gt}`.
 #' @param level (`integer`)\cr
 #'   An integer specifying which level to place the spanning header.
