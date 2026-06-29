@@ -270,12 +270,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
         expr(
           huxtable::add_footnote(
             text =
-              !!(x$table_styling$abbreviation$abbreviation |>
-              paste(collapse = ", ") %>%
-              paste0(
-                ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                ": ", .
-              ))
+              !!.assemble_abbreviation_source_note(x)
           )
         ),
       .default = list()
