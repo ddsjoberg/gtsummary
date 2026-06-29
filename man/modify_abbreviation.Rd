@@ -5,7 +5,7 @@
 \alias{remove_abbreviation}
 \title{Modify Abbreviations}
 \usage{
-modify_abbreviation(x, abbreviation, text_interpret = c("md", "html"))
+modify_abbreviation(x, abbreviation, text_interpret = c("md", "html", "none"))
 
 remove_abbreviation(x, abbreviation = NULL)
 }
@@ -19,8 +19,10 @@ will remove all abbreviation source notes.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
-Applies to tables printed with \code{{gt}}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default), \code{"html"}, or
+\code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
+(useful when the text contains markdown-significant characters). Applies to tables
+printed with \code{{gt}}.}
 }
 \value{
 Updated gtsummary object
