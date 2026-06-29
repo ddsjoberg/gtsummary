@@ -7,6 +7,7 @@
 #' - `reset_gtsummary_theme()` reset themes
 #' - `get_gtsummary_theme()` get a named list with all active theme elements
 #' - `with_gtsummary_theme()` evaluate an expression with a theme temporarily set
+#' - `without_gtsummary_theme()` evaluate an expression with no theme set
 #' - `check_gtsummary_theme()` checks if passed theme is valid
 #'
 #' @section Details:
@@ -45,6 +46,13 @@
 #'   tbl_summary(by = trt, include = c(age, grade, trt)) |>
 #'   add_stat_label() |>
 #'   as_gt()
+#'
+#' # evaluate an expression with the active theme temporarily ignored
+#' without_gtsummary_theme(
+#'   trial |>
+#'     tbl_summary(by = trt, include = c(age, grade)) |>
+#'     as_gt()
+#' )
 #'
 #' # reset gtsummary theme
 #' reset_gtsummary_theme()
@@ -170,6 +178,21 @@ with_gtsummary_theme <- function(x, expr,
   }
 
   invisible()
+}
+
+# ------------------------------------------------------------------------------
+#' @rdname set_gtsummary_theme
+#' @export
+without_gtsummary_theme <- function(expr, env = rlang::caller_env()) {
+  set_cli_abort_call()
+
+  # save current theme and restore it on exit (even if expr errors) ------------
+  current_theme <- get_gtsummary_theme()
+  on.exit(suppressMessages(set_gtsummary_theme(current_theme)), add = TRUE)
+
+  # clear all theme elements, then evaluate with package defaults in effect ----
+  reset_gtsummary_theme()
+  eval_tidy({{ expr }}, env = env)
 }
 
 # ------------------------------------------------------------------------------
