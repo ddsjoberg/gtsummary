@@ -84,3 +84,22 @@ test_that("remove_source_note(source_note_id) messaging", {
       remove_source_note(source_note_id = 100)
   )
 })
+
+test_that("modify_source_note(text_interpret = 'none') stores identity and renders verbatim", {
+  # accepts "none" and stores the `identity` interpret function (#1987)
+  tbl <- tbl_summary(trial, include = marker) |>
+    modify_source_note("*literal note*", text_interpret = "none")
+  expect_equal(
+    tbl$table_styling$source_note$text_interpret,
+    "identity"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    modify_source_note(tbl_summary(trial, include = marker), "x", text_interpret = "latex")
+  )
+
+  skip_if_pkg_not_installed("gt")
+  html <- as_gt(tbl) |> gt::as_raw_html()
+  expect_match(html, "\\*literal note\\*", fixed = FALSE)
+})
