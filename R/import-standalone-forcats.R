@@ -6,7 +6,7 @@
 # ---
 # repo: insightsengineering/standalone
 # file: standalone-forcats.R
-# last-updated: 2025-05-03
+# last-updated: 2026-06-30
 # license: https://unlicense.org
 # imports:
 # ---
@@ -16,6 +16,16 @@
 # of programming.
 #
 # ## Changelog
+# 2026-06-30
+#   - `fct_collapse()` no longer relies on the base R `%||%` operator, which is
+#     only available in R >= 4.4.
+#   - `fct_reorder()` partitions values with a single `split()` call instead of
+#     scanning the full vector once per level (large speed/memory improvement
+#     for factors with many levels).
+# 2025-07-25
+#   - add `fct_reorder()` function.
+# 2025-06-24
+#   - add `fct_collapse()` function (and its internal helper functions).
 # 2025-05-03
 #   - `add fct_relevel()` fix for non-factor inputs
 # 2025-02-24
@@ -89,6 +99,99 @@ fct_relevel <- function(f, ..., after = 0L) {
   new_levels <- append(setdiff(old_levels, first_levels), first_levels, after = after)
   new_factor <- factor(f, levels = new_levels)
   return(new_factor)
+}
+
+# internal forcats function used within `fct_collapse()`
+# to re-value factor levels
+.lvls_revalue <- function(f, new_levels) {
+  if (length(new_levels) != nlevels(f)) {
+    n_new <- length(new_levels)
+    n_old <- nlevels(f)
+    cli::cli_abort("{.arg new_levels} must be the same length ({n_new}) as {.code levels(f)} ({n_old}).")
+  }
+  if (anyDuplicated(new_levels)) {
+    u_levels <- unique(new_levels)
+    index <- match(new_levels, u_levels)
+    out <- index[f]
+    attributes(out) <- attributes(f)
+    attr(out, "levels") <- u_levels
+    out
+  } else {
+    attr(f, "levels") <- new_levels
+    f
+  }
+}
+
+# internal forcats function used within `fct_collapse()`
+# to rename factor levels
+.lvls_rename <- function(f, new_levels) {
+  old_levels <- levels(f)
+  idx <- match(new_levels, old_levels)
+  if (any(is.na(idx))) {
+    bad <- new_levels[is.na(idx)]
+    warning("Unknown levels in `f`: ", paste(bad, collapse = ", "), call. = FALSE)
+    new_levels <- new_levels[!is.na(idx)]
+    idx <- idx[!is.na(idx)]
+  }
+  old_levels[idx] <- names(new_levels)
+  old_levels
+}
+
+# internal forcats function used within `fct_collapse()`
+# to process other factor levels not being collapsed
+.lvls_other <- function(f, keep, other_level = "Other") {
+  if (all(keep)) {
+    f
+  } else {
+    new_levels <- ifelse(keep, levels(f), other_level)
+    f <- .lvls_revalue(f, new_levels)
+    fct_relevel(f, other_level, after = Inf)
+  }
+}
+
+fct_collapse <- function(f, ..., other_level = NULL) {
+  if (!inherits(f, "factor")) f <- factor(f)
+
+  dots <- rlang::list2(...)
+  old <- unlist(dots, use.names = FALSE)
+  if (is.null(old)) old <- character()
+  new <- rep(names(dots), lengths(dots))
+
+  # collapse/re-value factor levels using new names
+  out <- .lvls_revalue(f, .lvls_rename(f, rlang::set_names(old, new)))
+  # add other levels not being collapsed
+  if (!is.null(other_level)) out <- .lvls_other(out, levels(out) %in% new, other_level)
+
+  out
+}
+
+fct_reorder <- function(.f, .x, .fun = stats::median, ..., .na_rm = NULL, .default = Inf, .desc = FALSE) {
+  if (!inherits(.f, "factor")) .f <- factor(.f)
+  stopifnot(length(.f) == length(.x))
+  .fun <- as.function(.fun)
+
+  lvls <- levels(.f)
+
+  # Partition `.x` by level in a single pass (O(n)) instead of re-scanning the
+  # whole vector once per level (O(n * nlevels)).
+  groups <- split(.x, .f)
+
+  # Compute summary statistic per level
+  summary_vals <- vapply(lvls, function(lvl) {
+    vals <- groups[[lvl]]
+    if (isTRUE(.na_rm)) {
+      vals <- vals[!is.na(vals)]
+    }
+    if (length(vals) == 0) {
+      return(.default)
+    }
+    .fun(vals, ...)
+  }, numeric(1))
+
+  # Reorder levels based on summary_vals
+  new_levels <- lvls[order(summary_vals, decreasing = .desc, na.last = TRUE)]
+
+  factor(.f, levels = new_levels)
 }
 
 # nocov end
