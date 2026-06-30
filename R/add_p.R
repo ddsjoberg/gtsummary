@@ -277,6 +277,17 @@ calculate_and_add_test_results <- function(x, include, group = NULL, test.args, 
           # for `tbl_continuous` tables we need to ensure the 'variable' is the one from the table
           dplyr::mutate( variable = .env$variable)
 
+        # check that add_difference() tests return an estimate column
+        if (calling_fun == "add_difference" && !"estimate" %in% names(res)) {
+          cli::cli_abort(
+            c("The test for variable {.val {variable}} did not return a
+               difference estimate.",
+              i = "Tests used with {.fun add_difference} must return an {.val estimate} statistic.",
+              i = "Use {.fun add_p} instead for tests that only return a p-value."),
+            call = get_cli_abort_call()
+          )
+        }
+
         res
       }
     ) |>
