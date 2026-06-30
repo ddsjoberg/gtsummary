@@ -5,7 +5,14 @@
 \alias{remove_abbreviation}
 \title{Modify Abbreviations}
 \usage{
-modify_abbreviation(x, abbreviation, text_interpret = c("md", "html", "none"))
+modify_abbreviation(
+  x,
+  abbreviation,
+  text_interpret = c("md", "html", "none"),
+  prefix = NULL,
+  sep1 = NULL,
+  sep2 = NULL
+)
 
 remove_abbreviation(x, abbreviation = NULL)
 }
@@ -13,9 +20,11 @@ remove_abbreviation(x, abbreviation = NULL)
 \item{x}{(\code{gtsummary})\cr
 A gtsummary object}
 
-\item{abbreviation}{(\code{string})\cr
-a string. In \code{remove_abbreviation()}, the default value is \code{NULL}, which
-will remove all abbreviation source notes.}
+\item{abbreviation}{(\code{character})\cr
+a character vector of one or more abbreviations to add. In
+\code{remove_abbreviation()}, the default value is \code{NULL}, which will remove all
+abbreviation source notes; otherwise a character vector of abbreviations to
+remove.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
@@ -23,6 +32,28 @@ String indicates whether text will be interpreted with
 \code{"none"}. \code{"none"} applies no interpretation, rendering the text verbatim
 (useful when the text contains markdown-significant characters). Applies to tables
 printed with \code{{gt}}.}
+
+\item{prefix, sep1, sep2}{(\code{character})\cr
+optional arguments controlling how the abbreviation source note is
+assembled as \code{paste0(prefix, sep1, paste(abbreviations, collapse = sep2))}.
+\itemize{
+\item \code{prefix} is a character vector of length two giving the leading text, as
+\code{c(singular, plural)}. The first element is used when a single
+abbreviation is present and the second when multiple abbreviations are
+present. Pass \code{c("", "")} to omit the leading text. Defaults to \code{NULL},
+in which case the theme element \code{"modify_abbreviation-arg:prefix"} is
+used, falling back to the translated default
+\code{c("Abbreviation", "Abbreviations")}. Unlike the default, a user-supplied
+\code{prefix} is used as-is and is not translated.
+\item \code{sep1} is a string giving the separator between the prefix and the
+abbreviations. Defaults to \code{NULL}, in which case the theme element
+\code{"modify_abbreviation-arg:sep1"} is used, falling back to the default
+\code{": "}. It is omitted when the resolved prefix is empty.
+\item \code{sep2} is a string giving the separator placed between abbreviations.
+Defaults to \code{NULL}, in which case the theme element
+\code{"modify_abbreviation-arg:sep2"} is used, falling back to the default
+\code{", "}.
+}}
 }
 \value{
 Updated gtsummary object
@@ -47,6 +78,21 @@ tbl_summary(
 lm(marker ~ trt, trial) |>
   tbl_regression() |>
   remove_abbreviation("CI = Confidence Interval")
+
+# Example 3 ----------------------------------
+# add multiple abbreviations at once and customize the prefix and separator
+tbl_summary(
+  trial,
+  by = trt,
+  include = age,
+  type = age ~ "continuous2"
+) |>
+  modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
+  modify_abbreviation(
+    c("IQR = Interquartile Range", "SD = Standard Deviation"),
+    prefix = c("Key", "Keys"),
+    sep2 = "; "
+  )
 \dontshow{\}) # examplesIf}
 }
 \seealso{
