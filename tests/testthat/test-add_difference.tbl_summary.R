@@ -919,6 +919,10 @@ test_that("add_difference.tbl_summary(levels) composes with adj.vars and test", 
     trial |>
       tbl_summary(by = grade, include = age, missing = "no") |>
       add_difference(levels = c("I", "III"), test = everything() ~ "t.test"),
+    NA
+  )
+})
+
 test_that("add_difference() errors when test does not return an estimate", {
   # custom test that returns only p.value, no estimate
   no_estimate_test <- function(data, variable, by, ...) {
