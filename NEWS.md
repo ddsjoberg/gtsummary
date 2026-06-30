@@ -2,6 +2,8 @@
 
 * Fixed bug in `tbl_strata_nested_stack()` where second-level strata headers were dropped in all but the first group when using three or more strata levels. (#2418)
 
+* `modify_abbreviation()` and `remove_abbreviation()` now accept a character vector of abbreviations, allowing multiple abbreviations to be added or removed in a single call. `modify_abbreviation()` also gains `prefix`, `sep1`, and `sep2` arguments to customize the abbreviation source note's leading text (e.g. `c("Abbr.", "Abbrs.")`), the separator between the prefix and the abbreviations (e.g. `": "`), and the separator between abbreviations (e.g. `"; "`). Defaults are also configurable via the `modify_abbreviation-arg:prefix`, `modify_abbreviation-arg:sep1`, and `modify_abbreviation-arg:sep2` theme elements. (#2172)
+
 * The `missing` argument of `tbl_summary()` and `tbl_svysummary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)
 
 * Updated French language translations. (#2341; @nalimilan)

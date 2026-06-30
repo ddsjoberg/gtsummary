@@ -42,6 +42,8 @@
 #'   row is selected, the split will not happen as it is supposed to happen after
 #'   the last row.
 #'
+#' To paginate gtsummary tables, you can use the [pager R package](https://insightsengineering.github.io/pager/).
+#'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
 #' # Split by rows

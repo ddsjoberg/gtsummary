@@ -291,12 +291,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
         expr(
           flextable::add_footer_lines(
             value = flextable::as_paragraph(
-              !!(x$table_styling$abbreviation$abbreviation |>
-                paste(collapse = ", ") %>%
-                paste0(
-                  ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                  ": ", .
-                ))
+              !!.assemble_abbreviation_source_note(x)
             )
           )
         ),
