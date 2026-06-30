@@ -267,7 +267,11 @@ add_difference.tbl_summary <- function(x,
 #' resulting table keeps every group while the difference is calculated on the
 #' selected pair.
 #'
-#' @param x (`tbl_summary`)\cr a gtsummary table
+#' Handles both `tbl_summary()` (where `x$inputs$data` is a data frame) and
+#' `tbl_svysummary()` (where `x$inputs$data` is a `survey.design` whose data
+#' frame lives in `$variables`).
+#'
+#' @param x (`tbl_summary`/`tbl_svysummary`)\cr a gtsummary table
 #' @param levels (`vector`)\cr the user-supplied `levels` argument (may be `NULL`)
 #'
 #' @return the (possibly modified) gtsummary table `x`
@@ -275,7 +279,9 @@ add_difference.tbl_summary <- function(x,
 #' @noRd
 .process_difference_levels <- function(x, levels) {
   by_var <- x$inputs$by
-  by_col <- x$inputs$data[[by_var]]
+  is_survey <- inherits(x$inputs$data, "survey.design")
+  by_col <-
+    if (is_survey) x$inputs$data$variables[[by_var]] else x$inputs$data[[by_var]]
 
   # the distinct, non-missing levels observed in the `by` column (in level order)
   if (is.factor(by_col)) {
@@ -336,9 +342,27 @@ add_difference.tbl_summary <- function(x,
 
   # subset the data to the two selected levels and re-level the `by` factor so
   # the difference is computed as `levels[1]` minus `levels[2]`
-  data <- x$inputs$data
-  data <- data[as.character(data[[by_var]]) %in% as.character(levels), , drop = FALSE]
-  data[[by_var]] <- factor(as.character(data[[by_var]]), levels = as.character(levels))
+  if (is_survey) {
+    # save original column labels (subsetting a survey design strips them)
+    original_lbls <- lapply(x$inputs$data$variables, \(col) attr(col, "label"))
+
+    data <- x$inputs$data
+    data <-
+      call2("subset", x = expr(data),
+            subset = expr(as.character(!!sym(by_var)) %in% !!as.character(levels))) |>
+      eval()
+    data$variables[[by_var]] <-
+      factor(as.character(data$variables[[by_var]]), levels = as.character(levels))
+
+    # restore column labels
+    for (v in names(original_lbls)) {
+      attr(data$variables[[v]], "label") <- original_lbls[[v]]
+    }
+  } else {
+    data <- x$inputs$data
+    data <- data[as.character(data[[by_var]]) %in% as.character(levels), , drop = FALSE]
+    data[[by_var]] <- factor(as.character(data[[by_var]]), levels = as.character(levels))
+  }
 
   x$inputs$data <- data
 
