@@ -4,9 +4,11 @@
 #' a single specialized source note.
 #'
 #' @inheritParams modify_footnote2
-#' @param abbreviation (`string`)\cr
-#'   a string. In `remove_abbreviation()`, the default value is `NULL`, which
-#'   will remove all abbreviation source notes.
+#' @param abbreviation (`character`)\cr
+#'   a character vector of one or more abbreviations to add. In
+#'   `remove_abbreviation()`, the default value is `NULL`, which will remove all
+#'   abbreviation source notes; otherwise a character vector of abbreviations to
+#'   remove.
 #' @param prefix,sep1,sep2 (`character`)\cr
 #'   optional arguments controlling how the abbreviation source note is
 #'   assembled as `paste0(prefix, sep1, paste(abbreviations, collapse = sep2))`.
@@ -48,7 +50,7 @@
 #'   remove_abbreviation("CI = Confidence Interval")
 #'
 #' # Example 3 ----------------------------------
-#' # customize the prefix and separators of the abbreviation source note
+#' # add multiple abbreviations at once and customize the prefix and separators
 #' tbl_summary(
 #'   trial,
 #'   by = trt,
@@ -56,10 +58,8 @@
 #'   type = age ~ "continuous2"
 #' ) |>
 #'   modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
-#'   modify_abbreviation("IQR = Interquartile Range") |>
-#'   modify_abbreviation("SD = Standard Deviation") |>
 #'   modify_abbreviation(
-#'     "N = Number of Observations",
+#'     c("IQR = Interquartile Range", "SD = Standard Deviation"),
 #'     prefix = c("Key", "Keys"),
 #'     sep1 = " - ",
 #'     sep2 = "; "
@@ -75,7 +75,13 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_string(abbreviation)
+  check_class(abbreviation, "character")
+  if (is_empty(abbreviation)) {
+    cli::cli_abort(
+      "The {.arg abbreviation} argument must specify at least one abbreviation.",
+      call = get_cli_abort_call()
+    )
+  }
   text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
   if (!is.null(prefix) && (!is.character(prefix) || length(prefix) != 2L)) {
     cli::cli_abort(
@@ -106,7 +112,7 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
 
   # check inputs ---------------------------------------------------------------
   check_class(x, "gtsummary")
-  check_string(abbreviation, allow_empty = TRUE)
+  if (!is.null(abbreviation)) check_class(abbreviation, "character")
 
   # remove all abbreviations if abbreviation=NULL ------------------------------
   if (is_empty(abbreviation)) {
@@ -122,7 +128,7 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
   if (nrow(x$table_styling$abbreviation) == 0L) {
     cli::cli_abort("There are no abbreviations to remove.", call = get_cli_abort_call())
   }
-  if (!isTRUE(abbreviation %in% x$table_styling$abbreviation$abbreviation)) {
+  if (!all(abbreviation %in% x$table_styling$abbreviation$abbreviation)) {
     cli::cli_abort(
       "The {.arg abbreviation} argument must be one of {.val {unique(x$table_styling$abbreviation$abbreviation)}}.",
       call = get_cli_abort_call()

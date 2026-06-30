@@ -18,6 +18,44 @@ test_that("modify_abbreviation()", {
   )
 })
 
+test_that("modify_abbreviation() accepts a character vector of abbreviations", {
+  expect_silent(
+    tbl <-
+      tbl_summary(trial, include = marker) |>
+      modify_abbreviation(c("Q1 = First Quartile", "Q3 = Third Quartile"))
+  )
+  expect_equal(
+    tbl$table_styling$abbreviation,
+    dplyr::tribble(
+      ~column,               ~abbreviation, ~text_interpret,
+      NA_character_, "Q1 = First Quartile",        "gt::md",
+      NA_character_, "Q3 = Third Quartile",        "gt::md"
+    )
+  )
+  expect_equal(
+    as.character(as_gt(tbl)$`_source_notes`[[1]]),
+    "Abbreviations: Q1 = First Quartile, Q3 = Third Quartile"
+  )
+
+  # an empty character vector is rejected
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = marker) |>
+      modify_abbreviation(character(0))
+  )
+})
+
+test_that("remove_abbreviation() accepts a character vector of abbreviations", {
+  tbl <-
+    tbl_summary(trial, include = marker) |>
+    modify_abbreviation(c("Q1 = First Quartile", "Q3 = Third Quartile", "SD = Standard Deviation")) |>
+    remove_abbreviation(c("Q1 = First Quartile", "Q3 = Third Quartile"))
+  expect_equal(
+    tbl$table_styling$abbreviation$abbreviation,
+    "SD = Standard Deviation"
+  )
+})
+
 
 test_that("remove_abbreviation()", {
   expect_silent(

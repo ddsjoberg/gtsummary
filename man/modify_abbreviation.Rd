@@ -20,9 +20,11 @@ remove_abbreviation(x, abbreviation = NULL)
 \item{x}{(\code{gtsummary})\cr
 A gtsummary object}
 
-\item{abbreviation}{(\code{string})\cr
-a string. In \code{remove_abbreviation()}, the default value is \code{NULL}, which
-will remove all abbreviation source notes.}
+\item{abbreviation}{(\code{character})\cr
+a character vector of one or more abbreviations to add. In
+\code{remove_abbreviation()}, the default value is \code{NULL}, which will remove all
+abbreviation source notes; otherwise a character vector of abbreviations to
+remove.}
 
 \item{text_interpret}{(\code{string})\cr
 String indicates whether text will be interpreted with
@@ -78,7 +80,7 @@ lm(marker ~ trt, trial) |>
   remove_abbreviation("CI = Confidence Interval")
 
 # Example 3 ----------------------------------
-# customize the prefix and separators of the abbreviation source note
+# add multiple abbreviations at once and customize the prefix and separators
 tbl_summary(
   trial,
   by = trt,
@@ -86,10 +88,8 @@ tbl_summary(
   type = age ~ "continuous2"
 ) |>
   modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
-  modify_abbreviation("IQR = Interquartile Range") |>
-  modify_abbreviation("SD = Standard Deviation") |>
   modify_abbreviation(
-    "N = Number of Observations",
+    c("IQR = Interquartile Range", "SD = Standard Deviation"),
     prefix = c("Key", "Keys"),
     sep1 = " - ",
     sep2 = "; "
