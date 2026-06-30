@@ -91,7 +91,6 @@ tbl_summary(
   modify_abbreviation(
     c("IQR = Interquartile Range", "SD = Standard Deviation"),
     prefix = c("Key", "Keys"),
-    sep1 = " - ",
     sep2 = "; "
   )
 \dontshow{\}) # examplesIf}
