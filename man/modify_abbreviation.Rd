@@ -80,7 +80,7 @@ lm(marker ~ trt, trial) |>
   remove_abbreviation("CI = Confidence Interval")
 
 # Example 3 ----------------------------------
-# add multiple abbreviations at once and customize the prefix and separators
+# add multiple abbreviations at once and customize the prefix and separator
 tbl_summary(
   trial,
   by = trt,
@@ -91,7 +91,6 @@ tbl_summary(
   modify_abbreviation(
     c("IQR = Interquartile Range", "SD = Standard Deviation"),
     prefix = c("Key", "Keys"),
-    sep1 = " - ",
     sep2 = "; "
   )
 \dontshow{\}) # examplesIf}
