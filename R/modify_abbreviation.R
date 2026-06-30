@@ -73,14 +73,11 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
   # check inputs ---------------------------------------------------------------
+  check_not_missing(x)
+  check_not_missing(abbreviation)
   check_class(x, "gtsummary")
   check_class(abbreviation, "character")
-  if (is_empty(abbreviation)) {
-    cli::cli_abort(
-      "The {.arg abbreviation} argument must specify at least one abbreviation.",
-      call = get_cli_abort_call()
-    )
-  }
+
   text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
   if (!is.null(prefix) && (!is.character(prefix) || length(prefix) != 2L)) {
     cli::cli_abort(
