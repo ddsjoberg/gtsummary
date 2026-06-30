@@ -232,14 +232,18 @@ add_difference.tbl_summary <- function(x,
     )
 
   # when `levels` is supplied, note the compared pair and direction ------------
+  # use `replace = FALSE` so this footnote is appended to (not overwriting) the
+  # footnote describing the difference method/test.
   if (!is_empty(levels)) {
     footnote_levels <-
       glue("{translate_string('Difference')}: {levels[1]} - {levels[2]}")
+    footnote_columns <-
+      intersect(c("estimate", "conf.low", "conf.high", "p.value"), names(x$table_body))
     x <-
-      modify_table_styling(
+      .modify_footnote_header(
         x,
-        columns = any_of(c("estimate", "conf.low", "conf.high", "p.value")),
-        footnote = footnote_levels
+        lst_footnotes = rep_named(footnote_columns, list(footnote_levels)),
+        replace = FALSE
       )
   }
 
