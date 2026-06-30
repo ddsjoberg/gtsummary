@@ -371,12 +371,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       nrow(x$table_styling$abbreviation) > 0L ~
         expr(
           kableExtra::footnote(
-            general = !!(x$table_styling$abbreviation$abbreviation |>
-                           paste(collapse = ", ") %>%
-                           paste0(
-                             ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                             ": ", .
-                           )),
+            general = !!.assemble_abbreviation_source_note(x),
             escape = !!escape,
             general_title = ""
           )
