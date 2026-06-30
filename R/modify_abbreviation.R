@@ -46,6 +46,24 @@
 #' lm(marker ~ trt, trial) |>
 #'   tbl_regression() |>
 #'   remove_abbreviation("CI = Confidence Interval")
+#'
+#' # Example 3 ----------------------------------
+#' # customize the prefix and separators of the abbreviation source note
+#' tbl_summary(
+#'   trial,
+#'   by = trt,
+#'   include = age,
+#'   type = age ~ "continuous2"
+#' ) |>
+#'   modify_table_body(~dplyr::mutate(.x, label = sub("Q1, Q3", "IQR", x = label))) |>
+#'   modify_abbreviation("IQR = Interquartile Range") |>
+#'   modify_abbreviation("SD = Standard Deviation") |>
+#'   modify_abbreviation(
+#'     "N = Number of Observations",
+#'     prefix = c("Key", "Keys"),
+#'     sep1 = " - ",
+#'     sep2 = "; "
+#'   )
 NULL
 
 #' @export
