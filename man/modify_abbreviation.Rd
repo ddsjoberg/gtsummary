@@ -91,7 +91,6 @@ tbl_summary(
   modify_abbreviation(
     "N = Number of Observations",
     prefix = c("Key", "Keys"),
-    sep1 = " - ",
     sep2 = "; "
   )
 \dontshow{\}) # examplesIf}
