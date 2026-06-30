@@ -10,7 +10,8 @@ modify_abbreviation(
   abbreviation,
   text_interpret = c("md", "html", "none"),
   prefix = NULL,
-  sep = NULL
+  sep1 = NULL,
+  sep2 = NULL
 )
 
 remove_abbreviation(x, abbreviation = NULL)
@@ -30,21 +31,27 @@ String indicates whether text will be interpreted with
 (useful when the text contains markdown-significant characters). Applies to tables
 printed with \code{{gt}}.}
 
-\item{prefix}{(\code{character})\cr
-an optional character vector of length two giving the leading text printed
-before the abbreviations, as \code{c(singular, plural)}. The first element is
-used when a single abbreviation is present and the second when multiple
-abbreviations are present. Pass \code{c("", "")} to omit the leading text.
+\item{prefix, sep1, sep2}{(\code{character})\cr
+optional arguments controlling how the abbreviation source note is
+assembled as \code{paste0(prefix, sep1, paste(abbreviations, collapse = sep2))}.
+\itemize{
+\item \code{prefix} is a character vector of length two giving the leading text, as
+\code{c(singular, plural)}. The first element is used when a single
+abbreviation is present and the second when multiple abbreviations are
+present. Pass \code{c("", "")} to omit the leading text. Defaults to \code{NULL},
+in which case the theme element \code{"modify_abbreviation-arg:prefix"} is
+used, falling back to the translated default
+\code{c("Abbreviation", "Abbreviations")}. Unlike the default, a user-supplied
+\code{prefix} is used as-is and is not translated.
+\item \code{sep1} is a string giving the separator between the prefix and the
+abbreviations. Defaults to \code{NULL}, in which case the theme element
+\code{"modify_abbreviation-arg:sep1"} is used, falling back to the default
+\code{": "}. It is omitted when the resolved prefix is empty.
+\item \code{sep2} is a string giving the separator placed between abbreviations.
 Defaults to \code{NULL}, in which case the theme element
-\code{"modify_abbreviation-arg:prefix"} is used, falling back to the translated
-default \code{c("Abbreviation", "Abbreviations")}. Unlike the default, a
-user-supplied \code{prefix} is used as-is and is not translated.}
-
-\item{sep}{(\code{string})\cr
-an optional string giving the separator placed between abbreviations.
-Defaults to \code{NULL}, in which case the theme element
-\code{"modify_abbreviation-arg:sep"} is used, falling back to the default
-\code{", "}.}
+\code{"modify_abbreviation-arg:sep2"} is used, falling back to the default
+\code{", "}.
+}}
 }
 \value{
 Updated gtsummary object
