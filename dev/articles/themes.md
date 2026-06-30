@@ -198,3 +198,5 @@ input for the argument.
 | `tbl_svysummary-arg:digits`, `tbl_svysummary-arg:label`, `tbl_svysummary-arg:missing`, `tbl_svysummary-arg:missing_text`, `tbl_svysummary-arg:missing_stat`, `tbl_svysummary-arg:percent`, `tbl_svysummary-arg:sort`, `tbl_svysummary-arg:statistic`, `tbl_svysummary-arg:type`, `tbl_svysummary-arg:value` |
 | tbl_custom_summary |
 | `tbl_custom_summary-arg:digits`, `tbl_custom_summary-arg:label`, `tbl_custom_summary-arg:missing`, `tbl_custom_summary-arg:missing_text`, `tbl_custom_summary-arg:type`, `tbl_custom_summary-arg:value` |
+| modify_abbreviation |
+| `modify_abbreviation-arg:prefix`, `modify_abbreviation-arg:sep1`, `modify_abbreviation-arg:sep2` |

@@ -2,6 +2,21 @@
 
 ## gtsummary (development version)
 
+- [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
+  and
+  [`remove_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
+  now accept a character vector of abbreviations, allowing multiple
+  abbreviations to be added or removed in a single call.
+  [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
+  also gains `prefix`, `sep1`, and `sep2` arguments to customize the
+  abbreviation source note’s leading text (e.g. `c("Abbr.", "Abbrs.")`),
+  the separator between the prefix and the abbreviations (e.g. `": "`),
+  and the separator between abbreviations (e.g. `"; "`). Defaults are
+  also configurable via the `modify_abbreviation-arg:prefix`,
+  `modify_abbreviation-arg:sep1`, and `modify_abbreviation-arg:sep2`
+  theme elements.
+  ([\#2172](https://github.com/ddsjoberg/gtsummary/issues/2172))
+
 - The `missing` argument of
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   and
