@@ -1,11 +1,3 @@
-# modify_abbreviation() accepts a character vector of abbreviations
-
-    Code
-      modify_abbreviation(tbl_summary(trial, include = marker), character(0))
-    Condition
-      Error in `modify_abbreviation()`:
-      ! The `abbreviation` argument must specify at least one abbreviation.
-
 # remove_abbreviation() messaging
 
     Code

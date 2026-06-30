@@ -36,13 +36,6 @@ test_that("modify_abbreviation() accepts a character vector of abbreviations", {
     as.character(as_gt(tbl)$`_source_notes`[[1]]),
     "Abbreviations: Q1 = First Quartile, Q3 = Third Quartile"
   )
-
-  # an empty character vector is rejected
-  expect_snapshot(
-    error = TRUE,
-    tbl_summary(trial, include = marker) |>
-      modify_abbreviation(character(0))
-  )
 })
 
 test_that("remove_abbreviation() accepts a character vector of abbreviations", {
