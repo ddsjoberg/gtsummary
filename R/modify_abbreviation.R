@@ -7,20 +7,25 @@
 #' @param abbreviation (`string`)\cr
 #'   a string. In `remove_abbreviation()`, the default value is `NULL`, which
 #'   will remove all abbreviation source notes.
-#' @param prefix (`character`)\cr
-#'   an optional character vector of length two giving the leading text printed
-#'   before the abbreviations, as `c(singular, plural)`. The first element is
-#'   used when a single abbreviation is present and the second when multiple
-#'   abbreviations are present. Pass `c("", "")` to omit the leading text.
-#'   Defaults to `NULL`, in which case the theme element
-#'   `"modify_abbreviation-arg:prefix"` is used, falling back to the translated
-#'   default `c("Abbreviation", "Abbreviations")`. Unlike the default, a
-#'   user-supplied `prefix` is used as-is and is not translated.
-#' @param sep (`string`)\cr
-#'   an optional string giving the separator placed between abbreviations.
-#'   Defaults to `NULL`, in which case the theme element
-#'   `"modify_abbreviation-arg:sep"` is used, falling back to the default
-#'   `", "`.
+#' @param prefix,sep1,sep2 (`character`)\cr
+#'   optional arguments controlling how the abbreviation source note is
+#'   assembled as `paste0(prefix, sep1, paste(abbreviations, collapse = sep2))`.
+#'   - `prefix` is a character vector of length two giving the leading text, as
+#'     `c(singular, plural)`. The first element is used when a single
+#'     abbreviation is present and the second when multiple abbreviations are
+#'     present. Pass `c("", "")` to omit the leading text. Defaults to `NULL`,
+#'     in which case the theme element `"modify_abbreviation-arg:prefix"` is
+#'     used, falling back to the translated default
+#'     `c("Abbreviation", "Abbreviations")`. Unlike the default, a user-supplied
+#'     `prefix` is used as-is and is not translated.
+#'   - `sep1` is a string giving the separator between the prefix and the
+#'     abbreviations. Defaults to `NULL`, in which case the theme element
+#'     `"modify_abbreviation-arg:sep1"` is used, falling back to the default
+#'     `": "`. It is omitted when the resolved prefix is empty.
+#'   - `sep2` is a string giving the separator placed between abbreviations.
+#'     Defaults to `NULL`, in which case the theme element
+#'     `"modify_abbreviation-arg:sep2"` is used, falling back to the default
+#'     `", "`.
 #'
 #' @return Updated gtsummary object
 #' @name modify_abbreviation
@@ -46,7 +51,7 @@ NULL
 #' @export
 #' @rdname modify_abbreviation
 modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html", "none"),
-                                prefix = NULL, sep = NULL) {
+                                prefix = NULL, sep1 = NULL, sep2 = NULL) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -60,13 +65,14 @@ modify_abbreviation <- function(x, abbreviation, text_interpret = c("md", "html"
       call = get_cli_abort_call()
     )
   }
-  if (!is.null(sep)) check_string(sep)
+  if (!is.null(sep1)) check_string(sep1)
+  if (!is.null(sep2)) check_string(sep2)
 
   # add updates to `x$table_styling$abbreviation` ------------------------------
   x <- x |>
     .modify_abbreviation(
       abbreviation = abbreviation, text_interpret = text_interpret,
-      prefix = prefix, sep = sep
+      prefix = prefix, sep1 = sep1, sep2 = sep2
     )
 
   # update call list and return table ------------------------------------------
@@ -121,7 +127,7 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
 #  is tied to a column and it only printed when the column appears in the
 #  final printed table. This is primarily used internally.
 .modify_abbreviation <- function(x, abbreviation, text_interpret = "md", column = NA_character_,
-                                 prefix = NULL, sep = NULL) {
+                                 prefix = NULL, sep1 = NULL, sep2 = NULL) {
   previous <- x$table_styling$abbreviation
   updated <- previous |>
     dplyr::bind_rows(
@@ -136,24 +142,26 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
   # then override with the newly supplied (non-NULL) values
   updated <- .restore_abbreviation_attr(updated, previous)
   if (!is.null(prefix)) attr(updated, "prefix") <- prefix
-  if (!is.null(sep)) attr(updated, "sep") <- sep
+  if (!is.null(sep1)) attr(updated, "sep1") <- sep1
+  if (!is.null(sep2)) attr(updated, "sep2") <- sep2
 
   x$table_styling$abbreviation <- updated
   x
 }
 
-# copy the `prefix`/`sep` attributes from `from` onto `to`; used to persist
-# them across the dplyr operations that rebuild the abbreviation tibble (dplyr
-# drops non-standard attributes).
+# copy the `prefix`/`sep1`/`sep2` attributes from `from` onto `to`; used to
+# persist them across the dplyr operations that rebuild the abbreviation tibble
+# (dplyr drops non-standard attributes).
 .restore_abbreviation_attr <- function(to, from) {
   attr(to, "prefix") <- attr(from, "prefix")
-  attr(to, "sep") <- attr(from, "sep")
+  attr(to, "sep1") <- attr(from, "sep1")
+  attr(to, "sep2") <- attr(from, "sep2")
   to
 }
 
 # Assemble the abbreviation source note string.
 #
-# Resolves the prefix and separator using the order: tibble attribute (set via
+# Resolves the prefix and separators using the order: tibble attribute (set via
 # `modify_abbreviation()`), then theme element, then built-in default. Only the
 # built-in default prefix is translated; attribute/theme values are literal.
 # Returns a single string, or NULL when there are no abbreviations.
@@ -163,9 +171,11 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
     return(NULL)
   }
 
-  # resolve separator: attribute -> theme -> default
-  sep <- attr(df_abbreviation, "sep") %||%
-    get_theme_element("modify_abbreviation-arg:sep", default = ", ")
+  # resolve separators: attribute -> theme -> default
+  sep1 <- attr(df_abbreviation, "sep1") %||%
+    get_theme_element("modify_abbreviation-arg:sep1", default = ": ")
+  sep2 <- attr(df_abbreviation, "sep2") %||%
+    get_theme_element("modify_abbreviation-arg:sep2", default = ", ")
 
   # resolve prefix: attribute -> theme -> default
   prefix <- attr(df_abbreviation, "prefix") %||%
@@ -178,8 +188,8 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
   # are used literally
   if (is_default_prefix) label <- translate_string(label)
 
-  joined <- paste(df_abbreviation$abbreviation, collapse = sep)
+  joined <- paste(df_abbreviation$abbreviation, collapse = sep2)
 
-  # keep the ": " glue only when there is leading text
-  if (nzchar(label)) paste0(label, ": ", joined) else joined
+  # keep the prefix/sep1 only when there is leading text
+  if (nzchar(label)) paste0(label, sep1, joined) else joined
 }
