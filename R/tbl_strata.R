@@ -209,31 +209,10 @@ tbl_strata_internal <- function(data,
     as.list(strata) %>%
     set_names(paste0("strata_", seq_len(length(strata))))
 
-  # calculating df_by ----------------------------------------------------------
-  data_for_strata <- data
-  if (!is_survey(data_for_strata)) {
-    df_by <-
-      data_for_strata %>%
-      dplyr::mutate(strata = paste(!!!syms(strata), sep = .sep)) %>%
-      df_by(by = "strata")
-  } else {
-    data_for_strata$variables <-
-      data_for_strata$variables %>%
-      dplyr::mutate(strata = paste(!!!syms(strata), sep = .sep))
-    df_by <-
-      data_for_strata %>%
-      df_by(by = "strata")
-  }
-  df_by <-
-    df_by %>%
-    dplyr::select(
-      strata = "by",
-      any_of(c(
-        "n", "N", "p",
-        "n_unweighted", "N_unweighted", "p_unweighted"
-      ))
-    ) %>%
-    dplyr::mutate(header = glue::glue(.header))
+  # per-stratum stats made available to the `.header` glue string
+  # (`{n}`, `{N}`, `{p}`, and for survey objects the unweighted variants),
+  # keyed by the combined `strata` label
+  df_header_stats <- strata_header_stats(data, strata, .sep)
 
   # nesting data and building tbl objects --------------------------------------
   df_tbls <-
@@ -245,11 +224,9 @@ tbl_strata_internal <- function(data,
       strata = paste(!!!syms(names(new_strata_names)), sep = .sep)
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::left_join(
-      df_by %>% select("strata", "header"),
-      by = "strata"
-    ) %>%
+    dplyr::left_join(df_header_stats, by = "strata") %>%
     dplyr::mutate(
+      header = glue::glue(.header),
       tbl =
         switch(.parent_fun,
                "tbl_strata" = map(.data$data, .tbl_fun, ...),
@@ -315,71 +292,46 @@ nest_df_and_svy <- function(data, strata) {
     set_names(c(strata, "data"))
 }
 
-#' Simple utility function to get extract and calculate additional information
-#' about the 'by' variable in \code{\link{tbl_summary}}
+#' Per-stratum statistics for the `.header` glue string
 #'
-#' Given a dataset and the name of the 'by' variable, this function returns a
-#' data frame with unique levels of the by variable, the by variable ID, a character
-#' version of the levels, and the column name for each level in the \code{\link{tbl_summary}}
-#' output data frame.
+#' Returns a tibble keyed by the combined `strata` label with the counts made
+#' available to `glue::glue(.header)`: `n` (within-stratum N), `N` (overall N),
+#' and `p` (`n / N`). For survey objects, `n`/`N`/`p` are the weighted counts
+#' (via [survey::svytable()], rounded) and the unweighted counts are returned as
+#' `n_unweighted`/`N_unweighted`/`p_unweighted`.
 #'
-#' @param data data frame
-#' @param by character name of the `by` variable found in data
+#' @param data a data frame or survey object
+#' @param strata character vector of stratifying variable names
+#' @param .sep separator used to build the combined `strata` label
 #' @noRd
 #' @keywords internal
-#' @author Daniel D. Sjoberg
-
-df_by <- function(data, by) {
-  if (is.null(by)) {
-    return(NULL)
-  }
-
+strata_header_stats <- function(data, strata, .sep) {
   if (!is_survey(data)) {
-    # classic data.frame
-    result <-
-      data %>%
-      dplyr::select(by = all_of(by)) %>%
-      dplyr::count(!!sym("by"), .drop = FALSE) %>%
-      dplyr::arrange(!!sym("by")) %>%
-      dplyr::mutate(
-        N = sum(.data$n),
-        p = .data$n / .data$N,
-        by_id = 1:dplyr::n(), # 'by' variable ID
-        by_chr = as.character(.data$by), # Character version of 'by' variable
-        by_fct = # factor version of 'by' variable
-          switch(inherits(.data$by, "factor"),
-                 factor(.data$by, levels = attr(.data$by, "levels"), ordered = FALSE)
-          ) %||%
-          factor(.data$by),
-        by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
-      ) %>%
-      dplyr::select(starts_with("by"), everything())
-  } else {
-    # survey object
-    svy_table <- survey::svytable(c_form(right = by), data, round = TRUE) %>%
-      dplyr::as_tibble() %>%
-      set_names("by", "n") %>%
-      dplyr::mutate(
-        N = sum(.data$n),
-        p = .data$n / .data$N
-      )
-
-    result <- df_by(data$variables, by) %>%
-      dplyr::rename(n_unweighted = "n", N_unweighted = "N", p_unweighted = "p") %>%
-      dplyr::left_join(svy_table, by = "by")
-
-    result
+    return(.strata_counts(as.data.frame(data), strata, .sep))
   }
 
-  attr(result$by, "label") <- NULL
-  result
+  # survey object: weighted counts via svytable, plus unweighted counts
+  df_unweighted <-
+    .strata_counts(data$variables, strata, .sep) %>%
+    dplyr::rename(n_unweighted = "n", N_unweighted = "N", p_unweighted = "p")
+
+  data$variables <-
+    data$variables %>%
+    dplyr::mutate(strata = paste(!!!syms(strata), sep = .sep))
+  df_weighted <-
+    survey::svytable(stats::reformulate("strata"), data, round = TRUE) %>%
+    dplyr::as_tibble() %>%
+    set_names("strata", "n") %>%
+    dplyr::mutate(N = sum(.data$n), p = .data$n / .data$N)
+
+  dplyr::left_join(df_unweighted, df_weighted, by = "strata")
 }
 
-c_form <- function(left = NULL, right = 1) {
-  # quoting to take into account complex names
-  if (!is.null(left)) left <- paste0("`", left, "`")
-  right <- paste0("`", right, "`")
-  left <- paste(left, collapse = "+")
-  right <- paste(right, collapse = "+")
-  stats::as.formula(paste(left, "~", right))
+# unweighted per-stratum counts keyed by the combined `strata` label
+.strata_counts <- function(data, strata, .sep) {
+  data %>%
+    dplyr::mutate(strata = paste(!!!syms(strata), sep = .sep)) %>%
+    dplyr::count(.data$strata, .drop = FALSE) %>%
+    dplyr::arrange(.data$strata) %>%
+    dplyr::mutate(N = sum(.data$n), p = .data$n / .data$N)
 }
