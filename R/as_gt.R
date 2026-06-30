@@ -343,12 +343,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             source_note =
               !!call2(
                 parse_expr(dplyr::last(x$table_styling$abbreviation$text_interpret)),
-                x$table_styling$abbreviation$abbreviation |>
-                  paste(collapse = ", ") %>%
-                  paste0(
-                    ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                    ": ", .
-                  )
+                .assemble_abbreviation_source_note(x)
               )
           )
         ),

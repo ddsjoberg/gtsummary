@@ -77,6 +77,8 @@ Footnotes and caption handling are experimental and may change in the future.
 that the table will be split after each of these row numbers. If the last
 row is selected, the split will not happen as it is supposed to happen after
 the last row.
+
+To paginate gtsummary tables, you can use the \href{https://insightsengineering.github.io/pager/}{pager R package}.
 }
 \examples{
 \dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
