@@ -171,6 +171,35 @@ test_that("tbl_strata(.header) works as expected", {
   expect_true(all(grepl("_Grade .*_", tbl$table_body$groupname_col)))
 })
 
+test_that("tbl_strata(.header) exposes {n}, {N}, and {p} stats", {
+  df <- trial |>
+    select(grade, age, trt) |>
+    mutate(grade = paste("Grade", grade))
+
+  # expected within-stratum counts and overall N
+  n_by_grade <- as.integer(table(df$grade))
+  N_total <- nrow(df)
+
+  tbl <- df |>
+    tbl_strata(
+      strata = grade,
+      .tbl_fun = ~ .x |> tbl_summary(by = trt, include = age),
+      .header = "{strata}: n={n}, N={N}, p={style_percent(p)}"
+    )
+
+  expect_equal(
+    tbl$df_strata$header,
+    glue::glue(
+      "{lvl}: n={n}, N={N}, p={p}",
+      lvl = sort(unique(df$grade)),
+      n = n_by_grade,
+      N = N_total,
+      p = style_percent(n_by_grade / N_total)
+    ) |>
+      as.character()
+  )
+})
+
 test_that("tbl_strata(.combine_with) works as expected", {
   # non-default .combine_with (tbl_stack)
   expect_message(
@@ -285,6 +314,37 @@ test_that("tbl_strata works with survey objects", {
         strata = c(grade, trt),
         ~ tbl_svysummary(.x, by = trt, include = c(stage, trt), percent = "cell")
       )
+  )
+})
+
+test_that("tbl_strata(.header) exposes survey weighted/unweighted stats", {
+  skip_if_pkg_not_installed("survey")
+
+  df <- trial |>
+    dplyr::filter(!is.na(grade)) |>
+    mutate(grade = paste("Grade", grade))
+  svy_obj <- survey::svydesign(~1, data = df, weights = ~1)
+
+  # with weights = 1, weighted counts equal unweighted counts
+  n_by_grade <- as.integer(table(df$grade))
+  N_total <- nrow(df)
+
+  tbl <- svy_obj |>
+    tbl_strata(
+      strata = grade,
+      .tbl_fun = ~ tbl_svysummary(.x, by = trt, include = stage),
+      .header = "{strata}: n={n}, N={N}, n_uw={n_unweighted}, N_uw={N_unweighted}"
+    )
+
+  expect_equal(
+    tbl$df_strata$header,
+    glue::glue(
+      "{lvl}: n={n}, N={N}, n_uw={n}, N_uw={N}",
+      lvl = sort(unique(df$grade)),
+      n = n_by_grade,
+      N = N_total
+    ) |>
+      as.character()
   )
 })
 
