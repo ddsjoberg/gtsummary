@@ -107,7 +107,7 @@
 <ul><li>
 <code>rlang</code> is imported in full (<code>@import rlang</code> in <code>R/gtsummary-package.R</code>), so its functions are called <strong>bare — no <code>rlang::</code> prefix</strong>: e.g. <code>set_cli_abort_call()</code>, <code>arg_match()</code>, <code>enquo()</code>, <code>expr()</code>, <code>inject()</code>, <code>.data</code>, <code>%||%</code>.</li>
 <li>
-<strong>All other packages are called namespaced</strong> as <code>pkg::fn()</code>: <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code>, <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code>, etc. (dplyr/glue/utils are selectively re-exported via <code>@importFrom</code>; everything else uses <code>::</code>).</li>
+<strong>All other packages are called namespaced</strong> as <code>pkg::fn()</code>: <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>, <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code>, <code><a href="https://rdrr.io/pkg/glue/man/glue.html" class="external-link">glue::glue()</a></code>, etc. (dplyr/glue/utils are selectively re-exported via <code>@importFrom</code>; everything else uses <code>::</code>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="standalone-vendored-files">Standalone (vendored) files<a class="anchor" aria-label="anchor" href="#standalone-vendored-files"></a></h3>

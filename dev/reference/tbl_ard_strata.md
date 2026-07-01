@@ -84,8 +84,7 @@ tbl_ard_strata2(
   `"**{strata}**"` when `.combine_with = "tbl_merge"` and `"{strata}"`
   when `.combine_with = "tbl_stack"`. Items placed in curly brackets
   will be evaluated according to
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  syntax.
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) syntax.
 
       - `strata` stratum levels
 

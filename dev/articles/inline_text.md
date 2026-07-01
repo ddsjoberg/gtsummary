@@ -106,9 +106,9 @@ Here’s how the line will appear in your report.
 
 It is reasonable that you’ll need to modify the text. To do this, use
 the `pattern` argument. The `pattern` argument syntax follows
-[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html) format
-with referenced R objects being inserted between curly brackets. The
-default is
+[`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) format with
+referenced R objects being inserted between curly brackets. The default
+is
 `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.
 You have access the to following fields within the `pattern` argument.
 

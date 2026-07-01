@@ -36,8 +36,8 @@ inline_text(x, variable, level = NULL, column = NULL, pattern = NULL, ...)
 
   (`string`)  
   String indicating the statistics to return. Uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  formatting. Default is `NULL`
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) formatting.
+  Default is `NULL`
 
 - ...:
 

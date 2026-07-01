@@ -50,8 +50,8 @@ inline_text(
 
   (`string`)  
   String indicating the statistics to return. Uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  formatting. Default is `NULL`
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) formatting.
+  Default is `NULL`
 
 - pvalue_fun:
 

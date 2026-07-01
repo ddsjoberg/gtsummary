@@ -773,8 +773,8 @@ CRAN release: 2024-11-30
 
 - The `tbl_summary(statistic)` argument now allows users to pass curly
   brackets that appear in the final table. Just like in
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  double curly brackets are escaped to a single bracket. For example,
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) double curly
+  brackets are escaped to a single bracket. For example,
   `tbl_summary(statistic=~"{{{mean}}}")` results in `"{<mean value>}"`.
   ([\#2123](https://github.com/ddsjoberg/gtsummary/issues/2123))
 

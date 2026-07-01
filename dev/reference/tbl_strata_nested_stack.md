@@ -50,8 +50,7 @@ tbl_strata_nested_stack(
 
   (`string`)  
   string indicating the row headers that appear in the table. The
-  argument uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
+  argument uses [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html)
   syntax to insert values into the row headers. Elements available to
   insert are `strata`, `n`, `N` and `p`. The `strata` element is the
   variable level of the strata variables. Default is `'{strata}'`.

@@ -122,7 +122,7 @@ re-serialized too.
 - **All other packages are called namespaced** as `pkg::fn()`:
   [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html),
   [`gt::md()`](https://gt.rstudio.com/reference/md.html),
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html), etc.
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html), etc.
   (dplyr/glue/utils are selectively re-exported via `@importFrom`;
   everything else uses `::`).
 

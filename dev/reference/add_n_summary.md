@@ -65,8 +65,8 @@ add_n(
   - `"{p_miss}"` percent missing data
 
   The argument uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  syntax and multiple statistics may be reported, e.g.
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) syntax and
+  multiple statistics may be reported, e.g.
   `statistic = "{N_nonmiss} / {N_obs} ({p_nonmiss}%)"`
 
 - col_label:

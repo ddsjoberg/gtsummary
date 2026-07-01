@@ -99,9 +99,8 @@ are additionally available to stratifying columns: `{level}`, `{n}`, and
 `{p}` (`{n_unweighted}` and `{p_unweighted}` for `tbl_svysummary`
 objects)
 
-Syntax follows
-[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html), e.g.
-`all_stat_cols() ~ "**{level}**, N = {n}"`.
+Syntax follows [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html),
+e.g. `all_stat_cols() ~ "**{level}**, N = {n}"`.
 
 ## tbl_regression()
 

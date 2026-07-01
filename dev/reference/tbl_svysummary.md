@@ -135,7 +135,7 @@ mean and standard deviation for age;
 mean and standard deviation for all continuous variables. A statistic
 name that appears between curly brackets will be replaced with the
 numeric statistic (see
-[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)).
+[`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html)).
 
 For categorical variables the following statistics are available to
 display.

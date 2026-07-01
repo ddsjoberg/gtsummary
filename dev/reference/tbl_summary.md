@@ -145,10 +145,10 @@ and standard deviation for age;
 mean and standard deviation for all continuous variables.
 
 The values are interpreted using
-[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html) syntax:
-a name that appears between curly brackets will be interpreted as a
-function name and the formatted result of that function will be placed
-in the table.
+[`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) syntax: a name
+that appears between curly brackets will be interpreted as a function
+name and the formatted result of that function will be placed in the
+table.
 
 For categorical variables, the following statistics are available to
 display: `{n}` (frequency), `{N}` (denominator), `{p}` (percent).

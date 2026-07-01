@@ -155,11 +155,10 @@ tbl_uvregression(
 
   (`string`)  
   String of the model formula. Uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  syntax. Default is `"{y} ~ {x}"`, where `{y}` is the dependent
-  variable, and `{x}` represents a single covariate. For a random
-  intercept model, the formula may be
-  `formula = "{y} ~ {x} + (1 | gear)"`.
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) syntax.
+  Default is `"{y} ~ {x}"`, where `{y}` is the dependent variable, and
+  `{x}` represents a single covariate. For a random intercept model, the
+  formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
 
 - add_estimate_to_reference_rows:
 

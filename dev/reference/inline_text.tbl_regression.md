@@ -43,8 +43,8 @@ inline_text(
 
   (`string`)  
   String indicating the statistics to return. Uses
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  formatting. Default is
+  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) formatting.
+  Default is
   `"{estimate} ({conf.level }\% CI {conf.low}, {conf.high}; {p.value})"`.
   All columns from `x$table_body` are available to print as well as the
   confidence level (`conf.level`). See below for details.

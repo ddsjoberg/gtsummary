@@ -187,9 +187,9 @@ The input is a list of formulas that specify the statistics to report.
 For example, `statistic = list(age ~ "{mean} ({sd})")`. A statistic name
 that appears between curly brackets will be replaced with the numeric
 statistic (see
-[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)). All
-the statistics indicated in the statistic argument should be returned by
-the functions defined in the `stat_fns` argument.
+[`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html)). All the
+statistics indicated in the statistic argument should be returned by the
+functions defined in the `stat_fns` argument.
 
 When the summary type is `"continuous2"`, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary
