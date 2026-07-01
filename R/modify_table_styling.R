@@ -211,8 +211,8 @@ modify_table_styling <- function(x,
   # label ----------------------------------------------------------------------
   if (!is_empty(label)) {
     x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
+      .rows_update_base(
+        x$table_styling$header,
         dplyr::tibble(column = columns, interpret_label = .interpret_fun(text_interpret), label = label),
         by = "column"
       )
@@ -232,8 +232,8 @@ modify_table_styling <- function(x,
   # hide -----------------------------------------------------------------------
   if (!is_empty(hide)) {
     x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
+      .rows_update_base(
+        x$table_styling$header,
         dplyr::tibble(column = columns, hide = hide),
         by = "column"
       )
@@ -242,8 +242,8 @@ modify_table_styling <- function(x,
   # align ----------------------------------------------------------------------
   if (!is_empty(align)) {
     x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
+      .rows_update_base(
+        x$table_styling$header,
         dplyr::tibble(column = columns, align = align),
         by = "column"
       )
@@ -262,8 +262,7 @@ modify_table_styling <- function(x,
           replace = TRUE,
           remove = is.na(footnote)
         )
-    }
-    else {
+    } else {
       x <-
         .modify_footnote_body(
           x = x,
@@ -348,11 +347,9 @@ modify_table_styling <- function(x,
           rows = !!rows,
           pattern = cols_merge_pattern
         )
-    }
-    else {
+    } else {
       x <- .remove_column_merge(x, columns = columns)
     }
-
   }
 
   # return x -------------------------------------------------------------------
@@ -364,15 +361,14 @@ modify_table_styling <- function(x,
 .check_ref_to_ci_column <- function(x, columns, cols_merge_pattern) {
   # if "ci" column was selected & selector was not `everything()`, then print note
   if (("ci" %in% columns && !all(names(x$table_body) %in% columns)) ||
-      (!is_empty(cols_merge_pattern) && "ci" %in% .extract_glue_elements(cols_merge_pattern))) {
+    (!is_empty(cols_merge_pattern) && "ci" %in% .extract_glue_elements(cols_merge_pattern))) {
     cli::cli_warn(
       c("Use of the {.val ci} column was deprecated in {.pkg gtsummary} v2.0,
          and the column will eventually be removed from the tables.",
         "!" = "Review {.help deprecated_ci_column} for details on {.emph how to update your code}.\n\n",
         i = "The {.val ci} column has been replaced by the merged {.val {c('conf.low', 'conf.high')}} columns (merged with {.fun modify_column_merge}).",
-        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient.")
+        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient."
+      )
     )
   }
 }
-
-
