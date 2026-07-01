@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added a `levels` argument to `add_difference.tbl_summary()` and `add_difference.tbl_svysummary()` to select which two `by` groups to compare. This makes `add_difference()` usable when `by=` has more than two levels, and lets users flip the direction of the difference for two-level `by` variables. (#2151)
+
 * `modify_abbreviation()` and `remove_abbreviation()` now accept a character vector of abbreviations, allowing multiple abbreviations to be added or removed in a single call. `modify_abbreviation()` also gains `prefix`, `sep1`, and `sep2` arguments to customize the abbreviation source note's leading text (e.g. `c("Abbr.", "Abbrs.")`), the separator between the prefix and the abbreviations (e.g. `": "`), and the separator between abbreviations (e.g. `"; "`). Defaults are also configurable via the `modify_abbreviation-arg:prefix`, `modify_abbreviation-arg:sep1`, and `modify_abbreviation-arg:sep2` theme elements. (#2172)
 
 * The `missing` argument of `tbl_summary()` and `tbl_svysummary()` now accepts the formula-list-selector syntax (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the missing row to be shown for some variables and not others. A bare string (e.g. `missing = "no"`) remains supported. (#2283)

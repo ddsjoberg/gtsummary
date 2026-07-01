@@ -19,6 +19,13 @@
 #'   `list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(), all_categorical() ~ \(x) paste0(style_sigfig(x, scale = 100), "%"))`
 #' @param conf.level (`numeric`)\cr
 #'   a scalar in the interval `(0, 1)` indicating the confidence level. Default is 0.95
+#' @param levels (`vector`)\cr
+#'   a length-two vector of the `tbl_svysummary(by=)` levels to compare. The
+#'   difference is calculated as `levels[1]` minus `levels[2]`.
+#'   This argument is required when the `by` variable has more than two levels, and
+#'   allows the user to select which two groups to compare. When `by` has exactly
+#'   two levels, this argument is optional and can be used to flip the direction of
+#'   the difference (e.g. `levels[2]` minus `levels[1]`). Default is `NULL`.
 #' @inheritParams  add_p.tbl_summary
 #'
 #' @export
@@ -33,12 +40,19 @@
 #'     include = c(Class, Age)
 #'   ) |>
 #'   add_difference()
+#'
+#' # Example 2 ----------------------------------
+#' # Select two groups to compare when `by=` has 3+ levels
+#' survey::svydesign(~1, data = trial, weights = ~1) |>
+#'   tbl_svysummary(by = grade, include = c(age, marker), missing = "no") |>
+#'   add_difference(levels = c("I", "III"))
 add_difference.tbl_svysummary <- function(x,
                                           test = NULL,
                                           group = NULL,
                                           adj.vars = NULL,
                                           test.args = NULL,
                                           conf.level = 0.95,
+                                          levels = NULL,
                                           include = everything(),
                                           pvalue_fun = label_style_pvalue(digits = 1),
                                           estimate_fun = list(
@@ -59,11 +73,17 @@ add_difference.tbl_svysummary <- function(x,
     )
   }
 
-  # checking that input x has a by var and it has two levels
-  if (is_empty(x$inputs$by) || dplyr::n_distinct(as.data.frame(x$inputs$data)[[x$inputs$by]], na.rm = TRUE) != 2L) {
-    "Cannot run {.fun add_difference} when {.code tbl_summary(by)} column does not have exactly two levels." |>
+  # checking that input x has a by variable
+  if (is_empty(x$inputs$by)) {
+    "Cannot run {.fun add_difference} when {.code tbl_summary(by)} is not specified." |>
       cli::cli_abort(call = get_cli_abort_call())
   }
+
+  # process/validate the `levels` argument. When supplied, the survey design
+  # stored in `x` is subset to the two selected levels for the difference
+  # calculation; the original full design is restored on the returned object below.
+  original_inputs_data <- x$inputs$data
+  x <- .process_difference_levels(x, levels = levels)
 
   # if `pvalue_fun` not modified, check if we need to use a theme p-value
   if (missing(pvalue_fun)) {
@@ -170,6 +190,26 @@ add_difference.tbl_svysummary <- function(x,
       df_test_meta_data = df_test_meta_data, conf.level = conf.level,
       pvalue_fun = pvalue_fun, estimate_fun = estimate_fun, calling_fun = "add_difference"
     )
+
+  # when `levels` is supplied, note the compared pair and direction ------------
+  # use `replace = FALSE` so this footnote is appended to (not overwriting) the
+  # footnote describing the difference method/test.
+  if (!is_empty(levels)) {
+    footnote_levels <-
+      glue("{translate_string('Difference')}: {levels[1]} - {levels[2]}")
+    footnote_columns <-
+      intersect(c("estimate", "conf.low", "conf.high", "p.value"), names(x$table_body))
+    x <-
+      .modify_footnote_header(
+        x,
+        lst_footnotes = rep_named(footnote_columns, list(footnote_levels)),
+        replace = FALSE
+      )
+  }
+
+  # restore the original full design on the returned object --------------------
+  # (the subset was only needed for the difference calculation)
+  x$inputs$data <- original_inputs_data
 
   # update call list
   x$call_list <- updated_call_list
