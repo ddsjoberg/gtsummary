@@ -886,4 +886,3 @@ test_that("tbl_summary() handlines character vectors with 'NULL' values", {
     ignore_attr = TRUE
   )
 })
-
