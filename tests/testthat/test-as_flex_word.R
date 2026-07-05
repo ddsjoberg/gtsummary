@@ -451,11 +451,18 @@ test_that("as_flex_word() style theme elements apply and the argument overrides 
   expect_match(footer, "w:sz w:val=\"16\"")
   expect_no_match(footer, "w:sz w:val=\"40\"")
 
-  # theme alone (no argument) is applied
+  # theme alone (no argument) is applied when the footer part has nothing to
+  # inherit. removing the default statistic footnote empties the footer, so the
+  # theme style flows through to the page line placed in the footer region.
+  tbl_no_footer <-
+    trial |>
+    tbl_summary(by = trt, include = c(age, grade)) |>
+    modify_caption("**Caption**") |>
+    remove_footnote_header(columns = everything())
   path2 <- withr::local_tempfile(fileext = ".docx")
   with_gtsummary_theme(
     list("as_flex_word-lst:footer_style" = list(font.size = 20)),
-    as_flex_word(tbl, path = path2)
+    as_flex_word(tbl_no_footer, path = path2, page = "Page {PAGE}")
   )
   expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
 })
@@ -486,4 +493,109 @@ test_that("as_flex_word(header_style/footer_style) errors on an unnamed list", {
     as_flex_word(tbl, path = path, header_style = list(font.size = 8, 9)),
     "fully named"
   )
+})
+
+# inherit styling from the flextable parts -----------------------------------
+test_that("as_flex_word() inherits footer styling from the flextable footer part", {
+  # a footer fontsize set on the flextable is reflected in the Word footer
+  # (6pt -> 12 half-points) and does not affect the header
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))
+  )
+  expect_match(read_docx_part(path, "footer"), "w:sz w:val=\"12\"")
+  expect_no_match(read_docx_part(path, "header"), "w:sz w:val=\"12\"")
+})
+
+test_that("as_flex_word() inherits header styling from the flextable header part", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    addl_cmds = list(rlang::expr(flextable::fontsize(size = 20, part = "header")))
+  )
+  expect_match(read_docx_part(path, "header"), "w:sz w:val=\"40\"")
+})
+
+test_that("as_flex_word() inherits non-size properties from the flextable part", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    addl_cmds = list(rlang::expr(flextable::bold(part = "footer")))
+  )
+  expect_match(read_docx_part(path, "footer"), "<w:b/>|<w:b ")
+})
+
+test_that("as_flex_word() footer_style argument overrides the inherited part font", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer"))),
+    footer_style = list(font.size = 10)
+  )
+  footer <- read_docx_part(path, "footer")
+  expect_match(footer, "w:sz w:val=\"20\"")
+  expect_no_match(footer, "w:sz w:val=\"12\"")
+})
+
+test_that("as_flex_word() theme style applies only when the part has no styling to inherit", {
+  # non-empty footer part: the extracted part font wins over the theme
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
+    as_flex_word(
+      tbl,
+      path = path,
+      addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))
+    )
+  )
+  footer <- read_docx_part(path, "footer")
+  expect_match(footer, "w:sz w:val=\"12\"")
+  expect_no_match(footer, "w:sz w:val=\"40\"")
+
+  # empty footer (no notes/source notes): the theme style applies to the page
+  # line placed in the footer region. removing the default statistic footnote
+  # leaves no footer content to inherit from.
+  tbl_no_footer <-
+    trial |>
+    tbl_summary(by = trt, include = c(age, grade)) |>
+    modify_caption("**Caption**") |>
+    remove_footnote_header(columns = everything())
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
+    as_flex_word(
+      tbl_no_footer,
+      path = path2,
+      page = "Page {PAGE}",
+      page_location = "footer-right"
+    )
+  )
+  expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
+})
+
+test_that("as_flex_word(tbl_split) inherits footer styling per section", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    split_obj,
+    path = path,
+    addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))
+  )
+
+  read_part <- function(p, f) {
+    con <- unz(p, f)
+    on.exit(close(con))
+    paste(readLines(con, warn = FALSE), collapse = "")
+  }
+  parts <- unzip(path, list = TRUE)$Name
+  footer_parts <- grep("word/footer[0-9]+\\.xml", parts, value = TRUE)
+
+  expect_gt(length(footer_parts), 0L)
+  expect_true(all(vapply(
+    footer_parts, \(f) grepl("w:sz w:val=\"12\"", read_part(path, f)), logical(1)
+  )))
 })

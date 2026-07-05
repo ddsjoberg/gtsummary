@@ -58,13 +58,22 @@
 #' @param header_style,footer_style (named `list`)\cr
 #'   optional named lists of [`officer::fp_text()`] properties (e.g.
 #'   `list(font.size = 8, font.family = "Arial")`) used to style the text in the
-#'   Word document's header and footer regions, respectively. Properties are
-#'   merged onto the table body font, so unspecified properties are inherited
-#'   from the body. Values set here override the corresponding
+#'   Word document's header and footer regions, respectively. By default (when
+#'   these are `NULL`) each region inherits the styling of the corresponding
+#'   flextable part: the Word header from the flextable header part and the Word
+#'   footer from the flextable footer part. For example, applying
+#'   `flextable::fontsize(size = 6, part = "footer")` (e.g. via `addl_cmds` or a
+#'   theme) yields a size-6 Word footer. (The Word header font size follows the
+#'   flextable body font unless the header part size is explicitly changed, since
+#'   `as_flex_table()` always sets a fixed header size internally.) Values set
+#'   here are merged on top of
+#'   that inherited styling and override it, so unspecified properties are
+#'   retained. Values set here also override the corresponding
 #'   `as_flex_word-lst:header_style` / `as_flex_word-lst:footer_style` theme
-#'   elements. The page-number line adopts the style of whichever region it is
-#'   placed in (via `page_location`). Default is `NULL` (match the table body
-#'   font).
+#'   elements; those theme elements apply only when the flextable part carries no
+#'   styling to inherit (e.g. an empty footer). The page-number line adopts the
+#'   style of whichever region it is placed in (via `page_location`). Default is
+#'   `NULL`.
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
@@ -281,6 +290,19 @@ as_flex_word <- function(x,
 
   ft <- .eval_list_of_exprs(flextable_calls)
 
+  # extract per-part styling from the flextable so each Word region can inherit
+  # it. the footer part must be read *before* it is deleted below. the Word
+  # header region inherits from the flextable header part, the Word footer region
+  # from the flextable footer part. only inherit when content is actually
+  # relocated into the region (a caption for the header, footer lines for the
+  # footer): flextable keeps a blank footer row even with no notes, so
+  # `nrow_part()` alone would wrongly report content, and inheriting then would
+  # shadow the theme style for a region that only holds a page-number line.
+  header_extracted <-
+    if (isTRUE(header) && !is.null(caption_text)) .flex_word_part_font(ft, "header") else NULL
+  footer_extracted <-
+    if (isTRUE(footer) && length(footer_lines) > 0L) .flex_word_part_font(ft, "footer") else NULL
+
   if (isTRUE(footer)) {
     # footnote text, source notes, and abbreviations are relocated to the Word
     # footer. Deleting the flextable footer part removes this text while the
@@ -293,17 +315,22 @@ as_flex_word <- function(x,
 
   # resolve the font for each Word region. the base is the flextable body font
   # (so regions match the body by default, instead of the Word template default
-  # e.g. Cambria); the region's theme style and then argument style are merged on
-  # top, with the argument winning on any shared property.
+  # e.g. Cambria). on top of that we merge, in increasing precedence, the theme
+  # style, the flextable part's own styling (when present), and finally the
+  # argument style. so the argument wins over an explicit part style, which in
+  # turn wins over the theme style (the theme style therefore only takes effect
+  # when the part carries nothing to inherit).
   base_fp <- .flex_word_default_font()
   header_fp <- .flex_word_region_font(
     base_fp,
     theme_props = get_theme_element("as_flex_word-lst:header_style", eval = TRUE),
+    extracted_props = header_extracted,
     arg_props = header_style
   )
   footer_fp <- .flex_word_region_font(
     base_fp,
     theme_props = get_theme_element("as_flex_word-lst:footer_style", eval = TRUE),
+    extracted_props = footer_extracted,
     arg_props = footer_style
   )
 
@@ -403,12 +430,30 @@ as_flex_word <- function(x,
     .map_footnote_symbols(footnote_id, footnote_symbol)
   }
 
+  # resolve footnote removals/replacements before numbering, mirroring the
+  # `as_flex_table()` path. without this, footnotes removed via
+  # `remove_footnote_*()` (stored as removal-marker rows / `NA` text) would leak
+  # into the Word footer as spurious "<id> NA" lines.
+  shown_columns <- x$table_styling$header$column[!x$table_styling$header$hide]
+  resolve_footnote_removals <- function(df) {
+    if (nrow(df) == 0L) {
+      return(df)
+    }
+    df |>
+      dplyr::mutate(remove = ifelse(is.na(.data$footnote), TRUE, .data$remove)) |>
+      .filter_row_with_subsequent_replace_or_removal() |>
+      dplyr::filter(!.data$remove, .data$column %in% .env$shown_columns)
+  }
+  footnote_header_resolved <- resolve_footnote_removals(x$table_styling$footnote_header)
+  footnote_spanning_resolved <- resolve_footnote_removals(x$table_styling$footnote_spanning_header)
+  footnote_body_resolved <- resolve_footnote_removals(x$table_styling$footnote_body)
+
   # header (and spanning header) footnotes, numbered first
   spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()
   df_footnote_header <-
     dplyr::bind_rows(
-      x$table_styling$footnote_header |> dplyr::mutate(level = 0L),
-      x$table_styling$footnote_spanning_header
+      footnote_header_resolved |> dplyr::mutate(level = 0L),
+      footnote_spanning_resolved
     ) |>
     dplyr::mutate(row_numbers = .env$spanning_header_lvls - .data$level + 1L) %>%
     .number_footnotes(x, type = .)
@@ -417,7 +462,7 @@ as_flex_word <- function(x,
   df_footnote_body <-
     .number_footnotes(
       x,
-      type = x$table_styling$footnote_body,
+      type = footnote_body_resolved,
       start_with = dplyr::n_distinct(df_footnote_header$footnote_id)
     )
 
@@ -466,6 +511,12 @@ as_flex_word <- function(x,
 #' @return an `officer::fp_text` object
 #' @keywords internal
 #' @noRd
+# the header font size `as_flex_table()` bakes into every table via
+# `flextable::fontsize(part = "header", size = 11)`. kept in sync with that call
+# in `R/as_flex_table.R`; used to detect (and ignore) the baked-in header size
+# when inheriting the header part font for the Word header region.
+.flex_word_header_default_size <- 11
+
 .flex_word_default_font <- function() {
   defaults <- flextable::get_flextable_defaults()
   args <- list()
@@ -474,22 +525,103 @@ as_flex_word <- function(x,
   do.call(officer::fp_text, args)
 }
 
+#' Extract a part's text styling as an `fp_text` property list
+#'
+#' Reads the per-part text styling stored in `ft[[part]]$styles$text` (an
+#' `fpstruct` per `fp_text` property) and returns a named list of
+#' `officer::fp_text()` properties, so the corresponding Word region (header
+#' \eqn{\leftarrow} flextable header part, footer \eqn{\leftarrow} flextable
+#' footer part) can inherit the styling a user applied to the flextable. For each
+#' property the first cell value is used (falling back to the property default
+#' when the part has cells but no data); only property names accepted by
+#' `officer::fp_text()` are used.
+#'
+#' Two adjustments keep the inherited font sensible:
+#'
+#' - The sub-family properties (`hansi.family`, `cs.family`, `eastasia.family`)
+#'   are unreliable in a flextable part: flextable leaves them at its internal
+#'   default even when `font.family` is set, which would emit a Word run with
+#'   mismatched ascii/hAnsi fonts. They are collapsed to the extracted
+#'   `font.family` so the whole run uses one font.
+#' - `as_flex_table()` bakes a fixed header font size
+#'   (`.flex_word_header_default_size`) into every table, independent of the
+#'   flextable body/default font. For the header part that baked-in size is
+#'   treated as "the default" and dropped, so the body font still flows through;
+#'   only an explicitly different header size is inherited.
+#'
+#' @param ft (`flextable`)\cr the flextable object
+#' @param part (`string`)\cr one of `"header"`, `"body"`, `"footer"`
+#' @return a named list of `fp_text` properties, or `NULL` when the part has no
+#'   rows (or nothing to inherit)
+#' @keywords internal
+#' @noRd
+.flex_word_part_font <- function(ft, part) {
+  # nothing to extract when the part has no rows
+  if (flextable::nrow_part(ft, part = part) == 0L) {
+    return(NULL)
+  }
+
+  text_styles <- ft[[part]]$styles$text
+  if (is.null(text_styles)) {
+    return(NULL)
+  }
+
+  valid_props <- names(formals(officer::fp_text))
+  args <- list()
+  for (prop in intersect(names(text_styles), valid_props)) {
+    st <- text_styles[[prop]]
+    vals <- as.vector(st$data)
+    value <- if (length(vals) > 0L) vals[[1]] else st$default
+    if (!is.null(value) && !is.na(value)) {
+      args[[prop]] <- value
+    }
+  }
+
+  # collapse the (unreliable) sub-family properties onto the extracted
+  # `font.family` so the Word run uses a single, consistent font.
+  args[["hansi.family"]] <- NULL
+  args[["cs.family"]] <- NULL
+  args[["eastasia.family"]] <- NULL
+  if (!is.null(args[["font.family"]])) {
+    args[["hansi.family"]] <- args[["font.family"]]
+    args[["cs.family"]] <- args[["font.family"]]
+    args[["eastasia.family"]] <- args[["font.family"]]
+  }
+
+  # treat `as_flex_table()`'s baked-in header size as the default (see the
+  # constant's definition) so the body font size still applies unless the user
+  # explicitly changed the header size.
+  if (identical(part, "header") &&
+    isTRUE(args[["font.size"]] == .flex_word_header_default_size)) {
+    args[["font.size"]] <- NULL
+  }
+
+  if (length(args) == 0L) {
+    return(NULL)
+  }
+  args
+}
+
 #' Merge header/footer style property lists onto the base region font
 #'
-#' Starting from the base body `officer::fp_text`, merges the region's theme
-#' property list and then its argument property list (argument wins on shared
-#' properties). Each merge overrides the named properties and retains the rest
-#' via the `update.fp_text` S3 method. Empty/`NULL` lists are skipped.
+#' Starting from the base body `officer::fp_text`, merges (in order) the region's
+#' theme property list, the properties extracted from the flextable part, and the
+#' argument property list. Later merges win on shared properties, so the
+#' precedence is `body font < theme style < extracted part font < argument
+#' style`. Each merge overrides the named properties and retains the rest via the
+#' `update.fp_text` S3 method. Empty/`NULL` lists are skipped.
 #'
 #' @param base_fp (`fp_text`)\cr the base (table body) font
-#' @param theme_props,arg_props (`list` or `NULL`)\cr named `fp_text` property
-#'   lists from the theme element and the function argument
+#' @param theme_props,extracted_props,arg_props (`list` or `NULL`)\cr named
+#'   `fp_text` property lists from the theme element, the flextable part, and the
+#'   function argument
 #' @return an `officer::fp_text` object
 #' @keywords internal
 #' @noRd
-.flex_word_region_font <- function(base_fp, theme_props = NULL, arg_props = NULL) {
+.flex_word_region_font <- function(base_fp, theme_props = NULL,
+                                   extracted_props = NULL, arg_props = NULL) {
   fp <- base_fp
-  for (props in list(theme_props, arg_props)) {
+  for (props in list(theme_props, extracted_props, arg_props)) {
     if (length(props) > 0L) {
       fp <- do.call(stats::update, c(list(object = fp), props))
     }
