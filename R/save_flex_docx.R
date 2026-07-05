@@ -50,25 +50,6 @@
 #'   where to place the `page` text, as `"<region>-<alignment>"`. Must be one of
 #'   `"footer-right"` (default), `"footer-center"`, `"footer-left"`,
 #'   `"header-right"`, `"header-center"`, or `"header-left"`.
-#' @param header_style,footer_style (named `list`)\cr
-#'   optional named lists of [`officer::fp_text()`] properties (e.g.
-#'   `list(font.size = 8, font.family = "Arial")`) used to style the text in the
-#'   Word document's header and footer regions, respectively. By default (when
-#'   these are `NULL`) each region inherits the styling of the corresponding
-#'   flextable part: the Word header from the flextable header part and the Word
-#'   footer from the flextable footer part. For example, a flextable built with
-#'   `flextable::fontsize(size = 6, part = "footer")` yields a size-6 Word
-#'   footer. (The Word header font size follows the
-#'   flextable body font unless the header part size is explicitly changed, since
-#'   `as_flex_table()` always sets a fixed header size internally.) Values set
-#'   here are merged on top of
-#'   that inherited styling and override it, so unspecified properties are
-#'   retained. Values set here also override the corresponding
-#'   `save_flex_docx-lst:header_style` / `save_flex_docx-lst:footer_style` theme
-#'   elements; those theme elements apply only when the flextable part carries no
-#'   styling to inherit (e.g. an empty footer). The page-number line adopts the
-#'   style of whichever region it is placed in (via `page_location`). Default is
-#'   `NULL`.
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
@@ -85,12 +66,11 @@
 #' # save the table, placing caption in the header and notes in the footer
 #' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 #'
-#' # add a "Page X of Y" line to the footer and style the footer separately
+#' # add a "Page X of Y" line to the footer
 #' save_flex_docx(
 #'   tbl,
 #'   path = tempfile(fileext = ".docx"),
-#'   page = "Page {PAGE} of {NUMPAGES}",
-#'   footer_style = list(font.size = 8, italic = TRUE)
+#'   page = "Page {PAGE} of {NUMPAGES}"
 #' )
 #'
 #' # a split table is written with one table per section/page
@@ -113,8 +93,6 @@ save_flex_docx <- function(x,
                            "footer-right", "footer-center", "footer-left",
                            "header-right", "header-center", "header-left"
                          ),
-                         header_style = NULL,
-                         footer_style = NULL,
                          ...) {
   set_cli_abort_call()
 
@@ -142,8 +120,6 @@ save_flex_docx <- function(x,
   check_scalar_logical(footer)
   if (!is.null(page)) check_string(page)
   page_location <- arg_match(page_location)
-  .check_flex_docx_style(header_style, "header_style")
-  .check_flex_docx_style(footer_style, "footer_style")
   check_pkg_installed(c("flextable", "officer"))
 
   # collections: one section (with its own header/footer) per table ------------
@@ -161,9 +137,7 @@ save_flex_docx <- function(x,
         header = header,
         footer = footer,
         page = page,
-        page_location = page_location,
-        header_style = header_style,
-        footer_style = footer_style
+        page_location = page_location
       )
     )
   }
@@ -175,9 +149,7 @@ save_flex_docx <- function(x,
       header = header,
       footer = footer,
       page = page,
-      page_location = page_location,
-      header_style = header_style,
-      footer_style = footer_style
+      page_location = page_location
     )
 
   # write the Word file --------------------------------------------------------
@@ -206,8 +178,7 @@ save_flex_docx <- function(x,
 #' @return the original collection `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.save_flex_docx_collection <- function(x, path, header, footer, page, page_location,
-                                       header_style = NULL, footer_style = NULL) {
+.save_flex_docx_collection <- function(x, path, header, footer, page, page_location) {
   doc <- officer::read_docx()
 
   for (i in seq_along(x)) {
@@ -217,9 +188,7 @@ save_flex_docx <- function(x,
         header = header,
         footer = footer,
         page = page,
-        page_location = page_location,
-        header_style = header_style,
-        footer_style = footer_style
+        page_location = page_location
       )
 
     doc <- flextable::body_add_flextable(doc, built$ft)
@@ -262,8 +231,7 @@ save_flex_docx <- function(x,
 #'   `fpar`), and `footer_fpars` (list of `fpar`)
 #' @keywords internal
 #' @noRd
-.flex_docx_build_one <- function(x, header, footer, page, page_location,
-                                 header_style = NULL, footer_style = NULL) {
+.flex_docx_build_one <- function(x, header, footer, page, page_location) {
   is_flextable <- inherits(x, "flextable")
 
   # extract caption and footer content, then obtain the flextable with the
@@ -295,7 +263,7 @@ save_flex_docx <- function(x,
   # relocated into the region (a caption for the header, footer lines for the
   # footer): flextable keeps a blank footer row even with no notes, so
   # `nrow_part()` alone would wrongly report content, and inheriting then would
-  # shadow the theme style for a region that only holds a page-number line.
+  # apply footer styling to a region that only holds a page-number line.
   header_extracted <-
     if (isTRUE(header) && !is.null(caption_text)) .flex_docx_part_font(ft, "header") else NULL
   footer_extracted <-
@@ -313,24 +281,12 @@ save_flex_docx <- function(x,
 
   # resolve the font for each Word region. the base is the flextable body font
   # (so regions match the body by default, instead of the Word template default
-  # e.g. Cambria). on top of that we merge, in increasing precedence, the theme
-  # style, the flextable part's own styling (when present), and finally the
-  # argument style. so the argument wins over an explicit part style, which in
-  # turn wins over the theme style (the theme style therefore only takes effect
-  # when the part carries nothing to inherit).
+  # e.g. Cambria); on top of that we merge the styling extracted from the
+  # corresponding flextable part (when present), so styling applied to the
+  # flextable header/footer flows through to the Word header/footer.
   base_fp <- .flex_docx_default_font()
-  header_fp <- .flex_docx_region_font(
-    base_fp,
-    theme_props = get_theme_element("save_flex_docx-lst:header_style", eval = TRUE),
-    extracted_props = header_extracted,
-    arg_props = header_style
-  )
-  footer_fp <- .flex_docx_region_font(
-    base_fp,
-    theme_props = get_theme_element("save_flex_docx-lst:footer_style", eval = TRUE),
-    extracted_props = footer_extracted,
-    arg_props = footer_style
-  )
+  header_fp <- .flex_docx_region_font(base_fp, extracted_props = header_extracted)
+  footer_fp <- .flex_docx_region_font(base_fp, extracted_props = footer_extracted)
 
   # assemble the Word header/footer paragraph lists. content order is
   # caption/notes first, then the optional page-number line as a separate
@@ -663,55 +619,25 @@ save_flex_docx <- function(x,
   args
 }
 
-#' Merge header/footer style property lists onto the base region font
+#' Merge the extracted part styling onto the base region font
 #'
-#' Starting from the base body `officer::fp_text`, merges (in order) the region's
-#' theme property list, the properties extracted from the flextable part, and the
-#' argument property list. Later merges win on shared properties, so the
-#' precedence is `body font < theme style < extracted part font < argument
-#' style`. Each merge overrides the named properties and retains the rest via the
-#' `update.fp_text` S3 method. Empty/`NULL` lists are skipped.
+#' Starting from the base body `officer::fp_text`, merges the properties
+#' extracted from the corresponding flextable part (when present), so styling
+#' applied to the flextable header/footer flows through to the Word
+#' header/footer. The merge overrides the named properties and retains the rest
+#' via the `update.fp_text` S3 method. An empty/`NULL` list is skipped.
 #'
 #' @param base_fp (`fp_text`)\cr the base (table body) font
-#' @param theme_props,extracted_props,arg_props (`list` or `NULL`)\cr named
-#'   `fp_text` property lists from the theme element, the flextable part, and the
-#'   function argument
+#' @param extracted_props (`list` or `NULL`)\cr named `fp_text` property list
+#'   extracted from the flextable part
 #' @return an `officer::fp_text` object
 #' @keywords internal
 #' @noRd
-.flex_docx_region_font <- function(base_fp, theme_props = NULL,
-                                   extracted_props = NULL, arg_props = NULL) {
-  fp <- base_fp
-  for (props in list(theme_props, extracted_props, arg_props)) {
-    if (length(props) > 0L) {
-      fp <- do.call(stats::update, c(list(object = fp), props))
-    }
+.flex_docx_region_font <- function(base_fp, extracted_props = NULL) {
+  if (length(extracted_props) > 0L) {
+    return(do.call(stats::update, c(list(object = base_fp), extracted_props)))
   }
-  fp
-}
-
-#' Validate a header_style/footer_style argument
-#'
-#' Must be `NULL` or a fully named list (the names are `fp_text` property names).
-#'
-#' @param x the argument value
-#' @param arg_name (`string`)\cr the argument name for the error message
-#' @return `NULL`, invisibly (called for its side effect)
-#' @keywords internal
-#' @noRd
-.check_flex_docx_style <- function(x, arg_name) {
-  if (is.null(x)) {
-    return(invisible(NULL))
-  }
-  nms <- names(x)
-  if (!is.list(x) || is.null(nms) || any(!nzchar(nms))) {
-    cli::cli_abort(
-      "The {.arg {arg_name}} argument must be {.code NULL} or a fully named
-       {.cls list} of {.fn officer::fp_text} properties.",
-      call = get_cli_abort_call()
-    )
-  }
-  invisible(NULL)
+  base_fp
 }
 
 #' Build a page-number paragraph for the Word header/footer

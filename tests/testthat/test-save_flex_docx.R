@@ -469,97 +469,21 @@ test_that("save_flex_docx() errors on an empty list and a non-flextable list", {
   )
 })
 
-# header_style / footer_style -------------------------------------------------
-test_that("save_flex_docx(footer_style) styles only the footer, header untouched", {
+# page-number line -----------------------------------------------------------
+test_that("save_flex_docx(page) line adopts the resolved style of its region", {
+  # a footer fontsize set on the flextable flows through to the page line placed
+  # in the footer region (8pt -> 16 half-points)
+  ft <- as_flex_table(tbl) |> flextable::fontsize(size = 8, part = "footer")
   path <- withr::local_tempfile(fileext = ".docx")
   save_flex_docx(
-    tbl,
-    path = path,
-    header = TRUE,
-    footer = TRUE,
-    footer_style = list(font.size = 8, font.family = "Times New Roman")
-  )
-
-  header <- read_docx_part(path, "header")
-  footer <- read_docx_part(path, "footer")
-
-  # footer takes the styled font; header does not
-  expect_match(footer, "w:ascii=\"Times New Roman\"")
-  expect_match(footer, "w:sz w:val=\"16\"")
-  expect_no_match(header, "w:ascii=\"Times New Roman\"")
-})
-
-test_that("save_flex_docx(header_style) styles only the header, footer untouched", {
-  path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(
-    tbl,
-    path = path,
-    header = TRUE,
-    footer = TRUE,
-    header_style = list(font.size = 20, font.family = "Times New Roman")
-  )
-
-  header <- read_docx_part(path, "header")
-  footer <- read_docx_part(path, "footer")
-
-  expect_match(header, "w:ascii=\"Times New Roman\"")
-  expect_match(header, "w:sz w:val=\"40\"")
-  expect_no_match(footer, "w:ascii=\"Times New Roman\"")
-})
-
-test_that("save_flex_docx() style theme elements apply and the argument overrides the theme", {
-  # theme sets footer size 20; the argument sets size 8 and should win
-  path <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(
-    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
-    save_flex_docx(tbl, path = path, footer_style = list(font.size = 8))
-  )
-  footer <- read_docx_part(path, "footer")
-  expect_match(footer, "w:sz w:val=\"16\"")
-  expect_no_match(footer, "w:sz w:val=\"40\"")
-
-  # theme alone (no argument) is applied when the footer part has nothing to
-  # inherit. removing the default statistic footnote empties the footer, so the
-  # theme style flows through to the page line placed in the footer region.
-  tbl_no_footer <-
-    trial |>
-    tbl_summary(by = trt, include = c(age, grade)) |>
-    modify_caption("**Caption**") |>
-    remove_footnote_header(columns = everything())
-  path2 <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(
-    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
-    save_flex_docx(tbl_no_footer, path = path2, page = "Page {PAGE}")
-  )
-  expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
-})
-
-test_that("save_flex_docx(page) line adopts its region's resolved style", {
-  # page line placed in the footer adopts the footer style
-  path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(
-    tbl,
+    ft,
     path = path,
     page = "Page {PAGE} of {NUMPAGES}",
-    page_location = "footer-right",
-    footer_style = list(font.size = 8, font.family = "Times New Roman")
+    page_location = "footer-right"
   )
   footer <- read_docx_part(path, "footer")
   expect_match(footer, "PAGE")
-  expect_match(footer, "w:ascii=\"Times New Roman\"")
   expect_match(footer, "w:sz w:val=\"16\"")
-})
-
-test_that("save_flex_docx(header_style/footer_style) errors on an unnamed list", {
-  path <- withr::local_tempfile(fileext = ".docx")
-  expect_error(
-    save_flex_docx(tbl, path = path, footer_style = list(8)),
-    "fully named"
-  )
-  expect_error(
-    save_flex_docx(tbl, path = path, header_style = list(font.size = 8, 9)),
-    "fully named"
-  )
 })
 
 # inherit styling from the flextable parts -----------------------------------
@@ -588,48 +512,6 @@ test_that("save_flex_docx() inherits non-size properties from the flextable part
   path <- withr::local_tempfile(fileext = ".docx")
   save_flex_docx(ft, path = path)
   expect_match(read_docx_part(path, "footer"), "<w:b/>|<w:b ")
-})
-
-test_that("save_flex_docx() footer_style argument overrides the inherited part font", {
-  ft <- as_flex_table(tbl) |> flextable::fontsize(size = 6, part = "footer")
-  path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(ft, path = path, footer_style = list(font.size = 10))
-  footer <- read_docx_part(path, "footer")
-  expect_match(footer, "w:sz w:val=\"20\"")
-  expect_no_match(footer, "w:sz w:val=\"12\"")
-})
-
-test_that("save_flex_docx() theme style applies only when the part has no styling to inherit", {
-  # non-empty footer part: the extracted part font wins over the theme
-  ft <- as_flex_table(tbl) |> flextable::fontsize(size = 6, part = "footer")
-  path <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(
-    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
-    save_flex_docx(ft, path = path)
-  )
-  footer <- read_docx_part(path, "footer")
-  expect_match(footer, "w:sz w:val=\"12\"")
-  expect_no_match(footer, "w:sz w:val=\"40\"")
-
-  # empty footer (no notes/source notes): the theme style applies to the page
-  # line placed in the footer region. removing the default statistic footnote
-  # leaves no footer content to inherit from.
-  tbl_no_footer <-
-    trial |>
-    tbl_summary(by = trt, include = c(age, grade)) |>
-    modify_caption("**Caption**") |>
-    remove_footnote_header(columns = everything())
-  path2 <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(
-    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
-    save_flex_docx(
-      tbl_no_footer,
-      path = path2,
-      page = "Page {PAGE}",
-      page_location = "footer-right"
-    )
-  )
-  expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
 })
 
 test_that("save_flex_docx(list) inherits footer styling per section", {
