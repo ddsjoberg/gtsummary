@@ -228,15 +228,11 @@ save_flex_docx <- function(x,
         footer_style = footer_style
       )
 
-    # page break before every table except the first
-    if (i > 1L) {
-      doc <- officer::body_add_break(doc)
-    }
-
     doc <- flextable::body_add_flextable(doc, built$ft)
 
     # close this table's section, attaching its own header/footer. `type =
-    # "nextPage"` starts each section on a new page.
+    # "nextPage"` already starts the *next* section on a new page, so no explicit
+    # page break is added between tables (doing so would insert a blank page).
     doc <-
       officer::body_end_block_section(
         doc,
