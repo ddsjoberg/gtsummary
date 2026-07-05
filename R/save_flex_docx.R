@@ -50,6 +50,18 @@
 #'   where to place the `page` text, as `"<region>-<alignment>"`. Must be one of
 #'   `"footer-right"` (default), `"footer-center"`, `"footer-left"`,
 #'   `"header-right"`, `"header-center"`, or `"header-left"`.
+#' @param pr_section (`officer::prop_section`)\cr
+#'   an optional [`officer::prop_section()`] object used as the base Word section,
+#'   giving fine-grained control over page margins, page size, orientation, and
+#'   section columns (e.g.
+#'   `officer::prop_section(page_margins = officer::page_mar(top = 0.5))`). The
+#'   section's header and footer regions are always managed by `save_flex_docx()`
+#'   (the relocated caption and notes), so any `header_default`/`footer_default`
+#'   set on `pr_section` are ignored. For a collection (`tbl_split` or a list of
+#'   flextables) the same `pr_section` is applied to every table's section, and
+#'   the paging `type` is fixed to `"nextPage"` (any `type` on `pr_section` is
+#'   ignored) so tables page correctly. Overrides the
+#'   `save_flex_docx-lst:pr_section` theme element. Default is `NULL`.
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
@@ -84,6 +96,15 @@
 #'   as_flex_table(tbl) |>
 #'   flextable::set_caption("Table 1")
 #' save_flex_docx(ft, path = tempfile(fileext = ".docx"))
+#'
+#' # customize the Word page margins via a prop_section()
+#' save_flex_docx(
+#'   tbl,
+#'   path = tempfile(fileext = ".docx"),
+#'   pr_section = officer::prop_section(
+#'     page_margins = officer::page_mar(top = 0.5, bottom = 0.5)
+#'   )
+#' )
 save_flex_docx <- function(x,
                          path,
                          header = TRUE,
@@ -93,6 +114,7 @@ save_flex_docx <- function(x,
                            "footer-right", "footer-center", "footer-left",
                            "header-right", "header-center", "header-left"
                          ),
+                         pr_section = NULL,
                          ...) {
   set_cli_abort_call()
 
@@ -122,6 +144,18 @@ save_flex_docx <- function(x,
   page_location <- arg_match(page_location)
   check_pkg_installed(c("flextable", "officer"))
 
+  # resolve `pr_section` with argument-over-theme precedence, then validate. the
+  # resolved base section controls page margins/size/orientation/columns; its
+  # header/footer defaults are later overwritten by the relocated caption/notes.
+  pr_section <- pr_section %||% get_theme_element("save_flex_docx-lst:pr_section", eval = TRUE)
+  if (!is.null(pr_section) && !inherits(pr_section, "prop_section")) {
+    cli::cli_abort(
+      "The {.arg pr_section} argument must be an {.cls officer::prop_section}
+       object (e.g. from {.fn officer::prop_section}) or {.code NULL}.",
+      call = get_cli_abort_call()
+    )
+  }
+
   # collections: one section (with its own header/footer) per table ------------
   if (inherits(x, "tbl_split") || is_flextable_list) {
     if (length(x) == 0L) {
@@ -137,7 +171,8 @@ save_flex_docx <- function(x,
         header = header,
         footer = footer,
         page = page,
-        page_location = page_location
+        page_location = page_location,
+        pr_section = pr_section
       )
     )
   }
@@ -153,13 +188,19 @@ save_flex_docx <- function(x,
     )
 
   # write the Word file --------------------------------------------------------
-  # `prop_section()` is only supplied when a region has content; otherwise
-  # `save_as_docx()` uses its default section.
-  if (length(built$header_fpars) > 0L || length(built$footer_fpars) > 0L) {
+  # a section is supplied when a region has content, or when the caller passed a
+  # `pr_section` (so custom page margins/size apply even with no caption/notes).
+  # otherwise `save_as_docx()` uses its default section.
+  has_content <- length(built$header_fpars) > 0L || length(built$footer_fpars) > 0L
+  if (has_content || !is.null(pr_section)) {
     flextable::save_as_docx(
       built$ft,
       path = path,
-      pr_section = .flex_docx_prop_section(built$header_fpars, built$footer_fpars)
+      pr_section = .flex_docx_prop_section(
+        built$header_fpars,
+        built$footer_fpars,
+        base = pr_section
+      )
     )
   } else {
     flextable::save_as_docx(built$ft, path = path)
@@ -178,7 +219,8 @@ save_flex_docx <- function(x,
 #' @return the original collection `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.save_flex_docx_collection <- function(x, path, header, footer, page, page_location) {
+.save_flex_docx_collection <- function(x, path, header, footer, page, page_location,
+                                       pr_section = NULL) {
   doc <- officer::read_docx()
 
   for (i in seq_along(x)) {
@@ -193,10 +235,14 @@ save_flex_docx <- function(x,
 
     doc <- flextable::body_add_flextable(doc, built$ft)
 
+    # every section uses the same base `pr_section` (page margins/size/etc.), but
+    # `type = "nextPage"` is forced so tables page correctly without blank pages,
+    # overriding any `type` set in the user's `pr_section`.
     section <-
       .flex_docx_prop_section(
         built$header_fpars,
         built$footer_fpars,
+        base = pr_section,
         type = "nextPage"
       )
 
@@ -325,11 +371,28 @@ save_flex_docx <- function(x,
 #' @param header_fpars,footer_fpars (`list`)\cr lists of `officer::fpar` objects
 #' @param ... additional arguments passed to `officer::prop_section()` (e.g.
 #'   `type`)
+#' @param base (`officer::prop_section` or `NULL`)\cr an optional user-supplied
+#'   section whose properties (page margins, size, orientation, columns, and
+#'   `type`) are used as the base. Its `header_default`/`footer_default` are
+#'   always discarded: `save_flex_docx()` owns those regions.
 #' @return an `officer::prop_section` object
 #' @keywords internal
 #' @noRd
-.flex_docx_prop_section <- function(header_fpars, footer_fpars, ...) {
-  section_args <- list(...)
+.flex_docx_prop_section <- function(header_fpars, footer_fpars, base = NULL, ...) {
+  # start from the user's base section fields (dropping its header/footer
+  # defaults, which we always own), then let `...` overrides win (e.g. the forced
+  # `type = "nextPage"` for collections), and finally attach our relocated
+  # caption/notes as the header/footer defaults.
+  section_args <- list()
+  if (!is.null(base)) {
+    base_fields <- unclass(base)
+    base_fields[c(
+      "header_default", "header_even", "header_first",
+      "footer_default", "footer_even", "footer_first"
+    )] <- NULL
+    section_args <- base_fields
+  }
+  section_args <- utils::modifyList(section_args, list(...))
   if (length(header_fpars) > 0L) {
     section_args$header_default <- do.call(officer::block_list, header_fpars)
   }

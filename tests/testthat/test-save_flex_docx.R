@@ -532,3 +532,134 @@ test_that("save_flex_docx(list) inherits footer styling per section", {
     footer_parts, \(f) grepl("w:sz w:val=\"12\"", read_part(path, f)), logical(1)
   )))
 })
+
+# pr_section (fine-grained Word section control) ------------------------------
+test_that("save_flex_docx(pr_section) applies custom page margins, keeps caption/notes relocated", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(
+    tbl,
+    path = path,
+    pr_section = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5, bottom = 0.5)
+    )
+  )
+
+  body <- read_docx_part(path, "body")
+  # 0.5in = 720 twips
+  expect_match(body, "w:top=\"720\"")
+  expect_match(body, "w:bottom=\"720\"")
+  # caption still in header, notes still in footer
+  expect_match(read_docx_part(path, "header"), "Patient characteristics")
+  expect_match(read_docx_part(path, "footer"), "Data from the trial dataset")
+})
+
+test_that("save_flex_docx(pr_section) header/footer defaults are overridden by ours", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(
+    tbl,
+    path = path,
+    pr_section = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5),
+      header_default = officer::block_list(officer::fpar(officer::ftext("USER HEADER"))),
+      footer_default = officer::block_list(officer::fpar(officer::ftext("USER FOOTER")))
+    )
+  )
+
+  # the function's relocated caption/notes win; the user's header/footer are dropped
+  expect_match(read_docx_part(path, "header"), "Patient characteristics")
+  expect_no_match(read_docx_part(path, "header"), "USER HEADER")
+  expect_match(read_docx_part(path, "footer"), "Data from the trial dataset")
+  expect_no_match(read_docx_part(path, "footer"), "USER FOOTER")
+})
+
+test_that("save_flex_docx(pr_section) applies even when there is no caption/footer content", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  plain <- trial |>
+    tbl_summary(include = age) |>
+    remove_footnote_header(columns = everything())
+  save_flex_docx(
+    plain,
+    path = path,
+    header = FALSE,
+    footer = FALSE,
+    pr_section = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5)
+    )
+  )
+  # the section (and its margins) is written even with no header/footer content
+  expect_match(read_docx_part(path, "body"), "w:top=\"720\"")
+})
+
+test_that("save_flex_docx(pr_section) validates the class", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  expect_error(
+    save_flex_docx(tbl, path = path, pr_section = list(page_margins = 1)),
+    "prop_section"
+  )
+})
+
+test_that("save_flex_docx(tbl_split, pr_section) applies to every section, forcing nextPage", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(
+    split_obj,
+    path = path,
+    # user sets `type = "continuous"`, which must be ignored between tables
+    pr_section = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5),
+      type = "continuous"
+    )
+  )
+
+  body <- read_docx_part(path, "body")
+  n_tables <- length(split_obj)
+  # one section per table, all forced to nextPage (user's `continuous` ignored)
+  expect_equal(length(gregexpr("<w:sectPr", body)[[1]]), n_tables)
+  expect_equal(length(gregexpr("nextPage", body)[[1]]), n_tables)
+  expect_no_match(body, "w:val=\"continuous\"")
+  # every section carries the custom margin, and no blank page is introduced
+  expect_equal(length(gregexpr("w:top=\"720\"", body)[[1]]), n_tables)
+  expect_false(grepl("w:type=\"page\"", body))
+  expect_match(body, "</w:sectPr>\\s*</w:body>")
+})
+
+test_that("save_flex_docx(list, pr_section) applies custom margins to every section", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  ft <- as_flex_table(tbl) |> flextable::set_caption("Cap")
+  save_flex_docx(
+    list(ft, ft),
+    path = path,
+    pr_section = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5)
+    )
+  )
+  body <- read_docx_part(path, "body")
+  expect_equal(length(gregexpr("w:top=\"720\"", body)[[1]]), 2L)
+})
+
+test_that("save_flex_docx-lst:pr_section theme element applies and the argument overrides it", {
+  # theme sets top margin 0.5in (720 twips)
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-lst:pr_section" = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5)
+    )),
+    save_flex_docx(tbl, path = path)
+  )
+  expect_match(read_docx_part(path, "body"), "w:top=\"720\"")
+
+  # the argument (top = 1in = 1440 twips) overrides the theme
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-lst:pr_section" = officer::prop_section(
+      page_margins = officer::page_mar(top = 0.5)
+    )),
+    save_flex_docx(
+      tbl,
+      path = path2,
+      pr_section = officer::prop_section(page_margins = officer::page_mar(top = 1))
+    )
+  )
+  body2 <- read_docx_part(path2, "body")
+  expect_match(body2, "w:top=\"1440\"")
+  expect_no_match(body2, "w:top=\"720\"")
+})
