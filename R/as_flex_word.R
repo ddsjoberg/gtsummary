@@ -45,6 +45,26 @@
 #'   where to place the `page` text, as `"<region>-<alignment>"`. Must be one of
 #'   `"footer-right"` (default), `"footer-center"`, `"footer-left"`,
 #'   `"header-right"`, `"header-center"`, or `"header-left"`.
+#' @param addl_cmds (named `list`)\cr
+#'   an optional list of additional flextable command expressions applied to the
+#'   flextable after it is created from the gtsummary table. Do **not** include
+#'   the flextable object argument; each expression is piped onto the flextable
+#'   (e.g. `rlang::expr(flextable::bold(part = "header"))`). A **named** entry is
+#'   inserted *after* the call of that name; run
+#'   `as_flex_table(x, return_calls = TRUE)` to see the available names. An
+#'   **unnamed** entry is appended after all existing calls. These are applied
+#'   after any commands from the `as_flex_table-lst:addl_cmds` theme element.
+#'   Default is `NULL`.
+#' @param header_style,footer_style (named `list`)\cr
+#'   optional named lists of [`officer::fp_text()`] properties (e.g.
+#'   `list(font.size = 8, font.family = "Arial")`) used to style the text in the
+#'   Word document's header and footer regions, respectively. Properties are
+#'   merged onto the table body font, so unspecified properties are inherited
+#'   from the body. Values set here override the corresponding
+#'   `as_flex_word-lst:header_style` / `as_flex_word-lst:footer_style` theme
+#'   elements. The page-number line adopts the style of whichever region it is
+#'   placed in (via `page_location`). Default is `NULL` (match the table body
+#'   font).
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
@@ -73,6 +93,14 @@
 #'   tbl_summary(by = trt, include = c(age, marker, grade)) |>
 #'   tbl_split_by_rows(variables = c(age, marker)) |>
 #'   as_flex_word(path = tempfile(fileext = ".docx"))
+#'
+#' # add custom flextable commands and style the footer separately
+#' as_flex_word(
+#'   tbl,
+#'   path = tempfile(fileext = ".docx"),
+#'   addl_cmds = list(rlang::expr(flextable::fontsize(size = 8, part = "all"))),
+#'   footer_style = list(font.size = 8, italic = TRUE)
+#' )
 as_flex_word <- function(x,
                          path,
                          include = everything(),
@@ -83,6 +111,9 @@ as_flex_word <- function(x,
                            "footer-right", "footer-center", "footer-left",
                            "header-right", "header-center", "header-left"
                          ),
+                         addl_cmds = NULL,
+                         header_style = NULL,
+                         footer_style = NULL,
                          ...) {
   set_cli_abort_call()
 
@@ -101,6 +132,9 @@ as_flex_word <- function(x,
   check_scalar_logical(footer)
   if (!is.null(page)) check_string(page)
   page_location <- arg_match(page_location)
+  if (!is.null(addl_cmds)) check_class(addl_cmds, "list")
+  .check_flex_word_style(header_style, "header_style")
+  .check_flex_word_style(footer_style, "footer_style")
   check_pkg_installed(c("flextable", "officer"))
 
   # tbl_split: one section (with its own header/footer) per table --------------
@@ -119,7 +153,10 @@ as_flex_word <- function(x,
         header = header,
         footer = footer,
         page = page,
-        page_location = page_location
+        page_location = page_location,
+        addl_cmds = addl_cmds,
+        header_style = header_style,
+        footer_style = footer_style
       )
     )
   }
@@ -132,7 +169,10 @@ as_flex_word <- function(x,
       header = header,
       footer = footer,
       page = page,
-      page_location = page_location
+      page_location = page_location,
+      addl_cmds = addl_cmds,
+      header_style = header_style,
+      footer_style = footer_style
     )
 
   # write the Word file --------------------------------------------------------
@@ -161,7 +201,8 @@ as_flex_word <- function(x,
 #' @return the original `tbl_split` `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.as_flex_word_split <- function(x, path, include, header, footer, page, page_location) {
+.as_flex_word_split <- function(x, path, include, header, footer, page, page_location,
+                                addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
   doc <- officer::read_docx()
 
   for (i in seq_along(x)) {
@@ -172,7 +213,10 @@ as_flex_word <- function(x,
         header = header,
         footer = footer,
         page = page,
-        page_location = page_location
+        page_location = page_location,
+        addl_cmds = addl_cmds,
+        header_style = header_style,
+        footer_style = footer_style
       )
 
     # page break before every table except the first
@@ -214,7 +258,8 @@ as_flex_word <- function(x,
 #'   `fpar`), and `footer_fpars` (list of `fpar`)
 #' @keywords internal
 #' @noRd
-.flex_word_build_one <- function(x, include, header, footer, page, page_location) {
+.flex_word_build_one <- function(x, include, header, footer, page, page_location,
+                                 addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
   # extract caption and footer content before (optionally) suppressing them
   caption_text <- .flex_word_caption(x)
   footer_lines <- .flex_word_footer_lines(x)
@@ -228,6 +273,12 @@ as_flex_word <- function(x,
     flextable_calls[["set_caption"]] <- NULL
   }
 
+  # insert user-supplied flextable commands. these are applied after the theme
+  # `as_flex_table-lst:addl_cmds` commands (already inserted by `as_flex_table()`
+  # above). named entries are inserted after the matching call; unnamed entries
+  # are appended after all existing calls.
+  flextable_calls <- .flex_word_insert_addl_cmds(flextable_calls, addl_cmds)
+
   ft <- .eval_list_of_exprs(flextable_calls)
 
   if (isTRUE(footer)) {
@@ -240,10 +291,21 @@ as_flex_word <- function(x,
     }
   }
 
-  # resolve the font used by the flextable body so the Word header/footer
-  # regions match it (they would otherwise fall back to the Word template
-  # default, e.g. Cambria).
-  fp_text <- .flex_word_default_font()
+  # resolve the font for each Word region. the base is the flextable body font
+  # (so regions match the body by default, instead of the Word template default
+  # e.g. Cambria); the region's theme style and then argument style are merged on
+  # top, with the argument winning on any shared property.
+  base_fp <- .flex_word_default_font()
+  header_fp <- .flex_word_region_font(
+    base_fp,
+    theme_props = get_theme_element("as_flex_word-lst:header_style", eval = TRUE),
+    arg_props = header_style
+  )
+  footer_fp <- .flex_word_region_font(
+    base_fp,
+    theme_props = get_theme_element("as_flex_word-lst:footer_style", eval = TRUE),
+    arg_props = footer_style
+  )
 
   # assemble the Word header/footer paragraph lists. content order is
   # caption/notes first, then the optional page-number line as a separate
@@ -252,17 +314,19 @@ as_flex_word <- function(x,
   footer_fpars <- list()
 
   if (isTRUE(header) && !is.null(caption_text)) {
-    header_fpars <- c(header_fpars, list(officer::fpar(officer::ftext(caption_text, prop = fp_text))))
+    header_fpars <- c(header_fpars, list(officer::fpar(officer::ftext(caption_text, prop = header_fp))))
   }
   if (isTRUE(footer) && length(footer_lines) > 0L) {
-    footer_fpars <- c(footer_fpars, lapply(footer_lines, \(line) officer::fpar(officer::ftext(line, prop = fp_text))))
+    footer_fpars <- c(footer_fpars, lapply(footer_lines, \(line) officer::fpar(officer::ftext(line, prop = footer_fp))))
   }
 
-  # optional page-number line (independent of the header/footer flags)
+  # optional page-number line (independent of the header/footer flags). it adopts
+  # the resolved style of whichever region it is placed in.
   if (!is.null(page)) {
     page_region <- sub("-.*$", "", page_location)
     page_align <- sub("^.*-", "", page_location)
-    page_fpar <- .flex_word_page_fpar(page, alignment = page_align, fp_text = fp_text)
+    page_fp <- if (identical(page_region, "header")) header_fp else footer_fp
+    page_fpar <- .flex_word_page_fpar(page, alignment = page_align, fp_text = page_fp)
     if (identical(page_region, "header")) {
       header_fpars <- c(header_fpars, list(page_fpar))
     } else {
@@ -408,6 +472,98 @@ as_flex_word <- function(x,
   if (!is.null(defaults$font.family)) args$font.family <- defaults$font.family
   if (!is.null(defaults$font.size)) args$font.size <- defaults$font.size
   do.call(officer::fp_text, args)
+}
+
+#' Merge header/footer style property lists onto the base region font
+#'
+#' Starting from the base body `officer::fp_text`, merges the region's theme
+#' property list and then its argument property list (argument wins on shared
+#' properties). Each merge overrides the named properties and retains the rest
+#' via the `update.fp_text` S3 method. Empty/`NULL` lists are skipped.
+#'
+#' @param base_fp (`fp_text`)\cr the base (table body) font
+#' @param theme_props,arg_props (`list` or `NULL`)\cr named `fp_text` property
+#'   lists from the theme element and the function argument
+#' @return an `officer::fp_text` object
+#' @keywords internal
+#' @noRd
+.flex_word_region_font <- function(base_fp, theme_props = NULL, arg_props = NULL) {
+  fp <- base_fp
+  for (props in list(theme_props, arg_props)) {
+    if (length(props) > 0L) {
+      fp <- do.call(stats::update, c(list(object = fp), props))
+    }
+  }
+  fp
+}
+
+#' Insert user-supplied flextable commands into the call list
+#'
+#' Named entries are inserted after the call of the matching name (via
+#' `add_expr_after()`); unnamed entries are appended after all existing calls.
+#' Entries are processed in list order. Errors when a name is not an existing
+#' call name, pointing users to `as_flex_table(x, return_calls = TRUE)`.
+#'
+#' @param calls (`list`)\cr the named list of flextable call expressions
+#' @param addl_cmds (`list` or `NULL`)\cr user commands (named and/or unnamed)
+#' @return the updated call list
+#' @keywords internal
+#' @noRd
+.flex_word_insert_addl_cmds <- function(calls, addl_cmds) {
+  if (length(addl_cmds) == 0L) {
+    return(calls)
+  }
+
+  nms <- names(addl_cmds) %||% rep("", length(addl_cmds))
+  for (i in seq_along(addl_cmds)) {
+    nm <- nms[i]
+    if (!is.na(nm) && nzchar(nm)) {
+      if (!nm %in% names(calls)) {
+        cli::cli_abort(
+          c(
+            "Each named element of {.arg addl_cmds} must match a flextable call name.",
+            i = "{.val {nm}} is not a valid name.",
+            i = "Run {.code as_flex_table(x, return_calls = TRUE)} to see valid names."
+          ),
+          call = get_cli_abort_call()
+        )
+      }
+      calls <- add_expr_after(
+        calls = calls,
+        add_after = nm,
+        expr = addl_cmds[[i]],
+        new_name = paste0("user_added_", i)
+      )
+    } else {
+      calls <- c(calls, set_names(list(addl_cmds[[i]]), paste0("user_added_", i)))
+    }
+  }
+
+  calls
+}
+
+#' Validate a header_style/footer_style argument
+#'
+#' Must be `NULL` or a fully named list (the names are `fp_text` property names).
+#'
+#' @param x the argument value
+#' @param arg_name (`string`)\cr the argument name for the error message
+#' @return `NULL`, invisibly (called for its side effect)
+#' @keywords internal
+#' @noRd
+.check_flex_word_style <- function(x, arg_name) {
+  if (is.null(x)) {
+    return(invisible(NULL))
+  }
+  nms <- names(x)
+  if (!is.list(x) || is.null(nms) || any(!nzchar(nms))) {
+    cli::cli_abort(
+      "The {.arg {arg_name}} argument must be {.code NULL} or a fully named
+       {.cls list} of {.fn officer::fp_text} properties.",
+      call = get_cli_abort_call()
+    )
+  }
+  invisible(NULL)
 }
 
 #' Build a page-number paragraph for the Word header/footer
