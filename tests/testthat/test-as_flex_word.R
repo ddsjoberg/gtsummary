@@ -263,3 +263,67 @@ test_that("as_flex_word() errors on a bare list and an empty tbl_split", {
   empty_split <- structure(list(), class = c("tbl_split", "list"))
   expect_error(as_flex_word(empty_split, path = path), "empty")
 })
+
+test_that("as_flex_word() header/footer text matches the flextable body font", {
+  # set non-default flextable body font; the Word header/footer should follow it
+  old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
+  withr::defer(do.call(flextable::set_flextable_defaults, old))
+
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(tbl, path = path, header = TRUE, footer = TRUE)
+
+  header <- read_docx_part(path, "header")
+  footer <- read_docx_part(path, "footer")
+
+  # caption (header) and notes (footer) carry the set font family
+  expect_match(header, "w:ascii=\"Times New Roman\"")
+  expect_match(footer, "w:ascii=\"Times New Roman\"")
+
+  # and the set font size (points -> half-points: 9 -> 18)
+  expect_match(header, "w:sz w:val=\"18\"")
+  expect_match(footer, "w:sz w:val=\"18\"")
+})
+
+test_that("as_flex_word(page) line matches the flextable body font, fields included", {
+  old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
+  withr::defer(do.call(flextable::set_flextable_defaults, old))
+
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(tbl, path = path, page = "Page {PAGE} of {NUMPAGES}")
+
+  footer <- read_docx_part(path, "footer")
+
+  # the page line (including the PAGE/NUMPAGES field runs) uses the body font
+  expect_match(footer, "PAGE")
+  expect_match(footer, "w:ascii=\"Times New Roman\"")
+  expect_match(footer, "w:sz w:val=\"18\"")
+})
+
+test_that("as_flex_word(tbl_split) header/footer matches the flextable body font", {
+  old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
+  withr::defer(do.call(flextable::set_flextable_defaults, old))
+
+  spl <- tbl_split_by_rows(split_tbl, variables = c(age, marker), caption = "all")
+  spl[[1]] <- modify_caption(spl[[1]], "CAPTION ALPHA")
+  spl[[2]] <- modify_caption(spl[[2]], "CAPTION BETA")
+
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(spl, path = path, header = TRUE, footer = TRUE)
+
+  read_part <- function(p, f) {
+    con <- unz(p, f)
+    on.exit(close(con))
+    paste(readLines(con, warn = FALSE), collapse = "")
+  }
+  parts <- unzip(path, list = TRUE)$Name
+  header_parts <- grep("word/header[0-9]+\\.xml", parts, value = TRUE)
+  footer_parts <- grep("word/footer[0-9]+\\.xml", parts, value = TRUE)
+
+  # every section's header/footer follows the body font
+  expect_true(all(vapply(
+    header_parts, \(f) grepl("w:ascii=\"Times New Roman\"", read_part(path, f)), logical(1)
+  )))
+  expect_true(all(vapply(
+    footer_parts, \(f) grepl("w:ascii=\"Times New Roman\"", read_part(path, f)), logical(1)
+  )))
+})
