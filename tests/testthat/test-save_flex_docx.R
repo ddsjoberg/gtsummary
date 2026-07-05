@@ -21,26 +21,26 @@ tbl <-
   modify_source_note("Data from the trial dataset") |>
   modify_abbreviation("Q1 = First quartile")
 
-test_that("as_flex_word() writes a file and returns x invisibly", {
+test_that("save_flex_docx() writes a file and returns x invisibly", {
   path <- withr::local_tempfile(fileext = ".docx")
 
-  expect_invisible(res <- as_flex_word(tbl, path = path))
+  expect_invisible(res <- save_flex_docx(tbl, path = path))
   expect_identical(res, tbl)
   expect_true(file.exists(path))
 })
 
-test_that("as_flex_word(header = TRUE) places the caption in the Word header", {
+test_that("save_flex_docx(header = TRUE) places the caption in the Word header", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, header = TRUE, footer = FALSE)
+  save_flex_docx(tbl, path = path, header = TRUE, footer = FALSE)
 
   # caption text is in the header region, not the table body
   expect_match(read_docx_part(path, "header"), "Patient characteristics")
   expect_no_match(read_docx_part(path, "body"), "Patient characteristics")
 })
 
-test_that("as_flex_word(footer = TRUE) places notes in the Word footer, keeping cell symbols", {
+test_that("save_flex_docx(footer = TRUE) places notes in the Word footer, keeping cell symbols", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, header = FALSE, footer = TRUE)
+  save_flex_docx(tbl, path = path, header = FALSE, footer = TRUE)
 
   footer <- read_docx_part(path, "footer")
   body <- read_docx_part(path, "body")
@@ -59,9 +59,9 @@ test_that("as_flex_word(footer = TRUE) places notes in the Word footer, keeping 
   expect_match(body, "superscript")
 })
 
-test_that("as_flex_word(header = FALSE, footer = FALSE) keeps content in the table", {
+test_that("save_flex_docx(header = FALSE, footer = FALSE) keeps content in the table", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, header = FALSE, footer = FALSE)
+  save_flex_docx(tbl, path = path, header = FALSE, footer = FALSE)
 
   body <- read_docx_part(path, "body")
   expect_match(body, "Patient characteristics")
@@ -69,35 +69,35 @@ test_that("as_flex_word(header = FALSE, footer = FALSE) keeps content in the tab
   expect_match(body, "Data from the trial dataset")
 })
 
-test_that("as_flex_word() works when the table has no caption/footnotes", {
+test_that("save_flex_docx() works when the table has no caption/footnotes", {
   path <- withr::local_tempfile(fileext = ".docx")
   plain <- trial |> tbl_summary(include = age)
 
-  expect_invisible(as_flex_word(plain, path = path))
+  expect_invisible(save_flex_docx(plain, path = path))
   expect_true(file.exists(path))
 })
 
-test_that("as_flex_word() input checks", {
+test_that("save_flex_docx() input checks", {
   path <- withr::local_tempfile(fileext = ".docx")
 
   # x must be a gtsummary object
-  expect_error(as_flex_word(mtcars, path = path), "gtsummary")
+  expect_error(save_flex_docx(mtcars, path = path), "gtsummary")
 
   # path is required and must be a string
-  expect_error(as_flex_word(tbl), "path")
-  expect_error(as_flex_word(tbl, path = 1L), "path")
+  expect_error(save_flex_docx(tbl), "path")
+  expect_error(save_flex_docx(tbl, path = 1L), "path")
 
   # header/footer must be scalar logicals
-  expect_error(as_flex_word(tbl, path = path, header = "yes"))
-  expect_error(as_flex_word(tbl, path = path, footer = c(TRUE, FALSE)))
+  expect_error(save_flex_docx(tbl, path = path, header = "yes"))
+  expect_error(save_flex_docx(tbl, path = path, footer = c(TRUE, FALSE)))
 
   # dots must be empty
-  expect_error(as_flex_word(tbl, path = path, not_an_arg = TRUE))
+  expect_error(save_flex_docx(tbl, path = path, not_an_arg = TRUE))
 })
 
-test_that("as_flex_word(page) adds live PAGE/NUMPAGES fields to the footer", {
+test_that("save_flex_docx(page) adds live PAGE/NUMPAGES fields to the footer", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, page = "Page {PAGE} of {NUMPAGES}")
+  save_flex_docx(tbl, path = path, page = "Page {PAGE} of {NUMPAGES}")
 
   footer <- read_docx_part(path, "footer")
   # live Word fields are present
@@ -110,24 +110,24 @@ test_that("as_flex_word(page) adds live PAGE/NUMPAGES fields to the footer", {
   expect_match(footer, "right|end")
 })
 
-test_that("as_flex_word(page_location) honors region and alignment", {
+test_that("save_flex_docx(page_location) honors region and alignment", {
   # header-center
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, page = "P {PAGE}", page_location = "header-center")
+  save_flex_docx(tbl, path = path, page = "P {PAGE}", page_location = "header-center")
   expect_match(read_docx_part(path, "header"), "PAGE")
   expect_match(read_docx_part(path, "header"), "center")
 
   # footer-left
   path2 <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path2, page = "P {PAGE}", page_location = "footer-left")
+  save_flex_docx(tbl, path = path2, page = "P {PAGE}", page_location = "footer-left")
   footer <- read_docx_part(path2, "footer")
   expect_match(footer, "PAGE")
   expect_match(footer, "left|start")
 })
 
-test_that("as_flex_word(page) coexists with caption/notes as a separate line", {
+test_that("save_flex_docx(page) coexists with caption/notes as a separate line", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     header = TRUE, footer = TRUE,
@@ -139,9 +139,9 @@ test_that("as_flex_word(page) coexists with caption/notes as a separate line", {
   expect_match(footer, "PAGE")
 })
 
-test_that("as_flex_word(page) is added even when header/footer = FALSE", {
+test_that("save_flex_docx(page) is added even when header/footer = FALSE", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     header = FALSE, footer = FALSE,
@@ -150,17 +150,17 @@ test_that("as_flex_word(page) is added even when header/footer = FALSE", {
   expect_match(read_docx_part(path, "header"), "PAGE")
 })
 
-test_that("as_flex_word(page) errors on invalid placeholders and locations", {
+test_that("save_flex_docx(page) errors on invalid placeholders and locations", {
   path <- withr::local_tempfile(fileext = ".docx")
 
   # invalid placeholder token
   expect_error(
-    as_flex_word(tbl, path = path, page = "Page {x} of {y}"),
+    save_flex_docx(tbl, path = path, page = "Page {x} of {y}"),
     "invalid placeholder"
   )
   # invalid page_location
   expect_error(
-    as_flex_word(tbl, path = path, page = "Page {PAGE}", page_location = "middle"),
+    save_flex_docx(tbl, path = path, page = "Page {PAGE}", page_location = "middle"),
     class = "rlang_error"
   )
 })
@@ -172,10 +172,10 @@ split_tbl <-
   modify_source_note("Data from the trial dataset")
 split_obj <- tbl_split_by_rows(split_tbl, variables = c(age, marker))
 
-test_that("as_flex_word() writes a tbl_split as one doc with a section per table", {
+test_that("save_flex_docx() writes a tbl_split as one doc with a section per table", {
   path <- withr::local_tempfile(fileext = ".docx")
 
-  expect_invisible(res <- as_flex_word(split_obj, path = path))
+  expect_invisible(res <- save_flex_docx(split_obj, path = path))
   expect_identical(res, split_obj)
   expect_true(file.exists(path))
 
@@ -187,9 +187,9 @@ test_that("as_flex_word() writes a tbl_split as one doc with a section per table
   expect_equal(length(gregexpr('w:type="page"', body)[[1]]), n_tables - 1L)
 })
 
-test_that("as_flex_word(tbl_split) puts each table's notes in its own section footer", {
+test_that("save_flex_docx(tbl_split) puts each table's notes in its own section footer", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(split_obj, path = path, header = FALSE, footer = TRUE)
+  save_flex_docx(split_obj, path = path, header = FALSE, footer = TRUE)
 
   # each table gets its own footer part carrying the source note
   parts <- unzip(path, list = TRUE)$Name
@@ -202,13 +202,13 @@ test_that("as_flex_word(tbl_split) puts each table's notes in its own section fo
   expect_match(footer1, "Data from the trial dataset")
 })
 
-test_that("as_flex_word(tbl_split) maps each table's caption to its own section header", {
+test_that("save_flex_docx(tbl_split) maps each table's caption to its own section header", {
   spl <- tbl_split_by_rows(split_tbl, variables = c(age, marker), caption = "all")
   spl[[1]] <- modify_caption(spl[[1]], "CAPTION ALPHA")
   spl[[2]] <- modify_caption(spl[[2]], "CAPTION BETA")
 
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(spl, path = path, header = TRUE, footer = FALSE)
+  save_flex_docx(spl, path = path, header = TRUE, footer = FALSE)
 
   read_part <- function(p, f) {
     con <- unz(p, f)
@@ -220,9 +220,9 @@ test_that("as_flex_word(tbl_split) maps each table's caption to its own section 
   expect_match(read_part(path, headers[[2]]), "CAPTION BETA")
 })
 
-test_that("as_flex_word(tbl_split, page) adds the page line to each section", {
+test_that("save_flex_docx(tbl_split, page) adds the page line to each section", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(split_obj, path = path, page = "Page {PAGE} of {NUMPAGES}")
+  save_flex_docx(split_obj, path = path, page = "Page {PAGE} of {NUMPAGES}")
 
   con <- unz(path, "word/footer1.xml")
   on.exit(close(con))
@@ -231,46 +231,46 @@ test_that("as_flex_word(tbl_split, page) adds the page line to each section", {
   expect_match(footer1, "NUMPAGES")
 })
 
-test_that("as_flex_word(tbl_split, header/footer = FALSE) keeps content in the body", {
+test_that("save_flex_docx(tbl_split, header/footer = FALSE) keeps content in the body", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(split_obj, path = path, header = FALSE, footer = FALSE)
+  save_flex_docx(split_obj, path = path, header = FALSE, footer = FALSE)
 
   body <- read_docx_part(path, "body")
   expect_match(body, "Data from the trial dataset")
 })
 
-test_that("as_flex_word() length-1 tbl_split works", {
+test_that("save_flex_docx() length-1 tbl_split works", {
   spl1 <- tbl_split_by_rows(split_tbl, variables = age, row_numbers = integer(0))
   # ensure a single-element split
   spl1 <- structure(list(split_tbl), class = c("tbl_split", "list"))
 
   path <- withr::local_tempfile(fileext = ".docx")
-  expect_invisible(as_flex_word(spl1, path = path))
+  expect_invisible(save_flex_docx(spl1, path = path))
   expect_true(file.exists(path))
   body <- read_docx_part(path, "body")
   expect_equal(length(gregexpr("<w:tbl ", body)[[1]]), 1L)
 })
 
-test_that("as_flex_word() errors on a bare list and an empty tbl_split", {
+test_that("save_flex_docx() errors on a bare list and an empty tbl_split", {
   path <- withr::local_tempfile(fileext = ".docx")
 
   # a plain list of gtsummary tables is not accepted
   expect_error(
-    as_flex_word(list(split_tbl, split_tbl), path = path),
+    save_flex_docx(list(split_tbl, split_tbl), path = path),
     "tbl_split"
   )
   # an empty tbl_split has nothing to write
   empty_split <- structure(list(), class = c("tbl_split", "list"))
-  expect_error(as_flex_word(empty_split, path = path), "empty")
+  expect_error(save_flex_docx(empty_split, path = path), "empty")
 })
 
-test_that("as_flex_word() header/footer text matches the flextable body font", {
+test_that("save_flex_docx() header/footer text matches the flextable body font", {
   # set non-default flextable body font; the Word header/footer should follow it
   old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
   withr::defer(do.call(flextable::set_flextable_defaults, old))
 
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, header = TRUE, footer = TRUE)
+  save_flex_docx(tbl, path = path, header = TRUE, footer = TRUE)
 
   header <- read_docx_part(path, "header")
   footer <- read_docx_part(path, "footer")
@@ -284,12 +284,12 @@ test_that("as_flex_word() header/footer text matches the flextable body font", {
   expect_match(footer, "w:sz w:val=\"18\"")
 })
 
-test_that("as_flex_word(page) line matches the flextable body font, fields included", {
+test_that("save_flex_docx(page) line matches the flextable body font, fields included", {
   old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
   withr::defer(do.call(flextable::set_flextable_defaults, old))
 
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(tbl, path = path, page = "Page {PAGE} of {NUMPAGES}")
+  save_flex_docx(tbl, path = path, page = "Page {PAGE} of {NUMPAGES}")
 
   footer <- read_docx_part(path, "footer")
 
@@ -299,7 +299,7 @@ test_that("as_flex_word(page) line matches the flextable body font, fields inclu
   expect_match(footer, "w:sz w:val=\"18\"")
 })
 
-test_that("as_flex_word(tbl_split) header/footer matches the flextable body font", {
+test_that("save_flex_docx(tbl_split) header/footer matches the flextable body font", {
   old <- flextable::set_flextable_defaults(font.family = "Times New Roman", font.size = 9)
   withr::defer(do.call(flextable::set_flextable_defaults, old))
 
@@ -308,7 +308,7 @@ test_that("as_flex_word(tbl_split) header/footer matches the flextable body font
   spl[[2]] <- modify_caption(spl[[2]], "CAPTION BETA")
 
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(spl, path = path, header = TRUE, footer = TRUE)
+  save_flex_docx(spl, path = path, header = TRUE, footer = TRUE)
 
   read_part <- function(p, f) {
     con <- unz(p, f)
@@ -329,11 +329,11 @@ test_that("as_flex_word(tbl_split) header/footer matches the flextable body font
 })
 
 # addl_cmds -------------------------------------------------------------------
-test_that("as_flex_word(addl_cmds) accepts unnamed (append) and named (insert-after) entries", {
+test_that("save_flex_docx(addl_cmds) accepts unnamed (append) and named (insert-after) entries", {
   # unnamed entry is appended and applied
   path <- withr::local_tempfile(fileext = ".docx")
   expect_no_error(
-    as_flex_word(
+    save_flex_docx(
       tbl,
       path = path,
       addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "all")))
@@ -344,7 +344,7 @@ test_that("as_flex_word(addl_cmds) accepts unnamed (append) and named (insert-af
   # named entry inserts after an existing call name
   path2 <- withr::local_tempfile(fileext = ".docx")
   expect_no_error(
-    as_flex_word(
+    save_flex_docx(
       tbl,
       path = path2,
       addl_cmds = list(fontsize = rlang::expr(flextable::bold(part = "header")))
@@ -353,12 +353,12 @@ test_that("as_flex_word(addl_cmds) accepts unnamed (append) and named (insert-af
   expect_true(file.exists(path2))
 })
 
-test_that("as_flex_word(addl_cmds) errors on invalid name and non-list", {
+test_that("save_flex_docx(addl_cmds) errors on invalid name and non-list", {
   path <- withr::local_tempfile(fileext = ".docx")
 
   # a name that is not a flextable call errors, mentioning return_calls
   expect_error(
-    as_flex_word(
+    save_flex_docx(
       tbl,
       path = path,
       addl_cmds = list(not_a_call = rlang::expr(flextable::bold()))
@@ -368,14 +368,14 @@ test_that("as_flex_word(addl_cmds) errors on invalid name and non-list", {
 
   # a non-list errors
   expect_error(
-    as_flex_word(tbl, path = path, addl_cmds = rlang::expr(flextable::bold()))
+    save_flex_docx(tbl, path = path, addl_cmds = rlang::expr(flextable::bold()))
   )
 })
 
-test_that("as_flex_word(addl_cmds) applies to a tbl_split", {
+test_that("save_flex_docx(addl_cmds) applies to a tbl_split", {
   path <- withr::local_tempfile(fileext = ".docx")
   expect_no_error(
-    as_flex_word(
+    save_flex_docx(
       split_obj,
       path = path,
       addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "all")))
@@ -393,19 +393,19 @@ test_that("as_flex_table-lst:addl_cmds theme applies for a single table and a tb
 
   # single gtsummary
   path <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(theme, as_flex_word(tbl, path = path))
+  with_gtsummary_theme(theme, save_flex_docx(tbl, path = path))
   expect_match(read_docx_part(path, "body"), "<w:b/>|<w:b ")
 
   # tbl_split
   path2 <- withr::local_tempfile(fileext = ".docx")
-  with_gtsummary_theme(theme, as_flex_word(split_obj, path = path2))
+  with_gtsummary_theme(theme, save_flex_docx(split_obj, path = path2))
   expect_match(read_docx_part(path2, "body"), "<w:b/>|<w:b ")
 })
 
 # header_style / footer_style -------------------------------------------------
-test_that("as_flex_word(footer_style) styles only the footer, header untouched", {
+test_that("save_flex_docx(footer_style) styles only the footer, header untouched", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     header = TRUE,
@@ -422,9 +422,9 @@ test_that("as_flex_word(footer_style) styles only the footer, header untouched",
   expect_no_match(header, "w:ascii=\"Times New Roman\"")
 })
 
-test_that("as_flex_word(header_style) styles only the header, footer untouched", {
+test_that("save_flex_docx(header_style) styles only the header, footer untouched", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     header = TRUE,
@@ -440,12 +440,12 @@ test_that("as_flex_word(header_style) styles only the header, footer untouched",
   expect_no_match(footer, "w:ascii=\"Times New Roman\"")
 })
 
-test_that("as_flex_word() style theme elements apply and the argument overrides the theme", {
+test_that("save_flex_docx() style theme elements apply and the argument overrides the theme", {
   # theme sets footer size 20; the argument sets size 8 and should win
   path <- withr::local_tempfile(fileext = ".docx")
   with_gtsummary_theme(
-    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
-    as_flex_word(tbl, path = path, footer_style = list(font.size = 8))
+    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
+    save_flex_docx(tbl, path = path, footer_style = list(font.size = 8))
   )
   footer <- read_docx_part(path, "footer")
   expect_match(footer, "w:sz w:val=\"16\"")
@@ -461,16 +461,16 @@ test_that("as_flex_word() style theme elements apply and the argument overrides 
     remove_footnote_header(columns = everything())
   path2 <- withr::local_tempfile(fileext = ".docx")
   with_gtsummary_theme(
-    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
-    as_flex_word(tbl_no_footer, path = path2, page = "Page {PAGE}")
+    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
+    save_flex_docx(tbl_no_footer, path = path2, page = "Page {PAGE}")
   )
   expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
 })
 
-test_that("as_flex_word(page) line adopts its region's resolved style", {
+test_that("save_flex_docx(page) line adopts its region's resolved style", {
   # page line placed in the footer adopts the footer style
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     page = "Page {PAGE} of {NUMPAGES}",
@@ -483,24 +483,24 @@ test_that("as_flex_word(page) line adopts its region's resolved style", {
   expect_match(footer, "w:sz w:val=\"16\"")
 })
 
-test_that("as_flex_word(header_style/footer_style) errors on an unnamed list", {
+test_that("save_flex_docx(header_style/footer_style) errors on an unnamed list", {
   path <- withr::local_tempfile(fileext = ".docx")
   expect_error(
-    as_flex_word(tbl, path = path, footer_style = list(8)),
+    save_flex_docx(tbl, path = path, footer_style = list(8)),
     "fully named"
   )
   expect_error(
-    as_flex_word(tbl, path = path, header_style = list(font.size = 8, 9)),
+    save_flex_docx(tbl, path = path, header_style = list(font.size = 8, 9)),
     "fully named"
   )
 })
 
 # inherit styling from the flextable parts -----------------------------------
-test_that("as_flex_word() inherits footer styling from the flextable footer part", {
+test_that("save_flex_docx() inherits footer styling from the flextable footer part", {
   # a footer fontsize set on the flextable is reflected in the Word footer
   # (6pt -> 12 half-points) and does not affect the header
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))
@@ -509,9 +509,9 @@ test_that("as_flex_word() inherits footer styling from the flextable footer part
   expect_no_match(read_docx_part(path, "header"), "w:sz w:val=\"12\"")
 })
 
-test_that("as_flex_word() inherits header styling from the flextable header part", {
+test_that("save_flex_docx() inherits header styling from the flextable header part", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     addl_cmds = list(rlang::expr(flextable::fontsize(size = 20, part = "header")))
@@ -519,9 +519,9 @@ test_that("as_flex_word() inherits header styling from the flextable header part
   expect_match(read_docx_part(path, "header"), "w:sz w:val=\"40\"")
 })
 
-test_that("as_flex_word() inherits non-size properties from the flextable part", {
+test_that("save_flex_docx() inherits non-size properties from the flextable part", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     addl_cmds = list(rlang::expr(flextable::bold(part = "footer")))
@@ -529,9 +529,9 @@ test_that("as_flex_word() inherits non-size properties from the flextable part",
   expect_match(read_docx_part(path, "footer"), "<w:b/>|<w:b ")
 })
 
-test_that("as_flex_word() footer_style argument overrides the inherited part font", {
+test_that("save_flex_docx() footer_style argument overrides the inherited part font", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     tbl,
     path = path,
     addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer"))),
@@ -542,12 +542,12 @@ test_that("as_flex_word() footer_style argument overrides the inherited part fon
   expect_no_match(footer, "w:sz w:val=\"12\"")
 })
 
-test_that("as_flex_word() theme style applies only when the part has no styling to inherit", {
+test_that("save_flex_docx() theme style applies only when the part has no styling to inherit", {
   # non-empty footer part: the extracted part font wins over the theme
   path <- withr::local_tempfile(fileext = ".docx")
   with_gtsummary_theme(
-    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
-    as_flex_word(
+    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
+    save_flex_docx(
       tbl,
       path = path,
       addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))
@@ -567,8 +567,8 @@ test_that("as_flex_word() theme style applies only when the part has no styling 
     remove_footnote_header(columns = everything())
   path2 <- withr::local_tempfile(fileext = ".docx")
   with_gtsummary_theme(
-    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
-    as_flex_word(
+    list("save_flex_docx-lst:footer_style" = list(font.size = 20)),
+    save_flex_docx(
       tbl_no_footer,
       path = path2,
       page = "Page {PAGE}",
@@ -578,9 +578,9 @@ test_that("as_flex_word() theme style applies only when the part has no styling 
   expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
 })
 
-test_that("as_flex_word(tbl_split) inherits footer styling per section", {
+test_that("save_flex_docx(tbl_split) inherits footer styling per section", {
   path <- withr::local_tempfile(fileext = ".docx")
-  as_flex_word(
+  save_flex_docx(
     split_obj,
     path = path,
     addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "footer")))

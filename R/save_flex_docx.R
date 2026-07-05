@@ -69,7 +69,7 @@
 #'   here are merged on top of
 #'   that inherited styling and override it, so unspecified properties are
 #'   retained. Values set here also override the corresponding
-#'   `as_flex_word-lst:header_style` / `as_flex_word-lst:footer_style` theme
+#'   `save_flex_docx-lst:header_style` / `save_flex_docx-lst:footer_style` theme
 #'   elements; those theme elements apply only when the flextable part carries no
 #'   styling to inherit (e.g. an empty footer). The page-number line adopts the
 #'   style of whichever region it is placed in (via `page_location`). Default is
@@ -88,10 +88,10 @@
 #'   modify_caption("**Table 1. Patient Characteristics**")
 #'
 #' # save the table, placing caption in the header and notes in the footer
-#' as_flex_word(tbl, path = tempfile(fileext = ".docx"))
+#' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 #'
 #' # add a "Page X of Y" line to the footer
-#' as_flex_word(
+#' save_flex_docx(
 #'   tbl,
 #'   path = tempfile(fileext = ".docx"),
 #'   page = "Page {PAGE} of {NUMPAGES}"
@@ -101,16 +101,16 @@
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, marker, grade)) |>
 #'   tbl_split_by_rows(variables = c(age, marker)) |>
-#'   as_flex_word(path = tempfile(fileext = ".docx"))
+#'   save_flex_docx(path = tempfile(fileext = ".docx"))
 #'
 #' # add custom flextable commands and style the footer separately
-#' as_flex_word(
+#' save_flex_docx(
 #'   tbl,
 #'   path = tempfile(fileext = ".docx"),
 #'   addl_cmds = list(rlang::expr(flextable::fontsize(size = 8, part = "all"))),
 #'   footer_style = list(font.size = 8, italic = TRUE)
 #' )
-as_flex_word <- function(x,
+save_flex_docx <- function(x,
                          path,
                          include = everything(),
                          header = TRUE,
@@ -142,8 +142,8 @@ as_flex_word <- function(x,
   if (!is.null(page)) check_string(page)
   page_location <- arg_match(page_location)
   if (!is.null(addl_cmds)) check_class(addl_cmds, "list")
-  .check_flex_word_style(header_style, "header_style")
-  .check_flex_word_style(footer_style, "footer_style")
+  .check_flex_docx_style(header_style, "header_style")
+  .check_flex_docx_style(footer_style, "footer_style")
   check_pkg_installed(c("flextable", "officer"))
 
   # tbl_split: one section (with its own header/footer) per table --------------
@@ -155,7 +155,7 @@ as_flex_word <- function(x,
       )
     }
     return(
-      .as_flex_word_split(
+      .save_flex_docx_split(
         x,
         path = path,
         include = {{ include }},
@@ -172,7 +172,7 @@ as_flex_word <- function(x,
 
   # single gtsummary table -----------------------------------------------------
   built <-
-    .flex_word_build_one(
+    .flex_docx_build_one(
       x,
       include = {{ include }},
       header = header,
@@ -191,7 +191,7 @@ as_flex_word <- function(x,
     flextable::save_as_docx(
       built$ft,
       path = path,
-      pr_section = .flex_word_prop_section(built$header_fpars, built$footer_fpars)
+      pr_section = .flex_docx_prop_section(built$header_fpars, built$footer_fpars)
     )
   } else {
     flextable::save_as_docx(built$ft, path = path)
@@ -206,17 +206,17 @@ as_flex_word <- function(x,
 #' a section break so that each table's caption/notes populate that section's own
 #' Word header/footer regions.
 #'
-#' @inheritParams as_flex_word
+#' @inheritParams save_flex_docx
 #' @return the original `tbl_split` `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.as_flex_word_split <- function(x, path, include, header, footer, page, page_location,
+.save_flex_docx_split <- function(x, path, include, header, footer, page, page_location,
                                 addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
   doc <- officer::read_docx()
 
   for (i in seq_along(x)) {
     built <-
-      .flex_word_build_one(
+      .flex_docx_build_one(
         x[[i]],
         include = {{ include }},
         header = header,
@@ -241,7 +241,7 @@ as_flex_word <- function(x,
       officer::body_end_block_section(
         doc,
         officer::block_section(
-          .flex_word_prop_section(
+          .flex_docx_prop_section(
             built$header_fpars,
             built$footer_fpars,
             type = "nextPage"
@@ -262,16 +262,16 @@ as_flex_word <- function(x,
 #' the Word header/footer paragraph lists (caption/notes plus the optional
 #' page-number line).
 #'
-#' @inheritParams as_flex_word
+#' @inheritParams save_flex_docx
 #' @return a list with elements `ft` (flextable), `header_fpars` (list of
 #'   `fpar`), and `footer_fpars` (list of `fpar`)
 #' @keywords internal
 #' @noRd
-.flex_word_build_one <- function(x, include, header, footer, page, page_location,
+.flex_docx_build_one <- function(x, include, header, footer, page, page_location,
                                  addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
   # extract caption and footer content before (optionally) suppressing them
-  caption_text <- .flex_word_caption(x)
-  footer_lines <- .flex_word_footer_lines(x)
+  caption_text <- .flex_docx_caption(x)
+  footer_lines <- .flex_docx_footer_lines(x)
 
   # build the flextable, suppressing the caption and/or footer content that is
   # being relocated to the Word document header/footer regions
@@ -286,7 +286,7 @@ as_flex_word <- function(x,
   # `as_flex_table-lst:addl_cmds` commands (already inserted by `as_flex_table()`
   # above). named entries are inserted after the matching call; unnamed entries
   # are appended after all existing calls.
-  flextable_calls <- .flex_word_insert_addl_cmds(flextable_calls, addl_cmds)
+  flextable_calls <- .flex_docx_insert_addl_cmds(flextable_calls, addl_cmds)
 
   ft <- .eval_list_of_exprs(flextable_calls)
 
@@ -299,9 +299,9 @@ as_flex_word <- function(x,
   # `nrow_part()` alone would wrongly report content, and inheriting then would
   # shadow the theme style for a region that only holds a page-number line.
   header_extracted <-
-    if (isTRUE(header) && !is.null(caption_text)) .flex_word_part_font(ft, "header") else NULL
+    if (isTRUE(header) && !is.null(caption_text)) .flex_docx_part_font(ft, "header") else NULL
   footer_extracted <-
-    if (isTRUE(footer) && length(footer_lines) > 0L) .flex_word_part_font(ft, "footer") else NULL
+    if (isTRUE(footer) && length(footer_lines) > 0L) .flex_docx_part_font(ft, "footer") else NULL
 
   if (isTRUE(footer)) {
     # footnote text, source notes, and abbreviations are relocated to the Word
@@ -320,16 +320,16 @@ as_flex_word <- function(x,
   # argument style. so the argument wins over an explicit part style, which in
   # turn wins over the theme style (the theme style therefore only takes effect
   # when the part carries nothing to inherit).
-  base_fp <- .flex_word_default_font()
-  header_fp <- .flex_word_region_font(
+  base_fp <- .flex_docx_default_font()
+  header_fp <- .flex_docx_region_font(
     base_fp,
-    theme_props = get_theme_element("as_flex_word-lst:header_style", eval = TRUE),
+    theme_props = get_theme_element("save_flex_docx-lst:header_style", eval = TRUE),
     extracted_props = header_extracted,
     arg_props = header_style
   )
-  footer_fp <- .flex_word_region_font(
+  footer_fp <- .flex_docx_region_font(
     base_fp,
-    theme_props = get_theme_element("as_flex_word-lst:footer_style", eval = TRUE),
+    theme_props = get_theme_element("save_flex_docx-lst:footer_style", eval = TRUE),
     extracted_props = footer_extracted,
     arg_props = footer_style
   )
@@ -353,7 +353,7 @@ as_flex_word <- function(x,
     page_region <- sub("-.*$", "", page_location)
     page_align <- sub("^.*-", "", page_location)
     page_fp <- if (identical(page_region, "header")) header_fp else footer_fp
-    page_fpar <- .flex_word_page_fpar(page, alignment = page_align, fp_text = page_fp)
+    page_fpar <- .flex_docx_page_fpar(page, alignment = page_align, fp_text = page_fp)
     if (identical(page_region, "header")) {
       header_fpars <- c(header_fpars, list(page_fpar))
     } else {
@@ -374,7 +374,7 @@ as_flex_word <- function(x,
 #' @return an `officer::prop_section` object
 #' @keywords internal
 #' @noRd
-.flex_word_prop_section <- function(header_fpars, footer_fpars, ...) {
+.flex_docx_prop_section <- function(header_fpars, footer_fpars, ...) {
   section_args <- list(...)
   if (length(header_fpars) > 0L) {
     section_args$header_default <- do.call(officer::block_list, header_fpars)
@@ -394,7 +394,7 @@ as_flex_word <- function(x,
 #' @return a string or `NULL`
 #' @keywords internal
 #' @noRd
-.flex_word_caption <- function(x) {
+.flex_docx_caption <- function(x) {
   caption <- x$table_styling$caption
   if (is.null(caption) || !nzchar(caption)) {
     return(NULL)
@@ -413,7 +413,7 @@ as_flex_word <- function(x,
 #' @return a character vector (possibly empty)
 #' @keywords internal
 #' @noRd
-.flex_word_footer_lines <- function(x) {
+.flex_docx_footer_lines <- function(x) {
   # add the header `id` column used by `.number_footnotes()`
   x$table_styling$header <-
     x$table_styling$header |>
@@ -515,9 +515,9 @@ as_flex_word <- function(x,
 # `flextable::fontsize(part = "header", size = 11)`. kept in sync with that call
 # in `R/as_flex_table.R`; used to detect (and ignore) the baked-in header size
 # when inheriting the header part font for the Word header region.
-.flex_word_header_default_size <- 11
+.flex_docx_header_default_size <- 11
 
-.flex_word_default_font <- function() {
+.flex_docx_default_font <- function() {
   defaults <- flextable::get_flextable_defaults()
   args <- list()
   if (!is.null(defaults$font.family)) args$font.family <- defaults$font.family
@@ -544,7 +544,7 @@ as_flex_word <- function(x,
 #'   mismatched ascii/hAnsi fonts. They are collapsed to the extracted
 #'   `font.family` so the whole run uses one font.
 #' - `as_flex_table()` bakes a fixed header font size
-#'   (`.flex_word_header_default_size`) into every table, independent of the
+#'   (`.flex_docx_header_default_size`) into every table, independent of the
 #'   flextable body/default font. For the header part that baked-in size is
 #'   treated as "the default" and dropped, so the body font still flows through;
 #'   only an explicitly different header size is inherited.
@@ -555,7 +555,7 @@ as_flex_word <- function(x,
 #'   rows (or nothing to inherit)
 #' @keywords internal
 #' @noRd
-.flex_word_part_font <- function(ft, part) {
+.flex_docx_part_font <- function(ft, part) {
   # nothing to extract when the part has no rows
   if (flextable::nrow_part(ft, part = part) == 0L) {
     return(NULL)
@@ -592,7 +592,7 @@ as_flex_word <- function(x,
   # constant's definition) so the body font size still applies unless the user
   # explicitly changed the header size.
   if (identical(part, "header") &&
-    isTRUE(args[["font.size"]] == .flex_word_header_default_size)) {
+    isTRUE(args[["font.size"]] == .flex_docx_header_default_size)) {
     args[["font.size"]] <- NULL
   }
 
@@ -618,7 +618,7 @@ as_flex_word <- function(x,
 #' @return an `officer::fp_text` object
 #' @keywords internal
 #' @noRd
-.flex_word_region_font <- function(base_fp, theme_props = NULL,
+.flex_docx_region_font <- function(base_fp, theme_props = NULL,
                                    extracted_props = NULL, arg_props = NULL) {
   fp <- base_fp
   for (props in list(theme_props, extracted_props, arg_props)) {
@@ -641,7 +641,7 @@ as_flex_word <- function(x,
 #' @return the updated call list
 #' @keywords internal
 #' @noRd
-.flex_word_insert_addl_cmds <- function(calls, addl_cmds) {
+.flex_docx_insert_addl_cmds <- function(calls, addl_cmds) {
   if (length(addl_cmds) == 0L) {
     return(calls)
   }
@@ -683,7 +683,7 @@ as_flex_word <- function(x,
 #' @return `NULL`, invisibly (called for its side effect)
 #' @keywords internal
 #' @noRd
-.check_flex_word_style <- function(x, arg_name) {
+.check_flex_docx_style <- function(x, arg_name) {
   if (is.null(x)) {
     return(invisible(NULL))
   }
@@ -712,7 +712,7 @@ as_flex_word <- function(x,
 #' @return an `officer::fpar` object
 #' @keywords internal
 #' @noRd
-.flex_word_page_fpar <- function(page, alignment, fp_text = officer::fp_text()) {
+.flex_docx_page_fpar <- function(page, alignment, fp_text = officer::fp_text()) {
   # split into literal segments and `{...}` tokens, keeping the delimiters
   pieces <- str_extract_all(page, "\\{[^}]*\\}|[^{]+")[[1]]
 
