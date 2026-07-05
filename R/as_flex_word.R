@@ -240,6 +240,11 @@ as_flex_word <- function(x,
     }
   }
 
+  # resolve the font used by the flextable body so the Word header/footer
+  # regions match it (they would otherwise fall back to the Word template
+  # default, e.g. Cambria).
+  fp_text <- .flex_word_default_font()
+
   # assemble the Word header/footer paragraph lists. content order is
   # caption/notes first, then the optional page-number line as a separate
   # paragraph.
@@ -247,17 +252,17 @@ as_flex_word <- function(x,
   footer_fpars <- list()
 
   if (isTRUE(header) && !is.null(caption_text)) {
-    header_fpars <- c(header_fpars, list(officer::fpar(officer::ftext(caption_text))))
+    header_fpars <- c(header_fpars, list(officer::fpar(officer::ftext(caption_text, prop = fp_text))))
   }
   if (isTRUE(footer) && length(footer_lines) > 0L) {
-    footer_fpars <- c(footer_fpars, lapply(footer_lines, \(line) officer::fpar(officer::ftext(line))))
+    footer_fpars <- c(footer_fpars, lapply(footer_lines, \(line) officer::fpar(officer::ftext(line, prop = fp_text))))
   }
 
   # optional page-number line (independent of the header/footer flags)
   if (!is.null(page)) {
     page_region <- sub("-.*$", "", page_location)
     page_align <- sub("^.*-", "", page_location)
-    page_fpar <- .flex_word_page_fpar(page, alignment = page_align)
+    page_fpar <- .flex_word_page_fpar(page, alignment = page_align, fp_text = fp_text)
     if (identical(page_region, "header")) {
       header_fpars <- c(header_fpars, list(page_fpar))
     } else {
@@ -386,6 +391,25 @@ as_flex_word <- function(x,
   c(footnote_lines, source_note_lines, abbreviation_lines)
 }
 
+#' Resolve the flextable default font for the Word header/footer
+#'
+#' Reads `flextable::get_flextable_defaults()` and returns an `officer::fp_text()`
+#' carrying the table body's `font.family` and `font.size`. This lets the Word
+#' header/footer regions match the flextable body font instead of falling back to
+#' the Word template default. A property is omitted when the corresponding
+#' flextable default is missing, so the existing default still applies.
+#'
+#' @return an `officer::fp_text` object
+#' @keywords internal
+#' @noRd
+.flex_word_default_font <- function() {
+  defaults <- flextable::get_flextable_defaults()
+  args <- list()
+  if (!is.null(defaults$font.family)) args$font.family <- defaults$font.family
+  if (!is.null(defaults$font.size)) args$font.size <- defaults$font.size
+  do.call(officer::fp_text, args)
+}
+
 #' Build a page-number paragraph for the Word header/footer
 #'
 #' Parses a glue-like `page` string into an `officer::fpar()`, replacing the
@@ -394,10 +418,13 @@ as_flex_word <- function(x,
 #'
 #' @param page (`string`)\cr the user-supplied page string
 #' @param alignment (`string`)\cr one of "left", "center", "right"
+#' @param fp_text (`fp_text`)\cr run properties applied to every run (literal
+#'   text and the `{PAGE}`/`{NUMPAGES}` fields) so the page line matches the
+#'   table body font
 #' @return an `officer::fpar` object
 #' @keywords internal
 #' @noRd
-.flex_word_page_fpar <- function(page, alignment) {
+.flex_word_page_fpar <- function(page, alignment, fp_text = officer::fp_text()) {
   # split into literal segments and `{...}` tokens, keeping the delimiters
   pieces <- str_extract_all(page, "\\{[^}]*\\}|[^{]+")[[1]]
 
@@ -416,13 +443,14 @@ as_flex_word <- function(x,
     )
   }
 
-  # map each piece to an officer run
+  # map each piece to an officer run, applying the shared font properties so the
+  # page line (including the `{PAGE}`/`{NUMPAGES}` fields) matches the table body
   runs <-
     lapply(pieces, function(piece) {
       switch(piece,
-        "{PAGE}" = officer::run_word_field(field = "PAGE"),
-        "{NUMPAGES}" = officer::run_word_field(field = "NUMPAGES"),
-        officer::ftext(piece)
+        "{PAGE}" = officer::run_word_field(field = "PAGE", prop = fp_text),
+        "{NUMPAGES}" = officer::run_word_field(field = "NUMPAGES", prop = fp_text),
+        officer::ftext(piece, prop = fp_text)
       )
     })
 
