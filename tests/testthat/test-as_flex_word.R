@@ -327,3 +327,163 @@ test_that("as_flex_word(tbl_split) header/footer matches the flextable body font
     footer_parts, \(f) grepl("w:ascii=\"Times New Roman\"", read_part(path, f)), logical(1)
   )))
 })
+
+# addl_cmds -------------------------------------------------------------------
+test_that("as_flex_word(addl_cmds) accepts unnamed (append) and named (insert-after) entries", {
+  # unnamed entry is appended and applied
+  path <- withr::local_tempfile(fileext = ".docx")
+  expect_no_error(
+    as_flex_word(
+      tbl,
+      path = path,
+      addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "all")))
+    )
+  )
+  expect_true(file.exists(path))
+
+  # named entry inserts after an existing call name
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  expect_no_error(
+    as_flex_word(
+      tbl,
+      path = path2,
+      addl_cmds = list(fontsize = rlang::expr(flextable::bold(part = "header")))
+    )
+  )
+  expect_true(file.exists(path2))
+})
+
+test_that("as_flex_word(addl_cmds) errors on invalid name and non-list", {
+  path <- withr::local_tempfile(fileext = ".docx")
+
+  # a name that is not a flextable call errors, mentioning return_calls
+  expect_error(
+    as_flex_word(
+      tbl,
+      path = path,
+      addl_cmds = list(not_a_call = rlang::expr(flextable::bold()))
+    ),
+    "return_calls"
+  )
+
+  # a non-list errors
+  expect_error(
+    as_flex_word(tbl, path = path, addl_cmds = rlang::expr(flextable::bold()))
+  )
+})
+
+test_that("as_flex_word(addl_cmds) applies to a tbl_split", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  expect_no_error(
+    as_flex_word(
+      split_obj,
+      path = path,
+      addl_cmds = list(rlang::expr(flextable::fontsize(size = 6, part = "all")))
+    )
+  )
+  expect_true(file.exists(path))
+})
+
+# theme addl_cmds -------------------------------------------------------------
+test_that("as_flex_table-lst:addl_cmds theme applies for a single table and a tbl_split", {
+  theme <- list(
+    "as_flex_table-lst:addl_cmds" =
+      list(fontsize = list(rlang::expr(flextable::bold(part = "header"))))
+  )
+
+  # single gtsummary
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(theme, as_flex_word(tbl, path = path))
+  expect_match(read_docx_part(path, "body"), "<w:b/>|<w:b ")
+
+  # tbl_split
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(theme, as_flex_word(split_obj, path = path2))
+  expect_match(read_docx_part(path2, "body"), "<w:b/>|<w:b ")
+})
+
+# header_style / footer_style -------------------------------------------------
+test_that("as_flex_word(footer_style) styles only the footer, header untouched", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    header = TRUE,
+    footer = TRUE,
+    footer_style = list(font.size = 8, font.family = "Times New Roman")
+  )
+
+  header <- read_docx_part(path, "header")
+  footer <- read_docx_part(path, "footer")
+
+  # footer takes the styled font; header does not
+  expect_match(footer, "w:ascii=\"Times New Roman\"")
+  expect_match(footer, "w:sz w:val=\"16\"")
+  expect_no_match(header, "w:ascii=\"Times New Roman\"")
+})
+
+test_that("as_flex_word(header_style) styles only the header, footer untouched", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    header = TRUE,
+    footer = TRUE,
+    header_style = list(font.size = 20, font.family = "Times New Roman")
+  )
+
+  header <- read_docx_part(path, "header")
+  footer <- read_docx_part(path, "footer")
+
+  expect_match(header, "w:ascii=\"Times New Roman\"")
+  expect_match(header, "w:sz w:val=\"40\"")
+  expect_no_match(footer, "w:ascii=\"Times New Roman\"")
+})
+
+test_that("as_flex_word() style theme elements apply and the argument overrides the theme", {
+  # theme sets footer size 20; the argument sets size 8 and should win
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
+    as_flex_word(tbl, path = path, footer_style = list(font.size = 8))
+  )
+  footer <- read_docx_part(path, "footer")
+  expect_match(footer, "w:sz w:val=\"16\"")
+  expect_no_match(footer, "w:sz w:val=\"40\"")
+
+  # theme alone (no argument) is applied
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("as_flex_word-lst:footer_style" = list(font.size = 20)),
+    as_flex_word(tbl, path = path2)
+  )
+  expect_match(read_docx_part(path2, "footer"), "w:sz w:val=\"40\"")
+})
+
+test_that("as_flex_word(page) line adopts its region's resolved style", {
+  # page line placed in the footer adopts the footer style
+  path <- withr::local_tempfile(fileext = ".docx")
+  as_flex_word(
+    tbl,
+    path = path,
+    page = "Page {PAGE} of {NUMPAGES}",
+    page_location = "footer-right",
+    footer_style = list(font.size = 8, font.family = "Times New Roman")
+  )
+  footer <- read_docx_part(path, "footer")
+  expect_match(footer, "PAGE")
+  expect_match(footer, "w:ascii=\"Times New Roman\"")
+  expect_match(footer, "w:sz w:val=\"16\"")
+})
+
+test_that("as_flex_word(header_style/footer_style) errors on an unnamed list", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  expect_error(
+    as_flex_word(tbl, path = path, footer_style = list(8)),
+    "fully named"
+  )
+  expect_error(
+    as_flex_word(tbl, path = path, header_style = list(font.size = 8, 9)),
+    "fully named"
+  )
+})

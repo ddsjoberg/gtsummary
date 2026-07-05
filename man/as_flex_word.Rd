@@ -13,6 +13,9 @@ as_flex_word(
   page = NULL,
   page_location = c("footer-right", "footer-center", "footer-left", "header-right",
     "header-center", "header-left"),
+  addl_cmds = NULL,
+  header_style = NULL,
+  footer_style = NULL,
   ...
 )
 }
@@ -48,6 +51,28 @@ arguments.}
 where to place the \code{page} text, as \code{"<region>-<alignment>"}. Must be one of
 \code{"footer-right"} (default), \code{"footer-center"}, \code{"footer-left"},
 \code{"header-right"}, \code{"header-center"}, or \code{"header-left"}.}
+
+\item{addl_cmds}{(named \code{list})\cr
+an optional list of additional flextable command expressions applied to the
+flextable after it is created from the gtsummary table. Do \strong{not} include
+the flextable object argument; each expression is piped onto the flextable
+(e.g. \code{rlang::expr(flextable::bold(part = "header"))}). A \strong{named} entry is
+inserted \emph{after} the call of that name; run
+\code{as_flex_table(x, return_calls = TRUE)} to see the available names. An
+\strong{unnamed} entry is appended after all existing calls. These are applied
+after any commands from the \code{as_flex_table-lst:addl_cmds} theme element.
+Default is \code{NULL}.}
+
+\item{header_style, footer_style}{(named \code{list})\cr
+optional named lists of \code{\link[officer:fp_text]{officer::fp_text()}} properties (e.g.
+\code{list(font.size = 8, font.family = "Arial")}) used to style the text in the
+Word document's header and footer regions, respectively. Properties are
+merged onto the table body font, so unspecified properties are inherited
+from the body. Values set here override the corresponding
+\code{as_flex_word-lst:header_style} / \code{as_flex_word-lst:footer_style} theme
+elements. The page-number line adopts the style of whichever region it is
+placed in (via \code{page_location}). Default is \code{NULL} (match the table body
+font).}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }
@@ -96,6 +121,14 @@ trial |>
   tbl_summary(by = trt, include = c(age, marker, grade)) |>
   tbl_split_by_rows(variables = c(age, marker)) |>
   as_flex_word(path = tempfile(fileext = ".docx"))
+
+# add custom flextable commands and style the footer separately
+as_flex_word(
+  tbl,
+  path = tempfile(fileext = ".docx"),
+  addl_cmds = list(rlang::expr(flextable::fontsize(size = 8, part = "all"))),
+  footer_style = list(font.size = 8, italic = TRUE)
+)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
