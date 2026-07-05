@@ -444,9 +444,27 @@ save_flex_docx <- function(x,
       .filter_row_with_subsequent_replace_or_removal() |>
       dplyr::filter(!.data$remove, .data$column %in% .env$shown_columns)
   }
+  # body footnotes additionally carry a `rows` predicate. resolve it to row
+  # numbers (against this table's body) and drop footnotes that match no rows,
+  # mirroring `as_flex_table()`. this matters for `tbl_split_by_rows()`: a
+  # footnote scoped to rows absent from a section must not appear in that
+  # section's Word footer.
+  resolve_footnote_body <- function(df) {
+    if (nrow(df) == 0L) {
+      return(df)
+    }
+    df |>
+      dplyr::mutate(
+        remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
+        row_numbers = map(.data$rows, \(rows) .rows_expr_to_row_numbers(x$table_body, rows))
+      ) |>
+      tidyr::unnest(cols = "row_numbers") |>
+      .filter_row_with_subsequent_replace_or_removal() |>
+      dplyr::filter(!.data$remove, .data$column %in% .env$shown_columns)
+  }
   footnote_header_resolved <- resolve_footnote_removals(x$table_styling$footnote_header)
   footnote_spanning_resolved <- resolve_footnote_removals(x$table_styling$footnote_spanning_header)
-  footnote_body_resolved <- resolve_footnote_removals(x$table_styling$footnote_body)
+  footnote_body_resolved <- resolve_footnote_body(x$table_styling$footnote_body)
 
   # header (and spanning header) footnotes, numbered first
   spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()

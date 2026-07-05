@@ -212,6 +212,36 @@ test_that("save_flex_docx(tbl_split) puts each table's notes in its own section 
   expect_match(footer1, "Data from the trial dataset")
 })
 
+test_that("save_flex_docx(tbl_split) shows a row-scoped footnote only in the section that has those rows", {
+  tbl <-
+    tbl_summary(
+      trial,
+      by = trt,
+      include = c(age, grade),
+      type = age ~ "continuous2"
+    ) |>
+    modify_caption("This is my title") |>
+    modify_footnote_body("my label", columns = "label", rows = variable == "age")
+
+  spl <- tbl_split_by_rows(tbl, variables = "age")
+
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(spl, path = path, header = TRUE, footer = TRUE)
+
+  read_part <- function(p, f) {
+    con <- unz(p, f)
+    on.exit(close(con))
+    paste(readLines(con, warn = FALSE), collapse = "")
+  }
+  parts <- unzip(path, list = TRUE)$Name
+  footer_parts <- sort(grep("word/footer[0-9]+\\.xml", parts, value = TRUE))
+
+  # first section (age rows) carries the row-scoped footnote; the second
+  # section (grade only) must not, since the referenced rows are absent there.
+  expect_match(read_part(path, footer_parts[[1]]), "my label")
+  expect_no_match(read_part(path, footer_parts[[2]]), "my label")
+})
+
 test_that("save_flex_docx(tbl_split) maps each table's caption to its own section header", {
   spl <- tbl_split_by_rows(split_tbl, variables = c(age, marker), caption = "all")
   spl[[1]] <- modify_caption(spl[[1]], "CAPTION ALPHA")
