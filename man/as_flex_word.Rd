@@ -66,13 +66,22 @@ Default is \code{NULL}.}
 \item{header_style, footer_style}{(named \code{list})\cr
 optional named lists of \code{\link[officer:fp_text]{officer::fp_text()}} properties (e.g.
 \code{list(font.size = 8, font.family = "Arial")}) used to style the text in the
-Word document's header and footer regions, respectively. Properties are
-merged onto the table body font, so unspecified properties are inherited
-from the body. Values set here override the corresponding
+Word document's header and footer regions, respectively. By default (when
+these are \code{NULL}) each region inherits the styling of the corresponding
+flextable part: the Word header from the flextable header part and the Word
+footer from the flextable footer part. For example, applying
+\code{flextable::fontsize(size = 6, part = "footer")} (e.g. via \code{addl_cmds} or a
+theme) yields a size-6 Word footer. (The Word header font size follows the
+flextable body font unless the header part size is explicitly changed, since
+\code{as_flex_table()} always sets a fixed header size internally.) Values set
+here are merged on top of
+that inherited styling and override it, so unspecified properties are
+retained. Values set here also override the corresponding
 \code{as_flex_word-lst:header_style} / \code{as_flex_word-lst:footer_style} theme
-elements. The page-number line adopts the style of whichever region it is
-placed in (via \code{page_location}). Default is \code{NULL} (match the table body
-font).}
+elements; those theme elements apply only when the flextable part carries no
+styling to inherit (e.g. an empty footer). The page-number line adopts the
+style of whichever region it is placed in (via \code{page_location}). Default is
+\code{NULL}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }
