@@ -183,11 +183,18 @@ test_that("save_flex_docx() writes a tbl_split as one doc with a section per tab
   n_tables <- length(split_obj)
   # one <w:tbl per split table
   expect_equal(length(gregexpr("<w:tbl ", body)[[1]]), n_tables)
-  # each table is closed by its own `nextPage` section break, which starts the
-  # next section on a new page. no explicit page breaks are added (that would
-  # insert a blank page between tables).
+  # one section (`<w:sectPr>`) per table: tables 1..(N-1) end with a block
+  # section, and the last table becomes the document's default section. no
+  # trailing empty section/paragraph is added (that rendered as a blank final
+  # page).
+  expect_equal(length(gregexpr("<w:sectPr", body)[[1]]), n_tables)
   expect_equal(length(gregexpr("nextPage", body)[[1]]), n_tables)
+  # no explicit page breaks are added (that would insert a blank page between
+  # tables).
   expect_false(grepl('w:type="page"', body))
+  # the document ends immediately after the final section (no trailing blank
+  # paragraph before the closing body tag).
+  expect_match(body, "</w:sectPr>\\s*</w:body>")
 })
 
 test_that("save_flex_docx(tbl_split) puts each table's notes in its own section footer", {

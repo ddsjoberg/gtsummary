@@ -230,20 +230,24 @@ save_flex_docx <- function(x,
 
     doc <- flextable::body_add_flextable(doc, built$ft)
 
-    # close this table's section, attaching its own header/footer. `type =
-    # "nextPage"` already starts the *next* section on a new page, so no explicit
-    # page break is added between tables (doing so would insert a blank page).
-    doc <-
-      officer::body_end_block_section(
-        doc,
-        officer::block_section(
-          .flex_docx_prop_section(
-            built$header_fpars,
-            built$footer_fpars,
-            type = "nextPage"
-          )
-        )
+    section <-
+      .flex_docx_prop_section(
+        built$header_fpars,
+        built$footer_fpars,
+        type = "nextPage"
       )
+
+    if (i < length(x)) {
+      # close this table's section, attaching its own header/footer. `type =
+      # "nextPage"` starts the *next* section on a new page, so no explicit page
+      # break is added between tables (that would insert a blank page).
+      doc <- officer::body_end_block_section(doc, officer::block_section(section))
+    } else {
+      # the last table uses the document's default section instead of a block
+      # section. `body_end_block_section()` appends a trailing paragraph and a
+      # closing section, which would render as an extra blank page at the end.
+      doc <- officer::body_set_default_section(doc, section)
+    }
   }
 
   print(doc, target = path)
