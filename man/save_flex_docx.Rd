@@ -14,6 +14,7 @@ save_flex_docx(
     "header-center", "header-left"),
   header_style = NULL,
   footer_style = NULL,
+  pr_section = NULL,
   ...
 )
 }
@@ -67,6 +68,19 @@ elements; those theme elements apply only when the flextable part carries no
 styling to inherit (e.g. an empty footer). The page-number line adopts the
 style of whichever region it is placed in (via \code{page_location}). Default is
 \code{NULL}.}
+
+\item{pr_section}{(\code{officer::prop_section})\cr
+an optional \code{\link[officer:prop_section]{officer::prop_section()}} object used as the base Word section,
+giving fine-grained control over page margins, page size, orientation, and
+section columns (e.g.
+\code{officer::prop_section(page_margins = officer::page_mar(top = 0.5))}). The
+section's header and footer regions are always managed by \code{save_flex_docx()}
+(the relocated caption and notes), so any \code{header_default}/\code{footer_default}
+set on \code{pr_section} are ignored. For a collection (\code{tbl_split} or a list of
+flextables) the same \code{pr_section} is applied to every table's section, and
+the paging \code{type} is fixed to \code{"nextPage"} (any \code{type} on \code{pr_section} is
+ignored) so tables page correctly. Overrides the
+\code{save_flex_docx-lst:pr_section} theme element. Default is \code{NULL}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }
@@ -128,6 +142,15 @@ ft <-
   as_flex_table(tbl) |>
   flextable::set_caption("Table 1")
 save_flex_docx(ft, path = tempfile(fileext = ".docx"))
+
+# customize the Word page margins via a prop_section()
+save_flex_docx(
+  tbl,
+  path = tempfile(fileext = ".docx"),
+  pr_section = officer::prop_section(
+    page_margins = officer::page_mar(top = 0.5, bottom = 0.5)
+  )
+)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
