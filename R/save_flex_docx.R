@@ -1,7 +1,8 @@
-#' Save a gtsummary table to a Word file
+#' Save a table to a Word file
 #'
 #' @description
-#' Save a gtsummary table to a Word (`.docx`) file using the flextable package.
+#' Save a gtsummary table or a flextable to a Word (`.docx`) file using the
+#' flextable package.
 #'
 #' The `header` and `footer` arguments control where the table caption and the
 #' footnote-region content (footnotes, source notes, and abbreviations) are
@@ -14,18 +15,22 @@
 #' when `footer = TRUE`, only the footnote *text* is relocated to the Word
 #' document footer.
 #'
-#' A `tbl_split` object (from [`tbl_split_by_rows()`] or
-#' [`tbl_split_by_columns()`]) is also accepted. Each table in the split is
-#' written to its own Word section, separated by a page break, so that each
-#' table's caption and footnote-region content populate that section's own
-#' header/footer regions.
+#' A collection of tables is also accepted: a `tbl_split` object (from
+#' [`tbl_split_by_rows()`] or [`tbl_split_by_columns()`]), or a plain list of
+#' flextables. Each table is written to its own Word section so that each table's
+#' caption and footnote-region content populate that section's own header/footer
+#' regions, one table per page.
 #'
-#' @param x (`gtsummary` or `tbl_split`)\cr
-#'   a gtsummary table, or a `tbl_split` object (a list of gtsummary tables)
+#' A `flextable` object (or a list of them) is also accepted. Its caption
+#' (`flextable::set_caption()`) is relocated to the Word header and its footer
+#' part (`flextable::add_footer_lines()`) to the Word footer, matching the
+#' gtsummary behavior.
+#'
+#' @param x (`gtsummary`, `tbl_split`, `flextable`, or `list`)\cr
+#'   a gtsummary table, a `tbl_split` object (a list of gtsummary tables), a
+#'   `flextable` object, or a plain list of `flextable` objects
 #' @param path (`string`)\cr
 #'   file path to write the Word (`.docx`) file to
-#' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   columns to include in the output. Default is `everything()`.
 #' @param header (scalar `logical`)\cr
 #'   whether to place the table caption in the Word document's page header
 #'   region. When `FALSE`, the caption is rendered as the table caption. Default
@@ -45,25 +50,15 @@
 #'   where to place the `page` text, as `"<region>-<alignment>"`. Must be one of
 #'   `"footer-right"` (default), `"footer-center"`, `"footer-left"`,
 #'   `"header-right"`, `"header-center"`, or `"header-left"`.
-#' @param addl_cmds (named `list`)\cr
-#'   an optional list of additional flextable command expressions applied to the
-#'   flextable after it is created from the gtsummary table. Do **not** include
-#'   the flextable object argument; each expression is piped onto the flextable
-#'   (e.g. `rlang::expr(flextable::bold(part = "header"))`). A **named** entry is
-#'   inserted *after* the call of that name; run
-#'   `as_flex_table(x, return_calls = TRUE)` to see the available names. An
-#'   **unnamed** entry is appended after all existing calls. These are applied
-#'   after any commands from the `as_flex_table-lst:addl_cmds` theme element.
-#'   Default is `NULL`.
 #' @param header_style,footer_style (named `list`)\cr
 #'   optional named lists of [`officer::fp_text()`] properties (e.g.
 #'   `list(font.size = 8, font.family = "Arial")`) used to style the text in the
 #'   Word document's header and footer regions, respectively. By default (when
 #'   these are `NULL`) each region inherits the styling of the corresponding
 #'   flextable part: the Word header from the flextable header part and the Word
-#'   footer from the flextable footer part. For example, applying
-#'   `flextable::fontsize(size = 6, part = "footer")` (e.g. via `addl_cmds` or a
-#'   theme) yields a size-6 Word footer. (The Word header font size follows the
+#'   footer from the flextable footer part. For example, a flextable built with
+#'   `flextable::fontsize(size = 6, part = "footer")` yields a size-6 Word
+#'   footer. (The Word header font size follows the
 #'   flextable body font unless the header part size is explicitly changed, since
 #'   `as_flex_table()` always sets a fixed header size internally.) Values set
 #'   here are merged on top of
@@ -77,7 +72,7 @@
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
-#' @return the original gtsummary table `x` (invisibly)
+#' @return the original object `x` (invisibly)
 #'
 #' @seealso [`as_flex_table()`]
 #'
@@ -90,11 +85,12 @@
 #' # save the table, placing caption in the header and notes in the footer
 #' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 #'
-#' # add a "Page X of Y" line to the footer
+#' # add a "Page X of Y" line to the footer and style the footer separately
 #' save_flex_docx(
 #'   tbl,
 #'   path = tempfile(fileext = ".docx"),
-#'   page = "Page {PAGE} of {NUMPAGES}"
+#'   page = "Page {PAGE} of {NUMPAGES}",
+#'   footer_style = list(font.size = 8, italic = TRUE)
 #' )
 #'
 #' # a split table is written with one table per section/page
@@ -103,16 +99,13 @@
 #'   tbl_split_by_rows(variables = c(age, marker)) |>
 #'   save_flex_docx(path = tempfile(fileext = ".docx"))
 #'
-#' # add custom flextable commands and style the footer separately
-#' save_flex_docx(
-#'   tbl,
-#'   path = tempfile(fileext = ".docx"),
-#'   addl_cmds = list(rlang::expr(flextable::fontsize(size = 8, part = "all"))),
-#'   footer_style = list(font.size = 8, italic = TRUE)
-#' )
+#' # a flextable (or a list of flextables) is also accepted
+#' ft <-
+#'   as_flex_table(tbl) |>
+#'   flextable::set_caption("Table 1")
+#' save_flex_docx(ft, path = tempfile(fileext = ".docx"))
 save_flex_docx <- function(x,
                          path,
-                         include = everything(),
                          header = TRUE,
                          footer = TRUE,
                          page = NULL,
@@ -120,7 +113,6 @@ save_flex_docx <- function(x,
                            "footer-right", "footer-center", "footer-left",
                            "header-right", "header-center", "header-left"
                          ),
-                         addl_cmds = NULL,
                          header_style = NULL,
                          footer_style = NULL,
                          ...) {
@@ -130,9 +122,18 @@ save_flex_docx <- function(x,
   check_dots_empty()
   check_not_missing(x)
   check_not_missing(path)
-  if (!inherits(x, c("gtsummary", "tbl_split"))) {
+  # accepted: a gtsummary table, a tbl_split, a flextable, or a plain list of
+  # flextables. a tbl_split is itself a list but is matched by its class first.
+  is_flextable_list <-
+    !inherits(x, c("gtsummary", "tbl_split", "flextable")) &&
+      is.list(x) && length(x) > 0L && all(map_lgl(x, \(el) inherits(el, "flextable")))
+  if (!inherits(x, c("gtsummary", "tbl_split", "flextable")) && !is_flextable_list) {
     cli::cli_abort(
-      "The {.arg x} argument must be a {.cls gtsummary} or {.cls tbl_split} object.",
+      c(
+        "The {.arg x} argument must be a {.cls gtsummary}, {.cls tbl_split}, or
+         {.cls flextable} object, or a list of {.cls flextable} objects.",
+        i = "A list must be non-empty and contain only {.cls flextable} elements."
+      ),
       call = get_cli_abort_call()
     )
   }
@@ -141,45 +142,40 @@ save_flex_docx <- function(x,
   check_scalar_logical(footer)
   if (!is.null(page)) check_string(page)
   page_location <- arg_match(page_location)
-  if (!is.null(addl_cmds)) check_class(addl_cmds, "list")
   .check_flex_docx_style(header_style, "header_style")
   .check_flex_docx_style(footer_style, "footer_style")
   check_pkg_installed(c("flextable", "officer"))
 
-  # tbl_split: one section (with its own header/footer) per table --------------
-  if (inherits(x, "tbl_split")) {
+  # collections: one section (with its own header/footer) per table ------------
+  if (inherits(x, "tbl_split") || is_flextable_list) {
     if (length(x) == 0L) {
       cli::cli_abort(
-        "The {.arg x} argument is an empty {.cls tbl_split} with no tables to write.",
+        "The {.arg x} argument is an empty collection with no tables to write.",
         call = get_cli_abort_call()
       )
     }
     return(
-      .save_flex_docx_split(
+      .save_flex_docx_collection(
         x,
         path = path,
-        include = {{ include }},
         header = header,
         footer = footer,
         page = page,
         page_location = page_location,
-        addl_cmds = addl_cmds,
         header_style = header_style,
         footer_style = footer_style
       )
     )
   }
 
-  # single gtsummary table -----------------------------------------------------
+  # single gtsummary table or flextable ----------------------------------------
   built <-
     .flex_docx_build_one(
       x,
-      include = {{ include }},
       header = header,
       footer = footer,
       page = page,
       page_location = page_location,
-      addl_cmds = addl_cmds,
       header_style = header_style,
       footer_style = footer_style
     )
@@ -200,30 +196,28 @@ save_flex_docx <- function(x,
   invisible(x)
 }
 
-#' Write a `tbl_split` to a single Word file, one section per table
+#' Write a collection of tables to a single Word file, one section per table
 #'
 #' Each table is added to the document, separated by a page break, and closed by
 #' a section break so that each table's caption/notes populate that section's own
 #' Word header/footer regions.
 #'
 #' @inheritParams save_flex_docx
-#' @return the original `tbl_split` `x` (invisibly)
+#' @return the original collection `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.save_flex_docx_split <- function(x, path, include, header, footer, page, page_location,
-                                addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
+.save_flex_docx_collection <- function(x, path, header, footer, page, page_location,
+                                       header_style = NULL, footer_style = NULL) {
   doc <- officer::read_docx()
 
   for (i in seq_along(x)) {
     built <-
       .flex_docx_build_one(
         x[[i]],
-        include = {{ include }},
         header = header,
         footer = footer,
         page = page,
         page_location = page_location,
-        addl_cmds = addl_cmds,
         header_style = header_style,
         footer_style = footer_style
       )
@@ -255,40 +249,44 @@ save_flex_docx <- function(x,
   invisible(x)
 }
 
-#' Build the flextable and header/footer paragraph lists for one gtsummary table
+#' Build the flextable and header/footer paragraph lists for one table
 #'
-#' Shared by the single-table and `tbl_split` paths. Builds the flextable (with
-#' the caption and/or footer content suppressed when relocated), and assembles
-#' the Word header/footer paragraph lists (caption/notes plus the optional
-#' page-number line).
+#' Shared by the single-table and collection paths, for both gtsummary and
+#' flextable input. Obtains the flextable (converting a gtsummary table via
+#' [`as_flex_table()`], or using a flextable directly), relocates the caption
+#' and/or footer content, and assembles the Word header/footer paragraph lists
+#' (caption/notes plus the optional page-number line).
 #'
 #' @inheritParams save_flex_docx
 #' @return a list with elements `ft` (flextable), `header_fpars` (list of
 #'   `fpar`), and `footer_fpars` (list of `fpar`)
 #' @keywords internal
 #' @noRd
-.flex_docx_build_one <- function(x, include, header, footer, page, page_location,
-                                 addl_cmds = NULL, header_style = NULL, footer_style = NULL) {
-  # extract caption and footer content before (optionally) suppressing them
-  caption_text <- .flex_docx_caption(x)
-  footer_lines <- .flex_docx_footer_lines(x)
+.flex_docx_build_one <- function(x, header, footer, page, page_location,
+                                 header_style = NULL, footer_style = NULL) {
+  is_flextable <- inherits(x, "flextable")
 
-  # build the flextable, suppressing the caption and/or footer content that is
-  # being relocated to the Word document header/footer regions
-  flextable_calls <- as_flex_table(x, include = {{ include }}, return_calls = TRUE)
-
-  if (isTRUE(header)) {
-    # caption is relocated to the Word header; drop the flextable caption
-    flextable_calls[["set_caption"]] <- NULL
+  # extract caption and footer content, then obtain the flextable with the
+  # relocated content suppressed.
+  if (is_flextable) {
+    caption_text <- .flex_docx_caption_flextable(x)
+    footer_lines <- .flex_docx_footer_lines_flextable(x)
+    ft <- x
+    if (isTRUE(header)) {
+      # caption is relocated to the Word header; clear it so it does not also
+      # render in the table body.
+      ft <- flextable::set_caption(ft, caption = "")
+    }
+  } else {
+    caption_text <- .flex_docx_caption(x)
+    footer_lines <- .flex_docx_footer_lines(x)
+    flextable_calls <- as_flex_table(x, return_calls = TRUE)
+    if (isTRUE(header)) {
+      # caption is relocated to the Word header; drop the flextable caption
+      flextable_calls[["set_caption"]] <- NULL
+    }
+    ft <- .eval_list_of_exprs(flextable_calls)
   }
-
-  # insert user-supplied flextable commands. these are applied after the theme
-  # `as_flex_table-lst:addl_cmds` commands (already inserted by `as_flex_table()`
-  # above). named entries are inserted after the matching call; unnamed entries
-  # are appended after all existing calls.
-  flextable_calls <- .flex_docx_insert_addl_cmds(flextable_calls, addl_cmds)
-
-  ft <- .eval_list_of_exprs(flextable_calls)
 
   # extract per-part styling from the flextable so each Word region can inherit
   # it. the footer part must be read *before* it is deleted below. the Word
@@ -400,6 +398,51 @@ save_flex_docx <- function(x,
     return(NULL)
   }
   .strip_markdown(caption)
+}
+
+#' Extract the caption text from a flextable for the Word header
+#'
+#' Reads `ft$caption$value` (set via `flextable::set_caption()`). Returns the
+#' caption string as-is (flextable captions are plain text), or `NULL` when there
+#' is no caption.
+#'
+#' @param x (`flextable`)\cr a flextable object
+#' @return a string or `NULL`
+#' @keywords internal
+#' @noRd
+.flex_docx_caption_flextable <- function(x) {
+  caption <- x$caption$value
+  if (is.null(caption) || !is.character(caption) || !nzchar(caption)) {
+    return(NULL)
+  }
+  caption
+}
+
+#' Assemble the footer text lines from a flextable footer part
+#'
+#' Returns the text of each footer row, in order, dropping blank rows. Returns an
+#' empty character vector when the flextable has no footer part.
+#'
+#' @param x (`flextable`)\cr a flextable object
+#' @return a character vector (possibly empty)
+#' @keywords internal
+#' @noRd
+.flex_docx_footer_lines_flextable <- function(x) {
+  if (flextable::nrow_part(x, part = "footer") == 0L) {
+    return(character(0))
+  }
+  # the rendered footer text lives in the paragraph content of the footer part
+  # (`ft$footer$content$data`), a matrix of per-cell chunk data frames each with
+  # a `txt` column. the first column of each row holds that line's text (spanned
+  # footer cells repeat the same content); concatenate the chunks per row so
+  # footnote reference symbols stay attached to their text.
+  content <- x$footer$content$data
+  lines <- vapply(
+    seq_len(nrow(content)),
+    function(i) paste(content[i, 1][[1]]$txt, collapse = ""),
+    character(1)
+  )
+  lines[nzchar(lines)]
 }
 
 #' Assemble the ordered footer text lines for the Word footer
@@ -645,51 +688,6 @@ save_flex_docx <- function(x,
     }
   }
   fp
-}
-
-#' Insert user-supplied flextable commands into the call list
-#'
-#' Named entries are inserted after the call of the matching name (via
-#' `add_expr_after()`); unnamed entries are appended after all existing calls.
-#' Entries are processed in list order. Errors when a name is not an existing
-#' call name, pointing users to `as_flex_table(x, return_calls = TRUE)`.
-#'
-#' @param calls (`list`)\cr the named list of flextable call expressions
-#' @param addl_cmds (`list` or `NULL`)\cr user commands (named and/or unnamed)
-#' @return the updated call list
-#' @keywords internal
-#' @noRd
-.flex_docx_insert_addl_cmds <- function(calls, addl_cmds) {
-  if (length(addl_cmds) == 0L) {
-    return(calls)
-  }
-
-  nms <- names(addl_cmds) %||% rep("", length(addl_cmds))
-  for (i in seq_along(addl_cmds)) {
-    nm <- nms[i]
-    if (!is.na(nm) && nzchar(nm)) {
-      if (!nm %in% names(calls)) {
-        cli::cli_abort(
-          c(
-            "Each named element of {.arg addl_cmds} must match a flextable call name.",
-            i = "{.val {nm}} is not a valid name.",
-            i = "Run {.code as_flex_table(x, return_calls = TRUE)} to see valid names."
-          ),
-          call = get_cli_abort_call()
-        )
-      }
-      calls <- add_expr_after(
-        calls = calls,
-        add_after = nm,
-        expr = addl_cmds[[i]],
-        new_name = paste0("user_added_", i)
-      )
-    } else {
-      calls <- c(calls, set_names(list(addl_cmds[[i]]), paste0("user_added_", i)))
-    }
-  }
-
-  calls
 }
 
 #' Validate a header_style/footer_style argument

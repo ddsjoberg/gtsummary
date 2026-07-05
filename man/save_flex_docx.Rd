@@ -2,32 +2,28 @@
 % Please edit documentation in R/save_flex_docx.R
 \name{save_flex_docx}
 \alias{save_flex_docx}
-\title{Save a gtsummary table to a Word file}
+\title{Save a table to a Word file}
 \usage{
 save_flex_docx(
   x,
   path,
-  include = everything(),
   header = TRUE,
   footer = TRUE,
   page = NULL,
   page_location = c("footer-right", "footer-center", "footer-left", "header-right",
     "header-center", "header-left"),
-  addl_cmds = NULL,
   header_style = NULL,
   footer_style = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{(\code{gtsummary} or \code{tbl_split})\cr
-a gtsummary table, or a \code{tbl_split} object (a list of gtsummary tables)}
+\item{x}{(\code{gtsummary}, \code{tbl_split}, \code{flextable}, or \code{list})\cr
+a gtsummary table, a \code{tbl_split} object (a list of gtsummary tables), a
+\code{flextable} object, or a plain list of \code{flextable} objects}
 
 \item{path}{(\code{string})\cr
 file path to write the Word (\code{.docx}) file to}
-
-\item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-columns to include in the output. Default is \code{everything()}.}
 
 \item{header}{(scalar \code{logical})\cr
 whether to place the table caption in the Word document's page header
@@ -52,26 +48,15 @@ where to place the \code{page} text, as \code{"<region>-<alignment>"}. Must be o
 \code{"footer-right"} (default), \code{"footer-center"}, \code{"footer-left"},
 \code{"header-right"}, \code{"header-center"}, or \code{"header-left"}.}
 
-\item{addl_cmds}{(named \code{list})\cr
-an optional list of additional flextable command expressions applied to the
-flextable after it is created from the gtsummary table. Do \strong{not} include
-the flextable object argument; each expression is piped onto the flextable
-(e.g. \code{rlang::expr(flextable::bold(part = "header"))}). A \strong{named} entry is
-inserted \emph{after} the call of that name; run
-\code{as_flex_table(x, return_calls = TRUE)} to see the available names. An
-\strong{unnamed} entry is appended after all existing calls. These are applied
-after any commands from the \code{as_flex_table-lst:addl_cmds} theme element.
-Default is \code{NULL}.}
-
 \item{header_style, footer_style}{(named \code{list})\cr
 optional named lists of \code{\link[officer:fp_text]{officer::fp_text()}} properties (e.g.
 \code{list(font.size = 8, font.family = "Arial")}) used to style the text in the
 Word document's header and footer regions, respectively. By default (when
 these are \code{NULL}) each region inherits the styling of the corresponding
 flextable part: the Word header from the flextable header part and the Word
-footer from the flextable footer part. For example, applying
-\code{flextable::fontsize(size = 6, part = "footer")} (e.g. via \code{addl_cmds} or a
-theme) yields a size-6 Word footer. (The Word header font size follows the
+footer from the flextable footer part. For example, a flextable built with
+\code{flextable::fontsize(size = 6, part = "footer")} yields a size-6 Word
+footer. (The Word header font size follows the
 flextable body font unless the header part size is explicitly changed, since
 \code{as_flex_table()} always sets a fixed header size internally.) Values set
 here are merged on top of
@@ -86,10 +71,11 @@ style of whichever region it is placed in (via \code{page_location}). Default is
 \item{...}{These dots are for future extensions and must be empty.}
 }
 \value{
-the original gtsummary table \code{x} (invisibly)
+the original object \code{x} (invisibly)
 }
 \description{
-Save a gtsummary table to a Word (\code{.docx}) file using the flextable package.
+Save a gtsummary table or a flextable to a Word (\code{.docx}) file using the
+flextable package.
 
 The \code{header} and \code{footer} arguments control where the table caption and the
 footnote-region content (footnotes, source notes, and abbreviations) are
@@ -102,11 +88,16 @@ In-cell footnote reference symbols are always retained on the table cells;
 when \code{footer = TRUE}, only the footnote \emph{text} is relocated to the Word
 document footer.
 
-A \code{tbl_split} object (from \code{\link[=tbl_split_by_rows]{tbl_split_by_rows()}} or
-\code{\link[=tbl_split_by_columns]{tbl_split_by_columns()}}) is also accepted. Each table in the split is
-written to its own Word section, separated by a page break, so that each
-table's caption and footnote-region content populate that section's own
-header/footer regions.
+A collection of tables is also accepted: a \code{tbl_split} object (from
+\code{\link[=tbl_split_by_rows]{tbl_split_by_rows()}} or \code{\link[=tbl_split_by_columns]{tbl_split_by_columns()}}), or a plain list of
+flextables. Each table is written to its own Word section so that each table's
+caption and footnote-region content populate that section's own header/footer
+regions, one table per page.
+
+A \code{flextable} object (or a list of them) is also accepted. Its caption
+(\code{flextable::set_caption()}) is relocated to the Word header and its footer
+part (\code{flextable::add_footer_lines()}) to the Word footer, matching the
+gtsummary behavior.
 }
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
@@ -118,11 +109,12 @@ tbl <-
 # save the table, placing caption in the header and notes in the footer
 save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 
-# add a "Page X of Y" line to the footer
+# add a "Page X of Y" line to the footer and style the footer separately
 save_flex_docx(
   tbl,
   path = tempfile(fileext = ".docx"),
-  page = "Page {PAGE} of {NUMPAGES}"
+  page = "Page {PAGE} of {NUMPAGES}",
+  footer_style = list(font.size = 8, italic = TRUE)
 )
 
 # a split table is written with one table per section/page
@@ -131,13 +123,11 @@ trial |>
   tbl_split_by_rows(variables = c(age, marker)) |>
   save_flex_docx(path = tempfile(fileext = ".docx"))
 
-# add custom flextable commands and style the footer separately
-save_flex_docx(
-  tbl,
-  path = tempfile(fileext = ".docx"),
-  addl_cmds = list(rlang::expr(flextable::fontsize(size = 8, part = "all"))),
-  footer_style = list(font.size = 8, italic = TRUE)
-)
+# a flextable (or a list of flextables) is also accepted
+ft <-
+  as_flex_table(tbl) |>
+  flextable::set_caption("Table 1")
+save_flex_docx(ft, path = tempfile(fileext = ".docx"))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
