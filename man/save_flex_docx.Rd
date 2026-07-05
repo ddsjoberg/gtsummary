@@ -12,8 +12,6 @@ save_flex_docx(
   page = NULL,
   page_location = c("footer-right", "footer-center", "footer-left", "header-right",
     "header-center", "header-left"),
-  header_style = NULL,
-  footer_style = NULL,
   pr_section = NULL,
   ...
 )
@@ -48,26 +46,6 @@ arguments.}
 where to place the \code{page} text, as \code{"<region>-<alignment>"}. Must be one of
 \code{"footer-right"} (default), \code{"footer-center"}, \code{"footer-left"},
 \code{"header-right"}, \code{"header-center"}, or \code{"header-left"}.}
-
-\item{header_style, footer_style}{(named \code{list})\cr
-optional named lists of \code{\link[officer:fp_text]{officer::fp_text()}} properties (e.g.
-\code{list(font.size = 8, font.family = "Arial")}) used to style the text in the
-Word document's header and footer regions, respectively. By default (when
-these are \code{NULL}) each region inherits the styling of the corresponding
-flextable part: the Word header from the flextable header part and the Word
-footer from the flextable footer part. For example, a flextable built with
-\code{flextable::fontsize(size = 6, part = "footer")} yields a size-6 Word
-footer. (The Word header font size follows the
-flextable body font unless the header part size is explicitly changed, since
-\code{as_flex_table()} always sets a fixed header size internally.) Values set
-here are merged on top of
-that inherited styling and override it, so unspecified properties are
-retained. Values set here also override the corresponding
-\code{save_flex_docx-lst:header_style} / \code{save_flex_docx-lst:footer_style} theme
-elements; those theme elements apply only when the flextable part carries no
-styling to inherit (e.g. an empty footer). The page-number line adopts the
-style of whichever region it is placed in (via \code{page_location}). Default is
-\code{NULL}.}
 
 \item{pr_section}{(\code{officer::prop_section})\cr
 an optional \code{\link[officer:prop_section]{officer::prop_section()}} object used as the base Word section,
@@ -123,12 +101,11 @@ tbl <-
 # save the table, placing caption in the header and notes in the footer
 save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 
-# add a "Page X of Y" line to the footer and style the footer separately
+# add a "Page X of Y" line to the footer
 save_flex_docx(
   tbl,
   path = tempfile(fileext = ".docx"),
-  page = "Page {PAGE} of {NUMPAGES}",
-  footer_style = list(font.size = 8, italic = TRUE)
+  page = "Page {PAGE} of {NUMPAGES}"
 )
 
 # a split table is written with one table per section/page
