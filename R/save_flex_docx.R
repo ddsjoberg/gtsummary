@@ -69,6 +69,28 @@
 #'
 #' @seealso [`as_flex_table()`]
 #'
+#' @section Limitations:
+#'
+#' Relocating the caption to the Word header (`header = TRUE`) and the
+#' footnotes, source notes, and abbreviations to the Word footer
+#' (`footer = TRUE`) is lossy:
+#'
+#' - **Plain text only.** Relocated content is rendered as plain text: markdown
+#'   and HTML are not interpreted and emphasis markers (`**bold**`, `_italic_`)
+#'   are stripped. Only the font family and size are carried over; colors,
+#'   indentation, per-cell styling, and column structure are not preserved.
+#' - **Repeats on every page.** The caption and notes are written to the Word
+#'   header/footer regions, which repeat on every physical page of the section,
+#'   not just once.
+#' - **In-cell symbols are kept separate.** With `footer = TRUE`, only the
+#'   footnote *text* moves to the footer; the in-cell footnote reference symbols
+#'   remain on the table cells.
+#' - **Footer markers are inline.** Footnote reference markers in the footer
+#'   render inline with the text (not superscript), unlike the in-cell symbols.
+#' - **Applies to both inputs.** For flextable input the caption and footer are
+#'   taken as provided and are subject to the same plain-text and per-page-repeat
+#'   limitations.
+#'
 #' @examplesIf gtsummary:::is_pkg_installed(c("flextable", "officer"))
 #' tbl <-
 #'   trial |>

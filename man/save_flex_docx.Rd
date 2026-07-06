@@ -91,6 +91,31 @@ A \code{flextable} object (or a list of them) is also accepted. Its caption
 part (\code{flextable::add_footer_lines()}) to the Word footer, matching the
 gtsummary behavior.
 }
+\section{Limitations}{
+
+
+Relocating the caption to the Word header (\code{header = TRUE}) and the
+footnotes, source notes, and abbreviations to the Word footer
+(\code{footer = TRUE}) is lossy:
+\itemize{
+\item \strong{Plain text only.} Relocated content is rendered as plain text: markdown
+and HTML are not interpreted and emphasis markers (\verb{**bold**}, \verb{_italic_})
+are stripped. Only the font family and size are carried over; colors,
+indentation, per-cell styling, and column structure are not preserved.
+\item \strong{Repeats on every page.} The caption and notes are written to the Word
+header/footer regions, which repeat on every physical page of the section,
+not just once.
+\item \strong{In-cell symbols are kept separate.} With \code{footer = TRUE}, only the
+footnote \emph{text} moves to the footer; the in-cell footnote reference symbols
+remain on the table cells.
+\item \strong{Footer markers are inline.} Footnote reference markers in the footer
+render inline with the text (not superscript), unlike the in-cell symbols.
+\item \strong{Applies to both inputs.} For flextable input the caption and footer are
+taken as provided and are subject to the same plain-text and per-page-repeat
+limitations.
+}
+}
+
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
 tbl <-
