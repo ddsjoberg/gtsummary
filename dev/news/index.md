@@ -2,6 +2,37 @@
 
 ## gtsummary (development version)
 
+- Added
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)
+  to save a gtsummary table or a flextable to a Word (`.docx`) file via
+  flextable. The `header` and `footer` arguments place the table caption
+  in the Word document’s page header and the footnotes, source notes,
+  and abbreviations in the page footer. The `page` and `page_location`
+  arguments add a page-number line (e.g. `"Page {PAGE} of {NUMPAGES}"`)
+  to a chosen header/footer region and alignment. A collection of tables
+  is also accepted—a `tbl_split` object (from
+  [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)/[`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md))
+  or a plain list of flextables—writing each table to its own Word
+  section and page. For a flextable, its caption
+  ([`flextable::set_caption()`](https://davidgohel.github.io/flextable/reference/set_caption.html))
+  is relocated to the Word header and its footer part
+  ([`flextable::add_footer_lines()`](https://davidgohel.github.io/flextable/reference/add_footer_lines.html))
+  to the Word footer. The caption, footnotes, source notes,
+  abbreviations, and page-number line in the Word header/footer match
+  the table body font (family and size) instead of the Word template
+  default. Each Word region also inherits the styling applied to the
+  corresponding flextable part, so
+  e.g. `flextable::fontsize(size = 6, part = "footer")` yields a size-6
+  Word footer. The `pr_section` argument (and the
+  `save_flex_docx-lst:pr_section` theme element) accepts an
+  [`officer::prop_section()`](https://davidgohel.github.io/officer/reference/prop_section.html)
+  object for fine-grained control of the Word section—page margins, page
+  size, orientation, and columns—while the header/footer regions remain
+  managed by
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md);
+  for a collection the same section is applied to every table with the
+  paging `type` fixed to `"nextPage"`.
+
 - [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
   and
   [`remove_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
@@ -773,8 +804,8 @@ CRAN release: 2024-11-30
 
 - The `tbl_summary(statistic)` argument now allows users to pass curly
   brackets that appear in the final table. Just like in
-  [`glue::glue()`](https://rdrr.io/pkg/glue/man/glue.html) double curly
-  brackets are escaped to a single bracket. For example,
+  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
+  double curly brackets are escaped to a single bracket. For example,
   `tbl_summary(statistic=~"{{{mean}}}")` results in `"{<mean value>}"`.
   ([\#2123](https://github.com/ddsjoberg/gtsummary/issues/2123))
 

@@ -187,6 +187,8 @@
 - [`as_tibble(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_tibble.gtsummary.md)
   [`as.data.frame(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_tibble.gtsummary.md)
   : Convert gtsummary object to a tibble
+- [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)
+  **\[experimental\]** : Save a gtsummary table to a Word file
 
 ## Other Functions
 
