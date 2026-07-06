@@ -130,12 +130,13 @@ ft <-
   flextable::set_caption("Table 1")
 save_flex_docx(ft, path = tempfile(fileext = ".docx"))
 
-# customize the Word page margins via a prop_section()
+# customize the Word page margins and orientation via a prop_section()
 save_flex_docx(
   tbl,
   path = tempfile(fileext = ".docx"),
   pr_section = officer::prop_section(
-    page_margins = officer::page_mar(top = 0.5, bottom = 0.5)
+    page_margins = officer::page_mar(top = 0.5, bottom = 0.5),
+    page_size = officer::page_size(orient = "landscape")
   )
 )
 \dontshow{\}) # examplesIf}
