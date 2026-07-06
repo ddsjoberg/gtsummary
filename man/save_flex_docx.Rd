@@ -2,13 +2,13 @@
 % Please edit documentation in R/save_flex_docx.R
 \name{save_flex_docx}
 \alias{save_flex_docx}
-\title{Save a table to a Word file}
+\title{Save a gtsummary table to a Word file}
 \usage{
 save_flex_docx(
   x,
   path,
-  header = TRUE,
-  footer = TRUE,
+  header = FALSE,
+  footer = FALSE,
   page = NULL,
   page_location = c("footer-right", "footer-center", "footer-left", "header-right",
     "header-center", "header-left"),
@@ -27,12 +27,12 @@ file path to write the Word (\code{.docx}) file to}
 \item{header}{(scalar \code{logical})\cr
 whether to place the table caption in the Word document's page header
 region. When \code{FALSE}, the caption is rendered as the table caption. Default
-is \code{TRUE}.}
+is \code{FALSE}.}
 
 \item{footer}{(scalar \code{logical})\cr
 whether to place the footnotes, source notes, and abbreviations in the Word
 document's page footer region. When \code{FALSE}, this content is rendered in the
-table's footer. Default is \code{TRUE}.}
+table's footer. Default is \code{FALSE}.}
 
 \item{page}{(\code{string})\cr
 an optional string added as a page-number line in a header/footer region.
@@ -76,10 +76,6 @@ document's page \strong{header} and \strong{footer} regions (where it repeats on
 page) instead of appearing in the flow of the table itself. When \code{FALSE}, the
 content is rendered as part of the table, matching \code{\link[=as_flex_table]{as_flex_table()}}.
 
-In-cell footnote reference symbols are always retained on the table cells;
-when \code{footer = TRUE}, only the footnote \emph{text} is relocated to the Word
-document footer.
-
 A collection of tables is also accepted: a \code{tbl_split} object (from
 \code{\link[=tbl_split_by_rows]{tbl_split_by_rows()}} or \code{\link[=tbl_split_by_columns]{tbl_split_by_columns()}}), or a plain list of
 flextables. Each table is written to its own Word section so that each table's
@@ -102,17 +98,6 @@ footnotes, source notes, and abbreviations to the Word footer
 and HTML are not interpreted and emphasis markers (\verb{**bold**}, \verb{_italic_})
 are stripped. Only the font family and size are carried over; colors,
 indentation, per-cell styling, and column structure are not preserved.
-\item \strong{Repeats on every page.} The caption and notes are written to the Word
-header/footer regions, which repeat on every physical page of the section,
-not just once.
-\item \strong{In-cell symbols are kept separate.} With \code{footer = TRUE}, only the
-footnote \emph{text} moves to the footer; the in-cell footnote reference symbols
-remain on the table cells.
-\item \strong{Footer markers are inline.} Footnote reference markers in the footer
-render inline with the text (not superscript), unlike the in-cell symbols.
-\item \strong{Applies to both inputs.} For flextable input the caption and footer are
-taken as provided and are subject to the same plain-text and per-page-repeat
-limitations.
 }
 }
 
