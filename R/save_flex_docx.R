@@ -1,4 +1,4 @@
-#' Save a table to a Word file
+#' Save a gtsummary table to a Word file
 #'
 #' @description
 #' Save a gtsummary table or a flextable to a Word (`.docx`) file using the
@@ -10,10 +10,6 @@
 #' document's page **header** and **footer** regions (where it repeats on every
 #' page) instead of appearing in the flow of the table itself. When `FALSE`, the
 #' content is rendered as part of the table, matching [`as_flex_table()`].
-#'
-#' In-cell footnote reference symbols are always retained on the table cells;
-#' when `footer = TRUE`, only the footnote *text* is relocated to the Word
-#' document footer.
 #'
 #' A collection of tables is also accepted: a `tbl_split` object (from
 #' [`tbl_split_by_rows()`] or [`tbl_split_by_columns()`]), or a plain list of
@@ -34,11 +30,11 @@
 #' @param header (scalar `logical`)\cr
 #'   whether to place the table caption in the Word document's page header
 #'   region. When `FALSE`, the caption is rendered as the table caption. Default
-#'   is `TRUE`.
+#'   is `FALSE`.
 #' @param footer (scalar `logical`)\cr
 #'   whether to place the footnotes, source notes, and abbreviations in the Word
 #'   document's page footer region. When `FALSE`, this content is rendered in the
-#'   table's footer. Default is `TRUE`.
+#'   table's footer. Default is `FALSE`.
 #' @param page (`string`)\cr
 #'   an optional string added as a page-number line in a header/footer region.
 #'   The tokens `{PAGE}` and `{NUMPAGES}` are replaced with live Word fields for
@@ -79,17 +75,6 @@
 #'   and HTML are not interpreted and emphasis markers (`**bold**`, `_italic_`)
 #'   are stripped. Only the font family and size are carried over; colors,
 #'   indentation, per-cell styling, and column structure are not preserved.
-#' - **Repeats on every page.** The caption and notes are written to the Word
-#'   header/footer regions, which repeat on every physical page of the section,
-#'   not just once.
-#' - **In-cell symbols are kept separate.** With `footer = TRUE`, only the
-#'   footnote *text* moves to the footer; the in-cell footnote reference symbols
-#'   remain on the table cells.
-#' - **Footer markers are inline.** Footnote reference markers in the footer
-#'   render inline with the text (not superscript), unlike the in-cell symbols.
-#' - **Applies to both inputs.** For flextable input the caption and footer are
-#'   taken as provided and are subject to the same plain-text and per-page-repeat
-#'   limitations.
 #'
 #' @examplesIf gtsummary:::is_pkg_installed(c("flextable", "officer"))
 #' tbl <-
@@ -129,8 +114,8 @@
 #' )
 save_flex_docx <- function(x,
                          path,
-                         header = TRUE,
-                         footer = TRUE,
+                         header = FALSE,
+                         footer = FALSE,
                          page = NULL,
                          page_location = c(
                            "footer-right", "footer-center", "footer-left",
