@@ -66,6 +66,7 @@ ignored) so tables page correctly. Overrides the
 the original object \code{x} (invisibly)
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Save a gtsummary table or a flextable to a Word (\code{.docx}) file using the
 flextable package.
 
@@ -92,13 +93,11 @@ gtsummary behavior.
 
 Relocating the caption to the Word header (\code{header = TRUE}) and the
 footnotes, source notes, and abbreviations to the Word footer
-(\code{footer = TRUE}) is lossy:
-\itemize{
-\item \strong{Plain text only.} Relocated content is rendered as plain text: markdown
+(\code{footer = TRUE}) is lossy.
+Relocated content is rendered as plain text: markdown
 and HTML are not interpreted and emphasis markers (\verb{**bold**}, \verb{_italic_})
 are stripped. Only the font family and size are carried over; colors,
 indentation, per-cell styling, and column structure are not preserved.
-}
 }
 
 \examples{
@@ -120,8 +119,13 @@ save_flex_docx(
 
 # a split table is written with one table per section/page
 trial |>
-  tbl_summary(by = trt, include = c(age, marker, grade)) |>
-  tbl_split_by_rows(variables = c(age, marker)) |>
+  tbl_summary(by = trt, include = c(age, marker, grade), missing = ~"no") |>
+  modify_footnote_body(
+    "Footnotes only appear on the pages where the mark is present",
+    columns = "label",
+    rows = label == "Age"
+  ) |>
+  tbl_split_by_rows(variables = marker) |>
   save_flex_docx(path = tempfile(fileext = ".docx"))
 
 # a flextable (or a list of flextables) is also accepted
