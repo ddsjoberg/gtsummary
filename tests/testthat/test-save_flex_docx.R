@@ -478,6 +478,7 @@ test_that("save_flex_docx(page) line adopts the resolved style of its region", {
   save_flex_docx(
     ft,
     path = path,
+    footer = TRUE,
     page = "Page {PAGE} of {NUMPAGES}",
     page_location = "footer-right"
   )
@@ -492,7 +493,7 @@ test_that("save_flex_docx() inherits footer styling from the flextable footer pa
   # (6pt -> 12 half-points) and does not affect the header
   ft <- as_flex_table(tbl) |> flextable::fontsize(size = 6, part = "footer")
   path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(ft, path = path)
+  save_flex_docx(ft, path = path, header = TRUE, footer = TRUE)
   expect_match(read_docx_part(path, "footer"), "w:sz w:val=\"12\"")
   expect_no_match(read_docx_part(path, "header"), "w:sz w:val=\"12\"")
 })
@@ -503,21 +504,21 @@ test_that("save_flex_docx() inherits header styling from the flextable header pa
     flextable::set_caption("Caption") |>
     flextable::fontsize(size = 20, part = "header")
   path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(ft, path = path)
+  save_flex_docx(ft, path = path, header = TRUE)
   expect_match(read_docx_part(path, "header"), "w:sz w:val=\"40\"")
 })
 
 test_that("save_flex_docx() inherits non-size properties from the flextable part", {
   ft <- as_flex_table(tbl) |> flextable::bold(part = "footer")
   path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(ft, path = path)
+  save_flex_docx(ft, path = path, footer = TRUE)
   expect_match(read_docx_part(path, "footer"), "<w:b/>|<w:b ")
 })
 
 test_that("save_flex_docx(list) inherits footer styling per section", {
   ft <- as_flex_table(split_tbl) |> flextable::fontsize(size = 6, part = "footer")
   path <- withr::local_tempfile(fileext = ".docx")
-  save_flex_docx(list(ft, ft), path = path)
+  save_flex_docx(list(ft, ft), path = path, footer = TRUE)
 
   read_part <- function(p, f) {
     con <- unz(p, f)
@@ -539,6 +540,8 @@ test_that("save_flex_docx(pr_section) applies custom page margins, keeps caption
   save_flex_docx(
     tbl,
     path = path,
+    header = TRUE,
+    footer = TRUE,
     pr_section = officer::prop_section(
       page_margins = officer::page_mar(top = 0.5, bottom = 0.5)
     )
@@ -558,6 +561,8 @@ test_that("save_flex_docx(pr_section) header/footer defaults are overridden by o
   save_flex_docx(
     tbl,
     path = path,
+    header = TRUE,
+    footer = TRUE,
     pr_section = officer::prop_section(
       page_margins = officer::page_mar(top = 0.5),
       header_default = officer::block_list(officer::fpar(officer::ftext("USER HEADER"))),
