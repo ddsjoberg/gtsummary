@@ -206,16 +206,16 @@ AGE, a categorical variable summaries for AGEGR1 and SEX.
 
 The {cards} package can be utilized to create the ARD from a data frame.
 The package includes functions
-[`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
-for continuous summaries,
-[`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
-for categorical summaries, and
-[`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+[`ard_summary()`](https://rdrr.io/pkg/cards/man/ard_summary.html) for
+continuous summaries,
+[`ard_tabulate()`](https://rdrr.io/pkg/cards/man/ard_tabulate.html) for
+categorical summaries, and
+[`ard_tabulate_value()`](https://rdrr.io/pkg/cards/man/ard_tabulate_value.html)
 for dichotomous variables (and more).
 
 The package also exports a helper function,
-[`ard_stack()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html)
-to simultaneously build these summaries along with optional ancillary
+[`ard_stack()`](https://rdrr.io/pkg/cards/man/ard_stack.html) to
+simultaneously build these summaries along with optional ancillary
 results for a nicer display.
 
 ``` r
@@ -293,7 +293,7 @@ intervals.
 
 First, we will create an ARD for each of these analyses, then combine
 them with
-[`cards::bind_ard()`](https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html).
+[`cards::bind_ard()`](https://rdrr.io/pkg/cards/man/bind_ard.html).
 
 ``` r
 
@@ -335,19 +335,19 @@ similar structure to the simple ARDs we extracted from the
 results above.
 
 - The
-  [`cardx::ard_survival_survfit()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_survival_survfit.html)
+  [`cardx::ard_survival_survfit()`](https://rdrr.io/pkg/cardx/man/ard_survival_survfit.html)
   ARD looks like the
-  [`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  [`ard_tabulate()`](https://rdrr.io/pkg/cards/man/ard_tabulate.html)
   result.
 - The
-  [`cardx::ard_stats_t_test_onesample()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_stats_t_test_onesample.html)
+  [`cardx::ard_stats_t_test_onesample()`](https://rdrr.io/pkg/cardx/man/ard_stats_t_test_onesample.html)
   ARD looks like the
-  [`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
+  [`ard_summary()`](https://rdrr.io/pkg/cards/man/ard_summary.html)
   result.
 - The
-  [`cardx::ard_categorical_ci()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_categorical_ci.html)
+  [`cardx::ard_categorical_ci()`](https://rdrr.io/pkg/cardx/man/ard_categorical_ci.html)
   ARD looks like the
-  [`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+  [`ard_tabulate_value()`](https://rdrr.io/pkg/cards/man/ard_tabulate_value.html)
   result.
 
 With the created ARD, we can now build a summary table.

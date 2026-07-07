@@ -4,14 +4,14 @@ An S3 generic that serves as the default for `add_global_p(anova_fun)`.
 
 The default function uses
 [`car::Anova()`](https://rdrr.io/pkg/car/man/Anova.html) (via
-[`cardx::ard_car_anova()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_car_anova.html))
+[`cardx::ard_car_anova()`](https://rdrr.io/pkg/cardx/man/ard_car_anova.html))
 to calculate the p-values.
 
 The method for GEE models (created from
 [`geepack::geeglm()`](https://rdrr.io/pkg/geepack/man/geeglm.html))
 returns Wald tests calculated using
 [`aod::wald.test()`](https://rdrr.io/pkg/aod/man/wald.test.html) (via
-[`cardx::ard_aod_wald_test()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_aod_wald_test.html)).
+[`cardx::ard_aod_wald_test()`](https://rdrr.io/pkg/cardx/man/ard_aod_wald_test.html)).
 For this method, the `type` argument is not used.
 
 ## Usage

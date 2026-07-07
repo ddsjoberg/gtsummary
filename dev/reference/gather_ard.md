@@ -2,7 +2,7 @@
 
 Extract the ARDs from a gtsummary table. If needed, results may be
 combined with
-[`cards::bind_ard()`](https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html).
+[`cards::bind_ard()`](https://rdrr.io/pkg/cards/man/bind_ard.html).
 
 ## Usage
 

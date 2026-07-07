@@ -99,19 +99,19 @@ to improve the default appearance of the table.
 1.  **Attributes**: When attributes are included, the default labels
     will be the variable labels, when available. Attributes can be
     included in an ARD with
-    [`cards::ard_attributes()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html)
+    [`cards::ard_attributes()`](https://rdrr.io/pkg/cards/man/ard_attributes.html)
     or `ard_stack(.attributes = TRUE)`.
 
 2.  **Missing**: When missing results are included, users can include
     missing counts or rates for variables with
     `tbl_ard_summary(missing = c("ifany", "always"))`. The missing
     statistics can be included in an ARD with
-    [`cards::ard_missing()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html)
+    [`cards::ard_missing()`](https://rdrr.io/pkg/cards/man/ard_missing.html)
     or `ard_stack(.missing = TRUE)`.
 
 3.  **Total N**: The total N is saved internally when available, and it
     can be calculated with
-    [`cards::ard_total_n()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html)
+    [`cards::ard_total_n()`](https://rdrr.io/pkg/cards/man/ard_total_n.html)
     or `ard_stack(.total_n = TRUE)`.
 
 ## Examples

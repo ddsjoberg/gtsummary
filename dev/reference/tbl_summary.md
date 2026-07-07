@@ -119,7 +119,7 @@ tbl_summary(
   In rarer cases, you may need to define/override the typical
   denominators. In these cases, pass an integer or a data frame. Refer
   to the
-  [`?cards::ard_tabulate(denominator)`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  [`?cards::ard_tabulate(denominator)`](https://rdrr.io/pkg/cards/man/ard_tabulate.html)
   help file for details. When a data frame is passed, this data frame is
   used to calculate header counts.
 

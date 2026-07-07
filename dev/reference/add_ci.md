@@ -95,11 +95,11 @@ Must be one of
   **categorical** variables
 
 - `"agresti.coull"` calculated via
-  [`cardx::proportion_ci_agresti_coull()`](https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html)
+  [`cardx::proportion_ci_agresti_coull()`](https://rdrr.io/pkg/cardx/man/proportion_ci.html)
   for **categorical** variables
 
 - `"jeffreys"` calculated via
-  [`cardx::proportion_ci_jeffreys()`](https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html)
+  [`cardx::proportion_ci_jeffreys()`](https://rdrr.io/pkg/cardx/man/proportion_ci.html)
   for **categorical** variables
 
 - `"t.test"` calculated via
