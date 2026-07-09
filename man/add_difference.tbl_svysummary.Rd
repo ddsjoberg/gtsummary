@@ -11,6 +11,7 @@
   adj.vars = NULL,
   test.args = NULL,
   conf.level = 0.95,
+  levels = NULL,
   include = everything(),
   pvalue_fun = label_style_pvalue(digits = 1),
   estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
@@ -47,6 +48,14 @@ For example, add an argument for all t-tests, use
 \item{conf.level}{(\code{numeric})\cr
 a scalar in the interval \verb{(0, 1)} indicating the confidence level. Default is 0.95}
 
+\item{levels}{(\code{vector})\cr
+a length-two vector of the \code{tbl_svysummary(by=)} levels to compare. The
+difference is calculated as \code{levels[1]} minus \code{levels[2]}.
+This argument is required when the \code{by} variable has more than two levels, and
+allows the user to select which two groups to compare. When \code{by} has exactly
+two levels, this argument is optional and can be used to flip the direction of
+the difference (e.g. \code{levels[2]} minus \code{levels[1]}). Default is \code{NULL}.}
+
 \item{include}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 Variables to include in output. Default is \code{everything()}.}
 
@@ -81,5 +90,11 @@ survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) |>
     include = c(Class, Age)
   ) |>
   add_difference()
+
+# Example 2 ----------------------------------
+# Select two groups to compare when `by=` has 3+ levels
+survey::svydesign(~1, data = trial, weights = ~1) |>
+  tbl_svysummary(by = grade, include = c(age, marker), missing = "no") |>
+  add_difference(levels = c("I", "III"))
 \dontshow{\}) # examplesIf}
 }

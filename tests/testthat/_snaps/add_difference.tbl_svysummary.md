@@ -53,7 +53,7 @@
       add_difference(tbl_svysummary(svy_trial, include = age))
     Condition
       Error in `add_difference()`:
-      ! Cannot run `add_difference()` when `tbl_summary(by)` column does not have exactly two levels.
+      ! Cannot run `add_difference()` when `tbl_summary(by)` is not specified.
 
 ---
 
