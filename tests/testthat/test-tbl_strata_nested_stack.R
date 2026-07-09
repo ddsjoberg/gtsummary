@@ -234,3 +234,54 @@ test_that("tbl_strata_nested_stack() works with tables without prior indentation
     c(4L, 4L)
   )
 })
+
+test_that("tbl_strata_nested_stack() keeps second-level headers in all groups with 3+ strata levels (#2418)", {
+  df <- tidyr::expand_grid(
+    SEX     = c("Female", "Male"),
+    PARAMCD = c("A", "C", "W", "Y"),
+    VISIT   = c("D01", "D31", "D31/D01")
+  ) |>
+    dplyr::mutate(
+      SEX     = factor(SEX,     c("Female", "Male")),
+      PARAMCD = factor(PARAMCD, c("A", "C", "W", "Y")),
+      VISIT   = factor(VISIT,   c("D01", "D31", "D31/D01"))
+    ) |>
+    tidyr::crossing(
+      USUBJID = sprintf("S-%03d", 1:4),
+      TRT     = c("G1", "G2")
+    ) |>
+    dplyr::mutate(AVAL = seq_len(dplyr::n()))
+
+  expect_silent(
+    tbl <-
+      tbl_strata_nested_stack(
+        data     = df,
+        strata   = c(SEX, PARAMCD, VISIT),
+        .tbl_fun = function(d) tbl_summary(d, by = TRT, include = AVAL),
+        quiet    = TRUE
+      )
+  )
+
+  # extract the nesting header rows (those without an associated variable)
+  hdr <- tbl$table_body[is.na(tbl$table_body$variable), "label", drop = TRUE] |>
+    as.character()
+
+  # the second-level (PARAMCD) headers must appear under BOTH SEX groups, not
+  # just the first one. Previously, only the first PARAMCD header rendered under
+  # the second SEX group.
+  expect_equal(sum(hdr == "Female"), 1L)
+  expect_equal(sum(hdr == "Male"), 1L)
+  expect_equal(sum(hdr == "A"), 2L)
+  expect_equal(sum(hdr == "C"), 2L)
+  expect_equal(sum(hdr == "W"), 2L)
+  expect_equal(sum(hdr == "Y"), 2L)
+
+  # the header structure should be symmetric across the two SEX groups: each
+  # SEX section contains the same sequence of nested headers
+  female_idx <- which(hdr == "Female")
+  male_idx <- which(hdr == "Male")
+  expect_equal(female_idx, 1L)
+  female_section <- hdr[female_idx:(male_idx - 1L)]
+  male_section <- hdr[male_idx:length(hdr)]
+  expect_equal(female_section[-1], male_section[-1])
+})
