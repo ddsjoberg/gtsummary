@@ -2,6 +2,16 @@
 
 ## gtsummary (development version)
 
+- Added a `levels` argument to
+  [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_summary.md)
+  and
+  [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_svysummary.md)
+  to select which two `by` groups to compare. This makes
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
+  usable when `by=` has more than two levels, and lets users flip the
+  direction of the difference for two-level `by` variables.
+  ([\#2151](https://github.com/ddsjoberg/gtsummary/issues/2151))
+
 - Fixed bug in
   [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
   where second-level strata headers were dropped in all but the first
