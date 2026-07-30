@@ -76,6 +76,14 @@ Default is \code{all_categorical(FALSE) ~ "alphanumeric"}.}
 Indicates the type of percentage to return.
 Must be one of \code{c("column", "row", "cell")}. Default is \code{"column"}.
 
+The \code{percent} argument sets the denominator of the \code{{p}} statistic.
+Independently of \code{percent}, the percentages under each of the three
+standard denominators are always available in the \code{statistic} argument as
+\code{{p_col}}, \code{{p_row}}, and \code{{p_cell}} (with matching denominators
+\code{{N_col}}, \code{{N_row}}, and \code{{N_cell}}), and may be combined in a single
+statistic string, e.g.
+\code{statistic = all_categorical() ~ "{n} ({p_col}\% / {p_row}\%)"}.
+
 In rarer cases, you may need to define/override the typical denominators.
 In these cases, pass an integer or a data frame. Refer to the
 \code{\link[cards:ard_tabulate]{?cards::ard_tabulate(denominator)}} help file for details.
@@ -110,6 +118,13 @@ name and the formatted result of that function will be placed in the table.
 
 For categorical variables, the following statistics are available to display:
 \code{{n}} (frequency), \code{{N}} (denominator), \code{{p}} (percent).
+The denominator of \code{{p}} (and the value of \code{{N}}) follows the \code{percent}
+argument. The percentages under each of the three standard denominators are
+also always available as \code{{p_col}}, \code{{p_row}}, and \code{{p_cell}} (with
+denominators \code{{N_col}}, \code{{N_row}}, and \code{{N_cell}}), and any of them may be
+combined in one statistic string, e.g. \code{"{n} ({p_col}\% / {p_row}\%)"}.
+When there is no \code{by} variable, a level's row denominator is the level
+count itself, and \code{{p_row}} is always 100\%.
 
 For continuous variables, \strong{any univariate function may be used}.
 The most commonly used functions are \code{{median}}, \code{{mean}}, \code{{sd}}, \code{{min}},

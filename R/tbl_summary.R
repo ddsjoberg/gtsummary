@@ -55,6 +55,14 @@
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
 #'
+#'   The `percent` argument sets the denominator of the `{p}` statistic.
+#'   Independently of `percent`, the percentages under each of the three
+#'   standard denominators are always available in the `statistic` argument as
+#'   `{p_col}`, `{p_row}`, and `{p_cell}` (with matching denominators
+#'   `{N_col}`, `{N_row}`, and `{N_cell}`), and may be combined in a single
+#'   statistic string, e.g.
+#'   `statistic = all_categorical() ~ "{n} ({p_col}% / {p_row}%)"`.
+#'
 #'   In rarer cases, you may need to define/override the typical denominators.
 #'   In these cases, pass an integer or a data frame. Refer to the
 #'   [`?cards::ard_tabulate(denominator)`][cards::ard_tabulate] help file for details.
@@ -78,6 +86,13 @@
 #'
 #' For categorical variables, the following statistics are available to display:
 #' `{n}` (frequency), `{N}` (denominator), `{p}` (percent).
+#' The denominator of `{p}` (and the value of `{N}`) follows the `percent`
+#' argument. The percentages under each of the three standard denominators are
+#' also always available as `{p_col}`, `{p_row}`, and `{p_cell}` (with
+#' denominators `{N_col}`, `{N_row}`, and `{N_cell}`), and any of them may be
+#' combined in one statistic string, e.g. `"{n} ({p_col}% / {p_row}%)"`.
+#' When there is no `by` variable, a level's row denominator is the level
+#' count itself, and `{p_row}` is always 100%.
 #'
 #' For continuous variables, **any univariate function may be used**.
 #' The most commonly used functions are `{median}`, `{mean}`, `{sd}`, `{min}`,
@@ -384,6 +399,16 @@ tbl_summary <- function(data,
         value = value,
         stat_label = ~ default_stat_labels()
       ),
+      # tabulate percentages under the additional denominators when requested
+      # in a statistic string, e.g. `{p_row}` in "{n} ({p_col}% / {p_row}%)"
+      .ard_extra_percents(
+        scope_table_body(.list2tb(type, "var_type"), data),
+        by = by,
+        statistic = statistic,
+        type = type,
+        value = value,
+        digits = digits
+      ),
       # calculate continuous summaries
       cards::ard_summary(
         scope_table_body(.list2tb(type, "var_type"), data),
@@ -551,6 +576,104 @@ tbl_summary <- function(data,
     )
 }
 
+# Tabulates the auxiliary percent statistics `p_col`/`p_row`/`p_cell` (and
+# their denominators `N_col`/`N_row`/`N_cell`) for the categorical/dichotomous
+# variables whose `statistic` string requests them. The primary `{p}`/`{N}`
+# follow the `percent=` argument; these statistics are always computed under
+# the standard "column"/"row"/"cell" denominators, so several denominators can
+# be displayed in a single statistic string. Returns a single ARD, or NULL
+# when no statistic string requests an auxiliary percent.
+.ard_extra_percents <- function(data, by, statistic, type, value, digits) {
+  lst_new_stat_names <- list(
+    column = c(p = "p_col", N = "N_col"),
+    row = c(p = "p_row", N = "N_row"),
+    cell = c(p = "p_cell", N = "N_cell")
+  )
+
+  lst_ard <-
+    imap(
+      lst_new_stat_names,
+      function(new_names, denominator) {
+        # variables whose statistic string requests a stat under this denominator
+        variables <-
+          names(statistic) |>
+          keep(
+            \(variable) {
+              type[[variable]] %in% c("categorical", "dichotomous") &&
+                any(new_names %in% .extract_glue_elements(statistic[[variable]]))
+            }
+          )
+        if (is_empty(variables)) {
+          return(NULL)
+        }
+
+        # format the auxiliary stats with the fmt function the user assigned to,
+        # e.g., `p_row`, falling back to the primary `p`/`N` formatting
+        fmt_fun <-
+          variables |>
+          lapply(
+            function(variable) {
+              fmt <- digits[[variable]]
+              if (is_empty(fmt)) {
+                return(NULL)
+              }
+              utils::modifyList(
+                fmt,
+                list(
+                  p = fmt[[new_names[["p"]]]] %||% fmt[["p"]],
+                  N = fmt[[new_names[["N"]]]] %||% fmt[["N"]]
+                ) |>
+                  compact()
+              )
+            }
+          ) |>
+          stats::setNames(variables) |>
+          compact()
+        if (is_empty(fmt_fun)) fmt_fun <- NULL
+
+        cards::bind_ard(
+          cards::ard_tabulate(
+            data,
+            by = all_of(by),
+            variables = all_of(.get_variables_by_type(type[variables], "categorical")),
+            fmt_fun = fmt_fun,
+            denominator = denominator,
+            stat_label = ~ default_stat_labels()
+          ),
+          cards::ard_tabulate_value(
+            data,
+            by = all_of(by),
+            variables = all_of(.get_variables_by_type(type[variables], "dichotomous")),
+            fmt_fun = fmt_fun,
+            denominator = denominator,
+            value = value,
+            stat_label = ~ default_stat_labels()
+          )
+        ) |>
+          # keep only the stats that depend on the denominator, under their
+          # auxiliary names ({n} is identical to the primary tabulation)
+          dplyr::filter(.data$stat_name %in% c("p", "N")) |>
+          dplyr::mutate(
+            stat_name =
+              dplyr::case_match(
+                .data$stat_name,
+                "p" ~ new_names[["p"]],
+                "N" ~ new_names[["N"]]
+              )
+          ) |>
+          dplyr::mutate(
+            stat_label = unname(unlist(default_stat_labels()[.data$stat_name]))
+          )
+      }
+    ) |>
+    compact()
+
+  if (is_empty(lst_ard)) {
+    return(NULL)
+  }
+  rlang::inject(cards::bind_ard(!!!lst_ard))
+}
+
 .add_env_to_list_elements <- function(x, env) {
   lapply(
     x,
@@ -591,7 +714,7 @@ tbl_summary <- function(data,
           dplyr::distinct() %>%
           {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
           glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
+            gsub("\\{(p|p_col|p_row|p_cell|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
           )
       }
     ) |>

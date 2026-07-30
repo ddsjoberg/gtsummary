@@ -27,7 +27,10 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   # stats returned for all variables
   lst_cat_summary_fns <-
     case_switch(
-      inherits(data, "data.frame") ~ .categorical_summary_functions(c("n", "N", "p")),
+      inherits(data, "data.frame") ~
+        .categorical_summary_functions(c("n", "N", "p",
+                                         "p_col", "p_row", "p_cell",
+                                         "N_col", "N_row", "N_cell")),
       inherits(data, "survey.design") ~
         .categorical_summary_functions(c("n", "N", "p",
                                          "n_unweighted", "N_unweighted", "p_unweighted",
@@ -118,7 +121,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         return(value)
       }
       # if an integer is passed for a percentage, process stat with label_style_number()
-      if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted")) {
+      if (stat_name %in% c("p", "p_col", "p_row", "p_cell", "p_miss", "p_nonmiss", "p_unweighted")) {
         return(label_style_number(digits = value, scale = 100))
       }
       # otherwise, use style_number() to style number
@@ -180,12 +183,12 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
                                                           "p_miss", "p_nonmiss", "p_unweighted")) {
   lst_defaults <-
     c(
-      c("n", "N", "N_obs", "N_miss", "N_nonmiss",
+      c("n", "N", "N_col", "N_row", "N_cell", "N_obs", "N_miss", "N_nonmiss",
         "N_obs_unweighted", "n_unweighted", "N_unweighted",
         "N_miss_unweighted", "N_nonmiss_unweighted") |>
         intersect(statistics) |>
         rep_named(list(label_style_number())),
-      c("p", "p_miss", "p_nonmiss", "p_unweighted",
+      c("p", "p_col", "p_row", "p_cell", "p_miss", "p_nonmiss", "p_unweighted",
         "p_miss_unweighted", "p_nonmiss_unweighted") |>
         intersect(statistics) |>
         rep_named(list(get_theme_element("tbl_summary-fn:percent_fun", default = label_style_percent()))),

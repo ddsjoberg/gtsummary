@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `statistic` argument of `tbl_summary()` now supports percentages under all three standard denominators in a single statistic string via the `{p_col}`, `{p_row}`, and `{p_cell}` statistics (with matching denominators `{N_col}`, `{N_row}`, and `{N_cell}`), independently of the table-wide `percent` argument, e.g. `statistic = all_categorical() ~ "{n} ({p_col}% / {p_row}%)"`. Integer `digits` for the new percentage statistics are interpreted on the percent scale, and per-statistic formatting (e.g. `digits = grade ~ list(p_row = 1)`) is supported.
+
 * Added a `levels` argument to `add_difference.tbl_summary()` and `add_difference.tbl_svysummary()` to select which two `by` groups to compare. This makes `add_difference()` usable when `by=` has more than two levels, and lets users flip the direction of the difference for two-level `by` variables. (#2151)
 
 * Fixed bug in `tbl_strata_nested_stack()` where second-level strata headers were dropped in all but the first group when using three or more strata levels. (#2418)
