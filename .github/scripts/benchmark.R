@@ -119,6 +119,7 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
       data.frame(
         expression = as.character(all_res$expression),
         median_s = as.numeric(all_res$median),
+        mem_bytes = as.numeric(all_res$mem_alloc),
         round = r,
         version = version,
         pkg_version = pkg_version,
@@ -168,18 +169,40 @@ build_comparison <- function(rounds_df) {
       verdict <- paste0("\U2796 ", sign_chr, round(diff_pct, 1), "%")
     }
 
+    # memory allocation is deterministic, so summarize with the mean across
+    # rounds (no confidence interval) and flag purely by sign
+    main_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "main"])
+    pr_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "pr"])
+    mem_pct <- (pr_mem / main_mem - 1) * 100
+
+    if (mem_pct < -0.05) {
+      mem_verdict <- paste0("\U2705 ", round(mem_pct, 1), "%")
+    } else if (mem_pct > 0.05) {
+      mem_verdict <- paste0("\U274C +", round(mem_pct, 1), "%")
+    } else {
+      mem_verdict <- paste0("\U2796 ", ifelse(mem_pct >= 0, "+", ""), round(mem_pct, 1), "%")
+    }
+
     data.frame(
       expression = g,
       main = paste0(round(mean(main_medians) * 1000, 1), "ms"),
       pr = paste0(round(mean(pr_medians) * 1000, 1), "ms"),
       change = verdict,
-      ci = paste0("[", round(ci_lo, 1), "%, ", round(ci_hi, 1), "%]")
+      ci = paste0("[", round(ci_lo, 1), "%, ", round(ci_hi, 1), "%]"),
+      `main mem` = format(bench::as_bench_bytes(main_mem)),
+      `pr mem` = format(bench::as_bench_bytes(pr_mem)),
+      mem_delta = mem_verdict,
+      check.names = FALSE,
+      stringsAsFactors = FALSE
     )
   })
   do.call(rbind, rows)
 }
 
 tab <- build_comparison(df_all)
+# display label for the memory-change column (\U escapes are not allowed inside
+# backtick names, so set the column name here where a string literal is fine)
+names(tab)[names(tab) == "mem_delta"] <- "mem \U0394"
 
 style_names <- c("style_number", "style_number varying digits", "style_sigfig")
 trans_names <- c("translate_string en", "translate_string es")
@@ -197,7 +220,10 @@ header <- paste0(
   "Each benchmark runs ", n_rounds, " independent rounds. ",
   "The **change** column shows the mean % difference (negative = faster).\n",
   "The **95% CI** column shows the confidence interval on the change. ",
-  "If the CI excludes 0%, the result is flagged as a real improvement (\U2705) or regression (\U274C).\n\n"
+  "If the CI excludes 0%, the result is flagged as a real improvement (\U2705) or regression (\U274C).\n\n",
+  "The **main mem** / **pr mem** columns show total memory allocated ",
+  "(`bench::mark()` `mem_alloc`), and **mem \U0394** its % change (negative = less memory). ",
+  "Allocation is deterministic, so no confidence interval is shown.\n\n"
 )
 
 style_section <- paste0(
