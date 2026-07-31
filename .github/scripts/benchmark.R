@@ -40,6 +40,32 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
     bench_statistic <- bench_tbl$inputs$statistic
     bench_by <- "trt"
 
+    # Setup for brdg_hierarchical / sort / filter benchmarks: build the tables
+    # once so the assembly (brdg) and post-processing (sort/filter) steps can be
+    # benchmarked in isolation from the ARD computation.
+    suppressMessages({
+      bench_h_tbl <- gtsummary::tbl_hierarchical(
+        data = cards::ADAE,
+        variables = c(AESOC, AETERM, AESEV),
+        by = TRTA,
+        id = USUBJID,
+        denominator = cards::ADSL,
+        overall_row = TRUE,
+        label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+      )
+      # `include = AESEV` leaves AESOC/AETERM out, exercising `.append_not_incl()`
+      bench_h_incl_tbl <- gtsummary::tbl_hierarchical(
+        data = cards::ADAE,
+        variables = c(AESOC, AETERM, AESEV),
+        by = TRTA,
+        id = USUBJID,
+        denominator = cards::ADSL,
+        include = AESEV
+      )
+    })
+    bench_h_cards <- bench_h_tbl$cards[[1]]
+    bench_h_args <- bench_h_tbl$inputs
+
     # dummy data for style and translation
     x <- rnorm(10000)
     d <- rep_len(c(0L, 1L, 2L), 10000)
@@ -117,7 +143,30 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 20, check = FALSE
       )
 
-      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res)
+      # brdg_hierarchical (table assembly in isolation)
+      brdg_h_res <- bench::mark(
+        brdg_hierarchical = gtsummary::brdg_hierarchical(
+          cards = bench_h_cards,
+          variables = bench_h_args$variables,
+          by = bench_h_args$by,
+          include = bench_h_args$include,
+          statistic = bench_h_args$statistic,
+          overall_row = bench_h_args$overall_row,
+          count = FALSE,
+          is_ordered = FALSE,
+          label = bench_h_args$label
+        ),
+        iterations = 20, check = FALSE
+      )
+
+      # sort / filter hierarchical (post-processing, include-subset path)
+      sort_filter_h_res <- bench::mark(
+        sort_hierarchical = gtsummary::sort_hierarchical(bench_h_incl_tbl, sort = "descending"),
+        filter_hierarchical = gtsummary::filter_hierarchical(bench_h_incl_tbl, sum(n) > 5),
+        iterations = 10, check = FALSE
+      )
+
+      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, brdg_h_res, sort_filter_h_res)
       data.frame(
         expression = as.character(all_res$expression),
         median_s = as.numeric(all_res$median),
@@ -214,11 +263,13 @@ style_names <- c("style_number", "style_number varying digits", "style_sigfig")
 trans_names <- c("translate_string en", "translate_string es")
 pipe_names <- c("tbl_summary", "tbl_hierarchical", "tbl_strata")
 brdg_names <- c("brdg_summary")
+hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical")
 
 style_tab <- tab[tab$expression %in% style_names, ]
 trans_tab <- tab[tab$expression %in% trans_names, ]
 pipe_tab <- tab[tab$expression %in% pipe_names, ]
 brdg_tab <- tab[tab$expression %in% brdg_names, ]
+hier_tab <- tab[tab$expression %in% hier_names, ]
 
 header <- paste0(
   "## Performance Benchmark\n\n",
@@ -251,9 +302,14 @@ pipe_section <- paste0(
 brdg_section <- paste0(
   "### `brdg_summary` (50 variables)\n\n",
   paste(knitr::kable(brdg_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
+hier_section <- paste0(
+  "### Hierarchical internals (`cards::ADAE`)\n\n",
+  paste(knitr::kable(hier_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n"
 )
 
-report <- paste0(header, style_section, trans_section, pipe_section, brdg_section)
+report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, hier_section)
 writeLines(report, "bench_report.md")
 cat(report)
