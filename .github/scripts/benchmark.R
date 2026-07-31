@@ -170,12 +170,16 @@ build_comparison <- function(rounds_df) {
     }
 
     # memory allocation is deterministic, so summarize with the mean across
-    # rounds (no confidence interval) and flag purely by sign
-    main_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "main"])
-    pr_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "pr"])
+    # rounds (no confidence interval) and flag purely by sign. mem_alloc is NA
+    # when R was built without memory profiling (e.g. the RSPM ubuntu binary used
+    # on CI); in that case the columns fall back to "n/a" instead of erroring.
+    main_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "main"], na.rm = TRUE)
+    pr_mem <- mean(rounds_df$mem_bytes[rounds_df$expression == g & rounds_df$version == "pr"], na.rm = TRUE)
     mem_pct <- (pr_mem / main_mem - 1) * 100
 
-    if (mem_pct < -0.05) {
+    if (is.na(mem_pct)) {
+      mem_verdict <- "n/a"
+    } else if (mem_pct < -0.05) {
       mem_verdict <- paste0("\U2705 ", round(mem_pct, 1), "%")
     } else if (mem_pct > 0.05) {
       mem_verdict <- paste0("\U274C +", round(mem_pct, 1), "%")
@@ -189,8 +193,8 @@ build_comparison <- function(rounds_df) {
       pr = paste0(round(mean(pr_medians) * 1000, 1), "ms"),
       change = verdict,
       ci = paste0("[", round(ci_lo, 1), "%, ", round(ci_hi, 1), "%]"),
-      `main mem` = format(bench::as_bench_bytes(main_mem)),
-      `pr mem` = format(bench::as_bench_bytes(pr_mem)),
+      `main mem` = if (is.na(main_mem)) "n/a" else format(bench::as_bench_bytes(main_mem)),
+      `pr mem` = if (is.na(pr_mem)) "n/a" else format(bench::as_bench_bytes(pr_mem)),
       mem_delta = mem_verdict,
       check.names = FALSE,
       stringsAsFactors = FALSE
@@ -223,7 +227,8 @@ header <- paste0(
   "If the CI excludes 0%, the result is flagged as a real improvement (\U2705) or regression (\U274C).\n\n",
   "The **main mem** / **pr mem** columns show total memory allocated ",
   "(`bench::mark()` `mem_alloc`), and **mem \U0394** its % change (negative = less memory). ",
-  "Allocation is deterministic, so no confidence interval is shown.\n\n"
+  "Allocation is deterministic, so no confidence interval is shown. ",
+  "These columns show `n/a` when R is built without memory profiling.\n\n"
 )
 
 style_section <- paste0(
