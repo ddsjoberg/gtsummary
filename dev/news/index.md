@@ -3,6 +3,19 @@
 ## gtsummary (development version)
 
 - Improved the speed and memory efficiency of
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
+  [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
+  [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md),
+  and the
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  helpers. The table assembly step
+  ([`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md))
+  now vectorizes the statistic formatting instead of looping over every
+  cell, making the pipeline roughly 8 times faster with lower memory
+  allocation. There is no change to the returned tables.
+  ([\#2442](https://github.com/ddsjoberg/gtsummary/issues/2442))
+
+- Improved the speed and memory efficiency of
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   and the internals it shares with
   [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.md),
