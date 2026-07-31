@@ -15,6 +15,11 @@
 #' @param cat_threshold (`integer`)\cr
 #'   for base R numeric classes with fewer levels than
 #'   this threshold will default to a categorical summary. Default is `10L`
+#' @param dichotomous_values (`named list`)\cr
+#'   optional named list of pre-computed default dichotomous values, with one
+#'   element per variable (as returned by `.get_default_dichotomous_value()`).
+#'   When supplied, these values are used instead of being recomputed. Default
+#'   is `NULL`.
 #'
 #' @return named list
 #' @export
@@ -25,7 +30,8 @@
 #'   variables = c("age", "grade", "response"),
 #'   value = NULL
 #' )
-assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L) {
+assign_summary_type <- function(data, variables, value, type = NULL, cat_threshold = 10L,
+                                 dichotomous_values = NULL) {
   set_cli_abort_call()
 
   # if not specified, use theme for default value
@@ -52,7 +58,11 @@ assign_summary_type <- function(data, variables, value, type = NULL, cat_thresho
         }
 
         # if a type with a default dichotomous value, make it dichotomous
-        if (!is.null(.get_default_dichotomous_value(data[[variable]]))) {
+        # (use the pre-computed value when supplied)
+        default_dichotomous_value <-
+          if (!is.null(dichotomous_values)) dichotomous_values[[variable]]
+          else .get_default_dichotomous_value(data[[variable]])
+        if (!is.null(default_dichotomous_value)) {
           return("dichotomous")
         }
 

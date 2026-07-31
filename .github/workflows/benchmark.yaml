@@ -7,6 +7,12 @@ jobs:
   benchmark:
     if: startsWith(github.event.pull_request.title, 'perf')
     runs-on: ubuntu-latest
+    # rocker/r-ver builds R with `--enable-memory-profiling`, which the default
+    # r-lib/actions/setup-r Linux binary lacks. Without it bench::mark()'s
+    # mem_alloc is NA and the memory columns cannot be populated. `latest` tracks
+    # the newest R release; main and PR are built in the same container each run,
+    # so they always compare on identical R.
+    container: rocker/r-ver:latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
@@ -15,8 +21,8 @@ jobs:
       - name: Checkout PR
         uses: actions/checkout@v4
 
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      # R is already installed in the rocker container (with memory profiling),
+      # so the setup-r step is intentionally omitted.
 
       - name: Install Dependencies & Cache
         uses: r-lib/actions/setup-r-dependencies@v2

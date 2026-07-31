@@ -84,10 +84,11 @@ test_that("tbl_uvregression(method.args)", {
   expect_error(
     tbl2 <-
       tbl_uvregression(
-        trial,
+        trial |>
+          dplyr::mutate(subjectid = dplyr::row_number()),
         y = survival::Surv(ttdeath, death),
         method = survival::coxph,
-        method.args = list(id = response),
+        method.args = list(id = subjectid),
         include = c(age, trt)
       ),
     NA
@@ -95,12 +96,22 @@ test_that("tbl_uvregression(method.args)", {
   # check models are the same
   expect_equal(
     tbl2$tbls$age$inputs$x |> broom::tidy(),
-    survival::coxph(survival::Surv(ttdeath, death) ~ age, trial, id = response) |>
+    survival::coxph(
+      survival::Surv(ttdeath, death) ~ age,
+      data = trial |>
+        dplyr::mutate(subjectid = dplyr::row_number()),
+      id = subjectid
+    ) |>
       broom::tidy()
   )
   expect_equal(
     tbl2$tbls$trt$inputs$x |> broom::tidy(),
-    survival::coxph(survival::Surv(ttdeath, death) ~ trt, trial, id = response) |>
+    survival::coxph(
+      survival::Surv(ttdeath, death) ~ trt,
+      data = trial |>
+        dplyr::mutate(subjectid = dplyr::row_number()),
+      id = subjectid
+    ) |>
       broom::tidy()
   )
   expect_snapshot(as.data.frame(tbl2))
