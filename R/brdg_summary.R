@@ -232,59 +232,67 @@ pier_summary_categorical <- function(cards,
     cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
+  # pivot the ARD to wide to vectorize the string interpolation. Rows with a
+  # populated `variable_level` are the per-level stats (one table row each); rows
+  # with a NULL `variable_level` are variable-scope stats that glue appends to
+  # every level, with the level-scope stat winning on any name collision.
+  stat_cols <- unique(cards_no_attr$stat_name)
+  is_level <- !map_lgl(cards_no_attr$variable_level, is.null)
+
+  level_rows <- cards_no_attr[is_level, , drop = FALSE]
+  level_rows$label <- map_chr(level_rows$variable_level, as.character)
+  level_wide <-
+    tidyr::pivot_wider(
+      level_rows,
+      id_cols = c("variable", "gts_column", cards::all_ard_groups(), "label"),
+      names_from = "stat_name",
+      values_from = "stat_fmt",
+      values_fn = list
+    ) |>
+    .unlist_wide_stat_cols()
+
+  # append variable-scope stats (`gts_column` determines the by-group, so
+  # (variable, gts_column) keys the join); level-scope stats win on collision
+  var_rows <- cards_no_attr[!is_level, , drop = FALSE]
+  if (nrow(var_rows) > 0L) {
+    var_wide <-
+      tidyr::pivot_wider(
+        var_rows,
+        id_cols = c("variable", "gts_column"),
+        names_from = "stat_name",
+        values_from = "stat_fmt",
+        values_fn = list
+      ) |>
+      .unlist_wide_stat_cols()
+    dup_cols <- intersect(setdiff(names(var_wide), c("variable", "gts_column")), names(level_wide))
+    var_wide <- var_wide[, setdiff(names(var_wide), dup_cols), drop = FALSE]
+    joined <- dplyr::left_join(level_wide, var_wide, by = c("variable", "gts_column"))
+  } else {
+    joined <- level_wide
+  }
+
+  # evaluate statistics per variable vectorially (one table row per level)
   df_glued <-
-    # construct stat columns with glue by grouping variables and primary summary variable
-    cards_no_attr |>
-    dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
-    dplyr::group_map(
-      function(df_variable_stats, df_groups_and_variable) {
-        lst_variable_stats <-
-          cards::get_ard_statistics(
-            df_variable_stats,
-            map_lgl(.data$variable_level, is.null),
-            .column = "stat_fmt"
-          )
-
-        str_statistic_pre_glue <-
-          statistic[[df_groups_and_variable$variable[1]]]
-
-        dplyr::mutate(
-          .data = df_groups_and_variable,
-          df_stats =
-            dplyr::filter(df_variable_stats, !map_lgl(.data$variable_level, is.null)) |>
-              dplyr::group_by(.data$variable_level) |>
-              dplyr::group_map(
-                function(df_variable_level_stats, df_variable_levels) {
-                  dplyr::mutate(
-                    .data = df_variable_levels,
-                    stat =
-                      map(
-                        str_statistic_pre_glue,
-                        function(str_to_glue) {
-                          stat <-
-                            glue::glue_data(
-                              .x =
-                                cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
-                                  c(lst_variable_stats),
-                              str_to_glue
-                            ) |>
-                            as.character()
-                        }
-                      ),
-                    label = map_chr(.data$variable_level, as.character)
-                  )
-                }
-              ) |>
-              dplyr::bind_rows() |>
-              list()
-        )
+    lapply(
+      variables,
+      function(var) {
+        df_var <- joined[joined$variable == var, , drop = FALSE]
+        if (nrow(df_var) == 0L) {
+          return(NULL)
+        }
+        keep_cols <- setdiff(names(df_var), stat_cols)
+        out <- df_var[, keep_cols, drop = FALSE]
+        out$stat <- as.character(glue::glue_data(df_var, statistic[[var]]))
+        out
       }
     ) |>
-    dplyr::bind_rows() %>%
-    # this ensures the correct order when there are 10+ groups
+    (function(lst) rlang::inject(vctrs::vec_rbind(!!!lst)))()
+
+  # this ensures the correct order when there are 10+ groups
+  df_glued <-
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
-      .,
+      df_glued,
       by = "gts_column"
     )
 
@@ -308,9 +316,6 @@ pier_summary_categorical <- function(cards,
       var_label = unlist(.data$var_label),
       .after = 0L
     ) |>
-    dplyr::select(-cards::all_ard_groups()) |>
-    tidyr::unnest(cols = "df_stats") |>
-    tidyr::unnest(cols = "stat") |>
     tidyr::pivot_wider(
       id_cols = c("row_type", "var_label", "variable", "label"),
       names_from = "gts_column",
@@ -355,48 +360,60 @@ pier_summary_continuous2 <- function(cards,
     cards::apply_fmt_fun()
 
   # construct formatted statistics ---------------------------------------------
+  # pivot the ARD to wide to vectorize the string interpolation. Two wide frames
+  # are needed: formatted values (for the stat) and stat labels (continuous2
+  # glues each row's label from the stat labels).
+  stat_cols <- unique(cards_no_attr$stat_name)
+  fmt_wide <-
+    tidyr::pivot_wider(
+      cards_no_attr,
+      id_cols = c("variable", "gts_column", cards::all_ard_groups()),
+      names_from = "stat_name",
+      values_from = "stat_fmt",
+      values_fn = list
+    ) |>
+    .unlist_wide_stat_cols()
+  label_wide <-
+    tidyr::pivot_wider(
+      cards_no_attr,
+      id_cols = c("variable", "gts_column", cards::all_ard_groups()),
+      names_from = "stat_name",
+      values_from = "stat_label",
+      values_fn = list
+    ) |>
+    .unlist_wide_stat_cols()
+
+  # evaluate statistics per variable vectorially; one output row per statistic
+  # element (continuous2 statistics are vectors)
   df_glued <-
-    # construct stat columns with glue by grouping variables and primary summary variable
-    cards_no_attr |>
-    dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
-    dplyr::group_map(
-      function(.x, .y) {
-        dplyr::mutate(
-          .data = .y,
-          stat =
-            map(
-              statistic[[.y$variable[1]]],
-              function(str_to_glue) {
-                stat <-
-                  glue::glue_data(
-                    .x = cards::get_ard_statistics(.x, .column = "stat_fmt"),
-                    str_to_glue
-                  ) |>
-                  as.character()
-              }
-            ) |>
-              list(),
-          label =
-            map(
-              statistic[[.y$variable[1]]],
-              function(str_to_glue) {
-                label <-
-                  glue::glue_data(
-                    .x = cards::get_ard_statistics(.x, .column = "stat_label"),
-                    str_to_glue
-                  ) |>
-                  as.character()
-              }
-            ) |>
-              list()
-        )
+    lapply(
+      variables,
+      function(var) {
+        df_fmt <- fmt_wide[fmt_wide$variable == var, , drop = FALSE]
+        df_lbl <- label_wide[label_wide$variable == var, , drop = FALSE]
+        if (nrow(df_fmt) == 0L) {
+          return(NULL)
+        }
+        keep_cols <- setdiff(names(df_fmt), stat_cols)
+        lapply(
+          statistic[[var]],
+          function(str_to_glue) {
+            out <- df_fmt[, keep_cols, drop = FALSE]
+            out$stat <- as.character(glue::glue_data(df_fmt, str_to_glue))
+            out$label <- as.character(glue::glue_data(df_lbl, str_to_glue))
+            out
+          }
+        ) |>
+          (function(lst) rlang::inject(vctrs::vec_rbind(!!!lst)))()
       }
     ) |>
-    dplyr::bind_rows() %>%
-    # this ensures the correct order when there are 10+ groups
+    (function(lst) rlang::inject(vctrs::vec_rbind(!!!lst)))()
+
+  # this ensures the correct order when there are 10+ groups
+  df_glued <-
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
-      .,
+      df_glued,
       by = "gts_column"
     )
 
@@ -420,9 +437,6 @@ pier_summary_continuous2 <- function(cards,
       var_label = unlist(.data$var_label),
       .after = 0L
     ) |>
-    dplyr::select(-cards::all_ard_groups()) |>
-    tidyr::unnest(cols = c("stat", "label")) |>
-    tidyr::unnest(cols = c("stat", "label")) |>
     tidyr::pivot_wider(
       id_cols = c("row_type", "var_label", "variable", "label"),
       names_from = "gts_column",
@@ -477,21 +491,7 @@ pier_summary_continuous <- function(cards,
   )
 
   # unlist any list columns to allow direct glue data evaluation
-  for (col in names(df_wide)) {
-    if (is.list(df_wide[[col]])) {
-      df_wide[[col]] <- lapply(df_wide[[col]], function(x) {
-        if (length(x) == 1) {
-          val <- x[[1]]
-          if (is.null(val)) NA else val
-        } else {
-          lapply(x, function(v) if (is.null(v)) NA else v)
-        }
-      })
-      if (all(lengths(df_wide[[col]]) == 1) && !any(vapply(df_wide[[col]], is.list, logical(1)))) {
-        df_wide[[col]] <- unlist(df_wide[[col]], use.names = FALSE)
-      }
-    }
-  }
+  df_wide <- .unlist_wide_stat_cols(df_wide)
 
   split_df <- split(df_wide, df_wide$variable)
   stat_cols <- unique(cards_no_attr$stat_name)
@@ -549,6 +549,29 @@ pier_summary_continuous <- function(cards,
     )
 
   df_results
+}
+
+# unlist the list-columns produced by `pivot_wider(values_fn = list)` so the wide
+# stat columns can be passed directly to `glue::glue_data()`. Length-1 cells
+# become scalars (NULL -> NA); longer cells stay lists (NULL -> NA element-wise).
+# Shared by the vectorized `pier_summary_*()` builders.
+.unlist_wide_stat_cols <- function(df_wide) {
+  for (col in names(df_wide)) {
+    if (is.list(df_wide[[col]])) {
+      df_wide[[col]] <- lapply(df_wide[[col]], function(x) {
+        if (length(x) == 1) {
+          val <- x[[1]]
+          if (is.null(val)) NA else val
+        } else {
+          lapply(x, function(v) if (is.null(v)) NA else v)
+        }
+      })
+      if (all(lengths(df_wide[[col]]) == 1) && !any(vapply(df_wide[[col]], is.list, logical(1)))) {
+        df_wide[[col]] <- unlist(df_wide[[col]], use.names = FALSE)
+      }
+    }
+  }
+  df_wide
 }
 
 #' @rdname brdg_summary
