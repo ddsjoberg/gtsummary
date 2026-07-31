@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved the speed and memory efficiency of `tbl_summary()` and the internals it shares with `tbl_svysummary()`, `tbl_custom_summary()`, and `tbl_ard_summary()`. The table assembly step (`brdg_summary()`) is roughly 2.6 times faster with lower memory allocation. There is no change to the returned tables. (#2440)
+
 * Added a `levels` argument to `add_difference.tbl_summary()` and `add_difference.tbl_svysummary()` to select which two `by` groups to compare. This makes `add_difference()` usable when `by=` has more than two levels, and lets users flip the direction of the difference for two-level `by` variables. (#2151)
 
 * Fixed bug in `tbl_strata_nested_stack()` where second-level strata headers were dropped in all but the first group when using three or more strata levels. (#2418)
