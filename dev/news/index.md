@@ -599,7 +599,7 @@ CRAN release: 2025-02-19
 - Adding the `tbl_merge(merge_vars)` argument. This argument allows
   users to specify any merging columns providing much more flexibility
   when merging unlike tables. Additionally, columns selected by
-  [`cards::all_ard_groups()`](https://rdrr.io/pkg/cards/man/selectors.html)
+  [`cards::all_ard_groups()`](https://insightsengineering.github.io/cards/latest-tag/reference/selectors.html)
   have been added to the default merging columns, which provides the
   functionality for merging the results from
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
@@ -943,7 +943,7 @@ Updates to address regressions in the v2.0.0 release:
   available on the website).
 
 - The total N is now returned with `.$cards` using the
-  [`cards::ard_total_n()`](https://rdrr.io/pkg/cards/man/ard_total_n.html)
+  [`cards::ard_total_n()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html)
   function for the calculation.
 
 - The default headers for `tbl_ard_*()` functions no longer include
@@ -962,7 +962,7 @@ Updates to address regressions in the v2.0.0 release:
 - The
   [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
   function no longer requires the results from
-  [`cards::ard_attributes()`](https://rdrr.io/pkg/cards/man/ard_attributes.html)
+  [`cards::ard_attributes()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html)
   to create tables.
   ([\#1873](https://github.com/ddsjoberg/gtsummary/issues/1873))
 

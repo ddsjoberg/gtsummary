@@ -80,7 +80,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/cards" class="external-link">cards</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pharmaverse/cards" class="external-link">cards</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_compact</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Setting theme <span style="color: #0000BB;">"Compact"</span></span></span></code></pre></div>
 <div class="section level2">
@@ -679,7 +679,7 @@ N = 84</span></th>
 <p>Now that we have a summary table, we can extract and save the
 ARD.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="va">tbl_demo</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/cards/man/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="va">tbl_demo</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 8 rows with <span style="font-style: italic;">duplicated statistic values</span> have been removed.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> See cards::bind_ard(.distinct) (`?cards::bind_ard()`) for details.</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 167 x 12</span></span></span>
@@ -709,14 +709,14 @@ using <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> we 
 <span>  <span class="va">ADAE</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># filter the data frame to print fewer AEs</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>    <span class="va">AESOC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/cards/man/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AESOC</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>    <span class="va">AETERM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/cards/man/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AETERM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
+<span>    <span class="va">AESOC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AESOC</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>    <span class="va">AETERM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AETERM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># create AE summary table</span></span>
 <span>  <span class="fu"><a href="../reference/tbl_hierarchical.html">tbl_hierarchical</a></span><span class="op">(</span></span>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AESOC</span>, <span class="va">AETERM</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="va">TRTA</span>,</span>
-<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/cards/man/adam.html" class="external-link">ADSL</a></span>,</span>
+<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span>
 <span>    id <span class="op">=</span> <span class="va">USUBJID</span>,</span>
 <span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>..ard_hierarchical_overall.. <span class="op">=</span> <span class="st">"Any Adverse Event"</span><span class="op">)</span></span>
@@ -1248,7 +1248,7 @@ N = 84</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># return ARDs</span></span>
-<span><span class="fu"><a href="../reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="va">tbl_ae</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/cards/man/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="va">tbl_ae</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 82 x 15</span></span></span>
 <span><span class="co">#&gt;    group1 group1_level group2 group2_level                     variable</span></span>
 <span><span class="co">#&gt; 1    &lt;NA&gt;                &lt;NA&gt;                                      TRTA</span></span>
@@ -1332,23 +1332,23 @@ Guidelines. This table has variables: a continuous variable summary for
 AGE, a categorical variable summaries for AGEGR1 and SEX.</p>
 <p><strong>Data ➡ ARD</strong></p>
 <p>The {cards} package can be utilized to create the ARD from a data
-frame. The package includes functions <code><a href="https://rdrr.io/pkg/cards/man/ard_summary.html" class="external-link">ard_summary()</a></code> for
-continuous summaries, <code><a href="https://rdrr.io/pkg/cards/man/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> for categorical
-summaries, and <code><a href="https://rdrr.io/pkg/cards/man/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> for dichotomous
+frame. The package includes functions <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> for
+continuous summaries, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> for categorical
+summaries, and <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> for dichotomous
 variables (and more).</p>
-<p>The package also exports a helper function, <code><a href="https://rdrr.io/pkg/cards/man/ard_stack.html" class="external-link">ard_stack()</a></code>
+<p>The package also exports a helper function, <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html" class="external-link">ard_stack()</a></code>
 to simultaneously build these summaries along with optional ancillary
 results for a nicer display.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ard_demo</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">ADSL</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AGEGR1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">AGEGR1</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;65"</span>, <span class="st">"65-80"</span>, <span class="st">"&gt;80"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/cards/man/ard_stack.html" class="external-link">ard_stack</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html" class="external-link">ard_stack</a></span><span class="op">(</span></span>
 <span>    <span class="co"># stratify all results by ARM</span></span>
 <span>    .by <span class="op">=</span> <span class="va">ARM</span>, </span>
 <span>    <span class="co"># these are the results that will be calculated</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/cards/man/ard_summary.html" class="external-link">ard_summary</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/cards/man/ard_tabulate.html" class="external-link">ard_tabulate</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="st">"AGE"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGEGR1"</span>,<span class="st">"SEX"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="co"># optional arguments for additional results</span></span>
 <span>    .attributes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    .total_n <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -1946,7 +1946,7 @@ outcomes after treatment: Kaplan-Meier estimate of survival, mean marker
 levels with confidence intervals, and rate of tumor response with
 confidence intervals.</p>
 <p>First, we will create an ARD for each of these analyses, then combine
-them with <code><a href="https://rdrr.io/pkg/cards/man/bind_ard.html" class="external-link">cards::bind_ard()</a></code>.</p>
+them with <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">cards::bind_ard()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ARD with the Kaplan-Meier survival estimates</span></span>
 <span><span class="va">ard_survival</span> <span class="op">&lt;-</span></span>
@@ -1958,22 +1958,22 @@ them with <code><a href="https://rdrr.io/pkg/cards/man/bind_ard.html" class="ext
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># retain survival time statistics</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/cards/man/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ARD with the mean post-treatment marker level with 95%CI</span></span>
 <span><span class="va">ard_marker_level</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cardx/man/ard_stats_t_test_onesample.html" class="external-link">ard_stats_t_test_onesample</a></span><span class="op">(</span><span class="va">trial</span>, variables <span class="op">=</span> <span class="va">marker</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/cards/man/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="fu"><a href="../reference/label_style.html">label_style_sigfig</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="fu"><a href="../reference/label_style.html">label_style_sigfig</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ARD with the post-treatment response rate with 95%CI</span></span>
 <span><span class="va">ard_tumor_response</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">cardx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cardx/man/ard_categorical_ci.html" class="external-link">ard_categorical_ci</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">trt</span>, variables <span class="op">=</span> <span class="va">response</span>, method <span class="op">=</span> <span class="st">"wilson"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/cards/man/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/update_ard.html" class="external-link">update_ard_fmt_fun</a></span><span class="op">(</span>stat_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span>, fmt_fun <span class="op">=</span> <span class="st">"xx%"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># combine all the ARDs into a single ARD for the outcomes</span></span>
 <span><span class="va">ard_outcomes</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">cards</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cards/man/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span>
+<span>  <span class="fu">cards</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span></span>
 <span>    <span class="va">ard_survival</span>,</span>
 <span>    <span class="va">ard_marker_level</span>, </span>
 <span>    <span class="va">ard_tumor_response</span></span>
@@ -1983,11 +1983,11 @@ a similar structure to the simple ARDs we extracted from the
 <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> results above.</p>
 <ul>
 <li>The <code><a href="https://rdrr.io/pkg/cardx/man/ard_survival_survfit.html" class="external-link">cardx::ard_survival_survfit()</a></code> ARD looks like the
-<code><a href="https://rdrr.io/pkg/cards/man/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">ard_tabulate()</a></code> result.</li>
 <li>The <code><a href="https://rdrr.io/pkg/cardx/man/ard_stats_t_test_onesample.html" class="external-link">cardx::ard_stats_t_test_onesample()</a></code> ARD looks like
-the <code><a href="https://rdrr.io/pkg/cards/man/ard_summary.html" class="external-link">ard_summary()</a></code> result.</li>
+the <code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html" class="external-link">ard_summary()</a></code> result.</li>
 <li>The <code><a href="https://rdrr.io/pkg/cardx/man/ard_categorical_ci.html" class="external-link">cardx::ard_categorical_ci()</a></code> ARD looks like the
-<code><a href="https://rdrr.io/pkg/cards/man/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> result.</li>
+<code><a href="https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html" class="external-link">ard_tabulate_value()</a></code> result.</li>
 </ul>
 <p>With the created ARD, we can now build a summary table.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
