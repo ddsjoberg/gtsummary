@@ -178,13 +178,18 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   # add dummy rows for variables not in include so their label rows are sorted correctly
   x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort)
 
-  # add indices to ARD
-  x_ard <- x_ard |>
-    dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols)))) |>
-    dplyr::mutate(pre_idx = dplyr::cur_group_id())
+  # add indices to ARD. `group_rows()` numbers groups exactly like
+  # `cur_group_id()` (same grouped object), so fill `pre_idx` from it without a
+  # grouped mutate (which would copy the full ARD and strip the card class)
+  grouped <- x_ard |>
+    dplyr::group_by(across(c(cards::all_ard_groups(), cards::all_ard_variables(), -all_of(by_cols))))
+  grows <- dplyr::group_rows(grouped)
+  pre_idx <- integer(nrow(x_ard))
+  for (g in seq_along(grows)) pre_idx[grows[[g]]] <- g
+  x_ard$pre_idx <- pre_idx
 
   # get grouping structure
-  gps <- x_ard |>
+  gps <- grouped |>
     dplyr::group_keys() |>
     dplyr::mutate(pre_idx = dplyr::row_number()) |>
     cards::as_card(check = FALSE)
@@ -250,35 +255,48 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
 
     for (v in not_incl) {
       i <- length(ard_args$by) + which(ard_args$variables == v)
-      x_sum_rows <- x |>
-        dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i)))) |>
-        dplyr::group_map(function(.df, .g) {
-          stat_nm <- setdiff(.df$stat_name, "N")[1]
-          # get pseudo-summary row stat value for descending sort
-          if (!is.null(sort) && sort[v] == "descending") {
-            sum <- .df |>
-              dplyr::filter(.data$variable == dplyr::last(ard_args$include) & .data$stat_name == !!stat_nm) |>
-              dplyr::summarize(sum_stat = sum(unlist(.data$stat))) |>
-              dplyr::pull("sum_stat")
-          }
-          g_cur <- .g[[ncol(.g) - 1]]
-          if (!is.na(g_cur) && g_cur == v) {
-            # dummy summary row to add in
-            .df[.df$stat_name == stat_nm, ][1, ] |>
-              select(-cards::all_ard_group_n(i:length(ard_args$variables))) |>
-              mutate(
-                variable = g_cur,
-                variable_level = .g[[ncol(.g)]],
-                stat_name = if (!is.null(sort) && sort[v] == "descending") stat_nm else "no_stat",
-                stat = if (!is.null(sort) && sort[v] == "descending") list(sum) else list(0),
-                tmp = TRUE
-              )
-          } else {
-            NULL
-          }
-        }, .keep = TRUE)
+      descending <- !is.null(sort) && sort[v] == "descending"
 
-      x <- x |> dplyr::bind_rows(x_sum_rows)
+      # extract the grouping structure once, then build every dummy row with
+      # vectorized slicing instead of materializing a tibble per group
+      grouped <- x |>
+        dplyr::group_by(across(all_of(cards::all_ard_group_n((length(ard_args$by) + 1):i))))
+      keys <- dplyr::group_keys(grouped)
+      grows <- dplyr::group_rows(grouped)
+      ncol_k <- ncol(keys)
+      # groups whose depth-`i` hierarchy variable is `v` are the ones that get a dummy row
+      g_cur <- keys[[ncol_k - 1]]
+      sel <- which(!is.na(g_cur) & g_cur == v)
+
+      if (length(sel) > 0) {
+        base_idx <- integer(length(sel))
+        stat_nm_v <- character(length(sel))
+        stat_val <- vector("list", length(sel))
+        for (k in seq_along(sel)) {
+          ridx <- grows[[sel[k]]]
+          snames <- x$stat_name[ridx]
+          snm <- setdiff(snames, "N")[1]
+          stat_nm_v[k] <- snm
+          base_idx[k] <- ridx[match(snm, snames)]
+          # pseudo-summary row stat value for descending sort
+          if (descending) {
+            sub <- ridx[x$variable[ridx] == dplyr::last(ard_args$include) & x$stat_name[ridx] == snm]
+            stat_val[[k]] <- sum(unlist(x$stat[sub]))
+          } else {
+            stat_val[[k]] <- 0
+          }
+        }
+
+        x_sum_rows <- x[base_idx, ] |>
+          select(-cards::all_ard_group_n(i:length(ard_args$variables)))
+        x_sum_rows$variable <- v
+        x_sum_rows$variable_level <- keys[[ncol_k]][sel]
+        x_sum_rows$stat_name <- if (descending) stat_nm_v else "no_stat"
+        x_sum_rows$stat <- stat_val
+        x_sum_rows$tmp <- TRUE
+
+        x <- x |> dplyr::bind_rows(x_sum_rows)
+      }
     }
   }
 
