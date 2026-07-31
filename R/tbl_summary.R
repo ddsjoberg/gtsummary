@@ -256,6 +256,10 @@ tbl_summary <- function(data,
   )
 
 
+  # compute the default dichotomous value for each variable once; reused below by
+  # `assign_summary_type()` (type inference) and `.assign_default_values()`
+  dichotomous_values <- lapply(data[include], .get_default_dichotomous_value)
+
   # assign summary type --------------------------------------------------------
   type <-
     case_switch(
@@ -265,7 +269,7 @@ tbl_summary <- function(data,
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
-    default_types <- assign_summary_type(data, include, value)
+    default_types <- assign_summary_type(data, include, value, dichotomous_values = dichotomous_values)
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
@@ -274,17 +278,22 @@ tbl_summary <- function(data,
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
   } else {
-    type <- assign_summary_type(data, include, value)
+    type <- assign_summary_type(data, include, value, dichotomous_values = dichotomous_values)
   }
 
+  # scope the table body once and reuse it across the argument-processing calls
+  # below (pure CSE: `type` and `data[include]` are unchanged in this window)
+  tb_var_type <- .list2tb(type, "var_type")
+  scoped_include <- scope_table_body(tb_var_type, data[include])
+
   value <-
-    scope_table_body(.list2tb(type, "var_type"), data[include]) |>
-    .assign_default_values(value, type)
+    scoped_include |>
+    .assign_default_values(value, type, default_values = dichotomous_values)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+    data = scoped_include,
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
@@ -297,7 +306,7 @@ tbl_summary <- function(data,
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     label =
       case_switch(
         missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
@@ -311,7 +320,7 @@ tbl_summary <- function(data,
   )
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     digits =
       case_switch(
         missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
@@ -322,7 +331,7 @@ tbl_summary <- function(data,
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     statistic =
       get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
@@ -337,7 +346,7 @@ tbl_summary <- function(data,
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      scope_table_body(.list2tb(type, "var_type"), data[include]) |>
+      scoped_include |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -355,10 +364,20 @@ tbl_summary <- function(data,
   # sort requested columns by frequency
   data <- .sort_data_infreq(data, sort)
 
+  # scope the (post-sort) full data once and reuse it across the `ard_*()` calls
+  # below; built after the sort so frequency reordering is captured
+  scoped_data <- scope_table_body(tb_var_type, data)
+
   # save processed function inputs ---------------------------------------------
+  # drop internal working objects that are not `tbl_summary()` arguments, so the
+  # saved inputs can be replayed as a call (e.g. by `add_overall()`)
   tbl_summary_inputs <-
     as.list(environment()) |>
-    utils::modifyList(list(default_types = NULL))
+    utils::modifyList(list(
+      default_types = NULL, tb_var_type = NULL,
+      scoped_include = NULL, scoped_data = NULL,
+      dichotomous_values = NULL
+    ))
   call <- match.call()
 
 
@@ -367,7 +386,7 @@ tbl_summary <- function(data,
     cards::bind_ard(
       # tabulate categorical summaries
       cards::ard_tabulate(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_categorical(FALSE),
         fmt_fun = digits,
@@ -376,7 +395,7 @@ tbl_summary <- function(data,
       ),
       # tabulate dichotomous summaries
       cards::ard_tabulate_value(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_dichotomous(),
         fmt_fun = digits,
@@ -386,12 +405,12 @@ tbl_summary <- function(data,
       ),
       # calculate continuous summaries
       cards::ard_summary(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_continuous(),
         statistic =
           .continuous_statistics_chr_to_fun(
-            statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
+            statistic[select(scoped_data, all_continuous()) |> names()]
           ),
         fmt_fun = digits,
         stat_label = ~ default_stat_labels()
@@ -608,7 +627,7 @@ tbl_summary <- function(data,
   names(x)[unlist(x) %in% type]
 }
 
-.assign_default_values <- function(data, value, type) {
+.assign_default_values <- function(data, value, type, default_values = NULL) {
   lapply(
     names(data),
     function(variable) {
@@ -621,8 +640,10 @@ tbl_summary <- function(data,
         return(NULL)
       }
 
-      # otherwise, return default value
-      default_value <- .get_default_dichotomous_value(data[[variable]])
+      # otherwise, return default value (use pre-computed value when available)
+      default_value <-
+        if (!is.null(default_values)) default_values[[variable]]
+        else .get_default_dichotomous_value(data[[variable]])
       if (!is.null(default_value)) {
         return(default_value)
       }
