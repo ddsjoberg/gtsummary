@@ -322,19 +322,26 @@ internal_tbl_hierarchical <- function(data,
   orig_args <- attributes(cards)$args
 
   # apply digits ---------------------------------------------------------------
-  cards <-
-    cards |>
-    dplyr::rows_update(
-      imap(
-        digits,
-        ~ enframe(.x, "stat_name", "fmt_fun") |>
-          dplyr::mutate(variable = .y)
-      ) |>
-        dplyr::bind_rows(),
-      by = c("variable", "stat_name"),
-      unmatched = "ignore"
+  # the digits frame is tiny (one row per variable x stat_name) with unique keys,
+  # while `cards` is long with heavily duplicated keys; a direct `vctrs::vec_match()`
+  # from `cards` into the digits frame updates every matching row like the former
+  # `dplyr::rows_update(unmatched = "ignore")`, without copying the full ARD.
+  df_digits <-
+    imap(
+      digits,
+      ~ enframe(.x, "stat_name", "fmt_fun") |>
+        dplyr::mutate(variable = .y)
     ) |>
-    cards::apply_fmt_fun()
+    dplyr::bind_rows()
+  if (nrow(df_digits) > 0L) {
+    m <- vctrs::vec_match(
+      vctrs::data_frame(variable = cards$variable, stat_name = cards$stat_name),
+      vctrs::data_frame(variable = df_digits$variable, stat_name = df_digits$stat_name)
+    )
+    hit <- which(!is.na(m))
+    cards$fmt_fun[hit] <- df_digits$fmt_fun[m[hit]]
+  }
+  cards <- cards |> cards::apply_fmt_fun()
 
   # restore class correct class attributes -------------------------------------
   attr(cards, "args") <- orig_args
@@ -448,10 +455,11 @@ internal_tbl_hierarchical <- function(data,
 }
 
 .add_gts_column_to_cards_hierarchical <- function(cards, variables, by) {
-  # save class attributes ------------------------------------------------------
-  orig_class <- class(cards)
-  orig_args <- attributes(cards)$args
-  # adding the name of the column the stats will populate
+  # adding the name of the column the stats will populate.
+  # `dplyr::group_rows()` returns row indices per group in the same order that
+  # `dplyr::cur_group_id()` numbers them (including first-appearance ordering for
+  # the list-valued `*_level` columns), so this reproduces the former grouped
+  # mutates without stripping/restoring the card class or copying the frame.
   if (is_empty(by)) {
     cards$gts_column <-
       ifelse(
@@ -460,22 +468,20 @@ internal_tbl_hierarchical <- function(data,
         NA_character_
       )
   } else {
-    cards <- cards |>
-      dplyr::group_by(.data$group1_level) |>
-      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
+    gts <- character(nrow(cards))
+    rows <- dplyr::group_rows(dplyr::group_by(cards, .data$group1_level))
+    for (g in seq_along(rows)) gts[rows[[g]]] <- paste0("stat_", g)
 
-    # process overall row
-    cards[cards$variable %in% by, ] <- cards[cards$variable %in% by, ] |>
-      dplyr::group_by(.data$variable_level) |>
-      dplyr::mutate(gts_column = paste0("stat_", dplyr::cur_group_id()))
+    # process overall row: within the `by` rows, number by `variable_level`
+    by_idx <- which(cards$variable %in% by)
+    if (length(by_idx) > 0L) {
+      rows2 <- dplyr::group_rows(
+        dplyr::group_by(vctrs::data_frame(v = vctrs::vec_slice(cards$variable_level, by_idx)), .data$v)
+      )
+      for (g in seq_along(rows2)) gts[by_idx[rows2[[g]]]] <- paste0("stat_", g)
+    }
+    cards$gts_column <- gts
   }
 
-  cards <- cards |>
-    dplyr::ungroup() |>
-    cards::as_card(check = FALSE)
-
-  # restore correct class attributes -------------------------------------------
-  attr(cards, "args") <- orig_args
-  class(cards) <- orig_class
   cards
 }
