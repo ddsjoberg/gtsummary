@@ -2,6 +2,19 @@
 
 ## gtsummary (development version)
 
+- Improved the speed and memory efficiency of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  and the internals it shares with
+  [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.md),
+  [`tbl_custom_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_custom_summary.md),
+  and
+  [`tbl_ard_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_summary.md).
+  The table assembly step
+  ([`brdg_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md))
+  is roughly 2.6 times faster with lower memory allocation. There is no
+  change to the returned tables.
+  ([\#2440](https://github.com/ddsjoberg/gtsummary/issues/2440))
+
 - Added a `levels` argument to
   [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_summary.md)
   and

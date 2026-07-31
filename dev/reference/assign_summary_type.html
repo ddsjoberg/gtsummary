@@ -9,7 +9,7 @@ in the type argument."><meta property="og:image" content="https://www.danieldsjo
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,14 @@ in the <code>type</code> argument.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">assign_summary_type</span><span class="op">(</span><span class="va">data</span>, <span class="va">variables</span>, <span class="va">value</span>, type <span class="op">=</span> <span class="cn">NULL</span>, cat_threshold <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">assign_summary_type</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">variables</span>,</span>
+<span>  <span class="va">value</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cat_threshold <span class="op">=</span> <span class="fl">10L</span>,</span>
+<span>  dichotomous_values <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -83,6 +90,14 @@ named list of summary types, where names are the variables</p></dd>
 <dd><p>(<code>integer</code>)<br>
 for base R numeric classes with fewer levels than
 this threshold will default to a categorical summary. Default is <code>10L</code></p></dd>
+
+
+<dt id="arg-dichotomous-values">dichotomous_values<a class="anchor" aria-label="anchor" href="#arg-dichotomous-values"></a></dt>
+<dd><p>(<code>named list</code>)<br>
+optional named list of pre-computed default dichotomous values, with one
+element per variable (as returned by <code>.get_default_dichotomous_value()</code>).
+When supplied, these values are used instead of being recomputed. Default
+is <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
