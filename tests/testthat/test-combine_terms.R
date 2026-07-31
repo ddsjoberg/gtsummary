@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed(c("broom.helpers", "car"))
 
 lmod <- lm(
   age ~ marker + I(marker^2) + stage,
