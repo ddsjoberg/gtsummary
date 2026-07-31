@@ -21,6 +21,8 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
 
     pkg_version <- as.character(packageVersion("gtsummary"))
     message("Version: ", pkg_version)
+    # confirm the R build supports memory profiling (needed for bench mem_alloc)
+    message("profmem capable: ", capabilities("profmem"))
 
     # Global Setup for brdg_summary benchmark
     set.seed(42)
