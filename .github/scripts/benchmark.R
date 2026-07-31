@@ -67,7 +67,17 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
       pipe_res <- bench::mark(
         tbl_summary = {
           gtsummary::trial |>
-            gtsummary::tbl_summary(by = trt, include = c(age, response, grade)) |>
+            gtsummary::tbl_summary(
+              by = trt,
+              include = c(age, marker, grade, response),
+              type = list(
+                age ~ "continuous",
+                marker ~ "continuous2",
+                grade ~ "categorical",
+                response ~ "dichotomous"
+              ),
+              statistic = list(marker ~ c("{median} ({p25}, {p75})", "{mean} ({sd})"))
+            ) |>
             gtsummary::add_overall() |>
             gtsummary::add_p() |>
             gtsummary::bold_labels() |>
