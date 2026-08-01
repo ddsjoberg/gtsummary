@@ -2,6 +2,8 @@
 
 * Improved the speed and memory efficiency of `tbl_hierarchical()`, `tbl_hierarchical_count()`, `tbl_ard_hierarchical()`, and the `sort_hierarchical()`/`filter_hierarchical()` helpers. The table assembly step (`brdg_hierarchical()`) now vectorizes the statistic formatting instead of looping over every cell, making the pipeline roughly 8 times faster with lower memory allocation. There is no change to the returned tables. (#2442)
 
+* Further improved the speed and memory efficiency of `filter_hierarchical()`. The internal row-selection steps now use base-R subsetting instead of full-ARD dplyr pipelines, and the overall-column filtering step (used when `add_overall()` has been applied) replaces a many-to-many join with a membership test, so it no longer materializes a cross product of duplicated keys. There is no change to the returned tables. (#2444)
+
 * Improved the speed and memory efficiency of `tbl_summary()` and the internals it shares with `tbl_svysummary()`, `tbl_custom_summary()`, and `tbl_ard_summary()`. The table assembly step (`brdg_summary()`) is roughly 2.6 times faster with lower memory allocation. There is no change to the returned tables. (#2440)
 
 * Added a `levels` argument to `add_difference.tbl_summary()` and `add_difference.tbl_svysummary()` to select which two `by` groups to compare. This makes `add_difference()` usable when `by=` has more than two levels, and lets users flip the direction of the difference for two-level `by` variables. (#2151)

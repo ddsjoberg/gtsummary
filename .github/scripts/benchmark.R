@@ -62,6 +62,17 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         denominator = cards::ADSL,
         include = AESEV
       )
+      # `add_overall()` exercises the `filter_hierarchical()` overall-column
+      # branch (the semi-join between `add_overall` and the filtered ARD)
+      bench_h_overall_tbl <- gtsummary::tbl_hierarchical(
+        data = cards::ADAE,
+        variables = c(AESOC, AETERM),
+        by = TRTA,
+        id = USUBJID,
+        denominator = cards::ADSL,
+        overall_row = TRUE
+      ) |>
+        gtsummary::add_overall()
     })
     bench_h_cards <- bench_h_tbl$cards[[1]]
     bench_h_args <- bench_h_tbl$inputs
@@ -159,10 +170,13 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 20, check = FALSE
       )
 
-      # sort / filter hierarchical (post-processing, include-subset path)
+      # sort / filter hierarchical (post-processing). `filter_hierarchical`
+      # exercises the include-subset path (`.append_not_incl()`);
+      # `filter_hierarchical_overall` exercises the `add_overall()` semi-join path
       sort_filter_h_res <- bench::mark(
         sort_hierarchical = gtsummary::sort_hierarchical(bench_h_incl_tbl, sort = "descending"),
         filter_hierarchical = gtsummary::filter_hierarchical(bench_h_incl_tbl, sum(n) > 5),
+        filter_hierarchical_overall = gtsummary::filter_hierarchical(bench_h_overall_tbl, sum(n) > 5),
         iterations = 10, check = FALSE
       )
 
@@ -263,7 +277,7 @@ style_names <- c("style_number", "style_number varying digits", "style_sigfig")
 trans_names <- c("translate_string en", "translate_string es")
 pipe_names <- c("tbl_summary", "tbl_hierarchical", "tbl_strata")
 brdg_names <- c("brdg_summary")
-hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical")
+hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical", "filter_hierarchical_overall")
 
 style_tab <- tab[tab$expression %in% style_names, ]
 trans_tab <- tab[tab$expression %in% trans_names, ]
