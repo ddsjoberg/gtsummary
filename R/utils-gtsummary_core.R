@@ -11,9 +11,21 @@
 #' @keywords internal
 #' @return gtsummary object
 .create_gtsummary_object <- function(table_body, ...) {
-  as_gtsummary(table_body, ...) |>
-    # the original function left the "label" column unhidden
-    modify_column_hide(columns = -any_of("label"))
+  x <- as_gtsummary(table_body, ...)
+
+  # equivalent to `modify_column_hide(x, columns = -any_of("label"))`, but avoids
+  # the full `modify_table_styling()` machinery: `as_gtsummary()` just built the
+  # header in sync with `table_body`, so only `hide` and `call_list` change here.
+  # (the "label" column is left unhidden, as the original did)
+  x$table_styling$header$hide <- !x$table_styling$header$column %in% "label"
+  x$call_list <- c(
+    x$call_list,
+    list(modify_column_hide = quote(
+      modify_column_hide(x = as_gtsummary(table_body, ...), columns = -any_of("label"))
+    ))
+  )
+
+  x
 }
 
 .purrr_when <- function(...) {
