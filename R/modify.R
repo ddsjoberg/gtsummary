@@ -349,6 +349,12 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
   imap(
     dots,
     function(value, variable) {
+      # fast path: a constant string (no glue braces to interpolate) is returned
+      # by `glue::glue()` unchanged, so skip the per-column dplyr/glue evaluation
+      if (length(value) == 1L && !is.na(value) && !grepl("[{}\n\r]", value)) {
+        return(glue::as_glue(value))
+      }
+
       df_header_subset <-
         df_header_subset |>
         dplyr::filter(.data$column %in% .env$variable) |>
