@@ -10,13 +10,7 @@ provide link.**
 
 Reviewer Checklist (if item does not apply, mark is as complete)
 
-PR branch has pulled the most recent updates from main branch.
-
 If a bug was fixed, a unit test was added.
-
-Run
-[`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html).
-Check the R console for errors, and review the rendered website.
 
 Code coverage is suitable for any new functions/features:
 `devtools::test_coverage()`
