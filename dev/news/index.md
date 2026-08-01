@@ -15,6 +15,17 @@
   allocation. There is no change to the returned tables.
   ([\#2442](https://github.com/ddsjoberg/gtsummary/issues/2442))
 
+- Further improved the speed and memory efficiency of
+  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md).
+  The internal row-selection steps now use base-R subsetting instead of
+  full-ARD dplyr pipelines, and the overall-column filtering step (used
+  when
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
+  has been applied) replaces a many-to-many join with a membership test,
+  so it no longer materializes a cross product of duplicated keys. There
+  is no change to the returned tables.
+  ([\#2444](https://github.com/ddsjoberg/gtsummary/issues/2444))
+
 - Improved the speed and memory efficiency of
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   and the internals it shares with
