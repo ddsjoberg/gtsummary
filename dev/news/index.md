@@ -11,6 +11,22 @@
   ([\#2450](https://github.com/ddsjoberg/gtsummary/issues/2450))
 
 - Improved the speed and memory efficiency of
+  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md).
+  Applying the tab spanners now skips the per-column
+  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
+  evaluation for constant spanner text; consolidating the merged table
+  styling no longer evaluates each row-selection expression when the
+  expression has no columns to rename (and reuses a single data mask per
+  table when it does); and the merged object is assembled without a
+  redundant table-styling rebuild. Several of these internals are
+  shared, so
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  and related functions get faster as well. There is no change to the
+  returned tables.
+  ([\#2451](https://github.com/ddsjoberg/gtsummary/issues/2451))
+
+- Improved the speed and memory efficiency of
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
   [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md),
