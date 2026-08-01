@@ -113,8 +113,26 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     ) |>
     set_names(strata)
 
-  df_headers <- lst_headers |>
-    reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y)))) |>
+  # join the per-level header tables; keep the raw strata columns for now so `tbls`
+  # can be aligned to the same ordering below
+  df_headers_full <- lst_headers |>
+    reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y))))
+
+  # `cards::nest_for_ard()` (which fixes the order of `tbls`) and the header pipeline
+  # above can order *character* strata differently (base C-locale vs. locale-aware
+  # collation). Re-order `tbls` to match the header order by matching on the strata
+  # level *values* rather than relying on positional alignment, which attaches counts
+  # to the wrong strata for non-factor variables (#2443).
+  tbls <- tbls[
+    vctrs::vec_match(
+      dplyr::mutate(df_headers_full[strata], across(everything(), as.character)),
+      df_tbls[paste0("group", seq_along(strata), "_level")] |>
+        set_names(strata) |>
+        dplyr::mutate(across(everything(), ~ as.character(unlist(.x))))
+    )
+  ]
+
+  df_headers <- df_headers_full |>
     dplyr::select(-all_of(strata)) |>
     dplyr::rename_with(.fn = ~str_remove(.x, "_strata$"))
 
