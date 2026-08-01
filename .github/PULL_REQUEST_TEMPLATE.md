@@ -8,9 +8,7 @@
 
 Reviewer Checklist (if item does not apply, mark is as complete)
 
-- [ ] PR branch has pulled the most recent updates from main branch.
 - [ ] If a bug was fixed, a unit test was added.
-- [ ] Run `pkgdown::build_site()`. Check the R console for errors, and review the rendered website.
 - [ ] Code coverage is suitable for any new functions/features: `devtools::test_coverage()`
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
 - [ ] **All** GitHub Action workflows pass with a :white_check_mark:
