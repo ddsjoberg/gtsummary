@@ -154,6 +154,12 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 20, check = FALSE
       )
 
+      # add_overall (isolated from table construction; bench_tbl built once in setup)
+      add_overall_res <- bench::mark(
+        add_overall = gtsummary::add_overall(bench_tbl),
+        iterations = 10, check = FALSE
+      )
+
       # brdg_hierarchical (table assembly in isolation)
       brdg_h_res <- bench::mark(
         brdg_hierarchical = gtsummary::brdg_hierarchical(
@@ -180,7 +186,7 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 10, check = FALSE
       )
 
-      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, brdg_h_res, sort_filter_h_res)
+      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, add_overall_res, brdg_h_res, sort_filter_h_res)
       data.frame(
         expression = as.character(all_res$expression),
         median_s = as.numeric(all_res$median),
@@ -277,12 +283,14 @@ style_names <- c("style_number", "style_number varying digits", "style_sigfig")
 trans_names <- c("translate_string en", "translate_string es")
 pipe_names <- c("tbl_summary", "tbl_hierarchical", "tbl_strata")
 brdg_names <- c("brdg_summary")
+ao_names <- c("add_overall")
 hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical", "filter_hierarchical_overall")
 
 style_tab <- tab[tab$expression %in% style_names, ]
 trans_tab <- tab[tab$expression %in% trans_names, ]
 pipe_tab <- tab[tab$expression %in% pipe_names, ]
 brdg_tab <- tab[tab$expression %in% brdg_names, ]
+ao_tab <- tab[tab$expression %in% ao_names, ]
 hier_tab <- tab[tab$expression %in% hier_names, ]
 
 header <- paste0(
@@ -318,12 +326,17 @@ brdg_section <- paste0(
   paste(knitr::kable(brdg_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n\n"
 )
+ao_section <- paste0(
+  "### `add_overall()` (50 variables)\n\n",
+  paste(knitr::kable(ao_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
 hier_section <- paste0(
   "### Hierarchical internals (`cards::ADAE`)\n\n",
   paste(knitr::kable(hier_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n"
 )
 
-report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, hier_section)
+report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, ao_section, hier_section)
 writeLines(report, "bench_report.md")
 cat(report)

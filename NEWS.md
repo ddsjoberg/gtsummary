@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved the speed and memory efficiency of `add_overall()`. The step that merges the overall column into the stratified table now skips no-op styling binds, uses base-R subsetting in place of dplyr pipelines, and avoids a redundant table-styling rebuild, roughly halving the merge overhead. There is no change to the returned tables. (#TODO)
+
 * Improved the speed and memory efficiency of `tbl_hierarchical()`, `tbl_hierarchical_count()`, `tbl_ard_hierarchical()`, and the `sort_hierarchical()`/`filter_hierarchical()` helpers. The table assembly step (`brdg_hierarchical()`) now vectorizes the statistic formatting instead of looping over every cell, making the pipeline roughly 8 times faster with lower memory allocation. There is no change to the returned tables. (#2442)
 
 * Further improved the speed and memory efficiency of `filter_hierarchical()`. The internal row-selection steps now use base-R subsetting instead of full-ARD dplyr pipelines, and the overall-column filtering step (used when `add_overall()` has been applied) replaces a many-to-many join with a membership test, so it no longer materializes a cross product of duplicated keys. There is no change to the returned tables. (#2444)
