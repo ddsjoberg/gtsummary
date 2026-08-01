@@ -206,6 +206,18 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
     ) %>%
     reduce(.rows_update_table_styling_header, .init = x$table_styling$header)
 
+  # per-table invariants used when renaming columns in `rows` expressions:
+  # the header columns, and a lazily-built, reusable data mask for evaluation
+  lst_columns <- map(tbls, ~ .x$table_styling$header$column)
+  lst_get_mask <- map(tbls, function(.tbl) {
+    force(.tbl)
+    mask <- NULL
+    function() {
+      if (is.null(mask)) mask <<- rlang::as_data_mask(.tbl$table_body)
+      mask
+    }
+  })
+
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
                        "footnote_spanning_header", "abbreviation", "source_note",
                        "fmt_fun", "post_fmt_fun", "indent", "text_format",
@@ -235,11 +247,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
           # updating column names in rows expr/quo
           if ("rows" %in% names(style_updated)) {
             style_updated$rows <-
-              map(
-                style_updated$rows,
-                \(.x) {
-                  .rename_variables_in_expression(.x, i, tbls[[i]], merge_vars = merge_vars)
-                }
+              .rename_variables_in_expression_list(
+                style_updated$rows, i, tbls[[i]], merge_vars = merge_vars,
+                columns = lst_columns[[i]], get_mask = lst_get_mask[[i]]
               )
           }
 
@@ -283,10 +293,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
   x
 }
 
-.rename_variables_in_expression <- function(rows, id, tbl, merge_vars) {
-  # if NULL, return rows expression unmodified
-  rows_evaluated <- eval_tidy(rows, data = tbl$table_body)
-  if (is.null(rows_evaluated)) {
+.rename_variables_in_expression <- function(rows, id, tbl, merge_vars,
+                                             columns = tbl$table_styling$header$column,
+                                             get_mask = function() tbl$table_body) {
+  # cheap short-circuit for the common literal-NULL case, avoiding evaluation
+  if (is.null(rows) || (is_quosure(rows) && quo_is_null(rows))) {
     return(rows)
   }
 
@@ -294,7 +305,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
   expr <- switch(inherits(rows, "quosure"), f_rhs(rows)) %||% rows
 
   # get all variable names in expression to be renamed
-  columns <- tbl$table_styling$header$column
   var_list <-
     expr(~ !!expr) %>%
     eval() %>%
@@ -303,7 +313,14 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
     intersect(columns)
 
   # if no variables to rename, return rows unaltered
+  # (when there is nothing to rename, the original expression is returned whether
+  #  or not it evaluates to NULL, so the evaluation below can be skipped here)
   if (identical(var_list, character())) {
+    return(rows)
+  }
+
+  # if the row expression evaluates to NULL, return it unmodified
+  if (is.null(eval_tidy(rows, data = get_mask()))) {
     return(rows)
   }
 
@@ -322,6 +339,41 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
   }
 
   expr_renamed
+}
+
+# apply `.rename_variables_in_expression()` over a list of `rows` expressions,
+# computing each unique expression only once (many styling rows share the same
+# `rows` quosure). `.rename_variables_in_expression()` is a pure function of its
+# arguments, so identical inputs yield identical outputs.
+.rename_variables_in_expression_list <- function(rows_list, id, tbl, merge_vars,
+                                                  columns, get_mask) {
+  n <- length(rows_list)
+  result <- vector("list", n)
+  seen_in <- list()
+  seen_out <- list()
+
+  for (j in seq_len(n)) {
+    hit <- NULL
+    for (k in seq_along(seen_in)) {
+      if (identical(seen_in[[k]], rows_list[[j]])) {
+        hit <- k
+        break
+      }
+    }
+    if (is.null(hit)) {
+      out <- .rename_variables_in_expression(
+        rows_list[[j]], id, tbl, merge_vars,
+        columns = columns, get_mask = get_mask
+      )
+      seen_in[[length(seen_in) + 1L]] <- rows_list[[j]]
+      seen_out[[length(seen_out) + 1L]] <- out
+      result[[j]] <- out
+    } else {
+      result[[j]] <- seen_out[[hit]]
+    }
+  }
+
+  result
 }
 
 .rename_variables_in_pattern <- function(pattern, id, tbl, merge_vars) {
