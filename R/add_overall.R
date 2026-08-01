@@ -166,9 +166,10 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
 add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   # checking the original tbl_summary and the added overall,
   # are the same before binding (excluding headers)
+  identity_cols <- c("row_type", "variable", "label")
   if (!identical(
-    select(x$table_body, c("row_type", "variable", "label")),
-    select(tbl_overall$table_body, c("row_type", "variable", "label")) |> as_tibble()
+    as_tibble(x$table_body[identity_cols]),
+    as_tibble(tbl_overall$table_body[identity_cols])
   )) {
     cli::cli_abort(
       c(
@@ -183,21 +184,17 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   x[["cards"]][["add_overall"]] <- tbl_overall[["cards"]][[1]]
 
   # adding overall stat to the table_body data frame
-  x$table_body <-
-    dplyr::bind_cols(
-      x$table_body,
-      tbl_overall$table_body |> dplyr::select("stat_0")
-    )
+  x$table_body[["stat_0"]] <- tbl_overall$table_body[["stat_0"]]
 
   # add all formatting instructions for "stat_0" column
   for (style in names(x$table_styling)) {
-    if (is.data.frame(x$table_styling[[style]]) && "column" %in% names(x$table_styling[[style]])) {
-      x$table_styling[[style]] <-
-        x$table_styling[[style]] |>
-        dplyr::bind_rows(
-          tbl_overall$table_styling[[style]] |>
-            dplyr::filter(.data$column == "stat_0")
-        )
+    style_overall <- tbl_overall$table_styling[[style]]
+    if (is.data.frame(style_overall) && "column" %in% names(style_overall)) {
+      overall_rows <- style_overall[style_overall$column %in% "stat_0", ]
+      if (nrow(overall_rows) > 0L) {
+        x$table_styling[[style]] <-
+          dplyr::bind_rows(x$table_styling[[style]], overall_rows)
+      }
     }
   }
 
@@ -217,7 +214,10 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   #   )
 
   if (last == FALSE) {
-    x <- modify_table_body(x, dplyr::relocate, "stat_0", .before = "stat_1")
+    # relocate directly: skip the `.update_table_styling()` header rebuild done by
+    # `modify_table_body()`, since the `modify_header()` call below re-normalizes
+    # the header to `table_body` column order anyway (no columns added/removed here)
+    x$table_body <- dplyr::relocate(x$table_body, "stat_0", .before = "stat_1")
   }
 
   # # updating table_style with footnote and column header
