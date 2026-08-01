@@ -3,6 +3,14 @@
 ## gtsummary (development version)
 
 - Improved the speed and memory efficiency of
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md).
+  The step that merges the overall column into the stratified table now
+  skips no-op styling binds, uses base-R subsetting in place of dplyr
+  pipelines, and avoids a redundant table-styling rebuild, roughly
+  halving the merge overhead. There is no change to the returned tables.
+  ([\#2450](https://github.com/ddsjoberg/gtsummary/issues/2450))
+
+- Improved the speed and memory efficiency of
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
   [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md),
