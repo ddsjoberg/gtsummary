@@ -28,9 +28,10 @@ modify_column_alignment <- function(x, columns, align = c("left", "right", "cent
 
 .modify_column_alignment <- function(x, columns, align) {
   # update alignment -----------------------------------------------------------
-  x$table_styling$header <-
-    x$table_styling$header |>
-    dplyr::mutate(align = ifelse(.data$column %in% .env$columns, .env$align, .data$align))
+  # `columns` is unique within the header, so indexed assignment replaces the
+  # `dplyr::mutate()` + `ifelse()` pass (verified byte-identical)
+  idx <- x$table_styling$header$column %in% columns
+  x$table_styling$header$align[idx] <- align
 
   # return gtsummary table -----------------------------------------------------
   x

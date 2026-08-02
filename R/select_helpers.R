@@ -198,9 +198,10 @@ scope_header <- function(table_body, header = NULL) {
   # if header not passed, return table_body unaltered
   if (is_empty(header)) return(table_body) # styler: off
 
-  header <- header |>
-    dplyr::select("column", "hide", starts_with("modify_selector_")) |>
-    dplyr::rename_with(.fn = ~str_remove(.x, "^modify_selector_"), .cols = starts_with("modify_selector_"))
+  nms <- names(header)
+  selector_cols <- nms[startsWith(nms, "modify_selector_")]
+  header <- header[c("column", "hide", selector_cols)]
+  names(header) <- c("column", "hide", str_remove(selector_cols, "^modify_selector_"))
 
   # add information as attributes to table_body
   for (modify_selector_column in names(header)[-1]) {
