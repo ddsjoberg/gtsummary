@@ -149,14 +149,14 @@ remove_abbreviation <- function(x, abbreviation = NULL) {
 .modify_abbreviation <- function(x, abbreviation, text_interpret = "md", column = NA_character_,
                                  prefix = NULL, sep1 = NULL, sep2 = NULL) {
   previous <- x$table_styling$abbreviation
-  updated <- previous |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = column,
-        abbreviation = abbreviation,
-        text_interpret = .interpret_fun(text_interpret)
-      )
-    )
+  lst_new <- list(
+    column = column,
+    abbreviation = abbreviation,
+    text_interpret = .interpret_fun(text_interpret)
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
+  updated <- dplyr::bind_rows(previous, new_rows)
 
   # carry forward any previously set prefix/sep attributes (dropped by dplyr),
   # then override with the newly supplied (non-NULL) values

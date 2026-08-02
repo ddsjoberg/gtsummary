@@ -114,16 +114,32 @@ remove_italic <- function(x, columns = everything(), rows = TRUE) {
 
 .modify_text_format <- function(x, columns, rows, text_format, undo = FALSE) {
   # add updates to `x$table_styling$text_format` -------------------------------
-  x$table_styling$text_format <-
-    dplyr::bind_rows(
-      x$table_styling$text_format,
+  # with a single `format_type` only `column` varies, so the `expand_grid()`
+  # cartesian product collapses to a simple recycle over `column`; use the fast
+  # constructor in that case (verified byte-identical), else fall back
+  new_rows <-
+    if (length(columns) >= 1L && length(text_format) == 1L) {
+      .fast_styling_tibble(
+        list(
+          column = columns,
+          rows = list(enquo(rows)),
+          format_type = text_format,
+          undo_text_format = undo
+        ),
+        n = length(columns)
+      )
+    }
+  if (is.null(new_rows)) {
+    new_rows <-
       tidyr::expand_grid(
         column = columns,
         rows = list(enquo(rows)),
         format_type = text_format,
         undo_text_format = undo
       )
-    )
+  }
+  x$table_styling$text_format <-
+    dplyr::bind_rows(x$table_styling$text_format, new_rows)
 
   # return table ---------------------------------------------------------------
   x

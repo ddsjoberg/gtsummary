@@ -195,27 +195,53 @@ modify_table_styling <- function(x,
     undo_text_format <- arg_match(undo_text_format, values = c("bold", "italic"), multiple = TRUE)
   }
   rows <- enquo(rows)
-  rows_eval_error <-
-    tryCatch(
-      eval_tidy(rows, data = x$table_body) %>%
-        {!is.null(.) && !is.logical(.)}, # styler: off
-      error = function(e) TRUE
-    )
-  if (rows_eval_error) {
-    cli::cli_abort(
-      "The {.arg rows} argument must be an expression that evaluates to a logical vector in {.code x$table_body}.",
-      call = get_cli_abort_call()
-    )
+  # `rows = NULL` (the default and the common internal call) needs no evaluation
+  # against `table_body`
+  if (!quo_is_null(rows)) {
+    rows_eval_error <-
+      tryCatch(
+        eval_tidy(rows, data = x$table_body) %>%
+          {!is.null(.) && !is.logical(.)}, # styler: off
+        error = function(e) TRUE
+      )
+    if (rows_eval_error) {
+      cli::cli_abort(
+        "The {.arg rows} argument must be an expression that evaluates to a logical vector in {.code x$table_body}.",
+        call = get_cli_abort_call()
+      )
+    }
+  }
+
+  # label / hide / align: columns are unique in the header, so `match()` + direct
+  # indexed assignment replaces the `dplyr::tibble()` + `.rows_update_base()`
+  # round trip. Falls back to the original path for unusual input shapes
+  # (unmatched columns or mismatched lengths) so error messages stay identical.
+  if (!is_empty(label) || !is_empty(hide) || !is_empty(align)) {
+    header_idx <- match(columns, x$table_styling$header$column)
+    n_columns <- length(columns)
+    fast_header_update <- !anyNA(header_idx)
   }
 
   # label ----------------------------------------------------------------------
   if (!is_empty(label)) {
-    x$table_styling$header <-
-      .rows_update_base(
-        x$table_styling$header,
-        dplyr::tibble(column = columns, interpret_label = .interpret_fun(text_interpret), label = label),
-        by = "column"
-      )
+    interpret_label <- .interpret_fun(text_interpret)
+    if (fast_header_update &&
+      length(label) %in% c(1L, n_columns) &&
+      length(interpret_label) %in% c(1L, n_columns)) {
+      # update a local copy of the header and reassign once, so the two column
+      # writes don't each copy-on-modify the whole `x` object chain
+      header <- x$table_styling$header
+      header$interpret_label[header_idx] <- interpret_label
+      header$label[header_idx] <- label
+      x$table_styling$header <- header
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, interpret_label = interpret_label, label = label),
+          by = "column"
+        )
+    }
   }
 
   # spanning_header ------------------------------------------------------------
@@ -231,28 +257,36 @@ modify_table_styling <- function(x,
 
   # hide -----------------------------------------------------------------------
   if (!is_empty(hide)) {
-    x$table_styling$header <-
-      .rows_update_base(
-        x$table_styling$header,
-        dplyr::tibble(column = columns, hide = hide),
-        by = "column"
-      )
+    if (fast_header_update && length(hide) %in% c(1L, n_columns)) {
+      x$table_styling$header$hide[header_idx] <- hide
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, hide = hide),
+          by = "column"
+        )
+    }
   }
 
   # align ----------------------------------------------------------------------
   if (!is_empty(align)) {
-    x$table_styling$header <-
-      .rows_update_base(
-        x$table_styling$header,
-        dplyr::tibble(column = columns, align = align),
-        by = "column"
-      )
+    if (fast_header_update && length(align) %in% c(1L, n_columns)) {
+      x$table_styling$header$align[header_idx] <- align
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, align = align),
+          by = "column"
+        )
+    }
   }
 
   # footnote -------------------------------------------------------------------
   if (!is_empty(footnote)) {
     # header footnotes
-    if (tryCatch(is.null(eval_tidy(rows)), error = \(x) FALSE)) {
+    if (quo_is_null(rows) || tryCatch(is.null(eval_tidy(rows)), error = \(x) FALSE)) {
       x <-
         .modify_footnote_header(
           x = x,
@@ -288,15 +322,11 @@ modify_table_styling <- function(x,
   # fmt_fun --------------------------------------------------------------------
   if (!is_empty(fmt_fun)) {
     if (rlang::is_function(fmt_fun)) fmt_fun <- list(fmt_fun)
+    lst_new <- list(column = columns, rows = list(rows), fmt_fun = fmt_fun)
+    new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+    if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
     x$table_styling$fmt_fun <-
-      dplyr::bind_rows(
-        x$table_styling$fmt_fun,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          fmt_fun = fmt_fun
-        )
-      )
+      dplyr::bind_rows(x$table_styling$fmt_fun, new_rows)
   }
 
   # text_format ----------------------------------------------------------------
