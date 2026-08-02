@@ -187,6 +187,10 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) |>
     dplyr::ungroup()
 
+  # the visible-header subset drives the columns to escape, the alignment groups
+  # and the spanning columns, so it is computed once here and reused below
+  header_visible <- dplyr::filter(x$table_styling$header, !.data$hide)
+
   # kableExtra doesn't support markdown bold/italics, will replace in next section
   kable_extra_calls <-
     kable_extra_calls |>
@@ -194,8 +198,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # escaping special characters in table_body ----------------------------------
   kable_call_index <- which(names(kable_extra_calls) %in% "kable")
-  cols_to_escape <-
-    dplyr::filter(x$table_styling$header, !.data$hide) |> dplyr::pull("column")
+  cols_to_escape <- header_visible$column
   kable_extra_calls <-
     append(kable_extra_calls,
            values = list(escape_table_body = NULL),
@@ -231,8 +234,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
     # collapse header into fewer rows by align status
     df_header_by_align <-
-      x$table_styling$header |>
-      dplyr::filter(!.data$hide) |>
+      header_visible |>
       dplyr::select("column", "align") |>
       tidyr::nest(column = "column") |>
       dplyr::mutate(column = map(.data$column, ~ unlist(.) |> unname()))
@@ -295,7 +297,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     kable_extra_calls[["add_header_above"]] <-
       tidyr::expand_grid(
         level = unique(x$table_styling$spanning_header$level),
-        column = x$table_styling$header$column[!x$table_styling$header$hide]
+        column = header_visible$column
       ) |>
       dplyr::left_join(
         x$table_styling$spanning_header[c("level", "column", "spanning_header")],

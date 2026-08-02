@@ -202,6 +202,11 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     dplyr::ungroup()
 
+  # the visible-header subset and the set of spanning-header levels are each used
+  # in several places below, so compute them once here
+  header_visible <- dplyr::filter(x$table_styling$header, .data$hide == FALSE)
+  spanning_levels <- unique(x$table_styling$spanning_header$level)
+
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
@@ -369,8 +374,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # insert_row ----------------------------------------------------------
   # we do this last so as to not mess up row indexes before
   col_labels <-
-    x$table_styling$header %>%
-    dplyr::filter(.data$hide == FALSE) %>%
+    header_visible %>%
     dplyr::select("column", "label") %>%
     deframe()
 
@@ -386,8 +390,8 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       huxtable_calls[["insert_row"]] |>
       append(
         tidyr::expand_grid(
-          level = unique(x$table_styling$spanning_header$level),
-          column = x$table_styling$header$column[!x$table_styling$header$hide]
+          level = spanning_levels,
+          column = header_visible$column
         ) |>
           dplyr::left_join(
             x$table_styling$spanning_header[c("level", "column", "spanning_header")],
@@ -409,7 +413,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       )
   }
 
-  header_bottom_row <- length(unique(x$table_styling$spanning_header$level)) + 1L
+  header_bottom_row <- length(spanning_levels) + 1L
   huxtable_calls[["insert_row"]] <- append(
     huxtable_calls[["insert_row"]],
     expr(
@@ -421,7 +425,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_markdown ---------------------------------------------------------------
-  header_rows <- seq_len(length(unique(x$table_styling$spanning_header$level)) + 1L) # styler: off
+  header_rows <- seq_len(length(spanning_levels) + 1L) # styler: off
   huxtable_calls[["set_markdown"]] <-
     list(
       set_markdown =
@@ -435,8 +439,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    x$table_styling$header %>%
-    dplyr::filter(.data$hide == FALSE) %>%
+    header_visible %>%
     dplyr::select("id", "align") %>%
     dplyr::group_by(.data$align) %>%
     tidyr::nest() %>%
