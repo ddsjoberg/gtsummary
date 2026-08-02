@@ -87,15 +87,15 @@ modify_indent <- function(x, columns, rows = NULL, indent = 4L,
 
 .modify_indent <- function(x, columns, rows = NULL, indent = 4L) {
   # update hidden status -------------------------------------------------------
+  lst_new <- list(
+    column = columns,
+    rows = list(enquo(rows)),
+    n_spaces = as.integer(indent)
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$indent <-
-    dplyr::bind_rows(
-      x$table_styling$indent,
-      dplyr::tibble(
-        column = columns,
-        rows = list(enquo(rows)),
-        n_spaces = as.integer(indent)
-      )
-    )
+    dplyr::bind_rows(x$table_styling$indent, new_rows)
 
   # return gtsummary table -----------------------------------------------------
   x

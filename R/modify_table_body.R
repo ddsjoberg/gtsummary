@@ -51,7 +51,9 @@ modify_table_body <- function(x, fun, ...) {
   # execute function on x$table_body -------------------------------------------
   x$table_body <-
     tryCatch(
-      map(.x = list(x$table_body), .f = fun, ...)[[1]],
+      # equivalent to `map(list(x$table_body), fun, ...)[[1]]` (the standalone
+      # purrr `map()` is `as_function()` + `lapply()`) without the list wrapper
+      as_function(fun, env = global_env())(x$table_body, ...),
       error = \(e) {
         cli::cli_abort(
           c("The following error occured while executing {.arg fun} on {.code x$table_body}:",
