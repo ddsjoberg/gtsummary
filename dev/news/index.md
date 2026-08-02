@@ -3,6 +3,19 @@
 ## gtsummary (development version)
 
 - Improved the speed and memory efficiency of
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md).
+  Adding the table-identifier condition to each styling row-selection
+  expression no longer evaluates the expression for the common
+  literal-`NULL` case, reuses a single data mask per input table when
+  evaluation is needed, and computes each unique expression only once;
+  the stacked `table_body` and header are assembled with base subsetting
+  in place of per-table tidyselect pipelines; and the group-header
+  column attributes are set without routing through the full
+  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_styling.md)
+  machinery. There is no change to the returned tables.
+  ([\#2452](https://github.com/ddsjoberg/gtsummary/issues/2452))
+
+- Improved the speed and memory efficiency of
   [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md).
   The step that merges the overall column into the stratified table now
   skips no-op styling binds, uses base-R subsetting in place of dplyr
