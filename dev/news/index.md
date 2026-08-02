@@ -2,6 +2,35 @@
 
 ## gtsummary (development version)
 
+- Improved the speed and memory efficiency of the table-modification
+  functions
+  ([`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
+  [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
+  [`modify_footnote_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
+  [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md),
+  [`modify_table_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_body.md),
+  the column/format helpers such as
+  [`modify_indent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_indent.md),
+  [`modify_missing_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_missing_symbol.md),
+  [`modify_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_source_note.md),
+  [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md),
+  and the developer-facing
+  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_styling.md)).
+  The header-styling sync is skipped when it would be a no-op; header
+  labels, alignment, and hidden status are assigned directly instead of
+  through a row-update round trip; the glue data used for dynamic
+  headers is built only when needed; row-selection expressions are not
+  evaluated for the literal-`NULL`/`TRUE` defaults; the
+  styling-instruction appends avoid the expensive
+  [`dplyr::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
+  construction; and plainly-named
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)/[`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)/[`modify_fmt_fun()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_fmt_fun.md)
+  calls skip the tidyselect machinery. There is no change to the
+  returned tables.
+  ([\#2453](https://github.com/ddsjoberg/gtsummary/issues/2453))
+
 - Improved the speed and memory efficiency of
   [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md).
   Adding the table-identifier condition to each styling row-selection
