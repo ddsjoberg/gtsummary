@@ -55,6 +55,29 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
     # modification machinery is benchmarked in isolation from table construction.
     bench_modify_tbl <- bench_tbl
 
+    # Setup for as_*() converter benchmarks: a styled 50-variable table built once
+    # so the shared conversion machinery (row-number resolution in
+    # `.table_styling_expr_to_row_number()` + the per-engine call builders) is
+    # benchmarked in isolation from table construction. Exercises a spanning
+    # header, header + body footnotes, bold labels and an indent -- the main
+    # styling paths every converter consumes.
+    suppressMessages({
+      bench_convert_tbl <-
+        bench_tbl |>
+        gtsummary::modify_spanning_header(gtsummary::all_stat_cols() ~ "**Treatment**") |>
+        gtsummary::modify_footnote_header(
+          footnote = "All subjects were randomized",
+          columns = gtsummary::all_stat_cols()
+        ) |>
+        gtsummary::modify_footnote_body(
+          footnote = "Statistics for the first variable",
+          columns = "label",
+          rows = variable == "v1"
+        ) |>
+        gtsummary::bold_labels() |>
+        gtsummary::modify_indent(columns = "label", rows = row_type == "level")
+    })
+
     # Setup for brdg_hierarchical / sort / filter benchmarks: build the tables
     # once so the assembly (brdg) and post-processing (sort/filter) steps can be
     # benchmarked in isolation from the ARD computation.
@@ -246,7 +269,20 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 10, check = FALSE
       )
 
-      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, add_overall_res, tbl_merge_res, tbl_stack_res, modify_res, brdg_h_res, sort_filter_h_res)
+      # as_*() converters (isolated from table construction; styled table built
+      # once in setup). Each converter shares the row-number resolution and the
+      # tibble call builder, then appends its own engine-specific calls.
+      convert_res <- bench::mark(
+        as_gt = gtsummary::as_gt(bench_convert_tbl),
+        as_flex_table = gtsummary::as_flex_table(bench_convert_tbl),
+        as_hux_table = gtsummary::as_hux_table(bench_convert_tbl),
+        as_kable_extra = gtsummary::as_kable_extra(bench_convert_tbl),
+        as_kable = gtsummary::as_kable(bench_convert_tbl),
+        as_tibble = gtsummary::as_tibble(bench_convert_tbl),
+        iterations = 10, check = FALSE
+      )
+
+      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, add_overall_res, tbl_merge_res, tbl_stack_res, modify_res, brdg_h_res, sort_filter_h_res, convert_res)
       data.frame(
         expression = as.character(all_res$expression),
         median_s = as.numeric(all_res$median),
@@ -347,6 +383,7 @@ ao_names <- c("add_overall")
 merge_names <- c("tbl_merge")
 stack_names <- c("tbl_stack")
 modify_names <- c("modify_functions")
+convert_names <- c("as_gt", "as_flex_table", "as_hux_table", "as_kable_extra", "as_kable", "as_tibble")
 hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical", "filter_hierarchical_overall")
 
 style_tab <- tab[tab$expression %in% style_names, ]
@@ -357,6 +394,7 @@ ao_tab <- tab[tab$expression %in% ao_names, ]
 merge_tab <- tab[tab$expression %in% merge_names, ]
 stack_tab <- tab[tab$expression %in% stack_names, ]
 modify_tab <- tab[tab$expression %in% modify_names, ]
+convert_tab <- tab[tab$expression %in% convert_names, ]
 hier_tab <- tab[tab$expression %in% hier_names, ]
 
 header <- paste0(
@@ -412,12 +450,17 @@ modify_section <- paste0(
   paste(knitr::kable(modify_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n\n"
 )
+convert_section <- paste0(
+  "### `as_*()` converters (50-variable styled table)\n\n",
+  paste(knitr::kable(convert_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
 hier_section <- paste0(
   "### Hierarchical internals (`cards::ADAE`)\n\n",
   paste(knitr::kable(hier_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n"
 )
 
-report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, ao_section, merge_section, stack_section, modify_section, hier_section)
+report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, ao_section, merge_section, stack_section, modify_section, convert_section, hier_section)
 writeLines(report, "bench_report.md")
 cat(report)

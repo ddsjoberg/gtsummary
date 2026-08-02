@@ -87,6 +87,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
     dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) |>
     dplyr::ungroup()
 
+  # the visible-header subset drives the labels, spanning columns and alignment,
+  # so it is computed once here and reused below
+  header_visible <- dplyr::filter(x$table_styling$header, .data$hide == FALSE)
+
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
@@ -99,12 +103,8 @@ table_styling_to_flextable_calls <- function(x, ...) {
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
 
   # compose_header -------------------------------------------------------------
-  col_labels <-
-    x$table_styling$header |>
-    dplyr::filter(.data$hide == FALSE)
-
   flextable_calls[["compose_header"]] <-
-    .chr_with_md_to_ft_compose(x = col_labels$label, j = col_labels$column)
+    .chr_with_md_to_ft_compose(x = header_visible$label, j = header_visible$column)
 
   # set_caption ----------------------------------------------------------------
   if (!is.null(x$table_styling$caption)) {
@@ -122,7 +122,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     flextable_calls[["add_header_row"]] <-
       tidyr::expand_grid(
         level = unique(x$table_styling$spanning_header$level),
-        column = x$table_styling$header$column[!x$table_styling$header$hide]
+        column = header_visible$column
       ) |>
       dplyr::left_join(
         x$table_styling$spanning_header[c("level", "column", "spanning_header")],
@@ -174,8 +174,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    x$table_styling$header |>
-    dplyr::filter(.data$hide == FALSE) |>
+    header_visible |>
     dplyr::select("id", "align") |>
     dplyr::group_by(.data$align) |>
     tidyr::nest() |>
