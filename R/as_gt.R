@@ -78,6 +78,20 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
 table_styling_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
+  # cache parsed interpreter expressions (e.g. "gt::md", "gt::html", "identity"),
+  # which recur across column labels, spanning headers and footnotes, so each
+  # distinct string is parsed once instead of once per row.
+  parse_cache <- new.env(parent = emptyenv())
+  parse_interpret <- function(text) {
+    cached <- parse_cache[[text]]
+    if (!is.null(cached)) {
+      return(cached)
+    }
+    parsed <- parse_expr(text)
+    parse_cache[[text]] <- parsed
+    parsed
+  }
+
   # preparation ----------------------------------------------------------------
   # in {gt} v0.11.0, there is an issue applying `gt::md()` to an empty string, e.g. `gt::md("")`
   # in those cases, changing the interpreting function to `identity()` (https://github.com/rstudio/gt/issues/1769)
@@ -95,7 +109,7 @@ table_styling_to_gt_calls <- function(x, ...) {
         switch(
           !is.null(x$table_styling$caption),
           rlang::call2(
-            .fn = parse_expr(.interpret_fun(attr(x$table_styling$caption, "text_interpret"))),
+            .fn = parse_interpret(.interpret_fun(attr(x$table_styling$caption, "text_interpret"))),
             x$table_styling$caption
           )
         )
@@ -189,8 +203,12 @@ table_styling_to_gt_calls <- function(x, ...) {
       ))
     )
 
-  # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "bold")
+  # tab_style_bold / tab_style_italic ------------------------------------------
+  # split the text_format table by type in a single pass rather than filtering it
+  # twice (subsetting only uses column/row_numbers, which base indexing preserves)
+  text_format_type <- x$table_styling$text_format$format_type
+  df_bold <- x$table_styling$text_format[text_format_type == "bold", , drop = FALSE]
+  df_italic <- x$table_styling$text_format[text_format_type == "italic", , drop = FALSE]
   gt_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
@@ -204,7 +222,6 @@ table_styling_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_italic -----------------------------------------------------------
-  df_italic <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "italic")
   gt_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
@@ -222,7 +239,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     map2(
       x$table_styling$header$interpret_label,
       x$table_styling$header$label,
-      ~ call2(parse_expr(.x), .y)
+      ~ call2(parse_interpret(.x), .y)
     ) %>%
     set_names(x$table_styling$header$column) %>%
     {call2(expr(gt::cols_label), !!!.)} # styler: off
@@ -246,7 +263,7 @@ table_styling_to_gt_calls <- function(x, ...) {
           \(.x, .y) {
             expr(gt::tab_spanner(
               columns = !!.x$column,
-              label = !!call2(parse_expr(.y$text_interpret), .y$spanning_header),
+              label = !!call2(parse_interpret(.y$text_interpret), .y$spanning_header),
               level = !!.y$level,
               id = !!paste0("level ", .y$level, "; ", .x$column[1]),
               gather = FALSE
@@ -267,7 +284,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             gt::tab_footnote(
               footnote =
                 !!call2(
-                  parse_expr(x$table_styling$footnote_header$text_interpret[i]),
+                  parse_interpret(x$table_styling$footnote_header$text_interpret[i]),
                   x$table_styling$footnote_header$footnote[i]
                 ),
               locations = gt::cells_column_labels(columns = !!x$table_styling$footnote_header$column[i])
@@ -283,7 +300,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             gt::tab_footnote(
               footnote =
                 !!call2(
-                  parse_expr(x$table_styling$footnote_body$text_interpret[i]),
+                  parse_interpret(x$table_styling$footnote_body$text_interpret[i]),
                   x$table_styling$footnote_body$footnote[i]
                 ),
               locations = gt::cells_body(columns = !!x$table_styling$footnote_body$column[i],
@@ -300,7 +317,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             gt::tab_footnote(
               footnote =
                 !!call2(
-                  parse_expr(x$table_styling$footnote_spanning_header$text_interpret[i]),
+                  parse_interpret(x$table_styling$footnote_spanning_header$text_interpret[i]),
                   x$table_styling$footnote_spanning_header$footnote[i]
                 ),
               locations =
@@ -342,7 +359,7 @@ table_styling_to_gt_calls <- function(x, ...) {
           gt::tab_source_note(
             source_note =
               !!call2(
-                parse_expr(dplyr::last(x$table_styling$abbreviation$text_interpret)),
+                parse_interpret(dplyr::last(x$table_styling$abbreviation$text_interpret)),
                 .assemble_abbreviation_source_note(x)
               )
           )
@@ -360,7 +377,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       \(i) {
         expr(
           gt::tab_source_note(source_note =
-                                !!do.call(eval(rlang::parse_expr(x$table_styling$source_note$text_interpret[i])),
+                                !!do.call(eval(parse_interpret(x$table_styling$source_note$text_interpret[i])),
                                           args = list(x$table_styling$source_note$source_note[i])))
         )
       }

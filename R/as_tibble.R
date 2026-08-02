@@ -122,8 +122,12 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
       )
     )
 
-  # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "bold")
+  # tab_style_bold / tab_style_italic ------------------------------------------
+  # split the text_format table by type in a single pass rather than filtering it
+  # twice (subsetting only uses nrow/column/row_numbers, which base indexing preserves)
+  text_format_type <- x$table_styling$text_format$format_type
+  df_bold <- x$table_styling$text_format[text_format_type == "bold", , drop = FALSE]
+  df_italic <- x$table_styling$text_format[text_format_type == "italic", , drop = FALSE]
 
   tibble_calls[["tab_style_bold"]] <-
     map(
@@ -137,8 +141,6 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     )
 
   # tab_style_italic -------------------------------------------------------------
-  df_italic <- x$table_styling$text_format %>% dplyr::filter(.data$format_type == "italic")
-
   tibble_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
@@ -151,10 +153,13 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     )
 
   # fmt (part 2) ---------------------------------------------------------------
+  # resolve the fmt-application helper once instead of re-parsing/evaluating the
+  # `gtsummary:::.apply_fmt_fun` string for every fmt_fun / post_fmt_fun row
+  apply_fmt_fun <- eval(parse_expr("gtsummary:::.apply_fmt_fun"))
   tibble_calls[["fmt"]] <-
     map(
       seq_len(nrow(x$table_styling$fmt_fun)),
-      ~ expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
+      ~ expr((!!expr(!!apply_fmt_fun))(
         columns = !!x$table_styling$fmt_fun$column[[.x]],
         row_numbers = !!x$table_styling$fmt_fun$row_numbers[[.x]],
         fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
@@ -188,7 +193,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   tibble_calls[["post_fmt"]] <-
     map(
       seq_len(nrow(x$table_styling$post_fmt_fun)),
-      ~ expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
+      ~ expr((!!expr(!!apply_fmt_fun))(
         columns = !!x$table_styling$post_fmt_fun$column[[.x]],
         row_numbers = !!x$table_styling$post_fmt_fun$row_numbers[[.x]],
         fmt_fun = !!x$table_styling$post_fmt_fun$fmt_fun[[.x]]
@@ -196,15 +201,13 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
     )
 
   # cols_hide ------------------------------------------------------------------
-  # cols_to_keep object created above in fmt section
+  # the visible-header subset drives both the columns to keep and their labels
+  df_col_labels <- dplyr::filter(x$table_styling$header, .data$hide == FALSE)
   tibble_calls[["cols_hide"]] <-
-    expr(dplyr::select(any_of("groupname_col"), !!!syms(.cols_to_show(x))))
+    expr(dplyr::select(any_of("groupname_col"), !!!syms(df_col_labels$column)))
 
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
-    df_col_labels <-
-      dplyr::filter(x$table_styling$header, .data$hide == FALSE)
-
     tibble_calls[["cols_label"]] <-
       expr(rlang::set_names(!!df_col_labels$label))
   }

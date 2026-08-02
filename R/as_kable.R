@@ -90,16 +90,17 @@ table_styling_to_kable_calls <- function(x, ...) {
 .construct_call_to_kable <- function(x, ...) {
   dots <- rlang::dots_list(...)
 
+  # subset the header to its visible columns once (used for both names and align)
+  header_visible <- dplyr::filter(x$table_styling$header, .data$hide == FALSE)
   kable_args <-
     # default args
     list(
       caption = x$table_styling$caption,
       col.names =
-        dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label |>
+        header_visible$label |>
         str_replace_all(pattern = "\\n(?!\\\\)", replacement = ""),
       align =
-        dplyr::filter(x$table_styling$header, .data$hide == FALSE) %>%
-        dplyr::pull("align") %>%
+        header_visible$align |>
         str_sub(1, 1)
     ) |>
     # update with any args from theme element
