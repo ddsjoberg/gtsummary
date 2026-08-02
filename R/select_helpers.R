@@ -198,16 +198,19 @@ scope_header <- function(table_body, header = NULL) {
   # if header not passed, return table_body unaltered
   if (is_empty(header)) return(table_body) # styler: off
 
-  header <- header |>
-    dplyr::select("column", "hide", starts_with("modify_selector_")) |>
-    dplyr::rename_with(.fn = ~str_remove(.x, "^modify_selector_"), .cols = starts_with("modify_selector_"))
+  nms <- names(header)
+  selector_cols <- nms[startsWith(nms, "modify_selector_")]
+  header <- header[c("column", "hide", selector_cols)]
+  names(header) <- c("column", "hide", str_remove(selector_cols, "^modify_selector_"))
 
   # add information as attributes to table_body
   for (modify_selector_column in names(header)[-1]) {
+    values <- header[[modify_selector_column]]
+    attr_name <- paste0("gtsummary.", modify_selector_column)
     # cycle over the values where the modify selector column is not NA
-    for (column in header$column[!is.na(header[[modify_selector_column]])]) {
-        attr(table_body[[column]], paste0("gtsummary.", modify_selector_column)) <-
-          header[header$column == column, modify_selector_column][[1]]
+    # (header$column is unique, so the row index identifies the column directly)
+    for (idx in which(!is.na(values))) {
+      attr(table_body[[header$column[idx]]], attr_name) <- values[idx]
     }
   }
 

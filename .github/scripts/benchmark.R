@@ -40,6 +40,21 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
     bench_statistic <- bench_tbl$inputs$statistic
     bench_by <- "trt"
 
+    # Setup for tbl_merge benchmark: merge three copies of the summary table
+    # (built once above) so the merge machinery is benchmarked in isolation from
+    # table construction. Identical row counts / unique merge keys keep it silent.
+    bench_merge_tbls <- list(bench_tbl, bench_tbl, bench_tbl)
+
+    # Setup for tbl_stack benchmark: stack three copies of the summary table
+    # (built once above) so the stacking machinery is benchmarked in isolation
+    # from table construction. `group_header` exercises the groupname_col path.
+    bench_stack_tbls <- list(bench_tbl, bench_tbl, bench_tbl)
+
+    # Setup for modify_* benchmark: the modify functions are applied to the
+    # 50-variable summary table built above so the header/footnote/abbreviation
+    # modification machinery is benchmarked in isolation from table construction.
+    bench_modify_tbl <- bench_tbl
+
     # Setup for brdg_hierarchical / sort / filter benchmarks: build the tables
     # once so the assembly (brdg) and post-processing (sort/filter) steps can be
     # benchmarked in isolation from the ARD computation.
@@ -154,6 +169,57 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 20, check = FALSE
       )
 
+      # add_overall (isolated from table construction; bench_tbl built once in setup)
+      add_overall_res <- bench::mark(
+        add_overall = gtsummary::add_overall(bench_tbl),
+        iterations = 10, check = FALSE
+      )
+
+      # tbl_merge (isolated from table construction; tables built once in setup)
+      tbl_merge_res <- bench::mark(
+        tbl_merge = gtsummary::tbl_merge(bench_merge_tbls),
+        iterations = 10, check = FALSE
+      )
+
+      # tbl_stack (isolated from table construction; tables built once in setup)
+      tbl_stack_res <- bench::mark(
+        tbl_stack = gtsummary::tbl_stack(
+          bench_stack_tbls, group_header = c("A", "B", "C"), quiet = TRUE
+        ),
+        iterations = 10, check = FALSE
+      )
+
+      # modify_* functions (isolated from table construction; table built once in setup).
+      # The chain exercises plain + glue-formula headers, a spanning header, header
+      # and body footnotes with a rows predicate, an abbreviation append, the shared
+      # `.modify_text_format` backend (bold_labels), an indent and a source-note
+      # append, and a column-adding `modify_table_body()` (the full styling-sync path).
+      modify_res <- bench::mark(
+        modify_functions = {
+          bench_modify_tbl |>
+            gtsummary::modify_header(
+              label = "**Characteristic**",
+              gtsummary::all_stat_cols() ~ "**{level}**, N = {n}"
+            ) |>
+            gtsummary::modify_spanning_header(gtsummary::all_stat_cols() ~ "**Treatment**") |>
+            gtsummary::modify_footnote_header(
+              footnote = "All subjects were randomized",
+              columns = gtsummary::all_stat_cols()
+            ) |>
+            gtsummary::modify_footnote_body(
+              footnote = "Statistics rounded to two decimal places",
+              columns = "label",
+              rows = variable == "v1"
+            ) |>
+            gtsummary::modify_abbreviation("IQR = Interquartile Range") |>
+            gtsummary::bold_labels() |>
+            gtsummary::modify_indent(columns = "label", rows = row_type == "level") |>
+            gtsummary::modify_source_note("Source: trial data") |>
+            gtsummary::modify_table_body(~ dplyr::mutate(.x, extra_col = NA_character_))
+        },
+        iterations = 10, check = FALSE
+      )
+
       # brdg_hierarchical (table assembly in isolation)
       brdg_h_res <- bench::mark(
         brdg_hierarchical = gtsummary::brdg_hierarchical(
@@ -180,7 +246,7 @@ run_benchmarks <- function(version = "main", n_rounds = 5L) {
         iterations = 10, check = FALSE
       )
 
-      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, brdg_h_res, sort_filter_h_res)
+      all_res <- rbind(style_res, trans_res, pipe_res, brdg_res, add_overall_res, tbl_merge_res, tbl_stack_res, modify_res, brdg_h_res, sort_filter_h_res)
       data.frame(
         expression = as.character(all_res$expression),
         median_s = as.numeric(all_res$median),
@@ -277,12 +343,20 @@ style_names <- c("style_number", "style_number varying digits", "style_sigfig")
 trans_names <- c("translate_string en", "translate_string es")
 pipe_names <- c("tbl_summary", "tbl_hierarchical", "tbl_strata")
 brdg_names <- c("brdg_summary")
+ao_names <- c("add_overall")
+merge_names <- c("tbl_merge")
+stack_names <- c("tbl_stack")
+modify_names <- c("modify_functions")
 hier_names <- c("brdg_hierarchical", "sort_hierarchical", "filter_hierarchical", "filter_hierarchical_overall")
 
 style_tab <- tab[tab$expression %in% style_names, ]
 trans_tab <- tab[tab$expression %in% trans_names, ]
 pipe_tab <- tab[tab$expression %in% pipe_names, ]
 brdg_tab <- tab[tab$expression %in% brdg_names, ]
+ao_tab <- tab[tab$expression %in% ao_names, ]
+merge_tab <- tab[tab$expression %in% merge_names, ]
+stack_tab <- tab[tab$expression %in% stack_names, ]
+modify_tab <- tab[tab$expression %in% modify_names, ]
 hier_tab <- tab[tab$expression %in% hier_names, ]
 
 header <- paste0(
@@ -318,12 +392,32 @@ brdg_section <- paste0(
   paste(knitr::kable(brdg_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n\n"
 )
+ao_section <- paste0(
+  "### `add_overall()` (50 variables)\n\n",
+  paste(knitr::kable(ao_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
+merge_section <- paste0(
+  "### `tbl_merge()` (3 tables, 50 variables each)\n\n",
+  paste(knitr::kable(merge_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
+stack_section <- paste0(
+  "### `tbl_stack()` (3 tables, 50 variables each)\n\n",
+  paste(knitr::kable(stack_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
+modify_section <- paste0(
+  "### `modify_*()` functions (50-variable table)\n\n",
+  paste(knitr::kable(modify_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
+  "\n\n"
+)
 hier_section <- paste0(
   "### Hierarchical internals (`cards::ADAE`)\n\n",
   paste(knitr::kable(hier_tab, format = "markdown", row.names = FALSE), collapse = "\n"),
   "\n"
 )
 
-report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, hier_section)
+report <- paste0(header, style_section, trans_section, pipe_section, brdg_section, ao_section, merge_section, stack_section, modify_section, hier_section)
 writeLines(report, "bench_report.md")
 cat(report)

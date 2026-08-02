@@ -44,15 +44,15 @@ modify_post_fmt_fun <- function(x, fmt_fun, columns, rows = TRUE) {
   }
 
   # save the information in a table to be executed after fmt_funs have been applied
+  lst_new <- list(
+    column = columns,
+    rows = list(rows),
+    fmt_fun = list(fmt_fun)
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$post_fmt_fun <-
-    x$table_styling$post_fmt_fun |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = columns,
-        rows = list(rows),
-        fmt_fun = list(fmt_fun)
-      )
-    )
+    dplyr::bind_rows(x$table_styling$post_fmt_fun, new_rows)
 
   # return table ---------------------------------------------------------------
   x

@@ -11,9 +11,21 @@
 #' @keywords internal
 #' @return gtsummary object
 .create_gtsummary_object <- function(table_body, ...) {
-  as_gtsummary(table_body, ...) |>
-    # the original function left the "label" column unhidden
-    modify_column_hide(columns = -any_of("label"))
+  x <- as_gtsummary(table_body, ...)
+
+  # equivalent to `modify_column_hide(x, columns = -any_of("label"))`, but avoids
+  # the full `modify_table_styling()` machinery: `as_gtsummary()` just built the
+  # header in sync with `table_body`, so only `hide` and `call_list` change here.
+  # (the "label" column is left unhidden, as the original did)
+  x$table_styling$header$hide <- !x$table_styling$header$column %in% "label"
+  x$call_list <- c(
+    x$call_list,
+    list(modify_column_hide = quote(
+      modify_column_hide(x = as_gtsummary(table_body, ...), columns = -any_of("label"))
+    ))
+  )
+
+  x
 }
 
 .purrr_when <- function(...) {
@@ -42,6 +54,17 @@
 
 # this fn updates `table_styling` list to match `table_body`
 .update_table_styling <- function(x) {
+  # fast path: when the header already matches `table_body` exactly (same
+  # columns in the same order, canonical column arrangement), the rebuild below
+  # is a byte-identical no-op (verified with serialize()), so skip it
+  if (identical(x$table_styling$header[["column"]], names(x$table_body)) &&
+    identical(
+      names(x$table_styling$header)[1:5],
+      c("column", "hide", "align", "interpret_label", "label")
+    )) {
+    return(x)
+  }
+
   # vector of columns deleted in update
   deleted_columns <-
     x$table_styling$header$column %>%
@@ -110,4 +133,24 @@
   }
 
   return(dplyr::as_tibble(x))
+}
+
+# fast construction of a styling tibble to append: `dplyr::tibble()` is
+# comparatively expensive, so when every field is a bare vector of length 1 or
+# `n`, build the tibble directly with vctrs (verified byte-identical to
+# `dplyr::tibble()`). Returns NULL when the inputs need `dplyr::tibble()`'s
+# richer recycling/NULL-dropping/error behavior; callers then fall back to the
+# original construction so error messages remain unchanged.
+.fast_styling_tibble <- function(lst, n) {
+  for (elt in lst) {
+    if (is.null(elt) || !is.vector(elt) || !is.null(attributes(elt)) ||
+      !(length(elt) == 1L || length(elt) == n)) {
+      return(NULL)
+    }
+  }
+  vctrs::new_data_frame(
+    lapply(lst, function(elt) if (length(elt) == n) elt else rep_len(elt, n)),
+    n = n,
+    class = c("tbl_df", "tbl")
+  )
 }

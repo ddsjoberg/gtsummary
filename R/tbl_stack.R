@@ -93,12 +93,10 @@ tbl_stack <- function(tbls,
     check_identical_length(tbls, tbl_id_lbls)
   }
 
-  # will return call, and all arguments passed to tbl_stack
-  func_inputs <- as.list(environment())
-
   # stack tables ---------------------------------------------------------------
   # first, save a string of the new tbl ID column
   tbl_id_colname <- .tbl_id_varname(tbls)
+  tbl_id_lbl_colname <- paste0(tbl_id_colname, "_lbl")
 
   # stack the `table_body` data frames
   results <- list()
@@ -107,22 +105,27 @@ tbl_stack <- function(tbls,
       tbls, seq_along(tbls),
       function(tbl, id) {
         # adding a table ID and group header
-        table_body <- tbl[["table_body"]] |> dplyr::mutate("{tbl_id_colname}" := id)
+        table_body <- tbl[["table_body"]]
+        table_body[[tbl_id_colname]] <- id
 
         # add ID label column if specified
         if (!is_empty(tbl_id_lbls)) {
-          table_body <- table_body |>
-            dplyr::mutate("{tbl_id_colname}_lbl" := tbl_id_lbls[id])
+          table_body[[tbl_id_lbl_colname]] <- tbl_id_lbls[id]
         }
 
         if (!is.null(group_header)) {
-          table_body <-
-            table_body |>
-            dplyr::mutate(groupname_col = group_header[id])
+          table_body[["groupname_col"]] <- group_header[id]
         }
 
-        table_body |>
-          dplyr::select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), matches("^tbl_id\\d+_lbl$"), everything())
+        # equivalent to select(any_of("groupname_col"), matches("^tbl_id\\d+$"),
+        #                      matches("^tbl_id\\d+_lbl$"), everything())
+        nms <- names(table_body)
+        first_cols <- c(
+          intersect("groupname_col", nms),
+          nms[grepl("^tbl_id[0-9]+$", nms)],
+          nms[grepl("^tbl_id[0-9]+_lbl$", nms)]
+        )
+        table_body[c(first_cols, setdiff(nms, first_cols))]
       }
     ) %>%
     dplyr::bind_rows()
@@ -131,13 +134,24 @@ tbl_stack <- function(tbls,
   # print message if column headers, footnotes, etc. are different among tbls
   if (identical(quiet, FALSE)) .print_stack_differences(tbls)
 
-  results$table_styling$header <-
+  header <-
     map(
       union(attr_order, seq_along(tbls)),
       ~ tbls[[.x]][["table_styling"]][["header"]]
     ) |>
-    dplyr::bind_rows() |>
-    dplyr::filter(.by = "column", dplyr::row_number() == 1)
+    dplyr::bind_rows()
+  results$table_styling$header <- header[!duplicated(header$column), ]
+
+  # lazily-built, reusable data mask per table for `rows` evaluation (built at
+  # most once per table, then reused across every style type below)
+  lst_get_mask <- map(tbls, function(.tbl) {
+    force(.tbl)
+    mask <- NULL
+    function() {
+      if (is.null(mask)) mask <<- rlang::as_data_mask(.tbl$table_body)
+      mask
+    }
+  })
 
   # cycle over each of the styling tibbles and stack them in reverse order -----
   for (style_type in c("spanning_header", "footnote_header", "footnote_body",
@@ -153,13 +167,17 @@ tbl_stack <- function(tbls,
             # adding tbl_id to the rows specifications,
             # e.g. data$tbl_id == 1L & .data$row_type != "label"
             df$rows <-
-              map(df$rows, ~ .add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i, tbl_id_colname, style_type))
+              .add_tbl_id_to_quo_list(df$rows, lst_get_mask[[i]], i, tbl_id_colname)
           }
-          df |>
-            dplyr::mutate_at(vars(any_of(c(
-              "column", "text_interpret",
-              "footnote", "format_type", "symbol"
-            ))), as.character)
+          # coerce shared columns to character so `bind_rows()` unifies types
+          # (runs on 0-row tibbles too, where it can change a column's type)
+          for (v in intersect(
+            c("column", "text_interpret", "footnote", "format_type", "symbol"),
+            names(df)
+          )) {
+            df[[v]] <- as.character(df[[v]])
+          }
+          df
         }
       ) |>
       dplyr::bind_rows()
@@ -194,14 +212,20 @@ tbl_stack <- function(tbls,
 
   # adding label for grouping variable, if present -----------------------------
   class(results) <- c("tbl_stack", "gtsummary")
-  results <-
-    modify_table_styling(
-      results,
-      any_of("groupname_col"),
-      label = get_theme_element("tbl_stack-str:group_header", default = "**Group**"),
-      align = "left",
-      hide = FALSE
-    )
+
+  # sync the header to the new `table_body` columns (tbl_id*, groupname_col),
+  # then set the group-column attributes directly; equivalent to
+  # `modify_table_styling(results, any_of("groupname_col"), label = ..., align = "left", hide = FALSE)`
+  # without the selector/validation machinery (`call_list` is overwritten below either way)
+  results <- .update_table_styling(results)
+  if ("groupname_col" %in% results$table_styling$header$column) {
+    idx <- results$table_styling$header$column == "groupname_col"
+    results$table_styling$header$label[idx] <-
+      get_theme_element("tbl_stack-str:group_header", default = "**Group**")
+    results$table_styling$header$interpret_label[idx] <- "gt::md"
+    results$table_styling$header$align[idx] <- "left"
+    results$table_styling$header$hide[idx] <- FALSE
+  }
 
   # add objects to the returned tbl --------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
@@ -257,17 +281,47 @@ tbl_stack <- function(tbls,
   return(invisible())
 }
 
-.add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname, style_type) {
-  # if NULL AND style_type is a type that adds header changes (i.e. footnote in header),
-  # then just return the NULL
-  # the requires the stacking to pick one of the header footnotes and use it
-  # the others will be discarded when printed.
-  row_is_null <- eval_tidy(x, data = table_body) |> is.null()
-  if (row_is_null && style_type %in% c("footnote", "footnote_abbrev")) {
-    return(x)
+# apply `.add_tbl_id_to_quo()` over a list of `rows` expressions, computing each
+# unique expression only once (many styling rows share the same `rows` quosure).
+# `.add_tbl_id_to_quo()` is a pure function of its arguments, so identical inputs
+# yield identical outputs.
+.add_tbl_id_to_quo_list <- function(rows_list, get_mask, tbl_id, tbl_id_colname) {
+  n <- length(rows_list)
+  result <- vector("list", n)
+  seen_in <- list()
+  seen_out <- list()
+
+  for (j in seq_len(n)) {
+    hit <- NULL
+    for (k in seq_along(seen_in)) {
+      if (identical(seen_in[[k]], rows_list[[j]])) {
+        hit <- k
+        break
+      }
+    }
+    if (is.null(hit)) {
+      out <- .add_tbl_id_to_quo(rows_list[[j]], get_mask, tbl_id, tbl_id_colname)
+      seen_in[[length(seen_in) + 1L]] <- rows_list[[j]]
+      seen_out[[length(seen_out) + 1L]] <- out
+      result[[j]] <- out
+    } else {
+      result[[j]] <- seen_out[[hit]]
+    }
   }
 
-  # otherwise if NULL, add the tbl_id condition
+  result
+}
+
+.add_tbl_id_to_quo <- function(x, get_mask, tbl_id, tbl_id_colname) {
+  # cheap short-circuit for the common literal-NULL cases, avoiding evaluation;
+  # otherwise fall back to evaluating against the (memoized) data mask, since a
+  # quosure can evaluate to NULL without being the NULL quosure
+  row_is_null <-
+    is.null(x) ||
+    (is_quosure(x) && quo_is_null(x)) ||
+    is.null(eval_tidy(x, data = get_mask()))
+
+  # if NULL, add the tbl_id condition
   if (row_is_null) {
     return(expr(!!sym(tbl_id_colname) == !!tbl_id))
   }
@@ -288,10 +342,9 @@ tbl_stack <- function(tbls,
 .tbl_id_varname <- function(tbls) {
   # get column names that begin with 'tbl_id##'
   tbl_id_colnames <-
-    map(tbls, ~dplyr::select(.x$table_body, matches("^tbl_id\\d+$")) |> names()) |>
+    lapply(tbls, function(x) grep("^tbl_id[0-9]+$", names(x$table_body), value = TRUE)) |>
     unlist() |>
-    unique() |>
-    discard(is.na)
+    unique()
 
   # return 'tbl_id1' if no columns found
   if (is_empty(tbl_id_colnames)) {
