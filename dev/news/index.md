@@ -2,6 +2,33 @@
 
 ## gtsummary (development version)
 
+- Improved the speed and memory efficiency of the output converters
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md),
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
+  [`as_hux_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md),
+  [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable_extra.md),
+  [`as_kable()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable.md),
+  and
+  [`as_tibble()`](https://tibble.tidyverse.org/reference/as_tibble.html).
+  The shared row-number resolution step
+  ([`.table_styling_expr_to_row_number()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/dot-table_styling_expr_to_row_number.md))
+  replaces its per-row
+  [`dplyr::rowwise()`](https://dplyr.tidyverse.org/reference/rowwise.html)
+  loops with vectorized `map()` calls, computes the visible-column set
+  once, and resolves the footnote replace/remove precedence in a single
+  vectorized pass instead of a quadratic per-row scan; the shared tibble
+  call builder (`table_styling_to_tibble_calls()`, used by five of the
+  converters) resolves the cell-formatting helper once instead of
+  re-parsing it for every formatted column and splits the bold/italic
+  formatting table in a single pass;
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+  caches the parsed markdown/HTML interpreters that recur across column
+  labels, spanning headers, and footnotes; and the flextable, huxtable,
+  and kableExtra builders compute the visible-header subset once instead
+  of re-deriving it for every section. There is no change to the
+  returned tables.
+  ([\#2454](https://github.com/ddsjoberg/gtsummary/issues/2454))
+
 - Improved the speed and memory efficiency of the table-modification
   functions
   ([`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
