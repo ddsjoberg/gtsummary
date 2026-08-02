@@ -45,14 +45,22 @@ modify_missing_symbol <- function(x, symbol, columns, rows) {
 
 .modify_missing_symbol <- function(x, symbol, columns, rows) {
   # add updates to `x$table_styling$fmt_missing` -------------------------------
-  x$table_styling$fmt_missing <- x$table_styling$fmt_missing |>
-    dplyr::bind_rows(
-      tidyr::expand_grid(
-        column = columns,
-        rows = list(enquo(rows)),
-        symbol = symbol
+  # only `column` varies here (`symbol` is scalar), so the `expand_grid()`
+  # cartesian product collapses to a simple recycle over `column`; use the fast
+  # constructor in that case (verified byte-identical), else fall back
+  new_rows <-
+    if (length(columns) >= 1L && length(symbol) == 1L) {
+      .fast_styling_tibble(
+        list(column = columns, rows = list(enquo(rows)), symbol = symbol),
+        n = length(columns)
       )
-    )
+    }
+  if (is.null(new_rows)) {
+    new_rows <-
+      tidyr::expand_grid(column = columns, rows = list(enquo(rows)), symbol = symbol)
+  }
+  x$table_styling$fmt_missing <-
+    dplyr::bind_rows(x$table_styling$fmt_missing, new_rows)
 
   # return table ---------------------------------------------------------------
   x
