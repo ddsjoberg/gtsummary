@@ -136,15 +136,15 @@ remove_column_merge <- function(x, columns = everything()) {
   x <- .remove_column_merge(x, columns = columns)
 
   # append new merge instructions
+  lst_new <- list(
+    column = columns[1],
+    rows = list(rows),
+    pattern = pattern
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$cols_merge <-
-    x$table_styling$cols_merge |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = columns[1],
-        rows = list(rows),
-        pattern = pattern
-      )
-    )
+    dplyr::bind_rows(x$table_styling$cols_merge, new_rows)
 
   # hiding all but the first column
   x <- .modify_column_hide(x, columns = columns[-1], hide = TRUE)

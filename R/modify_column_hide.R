@@ -60,9 +60,10 @@ modify_column_unhide <- function(x, columns) {
 
 .modify_column_hide <- function(x, columns, hide = FALSE) {
   # update hidden status -------------------------------------------------------
-  x$table_styling$header <-
-    x$table_styling$header |>
-    dplyr::mutate(hide = ifelse(.data$column %in% .env$columns, .env$hide, .data$hide))
+  # `columns` is unique within the header, so indexed assignment replaces the
+  # `dplyr::mutate()` + `ifelse()` pass (verified byte-identical)
+  idx <- x$table_styling$header$column %in% columns
+  x$table_styling$header$hide[idx] <- hide
 
   # return gtsummary table -----------------------------------------------------
   x
