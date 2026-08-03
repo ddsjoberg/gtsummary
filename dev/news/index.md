@@ -144,6 +144,12 @@
 
 - Fixed bug in
   [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
+  where summary statistics could be attached to the wrong strata level
+  when the `strata` variable was a character (or other non-factor)
+  vector. ([\#2443](https://github.com/ddsjoberg/gtsummary/issues/2443))
+
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
   where second-level strata headers were dropped in all but the first
   group when using three or more strata levels.
   ([\#2418](https://github.com/ddsjoberg/gtsummary/issues/2418))
