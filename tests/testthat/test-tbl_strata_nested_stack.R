@@ -285,3 +285,23 @@ test_that("tbl_strata_nested_stack() keeps second-level headers in all groups wi
   male_section <- hdr[male_idx:length(hdr)]
   expect_equal(female_section[-1], male_section[-1])
 })
+
+test_that("tbl_strata_nested_stack() aligns counts for character strata (#2443)", {
+  # PARAM levels whose base C-locale order (ALT, AST, Albumin) differs from the
+  # locale-aware collation order (Albumin, ALT, AST) used by the header pipeline.
+  # Previously the summary statistics were attached to the wrong strata level for
+  # character strata; the character result must match the (correct) factor result.
+  df <- data.frame(
+    PARAM = rep(c("Albumin", "ALT", "AST", "Bilirubin"), 25L),
+    grp   = factor(rep(c("A", "B"), each = 50L)),
+    x     = factor(rep(c("0", "1", "2", "0"), 25L))
+  )
+  fn <- ~ tbl_summary(.x, by = grp, include = x, type = x ~ "categorical")
+
+  chr <- df |> tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
+  fac <- df |>
+    dplyr::mutate(PARAM = factor(PARAM)) |>
+    tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
+
+  expect_equal(as_tibble(chr), as_tibble(fac))
+})
