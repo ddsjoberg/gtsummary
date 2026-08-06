@@ -299,8 +299,10 @@ test_that("tbl_strata_nested_stack() aligns counts for character strata (#2443)"
   fn <- ~ tbl_summary(.x, by = grp, include = x, type = x ~ "categorical")
 
   chr <- df |> tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
-  fac <- df |>
-    dplyr::mutate(PARAM = factor(PARAM)) |>
+  fac <- df %>%
+    # c-locale sorting (which is the sorting used in test environments)
+    # this ensures that the test passes in local environments where sorting is locale-dependent
+   {withr::with_collate("C", dplyr::mutate(., PARAM = factor(PARAM)))} |>
     tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
 
   expect_equal(as_tibble(chr), as_tibble(fac))
