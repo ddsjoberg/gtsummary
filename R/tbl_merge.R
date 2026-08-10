@@ -427,7 +427,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL, merge_vars = NULL, tbl_ids = NUL
   for (i in seq_along(tbls)) {
     if (nrow(tbls[[i]]$table_body) != nrow(dplyr::distinct(tbls[[i]]$table_body[merge_vars]))) {
       cli::cli_inform(
-        c("The {.arg merge_vars} columns to do uniquely identify rows in all {.arg tbls},
+        c("The {.arg merge_vars} columns do not uniquely identify rows in all {.arg tbls},
            which may result in rows appearing out of order.",
           i = "See {.help [{.fun tbl_merge}](gtsummary::tbl_merge)} help file for details.
                Use {.code quiet=TRUE} to silence message."),

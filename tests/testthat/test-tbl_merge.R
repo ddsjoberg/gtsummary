@@ -304,7 +304,7 @@ test_that("tbl_merge() works with tbl_hierarchical()", {
 test_that("tbl_merge() test unlike table merge messaging", {
   expect_message(
     tbl_merge(list(t1, t1), merge_vars = "variable"),
-    "*columns to do uniquely identify rows*"
+    "*columns do not uniquely identify rows*"
   )
 
   expect_message(

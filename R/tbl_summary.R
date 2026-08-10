@@ -24,7 +24,7 @@
 #'   or function(s). If not specified, default formatting is assigned
 #'   via `assign_summary_digits()`. See below for details.
 #' @param type ([`formula-list-selector`][syntax])\cr
-#'   Specifies the summary type. Accepted value are
+#'   Specifies the summary type. Accepted values are
 #'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
 #'   If not specified, default type is assigned via
 #'   `assign_summary_type()`. See below for details.
@@ -100,7 +100,7 @@
 #' }
 #'
 #' @section digits argument:
-#' The digits argument specifies the the number of digits (or formatting function)
+#' The digits argument specifies the number of digits (or formatting function)
 #' statistics are rounded to.
 #'
 #' The values passed can either be a single integer, a vector of integers, a
@@ -498,7 +498,7 @@ tbl_summary <- function(data,
 
 .add_gts_column_to_cards_summary <- function(cards, variables, by) {
   if ("gts_column" %in% names(cards)) {
-    cli::cli_inform("The {.val gts_column} column is alread present. Defining the column has been skipped.")
+    cli::cli_inform("The {.val gts_column} column is already present. Defining the column has been skipped.")
     return(cards)
   }
 

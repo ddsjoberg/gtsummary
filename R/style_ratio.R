@@ -11,7 +11,7 @@
 #'   Numeric vector
 #' @param digits (`integer`)\cr
 #'   Integer specifying the number of significant
-#'   digits to display for numbers below 1. Numbers larger than 1 will be be `digits + 1`.
+#'   digits to display for numbers below 1. Numbers larger than 1 will be `digits + 1`.
 #'   Default is `digits = 2`.
 #' @inheritParams style_number
 #'

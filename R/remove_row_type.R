@@ -5,7 +5,7 @@
 #' @param x (`gtsummary`)\cr
 #'   A gtsummary object
 #' @param variables ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   Variables to to remove rows from. Default is `everything()`
+#'   Variables to remove rows from. Default is `everything()`
 #' @param type (`string`)\cr
 #'   Type of row to remove. Must be one of `c("header", "reference", "missing", "level", "all")`
 #' @param level_value (`string`)

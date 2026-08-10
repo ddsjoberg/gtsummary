@@ -14,7 +14,7 @@
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   specifies statistic labels, e.g. `list(r.squared = "R2", p.value = "P")`
 #' @param fmt_fun ([`formula-list-selector`][syntax])\cr
-#'   Specifies the the functions used to format/round the glance statistics.
+#'   Specifies the functions used to format/round the glance statistics.
 #'   The default is to round
 #'   the number of observations and degrees of freedom to the nearest integer,
 #'   p-values are styled with `style_pvalue()` and the remaining statistics
