@@ -37,13 +37,13 @@
 #'     - `tbl=` the original `tbl_summary()`/`tbl_svysummary()` object is also available to utilize
 #'
 #' The user-defined function does not need to utilize each of these inputs. It's
-#' encouraged the user-defined function accept `...` as each of the arguments
+#' encouraged that the user-defined function accept `...` as each of the arguments
 #' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, variable, by, ...)`
 #'
 #' - Use `modify_header()` to update the column headers
 #' - Use `modify_fmt_fun()` to update the functions that format the statistics
-#' - Use `modify_footnote_header()` to add a explanatory footnote
+#' - Use `modify_footnote_header()` to add an explanatory footnote
 #'
 #' If you return a tibble with column names `p.value` or `q.value`, default
 #' p-value formatting will be applied, and you may take advantage of subsequent
@@ -247,7 +247,7 @@ eval_fn_safe <- function(variable, tbl, fn) {
   }
   if (!is_empty(result[["error"]])) {
     cli::cli_inform(
-      c("There was a error for variable {.val {variable}}", "x" = "{result[['error']]}")
+      c("There was an error for variable {.val {variable}}", "x" = "{result[['error']]}")
     )
   }
 

@@ -136,7 +136,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call, cal
   if (is_empty(x$inputs[["by"]])) {
     cli::cli_inform(
       c("Cannot add an overall column with {.fun add_overall} when original table
-         is not statified with {.code {calling_fun}(by)}.",
+         is not stratified with {.code {calling_fun}(by)}.",
         i = "Returning table unaltered.")
     )
     return(x)
@@ -179,7 +179,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   )) {
     cli::cli_abort(
       c(
-        "An error occured in {.fun add_overall}, and the overall statistic cannot be added.",
+        "An error occurred in {.fun add_overall}, and the overall statistic cannot be added.",
         "Have variable labels changed since the original call to {.fun {calling_fun}}?"
       ),
       call = get_cli_abort_call()

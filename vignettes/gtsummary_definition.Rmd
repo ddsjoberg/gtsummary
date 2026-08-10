@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 This vignette is meant for those who wish to contribute to {gtsummary}, or users who wish to gain an understanding of the inner-workings of a {gtsummary} object so they may more easily modify them to suit your own needs.
-If this does not describe you, please refer to the [{gtsummary} website](https://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
+If this does not describe you, please refer to the [{gtsummary} website](https://www.danieldsjoberg.com/gtsummary/) for an introduction on how to use the package's functions and tutorials on advanced use.
 
 _This overview is for informational purposes. Documenting the internal structures does not mean the internal structures of the package won't be updated. If they are updated, this is not considered a breaking change._
 
@@ -68,7 +68,7 @@ The list contains the following data frames `header`, `footnote_header`, `footno
 **`header`**
 
 The `header` table has the following columns and is one row per column found in `.$table_body`.
-The table contains styling information that applies to entire column or the columns headers.
+The table contains styling information that applies to the entire column or the column headers.
 
 ```{r, echo=FALSE}
 dplyr::tribble(
@@ -97,7 +97,7 @@ dplyr::tribble(
 **`footnote_header`**
 
 Each {gtsummary} table may contain footnotes in the column headers.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
 dplyr::tribble(
@@ -124,7 +124,7 @@ dplyr::tribble(
 **`footnote_body`**
 
 Each {gtsummary} table may include footnotes in the body of the table.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
 dplyr::tribble(
@@ -152,7 +152,7 @@ dplyr::tribble(
 **`footnote_spanning_header`**
 
 Each {gtsummary} table may include footnotes in the spanning headers of the table.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
 dplyr::tribble(
@@ -217,7 +217,7 @@ Source notes are added one at a time and present much like footnotes, but are no
 ```{r, echo=FALSE}
 dplyr::tribble(
   ~Column, ~Description,
-  "id", "Integer idenitfying the source note",
+  "id", "Integer identifying the source note",
   "source_note", "string containing the abbreviation to add",
   "text_interpret", "the {gt} function that is used to interpret the source note, `gt::md()` or `gt::html()`",
   "remove", "logical indicating whether the source note should be included or removed from final table"
@@ -290,7 +290,7 @@ dplyr::tribble(
 
 **`fmt_missing`**
 
-By default, all `NA` values are shown blanks.
+By default, all `NA` values are shown as blanks.
 Missing values in columns/rows are replaced with the `symbol`.
 For example, reference rows in `tbl_regression()` are shown with an em-dash.
 Updates/changes to styling functions are appended to the bottom of the tibble.
