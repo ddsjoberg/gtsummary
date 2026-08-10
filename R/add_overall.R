@@ -125,6 +125,12 @@ add_overall.tbl_hierarchical_count <- function(x,
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
   check_string(col_label, allow_empty = TRUE)
+  if ("add_overall" %in% names(x$call_list)) {
+    cli::cli_abort(
+      "The {.fun add_overall} function has already been called and cannot be called again.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # checking that input x has a by var
   if (is_empty(x$inputs[["by"]])) {

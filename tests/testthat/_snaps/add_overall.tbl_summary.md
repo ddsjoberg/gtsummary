@@ -16,3 +16,11 @@
       ! An error occured in `add_overall()`, and the overall statistic cannot be added.
       Have variable labels changed since the original call to `tbl_summary()`?
 
+---
+
+    Code
+      add_overall(add_overall(tbl_summary(trial, include = age, by = trt)))
+    Condition
+      Error in `add_overall()`:
+      ! The `add_overall()` function has already been called and cannot be called again.
+
