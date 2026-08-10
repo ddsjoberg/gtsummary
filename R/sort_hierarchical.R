@@ -143,15 +143,6 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   # scalar-interface checks; level/`by`-name validity is delegated to `cards::sort_ard_hierarchical()`.
   by_level_list <- NULL
   if (!is.null(by_level)) {
-    # gtsummary accepts a SCALAR (single `by` variable only); reject the `cards` named-list form
-    if (is.list(by_level)) {
-      cli::cli_abort(
-        c("The {.arg by_level} argument must be a single value, e.g. {.code by_level = \"Placebo\"}.",
-          "i" = "A named list is not accepted here because gtsummary hierarchical tables allow only a
-                 single {.arg by} variable."),
-        call = get_cli_abort_call()
-      )
-    }
     check_scalar(by_level)
     if (is_empty(ard_args$by)) {
       cli::cli_abort(
@@ -270,7 +261,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   x_ard <- x_ard |>
     dplyr::ungroup() |>
     cards::as_card(check = FALSE)
-  
+
   # restore all custom attributes
   class(x_ard) <- orig_class
   attr(x_ard, "args") <- orig_args
