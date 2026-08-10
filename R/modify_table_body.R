@@ -56,7 +56,7 @@ modify_table_body <- function(x, fun, ...) {
       as_function(fun, env = global_env())(x$table_body, ...),
       error = \(e) {
         cli::cli_abort(
-          c("The following error occured while executing {.arg fun} on {.code x$table_body}:",
+          c("The following error occurred while executing {.arg fun} on {.code x$table_body}:",
             "x" = conditionMessage(e)),
           call = get_cli_abort_call()
         )

@@ -30,7 +30,7 @@
 #'
 #' @section Note:
 #'
-#' To calculate the p-values, the formula is re-constructed from the the call in the
+#' To calculate the p-values, the formula is re-constructed from the call in the
 #' original `survfit()` object.
 #' When the `survfit()` object is created a for loop, `lapply()`, `purrr::map()`
 #' setting the call _may not_ reflect the true formula which may result in an

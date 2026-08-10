@@ -89,7 +89,7 @@
     Code
       tbl_stack(list(t1, t1)) %>% inline_text(variable = marker, column = estimate)
     Message
-      Variable marker likely not unique in gtsummary table, and the cell(s) you wish to display may not be accessible. This may occur when gtsummary tables with repeated variable names are combined using `tbl_stack()`.
+      Variable "marker" likely not unique in gtsummary table, and the cell(s) you wish to display may not be accessible. This may occur when gtsummary tables with repeated variable names are combined using `tbl_stack()`.
     Output
       [1] "-0.05"
 
