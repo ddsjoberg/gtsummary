@@ -459,19 +459,20 @@ details.
 ``` r
 
 tbl_summary_ex$cards[["tbl_summary"]]
-#> {cards} data frame: 76 x 12
-#>    group1 group1_level variable variable_level stat_name stat_label  stat
-#> 1     trt       Drug A    grade              I         n          n    35
-#> 2     trt       Drug A    grade              I         N          N    98
-#> 3     trt       Drug A    grade              I         p          % 0.357
-#> 4     trt       Drug A    grade             II         n          n    32
-#> 5     trt       Drug A    grade             II         N          N    98
-#> 6     trt       Drug A    grade             II         p          % 0.327
-#> 7     trt       Drug A    grade            III         n          n    31
-#> 8     trt       Drug A    grade            III         N          N    98
-#> 9     trt       Drug A    grade            III         p          % 0.316
-#> 10    trt       Drug B    grade              I         n          n    33
-#> ℹ 66 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 76 × 12
+#>    group1 group1_level variable variable_level stat_name   stat gts_column
+#>    <chr>  <list>       <chr>    <list>         <chr>     <list> <chr>     
+#>  1 trt    Drug A       grade    I              n         35     stat_1    
+#>  2 trt    Drug A       grade    I              N         98     stat_1    
+#>  3 trt    Drug A       grade    I              p          0.357 stat_1    
+#>  4 trt    Drug A       grade    II             n         32     stat_1    
+#>  5 trt    Drug A       grade    II             N         98     stat_1    
+#>  6 trt    Drug A       grade    II             p          0.327 stat_1    
+#>  7 trt    Drug A       grade    III            n         31     stat_1    
+#>  8 trt    Drug A       grade    III            N         98     stat_1    
+#>  9 trt    Drug A       grade    III            p          0.316 stat_1    
+#> 10 trt    Drug B       grade    I              n         33     stat_2    
+#> # ℹ 66 more rows
+#> # ℹ 5 more variables: context <chr>, stat_label <chr>, fmt_fun <list>,
+#> #   warning <list>, error <list>
 ```

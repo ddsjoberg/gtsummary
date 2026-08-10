@@ -71,21 +71,22 @@ Now that we have a summary table, we can extract and save the ARD.
 gather_ard(tbl_demo) |> bind_ard()
 #> ℹ 8 rows with duplicated statistic values have been removed.
 #> • See cards::bind_ard(.distinct) (`?cards::bind_ard()`) for details.
-#> {cards} data frame: 167 x 12
-#>    group1 group1_level variable variable_level stat_name stat_label  stat
-#> 1     ARM      Placebo   AGEGR1            <65         n          n    14
-#> 2     ARM      Placebo   AGEGR1            <65         N          N    86
-#> 3     ARM      Placebo   AGEGR1            <65         p          % 0.163
-#> 4     ARM      Placebo   AGEGR1          65-80         n          n    42
-#> 5     ARM      Placebo   AGEGR1          65-80         N          N    86
-#> 6     ARM      Placebo   AGEGR1          65-80         p          % 0.488
-#> 7     ARM      Placebo   AGEGR1            >80         n          n    30
-#> 8     ARM      Placebo   AGEGR1            >80         N          N    86
-#> 9     ARM      Placebo   AGEGR1            >80         p          % 0.349
-#> 10    ARM      Placebo      SEX              F         n          n    53
-#> ℹ 157 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 167 × 12
+#>    group1 group1_level variable variable_level stat_name   stat gts_column
+#>    <chr>  <list>       <chr>    <list>         <chr>     <list> <chr>     
+#>  1 ARM    Placebo      AGEGR1   <65            n         14     stat_1    
+#>  2 ARM    Placebo      AGEGR1   <65            N         86     stat_1    
+#>  3 ARM    Placebo      AGEGR1   <65            p          0.163 stat_1    
+#>  4 ARM    Placebo      AGEGR1   65-80          n         42     stat_1    
+#>  5 ARM    Placebo      AGEGR1   65-80          N         86     stat_1    
+#>  6 ARM    Placebo      AGEGR1   65-80          p          0.488 stat_1    
+#>  7 ARM    Placebo      AGEGR1   >80            n         30     stat_1    
+#>  8 ARM    Placebo      AGEGR1   >80            N         86     stat_1    
+#>  9 ARM    Placebo      AGEGR1   >80            p          0.349 stat_1    
+#> 10 ARM    Placebo      SEX      F              n         53     stat_1    
+#> # ℹ 157 more rows
+#> # ℹ 5 more variables: context <chr>, stat_label <chr>, fmt_fun <list>,
+#> #   warning <list>, error <list>
 ```
 
 #### Adverse Event Summary
@@ -126,32 +127,23 @@ tbl_ae
 
 # return ARDs
 gather_ard(tbl_ae) |> bind_ard()
-#> {cards} data frame: 82 x 15
-#>    group1 group1_level group2 group2_level                     variable
-#> 1    <NA>                <NA>                                      TRTA
-#> 2    <NA>                <NA>                                      TRTA
-#> 3    <NA>                <NA>                                      TRTA
-#> 4    <NA>                <NA>                                      TRTA
-#> 5    <NA>                <NA>                                      TRTA
-#> 6    <NA>                <NA>                                      TRTA
-#> 7    <NA>                <NA>                                      TRTA
-#> 8    <NA>                <NA>                                      TRTA
-#> 9    <NA>                <NA>                                      TRTA
-#> 10   TRTA      Placebo   <NA>              ..ard_hierarchical_overall..
-#>    variable_level stat_name stat_label  stat stat_fmt
-#> 1         Placebo         n          n    86       86
-#> 2         Placebo         N          N   254      254
-#> 3         Placebo         p          % 0.339     33.9
-#> 4       Xanomeli…         n          n    84       84
-#> 5       Xanomeli…         N          N   254      254
-#> 6       Xanomeli…         p          % 0.331     33.1
-#> 7       Xanomeli…         n          n    84       84
-#> 8       Xanomeli…         N          N   254      254
-#> 9       Xanomeli…         p          % 0.331     33.1
-#> 10           TRUE         n          n    16       16
-#> ℹ 72 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 82 × 15
+#>    group1 group1_level group2 group2_level variable         variable_level      
+#>    <chr>  <list>       <chr>  <list>       <chr>            <list>              
+#>  1 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  2 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  3 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  4 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  5 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  6 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  7 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#>  8 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#>  9 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#> 10 TRTA   Placebo      NA     <NULL>       ..ard_hierarchi… TRUE                
+#> # ℹ 72 more rows
+#> # ℹ 9 more variables: context <chr>, stat_name <chr>, stat_label <chr>,
+#> #   stat <list>, stat_fmt <list>, fmt_fun <list>, warning <list>, error <list>,
+#> #   gts_column <chr>
 ```
 
 #### Other summaries
@@ -235,21 +227,22 @@ ard_demo <-
     .overall = TRUE
   )
 ard_demo
-#> {cards} data frame: 111 x 11
-#>    group1 group1_level variable variable_level stat_name stat_label   stat
-#> 1     ARM      Placebo      AGE                        N          N     86
-#> 2     ARM      Placebo      AGE                     mean       Mean 75.209
-#> 3     ARM      Placebo      AGE                       sd         SD   8.59
-#> 4     ARM      Placebo      AGE                   median     Median     76
-#> 5     ARM      Placebo      AGE                      p25         Q1     69
-#> 6     ARM      Placebo      AGE                      p75         Q3     82
-#> 7     ARM      Placebo      AGE                      min        Min     52
-#> 8     ARM      Placebo      AGE                      max        Max     89
-#> 9     ARM      Placebo   AGEGR1            <65         n          n     14
-#> 10    ARM      Placebo   AGEGR1            <65         N          N     86
-#> ℹ 101 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 4 more variables: context, fmt_fun, warning, error
+#> # An ARD data frame: 111 × 11
+#>    group1 group1_level variable variable_level context  stat_name   stat
+#>    <chr>  <list>       <chr>    <list>         <chr>    <chr>     <list>
+#>  1 ARM    Placebo      AGE      <NULL>         summary  N          86   
+#>  2 ARM    Placebo      AGE      <NULL>         summary  mean       75.2 
+#>  3 ARM    Placebo      AGE      <NULL>         summary  sd          8.59
+#>  4 ARM    Placebo      AGE      <NULL>         summary  median     76   
+#>  5 ARM    Placebo      AGE      <NULL>         summary  p25        69   
+#>  6 ARM    Placebo      AGE      <NULL>         summary  p75        82   
+#>  7 ARM    Placebo      AGE      <NULL>         summary  min        52   
+#>  8 ARM    Placebo      AGE      <NULL>         summary  max        89   
+#>  9 ARM    Placebo      AGEGR1   <65            tabulate n          14   
+#> 10 ARM    Placebo      AGEGR1   <65            tabulate N          86   
+#> # ℹ 101 more rows
+#> # ℹ 4 more variables: stat_label <chr>, fmt_fun <list>, warning <list>,
+#> #   error <list>
 ```
 
 The optional arguments that can be specified to improve the appearance

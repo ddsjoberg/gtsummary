@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9011</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -5172,21 +5172,22 @@ format them, and more. See the {cards} package documentation for
 details.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">cards</span><span class="op">[[</span><span class="st">"tbl_summary"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 76 x 12</span></span></span>
-<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name stat_label  stat</span></span>
-<span><span class="co">#&gt; 1     trt       Drug A    grade              I         n          n    35</span></span>
-<span><span class="co">#&gt; 2     trt       Drug A    grade              I         N          N    98</span></span>
-<span><span class="co">#&gt; 3     trt       Drug A    grade              I         p          % 0.357</span></span>
-<span><span class="co">#&gt; 4     trt       Drug A    grade             II         n          n    32</span></span>
-<span><span class="co">#&gt; 5     trt       Drug A    grade             II         N          N    98</span></span>
-<span><span class="co">#&gt; 6     trt       Drug A    grade             II         p          % 0.327</span></span>
-<span><span class="co">#&gt; 7     trt       Drug A    grade            III         n          n    31</span></span>
-<span><span class="co">#&gt; 8     trt       Drug A    grade            III         N          N    98</span></span>
-<span><span class="co">#&gt; 9     trt       Drug A    grade            III         p          % 0.316</span></span>
-<span><span class="co">#&gt; 10    trt       Drug B    grade              I         n          n    33</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">66 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">5 more variables: context, fmt_fun, warning, error, gts_column</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># An ARD data frame: 76 × 12</span></span></span>
+<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name   stat gts_column</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> trt    Drug A       grade    I              n         35     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> trt    Drug A       grade    I              N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> trt    Drug A       grade    I              p          0.357 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> trt    Drug A       grade    II             n         32     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> trt    Drug A       grade    II             N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> trt    Drug A       grade    II             p          0.327 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> trt    Drug A       grade    III            n         31     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> trt    Drug A       grade    III            N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> trt    Drug A       grade    III            p          0.316 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> trt    Drug B       grade    I              n         33     stat_2    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 66 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: context &lt;chr&gt;, stat_label &lt;chr&gt;, fmt_fun &lt;list&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   warning &lt;list&gt;, error &lt;list&gt;</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
