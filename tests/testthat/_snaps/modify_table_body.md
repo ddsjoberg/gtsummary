@@ -20,6 +20,6 @@
         "I made an error."))
     Condition
       Error in `modify_table_body()`:
-      ! The following error occured while executing `fun` on `x$table_body`:
+      ! The following error occurred while executing `fun` on `x$table_body`:
       x I made an error.
 

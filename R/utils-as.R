@@ -296,7 +296,7 @@
 }
 
 # this function orders the footnotes by where they first appear in the table,
-# and assigns them an sequential ID
+# and assigns them a sequential ID
 .number_footnotes <- function(x, type, start_with = 0L) {
   # if empty, return empty data frame
   if (nrow(type) == 0L) {

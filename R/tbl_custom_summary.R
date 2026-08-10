@@ -58,7 +58,7 @@
 #'     `statistic` argument, for that variable)
 #'
 #' The user-defined does not need to utilize each of these inputs. It's
-#' encouraged the user-defined function accept `...` as each of the arguments
+#' encouraged that the user-defined function accept `...` as each of the arguments
 #' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, ...)` (see examples).
 #'

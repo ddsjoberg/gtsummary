@@ -100,7 +100,7 @@ add_significance_stars <- function(x,
   pattern_cols <- .extract_glue_elements(pattern)
   if (is_empty(pattern_cols)) {
     cli::cli_abort(
-      "The {.arg pattern} argumnet must be a string using glue syntax to select columns.",
+      "The {.arg pattern} argument must be a string using glue syntax to select columns.",
       call = get_cli_abort_call()
     )
   }

@@ -19,7 +19,7 @@ test_that("modify_footnote_spanning_header(footnote)", {
         level = 1L
       ) |>
       modify_footnote_spanning_header(
-        footnote = "Treatment Recieved",
+        footnote = "Treatment Received",
         columns = all_stat_cols()
       )
   )
@@ -29,7 +29,7 @@ test_that("modify_footnote_spanning_header(footnote)", {
       ~column,               ~footnote, ~level, ~text_interpret, ~replace, ~remove,
       "stat_1", "Randomized Treatment",     1L,        "gt::md",     TRUE,   FALSE,
       "stat_1",                     NA,     1L,        "gt::md",     TRUE,    TRUE,
-      "stat_1",   "Treatment Recieved",     1L,        "gt::md",     TRUE,   FALSE
+      "stat_1",   "Treatment Received",     1L,        "gt::md",     TRUE,   FALSE
     )
   )
 
