@@ -4,7 +4,7 @@ This vignette is meant for those who wish to contribute to {gtsummary},
 or users who wish to gain an understanding of the inner-workings of a
 {gtsummary} object so they may more easily modify them to suit your own
 needs. If this does not describe you, please refer to the [{gtsummary}
-website](https://www.danieldsjoberg.com/gtsummary/) to an introduction
+website](https://www.danieldsjoberg.com/gtsummary/) for an introduction
 on how to use the package’s functions and tutorials on advanced use.
 
 *This overview is for informational purposes. Documenting the internal
@@ -84,7 +84,7 @@ the following objects `caption`, `horizontal_line_above`, and
 
 The `header` table has the following columns and is one row per column
 found in `.$table_body`. The table contains styling information that
-applies to entire column or the columns headers.
+applies to the entire column or the column headers.
 
 | Column | Description |
 |----|----|
@@ -99,7 +99,7 @@ applies to entire column or the columns headers.
 **`footnote_header`**
 
 Each {gtsummary} table may contain footnotes in the column headers.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 | Column | Description |
 |----|----|
@@ -112,7 +112,7 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 **`footnote_body`**
 
 Each {gtsummary} table may include footnotes in the body of the table.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 | Column | Description |
 |----|----|
@@ -126,8 +126,8 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 **`footnote_spanning_header`**
 
 Each {gtsummary} table may include footnotes in the spanning headers of
-the table. Updates/changes to footnote are appended to the bottom of the
-tibble.
+the table. Updates/changes to footnotes are appended to the bottom of
+the tibble.
 
 | Column | Description |
 |----|----|
@@ -173,7 +173,7 @@ to a header or cell in the table.
 
 | Column | Description |
 |----|----|
-| id | Integer idenitfying the source note |
+| id | Integer identifying the source note |
 | source_note | string containing the abbreviation to add |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
 | remove | logical indicating whether the source note should be included or removed from final table |
@@ -205,7 +205,7 @@ bottom of the tibble.
 
 **`fmt_missing`**
 
-By default, all `NA` values are shown blanks. Missing values in
+By default, all `NA` values are shown as blanks. Missing values in
 columns/rows are replaced with the `symbol`. For example, reference rows
 in
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)

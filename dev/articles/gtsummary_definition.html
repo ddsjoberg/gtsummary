@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9012</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,8 +83,8 @@
 inner-workings of a {gtsummary} object so they may more easily modify
 them to suit your own needs. If this does not describe you, please refer
 to the <a href="https://www.danieldsjoberg.com/gtsummary/">{gtsummary}
-website</a> to an introduction on how to use the package’s functions and
-tutorials on advanced use.</p>
+website</a> for an introduction on how to use the package’s functions
+and tutorials on advanced use.</p>
 <p><em>This overview is for informational purposes. Documenting the
 internal structures does not mean the internal structures of the package
 won’t be updated. If they are updated, this is not considered a breaking
@@ -157,7 +157,7 @@ The list contains the following data frames <code>header</code>,
 <p><strong><code>header</code></strong></p>
 <p>The <code>header</code> table has the following columns and is one
 row per column found in <code>.$table_body</code>. The table contains
-styling information that applies to entire column or the columns
+styling information that applies to the entire column or the column
 headers.</p>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -647,7 +647,7 @@ headers.</p>
 </div>
 <p><strong><code>footnote_header</code></strong></p>
 <p>Each {gtsummary} table may contain footnotes in the column headers.
-Updates/changes to footnote are appended to the bottom of the
+Updates/changes to footnotes are appended to the bottom of the
 tibble.</p>
 <div id="xbhisifmmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xbhisifmmy table {
@@ -1129,7 +1129,7 @@ tibble.</p>
 </div>
 <p><strong><code>footnote_body</code></strong></p>
 <p>Each {gtsummary} table may include footnotes in the body of the
-table. Updates/changes to footnote are appended to the bottom of the
+table. Updates/changes to footnotes are appended to the bottom of the
 tibble.</p>
 <div id="shlcphlxbg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#shlcphlxbg table {
@@ -1615,7 +1615,7 @@ tibble.</p>
 </div>
 <p><strong><code>footnote_spanning_header</code></strong></p>
 <p>Each {gtsummary} table may include footnotes in the spanning headers
-of the table. Updates/changes to footnote are appended to the bottom of
+of the table. Updates/changes to footnotes are appended to the bottom of
 the tibble.</p>
 <div id="gzfelhkpkb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gzfelhkpkb table {
@@ -3044,7 +3044,7 @@ linked to a header or cell in the table.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Column" class="gt_row gt_left"><span class="gt_from_md">id</span></td>
-<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Integer idenitfying the source note</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Integer identifying the source note</span></td>
 </tr>
 <tr>
 <td headers="Column" class="gt_row gt_left"><span class="gt_from_md">source_note</span></td>
@@ -4014,7 +4014,7 @@ appended to the bottom of the tibble.</p>
 </table>
 </div>
 <p><strong><code>fmt_missing</code></strong></p>
-<p>By default, all <code>NA</code> values are shown blanks. Missing
+<p>By default, all <code>NA</code> values are shown as blanks. Missing
 values in columns/rows are replaced with the <code>symbol</code>. For
 example, reference rows in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> are shown with
 an em-dash. Updates/changes to styling functions are appended to the

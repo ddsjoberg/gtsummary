@@ -473,8 +473,8 @@ CRAN release: 2025-07-03
   to split tables horizontally (row-wise) and vertically (column-wise).
   ([\#2216](https://github.com/ddsjoberg/gtsummary/issues/2216))
 
-- Users are now allows to specify/override the denominator by passing an
-  integer or a data frame to the `tbl_summary(percent)` argument.
+- Users are now allowed to specify/override the denominator by passing
+  an integer or a data frame to the `tbl_summary(percent)` argument.
   ([\#2239](https://github.com/ddsjoberg/gtsummary/issues/2239))
 
 - Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that
@@ -1222,7 +1222,7 @@ CRAN release: 2024-07-23
   additional levels of precision in a
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   table, I would need to specify the precision of every summary
-  statistic for a variable. Now, we can simple update the one statistic
+  statistic for a variable. Now, we can simply update the one statistic
   we’re interested in with a named list of vector:
   `tbl_summary(digits = age ~ list(sd = 2))`.
 
@@ -1304,8 +1304,8 @@ CRAN release: 2024-07-23
   over the years, and we are now adopting a more modern approach by
   using these features. As a result, the `"ci"` column will eventually
   be dropped from `.$table_body`. By using column merging, the conf.low
-  and conf.high remain numeric and we can to continue to update how
-  these columns are formatted. Review
+  and conf.high remain numeric and we can continue to update how these
+  columns are formatted. Review
   [`?deprecated_ci_column`](https://www.danieldsjoberg.com/gtsummary/dev/reference/deprecated_ci_column.md)
   for details.
 
@@ -1330,7 +1330,7 @@ CRAN release: 2024-07-23
 - Messaging and checks have been improved when tidyselect is invoked in
   the package, i.e. when the tilda is used to select variables
   `age ~ "Patient Age"`. The subset of variables that can be selected is
-  now reduced the variables present in the table. For example, if you
+  now reduced to the variables present in the table. For example, if you
   have a summary table of patient age (and only patient age), and age is
   a single column from a data set of many columns and you mis-spell age
   (`aggge ~ "Patient Age"`), the error message will now ask if you meant
@@ -1378,9 +1378,9 @@ CRAN release: 2024-07-23
   [`all_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/select_helpers.md),
   etc., are now simplified by wrapping
   [`tidyselect::where()`](https://tidyselect.r-lib.org/reference/where.html),
-  which not available when these functions were originally written.
+  which was not available when these functions were originally written.
   Previously, these functions would error if used out of context; they
-  now, instead,select no columns when used out-of-context.
+  now, instead, select no columns when used out-of-context.
 
 - The design-based t-test has been added as possible methods for
   [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_svysummary.md)
@@ -1476,7 +1476,7 @@ CRAN release: 2024-07-23
   numeric before passing to
   [`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html). We have
   eliminated type- and class-specific handling in these functions and it
-  is now left to the the user pass data compatible with the functions
+  is now left to the user to pass data compatible with the functions
   that calculate the p-values or to create a custom test that wraps
   [`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) and
   performs the conversion. This change is effective immediately.
@@ -2338,7 +2338,7 @@ CRAN release: 2022-01-20
 
 - New function
   [`tbl_strata2()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md)
-  that passes both the the stratified data frame as well as the stratum
+  that passes both the stratified data frame as well as the stratum
   level to the user function.
   ([\#1091](https://github.com/ddsjoberg/gtsummary/issues/1091))
 
@@ -2925,7 +2925,7 @@ CRAN release: 2021-04-13
 
 - Added new function
   [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md).
-  The function aids prepares gtsummary tables stratified by one or more
+  The function prepares gtsummary tables stratified by one or more
   variables ([\#679](https://github.com/ddsjoberg/gtsummary/issues/679))
 
 - Adding coefficient
@@ -3358,7 +3358,7 @@ CRAN release: 2021-01-08
 
 - Users may now choose which
   [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)
-  columns to report with a theme element. they can choose among the
+  columns to report with a theme element. They can choose among the
   `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`,
   `"conf.high"` and `"p.value"`
   ([\#637](https://github.com/ddsjoberg/gtsummary/issues/637))
@@ -3985,7 +3985,7 @@ CRAN release: 2020-04-17
 
 - In
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
-  passing an ordered factor in the `by=` argument no longer causes as
+  passing an ordered factor in the `by=` argument no longer causes an
   error. ([\#453](https://github.com/ddsjoberg/gtsummary/issues/453))
 
 ## gtsummary 1.2.6

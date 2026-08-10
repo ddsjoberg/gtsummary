@@ -98,8 +98,8 @@ summary(m1)$coefficients
 #> stageT4     -0.23108633 0.44822835 -0.5155549 0.60616530
 ```
 
-- We will then a **regression model table** to summarize and present
-  these results in just one line of code from {gtsummary}.
+- We will then create a **regression model table** to summarize and
+  present these results in just one line of code from {gtsummary}.
 
 ``` r
 

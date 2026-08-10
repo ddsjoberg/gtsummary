@@ -20,8 +20,7 @@ Headers, Labels and Formatting
 
 2.  [How do I **change the value** of the by levels?](#modify-pvalue)
 
-3.  [How do I added a **spanning header** row to a
-    table?](#table-header)
+3.  [How do I add a **spanning header** row to a table?](#table-header)
 
 4.  [How do I change **variable labels**?](#modify-pvalue)
 
@@ -167,8 +166,7 @@ trial |>
 ------------------------------------------------------------------------
 
 Modify the function that formats the p-values, change variable labels,
-updating tumor response header, and add a correction for multiple
-testing.
+update tumor response header, and add a correction for multiple testing.
 
 ``` r
 
@@ -188,7 +186,7 @@ trial |>
 
 ------------------------------------------------------------------------
 
-Include missing tumor response as column using
+Include missing tumor response as a column using
 [`forcats::fct_na_value_to_level()`](https://forcats.tidyverse.org/reference/fct_na_value_to_level.html).
 
 ``` r
@@ -512,7 +510,7 @@ trial |>
 ------------------------------------------------------------------------
 
 To use robust standard errors in a regression model, the model is
-prepared use usual, and the variance-covariance matrix of the model is
+prepared as usual, and the variance-covariance matrix of the model is
 modified via an appropriate function, such as `vcovCL` from the sandwich
 package.
 

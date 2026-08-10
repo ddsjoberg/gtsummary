@@ -187,7 +187,7 @@ selection](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/crayon_image
 
 ### {gtsummary} functions to add information
 
-The {gtsummary} package has functions to adding information or
+The {gtsummary} package has functions for adding information or
 statistics to
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
 tables.

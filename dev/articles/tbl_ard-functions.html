@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9012</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,16 +89,16 @@
 <p>Analysis Results Datasets (ARDs) are part of the <a href="https://www.cdisc.org/standards/foundational/analysis-results-standard" class="external-link">CDISC
 Analysis Results Standard</a>, which aims to facilitate automation,
 reproducibility, reusability, and traceability of analysis results data
-(ARD). ARDs are highly structured and generalized data frame objects in
-which store the results of both simple and complex statistical results.
+(ARD). ARDs are highly structured and generalized data frame objects
+that store the results of both simple and complex statistical results.
 The {gtsummary} package utilizes ARDs (via the {cards} and {cardx}
 packages) to perform all calculations.</p>
 <p>In this tutorial, we will review how to use the native {gtsummary}
 functions to build standard and highly customized tables. There are two
 basic approaches to creating summary tables utilizing ARDs:</p>
 <ol style="list-style-type: decimal">
-<li>As ARDs power every calculation and tabulation in the {gtsummary},
-ARDs can be extracted from any table created with the
+<li>As ARDs power every calculation and tabulation in the {gtsummary}
+package, ARDs can be extracted from any table created with the
 <code>tbl_*()</code> functions (and their add-ons).</li>
 <li>One can also create ARDs first, then pass the ARD to a
 <code>tbl_ard_*()</code> function that will convert the ARD to a summary
@@ -1364,8 +1364,8 @@ results for a nicer display.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: stat_label &lt;chr&gt;, fmt_fun &lt;list&gt;, warning &lt;list&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   error &lt;list&gt;</span></span></span></code></pre></div>
 <p>The optional arguments that can be specified to improve the
-appearance of the table. - <code>.attributes</code> summary table will
-utilize the column label attributes, if available -
+appearance of the table. - <code>.attributes</code> the summary table
+will utilize the column label attributes, if available -
 <code>.total_n</code> the total N is saved internally, and will be used
 in the printed table. - <code>.overall</code> the operations will be
 repeated without <code>.by</code> variable - <code>.missing</code> when
@@ -2518,13 +2518,12 @@ the <code><a href="https://insightsengineering.github.io/cards/latest-tag/refere
 <div class="section level4">
 <h4 id="final-thoughts">Final Thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
 </h4>
-<p>When creating the a custom summary table, you will want to utilize
-the functions with the <code>tbl_ard_*()</code> prefix. It will be
-important to familiarize yourself with the table structures that each of
-these functions produce, so you know which to use to build your
-table.</p>
-<p>If your table is a combination or mix of table types structures, you
-can build each part of your table separately and use
+<p>When creating a custom summary table, you will want to utilize the
+functions with the <code>tbl_ard_*()</code> prefix. It will be important
+to familiarize yourself with the table structures that each of these
+functions produce, so you know which to use to build your table.</p>
+<p>If your table is a combination or mix of table structures, you can
+build each part of your table separately and use
 <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> and <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> to cobble together
 your final table.</p>
 <p>Finally, some tables are entirely unique and would be difficult to

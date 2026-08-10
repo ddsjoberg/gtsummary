@@ -407,14 +407,14 @@ table:
 notes](https://www.danieldsjoberg.com/gtsummary/reference/modify_source_note.html),
 and
 [abbreviations](https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.html).
-Adding, modify, and removing these notes require functions tailored for
-each type of note.
+Adding, modifying, and removing these notes require functions tailored
+for each type of note.
 
 - Footnotes place notes with markers that appear in the table, and the
   marker appears again next to the note below the table: a very standard
   footnote.
 
-- Source notes are similar to footnotes, expect there is no marker
+- Source notes are similar to footnotes, except there is no marker
   associated with the note.
 
 - Abbreviations are a special type of source note. All abbreviations

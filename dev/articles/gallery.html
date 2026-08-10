@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9012</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@ package.</p>
 headers</strong> in a table?</a></p></li>
 <li><p><a href="#modify-pvalue">How do I <strong>change the
 value</strong> of the by levels?</a></p></li>
-<li><p><a href="#table-header">How do I added a <strong>spanning
+<li><p><a href="#table-header">How do I add a <strong>spanning
 header</strong> row to a table?</a></p></li>
 <li><p><a href="#modify-pvalue">How do I change <strong>variable
 labels</strong>?</a></p></li>
@@ -1238,8 +1238,8 @@ N = 102</span></th>
 <hr>
 <p><a id="modify-pvalue"></a></p>
 <p>Modify the function that formats the p-values, change variable
-labels, updating tumor response header, and add a correction for
-multiple testing.</p>
+labels, update tumor response header, and add a correction for multiple
+testing.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">response</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No Tumor Response"</span>, <span class="st">"Tumor Responded"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1776,7 +1776,7 @@ N = 61</span><span class="gt_footnote_marks" style="white-space:nowrap;font-styl
 </div>
 <hr>
 <p><a id="include-missing"></a></p>
-<p>Include missing tumor response as column using
+<p>Include missing tumor response as a column using
 <code><a href="https://forcats.tidyverse.org/reference/fct_na_value_to_level.html" class="external-link">forcats::fct_na_value_to_level()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trial</span> <span class="op">|&gt;</span> </span>
@@ -8636,7 +8636,7 @@ Wald confidence intervals are calculated using
 <hr>
 <p><a id="use_robust_errors"></a></p>
 <p>To use robust standard errors in a regression model, the model is
-prepared use usual, and the variance-covariance matrix of the model is
+prepared as usual, and the variance-covariance matrix of the model is
 modified via an appropriate function, such as <code>vcovCL</code> from
 the sandwich package.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
