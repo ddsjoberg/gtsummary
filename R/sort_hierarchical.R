@@ -26,6 +26,16 @@
 #'     in `x` for the variable, an error will occur.
 #'
 #'   Defaults to `everything() ~ "descending"`.
+#' @param by_level (scalar)\cr
+#'   an optional single level of the table's `by` variable used to restrict the counts used for
+#'   `"descending"` sorting. When supplied, `"descending"` sorts rank rows by the count sums observed
+#'   only in the specified `by` level (e.g. `by_level = "Placebo"` sorts by the counts in the
+#'   `"Placebo"` arm), rather than by the sums across all `by` levels. Has no effect on variables
+#'   sorted `"alphanumeric"`, and cannot be used when `x` has no `by` variable. Because gtsummary
+#'   hierarchical tables allow only a single `by` variable, a scalar level is supplied here (rather
+#'   than the named list used by [cards::sort_ard_hierarchical()]).
+#'
+#'   Defaults to `NULL`, in which case count sums are calculated across all `by` levels.
 #' @inheritParams rlang::args_dots_empty
 #'
 #' @note
@@ -82,6 +92,10 @@
 #' # Sort `AEBODSYS` alphanumerically, `AEDECOD` by descending frequency
 #' sort_hierarchical(tbl, sort = list(AEBODSYS = "alphanumeric", AEDECOD = "descending"))
 #'
+#' # Example 4 ----------------------------------------------
+#' # Sort by descending frequency within the "Placebo" arm only
+#' sort_hierarchical(tbl, by_level = "Placebo")
+#'
 #' reset_gtsummary_theme()
 NULL
 
@@ -96,7 +110,8 @@ sort_hierarchical <- function(x, ...) {
 
 #' @rdname sort_hierarchical
 #' @export
-sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descending", ...) {
+sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descending",
+                                                by_level = NULL, ...) {
   set_cli_abort_call()
 
   # check input
@@ -124,8 +139,31 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
     error_msg = "Sorting type must be either {.val descending} or {.val alphanumeric} for all variables."
   )
 
+  # resolve/validate the scalar `by_level` into the named list `cards` expects. gtsummary owns the
+  # scalar-interface checks; level/`by`-name validity is delegated to `cards::sort_ard_hierarchical()`.
+  by_level_list <- NULL
+  if (!is.null(by_level)) {
+    # gtsummary accepts a SCALAR (single `by` variable only); reject the `cards` named-list form
+    if (is.list(by_level)) {
+      cli::cli_abort(
+        c("The {.arg by_level} argument must be a single value, e.g. {.code by_level = \"Placebo\"}.",
+          "i" = "A named list is not accepted here because gtsummary hierarchical tables allow only a
+                 single {.arg by} variable."),
+        call = get_cli_abort_call()
+      )
+    }
+    check_scalar(by_level)
+    if (is_empty(ard_args$by)) {
+      cli::cli_abort(
+        "The {.arg by_level} argument cannot be used because {.arg x} has no {.arg by} variable.",
+        call = get_cli_abort_call()
+      )
+    }
+    by_level_list <- rlang::set_names(list(by_level), ard_args$by)
+  }
+
   # add row indices match structure of ard to x$table_body
-  reshape_x <- .reshape_ard_compare(x, x_ard, c(ard_args, list(id = x$inputs$id)), sort)
+  reshape_x <- .reshape_ard_compare(x, x_ard, c(ard_args, list(id = x$inputs$id)), sort, by_level)
   x <- reshape_x$x
   x_ard <- reshape_x$x_ard
 
@@ -138,7 +176,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
     unique()
 
   # apply sorting
-  x_ard_sort <- x_ard |> cards::sort_ard_hierarchical(sort)
+  x_ard_sort <- x_ard |> cards::sort_ard_hierarchical(sort, by_level = by_level_list)
 
   # pull updated index order after sorting
   idx_sort <- x_ard_sort |>
@@ -155,7 +193,10 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
 
   # if overall column present, sort x$cards$add_overall
   if ("add_overall" %in% names(x$cards)) {
-    # update x$cards$add_overall
+    # `by_level` is intentionally omitted here: the overall ARD is pooled across `by` levels (it has
+    # no `by` variable), so a level restriction is both meaningless and would error in `cards`. The
+    # displayed overall column is unaffected because it already lives in `x$table_body` (add_overall()
+    # runs before sort_hierarchical()) and is reordered positionally via `idx_sort` below.
     x$cards$add_overall <- x$cards$add_overall |> cards::sort_ard_hierarchical(sort)
   }
 
@@ -168,7 +209,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   x
 }
 
-.reshape_ard_compare <- function(x, x_ard, ard_args, sort = NULL) {
+.reshape_ard_compare <- function(x, x_ard, ard_args, sort = NULL, by_level = NULL) {
   by_cols <- if (length(ard_args$by) > 0) c("group1", "group1_level") else NULL
 
   # SAVE ALL ATTRIBUTES (NEW CODE)
@@ -176,7 +217,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   orig_args <- attributes(x_ard)$args
 
   # add dummy rows for variables not in include so their label rows are sorted correctly
-  x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort)
+  x_ard <- x_ard |> .append_not_incl(ard_args, x$call_list, sort, by_level)
 
   # add indices to ARD. `group_rows()` numbers groups exactly like
   # `cur_group_id()` (same grouped object), so fill `pre_idx` from it without a
@@ -237,7 +278,7 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
   list(x = x, x_ard = x_ard)
 }
 
-.append_not_incl <- function(x, ard_args, call_list, sort = NULL) {
+.append_not_incl <- function(x, ard_args, call_list, sort = NULL, by_level = NULL) {
   # add dummy rows for variables not in include so their label rows are sorted correctly
   not_incl <- setdiff(ard_args$variables, ard_args$include)
   if (length(not_incl) > 0) {
@@ -281,6 +322,12 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
           # pseudo-summary row stat value for descending sort
           if (descending) {
             sub <- ridx[x$variable[ridx] == dplyr::last(ard_args$include) & x$stat_name[ridx] == snm]
+            # restrict the summed rows to the requested `by` level so the dummy row's sum matches the
+            # `by_level`-restricted sum `cards` computes for the real rows (see the group1_level fix below)
+            if (!is.null(by_level)) {
+              lvls <- vapply(x$group1_level[sub], \(z) as.character(unlist(z))[1], character(1L))
+              sub <- sub[lvls == by_level]
+            }
             stat_val[[k]] <- sum(unlist(x$stat[sub]))
           } else {
             stat_val[[k]] <- 0
@@ -293,6 +340,9 @@ sort_hierarchical.tbl_hierarchical <- function(x, sort = everything() ~ "descend
         x_sum_rows$variable_level <- keys[[ncol_k]][sel]
         x_sum_rows$stat_name <- if (descending) stat_nm_v else "no_stat"
         x_sum_rows$stat <- stat_val
+        # align the dummy row's `by` level with the requested `by_level` so `cards`' descending mask
+        # keeps every dummy row uniformly (group1_level is a list column; the mask reads `z[[1]]`)
+        if (!is.null(by_level)) x_sum_rows$group1_level <- rep(list(by_level), nrow(x_sum_rows))
         x_sum_rows$tmp <- TRUE
 
         x <- x |> dplyr::bind_rows(x_sum_rows)
