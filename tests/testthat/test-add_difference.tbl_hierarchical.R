@@ -40,7 +40,7 @@ test_that("add_difference.tbl_hierarchical() works", {
   expect_setequal(res$cards$add_difference$stat_name, "estimate")
   expect_true("add_difference" %in% names(res$call_list))
 
-  # values equal the p_diff computed directly by cards, formatted with the default
+  # values equal the 'estimate' (rate differences) computed directly by cards, formatted with the default
   d <- cards::diff_ard_hierarchical(
     tbl$cards$tbl_hierarchical,
     levels = list(TRTA = "Xanomeline High Dose", TRTA = "Placebo")
@@ -120,21 +120,21 @@ test_that("add_difference.tbl_ard_hierarchical() works and uses the source ARD f
 
   tbl <- tbl_ard_hierarchical(cards = ard, variables = c(AESOC, AEDECOD), by = TRTA)
 
-  # default: estimate_fun = NULL -> uses the diff ARD's fmt_fun (digits = 3, scale = 100)
+  # default: estimate_fun = NULL -> uses the diff ARD's fmt_fun (digits = 1, scale = 100)
   expect_silent(res <- add_difference(tbl, levels = c("Xanomeline High Dose", "Placebo")))
   est <- as.data.frame(res, col_labels = FALSE)$estimate
   est <- est[!is.na(est)]
-  expect_true(all(grepl("\\.\\d{3}%$", est)))
+  expect_true(all(grepl("\\.\\d{1}%$", est)))
 
-  # an explicit estimate_fun overrides the source fmt_fun
+  # an explicit estimate_fun overrides the source fmt_fun (here, 3 decimals)
   res1 <- add_difference(
     tbl,
     levels = c("Xanomeline High Dose", "Placebo"),
-    estimate_fun = label_style_number(digits = 1, scale = 100)
+    estimate_fun = label_style_number(digits = 3, scale = 100)
   )
   est1 <- as.data.frame(res1, col_labels = FALSE)$estimate
   est1 <- est1[!is.na(est1)]
-  expect_true(all(grepl("\\.\\d{1}%$", est1)))
+  expect_true(all(grepl("\\.\\d{3}%$", est1)))
 })
 
 test_that("add_difference.tbl_hierarchical() aligns correctly after a prior sort_hierarchical()", {

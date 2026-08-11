@@ -140,8 +140,6 @@ add_difference.tbl_ard_hierarchical <- function(x,
 
   # reshape the difference ARD into a single formatted column -------------------
   ard_diff$gts_column <- "estimate"
-  # rename the p_diff statistic to `estimate` (used as the glue element and column key)
-  ard_diff$stat_name <- "estimate"
   # clear the stale `stat_fmt` (carried over from the `p` statistic) so the
   # formatting function is re-applied downstream in `pier_summary_hierarchical()`
   ard_diff$stat_fmt <- list(NULL)
