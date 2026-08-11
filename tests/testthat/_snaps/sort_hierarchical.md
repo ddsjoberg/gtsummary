@@ -150,8 +150,7 @@
       sort_hierarchical(tbl, by_level = list(TRTA = "Placebo"))
     Condition
       Error in `sort_hierarchical()`:
-      ! The `by_level` argument must be a single value, e.g. `by_level = "Placebo"`.
-      i A named list is not accepted here because gtsummary hierarchical tables allow only a single `by` variable.
+      ! The `by_level` argument must be a vector of length 1.
 
 ---
 
@@ -159,7 +158,7 @@
       sort_hierarchical(tbl, by_level = c("Placebo", "Xanomeline Low Dose"))
     Condition
       Error in `sort_hierarchical()`:
-      ! The `by_level` argument must be length 1.
+      ! The `by_level` argument must be a vector of length 1.
 
 ---
 
