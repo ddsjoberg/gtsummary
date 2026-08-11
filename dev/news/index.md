@@ -2,6 +2,16 @@
 
 ## gtsummary (development version)
 
+- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  gained a `by_level` argument that restricts the counts used for
+  `"descending"` sorting to a single `by` variable level
+  (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the
+  Placebo arm). This exposes the new `by_level` argument of
+  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
+  because gtsummary hierarchical tables allow only a single `by`
+  variable, a scalar level is accepted here and wrapped internally into
+  the named list `cards` expects.
+
 - Improved the speed and memory efficiency of the output converters
   [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md),
   [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),

@@ -20,13 +20,13 @@ criteria are:
 sort_hierarchical(x, ...)
 
 # S3 method for class 'tbl_hierarchical'
-sort_hierarchical(x, sort = everything() ~ "descending", ...)
+sort_hierarchical(x, sort = everything() ~ "descending", by_level = NULL, ...)
 
 # S3 method for class 'tbl_hierarchical_count'
-sort_hierarchical(x, sort = everything() ~ "descending", ...)
+sort_hierarchical(x, sort = everything() ~ "descending", by_level = NULL, ...)
 
 # S3 method for class 'tbl_ard_hierarchical'
-sort_hierarchical(x, sort = everything() ~ "descending", ...)
+sort_hierarchical(x, sort = everything() ~ "descending", by_level = NULL, ...)
 ```
 
 ## Arguments
@@ -65,6 +65,23 @@ sort_hierarchical(x, sort = everything() ~ "descending", ...)
     are present in `x` for the variable, an error will occur.
 
   Defaults to `everything() ~ "descending"`.
+
+- by_level:
+
+  (scalar)  
+  an optional single level of the table's `by` variable used to restrict
+  the counts used for `"descending"` sorting. When supplied,
+  `"descending"` sorts rank rows by the count sums observed only in the
+  specified `by` level (e.g. `by_level = "Placebo"` sorts by the counts
+  in the `"Placebo"` arm), rather than by the sums across all `by`
+  levels. Has no effect on variables sorted `"alphanumeric"`, and cannot
+  be used when `x` has no `by` variable. Because gtsummary hierarchical
+  tables allow only a single `by` variable, a scalar level is supplied
+  here (rather than the named list used by
+  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html)).
+
+  Defaults to `NULL`, in which case count sums are calculated across all
+  `by` levels.
 
 ## Value
 
