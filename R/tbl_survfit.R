@@ -249,7 +249,11 @@ tbl_survfit.list <- function(x,
   }
   check_string(label_header)
   estimate_fun <- as_function(estimate_fun)
-  missing <- ifelse(missing(missing), "\U2014", check_string(missing))
+  if (missing(missing)) {
+    missing <- "\U2014"
+  } else {
+    check_string(missing)
+  }
   if (!is_empty(type)) type <- arg_match(type, values = c("survival", "risk", "cumhaz"))
 
   tbl_survfit_inputs <- as.list(environment())
