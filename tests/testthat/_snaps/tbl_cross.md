@@ -95,7 +95,7 @@
       tbl_cross(trial, row = NULL, col = grade)
     Condition
       Error in `tbl_cross()`:
-      ! The `row` argument must be length 1.
+      ! The `row` argument must be a vector of length 1.
 
 # tbl_cross(label) errors properly
 
