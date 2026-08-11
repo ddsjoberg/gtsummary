@@ -268,6 +268,8 @@ check_scalar <- function(x,
   if (length(x) != 1L || is.list(x)) {
     cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
   }
+
+  invisible(x)
 }
 
 #' Check Number of Levels
