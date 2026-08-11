@@ -249,18 +249,25 @@ check_scalar <- function(x,
                          message =
                            ifelse(
                              allow_empty,
-                             "The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-                             "The {.arg {arg_name}} argument must be length {.val {1}}."
+                             "The {.arg {arg_name}} argument must be a vector of length {.val {1}} or empty.",
+                             "The {.arg {arg_name}} argument must be a vector of length {.val {1}}."
                            ),
                          arg_name = rlang::caller_arg(x),
                          class = "check_scalar",
                          call = get_cli_abort_call(),
                          envir = rlang::current_env()) {
-  check_length(
-    x = x, length = 1L, message = message,
-    allow_empty = allow_empty, arg_name = arg_name,
-    class = class, call = call, envir = envir
-  )
+  # if empty: return invisibly when allowed, otherwise error
+  if (rlang::is_empty(x)) {
+    if (isTRUE(allow_empty)) {
+      return(invisible(x))
+    }
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+  }
+
+  # input must be a vector of length 1 (not a list)
+  if (length(x) != 1L || is.list(x)) {
+    cli::cli_abort(message, class = c(class, "standalone-checks"), call = call, .envir = envir)
+  }
 }
 
 #' Check Number of Levels
