@@ -64,7 +64,8 @@ include the rate (\code{p}) statistic (the default for \code{tbl_hierarchical()}
 # Example 1 ----------------------------------
 # rate difference between two treatment arms
 ADAE_subset <- cards::ADAE |>
-  dplyr::filter(AESOC \%in\% unique(cards::ADAE$AESOC)[1:5])
+  dplyr::filter(AESOC \%in\% unique(cards::ADAE$AESOC)[1:5]) |>
+  dplyr::filter(.by = AESOC, AEDECOD \%in\% unique(cards::ADAE$AESOC)[1:5])
 
 tbl_hierarchical(
   data = ADAE_subset,

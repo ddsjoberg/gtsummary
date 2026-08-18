@@ -52,13 +52,13 @@ row for unknown values).
 }
 
 The user-defined function does not need to utilize each of these inputs. It's
-encouraged the user-defined function accept \code{...} as each of the arguments
+encouraged that the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
 \itemize{
 \item Use \code{modify_header()} to update the column headers
 \item Use \code{modify_fmt_fun()} to update the functions that format the statistics
-\item Use \code{modify_footnote_header()} to add a explanatory footnote
+\item Use \code{modify_footnote_header()} to add an explanatory footnote
 }
 
 If you return a tibble with column names \code{p.value} or \code{q.value}, default

@@ -25,7 +25,7 @@ will result in a column in the summary table. Default is
 \code{c("{n}", "{p}\%")} for categorical/dichotomous summaries}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
