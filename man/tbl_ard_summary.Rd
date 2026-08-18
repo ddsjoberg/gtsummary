@@ -34,7 +34,7 @@ The default is
 \code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 Continuous summaries may be assigned \code{c("continuous", "continuous2")}, while
 categorical and dichotomous cannot be modified.}
@@ -58,7 +58,7 @@ Variables to include in the summary table. Default is \code{everything()}}
 \item{overall}{(scalar \code{logical})\cr
 When \code{TRUE}, the \code{cards} input is parsed into two parts to run
 \code{tbl_ard_summary(cards_by) |> add_overall(cards_overall)}.
-Can only by used when \code{by} argument is specified.
+Can only be used when \code{by} argument is specified.
 Default is \code{FALSE}.}
 }
 \value{
