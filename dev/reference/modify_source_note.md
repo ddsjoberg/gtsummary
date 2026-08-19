@@ -1,7 +1,7 @@
 # Modify source note
 
 Add and remove source notes from a table. Source notes are similar to
-footnotes, expect they are not linked to a cell in the table.
+footnotes, except they are not linked to a cell in the table.
 
 ## Usage
 

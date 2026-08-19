@@ -2,132 +2,22 @@
 
 ## gtsummary (development version)
 
-- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
-  gained a `by_level` argument that restricts the counts used for
-  `"descending"` sorting to a single `by` variable level
-  (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the
-  Placebo arm). This exposes the new `by_level` argument of
-  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
-  because gtsummary hierarchical tables allow only a single `by`
-  variable, a scalar level is accepted here and wrapped internally into
-  the named list `cards` expects.
+### Performance
 
-- Improved the speed and memory efficiency of the output converters
-  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md),
-  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
-  [`as_hux_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md),
-  [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable_extra.md),
-  [`as_kable()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable.md),
-  and
-  [`as_tibble()`](https://tibble.tidyverse.org/reference/as_tibble.html).
-  The shared row-number resolution step
-  ([`.table_styling_expr_to_row_number()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/dot-table_styling_expr_to_row_number.md))
-  replaces its per-row
-  [`dplyr::rowwise()`](https://dplyr.tidyverse.org/reference/rowwise.html)
-  loops with vectorized `map()` calls, computes the visible-column set
-  once, and resolves the footnote replace/remove precedence in a single
-  vectorized pass instead of a quadratic per-row scan; the shared tibble
-  call builder (`table_styling_to_tibble_calls()`, used by five of the
-  converters) resolves the cell-formatting helper once instead of
-  re-parsing it for every formatted column and splits the bold/italic
-  formatting table in a single pass;
-  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
-  caches the parsed markdown/HTML interpreters that recur across column
-  labels, spanning headers, and footnotes; and the flextable, huxtable,
-  and kableExtra builders compute the visible-header subset once instead
-  of re-deriving it for every section. There is no change to the
-  returned tables.
-  ([\#2454](https://github.com/ddsjoberg/gtsummary/issues/2454))
+This release brings a large, cross-cutting performance effort. None of
+the changes below alter the returned tables—only how quickly and cheaply
+they are built. The table highlights the headline improvements measured
+against the previous CRAN release
+([tracking-gtsummary-cards-efficiency](https://github.com/ddsjoberg/tracking-gtsummary-cards-efficiency));
+negative values indicate a reduction (i.e. an improvement).
 
-- Improved the speed and memory efficiency of the table-modification
-  functions
-  ([`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
-  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
-  [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
-  [`modify_footnote_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
-  [`modify_footnote_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md),
-  [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md),
-  [`modify_table_body()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_body.md),
-  the column/format helpers such as
-  [`modify_indent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_indent.md),
-  [`modify_missing_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_missing_symbol.md),
-  [`modify_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_source_note.md),
-  [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md),
-  and the developer-facing
-  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_styling.md)).
-  The header-styling sync is skipped when it would be a no-op; header
-  labels, alignment, and hidden status are assigned directly instead of
-  through a row-update round trip; the glue data used for dynamic
-  headers is built only when needed; row-selection expressions are not
-  evaluated for the literal-`NULL`/`TRUE` defaults; the
-  styling-instruction appends avoid the expensive
-  [`dplyr::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
-  construction; and plainly-named
-  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)/[`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)/[`modify_fmt_fun()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_fmt_fun.md)
-  calls skip the tidyselect machinery. There is no change to the
-  returned tables.
-  ([\#2453](https://github.com/ddsjoberg/gtsummary/issues/2453))
-
-- Improved the speed and memory efficiency of
-  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md).
-  Adding the table-identifier condition to each styling row-selection
-  expression no longer evaluates the expression for the common
-  literal-`NULL` case, reuses a single data mask per input table when
-  evaluation is needed, and computes each unique expression only once;
-  the stacked `table_body` and header are assembled with base subsetting
-  in place of per-table tidyselect pipelines; and the group-header
-  column attributes are set without routing through the full
-  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_styling.md)
-  machinery. There is no change to the returned tables.
-  ([\#2452](https://github.com/ddsjoberg/gtsummary/issues/2452))
-
-- Improved the speed and memory efficiency of
-  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md).
-  The step that merges the overall column into the stratified table now
-  skips no-op styling binds, uses base-R subsetting in place of dplyr
-  pipelines, and avoids a redundant table-styling rebuild, roughly
-  halving the merge overhead. There is no change to the returned tables.
-  ([\#2450](https://github.com/ddsjoberg/gtsummary/issues/2450))
-
-- Improved the speed and memory efficiency of
-  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md).
-  Applying the tab spanners now skips the per-column
-  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
-  evaluation for constant spanner text; consolidating the merged table
-  styling no longer evaluates each row-selection expression when the
-  expression has no columns to rename (and reuses a single data mask per
-  table when it does); and the merged object is assembled without a
-  redundant table-styling rebuild. Several of these internals are
-  shared, so
-  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
-  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
-  and related functions get faster as well. There is no change to the
-  returned tables.
-  ([\#2451](https://github.com/ddsjoberg/gtsummary/issues/2451))
-
-- Improved the speed and memory efficiency of
-  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
-  [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
-  [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md),
-  and the
-  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
-  helpers. The table assembly step
-  ([`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md))
-  now vectorizes the statistic formatting instead of looping over every
-  cell, making the pipeline roughly 8 times faster with lower memory
-  allocation. There is no change to the returned tables.
-  ([\#2442](https://github.com/ddsjoberg/gtsummary/issues/2442))
-
-- Further improved the speed and memory efficiency of
-  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md).
-  The internal row-selection steps now use base-R subsetting instead of
-  full-ARD dplyr pipelines, and the overall-column filtering step (used
-  when
-  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
-  has been applied) replaces a many-to-many join with a membership test,
-  so it no longer materializes a cross product of duplicated keys. There
-  is no change to the returned tables.
-  ([\#2444](https://github.com/ddsjoberg/gtsummary/issues/2444))
+| Function (input data) | Computation time | Memory allocated |
+|:---|---:|---:|
+| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md) pipeline | −40% | −13% |
+| [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md) pipeline | −56% | −35% |
+| [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md) pipeline (10× replicated ADAE) | −94% | −71% |
+| [`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md) table assembly (10× replicated ADAE) | −99% | −71% |
+| [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md) (10× replicated ADAE) | −92% | −67% |
 
 - Improved the speed and memory efficiency of
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
@@ -138,31 +28,71 @@
   [`tbl_ard_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_summary.md).
   The table assembly step
   ([`brdg_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_summary.md))
-  is roughly 2.6 times faster with lower memory allocation. There is no
-  change to the returned tables.
+  is roughly 2.6 times faster.
   ([\#2440](https://github.com/ddsjoberg/gtsummary/issues/2440))
 
-- Added a `levels` argument to
-  [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_summary.md)
+- Improved the speed and memory efficiency of
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
+  [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md),
+  [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md),
+  and the
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  helpers. The table assembly step
+  ([`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md))
+  now vectorizes the statistic formatting instead of looping over every
+  cell, making the pipeline roughly 8 times faster.
+  ([\#2442](https://github.com/ddsjoberg/gtsummary/issues/2442))
+
+- Further improved the speed and memory efficiency of
+  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  by using base-R subsetting in the row-selection steps and replacing a
+  many-to-many join with a membership test in the overall-column
+  filtering step.
+  ([\#2444](https://github.com/ddsjoberg/gtsummary/issues/2444))
+
+- Improved the speed and memory efficiency of
+  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md).
+  Several of these internals are shared, so
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  and related functions get faster as well.
+  ([\#2451](https://github.com/ddsjoberg/gtsummary/issues/2451))
+
+- Improved the speed and memory efficiency of
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md),
+  roughly halving the overhead of merging the overall column into the
+  stratified table.
+  ([\#2450](https://github.com/ddsjoberg/gtsummary/issues/2450))
+
+- Improved the speed and memory efficiency of
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md).
+  ([\#2452](https://github.com/ddsjoberg/gtsummary/issues/2452))
+
+- Improved the speed and memory efficiency of the table-modification
+  functions
+  ([`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md),
+  the footnote and abbreviation helpers, the column/format helpers such
+  as
+  [`modify_indent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_indent.md)
   and
-  [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_svysummary.md)
-  to select which two `by` groups to compare. This makes
-  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
-  usable when `by=` has more than two levels, and lets users flip the
-  direction of the difference for two-level `by` variables.
-  ([\#2151](https://github.com/ddsjoberg/gtsummary/issues/2151))
+  [`modify_source_note()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_source_note.md),
+  [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/bold_italicize_labels_levels.md),
+  and the developer-facing
+  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_table_styling.md)).
+  ([\#2453](https://github.com/ddsjoberg/gtsummary/issues/2453))
 
-- Fixed bug in
-  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
-  where summary statistics could be attached to the wrong strata level
-  when the `strata` variable was a character (or other non-factor)
-  vector. ([\#2443](https://github.com/ddsjoberg/gtsummary/issues/2443))
+- Improved the speed and memory efficiency of the output converters
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md),
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
+  [`as_hux_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md),
+  [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable_extra.md),
+  [`as_kable()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_kable.md),
+  and
+  [`as_tibble()`](https://tibble.tidyverse.org/reference/as_tibble.html).
+  ([\#2454](https://github.com/ddsjoberg/gtsummary/issues/2454))
 
-- Fixed bug in
-  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
-  where second-level strata headers were dropped in all but the first
-  group when using three or more strata levels.
-  ([\#2418](https://github.com/ddsjoberg/gtsummary/issues/2418))
+### New Features and Functions
 
 - Added
   [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)
@@ -195,6 +125,50 @@
   for a collection the same section is applied to every table with the
   paging `type` fixed to `"nextPage"`.
 
+- Added
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
+  methods for hierarchical tables,
+  [`add_difference.tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md)
+  and
+  [`add_difference.tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md),
+  which append a column of event-rate differences between two `by`
+  variable levels (e.g. the rate difference of adverse events between
+  two treatment arms). The two levels are chosen with the `levels`
+  argument, and the calculation is performed by the new
+  [`cards::diff_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html)
+  function.
+
+- Added a `levels` argument to
+  [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_summary.md)
+  and
+  [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_svysummary.md)
+  to select which two `by` groups to compare. This makes
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
+  usable when `by=` has more than two levels, and lets users flip the
+  direction of the difference for two-level `by` variables.
+  ([\#2151](https://github.com/ddsjoberg/gtsummary/issues/2151))
+
+- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)
+  gained a `by_level` argument that restricts the counts used for
+  `"descending"` sorting to a single `by` variable level
+  (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the
+  Placebo arm). This exposes the new `by_level` argument of
+  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
+  because gtsummary hierarchical tables allow only a single `by`
+  variable, a scalar level is accepted here and wrapped internally into
+  the named list `cards` expects.
+
+- Added
+  [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
+  [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
+  and the `pkgwide-chr:footnote_symbol` theme element to control the
+  symbols used for footnote references (e.g. `c("*", "†", "‡")` instead
+  of `1, 2, 3`). Currently supported by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+  and
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md).
+  ([\#1445](https://github.com/ddsjoberg/gtsummary/issues/1445))
+
 - [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
   and
   [`remove_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_abbreviation.md)
@@ -220,13 +194,14 @@
   string (e.g. `missing = "no"`) remains supported.
   ([\#2283](https://github.com/ddsjoberg/gtsummary/issues/2283))
 
-- Updated French language translations.
-  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
-  [@nalimilan](https://github.com/nalimilan))
-
-- Added Bosnian language translations.
-  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
-  [@dzanahmed](https://github.com/dzanahmed))
+- The `text_interpret` argument now accepts `"none"` (in addition to
+  `"md"` and `"html"`), which renders text verbatim without
+  markdown/HTML interpretation. The
+  [`add_significance_stars()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_significance_stars.md)
+  footnote now uses `"none"` so its asterisks render literally. Honored
+  by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md).
+  ([\#1987](https://github.com/ddsjoberg/gtsummary/issues/1987))
 
 - [`as_hux_xlsx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_hux_table.md)
   now accepts a list of gtsummary tables, writing each table to its own
@@ -240,14 +215,7 @@
   ignored (package defaults in effect), restoring the theme afterward.
   ([\#2284](https://github.com/ddsjoberg/gtsummary/issues/2284))
 
-- The `text_interpret` argument now accepts `"none"` (in addition to
-  `"md"` and `"html"`), which renders text verbatim without
-  markdown/HTML interpretation. The
-  [`add_significance_stars()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_significance_stars.md)
-  footnote now uses `"none"` so its asterisks render literally. Honored
-  by
-  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md).
-  ([\#1987](https://github.com/ddsjoberg/gtsummary/issues/1987))
+### Other Updates
 
 - In
   [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md),
@@ -256,16 +224,23 @@
   requires `flextable (>= 0.9.11)`.
   ([\#2251](https://github.com/ddsjoberg/gtsummary/issues/2251))
 
-- Added
-  [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
-  [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md),
-  and the `pkgwide-chr:footnote_symbol` theme element to control the
-  symbols used for footnote references (e.g. `c("*", "†", "‡")` instead
-  of `1, 2, 3`). Currently supported by
-  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_gt.md)
+- [`style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_sigfig.md),
+  [`style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_percent.md),
+  [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_pvalue.md),
   and
-  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/as_flex_table.md).
-  ([\#1445](https://github.com/ddsjoberg/gtsummary/issues/1445))
+  [`style_ratio()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_ratio.md)
+  now work with matrix input.
+  ([\#2409](https://github.com/ddsjoberg/gtsummary/issues/2409))
+
+- Updated French language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@nalimilan](https://github.com/nalimilan))
+
+- Added Bosnian language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@dzanahmed](https://github.com/dzanahmed))
+
+### Bug Fixes
 
 - Fixed bug in
   [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)
@@ -295,13 +270,17 @@
   with `theme_gtsummary_journal("qjecon")`.
   ([\#2404](https://github.com/ddsjoberg/gtsummary/issues/2404))
 
-- [`style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_sigfig.md),
-  [`style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_percent.md),
-  [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_pvalue.md),
-  and
-  [`style_ratio()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_ratio.md)
-  now work with matrix input.
-  ([\#2409](https://github.com/ddsjoberg/gtsummary/issues/2409))
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
+  where summary statistics could be attached to the wrong strata level
+  when the `strata` variable was a character (or other non-factor)
+  vector. ([\#2443](https://github.com/ddsjoberg/gtsummary/issues/2443))
+
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata_nested_stack.md)
+  where second-level strata headers were dropped in all but the first
+  group when using three or more strata levels.
+  ([\#2418](https://github.com/ddsjoberg/gtsummary/issues/2418))
 
 ## gtsummary 2.5.1
 

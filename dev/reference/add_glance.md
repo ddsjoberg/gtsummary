@@ -57,9 +57,9 @@ add_glance_source_note(
 - fmt_fun:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
-  Specifies the the functions used to format/round the glance
-  statistics. The default is to round the number of observations and
-  degrees of freedom to the nearest integer, p-values are styled with
+  Specifies the functions used to format/round the glance statistics.
+  The default is to round the number of observations and degrees of
+  freedom to the nearest integer, p-values are styled with
   [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/style_pvalue.md)
   and the remaining statistics are styled with
   `style_sigfig(x, digits = 3)`

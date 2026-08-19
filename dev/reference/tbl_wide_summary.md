@@ -58,7 +58,7 @@ tbl_wide_summary(
 - type:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
-  Specifies the summary type. Accepted value are
+  Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`. If not
   specified, default type is assigned via
   [`assign_summary_type()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_summary_type.md).

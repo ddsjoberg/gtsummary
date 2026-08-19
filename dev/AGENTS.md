@@ -52,6 +52,8 @@ Rscript -e 'testthat::snapshot_accept("modify_source_note")'
 Notes: - Many tests use `skip_on_cran()`. Set `NOT_CRAN=true` (or run
 via `devtools::test()`) to exercise them. - Some suites need optional
 Suggests packages (e.g. `broom.helpers`, `survey`, `flextable`,
+`officer` (Word export via
+[`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)),
 `cardx`); they `skip` if the package is absent. - testthat edition 3,
 parallel enabled. Dev container image:
 `ghcr.io/rocker-org/devcontainer/tidyverse:4`.
@@ -172,6 +174,28 @@ modify_source_note <- function(x, source_note, text_interpret = c("md", "html"))
 Key object structure: `x$table_body`, `x$table_styling` (header,
 footnotes, source notes, etc.), `x$call_list`, `x$inputs`.
 
+### Performance-critical paths
+
+Table-assembly and styling internals (the `brdg_*()` bridges, the
+`modify_*()`/`bold_*()` styling functions,
+[`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md)/[`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md)/
+[`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md),
+the
+[`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+helpers, and the `as_*()` converters) were heavily optimized in the
+2.6.0 cycle. When editing these, preserve the established patterns:
+prefer vectorized `map()`/base-R subsetting over
+[`dplyr::rowwise()`](https://dplyr.tidyverse.org/reference/rowwise.html)
+and per-row/per-table dplyr pipelines in hot loops; skip work that is a
+no-op (e.g. literal-`NULL`/`TRUE` row selections, constant
+[`glue::glue()`](https://glue.tidyverse.org/reference/glue.html) text);
+and compute shared values (visible-column sets, parsed interpreters,
+data masks) once rather than per row/column/table. These refactors are
+guaranteed to be output-preserving (“no change to the returned tables”),
+and the snapshot tests in `tests/testthat/_snaps/` are what enforce that
+— do not accept snapshot changes for a change advertised as
+performance-only.
+
 ## Pull requests
 
 - Honor
@@ -181,6 +205,21 @@ footnotes, source notes, etc.), `x$call_list`, `x$inputs`.
   performance, **begin the PR title with `perf`**. The “Performance
   Benchmark” workflow (`.github/workflows/benchmark.yaml`) only runs
   when the PR title starts with `perf`; it runs
-  `.github/scripts/benchmark.R` to compare PR-vs-`main` timings on
-  representative pipelines (`tbl_summary`, `tbl_hierarchical`) and posts
-  a benchmark report as a PR comment.
+  `.github/scripts/benchmark.R` (in a memory-profiling `rocker/r-ver`
+  container) to compare PR-vs-`main` time and memory across the full set
+  of hot paths — the `style_*()` functions, the
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  /
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
+  /
+  [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md)
+  pipelines, the `brdg_*()` assembly steps,
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md),
+  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_merge.md),
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_stack.md),
+  the `modify_*()` family, the
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
+  helpers, and the `as_*()` converters — and posts a benchmark report as
+  a PR comment. Add a new `bench::mark()` block there when you add a hot
+  path. Longer-term trends across releases are tracked in
+  [ddsjoberg/tracking-gtsummary-cards-efficiency](https://github.com/ddsjoberg/tracking-gtsummary-cards-efficiency).

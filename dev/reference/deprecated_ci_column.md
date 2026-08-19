@@ -16,7 +16,7 @@ features. As a result, the pre-formatted `"ci"` column will eventually
 be dropped from `.$table_body`.
 
 By using column merging, the `conf.low` and `conf.high` remain numeric
-and we can to continue to update how these columns are formatted, even
+and we can continue to update how these columns are formatted, even
 after printing the table.
 
 The `"ci"` column is hidden, meaning that it appears in `.$table_body`,

@@ -48,7 +48,7 @@ tbl_ard_summary(
 - type:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
-  Specifies the summary type. Accepted value are
+  Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`.
   Continuous summaries may be assigned `c("continuous", "continuous2")`,
   while categorical and dichotomous cannot be modified.
@@ -84,7 +84,7 @@ tbl_ard_summary(
 
   (scalar `logical`)  
   When `TRUE`, the `cards` input is parsed into two parts to run
-  `tbl_ard_summary(cards_by) |> add_overall(cards_overall)`. Can only by
+  `tbl_ard_summary(cards_by) |> add_overall(cards_overall)`. Can only be
   used when `by` argument is specified. Default is `FALSE`.
 
 ## Value

@@ -65,6 +65,9 @@
   **\[experimental\]** : Filter Hierarchical Tables
 - [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md)
   : Add overall column
+- [`add_difference(`*`<tbl_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md)
+  [`add_difference(`*`<tbl_ard_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md)
+  : Add rate differences to hierarchical tables
 
 ### Likert Summary Tables
 
@@ -353,6 +356,9 @@
   **\[experimental\]** : ARD summary table
 - [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
   **\[experimental\]** : Wide ARD summary table
+- [`add_difference(`*`<tbl_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md)
+  [`add_difference(`*`<tbl_ard_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.tbl_hierarchical.md)
+  : Add rate differences to hierarchical tables
 - [`add_overall(`*`<tbl_ard_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall_ard.md)
   : ARD add overall column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)

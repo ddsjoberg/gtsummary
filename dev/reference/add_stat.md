@@ -71,9 +71,9 @@ single variable.
       object is also available to utilize
 
 The user-defined function does not need to utilize each of these inputs.
-It's encouraged the user-defined function accept `...` as each of the
-arguments *will* be passed to the function, even if not all inputs are
-utilized by the user's function, e.g. `foo(data, variable, by, ...)`
+It's encouraged that the user-defined function accept `...` as each of
+the arguments *will* be passed to the function, even if not all inputs
+are utilized by the user's function, e.g. `foo(data, variable, by, ...)`
 
 - Use
   [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
@@ -85,7 +85,7 @@ utilized by the user's function, e.g. `foo(data, variable, by, ...)`
 
 - Use
   [`modify_footnote_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote2.md)
-  to add a explanatory footnote
+  to add an explanatory footnote
 
 If you return a tibble with column names `p.value` or `q.value`, default
 p-value formatting will be applied, and you may take advantage of

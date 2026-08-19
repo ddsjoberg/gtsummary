@@ -15,7 +15,7 @@ a custom function in charge of computing the statistics (see Details)."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +124,7 @@ via <code><a href="assign_summary_digits.html">assign_summary_digits()</a></code
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 <code>c("continuous", "continuous2", "categorical", "dichotomous")</code>.
 If not specified, default type is assigned via
 <code><a href="assign_summary_type.html">assign_summary_type()</a></code>. See below for details.</p></dd>
@@ -199,7 +199,7 @@ if present</p></li>
 <li><p><code>stat_display=</code> a string indicating the statistic to display (for the
 <code>statistic</code> argument, for that variable)</p></li>
 </ul><p>The user-defined does not need to utilize each of these inputs. It's
-encouraged the user-defined function accept <code>...</code> as each of the arguments
+encouraged that the user-defined function accept <code>...</code> as each of the arguments
 <em>will</em> be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. <code>foo(data, ...)</code> (see examples).</p>
 <p>The user-defined function should return a one row <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">dplyr::tibble()</a></code> with
