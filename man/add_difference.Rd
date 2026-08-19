@@ -16,6 +16,7 @@ Object with class 'gtsummary'}
 \itemize{
 \item \code{\link[=add_difference.tbl_summary]{add_difference.tbl_summary()}}
 \item \code{\link[=add_difference.tbl_svysummary]{add_difference.tbl_svysummary()}}
+\item \code{\link[=add_difference.tbl_hierarchical]{add_difference.tbl_hierarchical()}}
 }
 }
 \author{

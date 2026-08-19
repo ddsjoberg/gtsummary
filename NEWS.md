@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added `add_difference()` methods for hierarchical tables, `add_difference.tbl_hierarchical()` and `add_difference.tbl_ard_hierarchical()`, which append a column of event-rate differences between two `by` variable levels (e.g. the rate difference of adverse events between two treatment arms). The two levels are chosen with the `levels` argument, and the calculation is performed by the new `cards::diff_ard_hierarchical()` function.
+
+* `sort_hierarchical()` gained a `by_level` argument that restricts the counts used for `"descending"` sorting to a single `by` variable level (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the Placebo arm). This exposes the new `by_level` argument of `cards::sort_ard_hierarchical()`; because gtsummary hierarchical tables allow only a single `by` variable, a scalar level is accepted here and wrapped internally into the named list `cards` expects.
+
 * Improved the speed and memory efficiency of the output converters `as_gt()`, `as_flex_table()`, `as_hux_table()`, `as_kable_extra()`, `as_kable()`, and `as_tibble()`. The shared row-number resolution step (`.table_styling_expr_to_row_number()`) replaces its per-row `dplyr::rowwise()` loops with vectorized `map()` calls, computes the visible-column set once, and resolves the footnote replace/remove precedence in a single vectorized pass instead of a quadratic per-row scan; the shared tibble call builder (`table_styling_to_tibble_calls()`, used by five of the converters) resolves the cell-formatting helper once instead of re-parsing it for every formatted column and splits the bold/italic formatting table in a single pass; `as_gt()` caches the parsed markdown/HTML interpreters that recur across column labels, spanning headers, and footnotes; and the flextable, huxtable, and kableExtra builders compute the visible-header subset once instead of re-deriving it for every section. There is no change to the returned tables. (#2454)
 
 * Improved the speed and memory efficiency of the table-modification functions (`modify_header()`, `modify_spanning_header()`, `modify_footnote_header()`, `modify_footnote_body()`, `modify_footnote_spanning_header()`, `modify_abbreviation()`, `modify_table_body()`, the column/format helpers such as `modify_indent()`, `modify_missing_symbol()`, `modify_source_note()`, `bold_labels()`, and the developer-facing `modify_table_styling()`). The header-styling sync is skipped when it would be a no-op; header labels, alignment, and hidden status are assigned directly instead of through a row-update round trip; the glue data used for dynamic headers is built only when needed; row-selection expressions are not evaluated for the literal-`NULL`/`TRUE` defaults; the styling-instruction appends avoid the expensive `dplyr::tibble()` construction; and plainly-named `modify_header()`/`modify_spanning_header()`/`modify_fmt_fun()` calls skip the tidyselect machinery. There is no change to the returned tables. (#2453)
@@ -134,7 +138,7 @@
 
 * Added `tbl_split_by_rows()` and `tbl_split_by_columns()` to split tables horizontally (row-wise) and vertically (column-wise). (#2216)
 
-* Users are now allows to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
+* Users are now allowed to specify/override the denominator by passing an integer or a data frame to the `tbl_summary(percent)` argument. (#2239) 
 
 * Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that allows used to label the gtsummary input tables. This is particularly helpful when calling `gather_ard()`, which will return a named list of ARDs where the names are the assigned tbl IDs. (#2224) 
 
@@ -409,7 +413,7 @@ Updates to address regressions in the v2.0.0 release:
 * The {gt} package is now the default printer for all Quarto and R markdown output formats.
   - Previously, when printing a gtsummary table in a Quarto or R markdown document, we would detect the output format and convert to gt, flextable, or kable to provide the best-looking table. The {gt} package has matured and provides lovely tables for nearly all output types, and we have now made {gt} the default table drawing tool for all gtsummary tables. These output types are still supported.
 
-* Previously, if I wanted a single statistic to be reported to additional levels of precision in a `tbl_summary()` table, I would need to specify the precision of every summary statistic for a variable. Now, we can simple update the one statistic we're interested in with a named list of vector: `tbl_summary(digits = age ~ list(sd = 2))`.
+* Previously, if I wanted a single statistic to be reported to additional levels of precision in a `tbl_summary()` table, I would need to specify the precision of every summary statistic for a variable. Now, we can simply update the one statistic we're interested in with a named list of vector: `tbl_summary(digits = age ~ list(sd = 2))`.
 
 * New functions `tbl_ard_summary()` and `tbl_ard_continuous()` have been added. These provide general tools for creating bespoke summary tables. Rather than accepting a data frame, these functions accept an ARD object (Analysis Results Dataset often created with the {cards} or {cardx} packages). The ARD objects align with the emerging [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard). ARDs are now used throughout the package. See below under the "Internal Storage" heading.
 
@@ -431,7 +435,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * In `tbl_regression()`, the `.$model_obj` is no longer returned with the object. The modeling object is, and always has been, available in `.$inputs$x`.
 
-* When the gtsummary package was first written, the gt package was not on CRAN and the version of the package that was available did not have the ability to merge columns. Due to these limitations, the `"ci"` column was added to show the combined `"conf.low"` and `"conf.high"` columns. Column merging in both gt and gtsummary packages has matured over the years, and we are now adopting a more modern approach by using these features. As a result, the `"ci"` column will eventually be dropped from `.$table_body`. By using column merging, the conf.low and conf.high remain numeric and we can to continue to update how these columns are formatted. Review `?deprecated_ci_column` for details.
+* When the gtsummary package was first written, the gt package was not on CRAN and the version of the package that was available did not have the ability to merge columns. Due to these limitations, the `"ci"` column was added to show the combined `"conf.low"` and `"conf.high"` columns. Column merging in both gt and gtsummary packages has matured over the years, and we are now adopting a more modern approach by using these features. As a result, the `"ci"` column will eventually be dropped from `.$table_body`. By using column merging, the conf.low and conf.high remain numeric and we can continue to update how these columns are formatted. Review `?deprecated_ci_column` for details.
 
 ### Documentation
 
@@ -441,7 +445,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Argument `add_p.tbl_summary(adj.vars)` was added to more easily add p-values that are adjusted/stratified by other columns in a data frame. 
 
-* Messaging and checks have been improved when tidyselect is invoked in the package, i.e. when the tilda is used to select variables `age ~ "Patient Age"`. The subset of variables that can be selected is now reduced the variables present in the table. For example, if you have a summary table of patient age (and only patient age), and age is a single column from a data set of many columns and you mis-spell age (`aggge ~ "Patient Age"`), the error message will now ask if you meant `"age"` instead of listing every column in the data set. 
+* Messaging and checks have been improved when tidyselect is invoked in the package, i.e. when the tilda is used to select variables `age ~ "Patient Age"`. The subset of variables that can be selected is now reduced to the variables present in the table. For example, if you have a summary table of patient age (and only patient age), and age is a single column from a data set of many columns and you mis-spell age (`aggge ~ "Patient Age"`), the error message will now ask if you meant `"age"` instead of listing every column in the data set. 
   - Note that as before, you can circumvent tidyselect by using a named list, e.g. `list(age = "Patient Age")`. 
 
 * Added the following methods for calculating differences in `add_difference.tbl_summary()`: Hedge's G, Paired data Cohen's D, and Paired data Hedge's G. All three are powered by the {effectsize} package.
@@ -458,7 +462,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * The values passed in `tbl_summary(value)` are now only checked for columns that are summary type `"dichotomous"`. 
 
-* The gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., are now simplified by wrapping `tidyselect::where()`, which not available when these functions were originally written. Previously, these functions would error if used out of context; they now, instead,select no columns when used out-of-context.
+* The gtsummary selecting functions, e.g. `all_categorical()`, `all_continuous()`, etc., are now simplified by wrapping `tidyselect::where()`, which was not available when these functions were originally written. Previously, these functions would error if used out of context; they now, instead, select no columns when used out-of-context.
 
 * The design-based t-test has been added as possible methods for `add_difference.tbl_svysummary()` and is now the default for continuous variables.
 
@@ -494,7 +498,7 @@ Updates to address regressions in the v2.0.0 release:
  
 * The `add_p(test = ~'aov')` test is now deprecated as identical results can be obtained with `add_p(test = ~'oneway.test', test.args = ~list(var.equal = TRUE))`.
 
-* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the the user pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
+* Previously, `add_p.tbl_summary()` would coerce various data types to classes compatible with some base R tests. For example, we would convert `difftime` classes to general numeric before passing to `wilcox.test()`. We have eliminated type- and class-specific handling in these functions and it is now left to the user to pass data compatible with the functions that calculate the p-values or to create a custom test that wraps `wilcox.test()` and performs the conversion. This change is effective immediately.
      
 * Arguments `modify_header(update)`, `modify_footnote(update)`, `modify_spanning_header(update)`, and `modify_fmt_fun(update)` have been deprecated. Use dynamic dots instead, e.g. `modify_header(...)`, which has been the preferred method for passing updates for a few years.
 
@@ -838,7 +842,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added new function `modify_column_alignment()` to updated column alignment. Function is a wrapper for the more complex `modify_table_styling()` function.
 
-* New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#1091)
+* New function `tbl_strata2()` that passes both the stratified data frame as well as the stratum level to the user function. (#1091)
 
 * Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)
 
@@ -1074,7 +1078,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added new function `add_significance_stars()` adding star indicators to significant estimates and an explanatory footnote.
 
-* Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by one or more variables (#679)
+* Added new function `tbl_strata()`. The function prepares gtsummary tables stratified by one or more variables (#679)
 
 * Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`. Function creates a forest plot of model coefficients via `GGally::ggcoef_plot()`.
 
@@ -1246,7 +1250,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Added `digits=` argument to `style_percent()` (#690)
 
-* Users may now choose which `tbl_regression()` columns to report with a theme element. they can choose among the `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`, `"conf.high"` and `"p.value"` (#637)
+* Users may now choose which `tbl_regression()` columns to report with a theme element. They can choose among the `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`, `"conf.high"` and `"p.value"` (#637)
 
 * Allow users to include the reference value in `tbl_regression()` via a theme element
 
@@ -1483,7 +1487,7 @@ Updates to address regressions in the v2.0.0 release:
 
 * Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
 
-* In `tbl_summary()` passing an ordered factor in the `by=` argument no longer causes as error. (#453)
+* In `tbl_summary()` passing an ordered factor in the `by=` argument no longer causes an error. (#453)
 
 # gtsummary 1.2.6
 

@@ -18,13 +18,13 @@ theme_gtsummary_compact()
 ## Introduction
 
 Analysis Results Datasets (ARDs) are part of the [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard), which aims to facilitate automation, reproducibility, reusability, and traceability of analysis results data (ARD).
-ARDs are highly structured and generalized data frame objects in which store the results of both simple and complex statistical results.
+ARDs are highly structured and generalized data frame objects that store the results of both simple and complex statistical results.
 The {gtsummary} package utilizes ARDs (via the {cards} and {cardx} packages) to perform all calculations.
 
 In this tutorial, we will review how to use the native {gtsummary} functions to build standard and highly customized tables.
 There are two basic approaches to creating summary tables utilizing ARDs: 
 
-1. As ARDs power every calculation and tabulation in the {gtsummary}, ARDs can be extracted from any table created with the `tbl_*()` functions (and their add-ons).
+1. As ARDs power every calculation and tabulation in the {gtsummary} package, ARDs can be extracted from any table created with the `tbl_*()` functions (and their add-ons).
 2. One can also create ARDs first, then pass the ARD to a `tbl_ard_*()` function that will convert the ARD to a summary table.
 
 Both methods will be covered in this tutorial.
@@ -144,7 +144,7 @@ ard_demo
 ```
 
 The optional arguments that can be specified to improve the appearance of the table.
-- `.attributes` summary table will utilize the column label attributes, if available
+- `.attributes` the summary table will utilize the column label attributes, if available
 - `.total_n` the total N is saved internally, and will be used in the printed table.
 - `.overall` the operations will be repeated without `.by` variable
 - `.missing` when missing results are included, users can include missing counts or rates for the variables.
@@ -242,10 +242,10 @@ ard_outcomes |>
 
 #### Final Thoughts
 
-When creating the a custom summary table, you will want to utilize the functions with the `tbl_ard_*()` prefix.
+When creating a custom summary table, you will want to utilize the functions with the `tbl_ard_*()` prefix.
 It will be important to familiarize yourself with the table structures that each of these functions produce, so you know which to use to build your table.
 
-If your table is a combination or mix of table types structures, you can build each part of your table separately and use `tbl_stack()` and `tbl_merge()` to cobble together your final table.
+If your table is a combination or mix of table structures, you can build each part of your table separately and use `tbl_stack()` and `tbl_merge()` to cobble together your final table.
 
 Finally, some tables are entirely unique and would be difficult to create under any framework.
 In these cases, it's often much easier to build a data frame and then convert it to a gtsummary table with `as_gtsummary()`.

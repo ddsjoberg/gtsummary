@@ -2,6 +2,8 @@
 
 S3method(add_ci,tbl_summary)
 S3method(add_ci,tbl_svysummary)
+S3method(add_difference,tbl_ard_hierarchical)
+S3method(add_difference,tbl_hierarchical)
 S3method(add_difference,tbl_summary)
 S3method(add_difference,tbl_svysummary)
 S3method(add_difference_row,tbl_summary)
@@ -273,24 +275,30 @@ export(where)
 export(with_gtsummary_theme)
 export(without_gtsummary_theme)
 import(rlang)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,any_of)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,contains)
-importFrom(dplyr,ends_with)
-importFrom(dplyr,everything)
-importFrom(dplyr,last_col)
-importFrom(dplyr,matches)
-importFrom(dplyr,mutate)
-importFrom(dplyr,num_range)
-importFrom(dplyr,one_of)
-importFrom(dplyr,select)
-importFrom(dplyr,starts_with)
-importFrom(dplyr,vars)
-importFrom(dplyr,where)
-importFrom(glue,glue)
-importFrom(glue,glue_data)
-importFrom(utils,head)
-importFrom(utils,tail)
+importFrom(dplyr,
+  "%>%",
+  across,
+  all_of,
+  any_of,
+  as_tibble,
+  contains,
+  ends_with,
+  everything,
+  last_col,
+  matches,
+  mutate,
+  num_range,
+  one_of,
+  select,
+  starts_with,
+  vars,
+  where
+)
+importFrom(glue,
+  glue,
+  glue_data
+)
+importFrom(utils,
+  head,
+  tail
+)

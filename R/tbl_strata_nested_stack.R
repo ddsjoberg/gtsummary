@@ -73,9 +73,9 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
         map(
           .data$data,
           ~cards::eval_capture_conditions(expr(.tbl_fun(.x))) |>
-            # print errors, if they occured
+            # print errors, if they occurred
             cards::captured_condition_as_error(
-              message = c("The following {type} occured while building a table:", x = "{condition}")
+              message = c("The following {type} occurred while building a table:", x = "{condition}")
             )
         )
     )

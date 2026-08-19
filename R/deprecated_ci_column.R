@@ -16,7 +16,7 @@
 #' As a result, the pre-formatted `"ci"` column will eventually be dropped from `.$table_body`.
 #'
 #' By using column merging, the `conf.low` and `conf.high` remain numeric
-#' and we can to continue to update how these columns are formatted, even after printing the table.
+#' and we can continue to update how these columns are formatted, even after printing the table.
 #'
 #' The `"ci"` column is hidden, meaning that it appears in `.$table_body`, but is not printed.
 #' This means that references to the column in your code will not error, but will likely not have the intended effect.

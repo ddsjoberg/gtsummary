@@ -1,7 +1,7 @@
 #' ARD Hierarchical Table
 #'
 #' @description `r lifecycle::badge('experimental')`\cr
-#' *This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.*
+#' *This is a preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.*
 #'
 #' Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 #'

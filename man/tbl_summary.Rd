@@ -44,7 +44,7 @@ or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}. See below for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
@@ -134,7 +134,7 @@ display.
 
 \section{digits argument}{
 
-The digits argument specifies the the number of digits (or formatting function)
+The digits argument specifies the number of digits (or formatting function)
 statistics are rounded to.
 
 The values passed can either be a single integer, a vector of integers, a
