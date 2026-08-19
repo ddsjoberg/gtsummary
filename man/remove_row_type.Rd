@@ -16,7 +16,7 @@ remove_row_type(
 A gtsummary object}
 
 \item{variables}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Variables to to remove rows from. Default is \code{everything()}}
+Variables to remove rows from. Default is \code{everything()}}
 
 \item{type}{(\code{string})\cr
 Type of row to remove. Must be one of \code{c("header", "reference", "missing", "level", "all")}}

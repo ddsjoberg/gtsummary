@@ -43,7 +43,7 @@ can also be used to specify the order the statistics appear in the table.}
 specifies statistic labels, e.g. \code{list(r.squared = "R2", p.value = "P")}}
 
 \item{fmt_fun}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the the functions used to format/round the glance statistics.
+Specifies the functions used to format/round the glance statistics.
 The default is to round
 the number of observations and degrees of freedom to the nearest integer,
 p-values are styled with \code{style_pvalue()} and the remaining statistics
