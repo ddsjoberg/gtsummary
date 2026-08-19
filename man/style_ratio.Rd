@@ -21,7 +21,7 @@ Numeric vector}
 
 \item{digits}{(\code{integer})\cr
 Integer specifying the number of significant
-digits to display for numbers below 1. Numbers larger than 1 will be be \code{digits + 1}.
+digits to display for numbers below 1. Numbers larger than 1 will be \code{digits + 1}.
 Default is \code{digits = 2}.}
 
 \item{big.mark}{(\code{string})\cr

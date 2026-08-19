@@ -125,12 +125,18 @@ add_overall.tbl_hierarchical_count <- function(x,
 add_overall_generic <- function(x, last, col_label, statistic, digits, call, calling_fun) {
   check_scalar_logical(last)
   check_string(col_label, allow_empty = TRUE)
+  if ("add_overall" %in% names(x$call_list)) {
+    cli::cli_abort(
+      "The {.fun add_overall} function has already been called and cannot be called again.",
+      call = get_cli_abort_call()
+    )
+  }
 
   # checking that input x has a by var
   if (is_empty(x$inputs[["by"]])) {
     cli::cli_inform(
       c("Cannot add an overall column with {.fun add_overall} when original table
-         is not statified with {.code {calling_fun}(by)}.",
+         is not stratified with {.code {calling_fun}(by)}.",
         i = "Returning table unaltered.")
     )
     return(x)
@@ -173,7 +179,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label, calling_fun) {
   )) {
     cli::cli_abort(
       c(
-        "An error occured in {.fun add_overall}, and the overall statistic cannot be added.",
+        "An error occurred in {.fun add_overall}, and the overall statistic cannot be added.",
         "Have variable labels changed since the original call to {.fun {calling_fun}}?"
       ),
       call = get_cli_abort_call()

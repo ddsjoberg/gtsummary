@@ -728,7 +728,7 @@ check_empty <- function(x, variable = get("variable", envir = caller_env()),
     \(.x) {
       if (!is_empty(dots[[.x]])) {
         cli::cli_abort(
-          message = "The {.arg {.x}} argument is not used for the test selected for of variable {.val {variable}}.",
+          message = "The {.arg {.x}} argument is not used for the test selected for variable {.val {variable}}.",
           call = call
         )
       }

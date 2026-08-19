@@ -129,7 +129,7 @@ as_kable_extra <- function(x,
       .init = kable_extra_calls
     )
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ----------------------------------------------
   cards::process_selectors(
     data = vec_to_df(names(kable_extra_calls)),
     include = {{ include }}

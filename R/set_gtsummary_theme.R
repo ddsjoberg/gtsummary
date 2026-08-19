@@ -88,7 +88,7 @@ set_gtsummary_theme <- function(x, quiet) {
   if (!all(names(x) %in% df_theme_elements$name)) {
     not_name <- names(x) %>% setdiff(df_theme_elements$name)
     cli::cli_abort(
-      "The following names of {.arg x} are not accepted theme elemets: {.val {not_name}}.",
+      "The following names of {.arg x} are not accepted theme elements: {.val {not_name}}.",
       call = get_cli_abort_call()
     )
   }
@@ -148,7 +148,7 @@ with_gtsummary_theme <- function(x, expr,
 }
 
 .msg_ignored_elements <- function(x, current_theme, msg) {
-  # if no message, dont print one!
+  # if no message, don't print one!
   if (is.null(msg)) {
     return(invisible())
   }
@@ -211,7 +211,7 @@ check_gtsummary_theme <- function(x) {
   else if (!all(names(x) %in% df_theme_elements$name)) {
     not_name <- names(x) %>% setdiff(df_theme_elements$name)
     cli::cli_warn(
-      "The following names of {.arg x} are not accepted theme elemets: {.val {not_name}}."
+      "The following names of {.arg x} are not accepted theme elements: {.val {not_name}}."
     )
   }
 

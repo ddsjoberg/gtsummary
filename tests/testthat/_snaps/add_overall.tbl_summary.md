@@ -3,7 +3,7 @@
     Code
       tbl <- add_overall(tbl_summary(mtcars))
     Message
-      Cannot add an overall column with `add_overall()` when original table is not statified with `tbl_summary(by)`.
+      Cannot add an overall column with `add_overall()` when original table is not stratified with `tbl_summary(by)`.
       i Returning table unaltered.
 
 ---
@@ -13,6 +13,14 @@
         "continuous2"), label = mpg ~ "UPDATED!"))
     Condition
       Error in `add_overall()`:
-      ! An error occured in `add_overall()`, and the overall statistic cannot be added.
+      ! An error occurred in `add_overall()`, and the overall statistic cannot be added.
       Have variable labels changed since the original call to `tbl_summary()`?
+
+---
+
+    Code
+      add_overall(add_overall(tbl_summary(trial, include = age, by = trt)))
+    Condition
+      Error in `add_overall()`:
+      ! The `add_overall()` function has already been called and cannot be called again.
 
