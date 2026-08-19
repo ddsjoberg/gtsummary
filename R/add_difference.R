@@ -2,6 +2,7 @@
 #'
 #' - [`add_difference.tbl_summary()`]
 #' - [`add_difference.tbl_svysummary()`]
+#' - [`add_difference.tbl_hierarchical()`]
 #'
 #' @param x (`gtsummary`)\cr
 #'   Object with class 'gtsummary'

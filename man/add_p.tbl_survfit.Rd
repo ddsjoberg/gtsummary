@@ -60,7 +60,7 @@ and a second test of the \emph{G-rho} family.
 \section{Note}{
 
 
-To calculate the p-values, the formula is re-constructed from the the call in the
+To calculate the p-values, the formula is re-constructed from the call in the
 original \code{survfit()} object.
 When the \code{survfit()} object is created a for loop, \code{lapply()}, \code{purrr::map()}
 setting the call \emph{may not} reflect the true formula which may result in an
