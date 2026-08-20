@@ -9,15 +9,15 @@ save_flex_docx(
   path,
   body = function(x) flextable::delete_part(x, part = "footer"),
   footer = function(x) {
-     x <-
-    flextable::add_footer_lines(flextable::delete_part(flextable::delete_part(x, part =
-    "header"), part = "body"), values = flextable::as_paragraph("Page ",
-    flextable::as_word_field("PAGE"), " of ", flextable::as_word_field("NUMPAGES")))
-    
-    flextable::set_table_properties(flextable::align(x, i = flextable::nrow_part(x,
-    "footer"), part = "footer", align = "right"), layout = "autofit", width = 1)
+     x \%>\% flextable::delete_part(part = "header") \%>\%
+    flextable::delete_part(part = "body") \%>\% flextable::add_footer_lines(values =
+    flextable::as_paragraph("Page ", flextable::as_word_field("PAGE"), " of ",
+    flextable::as_word_field("NUMPAGES"))) \%>\% flextable::align(i =
+    flextable::nrow_part(x, "footer"), part = "footer", align = "right") \%>\%
+    flextable::set_table_properties(layout = "autofit", width = 1)
  },
   header = NULL,
+  template = NULL,
   pr_section = NULL,
   ...
 )
@@ -42,8 +42,15 @@ to the source flextable (returning a \code{flextable} or \code{NULL}), a static
 \code{flextable}, or \code{NULL} for nothing. The footer default keeps only the
 table's footnote region (deleting the header and body parts), appends a
 right-aligned \code{"Page X of Y"} line of live Word fields
-(\code{flextable::as_word_field()}), and autofits it to the page width. The header
+(\code{flextable::as_word_field()}), and fits it to the page width. The header
 default is \code{NULL} (the caption stays in the body with the table).}
+
+\item{template}{(\code{string})\cr
+an optional file path to a Word (\code{.docx}) document used as the base for the
+output. Its page setup (size, orientation, margins) and body content are
+carried through; its header/footer text is not (those regions are managed by
+\code{save_flex_docx()}). See the \emph{Using a Word template} section. Default is
+\code{NULL}.}
 
 \item{pr_section}{(\code{officer::prop_section})\cr
 an optional \code{\link[officer:prop_section]{officer::prop_section()}} object used as the base Word section,
@@ -70,7 +77,8 @@ flextable package.
 
 \strong{This function is highly experimental.} Its arguments and behavior are
 likely to change in future releases, and it may eventually be spun off into a
-separate package. Use with that in mind.
+separate package (as this function works with any flextable object in
+addition to gtsummary tables). Use with that in mind.
 
 The table is written into the \strong{body} of the Word document. The \code{body},
 \code{header}, and \code{footer} arguments are transformers applied to the (source)
@@ -90,8 +98,31 @@ A collection of tables is also accepted: a \code{tbl_split} object (from
 flextables. Each table is written to its own Word section (one table per page)
 with the \code{body}/\code{header}/\code{footer} transformers applied independently to each.
 }
+\section{Using a Word template}{
+
+
+The \code{template} argument accepts a path to a Word (\code{.docx}) document used as the
+base for the output. Its \strong{page setup} (size, orientation, margins, section
+columns) and any \strong{body content} (e.g. a cover page or introductory text) are
+carried through, with the table written into the body after that content.
+
+\code{save_flex_docx()} \strong{manages the Word header and footer regions itself} (via
+the \code{header}/\code{footer} arguments), so \strong{a template's own header/footer text is
+not carried through} — whatever \code{save_flex_docx()} places in a region (or
+leaves empty) takes precedence and blanks out the template's text there. This
+is intentional: header/footer text in a template and table placement in the
+header/footer are \strong{not meant to be mixed}. Because the default \code{footer}
+places a table, a template's header/footer text is superseded by default. Put
+the content you want in the header/footer into the \code{header}/\code{footer} arguments
+rather than into the template.
+}
+
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (FALSE && gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
+theme_gtsummary_compact()
+
+# Example 1 ----------------------------------
+# Default behavior is to place the footnote in the footer and add 'Page X of Y'
 tbl <-
   trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
@@ -108,9 +139,36 @@ save_flex_docx(
   footer = NULL
 )
 
-# place a static flextable in the page header
-hdr <- flextable::flextable(data.frame(x = "Confidential"))
-save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = hdr)
+# Example 2 ----------------------------------
+# This example places a header typically found in the pharmaceutical space,
+# including protocol number, table title/number, and sub-population label.
+
+# place a static report header (with a live "Page X of Y" field) in the header
+header_ft <-
+  data.frame(
+    col1 = c("Protocol: ABC123", NA),
+    col2 = c("Table 14.3.6 Adverse Event Rates by SOC and PT", "Safety Population"),
+    col3 = c(NA_character_, NA_character_),
+    stringsAsFactors = FALSE
+  ) |>
+  flextable::flextable() |>
+  flextable::delete_part(part = "header") |>
+  flextable::align(j = 1, align = "left", part = "body") |>
+  flextable::align(j = 2, align = "center", part = "body") |>
+  flextable::align(j = 3, align = "right", part = "body") |>
+  flextable::compose(
+    i = 1, j = 3,
+    value = flextable::as_paragraph(
+      "Page ", flextable::as_word_field("PAGE"),
+      " of ", flextable::as_word_field("NUMPAGES")
+    ),
+    part = "body"
+  ) |>
+  flextable::border_remove() |>
+  flextable::fontsize(size = 8, part = "all") |>
+  flextable::padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+  flextable::set_table_properties(layout = "autofit", width = 1)
+save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = header_ft)
 
 # a split table is written with one table per section/page
 trial |>
@@ -127,6 +185,8 @@ save_flex_docx(
     page_size = officer::page_size(orient = "landscape")
   )
 )
+
+reset_gtsummary_theme()
 \dontshow{\}) # examplesIf}
 }
 \seealso{

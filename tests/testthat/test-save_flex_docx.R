@@ -20,6 +20,39 @@ read_docx_file <- function(path, file) {
   paste(readLines(con, warn = FALSE), collapse = "")
 }
 
+# build a Word template with header/footer text and (optionally) landscape orientation
+make_template <- function(path, landscape = FALSE) {
+  section_args <- list(
+    header_default = officer::block_list(officer::fpar(officer::ftext("TEMPLATE HEADER"))),
+    footer_default = officer::block_list(officer::fpar(officer::ftext("TEMPLATE FOOTER")))
+  )
+  if (isTRUE(landscape)) {
+    section_args$page_size <- officer::page_size(orient = "landscape")
+  }
+  doc <- officer::body_add_par(officer::read_docx(), "template body", style = "Normal")
+  doc <- officer::body_set_default_section(doc, do.call(officer::prop_section, section_args))
+  print(doc, target = path)
+  path
+}
+
+# read the footer part referenced by the document's last section
+read_referenced_footer <- function(path) {
+  dir <- withr::local_tempdir()
+  utils::unzip(path, exdir = dir)
+  doc <- paste(readLines(file.path(dir, "word", "document.xml"), warn = FALSE), collapse = "")
+  sect <- regmatches(doc, gregexpr("<w:sectPr.*?</w:sectPr>", doc))[[1]]
+  last <- sect[length(sect)]
+  m <- regmatches(last, regexpr('footerReference[^>]*r:id="[^"]+"', last))
+  if (length(m) == 0) {
+    return(NA_character_)
+  }
+  rid <- sub('.*r:id="([^"]+)".*', "\\1", m)
+  rels <- paste(readLines(file.path(dir, "word", "_rels", "document.xml.rels"), warn = FALSE), collapse = "")
+  rel <- regmatches(rels, regexpr(paste0('Id="', rid, '"[^>]*Target="[^"]+"'), rels))
+  tgt <- sub('.*Target="([^"]+)".*', "\\1", rel)
+  paste(readLines(file.path(dir, "word", tgt), warn = FALSE), collapse = "")
+}
+
 tbl <-
   trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
@@ -350,4 +383,97 @@ test_that("save_flex_docx-lst:pr_section theme element applies and the argument 
   body2 <- read_docx_part(path2, "body")
   expect_match(body2, "w:top=\"1440\"")
   expect_no_match(body2, "w:top=\"720\"")
+})
+
+# template --------------------------------------------------------------------
+test_that("save_flex_docx(template) carries page geometry and body content through", {
+  template <- make_template(withr::local_tempfile(fileext = ".docx"), landscape = TRUE)
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(tbl, path = path, template = template)
+
+  body <- read_docx_part(path, "body")
+  # the template's landscape page setup and body content are carried through
+  expect_match(body, "w:orient=\"landscape\"")
+  expect_match(body, "template body")
+  expect_s3_class(officer::read_docx(path), "rdocx")
+})
+
+test_that("save_flex_docx(template) footer table supersedes the template footer text", {
+  template <- make_template(withr::local_tempfile(fileext = ".docx"))
+  path <- withr::local_tempfile(fileext = ".docx")
+  save_flex_docx(tbl, path = path, template = template)
+
+  # the referenced footer is our table (page field), not the template's text
+  referenced <- read_referenced_footer(path)
+  expect_match(referenced, "PAGE")
+  expect_no_match(referenced, "TEMPLATE FOOTER")
+})
+
+test_that("save_flex_docx(template) works with a collection", {
+  template <- make_template(withr::local_tempfile(fileext = ".docx"), landscape = TRUE)
+  path <- withr::local_tempfile(fileext = ".docx")
+
+  expect_invisible(save_flex_docx(split_obj, path = path, template = template))
+  body <- read_docx_part(path, "body")
+  # one section per table, template landscape geometry on each
+  expect_equal(length(gregexpr("nextPage", body)[[1]]), length(split_obj))
+  expect_match(body, "w:orient=\"landscape\"")
+  expect_s3_class(officer::read_docx(path), "rdocx")
+})
+
+test_that("save_flex_docx(template) rejects a non-existent file", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  expect_error(
+    save_flex_docx(tbl, path = path, template = tempfile(fileext = ".docx")),
+    "template"
+  )
+})
+
+# theme elements for body/footer/header/template ------------------------------
+test_that("save_flex_docx-arg:header theme element sets the default; argument overrides", {
+  # theme sets a static header table
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-arg:header" = flextable::flextable(data.frame(x = "THEME HEADER"))),
+    save_flex_docx(tbl, path = path)
+  )
+  expect_match(read_docx_part(path, "header"), "THEME HEADER")
+
+  # an explicit argument overrides the theme element
+  path2 <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-arg:header" = flextable::flextable(data.frame(x = "THEME HEADER"))),
+    save_flex_docx(tbl, path = path2, header = NULL)
+  )
+  expect_false("word/header1.xml" %in% unzip(path2, list = TRUE)$Name)
+})
+
+test_that("save_flex_docx-arg:footer theme element sets the default footer", {
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-arg:footer" = flextable::flextable(data.frame(x = "THEME FOOTER"))),
+    save_flex_docx(tbl, path = path)
+  )
+  expect_match(read_docx_part(path, "footer"), "THEME FOOTER")
+})
+
+test_that("save_flex_docx-arg:body theme element transforms the body", {
+  # a body transformer that leaves the footnotes in the table body
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-arg:body" = function(x) x, "save_flex_docx-arg:footer" = NULL),
+    save_flex_docx(tbl, path = path, footer = NULL)
+  )
+  # identity body keeps the footnote text in the document body
+  expect_match(read_docx_part(path, "body"), "Wilcoxon rank sum test")
+})
+
+test_that("save_flex_docx-arg:template theme element sets the default template", {
+  template <- make_template(withr::local_tempfile(fileext = ".docx"), landscape = TRUE)
+  path <- withr::local_tempfile(fileext = ".docx")
+  with_gtsummary_theme(
+    list("save_flex_docx-arg:template" = template),
+    save_flex_docx(tbl, path = path)
+  )
+  expect_match(read_docx_part(path, "body"), "w:orient=\"landscape\"")
 })
