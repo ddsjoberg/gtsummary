@@ -158,7 +158,7 @@ knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
 
 Review even more output options in the **[table gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
-## gtsummary for Clinical & Pharmaceutical Research
+## Clinical & Pharmaceutical Research
 
 {gtsummary} is a natural fit for clinical trial reporting. Below we highlight two features that clinical and pharmaceutical teams rely on: safety tables and built-in QC via the ARD backend. Both examples use the CDISC pilot data (`ADAE`/`ADSL`) shipped with the [{cards}](https://pharmaverse.github.io/cards/) package.
 
@@ -196,12 +196,17 @@ knitr::include_graphics("man/figures/README-tbl_ae-1.png")
 
 ### Built-in QC with the ARD Backend
 
-Because every {gtsummary} table is computed from an **Analysis Results Dataset (ARD)**—a structured, machine-readable record of every statistic, part of the [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard)—you can extract the numbers behind any table with [`gather_ard()`](https://www.danieldsjoberg.com/gtsummary/reference/gather_ard.html). Each reported result becomes one row, making it simple to QC results, trace a value back to its calculation, or compare against an independently double-programmed dataset.
+Because every {gtsummary} table is computed from an **Analysis Results Dataset (ARD)**—a structured, machine-readable record of every statistic, part of the [CDISC Analysis Results Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard)—you can extract the numbers behind any table with [`gather_ard()`](https://www.danieldsjoberg.com/gtsummary/reference/gather_ard.html). Each statistic becomes one row, making it simple to QC results, trace a value back to its calculation, or compare against an independently double-programmed dataset.
+
+For example, the adverse event counts behind the table above are stored as individual records—one for each event count (`n`), denominator (`N`), and percentage (`p`) in every treatment arm:
 
 ```{r ard_qc, include = TRUE, message = FALSE}
 tbl_ae |>
   gather_ard() |>
-  bind_ard()
+  bind_ard() |>
+  # keep the adverse event term counts and the columns identifying each statistic
+  dplyr::filter(variable == "AETERM") |>
+  dplyr::select(group1_level, variable_level, stat_name, stat)
 ```
 
 For the full CDISC/ARD workflow—including the `tbl_ard_*()` constructors that build tables directly from an ARD—see the [**ARD-first Tables**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html) article.

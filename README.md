@@ -184,7 +184,7 @@ tbl_merge_ex1 <-
 Review even more output options in the **[table
 gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
-## gtsummary for Clinical & Pharmaceutical Research
+## Clinical & Pharmaceutical Research
 
 {gtsummary} is a natural fit for clinical trial reporting. Below we
 highlight two features that clinical and pharmaceutical teams rely on:
@@ -230,31 +230,35 @@ statistic, part of the [CDISC Analysis Results
 Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard)—you
 can extract the numbers behind any table with
 [`gather_ard()`](https://www.danieldsjoberg.com/gtsummary/reference/gather_ard.html).
-Each reported result becomes one row, making it simple to QC results,
-trace a value back to its calculation, or compare against an
-independently double-programmed dataset.
+Each statistic becomes one row, making it simple to QC results, trace a
+value back to its calculation, or compare against an independently
+double-programmed dataset.
+
+For example, the adverse event counts behind the table above are stored
+as individual records—one for each event count (`n`), denominator (`N`),
+and percentage (`p`) in every treatment arm:
 
 ``` r
 tbl_ae |>
   gather_ard() |>
-  bind_ard()
-#> # An ARD data frame: 63 × 15
-#>    group1 group1_level group2 group2_level variable         variable_level      
-#>    <chr>  <list>       <chr>  <list>       <chr>            <list>              
-#>  1 <NA>   <NULL>       <NA>   <NULL>       TRTA             Placebo             
-#>  2 <NA>   <NULL>       <NA>   <NULL>       TRTA             Placebo             
-#>  3 <NA>   <NULL>       <NA>   <NULL>       TRTA             Placebo             
-#>  4 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline High Dose
-#>  5 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline High Dose
-#>  6 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline High Dose
-#>  7 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline Low Dose 
-#>  8 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline Low Dose 
-#>  9 <NA>   <NULL>       <NA>   <NULL>       TRTA             Xanomeline Low Dose 
-#> 10 TRTA   Placebo      <NA>   <NULL>       ..ard_hierarchi… TRUE                
-#> # ℹ 53 more rows
-#> # ℹ 9 more variables: context <chr>, stat_name <chr>, stat_label <chr>,
-#> #   stat <list>, stat_fmt <list>, fmt_fun <list>, warning <list>, error <list>,
-#> #   gts_column <chr>
+  bind_ard() |>
+  # keep the adverse event term counts and the columns identifying each statistic
+  dplyr::filter(variable == "AETERM") |>
+  dplyr::select(group1_level, variable_level, stat_name, stat)
+#> # An ARD data frame: 27 × 4
+#>    group1_level         variable_level            stat_name    stat
+#>    <list>               <list>                    <chr>      <list>
+#>  1 Placebo              DIARRHOEA                 n          9     
+#>  2 Placebo              DIARRHOEA                 N         86     
+#>  3 Placebo              DIARRHOEA                 p          0.105 
+#>  4 Xanomeline High Dose DIARRHOEA                 n          4     
+#>  5 Xanomeline High Dose DIARRHOEA                 N         84     
+#>  6 Xanomeline High Dose DIARRHOEA                 p          0.0476
+#>  7 Xanomeline Low Dose  DIARRHOEA                 n          5     
+#>  8 Xanomeline Low Dose  DIARRHOEA                 N         84     
+#>  9 Xanomeline Low Dose  DIARRHOEA                 p          0.0595
+#> 10 Placebo              APPLICATION SITE ERYTHEMA n          3     
+#> # ℹ 17 more rows
 ```
 
 For the full CDISC/ARD workflow—including the `tbl_ard_*()` constructors
