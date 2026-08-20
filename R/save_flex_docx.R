@@ -7,7 +7,8 @@
 #'
 #' **This function is highly experimental.** Its arguments and behavior are
 #' likely to change in future releases, and it may eventually be spun off into a
-#' separate package. Use with that in mind.
+#' separate package (as this function works with any flextable object in
+#' addition to gtsummary tables). Use with that in mind.
 #'
 #' The table is written into the **body** of the Word document. The `body`,
 #' `header`, and `footer` arguments are transformers applied to the (source)
@@ -44,8 +45,14 @@
 #'   `flextable`, or `NULL` for nothing. The footer default keeps only the
 #'   table's footnote region (deleting the header and body parts), appends a
 #'   right-aligned `"Page X of Y"` line of live Word fields
-#'   (`flextable::as_word_field()`), and autofits it to the page width. The header
+#'   (`flextable::as_word_field()`), and fits it to the page width. The header
 #'   default is `NULL` (the caption stays in the body with the table).
+#' @param template (`string`)\cr
+#'   an optional file path to a Word (`.docx`) document used as the base for the
+#'   output. Its page setup (size, orientation, margins) and body content are
+#'   carried through; its header/footer text is not (those regions are managed by
+#'   `save_flex_docx()`). See the *Using a Word template* section. Default is
+#'   `NULL`.
 #' @param pr_section (`officer::prop_section`)\cr
 #'   an optional [`officer::prop_section()`] object used as the base Word section,
 #'   giving fine-grained control over page margins, page size, orientation, and
@@ -65,7 +72,28 @@
 #'
 #' @seealso [`as_flex_table()`]
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("flextable", "officer"))
+#' @section Using a Word template:
+#'
+#' The `template` argument accepts a path to a Word (`.docx`) document used as the
+#' base for the output. Its **page setup** (size, orientation, margins, section
+#' columns) and any **body content** (e.g. a cover page or introductory text) are
+#' carried through, with the table written into the body after that content.
+#'
+#' `save_flex_docx()` **manages the Word header and footer regions itself** (via
+#' the `header`/`footer` arguments), so **a template's own header/footer text is
+#' not carried through** — whatever `save_flex_docx()` places in a region (or
+#' leaves empty) takes precedence and blanks out the template's text there. This
+#' is intentional: header/footer text in a template and table placement in the
+#' header/footer are **not meant to be mixed**. Because the default `footer`
+#' places a table, a template's header/footer text is superseded by default. Put
+#' the content you want in the header/footer into the `header`/`footer` arguments
+#' rather than into the template.
+#'
+#' @examplesIf FALSE && gtsummary:::is_pkg_installed(c("flextable", "officer"))
+#' theme_gtsummary_compact()
+#'
+#' # Example 1 ----------------------------------
+#' # Default behavior is to place the footnote in the footer and add 'Page X of Y'
 #' tbl <-
 #'   trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>
@@ -82,9 +110,36 @@
 #'   footer = NULL
 #' )
 #'
-#' # place a static flextable in the page header
-#' hdr <- flextable::flextable(data.frame(x = "Confidential"))
-#' save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = hdr)
+#' # Example 2 ----------------------------------
+#' # This example places a header typically found in the pharmaceutical space,
+#' # including protocol number, table title/number, and sub-population label.
+#'
+#' # place a static report header (with a live "Page X of Y" field) in the header
+#' header_ft <-
+#'   data.frame(
+#'     col1 = c("Protocol: ABC123", NA),
+#'     col2 = c("Table 14.3.6 Adverse Event Rates by SOC and PT", "Safety Population"),
+#'     col3 = c(NA_character_, NA_character_),
+#'     stringsAsFactors = FALSE
+#'   ) |>
+#'   flextable::flextable() |>
+#'   flextable::delete_part(part = "header") |>
+#'   flextable::align(j = 1, align = "left", part = "body") |>
+#'   flextable::align(j = 2, align = "center", part = "body") |>
+#'   flextable::align(j = 3, align = "right", part = "body") |>
+#'   flextable::compose(
+#'     i = 1, j = 3,
+#'     value = flextable::as_paragraph(
+#'       "Page ", flextable::as_word_field("PAGE"),
+#'       " of ", flextable::as_word_field("NUMPAGES")
+#'     ),
+#'     part = "body"
+#'   ) |>
+#'   flextable::border_remove() |>
+#'   flextable::fontsize(size = 8, part = "all") |>
+#'   flextable::padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+#'   flextable::set_table_properties(layout = "autofit", width = 1)
+#' save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = header_ft)
 #'
 #' # a split table is written with one table per section/page
 #' trial |>
@@ -101,27 +156,29 @@
 #'     page_size = officer::page_size(orient = "landscape")
 #'   )
 #' )
+#'
+#' reset_gtsummary_theme()
 save_flex_docx <- function(x,
                            path,
                            body = \(x) flextable::delete_part(x, part = "footer"),
                            footer = \(x) {
-                             x <- x |>
-                               flextable::delete_part(part = "header") |>
-                               flextable::delete_part(part = "body") |>
+                             x %>%
+                               flextable::delete_part(part = "header") %>%
+                               flextable::delete_part(part = "body") %>%
                                flextable::add_footer_lines(
                                  values = flextable::as_paragraph(
                                    "Page ", flextable::as_word_field("PAGE"),
                                    " of ", flextable::as_word_field("NUMPAGES")
                                  )
-                               )
-                             x |>
+                               ) %>%
                                flextable::align(
                                  i = flextable::nrow_part(x, "footer"),
                                  part = "footer", align = "right"
-                               ) |>
+                               ) %>%
                                flextable::set_table_properties(layout = "autofit", width = 1)
                            },
                            header = NULL,
+                           template = NULL,
                            pr_section = NULL,
                            ...) {
   set_cli_abort_call()
@@ -130,6 +187,14 @@ save_flex_docx <- function(x,
   check_dots_empty()
   check_not_missing(x)
   check_not_missing(path)
+
+  # resolve argument defaults from theme elements when the caller did not supply
+  # them (an explicitly passed argument always wins).
+  if (missing(body)) body <- get_theme_element("save_flex_docx-arg:body", default = body)
+  if (missing(footer)) footer <- get_theme_element("save_flex_docx-arg:footer", default = footer)
+  if (missing(header)) header <- get_theme_element("save_flex_docx-arg:header", default = header)
+  if (missing(template)) template <- get_theme_element("save_flex_docx-arg:template", default = template)
+
   # accepted: a gtsummary table, a tbl_split, a flextable, or a plain list of
   # flextables. a tbl_split is itself a list but is matched by its class first.
   is_flextable_list <-
@@ -149,6 +214,15 @@ save_flex_docx <- function(x,
   .flex_docx_check_body(body)
   .flex_docx_check_region(header, "header")
   .flex_docx_check_region(footer, "footer")
+  if (!is.null(template)) {
+    check_string(template)
+    if (!file.exists(template)) {
+      cli::cli_abort(
+        "The {.arg template} file does not exist: {.file {template}}.",
+        call = get_cli_abort_call()
+      )
+    }
+  }
   check_pkg_installed(c("flextable", "officer"))
 
   # resolve `pr_section` with argument-over-theme precedence, then validate. only
@@ -177,6 +251,7 @@ save_flex_docx <- function(x,
         body = body,
         header = header,
         footer = footer,
+        template = template,
         pr_section = pr_section
       )
     )
@@ -184,6 +259,14 @@ save_flex_docx <- function(x,
 
   # single gtsummary table or flextable ----------------------------------------
   built <- .flex_docx_build_one(x, body = body, header = header, footer = footer)
+
+  # when a template is supplied, build the document on top of it (its page setup
+  # and any header/footer furniture are carried through; a placed table overrides
+  # the corresponding region).
+  if (!is.null(template)) {
+    .flex_docx_write_one_template(built, path = path, template = template, pr_section = pr_section)
+    return(invisible(x))
+  }
 
   # write the Word file. a section is supplied when a region has content, or when
   # the caller passed a `pr_section` (so custom geometry applies even with no
@@ -211,8 +294,14 @@ save_flex_docx <- function(x,
 #' @return the original collection `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.save_flex_docx_collection <- function(x, path, body, header, footer, pr_section = NULL) {
-  doc <- officer::read_docx()
+.save_flex_docx_collection <- function(x, path, body, header, footer,
+                                       template = NULL, pr_section = NULL) {
+  doc <- if (is.null(template)) officer::read_docx() else officer::read_docx(path = template)
+
+  # when a template is supplied and the caller gave no `pr_section`, carry the
+  # template's page geometry across every section.
+  base_section <- pr_section %||%
+    if (!is.null(template)) .flex_docx_section_from_template(doc) else NULL
 
   for (i in seq_along(x)) {
     built <- .flex_docx_build_one(x[[i]], body = body, header = header, footer = footer)
@@ -225,7 +314,7 @@ save_flex_docx <- function(x,
       .flex_docx_prop_section(
         built$header_ft,
         built$footer_ft,
-        base = pr_section,
+        base = base_section,
         type = "nextPage"
       )
 
@@ -244,6 +333,67 @@ save_flex_docx <- function(x,
   print(doc, target = path)
 
   invisible(x)
+}
+
+#' Write a single table to a Word file on top of a template document
+#'
+#' Reads the template, adds the body flextable, and sets the default section with
+#' the resolved header/footer content. The template's page setup (and any
+#' header/footer furniture) is carried through; when a table is placed in a
+#' region, that region's default is set, which supersedes the template's content
+#' for that region.
+#'
+#' @param built (`list`)\cr the value from `.flex_docx_build_one()`
+#' @inheritParams save_flex_docx
+#' @return `NULL`, invisibly
+#' @keywords internal
+#' @noRd
+.flex_docx_write_one_template <- function(built, path, template, pr_section) {
+  doc <- officer::read_docx(path = template)
+  doc <- flextable::body_add_flextable(doc, built$body_ft)
+  base_section <- pr_section %||% .flex_docx_section_from_template(doc)
+  doc <- officer::body_set_default_section(
+    doc,
+    .flex_docx_prop_section(built$header_ft, built$footer_ft, base = base_section)
+  )
+  print(doc, target = path)
+
+  invisible(NULL)
+}
+
+#' Build an `officer::prop_section()` carrying a template's page geometry
+#'
+#' Reads a template document's page size, orientation, and margins via
+#' [`officer::docx_dim()`] and returns a `prop_section` reproducing them (with no
+#' header/footer defaults). Used when a `template` is supplied without a
+#' `pr_section`: the default section must be (re)set for officer to keep the
+#' template's header/footer regions, and this preserves the template's geometry
+#' rather than resetting it to the officer defaults.
+#'
+#' @param doc (`rdocx`)\cr a document from [`officer::read_docx()`]
+#' @return an `officer::prop_section` object
+#' @keywords internal
+#' @noRd
+.flex_docx_section_from_template <- function(doc) {
+  dd <- officer::docx_dim(doc)
+  # `docx_dim()` reports the (oriented) page dims in inches; `page_size()` with
+  # `orient` swaps width/height itself, so feed it the portrait dims (short side
+  # as width, long side as height) and let `orient` apply the rotation.
+  short <- min(dd$page[["width"]], dd$page[["height"]])
+  long <- max(dd$page[["width"]], dd$page[["height"]])
+  m <- dd$margins
+  officer::prop_section(
+    page_size = officer::page_size(
+      width = short,
+      height = long,
+      orient = if (isTRUE(dd$landscape)) "landscape" else "portrait"
+    ),
+    page_margins = officer::page_mar(
+      top = m[["top"]], bottom = m[["bottom"]],
+      left = m[["left"]], right = m[["right"]],
+      header = m[["header"]], footer = m[["footer"]]
+    )
+  )
 }
 
 #' Build the body/header/footer flextables for one table
