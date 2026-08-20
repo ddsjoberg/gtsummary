@@ -96,33 +96,33 @@ negative values indicate a reduction (i.e. an improvement).
 - Added
   [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)
   to save a gtsummary table or a flextable to a Word (`.docx`) file via
-  flextable. The `header` and `footer` arguments place the table caption
-  in the Word document’s page header and the footnotes, source notes,
-  and abbreviations in the page footer. The `page` and `page_location`
-  arguments add a page-number line (e.g. `"Page {PAGE} of {NUMPAGES}"`)
-  to a chosen header/footer region and alignment. A collection of tables
-  is also accepted—a `tbl_split` object (from
+  flextable. The table is written to the document body, and the `body`,
+  `footer`, and `header` arguments are transformer functions (or static
+  flextables) that build what is placed in the body and in the Word page
+  footer/header regions. By default the table’s footnote region
+  (footnotes, source notes, abbreviations) is moved out of the body and
+  into the Word footer as a flextable, followed by a right-aligned
+  `"Page X of Y"` line of live Word fields. A collection of tables—a
+  `tbl_split` object (from
   [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)/[`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md))
-  or a plain list of flextables—writing each table to its own Word
-  section and page. For a flextable, its caption
-  ([`flextable::set_caption()`](https://davidgohel.github.io/flextable/reference/set_caption.html))
-  is relocated to the Word header and its footer part
-  ([`flextable::add_footer_lines()`](https://davidgohel.github.io/flextable/reference/add_footer_lines.html))
-  to the Word footer. The caption, footnotes, source notes,
-  abbreviations, and page-number line in the Word header/footer match
-  the table body font (family and size) instead of the Word template
-  default. Each Word region also inherits the styling applied to the
-  corresponding flextable part, so
-  e.g. `flextable::fontsize(size = 6, part = "footer")` yields a size-6
-  Word footer. The `pr_section` argument (and the
-  `save_flex_docx-lst:pr_section` theme element) accepts an
+  or a plain list of flextables—is also accepted, writing each table to
+  its own Word section and page with the transformers applied per table.
+  A `template` argument accepts a path to a Word (`.docx`) template
+  whose page setup and body content are carried through (its
+  header/footer regions are managed by
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)).
+  The `pr_section` argument accepts an
   [`officer::prop_section()`](https://davidgohel.github.io/officer/reference/prop_section.html)
-  object for fine-grained control of the Word section—page margins, page
-  size, orientation, and columns—while the header/footer regions remain
-  managed by
-  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md);
-  for a collection the same section is applied to every table with the
-  paging `type` fixed to `"nextPage"`.
+  object for fine-grained control of the Word section geometry—page
+  margins, page size, orientation, and columns—while
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md)
+  manages the header/footer regions; for a collection the same geometry
+  is applied to every table with the paging `type` fixed to
+  `"nextPage"`. The defaults of the `body`, `footer`, `header`, and
+  `template` arguments, and the base `pr_section`, are all configurable
+  via theme elements (`save_flex_docx-arg:body`,
+  `save_flex_docx-arg:footer`, `save_flex_docx-arg:header`,
+  `save_flex_docx-arg:template`, and `save_flex_docx-lst:pr_section`).
 
 - Added
   [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_difference.md)

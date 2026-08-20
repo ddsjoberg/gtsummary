@@ -182,6 +182,8 @@ input for the argument.
 | `add_q-arg:method`, `add_q-arg:pvalue_fun` |
 | add_stat_label |
 | `add_stat_label-arg:location` |
+| save_flex_docx |
+| `save_flex_docx-arg:body`, `save_flex_docx-arg:footer`, `save_flex_docx-arg:header`, `save_flex_docx-arg:template` |
 | as_kable |
 | `as_kable-arg:dots` |
 | assign_summary_type |
