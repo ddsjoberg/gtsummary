@@ -16,7 +16,6 @@ negative values indicate a reduction (i.e. an improvement).
 | [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md) pipeline | −40% | −13% |
 | [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md) pipeline | −56% | −35% |
 | [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md) pipeline (10× replicated ADAE) | −94% | −71% |
-| [`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_hierarchical.md) table assembly (10× replicated ADAE) | −99% | −71% |
 | [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md) (10× replicated ADAE) | −92% | −67% |
 
 - Improved the speed and memory efficiency of

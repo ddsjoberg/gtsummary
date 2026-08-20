@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9016</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@
 <div class="section level3">
 <h3 id="performance-development-version">Performance<a class="anchor" aria-label="anchor" href="#performance-development-version"></a></h3>
 <p>This release brings a large, cross-cutting performance effort. None of the changes below alter the returned tables—only how quickly and cheaply they are built. The table highlights the headline improvements measured against the previous CRAN release (<a href="https://github.com/ddsjoberg/tracking-gtsummary-cards-efficiency" class="external-link">tracking-gtsummary-cards-efficiency</a>); negative values indicate a reduction (i.e. an improvement).</p>
-<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th align="left">Function (input data)</th>
+<table class="table"><thead><tr><th align="left">Function (input data)</th>
 <th align="right">Computation time</th>
 <th align="right">Memory allocated</th>
 </tr></thead><tbody><tr><td align="left">
@@ -60,10 +60,6 @@
 </tr><tr><td align="left">
 <code><a href="../reference/tbl_hierarchical.html">tbl_hierarchical()</a></code> pipeline (10× replicated ADAE)</td>
 <td align="right">−94%</td>
-<td align="right">−71%</td>
-</tr><tr><td align="left">
-<code><a href="../reference/brdg_hierarchical.html">brdg_hierarchical()</a></code> table assembly (10× replicated ADAE)</td>
-<td align="right">−99%</td>
 <td align="right">−71%</td>
 </tr><tr><td align="left">
 <code><a href="../reference/sort_hierarchical.html">sort_hierarchical()</a></code> (10× replicated ADAE)</td>
