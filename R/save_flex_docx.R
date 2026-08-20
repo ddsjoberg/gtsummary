@@ -19,7 +19,8 @@
 #' abbreviations) is moved out of the body and into the Word footer as a
 #' flextable, followed by a right-aligned `"Page X of Y"` line built from live
 #' Word fields. Compose your own behavior with flextable functions such as
-#' [`flextable::delete_part()`] and the helper [`add_flex_footer_with_field()`].
+#' [`flextable::delete_part()`], [`flextable::add_footer_lines()`], and
+#' [`flextable::as_word_field()`].
 #'
 #' A collection of tables is also accepted: a `tbl_split` object (from
 #' [`tbl_split_by_rows()`] or [`tbl_split_by_columns()`]), or a plain list of
@@ -41,10 +42,9 @@
 #'   what to place in the Word page footer/header region: a transformer applied
 #'   to the source flextable (returning a `flextable` or `NULL`), a static
 #'   `flextable`, or `NULL` for nothing. The footer default keeps only the
-#'   table's footnote region and appends a page-number line (`\(x) x |>
-#'   flextable::delete_part(part = "header") |> flextable::delete_part(part =
-#'   "body") |> add_flex_footer_with_field() |>
-#'   flextable::set_table_properties(layout = "autofit", width = 1)`). The header
+#'   table's footnote region (deleting the header and body parts), appends a
+#'   right-aligned `"Page X of Y"` line of live Word fields
+#'   (`flextable::as_word_field()`), and autofits it to the page width. The header
 #'   default is `NULL` (the caption stays in the body with the table).
 #' @param pr_section (`officer::prop_section`)\cr
 #'   an optional [`officer::prop_section()`] object used as the base Word section,
@@ -63,7 +63,7 @@
 #' @export
 #' @return the original object `x` (invisibly)
 #'
-#' @seealso [`as_flex_table()`], [`add_flex_footer_with_field()`]
+#' @seealso [`as_flex_table()`]
 #'
 #' @examplesIf gtsummary:::is_pkg_installed(c("flextable", "officer"))
 #' tbl <-
@@ -105,10 +105,20 @@ save_flex_docx <- function(x,
                            path,
                            body = \(x) flextable::delete_part(x, part = "footer"),
                            footer = \(x) {
-                             x |>
+                             x <- x |>
                                flextable::delete_part(part = "header") |>
                                flextable::delete_part(part = "body") |>
-                               add_flex_footer_with_field() |>
+                               flextable::add_footer_lines(
+                                 values = flextable::as_paragraph(
+                                   "Page ", flextable::as_word_field("PAGE"),
+                                   " of ", flextable::as_word_field("NUMPAGES")
+                                 )
+                               )
+                             x |>
+                               flextable::align(
+                                 i = flextable::nrow_part(x, "footer"),
+                                 part = "footer", align = "right"
+                               ) |>
                                flextable::set_table_properties(layout = "autofit", width = 1)
                            },
                            header = NULL,
@@ -400,67 +410,4 @@ save_flex_docx <- function(x,
     "footer_default", "footer_even", "footer_first"
   )] <- NULL
   base_fields
-}
-
-#' Add a footer line with Word field codes to a flextable
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`\cr
-#' Appends a single footer row to a flextable whose text is `footnote`, with any
-#' `{token}` replaced by a live Word field code (e.g. `{PAGE}`, `{NUMPAGES}`,
-#' `{DATE}`) and all other text rendered verbatim. The new row's alignment is set
-#' by `align` and does not affect any existing footer rows. Useful for adding a
-#' page-number line to a footer flextable placed in a Word footer region by
-#' [`save_flex_docx()`].
-#'
-#' **This function is highly experimental.** Its arguments and behavior are
-#' likely to change in future releases, and it may eventually be spun off into a
-#' separate package. Use with that in mind.
-#'
-#' @param x (`flextable`)\cr a flextable object
-#' @param footnote (`string`)\cr the footer text; `{token}` becomes a Word field
-#'   code matching `token`. Default is `"Page {PAGE} of {NUMPAGES}"`.
-#' @param align (`string`)\cr alignment of the new row, one of `"right"`
-#'   (default), `"center"`, or `"left"`
-#' @return a `flextable` object
-#' @export
-#'
-#' @examplesIf gtsummary:::is_pkg_installed(c("flextable"))
-#' trial |>
-#'   tbl_summary(by = trt, include = age) |>
-#'   as_flex_table() |>
-#'   add_flex_footer_with_field(footnote = "Page {PAGE} of {NUMPAGES}")
-add_flex_footer_with_field <- function(x, footnote = "Page {PAGE} of {NUMPAGES}", align = "right") {
-  set_cli_abort_call()
-  .flex_docx_check_flextable(x)
-  check_string(footnote)
-  align <- arg_match(align, values = c("right", "center", "left"))
-
-  # split into literal segments and `{...}` field tokens, keeping delimiters
-  pieces <- str_extract_all(footnote, "\\{[^}]*\\}|[^{]+")[[1]]
-  chunks <-
-    lapply(pieces, function(piece) {
-      if (str_detect(piece, "^\\{.*\\}$")) {
-        flextable::as_word_field(str_replace_all(piece, "^\\{|\\}$", ""))
-      } else {
-        piece
-      }
-    })
-
-  x <- flextable::add_footer_lines(x, values = inject(flextable::as_paragraph(!!!chunks)))
-  flextable::align(x, i = flextable::nrow_part(x, "footer"), part = "footer", align = align)
-}
-
-#' Validate that an object is a flextable
-#' @keywords internal
-#' @noRd
-.flex_docx_check_flextable <- function(x) {
-  check_not_missing(x)
-  if (!inherits(x, "flextable")) {
-    cli::cli_abort(
-      "The {.arg x} argument must be a {.cls flextable} object, not
-       {.obj_type_friendly {x}}.",
-      call = get_cli_abort_call()
-    )
-  }
 }

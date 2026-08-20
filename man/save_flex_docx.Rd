@@ -9,9 +9,13 @@ save_flex_docx(
   path,
   body = function(x) flextable::delete_part(x, part = "footer"),
   footer = function(x) {
+     x <-
+    flextable::add_footer_lines(flextable::delete_part(flextable::delete_part(x, part =
+    "header"), part = "body"), values = flextable::as_paragraph("Page ",
+    flextable::as_word_field("PAGE"), " of ", flextable::as_word_field("NUMPAGES")))
     
-    flextable::set_table_properties(add_flex_footer_with_field(flextable::delete_part(flextable::delete_part(x,
-    part = "header"), part = "body")), layout = "autofit", width = 1)
+    flextable::set_table_properties(flextable::align(x, i = flextable::nrow_part(x,
+    "footer"), part = "footer", align = "right"), layout = "autofit", width = 1)
  },
   header = NULL,
   pr_section = NULL,
@@ -36,7 +40,9 @@ unchanged.}
 what to place in the Word page footer/header region: a transformer applied
 to the source flextable (returning a \code{flextable} or \code{NULL}), a static
 \code{flextable}, or \code{NULL} for nothing. The footer default keeps only the
-table's footnote region and appends a page-number line (\verb{\\(x) x |> flextable::delete_part(part = "header") |> flextable::delete_part(part = "body") |> add_flex_footer_with_field() |> flextable::set_table_properties(layout = "autofit", width = 1)}). The header
+table's footnote region (deleting the header and body parts), appends a
+right-aligned \code{"Page X of Y"} line of live Word fields
+(\code{flextable::as_word_field()}), and autofits it to the page width. The header
 default is \code{NULL} (the caption stays in the body with the table).}
 
 \item{pr_section}{(\code{officer::prop_section})\cr
@@ -76,7 +82,8 @@ By default the footnote region of the table (footnotes, source notes, and
 abbreviations) is moved out of the body and into the Word footer as a
 flextable, followed by a right-aligned \code{"Page X of Y"} line built from live
 Word fields. Compose your own behavior with flextable functions such as
-\code{\link[flextable:delete_part]{flextable::delete_part()}} and the helper \code{\link[=add_flex_footer_with_field]{add_flex_footer_with_field()}}.
+\code{\link[flextable:delete_part]{flextable::delete_part()}}, \code{\link[flextable:add_footer_lines]{flextable::add_footer_lines()}}, and
+\code{\link[flextable:as_word_field]{flextable::as_word_field()}}.
 
 A collection of tables is also accepted: a \code{tbl_split} object (from
 \code{\link[=tbl_split_by_rows]{tbl_split_by_rows()}} or \code{\link[=tbl_split_by_columns]{tbl_split_by_columns()}}), or a plain list of
@@ -123,5 +130,5 @@ save_flex_docx(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=as_flex_table]{as_flex_table()}}, \code{\link[=add_flex_footer_with_field]{add_flex_footer_with_field()}}
+\code{\link[=as_flex_table]{as_flex_table()}}
 }

@@ -30,29 +30,6 @@ tbl <-
 
 ftbl <- as_flex_table(tbl)
 
-# add_flex_footer_with_field() ------------------------------------------------
-test_that("add_flex_footer_with_field() adds a field row with row-only alignment", {
-  before <- flextable::nrow_part(ftbl, "footer")
-  out <- add_flex_footer_with_field(ftbl, footnote = "Page {PAGE} of {NUMPAGES}")
-  # exactly one new footer row is appended
-  expect_equal(flextable::nrow_part(out, "footer"), before + 1L)
-
-  # the row renders as live Word fields
-  foot_only <- out |>
-    flextable::delete_part(part = "header") |>
-    flextable::delete_part(part = "body")
-  foot_wml <- officer::to_wml(foot_only, add_ns = TRUE)
-  expect_match(foot_wml, "PAGE")
-  expect_match(foot_wml, "NUMPAGES")
-  expect_match(foot_wml, "instrText")
-})
-
-test_that("add_flex_footer_with_field() validates footnote and align", {
-  expect_error(add_flex_footer_with_field(mtcars), "flextable")
-  expect_error(add_flex_footer_with_field(ftbl, footnote = 1L), "footnote")
-  expect_error(add_flex_footer_with_field(ftbl, align = "up"))
-})
-
 # save_flex_docx() default behavior -------------------------------------------
 test_that("save_flex_docx() writes a file and returns x invisibly", {
   path <- withr::local_tempfile(fileext = ".docx")
@@ -137,7 +114,9 @@ test_that("save_flex_docx() accepts custom body/header/footer transformers", {
       x |>
         flextable::delete_part(part = "header") |>
         flextable::delete_part(part = "body") |>
-        add_flex_footer_with_field("Printed {DATE}", align = "center")
+        flextable::add_footer_lines(
+          values = flextable::as_paragraph("Printed ", flextable::as_word_field("DATE"))
+        )
     }
   )
 
