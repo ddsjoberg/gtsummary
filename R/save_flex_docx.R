@@ -5,60 +5,66 @@
 #' Save a gtsummary table or a flextable to a Word (`.docx`) file using the
 #' flextable package.
 #'
-#' The `header` and `footer` arguments control where the table caption and the
-#' footnote-region content (footnotes, source notes, and abbreviations) are
-#' placed in the Word document. When `TRUE`, this content is moved to the Word
-#' document's page **header** and **footer** regions (where it repeats on every
-#' page) instead of appearing in the flow of the table itself. When `FALSE`, the
-#' content is rendered as part of the table, matching [`as_flex_table()`].
+#' **This function is highly experimental.** Its arguments and behavior are
+#' likely to change in future releases, and it may eventually be spun off into a
+#' separate package (as this function works with any flextable object in
+#' addition to gtsummary tables). Use with that in mind.
+#'
+#' The table is written into the **body** of the Word document. The `body`,
+#' `header`, and `footer` arguments are transformers applied to the (source)
+#' flextable to build, respectively, the content placed in the document body and
+#' in the Word page **header** and **footer** regions (which repeat on every
+#' page). Each is a function of a flextable, a static `flextable`, or `NULL`.
+#'
+#' By default the footnote region of the table (footnotes, source notes, and
+#' abbreviations) is moved out of the body and into the Word footer as a
+#' flextable, followed by a right-aligned `"Page X of Y"` line built from live
+#' Word fields. Compose your own behavior with flextable functions such as
+#' [`flextable::delete_part()`], [`flextable::add_footer_lines()`], and
+#' [`flextable::as_word_field()`].
 #'
 #' A collection of tables is also accepted: a `tbl_split` object (from
 #' [`tbl_split_by_rows()`] or [`tbl_split_by_columns()`]), or a plain list of
-#' flextables. Each table is written to its own Word section so that each table's
-#' caption and footnote-region content populate that section's own header/footer
-#' regions, one table per page.
-#'
-#' A `flextable` object (or a list of them) is also accepted. Its caption
-#' (`flextable::set_caption()`) is relocated to the Word header and its footer
-#' part (`flextable::add_footer_lines()`) to the Word footer, matching the
-#' gtsummary behavior.
+#' flextables. Each table is written to its own Word section (one table per page)
+#' with the `body`/`header`/`footer` transformers applied independently to each.
 #'
 #' @param x (`gtsummary`, `tbl_split`, `flextable`, or `list`)\cr
 #'   a gtsummary table, a `tbl_split` object (a list of gtsummary tables), a
 #'   `flextable` object, or a plain list of `flextable` objects
 #' @param path (`string`)\cr
 #'   file path to write the Word (`.docx`) file to
-#' @param header (scalar `logical`)\cr
-#'   whether to place the table caption in the Word document's page header
-#'   region. When `FALSE`, the caption is rendered as the table caption. Default
-#'   is `FALSE`.
-#' @param footer (scalar `logical`)\cr
-#'   whether to place the footnotes, source notes, and abbreviations in the Word
-#'   document's page footer region. When `FALSE`, this content is rendered in the
-#'   table's footer. Default is `FALSE`.
-#' @param page (`string`)\cr
-#'   an optional string added as a page-number line in a header/footer region.
-#'   The tokens `{PAGE}` and `{NUMPAGES}` are replaced with live Word fields for
-#'   the current page number and total page count (e.g.
-#'   `"Page {PAGE} of {NUMPAGES}"`); all other text is added verbatim. Default is
-#'   `NULL` (no page line). This is independent of the `header`/`footer`
-#'   arguments.
-#' @param page_location (`string`)\cr
-#'   where to place the `page` text, as `"<region>-<alignment>"`. Must be one of
-#'   `"footer-right"` (default), `"footer-center"`, `"footer-left"`,
-#'   `"header-right"`, `"header-center"`, or `"header-left"`.
+#' @param body (`function` or `NULL`)\cr
+#'   a transformer applied to the source flextable to produce the flextable
+#'   placed in the document body. Default `\(x) flextable::delete_part(x, part =
+#'   "footer")` removes the footnote region from the body (it is relocated to the
+#'   Word footer by the `footer` default). `NULL` uses the source flextable
+#'   unchanged.
+#' @param footer,header (`function`, `flextable`, or `NULL`)\cr
+#'   what to place in the Word page footer/header region: a transformer applied
+#'   to the source flextable (returning a `flextable` or `NULL`), a static
+#'   `flextable`, or `NULL` for nothing. The footer default keeps only the
+#'   table's footnote region (deleting the header and body parts), appends a
+#'   right-aligned `"Page X of Y"` line of live Word fields
+#'   (`flextable::as_word_field()`), and fits it to the page width. The header
+#'   default is `NULL` (the caption stays in the body with the table).
+#' @param template (`string`)\cr
+#'   an optional file path to a Word (`.docx`) document used as the base for the
+#'   output. Its page setup (size, orientation, margins) and body content are
+#'   carried through; its header/footer text is not (those regions are managed by
+#'   `save_flex_docx()`). See the *Using a Word template* section. Default is
+#'   `NULL`.
 #' @param pr_section (`officer::prop_section`)\cr
 #'   an optional [`officer::prop_section()`] object used as the base Word section,
 #'   giving fine-grained control over page margins, page size, orientation, and
 #'   section columns (e.g.
-#'   `officer::prop_section(page_margins = officer::page_mar(top = 0.5))`). The
-#'   section's header and footer regions are always managed by `save_flex_docx()`
-#'   (the relocated caption and notes), so any `header_default`/`footer_default`
-#'   set on `pr_section` are ignored. For a collection (`tbl_split` or a list of
-#'   flextables) the same `pr_section` is applied to every table's section, and
-#'   the paging `type` is fixed to `"nextPage"` (any `type` on `pr_section` is
-#'   ignored) so tables page correctly. Overrides the
-#'   `save_flex_docx-lst:pr_section` theme element. Default is `NULL`.
+#'   `officer::prop_section(page_margins = officer::page_mar(top = 0.5))`). Only
+#'   its geometry is used: `save_flex_docx()` always owns the header/footer
+#'   regions, so any `header_default`/`footer_default` set on `pr_section` are
+#'   ignored. For a collection (`tbl_split` or a list of flextables) the same
+#'   geometry is applied to every table's section and the paging `type` is fixed
+#'   to `"nextPage"` (any `type` on `pr_section` is ignored) so tables page
+#'   correctly. Overrides the `save_flex_docx-lst:pr_section` theme element.
+#'   Default is `NULL`.
 #' @param ... These dots are for future extensions and must be empty.
 #'
 #' @export
@@ -66,48 +72,80 @@
 #'
 #' @seealso [`as_flex_table()`]
 #'
-#' @section Limitations:
+#' @section Using a Word template:
 #'
-#' Relocating the caption to the Word header (`header = TRUE`) and the
-#' footnotes, source notes, and abbreviations to the Word footer
-#' (`footer = TRUE`) is lossy.
-#' Relocated content is rendered as plain text: markdown
-#' and HTML are not interpreted and emphasis markers (`**bold**`, `_italic_`)
-#' are stripped. Only the font family and size are carried over; colors,
-#' indentation, per-cell styling, and column structure are not preserved.
+#' The `template` argument accepts a path to a Word (`.docx`) document used as the
+#' base for the output. Its **page setup** (size, orientation, margins, section
+#' columns) and any **body content** (e.g. a cover page or introductory text) are
+#' carried through, with the table written into the body after that content.
 #'
-#' @examplesIf gtsummary:::is_pkg_installed(c("flextable", "officer"))
+#' `save_flex_docx()` **manages the Word header and footer regions itself** (via
+#' the `header`/`footer` arguments), so **a template's own header/footer text is
+#' not carried through** — whatever `save_flex_docx()` places in a region (or
+#' leaves empty) takes precedence and blanks out the template's text there. This
+#' is intentional: header/footer text in a template and table placement in the
+#' header/footer are **not meant to be mixed**. Because the default `footer`
+#' places a table, a template's header/footer text is superseded by default. Put
+#' the content you want in the header/footer into the `header`/`footer` arguments
+#' rather than into the template.
+#'
+#' @examplesIf FALSE && gtsummary:::is_pkg_installed(c("flextable", "officer"))
+#' theme_gtsummary_compact()
+#'
+#' # Example 1 ----------------------------------
+#' # Default behavior is to place the footnote in the footer and add 'Page X of Y'
 #' tbl <-
 #'   trial |>
 #'   tbl_summary(by = trt, include = c(age, grade)) |>
 #'   modify_caption("**Table 1. Patient Characteristics**")
 #'
-#' # save the table, placing caption in the header and notes in the footer
+#' # by default the footnotes move to the Word footer with a page-number line
 #' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 #'
-#' # add a "Page X of Y" line to the footer
+#' # keep the whole table (including footnotes) in the body, nothing in the footer
 #' save_flex_docx(
 #'   tbl,
 #'   path = tempfile(fileext = ".docx"),
-#'   page = "Page {PAGE} of {NUMPAGES}"
+#'   body = NULL,
+#'   footer = NULL
 #' )
+#'
+#' # Example 2 ----------------------------------
+#' # This example places a header typically found in the pharmaceutical space,
+#' # including protocol number, table title/number, and sub-population label.
+#'
+#' # place a static report header (with a live "Page X of Y" field) in the header
+#' header_ft <-
+#'   data.frame(
+#'     col1 = c("Protocol: ABC123", NA),
+#'     col2 = c("Table 14.3.6 Adverse Event Rates by SOC and PT", "Safety Population"),
+#'     col3 = c(NA_character_, NA_character_),
+#'     stringsAsFactors = FALSE
+#'   ) |>
+#'   flextable::flextable() |>
+#'   flextable::delete_part(part = "header") |>
+#'   flextable::align(j = 1, align = "left", part = "body") |>
+#'   flextable::align(j = 2, align = "center", part = "body") |>
+#'   flextable::align(j = 3, align = "right", part = "body") |>
+#'   flextable::compose(
+#'     i = 1, j = 3,
+#'     value = flextable::as_paragraph(
+#'       "Page ", flextable::as_word_field("PAGE"),
+#'       " of ", flextable::as_word_field("NUMPAGES")
+#'     ),
+#'     part = "body"
+#'   ) |>
+#'   flextable::border_remove() |>
+#'   flextable::fontsize(size = 8, part = "all") |>
+#'   flextable::padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+#'   flextable::set_table_properties(layout = "autofit", width = 1)
+#' save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = header_ft)
 #'
 #' # a split table is written with one table per section/page
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, marker, grade), missing = ~"no") |>
-#'   modify_footnote_body(
-#'     "Footnotes only appear on the pages where the mark is present",
-#'     columns = "label",
-#'     rows = label == "Age"
-#'   ) |>
 #'   tbl_split_by_rows(variables = marker) |>
 #'   save_flex_docx(path = tempfile(fileext = ".docx"))
-#'
-#' # a flextable (or a list of flextables) is also accepted
-#' ft <-
-#'   as_flex_table(tbl) |>
-#'   flextable::set_caption("Table 1")
-#' save_flex_docx(ft, path = tempfile(fileext = ".docx"))
 #'
 #' # customize the Word page margins and orientation via a prop_section()
 #' save_flex_docx(
@@ -118,23 +156,45 @@
 #'     page_size = officer::page_size(orient = "landscape")
 #'   )
 #' )
+#'
+#' reset_gtsummary_theme()
 save_flex_docx <- function(x,
-                         path,
-                         header = FALSE,
-                         footer = FALSE,
-                         page = NULL,
-                         page_location = c(
-                           "footer-right", "footer-center", "footer-left",
-                           "header-right", "header-center", "header-left"
-                         ),
-                         pr_section = NULL,
-                         ...) {
+                           path,
+                           body = \(x) flextable::delete_part(x, part = "footer"),
+                           footer = \(x) {
+                             x %>%
+                               flextable::delete_part(part = "header") %>%
+                               flextable::delete_part(part = "body") %>%
+                               flextable::add_footer_lines(
+                                 values = flextable::as_paragraph(
+                                   "Page ", flextable::as_word_field("PAGE"),
+                                   " of ", flextable::as_word_field("NUMPAGES")
+                                 )
+                               ) %>%
+                               flextable::align(
+                                 i = flextable::nrow_part(x, "footer"),
+                                 part = "footer", align = "right"
+                               ) %>%
+                               flextable::set_table_properties(layout = "autofit", width = 1)
+                           },
+                           header = NULL,
+                           template = NULL,
+                           pr_section = NULL,
+                           ...) {
   set_cli_abort_call()
 
   # check inputs ---------------------------------------------------------------
   check_dots_empty()
   check_not_missing(x)
   check_not_missing(path)
+
+  # resolve argument defaults from theme elements when the caller did not supply
+  # them (an explicitly passed argument always wins).
+  if (missing(body)) body <- get_theme_element("save_flex_docx-arg:body", default = body)
+  if (missing(footer)) footer <- get_theme_element("save_flex_docx-arg:footer", default = footer)
+  if (missing(header)) header <- get_theme_element("save_flex_docx-arg:header", default = header)
+  if (missing(template)) template <- get_theme_element("save_flex_docx-arg:template", default = template)
+
   # accepted: a gtsummary table, a tbl_split, a flextable, or a plain list of
   # flextables. a tbl_split is itself a list but is matched by its class first.
   is_flextable_list <-
@@ -151,15 +211,22 @@ save_flex_docx <- function(x,
     )
   }
   check_string(path)
-  check_scalar_logical(header)
-  check_scalar_logical(footer)
-  if (!is.null(page)) check_string(page)
-  page_location <- arg_match(page_location)
+  .flex_docx_check_body(body)
+  .flex_docx_check_region(header, "header")
+  .flex_docx_check_region(footer, "footer")
+  if (!is.null(template)) {
+    check_string(template)
+    if (!file.exists(template)) {
+      cli::cli_abort(
+        "The {.arg template} file does not exist: {.file {template}}.",
+        call = get_cli_abort_call()
+      )
+    }
+  }
   check_pkg_installed(c("flextable", "officer"))
 
-  # resolve `pr_section` with argument-over-theme precedence, then validate. the
-  # resolved base section controls page margins/size/orientation/columns; its
-  # header/footer defaults are later overwritten by the relocated caption/notes.
+  # resolve `pr_section` with argument-over-theme precedence, then validate. only
+  # its geometry is used; header/footer defaults are always owned by this function.
   pr_section <- pr_section %||% get_theme_element("save_flex_docx-lst:pr_section", eval = TRUE)
   if (!is.null(pr_section) && !inherits(pr_section, "prop_section")) {
     cli::cli_abort(
@@ -169,7 +236,7 @@ save_flex_docx <- function(x,
     )
   }
 
-  # collections: one section (with its own header/footer) per table ------------
+  # collections: one section per table -----------------------------------------
   if (inherits(x, "tbl_split") || is_flextable_list) {
     if (length(x) == 0L) {
       cli::cli_abort(
@@ -181,42 +248,38 @@ save_flex_docx <- function(x,
       .save_flex_docx_collection(
         x,
         path = path,
+        body = body,
         header = header,
         footer = footer,
-        page = page,
-        page_location = page_location,
+        template = template,
         pr_section = pr_section
       )
     )
   }
 
   # single gtsummary table or flextable ----------------------------------------
-  built <-
-    .flex_docx_build_one(
-      x,
-      header = header,
-      footer = footer,
-      page = page,
-      page_location = page_location
-    )
+  built <- .flex_docx_build_one(x, body = body, header = header, footer = footer)
 
-  # write the Word file --------------------------------------------------------
-  # a section is supplied when a region has content, or when the caller passed a
-  # `pr_section` (so custom page margins/size apply even with no caption/notes).
-  # otherwise `save_as_docx()` uses its default section.
-  has_content <- length(built$header_fpars) > 0L || length(built$footer_fpars) > 0L
+  # when a template is supplied, build the document on top of it (its page setup
+  # and any header/footer furniture are carried through; a placed table overrides
+  # the corresponding region).
+  if (!is.null(template)) {
+    .flex_docx_write_one_template(built, path = path, template = template, pr_section = pr_section)
+    return(invisible(x))
+  }
+
+  # write the Word file. a section is supplied when a region has content, or when
+  # the caller passed a `pr_section` (so custom geometry applies even with no
+  # header/footer). otherwise `save_as_docx()` uses its default section.
+  has_content <- !is.null(built$header_ft) || !is.null(built$footer_ft)
   if (has_content || !is.null(pr_section)) {
     flextable::save_as_docx(
-      built$ft,
+      built$body_ft,
       path = path,
-      pr_section = .flex_docx_prop_section(
-        built$header_fpars,
-        built$footer_fpars,
-        base = pr_section
-      )
+      pr_section = .flex_docx_prop_section(built$header_ft, built$footer_ft, base = pr_section)
     )
   } else {
-    flextable::save_as_docx(built$ft, path = path)
+    flextable::save_as_docx(built$body_ft, path = path)
   }
 
   invisible(x)
@@ -224,38 +287,34 @@ save_flex_docx <- function(x,
 
 #' Write a collection of tables to a single Word file, one section per table
 #'
-#' Each table is added to the document, separated by a page break, and closed by
-#' a section break so that each table's caption/notes populate that section's own
-#' Word header/footer regions.
+#' Each table is added to the document, separated by a section break, so that
+#' each table's header/footer content populates that section's own Word regions.
 #'
 #' @inheritParams save_flex_docx
 #' @return the original collection `x` (invisibly)
 #' @keywords internal
 #' @noRd
-.save_flex_docx_collection <- function(x, path, header, footer, page, page_location,
-                                       pr_section = NULL) {
-  doc <- officer::read_docx()
+.save_flex_docx_collection <- function(x, path, body, header, footer,
+                                       template = NULL, pr_section = NULL) {
+  doc <- if (is.null(template)) officer::read_docx() else officer::read_docx(path = template)
+
+  # when a template is supplied and the caller gave no `pr_section`, carry the
+  # template's page geometry across every section.
+  base_section <- pr_section %||%
+    if (!is.null(template)) .flex_docx_section_from_template(doc) else NULL
 
   for (i in seq_along(x)) {
-    built <-
-      .flex_docx_build_one(
-        x[[i]],
-        header = header,
-        footer = footer,
-        page = page,
-        page_location = page_location
-      )
+    built <- .flex_docx_build_one(x[[i]], body = body, header = header, footer = footer)
 
-    doc <- flextable::body_add_flextable(doc, built$ft)
+    doc <- flextable::body_add_flextable(doc, built$body_ft)
 
-    # every section uses the same base `pr_section` (page margins/size/etc.), but
-    # `type = "nextPage"` is forced so tables page correctly without blank pages,
-    # overriding any `type` set in the user's `pr_section`.
+    # every section uses the same base geometry, but `type = "nextPage"` is forced
+    # so tables page correctly without blank pages (overriding any user `type`).
     section <-
       .flex_docx_prop_section(
-        built$header_fpars,
-        built$footer_fpars,
-        base = pr_section,
+        built$header_ft,
+        built$footer_ft,
+        base = base_section,
         type = "nextPage"
       )
 
@@ -266,8 +325,7 @@ save_flex_docx <- function(x,
       doc <- officer::body_end_block_section(doc, officer::block_section(section))
     } else {
       # the last table uses the document's default section instead of a block
-      # section. `body_end_block_section()` appends a trailing paragraph and a
-      # closing section, which would render as an extra blank page at the end.
+      # section (a trailing block section would render as an extra blank page).
       doc <- officer::body_set_default_section(doc, section)
     }
   }
@@ -277,503 +335,229 @@ save_flex_docx <- function(x,
   invisible(x)
 }
 
-#' Build the flextable and header/footer paragraph lists for one table
+#' Write a single table to a Word file on top of a template document
 #'
-#' Shared by the single-table and collection paths, for both gtsummary and
-#' flextable input. Obtains the flextable (converting a gtsummary table via
-#' [`as_flex_table()`], or using a flextable directly), relocates the caption
-#' and/or footer content, and assembles the Word header/footer paragraph lists
-#' (caption/notes plus the optional page-number line).
+#' Reads the template, adds the body flextable, and sets the default section with
+#' the resolved header/footer content. The template's page setup (and any
+#' header/footer furniture) is carried through; when a table is placed in a
+#' region, that region's default is set, which supersedes the template's content
+#' for that region.
 #'
+#' @param built (`list`)\cr the value from `.flex_docx_build_one()`
 #' @inheritParams save_flex_docx
-#' @return a list with elements `ft` (flextable), `header_fpars` (list of
-#'   `fpar`), and `footer_fpars` (list of `fpar`)
+#' @return `NULL`, invisibly
 #' @keywords internal
 #' @noRd
-.flex_docx_build_one <- function(x, header, footer, page, page_location) {
-  is_flextable <- inherits(x, "flextable")
+.flex_docx_write_one_template <- function(built, path, template, pr_section) {
+  doc <- officer::read_docx(path = template)
+  doc <- flextable::body_add_flextable(doc, built$body_ft)
+  base_section <- pr_section %||% .flex_docx_section_from_template(doc)
+  doc <- officer::body_set_default_section(
+    doc,
+    .flex_docx_prop_section(built$header_ft, built$footer_ft, base = base_section)
+  )
+  print(doc, target = path)
 
-  # extract caption and footer content, then obtain the flextable with the
-  # relocated content suppressed.
-  if (is_flextable) {
-    caption_text <- .flex_docx_caption_flextable(x)
-    footer_lines <- .flex_docx_footer_lines_flextable(x)
-    ft <- x
-    if (isTRUE(header)) {
-      # caption is relocated to the Word header; clear it so it does not also
-      # render in the table body.
-      ft <- flextable::set_caption(ft, caption = "")
-    }
-  } else {
-    caption_text <- .flex_docx_caption(x)
-    footer_lines <- .flex_docx_footer_lines(x)
-    flextable_calls <- as_flex_table(x, return_calls = TRUE)
-    if (isTRUE(header)) {
-      # caption is relocated to the Word header; drop the flextable caption
-      flextable_calls[["set_caption"]] <- NULL
-    }
-    ft <- .eval_list_of_exprs(flextable_calls)
-  }
-
-  # extract per-part styling from the flextable so each Word region can inherit
-  # it. the footer part must be read *before* it is deleted below. the Word
-  # header region inherits from the flextable header part, the Word footer region
-  # from the flextable footer part. only inherit when content is actually
-  # relocated into the region (a caption for the header, footer lines for the
-  # footer): flextable keeps a blank footer row even with no notes, so
-  # `nrow_part()` alone would wrongly report content, and inheriting then would
-  # apply footer styling to a region that only holds a page-number line.
-  header_extracted <-
-    if (isTRUE(header) && !is.null(caption_text)) .flex_docx_part_font(ft, "header") else NULL
-  footer_extracted <-
-    if (isTRUE(footer) && length(footer_lines) > 0L) .flex_docx_part_font(ft, "footer") else NULL
-
-  if (isTRUE(footer)) {
-    # footnote text, source notes, and abbreviations are relocated to the Word
-    # footer. Deleting the flextable footer part removes this text while the
-    # in-cell footnote reference symbols (set on the header/body parts by the
-    # `flextable::footnote()` calls) are retained.
-    if (flextable::nrow_part(ft, part = "footer") > 0L) {
-      ft <- flextable::delete_part(ft, part = "footer")
-    }
-  }
-
-  # resolve the font for each Word region. the base is the flextable body font
-  # (so regions match the body by default, instead of the Word template default
-  # e.g. Cambria); on top of that we merge the styling extracted from the
-  # corresponding flextable part (when present), so styling applied to the
-  # flextable header/footer flows through to the Word header/footer.
-  base_fp <- .flex_docx_default_font()
-  header_fp <- .flex_docx_region_font(base_fp, extracted_props = header_extracted)
-  footer_fp <- .flex_docx_region_font(base_fp, extracted_props = footer_extracted)
-
-  # assemble the Word header/footer paragraph lists. content order is
-  # caption/notes first, then the optional page-number line as a separate
-  # paragraph.
-  header_fpars <- list()
-  footer_fpars <- list()
-
-  if (isTRUE(header) && !is.null(caption_text)) {
-    header_fpars <- c(header_fpars, list(officer::fpar(officer::ftext(caption_text, prop = header_fp))))
-  }
-  if (isTRUE(footer) && length(footer_lines) > 0L) {
-    footer_fpars <- c(footer_fpars, lapply(footer_lines, \(line) officer::fpar(officer::ftext(line, prop = footer_fp))))
-  }
-
-  # optional page-number line (independent of the header/footer flags). it adopts
-  # the resolved style of whichever region it is placed in.
-  if (!is.null(page)) {
-    page_region <- sub("-.*$", "", page_location)
-    page_align <- sub("^.*-", "", page_location)
-    page_fp <- if (identical(page_region, "header")) header_fp else footer_fp
-    page_fpar <- .flex_docx_page_fpar(page, alignment = page_align, fp_text = page_fp)
-    if (identical(page_region, "header")) {
-      header_fpars <- c(header_fpars, list(page_fpar))
-    } else {
-      footer_fpars <- c(footer_fpars, list(page_fpar))
-    }
-  }
-
-  list(ft = ft, header_fpars = header_fpars, footer_fpars = footer_fpars)
+  invisible(NULL)
 }
 
-#' Build an `officer::prop_section()` from header/footer paragraph lists
+#' Build an `officer::prop_section()` carrying a template's page geometry
 #'
-#' A region is only attached when it has at least one paragraph.
+#' Reads a template document's page size, orientation, and margins via
+#' [`officer::docx_dim()`] and returns a `prop_section` reproducing them (with no
+#' header/footer defaults). Used when a `template` is supplied without a
+#' `pr_section`: the default section must be (re)set for officer to keep the
+#' template's header/footer regions, and this preserves the template's geometry
+#' rather than resetting it to the officer defaults.
 #'
-#' @param header_fpars,footer_fpars (`list`)\cr lists of `officer::fpar` objects
-#' @param ... additional arguments passed to `officer::prop_section()` (e.g.
-#'   `type`)
-#' @param base (`officer::prop_section` or `NULL`)\cr an optional user-supplied
-#'   section whose properties (page margins, size, orientation, columns, and
-#'   `type`) are used as the base. Its `header_default`/`footer_default` are
-#'   always discarded: `save_flex_docx()` owns those regions.
+#' @param doc (`rdocx`)\cr a document from [`officer::read_docx()`]
 #' @return an `officer::prop_section` object
 #' @keywords internal
 #' @noRd
-.flex_docx_prop_section <- function(header_fpars, footer_fpars, base = NULL, ...) {
-  # start from the user's base section fields (dropping its header/footer
-  # defaults, which we always own), then let `...` overrides win (e.g. the forced
-  # `type = "nextPage"` for collections), and finally attach our relocated
-  # caption/notes as the header/footer defaults.
-  section_args <- list()
-  if (!is.null(base)) {
-    base_fields <- unclass(base)
-    base_fields[c(
-      "header_default", "header_even", "header_first",
-      "footer_default", "footer_even", "footer_first"
-    )] <- NULL
-    section_args <- base_fields
+.flex_docx_section_from_template <- function(doc) {
+  dd <- officer::docx_dim(doc)
+  # `docx_dim()` reports the (oriented) page dims in inches; `page_size()` with
+  # `orient` swaps width/height itself, so feed it the portrait dims (short side
+  # as width, long side as height) and let `orient` apply the rotation.
+  short <- min(dd$page[["width"]], dd$page[["height"]])
+  long <- max(dd$page[["width"]], dd$page[["height"]])
+  m <- dd$margins
+  officer::prop_section(
+    page_size = officer::page_size(
+      width = short,
+      height = long,
+      orient = if (isTRUE(dd$landscape)) "landscape" else "portrait"
+    ),
+    page_margins = officer::page_mar(
+      top = m[["top"]], bottom = m[["bottom"]],
+      left = m[["left"]], right = m[["right"]],
+      header = m[["header"]], footer = m[["footer"]]
+    )
+  )
+}
+
+#' Build the body/header/footer flextables for one table
+#'
+#' Shared by the single-table and collection paths, for both gtsummary and
+#' flextable input. Obtains the source flextable (converting a gtsummary table
+#' via [`as_flex_table()`], or using a flextable directly), then applies the
+#' `body`/`header`/`footer` transformers independently.
+#'
+#' @inheritParams save_flex_docx
+#' @return a list with elements `body_ft` (flextable), `header_ft`, and
+#'   `footer_ft` (each a flextable or `NULL`)
+#' @keywords internal
+#' @noRd
+.flex_docx_build_one <- function(x, body, header, footer) {
+  ft <-
+    if (inherits(x, "flextable")) {
+      x
+    } else {
+      .eval_list_of_exprs(as_flex_table(x, return_calls = TRUE))
+    }
+
+  list(
+    body_ft = .flex_docx_apply_body(body, ft),
+    header_ft = .flex_docx_resolve_region(header, ft, "header"),
+    footer_ft = .flex_docx_resolve_region(footer, ft, "footer")
+  )
+}
+
+#' Apply the `body` transformer to the source flextable
+#'
+#' `NULL` returns the flextable unchanged; a function is applied and its result
+#' validated to be a flextable.
+#'
+#' @param body (`function` or `NULL`)\cr the body transformer
+#' @param ft (`flextable`)\cr the source flextable
+#' @return a `flextable`
+#' @keywords internal
+#' @noRd
+.flex_docx_apply_body <- function(body, ft) {
+  if (is.null(body)) {
+    return(ft)
   }
+  out <- body(ft)
+  if (!inherits(out, "flextable")) {
+    cli::cli_abort(
+      "The {.arg body} function must return a {.cls flextable} object, not
+       {.obj_type_friendly {out}}.",
+      call = get_cli_abort_call()
+    )
+  }
+  out
+}
+
+#' Resolve a `header`/`footer` argument into a flextable (or `NULL`)
+#'
+#' `NULL` returns `NULL`; a function is applied to the source flextable; a static
+#' `flextable` is returned as-is. The result must be a flextable or `NULL`, and a
+#' flextable with no rows in any part is treated as `NULL` (rendering a fully
+#' empty flextable errors in officer).
+#'
+#' @param arg (`function`, `flextable`, or `NULL`)\cr the region argument
+#' @param ft (`flextable`)\cr the source flextable
+#' @param arg_name (`string`)\cr the argument name, for error messages
+#' @return a `flextable` or `NULL`
+#' @keywords internal
+#' @noRd
+.flex_docx_resolve_region <- function(arg, ft, arg_name) {
+  if (is.null(arg)) {
+    return(NULL)
+  }
+  out <- if (is.function(arg)) arg(ft) else arg
+  if (is.null(out)) {
+    return(NULL)
+  }
+  if (!inherits(out, "flextable")) {
+    cli::cli_abort(
+      "The {.arg {arg_name}} argument must resolve to a {.cls flextable} object
+       or {.code NULL}, not {.obj_type_friendly {out}}.",
+      call = get_cli_abort_call()
+    )
+  }
+  # a flextable with no rows in any part cannot be rendered; treat as empty
+  total_rows <-
+    flextable::nrow_part(out, "header") +
+    flextable::nrow_part(out, "body") +
+    flextable::nrow_part(out, "footer")
+  if (total_rows == 0L) {
+    return(NULL)
+  }
+  out
+}
+
+#' Validate the `body` argument
+#' @keywords internal
+#' @noRd
+.flex_docx_check_body <- function(body) {
+  if (!is.null(body) && !is.function(body)) {
+    cli::cli_abort(
+      "The {.arg body} argument must be a function or {.code NULL}.",
+      call = get_cli_abort_call()
+    )
+  }
+}
+
+#' Validate a `header`/`footer` argument
+#' @keywords internal
+#' @noRd
+.flex_docx_check_region <- function(arg, arg_name) {
+  if (!is.null(arg) && !is.function(arg) && !inherits(arg, "flextable")) {
+    cli::cli_abort(
+      "The {.arg {arg_name}} argument must be a function, a {.cls flextable}
+       object, or {.code NULL}.",
+      call = get_cli_abort_call()
+    )
+  }
+}
+
+#' Build an `officer::prop_section()` from the header/footer flextables
+#'
+#' A region is only attached when there is a flextable for it.
+#'
+#' @param header_ft,footer_ft (`flextable` or `NULL`)\cr the region content
+#' @param ... additional arguments passed to `officer::prop_section()` (e.g.
+#'   `type`)
+#' @param base (`officer::prop_section` or `NULL`)\cr an optional user-supplied
+#'   section whose geometry (page margins, size, orientation, columns, and
+#'   `type`) is used as the base. Its `header_default`/`footer_default` are always
+#'   discarded: `save_flex_docx()` owns those regions.
+#' @return an `officer::prop_section` object
+#' @keywords internal
+#' @noRd
+.flex_docx_prop_section <- function(header_ft, footer_ft, base = NULL, ...) {
+  section_args <- .flex_docx_base_geometry_args(base)
   section_args <- utils::modifyList(section_args, list(...))
-  if (length(header_fpars) > 0L) {
-    section_args$header_default <- do.call(officer::block_list, header_fpars)
+  if (!is.null(header_ft)) {
+    section_args$header_default <- officer::block_list(header_ft)
   }
-  if (length(footer_fpars) > 0L) {
-    section_args$footer_default <- do.call(officer::block_list, footer_fpars)
+  if (!is.null(footer_ft)) {
+    section_args$footer_default <- officer::block_list(footer_ft)
   }
   do.call(officer::prop_section, section_args)
 }
 
-#' Extract the caption text from a gtsummary table for the Word header
+#' Extract the geometry-only fields from a base `officer::prop_section`
 #'
-#' Returns the caption string (with markdown emphasis markers stripped, since the
-#' Word header renders plain text), or `NULL` when there is no caption.
+#' Returns the base section's fields (page margins, size, orientation, columns,
+#' and `type`) with the header/footer defaults dropped, as a plain list suitable
+#' for `do.call(officer::prop_section, .)`. `save_flex_docx()` always owns the
+#' header/footer regions, so those defaults are never carried over. Returns an
+#' empty list when `base` is `NULL`.
 #'
-#' @param x (`gtsummary`)\cr a gtsummary table
-#' @return a string or `NULL`
+#' @param base (`officer::prop_section` or `NULL`)\cr the base section
+#' @return a named list of `prop_section` arguments
 #' @keywords internal
 #' @noRd
-.flex_docx_caption <- function(x) {
-  caption <- x$table_styling$caption
-  if (is.null(caption) || !nzchar(caption)) {
-    return(NULL)
+.flex_docx_base_geometry_args <- function(base) {
+  if (is.null(base)) {
+    return(list())
   }
-  .strip_markdown(caption)
-}
-
-#' Extract the caption text from a flextable for the Word header
-#'
-#' Reads `ft$caption$value` (set via `flextable::set_caption()`). Returns the
-#' caption string as-is (flextable captions are plain text), or `NULL` when there
-#' is no caption.
-#'
-#' @param x (`flextable`)\cr a flextable object
-#' @return a string or `NULL`
-#' @keywords internal
-#' @noRd
-.flex_docx_caption_flextable <- function(x) {
-  caption <- x$caption$value
-  if (is.null(caption) || !is.character(caption) || !nzchar(caption)) {
-    return(NULL)
-  }
-  caption
-}
-
-#' Assemble the footer text lines from a flextable footer part
-#'
-#' Returns the text of each footer row, in order, dropping blank rows. Returns an
-#' empty character vector when the flextable has no footer part.
-#'
-#' @param x (`flextable`)\cr a flextable object
-#' @return a character vector (possibly empty)
-#' @keywords internal
-#' @noRd
-.flex_docx_footer_lines_flextable <- function(x) {
-  if (flextable::nrow_part(x, part = "footer") == 0L) {
-    return(character(0))
-  }
-  # the rendered footer text lives in the paragraph content of the footer part
-  # (`ft$footer$content$data`), a matrix of per-cell chunk data frames each with
-  # a `txt` column. the first column of each row holds that line's text (spanned
-  # footer cells repeat the same content); concatenate the chunks per row so
-  # footnote reference symbols stay attached to their text.
-  content <- x$footer$content$data
-  lines <- vapply(
-    seq_len(nrow(content)),
-    function(i) paste(content[i, 1][[1]]$txt, collapse = ""),
-    character(1)
-  )
-  lines[nzchar(lines)]
-}
-
-#' Assemble the ordered footer text lines for the Word footer
-#'
-#' Returns a character vector of the footnote text (in reference-symbol order,
-#' each prefixed with its symbol), followed by source notes, followed by the
-#' abbreviation line. Returns an empty character vector when there is no footer
-#' content.
-#'
-#' @param x (`gtsummary`)\cr a gtsummary table
-#' @return a character vector (possibly empty)
-#' @keywords internal
-#' @noRd
-.flex_docx_footer_lines <- function(x) {
-  # add the header `id` column used by `.number_footnotes()`
-  x$table_styling$header <-
-    x$table_styling$header |>
-    dplyr::group_by(.data$hide) |>
-    dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) |>
-    dplyr::ungroup()
-
-  # resolve reference symbols (custom or default integer numbering)
-  footnote_symbol <- .resolve_footnote_symbols(x)
-  ref_symbol_for <- function(footnote_id) {
-    if (is.null(footnote_symbol)) {
-      return(as.character(footnote_id))
-    }
-    .map_footnote_symbols(footnote_id, footnote_symbol)
-  }
-
-  # resolve footnote removals/replacements before numbering, mirroring the
-  # `as_flex_table()` path. without this, footnotes removed via
-  # `remove_footnote_*()` (stored as removal-marker rows / `NA` text) would leak
-  # into the Word footer as spurious "<id> NA" lines.
-  shown_columns <- x$table_styling$header$column[!x$table_styling$header$hide]
-  resolve_footnote_removals <- function(df) {
-    if (nrow(df) == 0L) {
-      return(df)
-    }
-    df |>
-      dplyr::mutate(remove = ifelse(is.na(.data$footnote), TRUE, .data$remove)) |>
-      .filter_row_with_subsequent_replace_or_removal() |>
-      dplyr::filter(!.data$remove, .data$column %in% .env$shown_columns)
-  }
-  # body footnotes additionally carry a `rows` predicate. resolve it to row
-  # numbers (against this table's body) and drop footnotes that match no rows,
-  # mirroring `as_flex_table()`. this matters for `tbl_split_by_rows()`: a
-  # footnote scoped to rows absent from a section must not appear in that
-  # section's Word footer.
-  resolve_footnote_body <- function(df) {
-    if (nrow(df) == 0L) {
-      return(df)
-    }
-    df |>
-      dplyr::mutate(
-        remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
-        row_numbers = map(.data$rows, \(rows) .rows_expr_to_row_numbers(x$table_body, rows))
-      ) |>
-      tidyr::unnest(cols = "row_numbers") |>
-      .filter_row_with_subsequent_replace_or_removal() |>
-      dplyr::filter(!.data$remove, .data$column %in% .env$shown_columns)
-  }
-  footnote_header_resolved <- resolve_footnote_removals(x$table_styling$footnote_header)
-  footnote_spanning_resolved <- resolve_footnote_removals(x$table_styling$footnote_spanning_header)
-  footnote_body_resolved <- resolve_footnote_body(x$table_styling$footnote_body)
-
-  # header (and spanning header) footnotes, numbered first
-  spanning_header_lvls <- x$table_styling$spanning_header$level |> append(0L) |> max()
-  df_footnote_header <-
-    dplyr::bind_rows(
-      footnote_header_resolved |> dplyr::mutate(level = 0L),
-      footnote_spanning_resolved
-    ) |>
-    dplyr::mutate(row_numbers = .env$spanning_header_lvls - .data$level + 1L) %>%
-    .number_footnotes(x, type = .)
-
-  # body footnotes, numbered after the header footnotes
-  df_footnote_body <-
-    .number_footnotes(
-      x,
-      type = footnote_body_resolved,
-      start_with = dplyr::n_distinct(df_footnote_header$footnote_id)
-    )
-
-  df_footnotes <-
-    dplyr::bind_rows(
-      dplyr::distinct(df_footnote_header, .data$footnote_id, .data$footnote),
-      dplyr::distinct(df_footnote_body, .data$footnote_id, .data$footnote)
-    ) |>
-    dplyr::distinct() |>
-    dplyr::arrange(.data$footnote_id)
-
-  footnote_lines <-
-    if (nrow(df_footnotes) > 0L) {
-      paste0(
-        ref_symbol_for(df_footnotes$footnote_id), " ",
-        .strip_markdown(df_footnotes$footnote)
-      )
-    } else {
-      character(0L)
-    }
-
-  # source notes
-  source_note_lines <-
-    if (nrow(x$table_styling$source_note) > 0L) {
-      .strip_markdown(x$table_styling$source_note$source_note)
-    } else {
-      character(0L)
-    }
-
-  # abbreviations (single assembled line)
-  abbreviation_line <- .assemble_abbreviation_source_note(x)
-  abbreviation_lines <-
-    if (!is.null(abbreviation_line)) .strip_markdown(abbreviation_line) else character(0L)
-
-  c(footnote_lines, source_note_lines, abbreviation_lines)
-}
-
-#' Resolve the flextable default font for the Word header/footer
-#'
-#' Reads `flextable::get_flextable_defaults()` and returns an `officer::fp_text()`
-#' carrying the table body's `font.family` and `font.size`. This lets the Word
-#' header/footer regions match the flextable body font instead of falling back to
-#' the Word template default. A property is omitted when the corresponding
-#' flextable default is missing, so the existing default still applies.
-#'
-#' @return an `officer::fp_text` object
-#' @keywords internal
-#' @noRd
-# the header font size `as_flex_table()` bakes into every table via
-# `flextable::fontsize(part = "header", size = 11)`. kept in sync with that call
-# in `R/as_flex_table.R`; used to detect (and ignore) the baked-in header size
-# when inheriting the header part font for the Word header region.
-.flex_docx_header_default_size <- 11
-
-.flex_docx_default_font <- function() {
-  defaults <- flextable::get_flextable_defaults()
-  args <- list()
-  if (!is.null(defaults$font.family)) args$font.family <- defaults$font.family
-  if (!is.null(defaults$font.size)) args$font.size <- defaults$font.size
-  do.call(officer::fp_text, args)
-}
-
-#' Extract a part's text styling as an `fp_text` property list
-#'
-#' Reads the per-part text styling stored in `ft[[part]]$styles$text` (an
-#' `fpstruct` per `fp_text` property) and returns a named list of
-#' `officer::fp_text()` properties, so the corresponding Word region (header
-#' \eqn{\leftarrow} flextable header part, footer \eqn{\leftarrow} flextable
-#' footer part) can inherit the styling a user applied to the flextable. For each
-#' property the first cell value is used (falling back to the property default
-#' when the part has cells but no data); only property names accepted by
-#' `officer::fp_text()` are used.
-#'
-#' Two adjustments keep the inherited font sensible:
-#'
-#' - The sub-family properties (`hansi.family`, `cs.family`, `eastasia.family`)
-#'   are unreliable in a flextable part: flextable leaves them at its internal
-#'   default even when `font.family` is set, which would emit a Word run with
-#'   mismatched ascii/hAnsi fonts. They are collapsed to the extracted
-#'   `font.family` so the whole run uses one font.
-#' - `as_flex_table()` bakes a fixed header font size
-#'   (`.flex_docx_header_default_size`) into every table, independent of the
-#'   flextable body/default font. For the header part that baked-in size is
-#'   treated as "the default" and dropped, so the body font still flows through;
-#'   only an explicitly different header size is inherited.
-#'
-#' @param ft (`flextable`)\cr the flextable object
-#' @param part (`string`)\cr one of `"header"`, `"body"`, `"footer"`
-#' @return a named list of `fp_text` properties, or `NULL` when the part has no
-#'   rows (or nothing to inherit)
-#' @keywords internal
-#' @noRd
-.flex_docx_part_font <- function(ft, part) {
-  # nothing to extract when the part has no rows
-  if (flextable::nrow_part(ft, part = part) == 0L) {
-    return(NULL)
-  }
-
-  text_styles <- ft[[part]]$styles$text
-  if (is.null(text_styles)) {
-    return(NULL)
-  }
-
-  valid_props <- names(formals(officer::fp_text))
-  args <- list()
-  for (prop in intersect(names(text_styles), valid_props)) {
-    st <- text_styles[[prop]]
-    vals <- as.vector(st$data)
-    value <- if (length(vals) > 0L) vals[[1]] else st$default
-    if (!is.null(value) && !is.na(value)) {
-      args[[prop]] <- value
-    }
-  }
-
-  # collapse the (unreliable) sub-family properties onto the extracted
-  # `font.family` so the Word run uses a single, consistent font.
-  args[["hansi.family"]] <- NULL
-  args[["cs.family"]] <- NULL
-  args[["eastasia.family"]] <- NULL
-  if (!is.null(args[["font.family"]])) {
-    args[["hansi.family"]] <- args[["font.family"]]
-    args[["cs.family"]] <- args[["font.family"]]
-    args[["eastasia.family"]] <- args[["font.family"]]
-  }
-
-  # treat `as_flex_table()`'s baked-in header size as the default (see the
-  # constant's definition) so the body font size still applies unless the user
-  # explicitly changed the header size.
-  if (identical(part, "header") &&
-    isTRUE(args[["font.size"]] == .flex_docx_header_default_size)) {
-    args[["font.size"]] <- NULL
-  }
-
-  if (length(args) == 0L) {
-    return(NULL)
-  }
-  args
-}
-
-#' Merge the extracted part styling onto the base region font
-#'
-#' Starting from the base body `officer::fp_text`, merges the properties
-#' extracted from the corresponding flextable part (when present), so styling
-#' applied to the flextable header/footer flows through to the Word
-#' header/footer. The merge overrides the named properties and retains the rest
-#' via the `update.fp_text` S3 method. An empty/`NULL` list is skipped.
-#'
-#' @param base_fp (`fp_text`)\cr the base (table body) font
-#' @param extracted_props (`list` or `NULL`)\cr named `fp_text` property list
-#'   extracted from the flextable part
-#' @return an `officer::fp_text` object
-#' @keywords internal
-#' @noRd
-.flex_docx_region_font <- function(base_fp, extracted_props = NULL) {
-  if (length(extracted_props) > 0L) {
-    return(do.call(stats::update, c(list(object = base_fp), extracted_props)))
-  }
-  base_fp
-}
-
-#' Build a page-number paragraph for the Word header/footer
-#'
-#' Parses a glue-like `page` string into an `officer::fpar()`, replacing the
-#' `{PAGE}` and `{NUMPAGES}` tokens with live Word fields and emitting all other
-#' text verbatim. Any other `{token}` triggers an error.
-#'
-#' @param page (`string`)\cr the user-supplied page string
-#' @param alignment (`string`)\cr one of "left", "center", "right"
-#' @param fp_text (`fp_text`)\cr run properties applied to every run (literal
-#'   text and the `{PAGE}`/`{NUMPAGES}` fields) so the page line matches the
-#'   table body font
-#' @return an `officer::fpar` object
-#' @keywords internal
-#' @noRd
-.flex_docx_page_fpar <- function(page, alignment, fp_text = officer::fp_text()) {
-  # split into literal segments and `{...}` tokens, keeping the delimiters
-  pieces <- str_extract_all(page, "\\{[^}]*\\}|[^{]+")[[1]]
-
-  # validate tokens are PAGE/NUMPAGES only
-  tokens <- pieces[str_detect(pieces, "^\\{.*\\}$")]
-  token_names <- str_replace_all(tokens, "^\\{|\\}$", "")
-  invalid <- setdiff(token_names, c("PAGE", "NUMPAGES"))
-  if (!is_empty(invalid)) {
-    cli::cli_abort(
-      c(
-        "The {.arg page} argument contains {?an /}invalid placeholder{?s}:
-         {.val {unique(invalid)}}.",
-        i = "Only {.val {'{PAGE}'}} and {.val {'{NUMPAGES}'}} are supported."
-      ),
-      call = get_cli_abort_call()
-    )
-  }
-
-  # map each piece to an officer run, applying the shared font properties so the
-  # page line (including the `{PAGE}`/`{NUMPAGES}` fields) matches the table body
-  runs <-
-    lapply(pieces, function(piece) {
-      switch(piece,
-        "{PAGE}" = officer::run_word_field(field = "PAGE", prop = fp_text),
-        "{NUMPAGES}" = officer::run_word_field(field = "NUMPAGES", prop = fp_text),
-        officer::ftext(piece, prop = fp_text)
-      )
-    })
-
-  inject(officer::fpar(!!!runs, fp_p = officer::fp_par(text.align = alignment)))
-}
-
-#' Strip the small subset of markdown emphasis markers gtsummary supports
-#'
-#' The Word header/footer regions render plain text, so bold (`**`) and italic
-#' (`_`) markers are removed rather than interpreted.
-#'
-#' @param x (`character`)\cr a character vector
-#' @return a character vector with `**` and `_` emphasis markers removed
-#' @keywords internal
-#' @noRd
-.strip_markdown <- function(x) {
-  x <- str_replace_all(x, "\\*\\*(.*?)\\*\\*", "\\1")
-  x <- str_replace_all(x, "\\_(.*?)\\_", "\\1")
-  x
+  base_fields <- unclass(base)
+  base_fields[c(
+    "header_default", "header_even", "header_first",
+    "footer_default", "footer_even", "footer_first"
+  )] <- NULL
+  base_fields
 }

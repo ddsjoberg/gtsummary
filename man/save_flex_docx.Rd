@@ -7,11 +7,17 @@
 save_flex_docx(
   x,
   path,
-  header = FALSE,
-  footer = FALSE,
-  page = NULL,
-  page_location = c("footer-right", "footer-center", "footer-left", "header-right",
-    "header-center", "header-left"),
+  body = function(x) flextable::delete_part(x, part = "footer"),
+  footer = function(x) {
+     x \%>\% flextable::delete_part(part = "header") \%>\%
+    flextable::delete_part(part = "body") \%>\% flextable::add_footer_lines(values =
+    flextable::as_paragraph("Page ", flextable::as_word_field("PAGE"), " of ",
+    flextable::as_word_field("NUMPAGES"))) \%>\% flextable::align(i =
+    flextable::nrow_part(x, "footer"), part = "footer", align = "right") \%>\%
+    flextable::set_table_properties(layout = "autofit", width = 1)
+ },
+  header = NULL,
+  template = NULL,
   pr_section = NULL,
   ...
 )
@@ -24,41 +30,40 @@ a gtsummary table, a \code{tbl_split} object (a list of gtsummary tables), a
 \item{path}{(\code{string})\cr
 file path to write the Word (\code{.docx}) file to}
 
-\item{header}{(scalar \code{logical})\cr
-whether to place the table caption in the Word document's page header
-region. When \code{FALSE}, the caption is rendered as the table caption. Default
-is \code{FALSE}.}
+\item{body}{(\code{function} or \code{NULL})\cr
+a transformer applied to the source flextable to produce the flextable
+placed in the document body. Default \verb{\\(x) flextable::delete_part(x, part = "footer")} removes the footnote region from the body (it is relocated to the
+Word footer by the \code{footer} default). \code{NULL} uses the source flextable
+unchanged.}
 
-\item{footer}{(scalar \code{logical})\cr
-whether to place the footnotes, source notes, and abbreviations in the Word
-document's page footer region. When \code{FALSE}, this content is rendered in the
-table's footer. Default is \code{FALSE}.}
+\item{footer, header}{(\code{function}, \code{flextable}, or \code{NULL})\cr
+what to place in the Word page footer/header region: a transformer applied
+to the source flextable (returning a \code{flextable} or \code{NULL}), a static
+\code{flextable}, or \code{NULL} for nothing. The footer default keeps only the
+table's footnote region (deleting the header and body parts), appends a
+right-aligned \code{"Page X of Y"} line of live Word fields
+(\code{flextable::as_word_field()}), and fits it to the page width. The header
+default is \code{NULL} (the caption stays in the body with the table).}
 
-\item{page}{(\code{string})\cr
-an optional string added as a page-number line in a header/footer region.
-The tokens \code{{PAGE}} and \code{{NUMPAGES}} are replaced with live Word fields for
-the current page number and total page count (e.g.
-\code{"Page {PAGE} of {NUMPAGES}"}); all other text is added verbatim. Default is
-\code{NULL} (no page line). This is independent of the \code{header}/\code{footer}
-arguments.}
-
-\item{page_location}{(\code{string})\cr
-where to place the \code{page} text, as \code{"<region>-<alignment>"}. Must be one of
-\code{"footer-right"} (default), \code{"footer-center"}, \code{"footer-left"},
-\code{"header-right"}, \code{"header-center"}, or \code{"header-left"}.}
+\item{template}{(\code{string})\cr
+an optional file path to a Word (\code{.docx}) document used as the base for the
+output. Its page setup (size, orientation, margins) and body content are
+carried through; its header/footer text is not (those regions are managed by
+\code{save_flex_docx()}). See the \emph{Using a Word template} section. Default is
+\code{NULL}.}
 
 \item{pr_section}{(\code{officer::prop_section})\cr
 an optional \code{\link[officer:prop_section]{officer::prop_section()}} object used as the base Word section,
 giving fine-grained control over page margins, page size, orientation, and
 section columns (e.g.
-\code{officer::prop_section(page_margins = officer::page_mar(top = 0.5))}). The
-section's header and footer regions are always managed by \code{save_flex_docx()}
-(the relocated caption and notes), so any \code{header_default}/\code{footer_default}
-set on \code{pr_section} are ignored. For a collection (\code{tbl_split} or a list of
-flextables) the same \code{pr_section} is applied to every table's section, and
-the paging \code{type} is fixed to \code{"nextPage"} (any \code{type} on \code{pr_section} is
-ignored) so tables page correctly. Overrides the
-\code{save_flex_docx-lst:pr_section} theme element. Default is \code{NULL}.}
+\code{officer::prop_section(page_margins = officer::page_mar(top = 0.5))}). Only
+its geometry is used: \code{save_flex_docx()} always owns the header/footer
+regions, so any \code{header_default}/\code{footer_default} set on \code{pr_section} are
+ignored. For a collection (\code{tbl_split} or a list of flextables) the same
+geometry is applied to every table's section and the paging \code{type} is fixed
+to \code{"nextPage"} (any \code{type} on \code{pr_section} is ignored) so tables page
+correctly. Overrides the \code{save_flex_docx-lst:pr_section} theme element.
+Default is \code{NULL}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 }
@@ -70,69 +75,106 @@ the original object \code{x} (invisibly)
 Save a gtsummary table or a flextable to a Word (\code{.docx}) file using the
 flextable package.
 
-The \code{header} and \code{footer} arguments control where the table caption and the
-footnote-region content (footnotes, source notes, and abbreviations) are
-placed in the Word document. When \code{TRUE}, this content is moved to the Word
-document's page \strong{header} and \strong{footer} regions (where it repeats on every
-page) instead of appearing in the flow of the table itself. When \code{FALSE}, the
-content is rendered as part of the table, matching \code{\link[=as_flex_table]{as_flex_table()}}.
+\strong{This function is highly experimental.} Its arguments and behavior are
+likely to change in future releases, and it may eventually be spun off into a
+separate package (as this function works with any flextable object in
+addition to gtsummary tables). Use with that in mind.
+
+The table is written into the \strong{body} of the Word document. The \code{body},
+\code{header}, and \code{footer} arguments are transformers applied to the (source)
+flextable to build, respectively, the content placed in the document body and
+in the Word page \strong{header} and \strong{footer} regions (which repeat on every
+page). Each is a function of a flextable, a static \code{flextable}, or \code{NULL}.
+
+By default the footnote region of the table (footnotes, source notes, and
+abbreviations) is moved out of the body and into the Word footer as a
+flextable, followed by a right-aligned \code{"Page X of Y"} line built from live
+Word fields. Compose your own behavior with flextable functions such as
+\code{\link[flextable:delete_part]{flextable::delete_part()}}, \code{\link[flextable:add_footer_lines]{flextable::add_footer_lines()}}, and
+\code{\link[flextable:as_word_field]{flextable::as_word_field()}}.
 
 A collection of tables is also accepted: a \code{tbl_split} object (from
 \code{\link[=tbl_split_by_rows]{tbl_split_by_rows()}} or \code{\link[=tbl_split_by_columns]{tbl_split_by_columns()}}), or a plain list of
-flextables. Each table is written to its own Word section so that each table's
-caption and footnote-region content populate that section's own header/footer
-regions, one table per page.
-
-A \code{flextable} object (or a list of them) is also accepted. Its caption
-(\code{flextable::set_caption()}) is relocated to the Word header and its footer
-part (\code{flextable::add_footer_lines()}) to the Word footer, matching the
-gtsummary behavior.
+flextables. Each table is written to its own Word section (one table per page)
+with the \code{body}/\code{header}/\code{footer} transformers applied independently to each.
 }
-\section{Limitations}{
+\section{Using a Word template}{
 
 
-Relocating the caption to the Word header (\code{header = TRUE}) and the
-footnotes, source notes, and abbreviations to the Word footer
-(\code{footer = TRUE}) is lossy.
-Relocated content is rendered as plain text: markdown
-and HTML are not interpreted and emphasis markers (\verb{**bold**}, \verb{_italic_})
-are stripped. Only the font family and size are carried over; colors,
-indentation, per-cell styling, and column structure are not preserved.
+The \code{template} argument accepts a path to a Word (\code{.docx}) document used as the
+base for the output. Its \strong{page setup} (size, orientation, margins, section
+columns) and any \strong{body content} (e.g. a cover page or introductory text) are
+carried through, with the table written into the body after that content.
+
+\code{save_flex_docx()} \strong{manages the Word header and footer regions itself} (via
+the \code{header}/\code{footer} arguments), so \strong{a template's own header/footer text is
+not carried through} — whatever \code{save_flex_docx()} places in a region (or
+leaves empty) takes precedence and blanks out the template's text there. This
+is intentional: header/footer text in a template and table placement in the
+header/footer are \strong{not meant to be mixed}. Because the default \code{footer}
+places a table, a template's header/footer text is superseded by default. Put
+the content you want in the header/footer into the \code{header}/\code{footer} arguments
+rather than into the template.
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (FALSE && gtsummary:::is_pkg_installed(c("flextable", "officer"))) withAutoprint(\{ # examplesIf}
+theme_gtsummary_compact()
+
+# Example 1 ----------------------------------
+# Default behavior is to place the footnote in the footer and add 'Page X of Y'
 tbl <-
   trial |>
   tbl_summary(by = trt, include = c(age, grade)) |>
   modify_caption("**Table 1. Patient Characteristics**")
 
-# save the table, placing caption in the header and notes in the footer
+# by default the footnotes move to the Word footer with a page-number line
 save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
 
-# add a "Page X of Y" line to the footer
+# keep the whole table (including footnotes) in the body, nothing in the footer
 save_flex_docx(
   tbl,
   path = tempfile(fileext = ".docx"),
-  page = "Page {PAGE} of {NUMPAGES}"
+  body = NULL,
+  footer = NULL
 )
+
+# Example 2 ----------------------------------
+# This example places a header typically found in the pharmaceutical space,
+# including protocol number, table title/number, and sub-population label.
+
+# place a static report header (with a live "Page X of Y" field) in the header
+header_ft <-
+  data.frame(
+    col1 = c("Protocol: ABC123", NA),
+    col2 = c("Table 14.3.6 Adverse Event Rates by SOC and PT", "Safety Population"),
+    col3 = c(NA_character_, NA_character_),
+    stringsAsFactors = FALSE
+  ) |>
+  flextable::flextable() |>
+  flextable::delete_part(part = "header") |>
+  flextable::align(j = 1, align = "left", part = "body") |>
+  flextable::align(j = 2, align = "center", part = "body") |>
+  flextable::align(j = 3, align = "right", part = "body") |>
+  flextable::compose(
+    i = 1, j = 3,
+    value = flextable::as_paragraph(
+      "Page ", flextable::as_word_field("PAGE"),
+      " of ", flextable::as_word_field("NUMPAGES")
+    ),
+    part = "body"
+  ) |>
+  flextable::border_remove() |>
+  flextable::fontsize(size = 8, part = "all") |>
+  flextable::padding(padding.top = 0, padding.bottom = 0, part = "all") |>
+  flextable::set_table_properties(layout = "autofit", width = 1)
+save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = header_ft)
 
 # a split table is written with one table per section/page
 trial |>
   tbl_summary(by = trt, include = c(age, marker, grade), missing = ~"no") |>
-  modify_footnote_body(
-    "Footnotes only appear on the pages where the mark is present",
-    columns = "label",
-    rows = label == "Age"
-  ) |>
   tbl_split_by_rows(variables = marker) |>
   save_flex_docx(path = tempfile(fileext = ".docx"))
-
-# a flextable (or a list of flextables) is also accepted
-ft <-
-  as_flex_table(tbl) |>
-  flextable::set_caption("Table 1")
-save_flex_docx(ft, path = tempfile(fileext = ".docx"))
 
 # customize the Word page margins and orientation via a prop_section()
 save_flex_docx(
@@ -143,6 +185,8 @@ save_flex_docx(
     page_size = officer::page_size(orient = "landscape")
   )
 )
+
+reset_gtsummary_theme()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
