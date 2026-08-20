@@ -62,6 +62,10 @@ the original object \code{x} (invisibly)
 Save a gtsummary table or a flextable to a Word (\code{.docx}) file using the
 flextable package.
 
+\strong{This function is highly experimental.} Its arguments and behavior are
+likely to change in future releases, and it may eventually be spun off into a
+separate package. Use with that in mind.
+
 The table is written into the \strong{body} of the Word document. The \code{body},
 \code{header}, and \code{footer} arguments are transformers applied to the (source)
 flextable to build, respectively, the content placed in the document body and

@@ -23,12 +23,17 @@ code matching \code{token}. Default is \code{"Page {PAGE} of {NUMPAGES}"}.}
 a \code{flextable} object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Appends a single footer row to a flextable whose text is \code{footnote}, with any
 \code{{token}} replaced by a live Word field code (e.g. \code{{PAGE}}, \code{{NUMPAGES}},
 \code{{DATE}}) and all other text rendered verbatim. The new row's alignment is set
 by \code{align} and does not affect any existing footer rows. Useful for adding a
 page-number line to a footer flextable placed in a Word footer region by
 \code{\link[=save_flex_docx]{save_flex_docx()}}.
+
+\strong{This function is highly experimental.} Its arguments and behavior are
+likely to change in future releases, and it may eventually be spun off into a
+separate package. Use with that in mind.
 }
 \examples{
 \dontshow{if (gtsummary:::is_pkg_installed(c("flextable"))) withAutoprint(\{ # examplesIf}

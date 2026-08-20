@@ -5,6 +5,10 @@
 #' Save a gtsummary table or a flextable to a Word (`.docx`) file using the
 #' flextable package.
 #'
+#' **This function is highly experimental.** Its arguments and behavior are
+#' likely to change in future releases, and it may eventually be spun off into a
+#' separate package. Use with that in mind.
+#'
 #' The table is written into the **body** of the Word document. The `body`,
 #' `header`, and `footer` arguments are transformers applied to the (source)
 #' flextable to build, respectively, the content placed in the document body and
@@ -401,12 +405,17 @@ save_flex_docx <- function(x,
 #' Add a footer line with Word field codes to a flextable
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`\cr
 #' Appends a single footer row to a flextable whose text is `footnote`, with any
 #' `{token}` replaced by a live Word field code (e.g. `{PAGE}`, `{NUMPAGES}`,
 #' `{DATE}`) and all other text rendered verbatim. The new row's alignment is set
 #' by `align` and does not affect any existing footer rows. Useful for adding a
 #' page-number line to a footer flextable placed in a Word footer region by
 #' [`save_flex_docx()`].
+#'
+#' **This function is highly experimental.** Its arguments and behavior are
+#' likely to change in future releases, and it may eventually be spun off into a
+#' separate package. Use with that in mind.
 #'
 #' @param x (`flextable`)\cr a flextable object
 #' @param footnote (`string`)\cr the footer text; `{token}` becomes a Word field
