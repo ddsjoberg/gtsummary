@@ -13,9 +13,10 @@ negative values indicate a reduction (i.e. an improvement).
 
 | Function (input data) | Computation time | Memory allocated |
 |:---|---:|---:|
-| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md) pipeline | −40% | −13% |
-| [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md) pipeline | −56% | −35% |
-| [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md) pipeline (10× replicated ADAE) | −94% | −71% |
+| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md) | −40% | −13% |
+| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md) high cardinality (1k-level factor) | −89% | −44% |
+| [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_strata.md) | −56% | −35% |
+| [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md) (10× replicated ADAE) | −94% | −71% |
 | [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md) (10× replicated ADAE) | −92% | −67% |
 
 - Improved the speed and memory efficiency of
@@ -134,7 +135,7 @@ negative values indicate a reduction (i.e. an improvement).
   variable levels (e.g. the rate difference of adverse events between
   two treatment arms). The two levels are chosen with the `levels`
   argument, and the calculation is performed by the new
-  [`cards::diff_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html)
+  [`cards::diff_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html)
   function.
 
 - Added a `levels` argument to
@@ -152,7 +153,7 @@ negative values indicate a reduction (i.e. an improvement).
   `"descending"` sorting to a single `by` variable level
   (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the
   Placebo arm). This exposes the new `by_level` argument of
-  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
+  [`cards::sort_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
   because gtsummary hierarchical tables allow only a single `by`
   variable, a scalar level is accepted here and wrapped internally into
   the named list `cards` expects.
@@ -723,7 +724,7 @@ CRAN release: 2025-02-19
 - Adding the `tbl_merge(merge_vars)` argument. This argument allows
   users to specify any merging columns providing much more flexibility
   when merging unlike tables. Additionally, columns selected by
-  [`cards::all_ard_groups()`](https://insightsengineering.github.io/cards/latest-tag/reference/selectors.html)
+  [`cards::all_ard_groups()`](https://pharmaverse.github.io/cards/latest-tag/reference/selectors.html)
   have been added to the default merging columns, which provides the
   functionality for merging the results from
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md)
@@ -1067,7 +1068,7 @@ Updates to address regressions in the v2.0.0 release:
   available on the website).
 
 - The total N is now returned with `.$cards` using the
-  [`cards::ard_total_n()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html)
+  [`cards::ard_total_n()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html)
   function for the calculation.
 
 - The default headers for `tbl_ard_*()` functions no longer include
@@ -1086,7 +1087,7 @@ Updates to address regressions in the v2.0.0 release:
 - The
   [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
   function no longer requires the results from
-  [`cards::ard_attributes()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html)
+  [`cards::ard_attributes()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_attributes.html)
   to create tables.
   ([\#1873](https://github.com/ddsjoberg/gtsummary/issues/1873))
 

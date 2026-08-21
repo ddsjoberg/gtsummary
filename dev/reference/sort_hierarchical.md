@@ -78,7 +78,7 @@ sort_hierarchical(x, sort = everything() ~ "descending", by_level = NULL, ...)
   be used when `x` has no `by` variable. Because gtsummary hierarchical
   tables allow only a single `by` variable, a scalar level is supplied
   here (rather than the named list used by
-  [`cards::sort_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html)).
+  [`cards::sort_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html)).
 
   Defaults to `NULL`, in which case count sums are calculated across all
   `by` levels.

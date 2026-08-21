@@ -292,7 +292,7 @@ For submission-ready deliverables, convert to a
 [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html)
 for polished RTF and Word output, or save straight to a Word document
 with
-[`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.html).
+[`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/save_flex_docx.md).
 
 ## Cite gtsummary
 

@@ -50,7 +50,7 @@ tbl_butchered <-
 
 # size comparison
 object.size(tbl_large) |> format(units = "Mb")
-#> [1] "8.2 Mb"
+#> [1] "8.3 Mb"
 object.size(tbl_butchered)|> format(units = "Mb")
 #> [1] "1.5 Mb"
 ```

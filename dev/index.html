@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9021</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.5.1.9022</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,13 +171,13 @@
 <span>  <span class="va">ADAE</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># filter to a few System Organ Classes and Preferred Terms for a compact display</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>    <span class="va">AESOC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AESOC</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>    <span class="va">AETERM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AETERM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
+<span>    <span class="va">AESOC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AESOC</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>    <span class="va">AETERM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AETERM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/tbl_hierarchical.html">tbl_hierarchical</a></span><span class="op">(</span></span>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AESOC</span>, <span class="va">AETERM</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="va">TRTA</span>, <span class="co"># summarize by treatment arm</span></span>
-<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span>
+<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span>
 <span>    id <span class="op">=</span> <span class="va">USUBJID</span>, <span class="co"># count unique patients, not events</span></span>
 <span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>..ard_hierarchical_overall.. <span class="op">=</span> <span class="st">"Any Adverse Event"</span><span class="op">)</span></span>
@@ -192,7 +192,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl_ae</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># keep the adverse event term counts and the columns identifying each statistic</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"AETERM"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group1_level</span>, <span class="va">variable_level</span>, <span class="va">stat_name</span>, <span class="va">stat</span><span class="op">)</span></span>
@@ -228,7 +228,7 @@
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html" class="external-link">gtsave</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># use extensions .png, .html, .docx, .rtf, .tex, .ltx</span></span></code></pre></div>
-<p>For submission-ready deliverables, convert to a <a href="https://davidgohel.github.io/flextable/" class="external-link">{flextable}</a> with <a href="https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html"><code>as_flex_table()</code></a> for polished RTF and Word output, or save straight to a Word document with <a href="https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.html"><code>save_flex_docx()</code></a>.</p>
+<p>For submission-ready deliverables, convert to a <a href="https://davidgohel.github.io/flextable/" class="external-link">{flextable}</a> with <a href="https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html"><code>as_flex_table()</code></a> for polished RTF and Word output, or save straight to a Word document with <code><a href="reference/save_flex_docx.html">save_flex_docx()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="cite-gtsummary">Cite gtsummary<a class="anchor" aria-label="anchor" href="#cite-gtsummary"></a>

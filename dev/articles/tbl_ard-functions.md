@@ -198,15 +198,15 @@ AGE, a categorical variable summaries for AGEGR1 and SEX.
 
 The {cards} package can be utilized to create the ARD from a data frame.
 The package includes functions
-[`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
+[`ard_summary()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_summary.html)
 for continuous summaries,
-[`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+[`ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
 for categorical summaries, and
-[`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+[`ard_tabulate_value()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
 for dichotomous variables (and more).
 
 The package also exports a helper function,
-[`ard_stack()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html)
+[`ard_stack()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_stack.html)
 to simultaneously build these summaries along with optional ancillary
 results for a nicer display.
 
@@ -286,7 +286,7 @@ intervals.
 
 First, we will create an ARD for each of these analyses, then combine
 them with
-[`cards::bind_ard()`](https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html).
+[`cards::bind_ard()`](https://pharmaverse.github.io/cards/latest-tag/reference/bind_ard.html).
 
 ``` r
 
@@ -330,17 +330,17 @@ results above.
 - The
   [`cardx::ard_survival_survfit()`](https://rdrr.io/pkg/cardx/man/ard_survival_survfit.html)
   ARD looks like the
-  [`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  [`ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
   result.
 - The
   [`cardx::ard_stats_t_test_onesample()`](https://rdrr.io/pkg/cardx/man/ard_stats_t_test_onesample.html)
   ARD looks like the
-  [`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
+  [`ard_summary()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_summary.html)
   result.
 - The
   [`cardx::ard_categorical_ci()`](https://rdrr.io/pkg/cardx/man/ard_categorical_ci.html)
   ARD looks like the
-  [`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+  [`ard_tabulate_value()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
   result.
 
 With the created ARD, we can now build a summary table.

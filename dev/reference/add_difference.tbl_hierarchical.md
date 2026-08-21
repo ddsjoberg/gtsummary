@@ -7,7 +7,7 @@ or
 For every node in the hierarchy (e.g. each system organ class and each
 preferred term) the event rate of a second `by` group is subtracted from
 the rate of a first `by` group. This is a wrapper around
-[`cards::diff_ard_hierarchical()`](https://insightsengineering.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html).
+[`cards::diff_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html).
 
 The table must be stratified by a single `by` variable and its
 statistics must include the rate (`p`) statistic (the default for
