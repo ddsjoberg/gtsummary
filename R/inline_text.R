@@ -206,7 +206,7 @@ inline_text.gtsummary <- function(x,
   }
   else {
     lvl <- cards::cards_select(expr = !!lvl, data = vec_to_df(possible_lvls))
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = glue("gtsummary::inline_text({lvl_argname} = 'must now be a string')"),
       details = glue("Use `{lvl_argname} = '{lvl}'` instead.")

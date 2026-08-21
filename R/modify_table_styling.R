@@ -156,7 +156,7 @@ modify_table_styling <- function(x,
     if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30L) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::modify_table_styling(undo_text_format = 'must be one of \"bold\" or \"italic\"')",
       details = glue::glue("Update function call to `{updated_call}`.")
@@ -181,7 +181,7 @@ modify_table_styling <- function(x,
     if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::modify_table_styling(text_format = 'must be one of \"bold\" or \"italic\"')",
       details = glue::glue("Update function call to `{updated_call}`.")

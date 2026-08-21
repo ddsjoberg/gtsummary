@@ -66,7 +66,7 @@ set_gtsummary_theme <- function(x, quiet) {
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::set_gtsummary_theme(quiet)",
       details = "Argument has been ignored."
