@@ -6,9 +6,10 @@ This release brings a large, cross-cutting performance effort. None of the chang
 
 | Function (input data) | Computation time | Memory allocated |
 | :-- | --: | --: |
-| `tbl_summary()` pipeline | −40% | −13% |
-| `tbl_strata()` pipeline | −56% | −35% |
-| `tbl_hierarchical()` pipeline (10× replicated ADAE) | −94% | −71% |
+| `tbl_summary()` | −40% | −13% |
+| `tbl_summary()` high cardinality (1k-level factor) | −89% | −44% |
+| `tbl_strata()` | −56% | −35% |
+| `tbl_hierarchical()` (10× replicated ADAE) | −94% | −71% |
 | `sort_hierarchical()` (10× replicated ADAE) | −92% | −67% |
 
 * Improved the speed and memory efficiency of `tbl_summary()` and the internals it shares with `tbl_svysummary()`, `tbl_custom_summary()`, and `tbl_ard_summary()`. The table assembly step (`brdg_summary()`) is roughly 2.6 times faster. (#2440)

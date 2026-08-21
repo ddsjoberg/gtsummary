@@ -296,8 +296,7 @@ For submission-ready deliverables, convert to a
 [{flextable}](https://davidgohel.github.io/flextable/) with
 [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html)
 for polished RTF and Word output, or save straight to a Word document
-with
-[`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.html).
+with `save_flex_docx()`.
 
 ## Cite gtsummary
 
