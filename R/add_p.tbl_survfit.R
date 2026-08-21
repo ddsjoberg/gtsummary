@@ -71,7 +71,7 @@ add_p.tbl_survfit <- function(x,
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::add_p(quiet)"
     )

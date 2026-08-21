@@ -199,13 +199,13 @@ tbl_survfit.list <- function(x,
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_survfit(quiet)"
     )
   }
   if (isTRUE(reverse)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_survfit(reverse)",
       details = "Please use `type='risk'` instead."
