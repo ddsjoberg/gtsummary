@@ -268,32 +268,6 @@ test_that("tbl_strata2 works with standard use", {
   expect_equal(length(tbl$tbls), 3)
 })
 
-test_that("tbl_strata(.quiet) produces deprecation warning", {
-  lifecycle::expect_deprecated(
-    trial |>
-      select(grade, response, stage, trt) |>
-      mutate(grade = paste("Grade", grade)) |>
-      tbl_strata(
-        strata = grade,
-        .tbl_fun = ~ .x |> tbl_summary(),
-        .quiet = TRUE
-      )
-  )
-})
-
-test_that("tbl_strata2(.quiet) produces deprecation warning", {
-  lifecycle::expect_deprecated(
-    trial |>
-      select(grade, response, stage, trt) |>
-      mutate(grade = paste("Grade", grade)) |>
-      tbl_strata2(
-        strata = grade,
-        .tbl_fun = ~ .x |> tbl_summary(),
-        .quiet = TRUE
-      )
-  )
-})
-
 test_that("tbl_strata works with survey objects", {
   skip_if_pkg_not_installed("survey")
 

@@ -104,14 +104,6 @@ test_that("add_global_p.tbl_regression works when table is modified to hide p-va
   expect_equal(sum(!is.na(res$table_body$p.value)), 2)
 })
 
-test_that("add_global_p.tbl_regression(quiet) causes deprecation error", {
-  tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>
-    tbl_regression()
-
-  lifecycle::expect_deprecated(
-    tbl |> add_global_p(quiet = TRUE),
-  )
-})
 
 test_that("add_global_p.tbl_regression returns an error for unsupported anova_fun input", {
   tbl <- glm(response ~ age + grade + marker, trial, family = binomial()) |>

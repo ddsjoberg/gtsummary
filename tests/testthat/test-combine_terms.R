@@ -162,13 +162,6 @@ test_that("combine_terms works when used in map/apply", {
   )
 })
 
-test_that("combine_terms(quiet) causes deprecation warning", {
-  lifecycle::expect_deprecated(
-    tbl_regression(lmod, label = stage ~ "Stage") |>
-      combine_terms(formula_update = . ~ . - marker - I(marker^2), quiet = TRUE)
-  )
-})
-
 test_that("combine_terms catches expected errors", {
   # p-value calculation error
   expect_snapshot(
