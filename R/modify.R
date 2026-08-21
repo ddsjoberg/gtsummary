@@ -253,14 +253,14 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
 
   # deprecated arguments -------------------------------------------------------
   if (!missing(include_example)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::show_header_names(include_example)",
       details = "Argument has been ignored."
     )
   }
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::show_header_names(quiet)",
       details = "Argument has been ignored."
@@ -402,7 +402,7 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
 .deprecate_modify_update_and_quiet_args <- function(dots, update, quiet, calling_fun) {
   # deprecated arguments
   if (!missing(update) || (!is_empty(dots) && is.list(dots[[1]]))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "2.0.0", glue("gtsummary::{calling_fun}(update=)"),
       details =
         glue("Use `{calling_fun}(...)` input instead.
@@ -416,7 +416,7 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
     dots
   }
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "2.0.0", glue("gtsummary::{calling_fun}(quiet=)"),
       details = "Argument has been ignored."
     )

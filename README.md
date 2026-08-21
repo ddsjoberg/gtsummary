@@ -299,41 +299,6 @@ for polished RTF and Word output, or save straight to a Word document
 with
 [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.html).
 
-## Additional Resources
-
-- The best resources are the gtsummary vignettes: [table
-  gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
-  [`tbl_summary()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
-  [`tbl_regression()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
-  [`inline_text()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
-  [gtsummary
-  themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
-  [gtsummary+R
-  markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
-
-- For clinical and pharmaceutical reporting, the [ARD-first
-  Tables](https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html)
-  article covers CDISC-aligned Analysis Results Datasets, powered by the
-  pharmaverse [{cards}](https://pharmaverse.github.io/cards/) and
-  [{cardx}](https://pharmaverse.github.io/cardx/) packages.
-
-- The R Journal Article [*Reproducible Summary Tables with the gtsummary
-  Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
-
-- The [RStudio Education
-  Blog](https://education.rstudio.com/blog/2020/07/gtsummary/) includes
-  a post with a brief introduction to the package.
-
-- A [recording of a
-  presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
-  the Weill Cornell Biostatistics Department and the Memorial Sloan
-  Kettering R Users Group.
-
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## Cite gtsummary
 
 ``` text

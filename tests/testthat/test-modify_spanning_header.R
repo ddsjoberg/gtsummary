@@ -1,29 +1,5 @@
 skip_on_cran()
 
-# first, testing deprecation
-test_that("modify_spanning_header(update,quiet) are deprecated", {
-  lifecycle::expect_deprecated(
-    tbl_summary(trial, include = marker) |>
-      modify_spanning_header(update = list(label = "Variable"))
-  )
-  lifecycle::expect_deprecated(
-    tbl_summary(trial, include = marker) |>
-      modify_spanning_header(quiet = FALSE)
-  )
-})
-
-test_that("modify_spanning_header(update) deprecated argument still works", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-  expect_equal(
-    tbl_summary(trial, include = marker) |>
-      modify_spanning_header(update = list(label = "Variable")) %>%
-      {.[c("table_body", "table_styling")]},
-    tbl_summary(trial, include = marker) |>
-      modify_spanning_header(label = "Variable") %>%
-      {.[c("table_body", "table_styling")]}
-  )
-})
-
 test_that("modify_spanning_header(...) works", {
   tbl <- tbl_summary(trial, include = "marker")
 

@@ -40,7 +40,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet, ...) {
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::combine_terms(quiet)"
     )
