@@ -121,7 +121,7 @@ tbl_strata <- function(data,
 
   # deprecations ---------------------------------------------------------------
   if (!missing(.quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_strata(.quiet)",
       details = "Argument has been ignored."
@@ -162,7 +162,7 @@ tbl_strata2 <- function(data,
 
   # deprecations ---------------------------------------------------------------
   if (!missing(.quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_strata(.quiet)",
       details = "Argument has been ignored."

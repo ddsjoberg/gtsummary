@@ -148,13 +148,11 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
-  cli::cli_warn(c(
-    "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
-    i = "The same functionality is covered in {.val oneway.test} with argument `var.equal = TRUE`."
-  ))
-
-  add_p_test_oneway.test(data = .data_pre_processing(data, factor = by),
-                         variable = variable, by = by, test.args = list(var.equal = TRUE))
+  lifecycle::deprecate_stop(
+    "2.0.0",
+    what = I( "The test 'aov' in `add_p(test)`"),
+    details = "The same functionality is covered in 'oneway.test' with argument `var.equal = TRUE`."
+  )
 }
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
