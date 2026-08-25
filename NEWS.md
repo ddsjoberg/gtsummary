@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 2.6.0
 
 ## Performance
 
