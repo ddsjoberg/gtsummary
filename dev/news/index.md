@@ -2,6 +2,10 @@
 
 ## gtsummary (development version)
 
+## gtsummary 2.6.0
+
+CRAN release: 2026-08-25
+
 ### Performance
 
 This release brings a large, cross-cutting performance effort. None of
