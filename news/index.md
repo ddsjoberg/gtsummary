@@ -1,5 +1,289 @@
 # Changelog
 
+## gtsummary 2.6.0
+
+CRAN release: 2026-08-25
+
+### Performance
+
+This release brings a large, cross-cutting performance effort. None of
+the changes below alter the returned tables—only how quickly and cheaply
+they are built. The table highlights the headline improvements measured
+against the previous CRAN release
+([tracking-gtsummary-cards-efficiency](https://github.com/ddsjoberg/tracking-gtsummary-cards-efficiency));
+negative values indicate a reduction (i.e. an improvement).
+
+| Function (input data) | Computation time | Memory allocated |
+|:---|---:|---:|
+| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md) | −40% | −13% |
+| [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md) high cardinality (1k-level factor) | −89% | −44% |
+| [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_strata.md) | −56% | −35% |
+| [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.md) (10× replicated ADAE) | −94% | −71% |
+| [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/sort_hierarchical.md) (10× replicated ADAE) | −92% | −67% |
+
+- Improved the speed and memory efficiency of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
+  and the internals it shares with
+  [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svysummary.md),
+  [`tbl_custom_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_custom_summary.md),
+  and
+  [`tbl_ard_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_summary.md).
+  The table assembly step
+  ([`brdg_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/brdg_summary.md))
+  is roughly 2.6 times faster.
+  ([\#2440](https://github.com/ddsjoberg/gtsummary/issues/2440))
+
+- Improved the speed and memory efficiency of
+  [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.md),
+  [`tbl_hierarchical_count()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.md),
+  [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_hierarchical.md),
+  and the
+  [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/sort_hierarchical.md)/[`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/filter_hierarchical.md)
+  helpers. The table assembly step
+  ([`brdg_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/brdg_hierarchical.md))
+  now vectorizes the statistic formatting instead of looping over every
+  cell, making the pipeline roughly 8 times faster.
+  ([\#2442](https://github.com/ddsjoberg/gtsummary/issues/2442))
+
+- Further improved the speed and memory efficiency of
+  [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/filter_hierarchical.md)
+  by using base-R subsetting in the row-selection steps and replacing a
+  many-to-many join with a membership test in the overall-column
+  filtering step.
+  ([\#2444](https://github.com/ddsjoberg/gtsummary/issues/2444))
+
+- Improved the speed and memory efficiency of
+  [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.md).
+  Several of these internals are shared, so
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md),
+  and related functions get faster as well.
+  ([\#2451](https://github.com/ddsjoberg/gtsummary/issues/2451))
+
+- Improved the speed and memory efficiency of
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/reference/add_overall.md),
+  roughly halving the overhead of merging the overall column into the
+  stratified table.
+  ([\#2450](https://github.com/ddsjoberg/gtsummary/issues/2450))
+
+- Improved the speed and memory efficiency of
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.md).
+  ([\#2452](https://github.com/ddsjoberg/gtsummary/issues/2452))
+
+- Improved the speed and memory efficiency of the table-modification
+  functions
+  ([`modify_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md),
+  [`modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md),
+  the footnote and abbreviation helpers, the column/format helpers such
+  as
+  [`modify_indent()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_indent.md)
+  and
+  [`modify_source_note()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_source_note.md),
+  [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.md),
+  and the developer-facing
+  [`modify_table_styling()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_table_styling.md)).
+  ([\#2453](https://github.com/ddsjoberg/gtsummary/issues/2453))
+
+- Improved the speed and memory efficiency of the output converters
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.md),
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.md),
+  [`as_hux_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_hux_table.md),
+  [`as_kable_extra()`](https://www.danieldsjoberg.com/gtsummary/reference/as_kable_extra.md),
+  [`as_kable()`](https://www.danieldsjoberg.com/gtsummary/reference/as_kable.md),
+  and
+  [`as_tibble()`](https://tibble.tidyverse.org/reference/as_tibble.html).
+  ([\#2454](https://github.com/ddsjoberg/gtsummary/issues/2454))
+
+### New Features and Functions
+
+- Added
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md)
+  to save a gtsummary table or a flextable to a Word (`.docx`) file via
+  flextable. The table is written to the document body, and the `body`,
+  `footer`, and `header` arguments are transformer functions (or static
+  flextables) that build what is placed in the body and in the Word page
+  footer/header regions. By default the table’s footnote region
+  (footnotes, source notes, abbreviations) is moved out of the body and
+  into the Word footer as a flextable, followed by a right-aligned
+  `"Page X of Y"` line of live Word fields. A collection of tables—a
+  `tbl_split` object (from
+  [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_split_by.md)/[`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_split_by.md))
+  or a plain list of flextables—is also accepted, writing each table to
+  its own Word section and page with the transformers applied per table.
+  A `template` argument accepts a path to a Word (`.docx`) template
+  whose page setup and body content are carried through (its
+  header/footer regions are managed by
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md)).
+  The `pr_section` argument accepts an
+  [`officer::prop_section()`](https://davidgohel.github.io/officer/reference/prop_section.html)
+  object for fine-grained control of the Word section geometry—page
+  margins, page size, orientation, and columns—while
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md)
+  manages the header/footer regions; for a collection the same geometry
+  is applied to every table with the paging `type` fixed to
+  `"nextPage"`. The defaults of the `body`, `footer`, `header`, and
+  `template` arguments, and the base `pr_section`, are all configurable
+  via theme elements (`save_flex_docx-arg:body`,
+  `save_flex_docx-arg:footer`, `save_flex_docx-arg:header`,
+  `save_flex_docx-arg:template`, and `save_flex_docx-lst:pr_section`).
+
+- Added
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.md)
+  methods for hierarchical tables,
+  [`add_difference.tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+  and
+  [`add_difference.tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md),
+  which append a column of event-rate differences between two `by`
+  variable levels (e.g. the rate difference of adverse events between
+  two treatment arms). The two levels are chosen with the `levels`
+  argument, and the calculation is performed by the new
+  [`cards::diff_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/diff_ard_hierarchical.html)
+  function.
+
+- Added a `levels` argument to
+  [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_summary.md)
+  and
+  [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_svysummary.md)
+  to select which two `by` groups to compare. This makes
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.md)
+  usable when `by=` has more than two levels, and lets users flip the
+  direction of the difference for two-level `by` variables.
+  ([\#2151](https://github.com/ddsjoberg/gtsummary/issues/2151))
+
+- [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/sort_hierarchical.md)
+  gained a `by_level` argument that restricts the counts used for
+  `"descending"` sorting to a single `by` variable level
+  (e.g. `by_level = "Placebo"` sorts by the frequencies observed in the
+  Placebo arm). This exposes the new `by_level` argument of
+  [`cards::sort_ard_hierarchical()`](https://pharmaverse.github.io/cards/latest-tag/reference/sort_ard_hierarchical.html);
+  because gtsummary hierarchical tables allow only a single `by`
+  variable, a scalar level is accepted here and wrapped internally into
+  the named list `cards` expects.
+
+- Added
+  [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md),
+  [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md),
+  and the `pkgwide-chr:footnote_symbol` theme element to control the
+  symbols used for footnote references (e.g. `c("*", "†", "‡")` instead
+  of `1, 2, 3`). Currently supported by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.md)
+  and
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.md).
+  ([\#1445](https://github.com/ddsjoberg/gtsummary/issues/1445))
+
+- [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.md)
+  and
+  [`remove_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.md)
+  now accept a character vector of abbreviations, allowing multiple
+  abbreviations to be added or removed in a single call.
+  [`modify_abbreviation()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.md)
+  also gains `prefix`, `sep1`, and `sep2` arguments to customize the
+  abbreviation source note’s leading text (e.g. `c("Abbr.", "Abbrs.")`),
+  the separator between the prefix and the abbreviations (e.g. `": "`),
+  and the separator between abbreviations (e.g. `"; "`). Defaults are
+  also configurable via the `modify_abbreviation-arg:prefix`,
+  `modify_abbreviation-arg:sep1`, and `modify_abbreviation-arg:sep2`
+  theme elements.
+  ([\#2172](https://github.com/ddsjoberg/gtsummary/issues/2172))
+
+- The `missing` argument of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
+  and
+  [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svysummary.md)
+  now accepts the formula-list-selector syntax
+  (e.g. `missing = list(age ~ "always", grade ~ "no")`), allowing the
+  missing row to be shown for some variables and not others. A bare
+  string (e.g. `missing = "no"`) remains supported.
+  ([\#2283](https://github.com/ddsjoberg/gtsummary/issues/2283))
+
+- The `text_interpret` argument now accepts `"none"` (in addition to
+  `"md"` and `"html"`), which renders text verbatim without
+  markdown/HTML interpretation. The
+  [`add_significance_stars()`](https://www.danieldsjoberg.com/gtsummary/reference/add_significance_stars.md)
+  footnote now uses `"none"` so its asterisks render literally. Honored
+  by
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.md).
+  ([\#1987](https://github.com/ddsjoberg/gtsummary/issues/1987))
+
+- [`as_hux_xlsx()`](https://www.danieldsjoberg.com/gtsummary/reference/as_hux_table.md)
+  now accepts a list of gtsummary tables, writing each table to its own
+  worksheet in a single Excel workbook. When the list is named, the
+  names are used as the worksheet names.
+  ([\#2327](https://github.com/ddsjoberg/gtsummary/issues/2327))
+
+- Added
+  [`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
+  to evaluate an expression with the active gtsummary theme temporarily
+  ignored (package defaults in effect), restoring the theme afterward.
+  ([\#2284](https://github.com/ddsjoberg/gtsummary/issues/2284))
+
+### Other Updates
+
+- In
+  [`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.md),
+  multiple footnote reference symbols on a single cell are now separated
+  by a comma (e.g. `1,2` instead of `12`), matching `gt` output. This
+  requires `flextable (>= 0.9.11)`.
+  ([\#2251](https://github.com/ddsjoberg/gtsummary/issues/2251))
+
+- [`style_sigfig()`](https://www.danieldsjoberg.com/gtsummary/reference/style_sigfig.md),
+  [`style_percent()`](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.md),
+  [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/reference/style_pvalue.md),
+  and
+  [`style_ratio()`](https://www.danieldsjoberg.com/gtsummary/reference/style_ratio.md)
+  now work with matrix input.
+  ([\#2409](https://github.com/ddsjoberg/gtsummary/issues/2409))
+
+- Updated French language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@nalimilan](https://github.com/nalimilan))
+
+- Added Bosnian language translations.
+  ([\#2341](https://github.com/ddsjoberg/gtsummary/issues/2341);
+  [@dzanahmed](https://github.com/dzanahmed))
+
+### Bug Fixes
+
+- Fixed bug in
+  [`add_difference()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.md)
+  where the `"emmeans"` method reported the wrong sign for a dichotomous
+  variable whose displayed `value` was the first factor level (`B - A`
+  instead of `A - B`). The estimate now reflects the displayed
+  proportion difference.
+  ([\#2399](https://github.com/ddsjoberg/gtsummary/issues/2399))
+
+- Fixed bug in
+  [`add_p()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.md)
+  where a warning from a paired test (e.g. `"paired.wilcox.test"`) could
+  be printed twice.
+  ([\#1945](https://github.com/ddsjoberg/gtsummary/issues/1945))
+
+- Fixed bug in
+  [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/reference/separate_p_footnotes.md)
+  where statistical test names in footnotes were not translated when
+  using a non-English language theme.
+  ([\#2368](https://github.com/ddsjoberg/gtsummary/issues/2368))
+
+- Fixed bug in
+  [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.md)
+  where duplicate footnote superscripts appeared on column headers when
+  stacking tables with identical footnotes, e.g. when using
+  [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.md)
+  with `theme_gtsummary_journal("qjecon")`.
+  ([\#2404](https://github.com/ddsjoberg/gtsummary/issues/2404))
+
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_strata_nested_stack.md)
+  where summary statistics could be attached to the wrong strata level
+  when the `strata` variable was a character (or other non-factor)
+  vector. ([\#2443](https://github.com/ddsjoberg/gtsummary/issues/2443))
+
+- Fixed bug in
+  [`tbl_strata_nested_stack()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_strata_nested_stack.md)
+  where second-level strata headers were dropped in all but the first
+  group when using three or more strata levels.
+  ([\#2418](https://github.com/ddsjoberg/gtsummary/issues/2418))
+
 ## gtsummary 2.5.1
 
 CRAN release: 2026-05-30
@@ -180,8 +464,8 @@ CRAN release: 2025-07-03
   to split tables horizontally (row-wise) and vertically (column-wise).
   ([\#2216](https://github.com/ddsjoberg/gtsummary/issues/2216))
 
-- Users are now allows to specify/override the denominator by passing an
-  integer or a data frame to the `tbl_summary(percent)` argument.
+- Users are now allowed to specify/override the denominator by passing
+  an integer or a data frame to the `tbl_summary(percent)` argument.
   ([\#2239](https://github.com/ddsjoberg/gtsummary/issues/2239))
 
 - Added the `tbl_merge(tbl_ids)` and `tbl_stack(tbl_ids)` arguments that
@@ -442,7 +726,7 @@ CRAN release: 2025-02-19
 - Adding the `tbl_merge(merge_vars)` argument. This argument allows
   users to specify any merging columns providing much more flexibility
   when merging unlike tables. Additionally, columns selected by
-  [`cards::all_ard_groups()`](https://insightsengineering.github.io/cards/latest-tag/reference/selectors.html)
+  [`cards::all_ard_groups()`](https://pharmaverse.github.io/cards/latest-tag/reference/selectors.html)
   have been added to the default merging columns, which provides the
   functionality for merging the results from
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.md)
@@ -786,7 +1070,7 @@ Updates to address regressions in the v2.0.0 release:
   available on the website).
 
 - The total N is now returned with `.$cards` using the
-  [`cards::ard_total_n()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html)
+  [`cards::ard_total_n()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html)
   function for the calculation.
 
 - The default headers for `tbl_ard_*()` functions no longer include
@@ -805,7 +1089,7 @@ Updates to address regressions in the v2.0.0 release:
 - The
   [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_wide_summary.md)
   function no longer requires the results from
-  [`cards::ard_attributes()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html)
+  [`cards::ard_attributes()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_attributes.html)
   to create tables.
   ([\#1873](https://github.com/ddsjoberg/gtsummary/issues/1873))
 
@@ -929,7 +1213,7 @@ CRAN release: 2024-07-23
   additional levels of precision in a
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
   table, I would need to specify the precision of every summary
-  statistic for a variable. Now, we can simple update the one statistic
+  statistic for a variable. Now, we can simply update the one statistic
   we’re interested in with a named list of vector:
   `tbl_summary(digits = age ~ list(sd = 2))`.
 
@@ -1011,8 +1295,8 @@ CRAN release: 2024-07-23
   over the years, and we are now adopting a more modern approach by
   using these features. As a result, the `"ci"` column will eventually
   be dropped from `.$table_body`. By using column merging, the conf.low
-  and conf.high remain numeric and we can to continue to update how
-  these columns are formatted. Review
+  and conf.high remain numeric and we can continue to update how these
+  columns are formatted. Review
   [`?deprecated_ci_column`](https://www.danieldsjoberg.com/gtsummary/reference/deprecated_ci_column.md)
   for details.
 
@@ -1037,7 +1321,7 @@ CRAN release: 2024-07-23
 - Messaging and checks have been improved when tidyselect is invoked in
   the package, i.e. when the tilda is used to select variables
   `age ~ "Patient Age"`. The subset of variables that can be selected is
-  now reduced the variables present in the table. For example, if you
+  now reduced to the variables present in the table. For example, if you
   have a summary table of patient age (and only patient age), and age is
   a single column from a data set of many columns and you mis-spell age
   (`aggge ~ "Patient Age"`), the error message will now ask if you meant
@@ -1085,9 +1369,9 @@ CRAN release: 2024-07-23
   [`all_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/select_helpers.md),
   etc., are now simplified by wrapping
   [`tidyselect::where()`](https://tidyselect.r-lib.org/reference/where.html),
-  which not available when these functions were originally written.
+  which was not available when these functions were originally written.
   Previously, these functions would error if used out of context; they
-  now, instead,select no columns when used out-of-context.
+  now, instead, select no columns when used out-of-context.
 
 - The design-based t-test has been added as possible methods for
   [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_svysummary.md)
@@ -1183,7 +1467,7 @@ CRAN release: 2024-07-23
   numeric before passing to
   [`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html). We have
   eliminated type- and class-specific handling in these functions and it
-  is now left to the the user pass data compatible with the functions
+  is now left to the user to pass data compatible with the functions
   that calculate the p-values or to create a custom test that wraps
   [`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) and
   performs the conversion. This change is effective immediately.
@@ -2045,7 +2329,7 @@ CRAN release: 2022-01-20
 
 - New function
   [`tbl_strata2()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_strata.md)
-  that passes both the the stratified data frame as well as the stratum
+  that passes both the stratified data frame as well as the stratum
   level to the user function.
   ([\#1091](https://github.com/ddsjoberg/gtsummary/issues/1091))
 
@@ -2632,7 +2916,7 @@ CRAN release: 2021-04-13
 
 - Added new function
   [`tbl_strata()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_strata.md).
-  The function aids prepares gtsummary tables stratified by one or more
+  The function prepares gtsummary tables stratified by one or more
   variables ([\#679](https://github.com/ddsjoberg/gtsummary/issues/679))
 
 - Adding coefficient
@@ -3065,7 +3349,7 @@ CRAN release: 2021-01-08
 
 - Users may now choose which
   [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.md)
-  columns to report with a theme element. they can choose among the
+  columns to report with a theme element. They can choose among the
   `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`,
   `"conf.high"` and `"p.value"`
   ([\#637](https://github.com/ddsjoberg/gtsummary/issues/637))
@@ -3692,7 +3976,7 @@ CRAN release: 2020-04-17
 
 - In
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
-  passing an ordered factor in the `by=` argument no longer causes as
+  passing an ordered factor in the `by=` argument no longer causes an
   error. ([\#453](https://github.com/ddsjoberg/gtsummary/issues/453))
 
 ## gtsummary 1.2.6

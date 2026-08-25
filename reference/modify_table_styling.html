@@ -35,7 +35,7 @@ vignette for information on .$table_styling objects."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,13 +43,14 @@ vignette for information on .$table_styling objects."><meta property="og:image" 
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -66,7 +67,7 @@ vignette for information on .$table_styling objects."><meta property="og:image" 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Modify Table Styling</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/R/modify_table_styling.R" class="external-link"><code>R/modify_table_styling.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/R/modify_table_styling.R" class="external-link"><code>R/modify_table_styling.R</code></a></small>
       <div class="d-none name"><code>modify_table_styling.Rd</code></div>
     </div>
 
@@ -184,9 +185,10 @@ An integer indicating how many space to indent text</p></dd>
 
 <dt id="arg-text-interpret">text_interpret<a class="anchor" aria-label="anchor" href="#arg-text-interpret"></a></dt>
 <dd><p>(<code>string</code>)<br>
-Must be one of <code>"md"</code> or <code>"html"</code> and indicates the processing function
-as <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code>. Use this in conjunction with arguments for
-header and footnotes.</p></dd>
+Must be one of <code>"md"</code>, <code>"html"</code>, or <code>"none"</code>, indicating the processing
+function as <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code>, <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code>, or no interpretation (text rendered
+verbatim). Use this in conjunction with arguments for header and footnotes.
+Applies to tables printed with <code>{gt}</code>.</p></dd>
 
 
 <dt id="arg-cols-merge-pattern">cols_merge_pattern<a class="anchor" aria-label="anchor" href="#arg-cols-merge-pattern"></a></dt>
@@ -251,7 +253,7 @@ internally with care, and it is <em>not</em> recommended for users.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -44,6 +44,7 @@
 <li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -71,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Modifier Functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/vignettes/articles/modify-functions.Rmd" class="external-link"><code>vignettes/articles/modify-functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/vignettes/articles/modify-functions.Rmd" class="external-link"><code>vignettes/articles/modify-functions.Rmd</code></a></small>
       <div class="d-none name"><code>modify-functions.Rmd</code></div>
     </div>
 
@@ -5521,13 +5522,13 @@ N = 102</span><span class="gt_footnote_marks" style="white-space:nowrap;font-sty
 table: <a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote2.html">footnotes</a>,
 <a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_source_note.html">source
 notes</a>, and <a href="https://www.danieldsjoberg.com/gtsummary/reference/modify_abbreviation.html">abbreviations</a>.
-Adding, modify, and removing these notes require functions tailored for
-each type of note.</p>
+Adding, modifying, and removing these notes require functions tailored
+for each type of note.</p>
 <ul>
 <li><p>Footnotes place notes with markers that appear in the table, and
 the marker appears again next to the note below the table: a very
 standard footnote.</p></li>
-<li><p>Source notes are similar to footnotes, expect there is no marker
+<li><p>Source notes are similar to footnotes, except there is no marker
 associated with the note.</p></li>
 <li><p>Abbreviations are a special type of source note. All
 abbreviations that appear in a table are collected and placed in a
@@ -5566,7 +5567,7 @@ documentation.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

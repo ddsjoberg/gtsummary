@@ -17,8 +17,10 @@ as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 
 - x:
 
-  (`gtsummary`)  
-  An object of class `"gtsummary"`
+  (`gtsummary` or `list`)  
+  a gtsummary object, or a (optionally named) list of gtsummary objects.
+  When a list is passed to `as_hux_xlsx()`, each table is written to its
+  own worksheet and the list names are used as the worksheet names.
 
 - include:
 
@@ -48,8 +50,14 @@ A {huxtable} object
 ## Excel Output
 
 Use the `as_hux_xlsx()` function to save a copy of the table in an excel
-file. The file is saved using
-[`huxtable::quick_xlsx()`](https://hughjonesd.github.io/huxtable/reference/quick-output.html).
+file.
+
+To export a single table, pass a gtsummary object as `x`; the file is
+written with a single worksheet. To export multiple tables to one
+workbook—one table per worksheet—pass a (optionally named) list of
+gtsummary objects as `x`. When the list is named, the names are used as
+the worksheet (tab) names; list elements without a name are assigned a
+default name of `"Sheet {i}"`.
 
 ## Author
 

@@ -26,7 +26,7 @@ add_glance_source_note(
     label_style_pvalue(digits = 1), c(where(is.integer), starts_with("df")) ~
     label_style_number()),
   glance_fun = glance_fun_s3(x$inputs$x),
-  text_interpret = c("md", "html"),
+  text_interpret = c("md", "html", "none"),
   sep1 = " = ",
   sep2 = "; "
 )
@@ -57,9 +57,9 @@ add_glance_source_note(
 - fmt_fun:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/reference/syntax.md))  
-  Specifies the the functions used to format/round the glance
-  statistics. The default is to round the number of observations and
-  degrees of freedom to the nearest integer, p-values are styled with
+  Specifies the functions used to format/round the glance statistics.
+  The default is to round the number of observations and degrees of
+  freedom to the nearest integer, p-values are styled with
   [`style_pvalue()`](https://www.danieldsjoberg.com/gtsummary/reference/style_pvalue.md)
   and the remaining statistics are styled with
   `style_sigfig(x, digits = 3)`
@@ -79,7 +79,9 @@ add_glance_source_note(
   String indicates whether source note text will be interpreted with
   [`gt::md()`](https://gt.rstudio.com/reference/md.html) or
   [`gt::html()`](https://gt.rstudio.com/reference/html.html). Must be
-  `"md"` (default) or `"html"`.
+  `"md"` (default), `"html"`, or `"none"`. `"none"` applies no
+  interpretation, rendering the text verbatim. Applies to tables printed
+  with `{gt}`.
 
 - sep1:
 

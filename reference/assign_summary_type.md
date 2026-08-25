@@ -6,7 +6,14 @@ the `type` argument.
 ## Usage
 
 ``` r
-assign_summary_type(data, variables, value, type = NULL, cat_threshold = 10L)
+assign_summary_type(
+  data,
+  variables,
+  value,
+  type = NULL,
+  cat_threshold = 10L,
+  dichotomous_values = NULL
+)
 ```
 
 ## Arguments
@@ -37,6 +44,14 @@ assign_summary_type(data, variables, value, type = NULL, cat_threshold = 10L)
   (`integer`)  
   for base R numeric classes with fewer levels than this threshold will
   default to a categorical summary. Default is `10L`
+
+- dichotomous_values:
+
+  (`named list`)  
+  optional named list of pre-computed default dichotomous values, with
+  one element per variable (as returned by
+  `.get_default_dichotomous_value()`). When supplied, these values are
+  used instead of being recomputed. Default is `NULL`.
 
 ## Value
 

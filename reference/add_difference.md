@@ -4,6 +4,8 @@
 
 - [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_svysummary.md)
 
+- [`add_difference.tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+
 ## Usage
 
 ``` r

@@ -77,8 +77,8 @@ following code would call the log-rank test, and a second test of the
 
 ## Note
 
-To calculate the p-values, the formula is re-constructed from the the
-call in the original
+To calculate the p-values, the formula is re-constructed from the call
+in the original
 [`survfit()`](https://rdrr.io/pkg/survival/man/survfit.html) object.
 When the [`survfit()`](https://rdrr.io/pkg/survival/man/survfit.html)
 object is created a for loop,

@@ -6,6 +6,17 @@ programming language. The {gtsummary} package summarizes data sets,
 regression models, and more, using sensible defaults with highly
 customizable capabilities.
 
+The package is widely used across **clinical and pharmaceutical
+research** for reporting clinical trials—from baseline demographics and
+adverse event summaries to efficacy analyses. Every table is computed
+from a structured, machine-readable [Analysis Results Dataset
+(ARD)](https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html)—part
+of the [CDISC Analysis Results
+Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard)—via
+the pharmaverse [{cards}](https://pharmaverse.github.io/cards/) and
+[{cardx}](https://pharmaverse.github.io/cardx/) packages, making results
+traceable and straightforward to QC.
+
 - [**Summarize data frames or
   tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
   easily in **R**. Perfect for presenting descriptive statistics,
@@ -78,8 +89,6 @@ Install the development version with
 Use
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
-
-![animated](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif)
 
 Example basic table:
 
@@ -167,6 +176,91 @@ tbl_merge](reference/figures/README-tbl_merge_ex1-1.png)
 Review even more output options in the **[table
 gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
+## Clinical & Pharmaceutical Research
+
+{gtsummary} is a natural fit for clinical trial reporting. Below we
+highlight two features that clinical and pharmaceutical teams rely on:
+safety tables and built-in QC via the ARD backend. Both examples use the
+CDISC pilot data (`ADAE`/`ADSL`) shipped with the
+[{cards}](https://pharmaverse.github.io/cards/) package.
+
+### Adverse Event Tables
+
+Use
+[`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.html)
+to build nested adverse event summaries by treatment arm—counts of
+patients with an event, organized by System Organ Class and Preferred
+Term—following FDA Standard Safety Table conventions.
+
+``` r
+
+library(cards) # provides the ADAE / ADSL CDISC pilot datasets
+
+tbl_ae <-
+  ADAE |>
+  # filter to a few System Organ Classes and Preferred Terms for a compact display
+  dplyr::filter(
+    AESOC %in% unique(cards::ADAE$AESOC)[1:3],
+    AETERM %in% unique(cards::ADAE$AETERM)[1:3]
+  ) |>
+  tbl_hierarchical(
+    variables = c(AESOC, AETERM),
+    by = TRTA, # summarize by treatment arm
+    denominator = cards::ADSL,
+    id = USUBJID, # count unique patients, not events
+    overall_row = TRUE,
+    label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
+  )
+```
+
+![Example of a nested adverse event table by treatment
+arm](reference/figures/README-tbl_ae-1.png)
+
+### Built-in QC with the ARD Backend
+
+Because every {gtsummary} table is computed from an **Analysis Results
+Dataset (ARD)**—a structured, machine-readable record of every
+statistic, part of the [CDISC Analysis Results
+Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard)—you
+can extract the numbers behind any table with
+[`gather_ard()`](https://www.danieldsjoberg.com/gtsummary/reference/gather_ard.html).
+Each statistic becomes one row, making it simple to QC results, trace a
+value back to its calculation, or compare against an independently
+double-programmed dataset.
+
+For example, the adverse event counts behind the table above are stored
+as individual records—one for each event count (`n`), denominator (`N`),
+and percentage (`p`) in every treatment arm:
+
+``` r
+
+tbl_ae |>
+  gather_ard() |>
+  bind_ard() |>
+  # keep the adverse event term counts and the columns identifying each statistic
+  dplyr::filter(variable == "AETERM") |>
+  dplyr::select(group1_level, variable_level, stat_name, stat)
+#> # An ARD data frame: 27 × 4
+#>    group1_level         variable_level            stat_name    stat
+#>    <list>               <list>                    <chr>      <list>
+#>  1 Placebo              DIARRHOEA                 n          9     
+#>  2 Placebo              DIARRHOEA                 N         86     
+#>  3 Placebo              DIARRHOEA                 p          0.105 
+#>  4 Xanomeline High Dose DIARRHOEA                 n          4     
+#>  5 Xanomeline High Dose DIARRHOEA                 N         84     
+#>  6 Xanomeline High Dose DIARRHOEA                 p          0.0476
+#>  7 Xanomeline Low Dose  DIARRHOEA                 n          5     
+#>  8 Xanomeline Low Dose  DIARRHOEA                 N         84     
+#>  9 Xanomeline Low Dose  DIARRHOEA                 p          0.0595
+#> 10 Placebo              APPLICATION SITE ERYTHEMA n          3     
+#> # ℹ 17 more rows
+```
+
+For the full CDISC/ARD workflow—including the `tbl_ard_*()` constructors
+that build tables directly from an ARD—see the [**ARD-first
+Tables**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html)
+article.
+
 ## gtsummary + R Markdown
 
 The **{gtsummary}** package was written to be a companion to the
@@ -188,41 +282,17 @@ Word, RTF, and LaTeX file.
 
 ``` r
 
-tbl |> 
-  as_gt() |> 
+tbl |>
+  as_gt() |>
   gt::gtsave(filename = ".") # use extensions .png, .html, .docx, .rtf, .tex, .ltx
 ```
 
-## Additional Resources
-
-- The best resources are the gtsummary vignettes: [table
-  gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
-  [`tbl_summary()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
-  [`tbl_regression()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
-  [`inline_text()`
-  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
-  [gtsummary
-  themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
-  [gtsummary+R
-  markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
-
-- The R Journal Article [*Reproducible Summary Tables with the gtsummary
-  Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
-
-- The [RStudio Education
-  Blog](https://education.rstudio.com/blog/2020/07/gtsummary/) includes
-  a post with a brief introduction to the package.
-
-- A [recording of a
-  presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
-  the Weill Cornell Biostatistics Department and the Memorial Sloan
-  Kettering R Users Group.
-
-  # An error occurred.
-
-  Unable to execute JavaScript.
+For submission-ready deliverables, convert to a
+[{flextable}](https://davidgohel.github.io/flextable/) with
+[`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html)
+for polished RTF and Word output, or save straight to a Word document
+with
+[`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md).
 
 ## Cite gtsummary
 

@@ -24,7 +24,7 @@ theme_gtsummary_printer(
 
 theme_gtsummary_language(
   language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "kr", "mr", "nl", "no",
-    "pt", "se", "zh-cn", "zh-tw"),
+    "pt", "se", "zh-cn", "zh-tw", "ba"),
   decimal.mark = NULL,
   big.mark = NULL,
   iqr.sep = NULL,
@@ -74,7 +74,7 @@ theme_gtsummary_eda(set_theme = TRUE)
   `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
   `"nl"` (Dutch), `"mr"` (Marathi), `"no"` (Norwegian), `"pt"`
   (Portuguese), `"se"` (Swedish), `"zh-cn"` (Chinese Simplified),
-  `"zh-tw"` (Chinese Traditional)
+  `"zh-tw"` (Chinese Traditional), `"ba"` (Bosnian)
 
   If a language is missing a translation for a word or phrase, please
   feel free to reach out on

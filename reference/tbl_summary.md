@@ -18,7 +18,7 @@ tbl_summary(
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = c("ifany", "no", "always"),
+  missing = everything() ~ "ifany",
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
   sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -68,7 +68,7 @@ tbl_summary(
 - type:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/reference/syntax.md))  
-  Specifies the summary type. Accepted value are
+  Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`. If not
   specified, default type is assigned via
   [`assign_summary_type()`](https://www.danieldsjoberg.com/gtsummary/reference/assign_summary_type.md).
@@ -87,7 +87,14 @@ tbl_summary(
 
   Arguments dictating how and if missing values are presented:
 
-  - `missing`: must be one of `c("ifany", "no", "always")`.
+  - `missing`: specifies whether to include a row of missing/`NA`
+    counts. Provide a
+    ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/reference/syntax.md))
+    where each variable is assigned one of `c("ifany", "no", "always")`
+    (e.g. `missing = list(age ~ "always", grade ~ "no")` or
+    `missing = everything() ~ "no"`). The default is
+    `everything() ~ "ifany"`, which adds a missing row only for
+    variables that have missing values.
 
   - `missing_text`: string indicating text shown on missing row. Default
     is `"Unknown"`.
@@ -112,7 +119,7 @@ tbl_summary(
   In rarer cases, you may need to define/override the typical
   denominators. In these cases, pass an integer or a data frame. Refer
   to the
-  [`?cards::ard_tabulate(denominator)`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  [`?cards::ard_tabulate(denominator)`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
   help file for details. When a data frame is passed, this data frame is
   used to calculate header counts.
 
@@ -172,7 +179,7 @@ available to display.
 
 ## digits argument
 
-The digits argument specifies the the number of digits (or formatting
+The digits argument specifies the number of digits (or formatting
 function) statistics are rounded to.
 
 The values passed can either be a single integer, a vector of integers,

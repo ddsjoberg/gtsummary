@@ -127,10 +127,13 @@ modify_table_styling(
 - text_interpret:
 
   (`string`)  
-  Must be one of `"md"` or `"html"` and indicates the processing
-  function as [`gt::md()`](https://gt.rstudio.com/reference/md.html) or
-  [`gt::html()`](https://gt.rstudio.com/reference/html.html). Use this
-  in conjunction with arguments for header and footnotes.
+  Must be one of `"md"`, `"html"`, or `"none"`, indicating the
+  processing function as
+  [`gt::md()`](https://gt.rstudio.com/reference/md.html),
+  [`gt::html()`](https://gt.rstudio.com/reference/html.html), or no
+  interpretation (text rendered verbatim). Use this in conjunction with
+  arguments for header and footnotes. Applies to tables printed with
+  `{gt}`.
 
 - cols_merge_pattern:
 

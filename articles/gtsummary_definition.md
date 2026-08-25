@@ -4,7 +4,7 @@ This vignette is meant for those who wish to contribute to {gtsummary},
 or users who wish to gain an understanding of the inner-workings of a
 {gtsummary} object so they may more easily modify them to suit your own
 needs. If this does not describe you, please refer to the [{gtsummary}
-website](https://www.danieldsjoberg.com/gtsummary/) to an introduction
+website](https://www.danieldsjoberg.com/gtsummary/) for an introduction
 on how to use the package’s functions and tutorials on advanced use.
 
 *This overview is for informational purposes. Documenting the internal
@@ -24,10 +24,12 @@ illustrative examples.
 
 library(gtsummary)
 
-tbl_regression_ex <-
-  lm(age ~ grade + marker, trial) |> 
-  tbl_regression() |> 
-  bold_p(t = 0.5)
+if (requireNamespace("broom", quietly = TRUE) && requireNamespace("broom.helpers", quietly = TRUE)) {
+  tbl_regression_ex <-
+    lm(age ~ grade + marker, trial) |> 
+    tbl_regression() |> 
+    bold_p(t = 0.5)
+}
 
 tbl_summary_ex <-
   trial |> 
@@ -75,13 +77,14 @@ styled.
 The list contains the following data frames `header`, `footnote_header`,
 `footnote_body`, `footnote_spanning_header`, `abbreviation`,
 `source_note`, `fmt_fun`, `text_format`, `fmt_missing`, `cols_merge` and
-the following objects `caption` and `horizontal_line_above`.
+the following objects `caption`, `horizontal_line_above`, and
+`footnote_symbol`.
 
 **`header`**
 
 The `header` table has the following columns and is one row per column
 found in `.$table_body`. The table contains styling information that
-applies to entire column or the columns headers.
+applies to the entire column or the column headers.
 
 | Column | Description |
 |----|----|
@@ -96,7 +99,7 @@ applies to entire column or the columns headers.
 **`footnote_header`**
 
 Each {gtsummary} table may contain footnotes in the column headers.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 | Column | Description |
 |----|----|
@@ -109,7 +112,7 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 **`footnote_body`**
 
 Each {gtsummary} table may include footnotes in the body of the table.
-Updates/changes to footnote are appended to the bottom of the tibble.
+Updates/changes to footnotes are appended to the bottom of the tibble.
 
 | Column | Description |
 |----|----|
@@ -123,8 +126,8 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 **`footnote_spanning_header`**
 
 Each {gtsummary} table may include footnotes in the spanning headers of
-the table. Updates/changes to footnote are appended to the bottom of the
-tibble.
+the table. Updates/changes to footnotes are appended to the bottom of
+the tibble.
 
 | Column | Description |
 |----|----|
@@ -134,6 +137,21 @@ tibble.
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
 | replace | logical indicating whether this footnote should replace any existing footnote in that header (TRUE) or be added to any existing (FALSE) |
 | remove | logical indicating whether to remove all footnotes in the column header |
+
+**`footnote_symbol`**
+
+An optional character vector of the ordered symbols used to reference
+footnotes, e.g. `c("*", "†", "‡")`. When `NULL` (the default), the print
+engine’s default numeric reference marks (`1, 2, 3, …`) are used. The
+symbols are assigned to footnotes in the order the footnotes appear in
+the table and are recycled when there are more footnotes than symbols.
+This element is set with
+[`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md)
+(or the `pkgwide-chr:footnote_symbol` theme element) and is currently
+utilized by
+[`as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.md)
+and
+[`as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.md).
 
 **`abbreviation`**
 
@@ -155,7 +173,7 @@ to a header or cell in the table.
 
 | Column | Description |
 |----|----|
-| id | Integer idenitfying the source note |
+| id | Integer identifying the source note |
 | source_note | string containing the abbreviation to add |
 | text_interpret | the {gt} function that is used to interpret the source note, [`gt::md()`](https://gt.rstudio.com/reference/md.html) or [`gt::html()`](https://gt.rstudio.com/reference/html.html) |
 | remove | logical indicating whether the source note should be included or removed from final table |
@@ -187,7 +205,7 @@ bottom of the tibble.
 
 **`fmt_missing`**
 
-By default, all `NA` values are shown blanks. Missing values in
+By default, all `NA` values are shown as blanks. Missing values in
 columns/rows are replaced with the `symbol`. For example, reference rows
 in
 [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.md)
@@ -441,19 +459,20 @@ details.
 ``` r
 
 tbl_summary_ex$cards[["tbl_summary"]]
-#> {cards} data frame: 76 x 12
-#>    group1 group1_level variable variable_level stat_name stat_label  stat
-#> 1     trt       Drug A    grade              I         n          n    35
-#> 2     trt       Drug A    grade              I         N          N    98
-#> 3     trt       Drug A    grade              I         p          % 0.357
-#> 4     trt       Drug A    grade             II         n          n    32
-#> 5     trt       Drug A    grade             II         N          N    98
-#> 6     trt       Drug A    grade             II         p          % 0.327
-#> 7     trt       Drug A    grade            III         n          n    31
-#> 8     trt       Drug A    grade            III         N          N    98
-#> 9     trt       Drug A    grade            III         p          % 0.316
-#> 10    trt       Drug B    grade              I         n          n    33
-#> ℹ 66 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 76 × 12
+#>    group1 group1_level variable variable_level stat_name   stat gts_column
+#>    <chr>  <list>       <chr>    <list>         <chr>     <list> <chr>     
+#>  1 trt    Drug A       grade    I              n         35     stat_1    
+#>  2 trt    Drug A       grade    I              N         98     stat_1    
+#>  3 trt    Drug A       grade    I              p          0.357 stat_1    
+#>  4 trt    Drug A       grade    II             n         32     stat_1    
+#>  5 trt    Drug A       grade    II             N         98     stat_1    
+#>  6 trt    Drug A       grade    II             p          0.327 stat_1    
+#>  7 trt    Drug A       grade    III            n         31     stat_1    
+#>  8 trt    Drug A       grade    III            N         98     stat_1    
+#>  9 trt    Drug A       grade    III            p          0.316 stat_1    
+#> 10 trt    Drug B       grade    I              n         33     stat_2    
+#> # ℹ 66 more rows
+#> # ℹ 5 more variables: context <chr>, stat_label <chr>, fmt_fun <list>,
+#> #   warning <list>, error <list>
 ```

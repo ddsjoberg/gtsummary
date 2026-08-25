@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,13 +15,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -38,7 +39,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Add CI Column</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/R/add_ci.R" class="external-link"><code>R/add_ci.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/R/add_ci.R" class="external-link"><code>R/add_ci.R</code></a></small>
       <div class="d-none name"><code>add_ci.Rd</code></div>
     </div>
 
@@ -129,8 +130,8 @@ in parentheses. Default is <code>NULL</code>, and no merging is performed.</p></
 <p>Must be one of</p><ul><li><p><code>"wilson"</code>, <code>"wilson.no.correct"</code> calculated via <code>prop.test(correct = c(TRUE, FALSE))</code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"exact"</code> calculated via <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">stats::binom.test()</a></code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"wald"</code>, <code>"wald.no.correct"</code> calculated via <code>cardx::proportion_ci_wald(correct = c(TRUE, FALSE)</code> for <strong>categorical</strong> variables</p></li>
-<li><p><code>"agresti.coull"</code> calculated via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html" class="external-link">cardx::proportion_ci_agresti_coull()</a></code> for <strong>categorical</strong> variables</p></li>
-<li><p><code>"jeffreys"</code> calculated via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/proportion_ci.html" class="external-link">cardx::proportion_ci_jeffreys()</a></code> for <strong>categorical</strong> variables</p></li>
+<li><p><code>"agresti.coull"</code> calculated via <code><a href="https://rdrr.io/pkg/cardx/man/proportion_ci.html" class="external-link">cardx::proportion_ci_agresti_coull()</a></code> for <strong>categorical</strong> variables</p></li>
+<li><p><code>"jeffreys"</code> calculated via <code><a href="https://rdrr.io/pkg/cardx/man/proportion_ci.html" class="external-link">cardx::proportion_ci_jeffreys()</a></code> for <strong>categorical</strong> variables</p></li>
 <li><p><code>"t.test"</code> calculated via <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">stats::t.test()</a></code> for <strong>continuous</strong> variables</p></li>
 <li><p><code>"wilcox.test"</code> calculated via <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">stats::wilcox.test()</a></code> for <strong>continuous</strong> variables</p></li>
 </ul></div>
@@ -194,7 +195,7 @@ in parentheses. Default is <code>NULL</code>, and no merging is performed.</p></
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

@@ -17,7 +17,7 @@ the type argument is not used."><meta property="og:image" content="https://www.d
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,13 +25,14 @@ the type argument is not used."><meta property="og:image" content="https://www.d
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -48,16 +49,16 @@ the type argument is not used."><meta property="og:image" content="https://www.d
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Global p-value generic</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/R/global_pvalue_fun.R" class="external-link"><code>R/global_pvalue_fun.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/R/global_pvalue_fun.R" class="external-link"><code>R/global_pvalue_fun.R</code></a></small>
       <div class="d-none name"><code>global_pvalue_fun.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>An S3 generic that serves as the default for <code>add_global_p(anova_fun)</code>.</p>
-<p>The default function uses <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova()</a></code> (via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_car_anova.html" class="external-link">cardx::ard_car_anova()</a></code>) to
+<p>The default function uses <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova()</a></code> (via <code><a href="https://rdrr.io/pkg/cardx/man/ard_car_anova.html" class="external-link">cardx::ard_car_anova()</a></code>) to
 calculate the p-values.</p>
 <p>The method for GEE models (created from <code><a href="https://rdrr.io/pkg/geepack/man/geeglm.html" class="external-link">geepack::geeglm()</a></code>) returns Wald tests calculated
-using <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> (via <code><a href="https://insightsengineering.github.io/cardx/latest-tag/reference/ard_aod_wald_test.html" class="external-link">cardx::ard_aod_wald_test()</a></code>). For this method,
+using <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> (via <code><a href="https://rdrr.io/pkg/cardx/man/ard_aod_wald_test.html" class="external-link">cardx::ard_aod_wald_test()</a></code>). For this method,
 the <code>type</code> argument is not used.</p>
     </div>
 
@@ -81,19 +82,19 @@ the <code>type</code> argument is not used.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">global_pvalue_fun</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"III"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">{cards} data frame: 10 x 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    variable   context stat_name stat_label    stat fmt_fun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     stage car_anova     sumsq      sumsq 548.715       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     stage car_anova        df  Degrees …       3       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     stage car_anova    meansq     meansq 182.905       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     stage car_anova statistic  Statistic   0.885       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     stage car_anova   p.value    p-value    0.45       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     grade car_anova     sumsq      sumsq 166.309       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     grade car_anova        df  Degrees …       2       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     grade car_anova    meansq     meansq  83.154       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     grade car_anova statistic  Statistic   0.402       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    grade car_anova   p.value    p-value   0.669       1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">2 more variables: warning, error</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># An ARD data frame: 10 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    variable context   stat_name stat_label           stat fmt_fun warning error </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;named&gt;</span> <span style="color: #949494; font-style: italic;">&lt;name&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> stage    car_anova sumsq     sumsq             549.          1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> stage    car_anova df        Degrees of Freed…   3           1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> stage    car_anova meansq    meansq            183.          1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> stage    car_anova statistic Statistic           0.885       1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> stage    car_anova p.value   p-value             0.450       1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> grade    car_anova sumsq     sumsq             166.          1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> grade    car_anova df        Degrees of Freed…   2           1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> grade    car_anova meansq    meansq             83.2         1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> grade    car_anova statistic Statistic           0.402       1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> grade    car_anova p.value   p-value             0.669       1 <span style="color: #949494;">&lt;NULL&gt;</span>  <span style="color: #949494;">&lt;NULL&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -105,7 +106,7 @@ the <code>type</code> argument is not used.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

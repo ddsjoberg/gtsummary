@@ -17,6 +17,7 @@ add_difference(
   adj.vars = NULL,
   test.args = NULL,
   conf.level = 0.95,
+  levels = NULL,
   include = everything(),
   pvalue_fun = label_style_pvalue(digits = 1),
   estimate_fun = list(c(all_continuous(), all_categorical(FALSE)) ~ label_style_sigfig(),
@@ -70,6 +71,17 @@ add_difference(
   (`numeric`)  
   a scalar in the interval `(0, 1)` indicating the confidence level.
   Default is 0.95
+
+- levels:
+
+  (`vector`)  
+  a length-two vector of the `tbl_svysummary(by=)` levels to compare.
+  The difference is calculated as `levels[1]` minus `levels[2]`. This
+  argument is required when the `by` variable has more than two levels,
+  and allows the user to select which two groups to compare. When `by`
+  has exactly two levels, this argument is optional and can be used to
+  flip the direction of the difference (e.g. `levels[2]` minus
+  `levels[1]`). Default is `NULL`.
 
 - include:
 

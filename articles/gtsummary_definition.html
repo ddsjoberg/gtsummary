@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -44,6 +44,7 @@
 <li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -71,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Definition of a gtsummary Object</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/vignettes/gtsummary_definition.Rmd" class="external-link"><code>vignettes/gtsummary_definition.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/vignettes/gtsummary_definition.Rmd" class="external-link"><code>vignettes/gtsummary_definition.Rmd</code></a></small>
       <div class="d-none name"><code>gtsummary_definition.Rmd</code></div>
     </div>
 
@@ -82,8 +83,8 @@
 inner-workings of a {gtsummary} object so they may more easily modify
 them to suit your own needs. If this does not describe you, please refer
 to the <a href="https://www.danieldsjoberg.com/gtsummary/">{gtsummary}
-website</a> to an introduction on how to use the package’s functions and
-tutorials on advanced use.</p>
+website</a> for an introduction on how to use the package’s functions
+and tutorials on advanced use.</p>
 <p><em>This overview is for informational purposes. Documenting the
 internal structures does not mean the internal structures of the package
 won’t be updated. If they are updated, this is not considered a breaking
@@ -99,10 +100,12 @@ illustrative examples.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tbl_regression_ex</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">marker</span>, <span class="va">trial</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"broom"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"broom.helpers"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">tbl_regression_ex</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">marker</span>, <span class="va">trial</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">tbl_summary_ex</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">trial</span> <span class="op">|&gt;</span> </span>
@@ -148,12 +151,13 @@ The list contains the following data frames <code>header</code>,
 <code>footnote_spanning_header</code>, <code>abbreviation</code>,
 <code>source_note</code>, <code>fmt_fun</code>,
 <code>text_format</code>, <code>fmt_missing</code>,
-<code>cols_merge</code> and the following objects <code>caption</code>
-and <code>horizontal_line_above</code>.</p>
+<code>cols_merge</code> and the following objects <code>caption</code>,
+<code>horizontal_line_above</code>, and
+<code>footnote_symbol</code>.</p>
 <p><strong><code>header</code></strong></p>
 <p>The <code>header</code> table has the following columns and is one
 row per column found in <code>.$table_body</code>. The table contains
-styling information that applies to entire column or the columns
+styling information that applies to the entire column or the column
 headers.</p>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -643,7 +647,7 @@ headers.</p>
 </div>
 <p><strong><code>footnote_header</code></strong></p>
 <p>Each {gtsummary} table may contain footnotes in the column headers.
-Updates/changes to footnote are appended to the bottom of the
+Updates/changes to footnotes are appended to the bottom of the
 tibble.</p>
 <div id="xbhisifmmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xbhisifmmy table {
@@ -1125,7 +1129,7 @@ tibble.</p>
 </div>
 <p><strong><code>footnote_body</code></strong></p>
 <p>Each {gtsummary} table may include footnotes in the body of the
-table. Updates/changes to footnote are appended to the bottom of the
+table. Updates/changes to footnotes are appended to the bottom of the
 tibble.</p>
 <div id="shlcphlxbg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#shlcphlxbg table {
@@ -1611,7 +1615,7 @@ tibble.</p>
 </div>
 <p><strong><code>footnote_spanning_header</code></strong></p>
 <p>Each {gtsummary} table may include footnotes in the spanning headers
-of the table. Updates/changes to footnote are appended to the bottom of
+of the table. Updates/changes to footnotes are appended to the bottom of
 the tibble.</p>
 <div id="gzfelhkpkb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#gzfelhkpkb table {
@@ -2095,6 +2099,16 @@ the tibble.</p>
 </tbody>
 </table>
 </div>
+<p><strong><code>footnote_symbol</code></strong></p>
+<p>An optional character vector of the ordered symbols used to reference
+footnotes, e.g. <code>c("*", "†", "‡")</code>. When <code>NULL</code>
+(the default), the print engine’s default numeric reference marks
+(<code>1, 2, 3, …</code>) are used. The symbols are assigned to
+footnotes in the order the footnotes appear in the table and are
+recycled when there are more footnotes than symbols. This element is set
+with <code><a href="../reference/modify_footnote_symbol.html">modify_footnote_symbol()</a></code> (or the
+<code>pkgwide-chr:footnote_symbol</code> theme element) and is currently
+utilized by <code><a href="../reference/as_gt.html">as_gt()</a></code> and <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>.</p>
 <p><strong><code>abbreviation</code></strong></p>
 <p>Abbreviations are added one at a time, and at the time of table
 rendering, they are coalesced into a single source note.</p>
@@ -3030,7 +3044,7 @@ linked to a header or cell in the table.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Column" class="gt_row gt_left"><span class="gt_from_md">id</span></td>
-<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Integer idenitfying the source note</span></td>
+<td headers="Description" class="gt_row gt_left"><span class="gt_from_md">Integer identifying the source note</span></td>
 </tr>
 <tr>
 <td headers="Column" class="gt_row gt_left"><span class="gt_from_md">source_note</span></td>
@@ -4000,7 +4014,7 @@ appended to the bottom of the tibble.</p>
 </table>
 </div>
 <p><strong><code>fmt_missing</code></strong></p>
-<p>By default, all <code>NA</code> values are shown blanks. Missing
+<p>By default, all <code>NA</code> values are shown as blanks. Missing
 values in columns/rows are replaced with the <code>symbol</code>. For
 example, reference rows in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> are shown with
 an em-dash. Updates/changes to styling functions are appended to the
@@ -5158,21 +5172,22 @@ format them, and more. See the {cards} package documentation for
 details.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">cards</span><span class="op">[[</span><span class="st">"tbl_summary"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">{cards} data frame: 76 x 12</span></span></span>
-<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name stat_label  stat</span></span>
-<span><span class="co">#&gt; 1     trt       Drug A    grade              I         n          n    35</span></span>
-<span><span class="co">#&gt; 2     trt       Drug A    grade              I         N          N    98</span></span>
-<span><span class="co">#&gt; 3     trt       Drug A    grade              I         p          % 0.357</span></span>
-<span><span class="co">#&gt; 4     trt       Drug A    grade             II         n          n    32</span></span>
-<span><span class="co">#&gt; 5     trt       Drug A    grade             II         N          N    98</span></span>
-<span><span class="co">#&gt; 6     trt       Drug A    grade             II         p          % 0.327</span></span>
-<span><span class="co">#&gt; 7     trt       Drug A    grade            III         n          n    31</span></span>
-<span><span class="co">#&gt; 8     trt       Drug A    grade            III         N          N    98</span></span>
-<span><span class="co">#&gt; 9     trt       Drug A    grade            III         p          % 0.316</span></span>
-<span><span class="co">#&gt; 10    trt       Drug B    grade              I         n          n    33</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">66 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">Use `print(n = ...)` to see more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">5 more variables: context, fmt_fun, warning, error, gts_column</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># An ARD data frame: 76 × 12</span></span></span>
+<span><span class="co">#&gt;    group1 group1_level variable variable_level stat_name   stat gts_column</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> trt    Drug A       grade    I              n         35     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> trt    Drug A       grade    I              N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> trt    Drug A       grade    I              p          0.357 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> trt    Drug A       grade    II             n         32     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> trt    Drug A       grade    II             N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> trt    Drug A       grade    II             p          0.327 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> trt    Drug A       grade    III            n         31     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> trt    Drug A       grade    III            N         98     stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> trt    Drug A       grade    III            p          0.316 stat_1    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> trt    Drug B       grade    I              n         33     stat_2    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 66 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: context &lt;chr&gt;, stat_label &lt;chr&gt;, fmt_fun &lt;list&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   warning &lt;list&gt;, error &lt;list&gt;</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -5185,7 +5200,7 @@ details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

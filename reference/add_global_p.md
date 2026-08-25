@@ -72,7 +72,7 @@ add_global_p(
   To pass a custom function, it must accept as its first argument is a
   model. Note that anything passed in `...` will be passed to this
   function. The function must return an object of class `'cards'` (see
-  [`cardx::ard_car_anova()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_car_anova.html)
+  [`cardx::ard_car_anova()`](https://rdrr.io/pkg/cardx/man/ard_car_anova.html)
   as an example), or a tibble with columns `'term'` and `'p.value'`
   (e.g. `\(x, type, ...) car::Anova(x, type, ...) |> broom::tidy()`).
 

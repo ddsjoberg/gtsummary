@@ -14,17 +14,17 @@ Analysis Results Datasets (ARDs) are part of the [CDISC Analysis Results
 Standard](https://www.cdisc.org/standards/foundational/analysis-results-standard),
 which aims to facilitate automation, reproducibility, reusability, and
 traceability of analysis results data (ARD). ARDs are highly structured
-and generalized data frame objects in which store the results of both
-simple and complex statistical results. The {gtsummary} package utilizes
-ARDs (via the {cards} and {cardx} packages) to perform all calculations.
+and generalized data frame objects that store the results of both simple
+and complex statistical results. The {gtsummary} package utilizes ARDs
+(via the {cards} and {cardx} packages) to perform all calculations.
 
 In this tutorial, we will review how to use the native {gtsummary}
 functions to build standard and highly customized tables. There are two
 basic approaches to creating summary tables utilizing ARDs:
 
-1.  As ARDs power every calculation and tabulation in the {gtsummary},
-    ARDs can be extracted from any table created with the `tbl_*()`
-    functions (and their add-ons).
+1.  As ARDs power every calculation and tabulation in the {gtsummary}
+    package, ARDs can be extracted from any table created with the
+    `tbl_*()` functions (and their add-ons).
 2.  One can also create ARDs first, then pass the ARD to a `tbl_ard_*()`
     function that will convert the ARD to a summary table.
 
@@ -71,21 +71,22 @@ Now that we have a summary table, we can extract and save the ARD.
 gather_ard(tbl_demo) |> bind_ard()
 #> ℹ 8 rows with duplicated statistic values have been removed.
 #> • See cards::bind_ard(.distinct) (`?cards::bind_ard()`) for details.
-#> {cards} data frame: 167 x 12
-#>    group1 group1_level variable variable_level stat_name stat_label  stat
-#> 1     ARM      Placebo   AGEGR1            <65         n          n    14
-#> 2     ARM      Placebo   AGEGR1            <65         N          N    86
-#> 3     ARM      Placebo   AGEGR1            <65         p          % 0.163
-#> 4     ARM      Placebo   AGEGR1          65-80         n          n    42
-#> 5     ARM      Placebo   AGEGR1          65-80         N          N    86
-#> 6     ARM      Placebo   AGEGR1          65-80         p          % 0.488
-#> 7     ARM      Placebo   AGEGR1            >80         n          n    30
-#> 8     ARM      Placebo   AGEGR1            >80         N          N    86
-#> 9     ARM      Placebo   AGEGR1            >80         p          % 0.349
-#> 10    ARM      Placebo      SEX              F         n          n    53
-#> ℹ 157 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 167 × 12
+#>    group1 group1_level variable variable_level stat_name   stat gts_column
+#>    <chr>  <list>       <chr>    <list>         <chr>     <list> <chr>     
+#>  1 ARM    Placebo      AGEGR1   <65            n         14     stat_1    
+#>  2 ARM    Placebo      AGEGR1   <65            N         86     stat_1    
+#>  3 ARM    Placebo      AGEGR1   <65            p          0.163 stat_1    
+#>  4 ARM    Placebo      AGEGR1   65-80          n         42     stat_1    
+#>  5 ARM    Placebo      AGEGR1   65-80          N         86     stat_1    
+#>  6 ARM    Placebo      AGEGR1   65-80          p          0.488 stat_1    
+#>  7 ARM    Placebo      AGEGR1   >80            n         30     stat_1    
+#>  8 ARM    Placebo      AGEGR1   >80            N         86     stat_1    
+#>  9 ARM    Placebo      AGEGR1   >80            p          0.349 stat_1    
+#> 10 ARM    Placebo      SEX      F              n         53     stat_1    
+#> # ℹ 157 more rows
+#> # ℹ 5 more variables: context <chr>, stat_label <chr>, fmt_fun <list>,
+#> #   warning <list>, error <list>
 ```
 
 #### Adverse Event Summary
@@ -126,32 +127,23 @@ tbl_ae
 
 # return ARDs
 gather_ard(tbl_ae) |> bind_ard()
-#> {cards} data frame: 82 x 15
-#>    group1 group1_level group2 group2_level                     variable
-#> 1    <NA>                <NA>                                      TRTA
-#> 2    <NA>                <NA>                                      TRTA
-#> 3    <NA>                <NA>                                      TRTA
-#> 4    <NA>                <NA>                                      TRTA
-#> 5    <NA>                <NA>                                      TRTA
-#> 6    <NA>                <NA>                                      TRTA
-#> 7    <NA>                <NA>                                      TRTA
-#> 8    <NA>                <NA>                                      TRTA
-#> 9    <NA>                <NA>                                      TRTA
-#> 10   TRTA      Placebo   <NA>              ..ard_hierarchical_overall..
-#>    variable_level stat_name stat_label  stat stat_fmt
-#> 1         Placebo         n          n    86       86
-#> 2         Placebo         N          N   254      254
-#> 3         Placebo         p          % 0.339     33.9
-#> 4       Xanomeli…         n          n    84       84
-#> 5       Xanomeli…         N          N   254      254
-#> 6       Xanomeli…         p          % 0.331     33.1
-#> 7       Xanomeli…         n          n    84       84
-#> 8       Xanomeli…         N          N   254      254
-#> 9       Xanomeli…         p          % 0.331     33.1
-#> 10           TRUE         n          n    16       16
-#> ℹ 72 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 5 more variables: context, fmt_fun, warning, error, gts_column
+#> # An ARD data frame: 82 × 15
+#>    group1 group1_level group2 group2_level variable         variable_level      
+#>    <chr>  <list>       <chr>  <list>       <chr>            <list>              
+#>  1 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  2 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  3 NA     <NULL>       NA     <NULL>       TRTA             Placebo             
+#>  4 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  5 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  6 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline High Dose
+#>  7 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#>  8 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#>  9 NA     <NULL>       NA     <NULL>       TRTA             Xanomeline Low Dose 
+#> 10 TRTA   Placebo      NA     <NULL>       ..ard_hierarchi… TRUE                
+#> # ℹ 72 more rows
+#> # ℹ 9 more variables: context <chr>, stat_name <chr>, stat_label <chr>,
+#> #   stat <list>, stat_fmt <list>, fmt_fun <list>, warning <list>, error <list>,
+#> #   gts_column <chr>
 ```
 
 #### Other summaries
@@ -206,15 +198,15 @@ AGE, a categorical variable summaries for AGEGR1 and SEX.
 
 The {cards} package can be utilized to create the ARD from a data frame.
 The package includes functions
-[`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
+[`ard_summary()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_summary.html)
 for continuous summaries,
-[`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+[`ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
 for categorical summaries, and
-[`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+[`ard_tabulate_value()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
 for dichotomous variables (and more).
 
 The package also exports a helper function,
-[`ard_stack()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_stack.html)
+[`ard_stack()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_stack.html)
 to simultaneously build these summaries along with optional ancillary
 results for a nicer display.
 
@@ -235,25 +227,26 @@ ard_demo <-
     .overall = TRUE
   )
 ard_demo
-#> {cards} data frame: 111 x 11
-#>    group1 group1_level variable variable_level stat_name stat_label   stat
-#> 1     ARM      Placebo      AGE                        N          N     86
-#> 2     ARM      Placebo      AGE                     mean       Mean 75.209
-#> 3     ARM      Placebo      AGE                       sd         SD   8.59
-#> 4     ARM      Placebo      AGE                   median     Median     76
-#> 5     ARM      Placebo      AGE                      p25         Q1     69
-#> 6     ARM      Placebo      AGE                      p75         Q3     82
-#> 7     ARM      Placebo      AGE                      min        Min     52
-#> 8     ARM      Placebo      AGE                      max        Max     89
-#> 9     ARM      Placebo   AGEGR1            <65         n          n     14
-#> 10    ARM      Placebo   AGEGR1            <65         N          N     86
-#> ℹ 101 more rows
-#> ℹ Use `print(n = ...)` to see more rows
-#> ℹ 4 more variables: context, fmt_fun, warning, error
+#> # An ARD data frame: 111 × 11
+#>    group1 group1_level variable variable_level context  stat_name   stat
+#>    <chr>  <list>       <chr>    <list>         <chr>    <chr>     <list>
+#>  1 ARM    Placebo      AGE      <NULL>         summary  N          86   
+#>  2 ARM    Placebo      AGE      <NULL>         summary  mean       75.2 
+#>  3 ARM    Placebo      AGE      <NULL>         summary  sd          8.59
+#>  4 ARM    Placebo      AGE      <NULL>         summary  median     76   
+#>  5 ARM    Placebo      AGE      <NULL>         summary  p25        69   
+#>  6 ARM    Placebo      AGE      <NULL>         summary  p75        82   
+#>  7 ARM    Placebo      AGE      <NULL>         summary  min        52   
+#>  8 ARM    Placebo      AGE      <NULL>         summary  max        89   
+#>  9 ARM    Placebo      AGEGR1   <65            tabulate n          14   
+#> 10 ARM    Placebo      AGEGR1   <65            tabulate N          86   
+#> # ℹ 101 more rows
+#> # ℹ 4 more variables: stat_label <chr>, fmt_fun <list>, warning <list>,
+#> #   error <list>
 ```
 
 The optional arguments that can be specified to improve the appearance
-of the table. - `.attributes` summary table will utilize the column
+of the table. - `.attributes` the summary table will utilize the column
 label attributes, if available - `.total_n` the total N is saved
 internally, and will be used in the printed table. - `.overall` the
 operations will be repeated without `.by` variable - `.missing` when
@@ -293,7 +286,7 @@ intervals.
 
 First, we will create an ARD for each of these analyses, then combine
 them with
-[`cards::bind_ard()`](https://insightsengineering.github.io/cards/latest-tag/reference/bind_ard.html).
+[`cards::bind_ard()`](https://pharmaverse.github.io/cards/latest-tag/reference/bind_ard.html).
 
 ``` r
 
@@ -335,19 +328,19 @@ similar structure to the simple ARDs we extracted from the
 results above.
 
 - The
-  [`cardx::ard_survival_survfit()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_survival_survfit.html)
+  [`cardx::ard_survival_survfit()`](https://rdrr.io/pkg/cardx/man/ard_survival_survfit.html)
   ARD looks like the
-  [`ard_tabulate()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  [`ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
   result.
 - The
-  [`cardx::ard_stats_t_test_onesample()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_stats_t_test_onesample.html)
+  [`cardx::ard_stats_t_test_onesample()`](https://rdrr.io/pkg/cardx/man/ard_stats_t_test_onesample.html)
   ARD looks like the
-  [`ard_summary()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_summary.html)
+  [`ard_summary()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_summary.html)
   result.
 - The
-  [`cardx::ard_categorical_ci()`](https://insightsengineering.github.io/cardx/latest-tag/reference/ard_categorical_ci.html)
+  [`cardx::ard_categorical_ci()`](https://rdrr.io/pkg/cardx/man/ard_categorical_ci.html)
   ARD looks like the
-  [`ard_tabulate_value()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
+  [`ard_tabulate_value()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate_value.html)
   result.
 
 With the created ARD, we can now build a summary table.
@@ -383,13 +376,13 @@ ard_outcomes |>
 
 #### Final Thoughts
 
-When creating the a custom summary table, you will want to utilize the
+When creating a custom summary table, you will want to utilize the
 functions with the `tbl_ard_*()` prefix. It will be important to
 familiarize yourself with the table structures that each of these
 functions produce, so you know which to use to build your table.
 
-If your table is a combination or mix of table types structures, you can
-build each part of your table separately and use
+If your table is a combination or mix of table structures, you can build
+each part of your table separately and use
 [`tbl_stack()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.md)
 and
 [`tbl_merge()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.md)

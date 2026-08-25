@@ -96,6 +96,22 @@ All {gtsummary} tables can be translated into another language using
 reset_gtsummary_theme()
 ```
 
+To build a single table with the active theme temporarily
+ignored—without clearing the theme for the rest of your session—wrap the
+code in
+[`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md).
+The expression is evaluated with the package defaults in effect, and the
+active theme is restored afterward.
+
+``` r
+
+# active theme is ignored only for this table
+without_gtsummary_theme(
+  trial |> 
+    tbl_summary(by = trt, include = c(age, grade))
+)
+```
+
 ## Writing Themes
 
 ### Theme Structure
@@ -166,6 +182,8 @@ input for the argument.
 | `add_q-arg:method`, `add_q-arg:pvalue_fun` |
 | add_stat_label |
 | `add_stat_label-arg:location` |
+| save_flex_docx |
+| `save_flex_docx-arg:body`, `save_flex_docx-arg:footer`, `save_flex_docx-arg:header`, `save_flex_docx-arg:template` |
 | as_kable |
 | `as_kable-arg:dots` |
 | assign_summary_type |
@@ -182,3 +200,5 @@ input for the argument.
 | `tbl_svysummary-arg:digits`, `tbl_svysummary-arg:label`, `tbl_svysummary-arg:missing`, `tbl_svysummary-arg:missing_text`, `tbl_svysummary-arg:missing_stat`, `tbl_svysummary-arg:percent`, `tbl_svysummary-arg:sort`, `tbl_svysummary-arg:statistic`, `tbl_svysummary-arg:type`, `tbl_svysummary-arg:value` |
 | tbl_custom_summary |
 | `tbl_custom_summary-arg:digits`, `tbl_custom_summary-arg:label`, `tbl_custom_summary-arg:missing`, `tbl_custom_summary-arg:missing_text`, `tbl_custom_summary-arg:type`, `tbl_custom_summary-arg:value` |
+| modify_abbreviation |
+| `modify_abbreviation-arg:prefix`, `modify_abbreviation-arg:sep1`, `modify_abbreviation-arg:sep2` |

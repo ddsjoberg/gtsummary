@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -44,6 +44,7 @@
 <li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -71,7 +72,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>gtsummary themes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/v2.5.1/vignettes/articles/themes.Rmd" class="external-link"><code>vignettes/articles/themes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/main/vignettes/articles/themes.Rmd" class="external-link"><code>vignettes/articles/themes.Rmd</code></a></small>
       <div class="d-none name"><code>themes.Rmd</code></div>
     </div>
 
@@ -2178,6 +2179,17 @@ N = 102</span></th>
 <code><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>To build a single table with the active theme temporarily
+ignored—without clearing the theme for the rest of your session—wrap the
+code in <code><a href="../reference/set_gtsummary_theme.html">without_gtsummary_theme()</a></code>. The expression is
+evaluated with the package defaults in effect, and the active theme is
+restored afterward.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># active theme is ignored only for this table</span></span>
+<span><span class="fu"><a href="../reference/set_gtsummary_theme.html">without_gtsummary_theme</a></span><span class="op">(</span></span>
+<span>  <span class="va">trial</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -2191,7 +2203,7 @@ with theme elements. To construct a personalized theme, create a named
 list of at least one theme element. Here’s an example of a theme that
 modifies the function that styles p-values and updates the default
 statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_theme</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="co"># round large p-values to two places</span></span>
@@ -2204,7 +2216,7 @@ statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary
 <p>Once you create the theme, first check the structure using
 <code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code>. Then apply or set the theme with
 <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme</a></span><span class="op">(</span><span class="va">my_theme</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -2716,6 +2728,12 @@ function arguments.</p>
 <td headers="Package-wide  eval" class="gt_row gt_left"><br></td>
 </tr>
 <tr>
+<td headers="Package-wide  name" class="gt_row gt_left"><span class="gt_from_md"><code>pkgwide-chr:footnote_symbol</code></span></td>
+<td headers="Package-wide  desc" class="gt_row gt_left"><span class="gt_from_md">character vector of the ordered symbols used to reference footnotes, e.g. <code>c("*", "\u2020", "\u2021")</code>. Symbols are assigned to footnotes in the order they appear and recycled when needed. Currently only utilized by <code><a href="../reference/as_gt.html">as_gt()</a></code> and <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>. See <code><a href="../reference/modify_footnote_symbol.html">?modify_footnote_symbol</a></code> for details.</span></td>
+<td headers="Package-wide  example" class="gt_row gt_left"><span class="gt_from_md"><code>c("*", "\u2020", "\u2021", "\u00A7")</code></span></td>
+<td headers="Package-wide  eval" class="gt_row gt_left"><br></td>
+</tr>
+<tr>
 <td headers="Package-wide  name" class="gt_row gt_left"><span class="gt_from_md"><code>pkgwide-fun:pre_conversion</code></span></td>
 <td headers="Package-wide  desc" class="gt_row gt_left"><span class="gt_from_md">function that is executed on the gtsummary object before it is converted with <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>, etc. Must be a function that can be run on every and any gtsummary object</span></td>
 <td headers="Package-wide  example" class="gt_row gt_left"><span class="gt_from_md"><code>bold_levels</code></span></td>
@@ -2798,6 +2816,15 @@ function arguments.</p>
 <td headers="as_flex_table  desc" class="gt_row gt_left"><span class="gt_from_md">named list of expressions of {flextable} package commands inserted in the <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> call; do not include the <code>data=</code> argument; the list of expressions is inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_flex_table(x, return_calls = TRUE)</code> and check the names.</span></td>
 <td headers="as_flex_table  example" class="gt_row gt_left"><span class="gt_from_md"><code>list(autofit = list(rlang::expr(flextable::font(fontname = "Bodoni 72", part = "all")), rlang::expr(flextable::fontsize(size = 8, part = "all"))))</code></span></td>
 <td headers="as_flex_table  eval" class="gt_row gt_left">Yes</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="4" class="gt_group_heading" scope="colgroup" id="save_flex_docx">save_flex_docx</th>
+    </tr>
+<tr class="gt_row_group_first">
+<td headers="save_flex_docx  name" class="gt_row gt_left"><span class="gt_from_md"><code>save_flex_docx-lst:pr_section</code></span></td>
+<td headers="save_flex_docx  desc" class="gt_row gt_left"><span class="gt_from_md">an {officer} <code>prop_section()</code> object used as the base Word section for <code><a href="../reference/save_flex_docx.html">save_flex_docx()</a></code>, controlling page margins, page size, orientation, and section columns; the section’s header/footer defaults are always managed by <code><a href="../reference/save_flex_docx.html">save_flex_docx()</a></code> (the relocated caption/notes) and cannot be set here, and in a collection the paging <code>type</code> is fixed to <code>"nextPage"</code>; the <code>pr_section</code> argument overrides this element.</span></td>
+<td headers="save_flex_docx  example" class="gt_row gt_left"><span class="gt_from_md"><code>officer::prop_section(page_margins = officer::page_mar(top = 0.5, bottom = 0.5))</code></span></td>
+<td headers="save_flex_docx  eval" class="gt_row gt_left">Yes</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="4" class="gt_group_heading" scope="colgroup" id="as_gt">as_gt</th>
@@ -2965,23 +2992,23 @@ function arguments.</p>
 <p>The second type of theme elements set function argument defaults. The
 values of these theme elements must align with the functions’ accepted
 input for the argument.</p>
-<div id="rrdkaxayan" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rrdkaxayan table {
+<div id="wjnqgbsqfy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wjnqgbsqfy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rrdkaxayan thead, #rrdkaxayan tbody, #rrdkaxayan tfoot, #rrdkaxayan tr, #rrdkaxayan td, #rrdkaxayan th {
+#wjnqgbsqfy thead, #wjnqgbsqfy tbody, #wjnqgbsqfy tfoot, #wjnqgbsqfy tr, #wjnqgbsqfy td, #wjnqgbsqfy th {
   border-style: none;
 }
 
-#rrdkaxayan p {
+#wjnqgbsqfy p {
   margin: 0;
   padding: 0;
 }
 
-#rrdkaxayan .gt_table {
+#wjnqgbsqfy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3007,12 +3034,12 @@ input for the argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_caption {
+#wjnqgbsqfy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rrdkaxayan .gt_title {
+#wjnqgbsqfy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3024,7 +3051,7 @@ input for the argument.</p>
   border-bottom-width: 0;
 }
 
-#rrdkaxayan .gt_subtitle {
+#wjnqgbsqfy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3036,7 +3063,7 @@ input for the argument.</p>
   border-top-width: 0;
 }
 
-#rrdkaxayan .gt_heading {
+#wjnqgbsqfy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3048,13 +3075,13 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_bottom_border {
+#wjnqgbsqfy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_col_headings {
+#wjnqgbsqfy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3069,7 +3096,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_col_heading {
+#wjnqgbsqfy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3089,7 +3116,7 @@ input for the argument.</p>
   overflow-x: hidden;
 }
 
-#rrdkaxayan .gt_column_spanner_outer {
+#wjnqgbsqfy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3101,15 +3128,15 @@ input for the argument.</p>
   padding-right: 4px;
 }
 
-#rrdkaxayan .gt_column_spanner_outer:first-child {
+#wjnqgbsqfy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rrdkaxayan .gt_column_spanner_outer:last-child {
+#wjnqgbsqfy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rrdkaxayan .gt_column_spanner {
+#wjnqgbsqfy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3121,11 +3148,11 @@ input for the argument.</p>
   width: 100%;
 }
 
-#rrdkaxayan .gt_spanner_row {
+#wjnqgbsqfy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rrdkaxayan .gt_group_heading {
+#wjnqgbsqfy .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3151,7 +3178,7 @@ input for the argument.</p>
   text-align: left;
 }
 
-#rrdkaxayan .gt_empty_group_heading {
+#wjnqgbsqfy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3166,15 +3193,15 @@ input for the argument.</p>
   vertical-align: middle;
 }
 
-#rrdkaxayan .gt_from_md > :first-child {
+#wjnqgbsqfy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rrdkaxayan .gt_from_md > :last-child {
+#wjnqgbsqfy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rrdkaxayan .gt_row {
+#wjnqgbsqfy .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3193,7 +3220,7 @@ input for the argument.</p>
   overflow-x: hidden;
 }
 
-#rrdkaxayan .gt_stub {
+#wjnqgbsqfy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3206,7 +3233,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#rrdkaxayan .gt_stub_row_group {
+#wjnqgbsqfy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3220,15 +3247,15 @@ input for the argument.</p>
   vertical-align: top;
 }
 
-#rrdkaxayan .gt_row_group_first td {
+#wjnqgbsqfy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rrdkaxayan .gt_row_group_first th {
+#wjnqgbsqfy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rrdkaxayan .gt_summary_row {
+#wjnqgbsqfy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3238,16 +3265,16 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#rrdkaxayan .gt_first_summary_row {
+#wjnqgbsqfy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_first_summary_row.thick {
+#wjnqgbsqfy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rrdkaxayan .gt_last_summary_row {
+#wjnqgbsqfy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3257,7 +3284,7 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_grand_summary_row {
+#wjnqgbsqfy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3267,7 +3294,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#rrdkaxayan .gt_first_grand_summary_row {
+#wjnqgbsqfy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3277,7 +3304,7 @@ input for the argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_last_grand_summary_row_top {
+#wjnqgbsqfy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3287,11 +3314,11 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_striped {
+#wjnqgbsqfy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rrdkaxayan .gt_table_body {
+#wjnqgbsqfy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3300,7 +3327,7 @@ input for the argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_footnotes {
+#wjnqgbsqfy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3314,7 +3341,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_footnote {
+#wjnqgbsqfy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3323,7 +3350,7 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#rrdkaxayan .gt_sourcenotes {
+#wjnqgbsqfy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3337,7 +3364,7 @@ input for the argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#rrdkaxayan .gt_sourcenote {
+#wjnqgbsqfy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3345,72 +3372,72 @@ input for the argument.</p>
   padding-right: 5px;
 }
 
-#rrdkaxayan .gt_left {
+#wjnqgbsqfy .gt_left {
   text-align: left;
 }
 
-#rrdkaxayan .gt_center {
+#wjnqgbsqfy .gt_center {
   text-align: center;
 }
 
-#rrdkaxayan .gt_right {
+#wjnqgbsqfy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rrdkaxayan .gt_font_normal {
+#wjnqgbsqfy .gt_font_normal {
   font-weight: normal;
 }
 
-#rrdkaxayan .gt_font_bold {
+#wjnqgbsqfy .gt_font_bold {
   font-weight: bold;
 }
 
-#rrdkaxayan .gt_font_italic {
+#wjnqgbsqfy .gt_font_italic {
   font-style: italic;
 }
 
-#rrdkaxayan .gt_super {
+#wjnqgbsqfy .gt_super {
   font-size: 65%;
 }
 
-#rrdkaxayan .gt_footnote_marks {
+#wjnqgbsqfy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rrdkaxayan .gt_asterisk {
+#wjnqgbsqfy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rrdkaxayan .gt_indent_1 {
+#wjnqgbsqfy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rrdkaxayan .gt_indent_2 {
+#wjnqgbsqfy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rrdkaxayan .gt_indent_3 {
+#wjnqgbsqfy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rrdkaxayan .gt_indent_4 {
+#wjnqgbsqfy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rrdkaxayan .gt_indent_5 {
+#wjnqgbsqfy .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rrdkaxayan .katex-display {
+#wjnqgbsqfy .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rrdkaxayan div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#wjnqgbsqfy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3452,6 +3479,10 @@ input for the argument.</p>
     </tr>
 <tr class="gt_row_group_first"><td headers="add_stat_label  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>add_stat_label-arg:location</code></span></td></tr>
 <tr class="gt_group_heading_row">
+<th colspan="1" class="gt_group_heading" scope="col" id="save_flex_docx">save_flex_docx</th>
+    </tr>
+<tr class="gt_row_group_first"><td headers="save_flex_docx  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>save_flex_docx-arg:body</code>, <code>save_flex_docx-arg:footer</code>, <code>save_flex_docx-arg:header</code>, <code>save_flex_docx-arg:template</code></span></td></tr>
+<tr class="gt_group_heading_row">
 <th colspan="1" class="gt_group_heading" scope="col" id="as_kable">as_kable</th>
     </tr>
 <tr class="gt_row_group_first"><td headers="as_kable  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>as_kable-arg:dots</code></span></td></tr>
@@ -3483,6 +3514,10 @@ input for the argument.</p>
 <th colspan="1" class="gt_group_heading" scope="col" id="tbl_custom_summary">tbl_custom_summary</th>
     </tr>
 <tr class="gt_row_group_first"><td headers="tbl_custom_summary  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_custom_summary-arg:digits</code>, <code>tbl_custom_summary-arg:label</code>, <code>tbl_custom_summary-arg:missing</code>, <code>tbl_custom_summary-arg:missing_text</code>, <code>tbl_custom_summary-arg:type</code>, <code>tbl_custom_summary-arg:value</code></span></td></tr>
+<tr class="gt_group_heading_row">
+<th colspan="1" class="gt_group_heading" scope="col" id="modify_abbreviation">modify_abbreviation</th>
+    </tr>
+<tr class="gt_row_group_first"><td headers="modify_abbreviation  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>modify_abbreviation-arg:prefix</code>, <code>modify_abbreviation-arg:sep1</code>, <code>modify_abbreviation-arg:sep2</code></span></td></tr>
 </tbody>
 </table>
 </div>
@@ -3499,7 +3534,7 @@ input for the argument.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

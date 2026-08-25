@@ -80,7 +80,7 @@ tbl_custom_summary(
 - type:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/reference/syntax.md))  
-  Specifies the summary type. Accepted value are
+  Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`. If not
   specified, default type is assigned via
   [`assign_summary_type()`](https://www.danieldsjoberg.com/gtsummary/reference/assign_summary_type.md).
@@ -141,7 +141,7 @@ A `tbl_custom_summary` object
 Please refer to the help file of
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
 regarding the use of select helpers, and arguments `include`, `by`,
-`type`, `value`, `digits`, `missing` and `missing_text`.
+`type`, `value`, `digits` and `missing_text`.
 
 ## `stat_fns` argument
 
@@ -172,7 +172,7 @@ Each function may take the following arguments:
   `statistic` argument, for that variable)
 
 The user-defined does not need to utilize each of these inputs. It's
-encouraged the user-defined function accept `...` as each of the
+encouraged that the user-defined function accept `...` as each of the
 arguments *will* be passed to the function, even if not all inputs are
 utilized by the user's function, e.g. `foo(data, ...)` (see examples).
 

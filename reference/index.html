@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,13 +15,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="../articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="../articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="../articles/index.html">And more...</a></li>
@@ -251,6 +252,13 @@
 
         </dt>
         <dd>Add overall column</dd>
+
+        <dt>
+
+          <code><a href="add_difference.tbl_hierarchical.html">add_difference(<i>&lt;tbl_hierarchical&gt;</i>)</a></code> <code><a href="add_difference.tbl_hierarchical.html">add_difference(<i>&lt;tbl_ard_hierarchical&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Add rate differences to hierarchical tables</dd>
       </dl></div><div class="section level2">
 
       <h3 id="likert-summary-tables">Likert Summary Tables<a class="anchor" aria-label="anchor" href="#likert-summary-tables"></a></h3>
@@ -629,6 +637,13 @@
 
         </dt>
         <dd>Convert gtsummary object to a tibble</dd>
+
+        <dt>
+
+          <code><a href="save_flex_docx.html">save_flex_docx()</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+        </dt>
+        <dd>Save a gtsummary table to a Word file</dd>
       </dl></div><div class="section level2">
       <h2 id="other-functions">Other Functions<a class="anchor" aria-label="anchor" href="#other-functions"></a></h2>
 
@@ -748,6 +763,13 @@
 
         <dt>
 
+          <code><a href="modify_footnote_symbol.html">modify_footnote_symbol()</a></code> <code><a href="modify_footnote_symbol.html">remove_footnote_symbol()</a></code>
+
+        </dt>
+        <dd>Modify Footnote Symbols</dd>
+
+        <dt>
+
           <code><a href="bold_italicize_labels_levels.html">bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_levels()</a></code>
 
         </dt>
@@ -836,7 +858,7 @@
 
       <dl><dt>
 
-          <code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">reset_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">get_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">with_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">check_gtsummary_theme()</a></code>
+          <code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">reset_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">get_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">with_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">without_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">check_gtsummary_theme()</a></code>
 
         </dt>
         <dd>Set gtsummary theme</dd>
@@ -998,6 +1020,13 @@
 
         <dt>
 
+          <code><a href="add_difference.tbl_hierarchical.html">add_difference(<i>&lt;tbl_hierarchical&gt;</i>)</a></code> <code><a href="add_difference.tbl_hierarchical.html">add_difference(<i>&lt;tbl_ard_hierarchical&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Add rate differences to hierarchical tables</dd>
+
+        <dt>
+
           <code><a href="add_overall_ard.html">add_overall(<i>&lt;tbl_ard_summary&gt;</i>)</a></code>
 
         </dt>
@@ -1121,7 +1150,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

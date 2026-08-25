@@ -110,7 +110,7 @@ the `pattern` argument. The `pattern` argument syntax follows
 with referenced R objects being inserted between curly brackets. The
 default is
 `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.
-You have access the to following fields within the `pattern` argument.
+You have access to the following fields within the `pattern` argument.
 
 | Parameter      | Description                                           |
 |----------------|-------------------------------------------------------|
@@ -134,5 +134,5 @@ The `inline_text` function has arguments for rounding the p-value
 (`estimate_fun`). These default to the same rounding performed in the
 table, but can be modified when reporting inline.
 
-For more details about inline code, review to the [RStudio documentation
+For more details about inline code, refer to the [RStudio documentation
 page](https://rmarkdown.rstudio.com/lesson-4.html).

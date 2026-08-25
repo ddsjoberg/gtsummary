@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="index.html" aria-label="View on CRAN"><span class="fa fa-home"></span></a></li>
+<li class="active nav-item"><a class="nav-link" href="index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -47,6 +47,7 @@
 <li><a class="dropdown-item" href="articles/tbl_summary.html">tbl_summary() tutorial</a></li>
     <li><a class="dropdown-item" href="articles/tbl_regression.html">tbl_regression() tutorial</a></li>
     <li><a class="dropdown-item" href="articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a></li>
+    <li><a class="dropdown-item" href="articles/tbl_ard-functions.html">ARD-first / Clinical Tables</a></li>
     <li><a class="dropdown-item" href="articles/gallery.html">FAQ + gallery</a></li>
     <li><a class="external-link dropdown-item" href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf">cheat sheet</a></li>
     <li><a class="dropdown-item" href="articles/index.html">And more...</a></li>
@@ -72,6 +73,7 @@
 <a class="anchor" aria-label="anchor" href="#gtsummary-"></a>
 </h2>
 <p>The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the <strong>R</strong> programming language. The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.</p>
+<p>The package is widely used across <strong>clinical and pharmaceutical research</strong> for reporting clinical trials—from baseline demographics and adverse event summaries to efficacy analyses. Every table is computed from a structured, machine-readable <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html">Analysis Results Dataset (ARD)</a>—part of the <a href="https://www.cdisc.org/standards/foundational/analysis-results-standard" class="external-link">CDISC Analysis Results Standard</a>—via the pharmaverse <a href="https://pharmaverse.github.io/cards/" class="external-link">{cards}</a> and <a href="https://pharmaverse.github.io/cardx/" class="external-link">{cardx}</a> packages, making results traceable and straightforward to QC.</p>
 <ul>
 <li><p><a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><strong>Summarize data frames or tibbles</strong></a> easily in <strong>R</strong>. Perfect for presenting descriptive statistics, comparing group <strong>demographics</strong> (e.g creating a <strong>Table 1</strong> for medical journals), and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.</p></li>
 <li><p><a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><strong>Summarize regression models</strong></a> in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio).</p></li>
@@ -96,7 +98,7 @@
 <h3 id="summary-table">Summary Table<a class="anchor" aria-label="anchor" href="#summary-table"></a>
 </h3>
 <p>Use <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html"><code>tbl_summary()</code></a> to summarize a data frame.</p>
-<p><img src="https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif" alt="animated" width="100%"></p>
+<!-- <img src = "https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%"> -->
 <p>Example basic table:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
@@ -154,6 +156,63 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="clinical--pharmaceutical-research">Clinical &amp; Pharmaceutical Research<a class="anchor" aria-label="anchor" href="#clinical--pharmaceutical-research"></a>
+</h2>
+<p>{gtsummary} is a natural fit for clinical trial reporting. Below we highlight two features that clinical and pharmaceutical teams rely on: safety tables and built-in QC via the ARD backend. Both examples use the CDISC pilot data (<code>ADAE</code>/<code>ADSL</code>) shipped with the <a href="https://pharmaverse.github.io/cards/" class="external-link">{cards}</a> package.</p>
+<div class="section level3">
+<h3 id="adverse-event-tables">Adverse Event Tables<a class="anchor" aria-label="anchor" href="#adverse-event-tables"></a>
+</h3>
+<p>Use <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_hierarchical.html"><code>tbl_hierarchical()</code></a> to build nested adverse event summaries by treatment arm—counts of patients with an event, organized by System Organ Class and Preferred Term—following FDA Standard Safety Table conventions.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pharmaverse/cards" class="external-link">cards</a></span><span class="op">)</span> <span class="co"># provides the ADAE / ADSL CDISC pilot datasets</span></span>
+<span></span>
+<span><span class="va">tbl_ae</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">ADAE</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># filter to a few System Organ Classes and Preferred Terms for a compact display</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">AESOC</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AESOC</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>    <span class="va">AETERM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">$</span><span class="va">AETERM</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/tbl_hierarchical.html">tbl_hierarchical</a></span><span class="op">(</span></span>
+<span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AESOC</span>, <span class="va">AETERM</span><span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="va">TRTA</span>, <span class="co"># summarize by treatment arm</span></span>
+<span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span>,</span>
+<span>    id <span class="op">=</span> <span class="va">USUBJID</span>, <span class="co"># count unique patients, not events</span></span>
+<span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>..ard_hierarchical_overall.. <span class="op">=</span> <span class="st">"Any Adverse Event"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-tbl_ae-1.png" alt="Example of a nested adverse event table by treatment arm" width="70%"></p>
+</div>
+<div class="section level3">
+<h3 id="built-in-qc-with-the-ard-backend">Built-in QC with the ARD Backend<a class="anchor" aria-label="anchor" href="#built-in-qc-with-the-ard-backend"></a>
+</h3>
+<p>Because every {gtsummary} table is computed from an <strong>Analysis Results Dataset (ARD)</strong>—a structured, machine-readable record of every statistic, part of the <a href="https://www.cdisc.org/standards/foundational/analysis-results-standard" class="external-link">CDISC Analysis Results Standard</a>—you can extract the numbers behind any table with <a href="https://www.danieldsjoberg.com/gtsummary/reference/gather_ard.html"><code>gather_ard()</code></a>. Each statistic becomes one row, making it simple to QC results, trace a value back to its calculation, or compare against an independently double-programmed dataset.</p>
+<p>For example, the adverse event counts behind the table above are stored as individual records—one for each event count (<code>n</code>), denominator (<code>N</code>), and percentage (<code>p</code>) in every treatment arm:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl_ae</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/gather_ard.html">gather_ard</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/bind_ard.html" class="external-link">bind_ard</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># keep the adverse event term counts and the columns identifying each statistic</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"AETERM"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">group1_level</span>, <span class="va">variable_level</span>, <span class="va">stat_name</span>, <span class="va">stat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # An ARD data frame: 27 × 4</span></span>
+<span><span class="co">#&gt;    group1_level         variable_level            stat_name    stat</span></span>
+<span><span class="co">#&gt;    &lt;list&gt;               &lt;list&gt;                    &lt;chr&gt;      &lt;list&gt;</span></span>
+<span><span class="co">#&gt;  1 Placebo              DIARRHOEA                 n          9     </span></span>
+<span><span class="co">#&gt;  2 Placebo              DIARRHOEA                 N         86     </span></span>
+<span><span class="co">#&gt;  3 Placebo              DIARRHOEA                 p          0.105 </span></span>
+<span><span class="co">#&gt;  4 Xanomeline High Dose DIARRHOEA                 n          4     </span></span>
+<span><span class="co">#&gt;  5 Xanomeline High Dose DIARRHOEA                 N         84     </span></span>
+<span><span class="co">#&gt;  6 Xanomeline High Dose DIARRHOEA                 p          0.0476</span></span>
+<span><span class="co">#&gt;  7 Xanomeline Low Dose  DIARRHOEA                 n          5     </span></span>
+<span><span class="co">#&gt;  8 Xanomeline Low Dose  DIARRHOEA                 N         84     </span></span>
+<span><span class="co">#&gt;  9 Xanomeline Low Dose  DIARRHOEA                 p          0.0595</span></span>
+<span><span class="co">#&gt; 10 Placebo              APPLICATION SITE ERYTHEMA n          3     </span></span>
+<span><span class="co">#&gt; # ℹ 17 more rows</span></span></code></pre></div>
+<p>For the full CDISC/ARD workflow—including the <code>tbl_ard_*()</code> constructors that build tables directly from an ARD—see the <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_ard-functions.html"><strong>ARD-first Tables</strong></a> article.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="gtsummary--r-markdown">gtsummary + R Markdown<a class="anchor" aria-label="anchor" href="#gtsummary--r-markdown"></a>
 </h2>
 <p>The <strong>{gtsummary}</strong> package was written to be a companion to the <strong>{gt}</strong> package from RStudio. But not all output types are supported by the <strong>{gt}</strong> package. Therefore, we have made it possible to print <strong>{gtsummary}</strong> tables with various engines.</p>
@@ -164,24 +223,11 @@
 <h2 id="save-individual-tables">Save Individual Tables<a class="anchor" aria-label="anchor" href="#save-individual-tables"></a>
 </h2>
 <p>{gtsummary} tables can also be saved directly to file as an image, HTML, Word, RTF, and LaTeX file.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html" class="external-link">gtsave</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># use extensions .png, .html, .docx, .rtf, .tex, .ltx</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="additional-resources">Additional Resources<a class="anchor" aria-label="anchor" href="#additional-resources"></a>
-</h2>
-<ul>
-<li><p>The best resources are the gtsummary vignettes: <a href="https://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><code>tbl_regression()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html"><code>inline_text()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/themes.html">gtsummary themes</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">gtsummary+R markdown</a>.</p></li>
-<li><p>The R Journal Article <a href="https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf" class="external-link"><em>Reproducible Summary Tables with the gtsummary Package</em></a>.</p></li>
-<li><p>The <a href="https://education.rstudio.com/blog/2020/07/gtsummary/" class="external-link">RStudio Education Blog</a> includes a post with a brief introduction to the package.</p></li>
-<li>
-<p>A <a href="https://www.youtube.com/watch?v=tANo9E1SYJE" class="external-link">recording of a presentation</a> given to the Weill Cornell Biostatistics Department and the Memorial Sloan Kettering R Users Group.</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-</iframe>
-</li>
-</ul>
+<p>For submission-ready deliverables, convert to a <a href="https://davidgohel.github.io/flextable/" class="external-link">{flextable}</a> with <a href="https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html"><code>as_flex_table()</code></a> for polished RTF and Word output, or save straight to a Word document with <code><a href="reference/save_flex_docx.html">save_flex_docx()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="cite-gtsummary">Cite gtsummary<a class="anchor" aria-label="anchor" href="#cite-gtsummary"></a>
@@ -276,7 +322,7 @@ A BibTeX entry for LaTeX users is
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

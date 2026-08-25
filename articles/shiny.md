@@ -73,4 +73,4 @@ shinyApp(ui = ui, server = server)
 ```
 
 To run this Shiny app locally on your machine, save the script above as
-`app.R` in a R Project, open in RStudio, and run the application.
+`app.R` in an R Project, open in RStudio, and run the application.

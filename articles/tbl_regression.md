@@ -98,8 +98,8 @@ summary(m1)$coefficients
 #> stageT4     -0.23108633 0.44822835 -0.5155549 0.60616530
 ```
 
-- We will then a **regression model table** to summarize and present
-  these results in just one line of code from {gtsummary}.
+- We will then create a **regression model table** to summarize and
+  present these results in just one line of code from {gtsummary}.
 
 ``` r
 
@@ -339,6 +339,7 @@ supported as well, even if not listed below.
 | [`survival::cch()`](https://rdrr.io/pkg/survival/man/cch.html) | Experimental support. |
 | [`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) |  |
 | [`survival::coxph()`](https://rdrr.io/pkg/survival/man/coxph.html) |  |
+| [`survival::coxphms.object`](https://rdrr.io/pkg/survival/man/coxphms.object.html) | Experimental support. It is recommended to use `tidy_coxphms()` as `tidy_fun`. |
 | [`survival::survreg()`](https://rdrr.io/pkg/survival/man/survreg.html) |  |
 | `svyVGAM::svy_vglm()` | Experimental support. It is recommended to use `tidy_svy_vglm()` as `tidy_fun`. |
 | `tidycmprsk::crr()` |  |

@@ -65,6 +65,9 @@
   **\[experimental\]** : Filter Hierarchical Tables
 - [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/reference/add_overall.md)
   : Add overall column
+- [`add_difference(`*`<tbl_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+  [`add_difference(`*`<tbl_ard_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+  : Add rate differences to hierarchical tables
 
 ### Likert Summary Tables
 
@@ -187,6 +190,8 @@
 - [`as_tibble(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/as_tibble.gtsummary.md)
   [`as.data.frame(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/as_tibble.gtsummary.md)
   : Convert gtsummary object to a tibble
+- [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md)
+  **\[experimental\]** : Save a gtsummary table to a Word file
 
 ## Other Functions
 
@@ -236,6 +241,9 @@
   : Modify Abbreviations
 - [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_caption.md)
   : Modify table caption
+- [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md)
+  [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md)
+  : Modify Footnote Symbols
 - [`bold_labels()`](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.md)
   [`italicize_labels()`](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.md)
   [`bold_levels()`](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.md)
@@ -274,6 +282,7 @@
   [`reset_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
   [`get_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
   [`with_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
+  [`without_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
   [`check_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.md)
   : Set gtsummary theme
 - [`theme_gtsummary_journal()`](https://www.danieldsjoberg.com/gtsummary/reference/theme_gtsummary.md)
@@ -347,6 +356,9 @@
   **\[experimental\]** : ARD summary table
 - [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_wide_summary.md)
   **\[experimental\]** : Wide ARD summary table
+- [`add_difference(`*`<tbl_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+  [`add_difference(`*`<tbl_ard_hierarchical>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+  : Add rate differences to hierarchical tables
 - [`add_overall(`*`<tbl_ard_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_overall_ard.md)
   : ARD add overall column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md)

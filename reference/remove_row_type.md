@@ -24,7 +24,7 @@ remove_row_type(
 - variables:
 
   ([`tidy-select`](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html))  
-  Variables to to remove rows from. Default is
+  Variables to remove rows from. Default is
   [`everything()`](https://tidyselect.r-lib.org/reference/everything.html)
 
 - type:

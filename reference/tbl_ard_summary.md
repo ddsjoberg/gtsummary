@@ -48,7 +48,7 @@ tbl_ard_summary(
 - type:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/reference/syntax.md))  
-  Specifies the summary type. Accepted value are
+  Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`.
   Continuous summaries may be assigned `c("continuous", "continuous2")`,
   while categorical and dichotomous cannot be modified.
@@ -84,7 +84,7 @@ tbl_ard_summary(
 
   (scalar `logical`)  
   When `TRUE`, the `cards` input is parsed into two parts to run
-  `tbl_ard_summary(cards_by) |> add_overall(cards_overall)`. Can only by
+  `tbl_ard_summary(cards_by) |> add_overall(cards_overall)`. Can only be
   used when `by` argument is specified. Default is `FALSE`.
 
 ## Value
@@ -99,19 +99,19 @@ to improve the default appearance of the table.
 1.  **Attributes**: When attributes are included, the default labels
     will be the variable labels, when available. Attributes can be
     included in an ARD with
-    [`cards::ard_attributes()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_attributes.html)
+    [`cards::ard_attributes()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_attributes.html)
     or `ard_stack(.attributes = TRUE)`.
 
 2.  **Missing**: When missing results are included, users can include
     missing counts or rates for variables with
     `tbl_ard_summary(missing = c("ifany", "always"))`. The missing
     statistics can be included in an ARD with
-    [`cards::ard_missing()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_missing.html)
+    [`cards::ard_missing()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_missing.html)
     or `ard_stack(.missing = TRUE)`.
 
 3.  **Total N**: The total N is saved internally when available, and it
     can be calculated with
-    [`cards::ard_total_n()`](https://insightsengineering.github.io/cards/latest-tag/reference/ard_total_n.html)
+    [`cards::ard_total_n()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html)
     or `ard_stack(.total_n = TRUE)`.
 
 ## Examples
