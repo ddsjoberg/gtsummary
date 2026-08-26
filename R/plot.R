@@ -30,7 +30,6 @@ NULL
 plot.tbl_regression <- function(x,
                                 remove_header_rows = TRUE,
                                 remove_reference_rows = FALSE, ...) {
-  check_dots_empty()
   check_pkg_installed("ggstats")
   check_not_missing(x)
   check_scalar_logical(remove_header_rows)
