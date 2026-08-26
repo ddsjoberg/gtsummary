@@ -30,3 +30,19 @@ test_that("plot.tbl_regression() works", {
     c(TRUE, FALSE, FALSE, FALSE)
   )
 })
+
+test_that("plot.tbl_regression() passes arguments in ... to ggstats::ggcoef_plot()", {
+  # arguments passed via ... should reach ggstats::ggcoef_plot() and not error (#2470)
+  expect_no_error(
+    lm(age ~ grade, trial) |>
+      tbl_regression() %>%
+      plot(point_size = 5)
+  )
+
+  # unrecognized arguments are still rejected by ggstats::ggcoef_plot()
+  expect_error(
+    lm(age ~ grade, trial) |>
+      tbl_regression() %>%
+      plot(not_an_argument = "red")
+  )
+})
