@@ -93,20 +93,10 @@
 #'
 #' # Example 1 ----------------------------------
 #' # Default behavior is to place the footnote in the footer and add 'Page X of Y'
-#' tbl <-
-#'   trial |>
-#'   tbl_summary(by = trt, include = c(age, grade))
+#' tbl <- tbl_summary(trial, by = trt, include = c(age, grade))
 #'
 #' # by default the footnotes move to the Word footer with a page-number line
 #' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
-#'
-#' # keep the whole table (including footnotes) in the body, nothing in the footer
-#' save_flex_docx(
-#'   tbl,
-#'   path = tempfile(fileext = ".docx"),
-#'   body = NULL,
-#'   footer = NULL
-#' )
 #'
 #' # Example 2 ----------------------------------
 #' # This example places a header typically found in the pharmaceutical space,
@@ -146,6 +136,7 @@
 #'   ) |>
 #'   save_flex_docx(path = tempfile(fileext = ".docx"), header = header_ft)
 #'
+#' # Example 3 ----------------------------------
 #' # a split table is written with one table per section/page, body footnotes
 #' # only appear on the pages where they are represented
 #' trial |>
@@ -154,6 +145,7 @@
 #'   tbl_split_by_rows(variables = marker) |>
 #'   save_flex_docx(path = tempfile(fileext = ".docx"))
 #'
+#' # Example 4 ----------------------------------
 #' # customize the Word page margins and orientation via a prop_section()
 #' save_flex_docx(
 #'   tbl,
@@ -162,6 +154,15 @@
 #'     page_margins = officer::page_mar(top = 0.5, bottom = 0.5),
 #'     page_size = officer::page_size(orient = "landscape")
 #'   )
+#' )
+#'
+#' # Example 5 ----------------------------------
+#' # keep the whole table (including footnotes) in the body, nothing in the footer
+#' save_flex_docx(
+#'   tbl,
+#'   path = tempfile(fileext = ".docx"),
+#'   body = NULL,
+#'   footer = NULL
 #' )
 #'
 #' reset_gtsummary_theme()
