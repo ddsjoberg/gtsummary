@@ -7,6 +7,17 @@
   now fits the table to 100% of the page width, and the default `footer`
   argument correctly right-aligns the `"Page X of Y"` line.
 
+- The
+  [`plot()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/plot.md)
+  method for
+  [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.md)
+  and
+  [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_uvregression.md)
+  now correctly passes arguments in `...` to
+  [`ggstats::ggcoef_plot()`](https://larmarange.github.io/ggstats/reference/ggcoef_model.html),
+  as documented.
+  ([\#2470](https://github.com/ddsjoberg/gtsummary/issues/2470))
+
 ## gtsummary 2.6.0
 
 CRAN release: 2026-08-25

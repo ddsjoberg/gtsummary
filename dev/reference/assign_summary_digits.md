@@ -53,48 +53,48 @@ assign_summary_digits(
 #> style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, 
 #>     scale = scale, prefix = prefix, suffix = suffix, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c5fda18>
-#> <environment: 0x560959145288>
+#> <bytecode: 0x562b397c3b50>
+#> <environment: 0x562b40105938>
 #> 
 #> $mpg$N_obs
 #> function (x) 
 #> style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, 
 #>     scale = scale, prefix = prefix, suffix = suffix, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c5fda18>
-#> <environment: 0x560955a96658>
+#> <bytecode: 0x562b397c3b50>
+#> <environment: 0x562b44f71da8>
 #> 
 #> $mpg$N_miss
 #> function (x) 
 #> style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, 
 #>     scale = scale, prefix = prefix, suffix = suffix, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c5fda18>
-#> <environment: 0x560955a96658>
+#> <bytecode: 0x562b397c3b50>
+#> <environment: 0x562b44f71da8>
 #> 
 #> $mpg$N_nonmiss
 #> function (x) 
 #> style_number(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, 
 #>     scale = scale, prefix = prefix, suffix = suffix, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c5fda18>
-#> <environment: 0x560955a96658>
+#> <bytecode: 0x562b397c3b50>
+#> <environment: 0x562b44f71da8>
 #> 
 #> $mpg$p_miss
 #> function (x) 
 #> style_percent(x, prefix = prefix, suffix = suffix, digits = digits, 
 #>     big.mark = big.mark, decimal.mark = decimal.mark, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c660780>
-#> <environment: 0x5609543d0b40>
+#> <bytecode: 0x562b397cab90>
+#> <environment: 0x562b456b6d80>
 #> 
 #> $mpg$p_nonmiss
 #> function (x) 
 #> style_percent(x, prefix = prefix, suffix = suffix, digits = digits, 
 #>     big.mark = big.mark, decimal.mark = decimal.mark, na = na, 
 #>     ...)
-#> <bytecode: 0x56094c660780>
-#> <environment: 0x5609543d0b40>
+#> <bytecode: 0x562b397cab90>
+#> <environment: 0x562b456b6d80>
 #> 
 #> 
 ```
