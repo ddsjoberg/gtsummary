@@ -35,10 +35,9 @@
 #'   file path to write the Word (`.docx`) file to
 #' @param body (`function` or `NULL`)\cr
 #'   a transformer applied to the source flextable to produce the flextable
-#'   placed in the document body. Default `\(x) flextable::delete_part(x, part =
-#'   "footer")` removes the footnote region from the body (it is relocated to the
-#'   Word footer by the `footer` default). `NULL` uses the source flextable
-#'   unchanged.
+#'   placed in the document body. The default removes the footnote region from
+#'   the body (it is relocated to the Word footer by the `footer` default) and fits the table
+#'   to 100% of the page width. `NULL` uses the source flextable unchanged.
 #' @param footer,header (`function`, `flextable`, or `NULL`)\cr
 #'   what to place in the Word page footer/header region: a transformer applied
 #'   to the source flextable (returning a `flextable` or `NULL`), a static
@@ -96,8 +95,7 @@
 #' # Default behavior is to place the footnote in the footer and add 'Page X of Y'
 #' tbl <-
 #'   trial |>
-#'   tbl_summary(by = trt, include = c(age, grade)) |>
-#'   modify_caption("**Table 1. Patient Characteristics**")
+#'   tbl_summary(by = trt, include = c(age, grade))
 #'
 #' # by default the footnotes move to the Word footer with a page-number line
 #' save_flex_docx(tbl, path = tempfile(fileext = ".docx"))
@@ -139,11 +137,20 @@
 #'   flextable::fontsize(size = 8, part = "all") |>
 #'   flextable::padding(padding.top = 0, padding.bottom = 0, part = "all") |>
 #'   flextable::set_table_properties(layout = "autofit", width = 1)
-#' save_flex_docx(tbl, path = tempfile(fileext = ".docx"), header = header_ft)
+#' cards::ADAE[1:150,] |>
+#'   tbl_hierarchical(
+#'     by = TRTA,
+#'     variables = c(AESOC, AEDECOD),
+#'     id = USUBJID,
+#'     denominator = cards::ADSL
+#'   ) |>
+#'   save_flex_docx(path = tempfile(fileext = ".docx"), header = header_ft)
 #'
-#' # a split table is written with one table per section/page
+#' # a split table is written with one table per section/page, body footnotes
+#' # only appear on the pages where they are represented
 #' trial |>
 #'   tbl_summary(by = trt, include = c(age, marker, grade), missing = ~"no") |>
+#'   modify_footnote_body(footnote = "Age in years", columns = "label", rows = variable == "age") |>
 #'   tbl_split_by_rows(variables = marker) |>
 #'   save_flex_docx(path = tempfile(fileext = ".docx"))
 #'
@@ -160,7 +167,11 @@
 #' reset_gtsummary_theme()
 save_flex_docx <- function(x,
                            path,
-                           body = \(x) flextable::delete_part(x, part = "footer"),
+                           body = \(x) {
+                             x %>%
+                               flextable::delete_part(part = "footer") %>%
+                               flextable::set_table_properties(layout = "autofit", width = 1)
+                             },
                            footer = \(x) {
                              x %>%
                                flextable::delete_part(part = "header") %>%
@@ -172,7 +183,7 @@ save_flex_docx <- function(x,
                                  )
                                ) %>%
                                flextable::align(
-                                 i = flextable::nrow_part(x, "footer"),
+                                 i = flextable::nrow_part(x, "footer") + 1L,
                                  part = "footer", align = "right"
                                ) %>%
                                flextable::set_table_properties(layout = "autofit", width = 1)
