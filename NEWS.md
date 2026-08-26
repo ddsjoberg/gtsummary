@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The default `body` argument of `save_flex_docx()` now fits the table to 100% of the page width, and the default `footer` argument correctly right-aligns the `"Page X of Y"` line.
+
 # gtsummary 2.6.0
 
 ## Performance
