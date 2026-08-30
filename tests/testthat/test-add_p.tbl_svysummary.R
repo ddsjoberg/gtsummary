@@ -308,3 +308,18 @@ test_that("add_p.tbl_svysummary(include)", {
   )
 })
 
+test_that("add_p.tbl_svysummary() works with svyrep.design", {
+  skip_if_pkg_not_installed("cardx")
+  skip_if_not(
+    exists("ard_continuous_ci.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design in the survey test functions"
+  )
+  rep_trial <- survey::as.svrepdesign(svy_trial)
+
+  expect_silent(
+    tbl_rep <- tbl_svysummary(rep_trial, by = trt, include = grade) |> add_p()
+  )
+
+  # a replicate design must return a p-value, not a silently empty column
+  expect_false(is.na(tbl_rep$table_body$p.value[1]))
+})

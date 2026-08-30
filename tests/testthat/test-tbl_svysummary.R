@@ -705,3 +705,24 @@ test_that("tbl_svysummary() missing `by` handling", {
     "Subject Age"
   )
 })
+
+# tbl_svysummary(data) with replicate weights ----------------------------------
+test_that("tbl_svysummary() works with svyrep.design", {
+  skip_if_pkg_not_installed("cardx")
+  skip_if_not(
+    exists("ard_tabulate.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design"
+  )
+  rep_titanic <- survey::as.svrepdesign(svy_titanic)
+
+  expect_silent(
+    tbl_rep <- tbl_svysummary(rep_titanic, by = Survived, include = c(Class, Age))
+  )
+
+  # the sampling weights are unchanged, so the displayed statistics must match
+  # the linearized design; only the variance estimation differs
+  expect_equal(
+    tbl_rep$table_body$stat_1,
+    tbl_svysummary(svy_titanic, by = Survived, include = c(Class, Age))$table_body$stat_1
+  )
+})

@@ -284,7 +284,7 @@ add_difference.tbl_summary <- function(x,
 #' @noRd
 .process_difference_levels <- function(x, levels) {
   by_var <- x$inputs$by
-  is_survey <- inherits(x$inputs$data, "survey.design")
+  is_survey <- is_survey(x$inputs$data)
   by_col <-
     if (is_survey) x$inputs$data$variables[[by_var]] else x$inputs$data[[by_var]]
 

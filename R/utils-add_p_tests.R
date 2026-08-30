@@ -375,7 +375,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   check_empty(c("test.args"), ...)
 
   if (!is_empty(group)) check_pkg_installed("lme4", ref = "cardx")
-  if (inherits(data, "survey.design")) check_pkg_installed("survey", ref = "cardx")
+  if (is_survey(data)) check_pkg_installed("survey", ref = "cardx")
 
   # for dichotomous variables, align the modeled level with the displayed `value`.
   # emmeans models the probability of the *last* factor level, but gtsummary
@@ -387,7 +387,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
       !is_empty(tbl$inputs$value[[variable]])) {
     fct_var <- factor(.extract_data_frame(data)[[variable]])
     if (identical(levels(fct_var)[1], as.character(tbl$inputs$value[[variable]]))) {
-      if (inherits(data, "survey.design")) {
+      if (is_survey(data)) {
         data$variables[[variable]] <- fct_rev(fct_var)
       } else {
         data[[variable]] <- fct_rev(fct_var)
@@ -405,7 +405,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
   if (type %in% "dichotomous" && dplyr::n_distinct(.extract_data_frame(data)[[by]], na.rm = TRUE) != 2) {
     cli::cli_abort("Variable {.val {variable}} must have exactly 2 levels.", call = get_cli_abort_call())
   }
-  if (inherits(data, "survey.design") && !is_empty(group)) {
+  if (is_survey(data) && !is_empty(group)) {
     cli::cli_abort("Cannot use {.arg group} argument with {.val emmeans} and survey data.", call = get_cli_abort_call())
   }
 
@@ -431,7 +431,7 @@ add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level =
     method <- "glm"
     method.args <- expr(list(family = stats::binomial()))
   }
-  else if (inherits(data, "survey.design")) {
+  else if (is_survey(data)) {
     package <- "survey"
     method <- "svyglm"
     if (type %in% "dichotomous") method.args <- expr(list(family = stats::binomial()))

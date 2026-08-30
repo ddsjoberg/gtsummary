@@ -539,3 +539,23 @@ test_that("tbl_uvregression() with survey.design", {
     survey::svyglm(api00 ~ ell, design = dclus2) |> broom::tidy()
   )
 })
+
+test_that("tbl_uvregression() works with svyrep.design", {
+  skip_if_pkg_not_installed("cardx")
+  skip_if_not(
+    exists("construct_model.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design"
+  )
+  rep_trial <- survey::as.svrepdesign(
+    survey::svydesign(~1, data = trial, weights = ~1)
+  )
+
+  expect_silent(
+    tbl <- tbl_uvregression(
+      rep_trial,
+      y = age,
+      include = c(marker, grade),
+      method = survey::svyglm
+    )
+  )
+})

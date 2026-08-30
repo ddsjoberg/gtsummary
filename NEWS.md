@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* `tbl_svysummary()`, `tbl_strata()` and `tbl_uvregression()` now accept replicate-weight survey designs (`svyrep.design`, created with `survey::svrepdesign()` or `survey::as.svrepdesign()`). Because `svyrep.design` is a sibling class of `survey.design` rather than a subclass, such designs previously failed the class checks. Summary statistics and standard errors are computed from the replicate weights. (#1441, #1535)
+
 * The default `body` argument of `save_flex_docx()` now fits the table to 100% of the page width, and the default `footer` argument correctly right-aligns the `"Page X of Y"` line.
 
 * The `plot()` method for `tbl_regression()` and `tbl_uvregression()` now correctly passes arguments in `...` to `ggstats::ggcoef_plot()`, as documented. (#2470)

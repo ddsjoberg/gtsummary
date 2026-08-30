@@ -3,8 +3,9 @@
 #' The `tbl_svysummary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables taking into account survey weights and design.
 #'
-#' @param data (`survey.design`)\cr
-#'   A survey object created with created with `survey::svydesign()`
+#' @param data (`survey.design`, `svyrep.design`)\cr
+#'   A survey object created with `survey::svydesign()`, or a replicate-weights
+#'   design created with `survey::svrepdesign()`/`survey::as.svrepdesign()`
 #' @param percent (`string`)\cr
 #'   Indicates the type of percentage to return.
 #'   Must be one of `c("column", "row", "cell")`. Default is `"column"`.
@@ -104,7 +105,7 @@ tbl_svysummary <- function(data,
 
   # data argument checks -------------------------------------------------------
   check_not_missing(data)
-  check_class(data, "survey.design")
+  check_class(data, c("survey.design", "svyrep.design"))
   .data_dim_checks(data$variables)
 
   # process arguments ----------------------------------------------------------

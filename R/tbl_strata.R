@@ -129,7 +129,7 @@ tbl_strata <- function(data,
   }
 
   # process inputs -------------------------------------------------------------
-  check_class(data, c("data.frame", "survey.design"))
+  check_class(data, c("data.frame", "survey.design", "svyrep.design"))
   .combine_with <- match.arg(.combine_with)
 
   # run `tbl_strata()``
@@ -170,7 +170,7 @@ tbl_strata2 <- function(data,
   }
 
   # process inputs -------------------------------------------------------------
-  check_class(data, c("data.frame", "survey.design"))
+  check_class(data, c("data.frame", "survey.design", "svyrep.design"))
   .combine_with <- match.arg(.combine_with)
 
   # run `tbl_strata()``
