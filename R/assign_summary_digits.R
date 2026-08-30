@@ -28,7 +28,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   lst_cat_summary_fns <-
     case_switch(
       inherits(data, "data.frame") ~ .categorical_summary_functions(c("n", "N", "p")),
-      inherits(data, "survey.design") ~
+      is_survey(data) ~
         .categorical_summary_functions(c("n", "N", "p",
                                          "n_unweighted", "N_unweighted", "p_unweighted",
                                          "p.std.error", "deff"))
@@ -38,7 +38,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
     case_switch(
       inherits(data, "data.frame") ~
         .categorical_summary_functions(c("N_obs", "N_miss", "N_nonmiss", "p_miss", "p_nonmiss")),
-      inherits(data, "survey.design") ~
+      is_survey(data) ~
         .categorical_summary_functions(c("N_obs", "N_miss", "N_nonmiss", "p_miss", "p_nonmiss",
                                          "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
                                          "p_miss_unweighted", "p_nonmiss_unweighted"))
@@ -152,7 +152,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         inherits(data, "data.frame") ~
           stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
           stats::quantile(data[[variable]], probs = c(0.05), na.rm = TRUE),
-        inherits(data, "survey.design") ~
+        is_survey(data) ~
           cardx::ard_summary(data, variables = all_of(variable), statistic = ~ c("p5", "p95")) |>
           dplyr::pull("stat") |>
           reduce(\(.x, .y) .y - .x) %>%

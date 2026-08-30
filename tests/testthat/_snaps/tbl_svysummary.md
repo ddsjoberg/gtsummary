@@ -62,7 +62,7 @@
       tbl_svysummary(data = letters)
     Condition
       Error in `tbl_svysummary()`:
-      ! The `data` argument must be class <survey.design>, not a character vector.
+      ! The `data` argument must be class <survey.design/svyrep.design>, not a character vector.
 
 ---
 
@@ -70,7 +70,7 @@
       tbl_svysummary(data = dplyr::tibble())
     Condition
       Error in `tbl_svysummary()`:
-      ! The `data` argument must be class <survey.design>, not a tibble.
+      ! The `data` argument must be class <survey.design/svyrep.design>, not a tibble.
 
 # tbl_svysummary(by)
 

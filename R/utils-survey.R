@@ -5,6 +5,11 @@ as.data.frame.survey.design <- function(x, ...) {
   x$variables
 }
 
+#' @export
+as.data.frame.svyrep.design <- function(x, ...) {
+  x$variables
+}
+
 #' Test if data is a survey object
 #' @noRd
 is_survey <- function(data) {

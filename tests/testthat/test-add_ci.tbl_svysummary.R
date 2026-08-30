@@ -800,3 +800,19 @@ test_that("add_ci.tbl_svysummary() ordering for factors", {
       dplyr::pull(ci_stat_2)
   )
 })
+
+test_that("add_ci.tbl_svysummary() works with svyrep.design", {
+  skip_if_pkg_not_installed("cardx")
+  skip_if_not(
+    exists("ard_continuous_ci.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design in the CI functions"
+  )
+  rep_trial <- survey::as.svrepdesign(svy_trial)
+
+  expect_silent(
+    tbl_rep <-
+      tbl_svysummary(rep_trial, include = age, statistic = age ~ "{mean}") |>
+      add_ci()
+  )
+  expect_false(is.na(tbl_rep$table_body$ci_stat_0[1]))
+})

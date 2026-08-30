@@ -322,3 +322,21 @@ test_that("tbl_strata(.header) exposes survey weighted/unweighted stats", {
   )
 })
 
+test_that("tbl_strata works with svyrep.design", {
+  skip_if_pkg_not_installed(c("survey", "cardx"))
+  skip_if_not(
+    exists("ard_tabulate.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design"
+  )
+  rep_trial <- survey::as.svrepdesign(
+    survey::svydesign(~1, data = trial, weights = ~1)
+  )
+
+  expect_silent(
+    tbl <- rep_trial |>
+      tbl_strata(
+        strata = trt,
+        .tbl_fun = ~ .x |> tbl_svysummary(include = grade)
+      )
+  )
+})

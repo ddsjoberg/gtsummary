@@ -335,3 +335,19 @@ test_that("add_difference.tbl_svysummary(levels) adds footnote naming compared p
   expect_true(any(grepl("I - III", footnotes)))
 })
 
+test_that("add_difference.tbl_svysummary() works with svyrep.design", {
+  skip_if_pkg_not_installed("cardx")
+  skip_if_not(
+    exists("construct_model.svyrep.design", envir = asNamespace("cardx"), inherits = FALSE),
+    "installed cardx does not support svyrep.design in the emmeans functions"
+  )
+  rep_trial <- survey::as.svrepdesign(svy_trial)
+
+  expect_silent(
+    tbl_rep <-
+      tbl_svysummary(rep_trial, by = trt, include = age,
+                     statistic = age ~ "{mean} ({sd})") |>
+      add_difference()
+  )
+  expect_false(is.na(tbl_rep$table_body$estimate[1]))
+})

@@ -4,6 +4,7 @@
 \alias{tbl_uvregression}
 \alias{tbl_uvregression.data.frame}
 \alias{tbl_uvregression.survey.design}
+\alias{tbl_uvregression.svyrep.design}
 \title{Univariable regression model summary}
 \usage{
 tbl_uvregression(data, ...)
@@ -30,6 +31,27 @@ tbl_uvregression(data, ...)
 )
 
 \method{tbl_uvregression}{survey.design}(
+  data,
+  y = NULL,
+  x = NULL,
+  method,
+  method.args = list(),
+  exponentiate = FALSE,
+  label = NULL,
+  include = everything(),
+  tidy_fun = broom.helpers::tidy_with_broom_or_parameters,
+  hide_n = FALSE,
+  show_single_row = NULL,
+  conf.level = 0.95,
+  estimate_fun = ifelse(exponentiate, label_style_ratio(), label_style_sigfig()),
+  pvalue_fun = label_style_pvalue(digits = 1),
+  formula = "{y} ~ {x}",
+  add_estimate_to_reference_rows = FALSE,
+  conf.int = TRUE,
+  ...
+)
+
+\method{tbl_uvregression}{svyrep.design}(
   data,
   y = NULL,
   x = NULL,

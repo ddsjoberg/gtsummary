@@ -22,8 +22,9 @@ tbl_svysummary(
 )
 }
 \arguments{
-\item{data}{(\code{survey.design})\cr
-A survey object created with created with \code{survey::svydesign()}}
+\item{data}{(\code{survey.design}, \code{svyrep.design})\cr
+A survey object created with \code{survey::svydesign()}, or a replicate-weights
+design created with \code{survey::svrepdesign()}/\code{survey::as.svrepdesign()}}
 
 \item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single column from \code{data}. Summary statistics will be stratified by this variable.

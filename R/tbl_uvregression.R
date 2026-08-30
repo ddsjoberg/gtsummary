@@ -260,6 +260,10 @@ tbl_uvregression.data.frame <- function(data,
 #' @name tbl_uvregression
 tbl_uvregression.survey.design <- tbl_uvregression.data.frame
 
+#' @export
+#' @name tbl_uvregression
+tbl_uvregression.svyrep.design <- tbl_uvregression.data.frame
+
 is_quo_empty <- function(x) {
   tryCatch(is_empty(eval_tidy(x)), error = \(e) FALSE)
 }
