@@ -265,17 +265,19 @@
     x$table_styling$spanning_header <- sh
 
     if (nrow(sh) > 0L &&
-        !setequal(unique(sh$level), seq_len(max(sh$level)))) {
+      !setequal(unique(sh$level), seq_len(max(sh$level)))) {
       max_level <- max(sh$level)
       missing_lvls <- seq_len(max_level) |>
         setdiff(unique(sh$level))
 
       cli::cli_abort(
-        c("!" = "There is an error in the spanning headers structure.",
+        c(
+          "!" = "There is an error in the spanning headers structure.",
           "!" = "Each spanning header level must be defined, that is, no levels may be skipped.",
           "i" = "The {cli::qty(length(missing_lvls))} spanning header{?s} for level{?s}
           {.val {missing_lvls}} {cli::qty(length(missing_lvls))} {?is/are} not present,
-          but level {.val {max_level}} is present."),
+          but level {.val {max_level}} is present."
+        ),
         call = get_cli_abort_call()
       )
     }
@@ -480,7 +482,9 @@
 # this function processes the footnotes and removes footnotes that have
 # later been replaced or removed from the table
 .filter_row_with_subsequent_replace_or_removal <- function(x) {
-  if (nrow(x) == 0L) return(x)
+  if (nrow(x) == 0L) {
+    return(x)
+  }
 
   # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal.
   # `rev(cumany(rev(.)))` is a suffix-OR (TRUE from the first flagged row to the
