@@ -658,7 +658,7 @@ tbl_summary <- function(data,
       if (length(stat_clean) == 1L) {
         cached_val <- as.character(glue::glue_data(map, stat_clean))
       } else {
-        cached_val <- vapply(stat_clean, \(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
+        cached_val <- vapply(stat_clean, function(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
       }
       cache[[key]] <- cached_val
     }
