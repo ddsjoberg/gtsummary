@@ -637,11 +637,8 @@ tbl_summary <- function(data,
 
   var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
 
-  # A homogeneous table repeats the same statistic template with the same labels
-  # across every variable, so the `glue_data()` evaluation is memoized on the
-  # (template, label mapping) pair. Values are collapsed with `vapply()` rather
-  # than `unlist()`, which would silently drop `NULL`s and flatten longer
-  # elements, leaving the names and values misaligned in the key.
+  # a homogeneous table repeats the same statistic template across every
+  # variable, so the `glue_data()` evaluation below is memoized
   cache <- new.env(parent = emptyenv())
   res <- vector("list", length(vars))
   for (i in seq_along(vars)) {
@@ -652,17 +649,10 @@ tbl_summary <- function(data,
     map <- var_labels[[v]]
     if (is.null(map)) map <- list()
 
-    key <- paste(
-      c(
-        stat_clean,
-        paste(
-          names(map),
-          vapply(map, \(label) paste0(as.character(label), collapse = "\r"), character(1L)),
-          sep = "\r"
-        )
-      ),
-      collapse = "\r\r"
-    )
+    # memoize on the (template, label mapping) pair. `as.character()` on a list
+    # stays 1:1 with `names()`, where `unlist()` would drop `NULL`s and flatten
+    # longer elements out of alignment.
+    key <- paste(c(stat_clean, names(map), as.character(map)), collapse = "\r")
     cached_val <- cache[[key]]
     if (is.null(cached_val)) {
       if (length(stat_clean) == 1L) {
