@@ -649,9 +649,6 @@ tbl_summary <- function(data,
     map <- var_labels[[v]]
     if (is.null(map)) map <- list()
 
-    # memoize on the (template, label mapping) pair. `as.character()` on a list
-    # stays 1:1 with `names()`, where `unlist()` would drop `NULL`s and flatten
-    # longer elements out of alignment.
     key <- paste(c(stat_clean, names(map), as.character(map)), collapse = "\r")
     cached_val <- cache[[key]]
     if (is.null(cached_val)) {
