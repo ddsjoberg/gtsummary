@@ -1,8 +1,6 @@
 # gtsummary (development version)
 
-## Performance
-
-* Improved the speed and memory efficiency of the `as_*()` converters and `tbl_summary()`. The resolution of the `rows` predicates stored in `x$table_styling` no longer round-trips through `tidyr::unnest()`/`dplyr::group_by()`/`tidyr::nest()`, and the summary statistic footnote is now constructed in a single pass over the ARD instead of once per variable. (#2474)
+* Improved the speed and memory efficiency of the `as_*()` converters and `tbl_summary()`. The resolution of the `rows` predicates stored in `x$table_styling` no longer round-trips through `tidyr::unnest()`/`dplyr::group_by()`/`tidyr::nest()`, and the summary statistic footnote is now constructed in a single pass over the ARD instead of once per variable. (#2474; @kpagacz)
 
 * The default `body` argument of `save_flex_docx()` now fits the table to 100% of the page width, and the default `footer` argument correctly right-aligns the `"Page X of Y"` line.
 
