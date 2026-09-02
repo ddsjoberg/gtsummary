@@ -598,27 +598,67 @@ tbl_summary <- function(data,
 }
 
 .construct_summary_footnote <- function(card, include, statistic, type) {
-  include |>
-    lapply(
-      function(variable) {
-        if (type[[variable]] %in% "continuous2") {
-          return(NULL)
-        }
-        card |>
-          dplyr::filter(.data$variable %in% .env$variable) |>
-          dplyr::select("stat_name", "stat_label") |>
-          dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
-          glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
-          )
+  if (is.null(card) || length(include) == 0L) {
+    return(NULL)
+  }
+
+  vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
+  if (length(vars) == 0L) {
+    return(NULL)
+  }
+
+  card_vars <- card[["variable"]]
+  card_stat_name <- card[["stat_name"]]
+  card_stat_label <- card[["stat_label"]]
+
+  if (is.null(card_vars) || is.null(card_stat_name) || is.null(card_stat_label)) {
+    return(NULL)
+  }
+
+  keep_idx <- which(card_vars %in% vars)
+  if (length(keep_idx) == 0L) {
+    return(NULL)
+  }
+
+  sub_var <- card_vars[keep_idx]
+  sub_name <- card_stat_name[keep_idx]
+  sub_label <- card_stat_label[keep_idx]
+
+  unique_idx <- which(!duplicated(paste0(sub_var, "\r", sub_name)))
+  u_var <- sub_var[unique_idx]
+  u_name <- sub_name[unique_idx]
+  u_label <- sub_label[unique_idx]
+
+  var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
+
+  cache <- new.env(parent = emptyenv())
+  res <- vector("list", length(vars))
+  for (i in seq_along(vars)) {
+    v <- vars[[i]]
+    stat_raw <- statistic[[v]]
+    if (is.null(stat_raw) || length(stat_raw) == 0L) next
+    stat_clean <- gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = stat_raw)
+    map <- var_labels[[v]]
+    if (is.null(map)) map <- list()
+
+    key <- paste(c(stat_clean, paste(names(map), as.character(unlist(map)), sep = "=")), collapse = "||")
+    cached_val <- cache[[key]]
+    if (is.null(cached_val)) {
+      if (length(stat_clean) == 1L) {
+        cached_val <- as.character(glue::glue_data(map, stat_clean))
+      } else {
+        cached_val <- vapply(stat_clean, function(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
       }
-    ) |>
-    stats::setNames(include) |>
-    compact() |>
-    unlist() |>
-    unique() %>%
-    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
+      cache[[key]] <- cached_val
+    }
+    res[[i]] <- cached_val
+  }
+
+  out <- unique(unlist(res, use.names = FALSE))
+  if (length(out) == 0L) {
+    return(NULL)
+  }
+  paste(out, collapse = "; ")
 }
 
 
