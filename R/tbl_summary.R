@@ -602,7 +602,9 @@ tbl_summary <- function(data,
     return(NULL)
   }
 
-  vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
+  # `continuous2` variables carry their statistic labels in the table body
+  # instead of a footnote, so they contribute nothing here
+  vars <- include[!vapply(include, \(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
   if (length(vars) == 0L) {
     return(NULL)
   }
@@ -624,6 +626,10 @@ tbl_summary <- function(data,
   sub_name <- card_stat_name[keep_idx]
   sub_label <- card_stat_label[keep_idx]
 
+  # one (stat_name, stat_label) pair per variable, replacing a per-variable
+  # `dplyr::filter() |> distinct()` with a single pass over the ARD. `glue_data()`
+  # resolves a duplicated name to its first entry, so keeping the first match
+  # here matches the previous `distinct()` behavior.
   unique_idx <- which(!duplicated(paste0(sub_var, "\r", sub_name)))
   u_var <- sub_var[unique_idx]
   u_name <- sub_name[unique_idx]
@@ -631,6 +637,11 @@ tbl_summary <- function(data,
 
   var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
 
+  # A homogeneous table repeats the same statistic template with the same labels
+  # across every variable, so the `glue_data()` evaluation is memoized on the
+  # (template, label mapping) pair. Values are collapsed with `vapply()` rather
+  # than `unlist()`, which would silently drop `NULL`s and flatten longer
+  # elements, leaving the names and values misaligned in the key.
   cache <- new.env(parent = emptyenv())
   res <- vector("list", length(vars))
   for (i in seq_along(vars)) {
@@ -641,19 +652,30 @@ tbl_summary <- function(data,
     map <- var_labels[[v]]
     if (is.null(map)) map <- list()
 
-    key <- paste(c(stat_clean, paste(names(map), as.character(unlist(map)), sep = "=")), collapse = "||")
+    key <- paste(
+      c(
+        stat_clean,
+        paste(
+          names(map),
+          vapply(map, \(label) paste0(as.character(label), collapse = "\r"), character(1L)),
+          sep = "\r"
+        )
+      ),
+      collapse = "\r\r"
+    )
     cached_val <- cache[[key]]
     if (is.null(cached_val)) {
       if (length(stat_clean) == 1L) {
         cached_val <- as.character(glue::glue_data(map, stat_clean))
       } else {
-        cached_val <- vapply(stat_clean, function(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
+        cached_val <- vapply(stat_clean, \(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
       }
       cache[[key]] <- cached_val
     }
     res[[i]] <- cached_val
   }
 
+  # unique footnote text across all variables, collapsed into a single string
   out <- unique(unlist(res, use.names = FALSE))
   if (length(out) == 0L) {
     return(NULL)
