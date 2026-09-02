@@ -190,7 +190,7 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
@@ -222,8 +222,7 @@ tbl_summary <- function(data,
   }
   if (is.character(percent)) {
     percent <- arg_match(percent, values = c("column", "row", "cell"))
-  }
-  else if (is.data.frame(percent)) {
+  } else if (is.data.frame(percent)) {
     if (!is_empty(by) && !by %in% names(percent)) {
       cli::cli_abort(
         "The {.cls data.frame} passed in the {.arg percent} argument must contain the {.val {by}} column.",
@@ -237,8 +236,7 @@ tbl_summary <- function(data,
         call = get_cli_abort_call()
       )
     }
-  }
-  else if (!is_integerish(percent)) {
+  } else if (!is_integerish(percent)) {
     cli::cli_abort(
       "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
          or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
@@ -340,7 +338,7 @@ tbl_summary <- function(data,
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
     missing =
       get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
-      .normalize_missing_arg()
+        .normalize_missing_arg()
   )
 
   # fill each element of digits argument
@@ -417,10 +415,10 @@ tbl_summary <- function(data,
       ),
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fun = digits,
-                         stat_label = ~ default_stat_labels()
+        variables = all_of(include),
+        by = all_of(by),
+        fmt_fun = digits,
+        stat_label = ~ default_stat_labels()
       ),
       # adding total N
       cards::ard_total_n(
@@ -480,9 +478,11 @@ tbl_summary <- function(data,
         ifelse(
           is_empty(by),
           get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
+            default = "**N = {style_number(N)}**"
+          ),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+            default = "**{level}**  \nN = {style_number(n)}"
+          )
         )
     )
 
@@ -530,7 +530,7 @@ tbl_summary <- function(data,
           ),
         by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
       )}
-    #styler: on
+    # styler: on
   }
 
   cards
@@ -682,16 +682,21 @@ tbl_summary <- function(data,
 
       # otherwise, return default value (use pre-computed value when available)
       default_value <-
-        if (!is.null(default_values)) default_values[[variable]]
-        else .get_default_dichotomous_value(data[[variable]])
+        if (!is.null(default_values)) {
+          default_values[[variable]]
+        } else {
+          .get_default_dichotomous_value(data[[variable]])
+        }
       if (!is.null(default_value)) {
         return(default_value)
       }
-      cli::cli_abort(c(
-        "Error in argument {.arg value} for variable {.val {variable}}.",
-        "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
-      ),
-      call = get_cli_abort_call())
+      cli::cli_abort(
+        c(
+          "Error in argument {.arg value} for variable {.val {variable}}.",
+          "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
+        ),
+        call = get_cli_abort_call()
+      )
     }
   ) |>
     stats::setNames(names(data))
@@ -829,7 +834,6 @@ tbl_summary <- function(data,
     predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
     error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
   )
-
 }
 
 .check_statistic_type_agreement <- function(statistic, type) {
@@ -843,8 +847,7 @@ tbl_summary <- function(data,
           msg <- c(msg, i = "Did you mean to set {.code type = list({variable} = {.val continuous2})} for a multi-line summary?")
         }
         cli::cli_abort(msg, call = get_cli_abort_call())
-      }
-      else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
+      } else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
         cli::cli_abort(
           "The {.arg statistic} argument value for variable {.val {variable}} must be {.cls character}, but is {.obj_type_friendly {stat}}.",
           call = get_cli_abort_call()
@@ -865,4 +868,3 @@ tbl_summary <- function(data,
   }
   missing
 }
-
