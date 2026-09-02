@@ -270,13 +270,10 @@
   # would resurface.
   cm <- cm[.last_of_each(column = cm$column), , drop = FALSE]
   cm <- cm[which(!is.na(cm$pattern)), , drop = FALSE]
-  x$table_styling$cols_merge <- dplyr::rowwise(
-    dplyr::tibble(
-      column = cm$column,
-      pattern = cm$pattern,
-      rows = .rows_expr_list(cm, table_body, return_when_null = seq_len(n_row_body))
-    ),
-    "column"
+  x$table_styling$cols_merge <- dplyr::tibble(
+    column = cm$column,
+    pattern = cm$pattern,
+    rows = .rows_expr_list(cm, table_body, return_when_null = seq_len(n_row_body))
   )
 
   class(x) <- "list"

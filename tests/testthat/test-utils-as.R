@@ -53,9 +53,10 @@ test_that(".table_styling_expr_to_row_number() returns a stable schema", {
         info = element
       )
     }
-    # `as_gt()` relies on `cols_merge` staying rowwise
-    expect_s3_class(styling$cols_merge, "rowwise_df")
-    expect_equal(dplyr::group_vars(styling$cols_merge), "column")
+    # `as_gt()` applies its own `rowwise()` and no other consumer groups this
+    # frame, so it stays a plain tibble. `expect_equal()` on `class()` rather
+    # than `expect_s3_class()`, which a `rowwise_df` would also satisfy.
+    expect_equal(class(styling$cols_merge), c("tbl_df", "tbl", "data.frame"))
   }
 })
 
