@@ -604,7 +604,7 @@ tbl_summary <- function(data,
 
   # `continuous2` variables carry their statistic labels in the table body
   # instead of a footnote, so they contribute nothing here
-  vars <- include[!vapply(include, \(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
+  vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
   if (length(vars) == 0L) {
     return(NULL)
   }
