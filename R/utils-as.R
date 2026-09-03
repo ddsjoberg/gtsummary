@@ -359,7 +359,7 @@
     if (nrow(abbr) > 0L) {
       keep <- !duplicated(abbr$abbreviation, fromLast = TRUE)
       abbr <- abbr[keep, , drop = FALSE]
-      abbr <- abbr[order(abbr$abbreviation), , drop = FALSE]
+      abbr <- abbr[order(abbr$abbreviation, method = "radix"), , drop = FALSE]
     }
     x$table_styling$abbreviation <- abbr
   }
