@@ -190,7 +190,7 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
@@ -222,8 +222,7 @@ tbl_summary <- function(data,
   }
   if (is.character(percent)) {
     percent <- arg_match(percent, values = c("column", "row", "cell"))
-  }
-  else if (is.data.frame(percent)) {
+  } else if (is.data.frame(percent)) {
     if (!is_empty(by) && !by %in% names(percent)) {
       cli::cli_abort(
         "The {.cls data.frame} passed in the {.arg percent} argument must contain the {.val {by}} column.",
@@ -237,8 +236,7 @@ tbl_summary <- function(data,
         call = get_cli_abort_call()
       )
     }
-  }
-  else if (!is_integerish(percent)) {
+  } else if (!is_integerish(percent)) {
     cli::cli_abort(
       "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
          or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
@@ -340,7 +338,7 @@ tbl_summary <- function(data,
       get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
     missing =
       get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
-      .normalize_missing_arg()
+        .normalize_missing_arg()
   )
 
   # fill each element of digits argument
@@ -417,10 +415,10 @@ tbl_summary <- function(data,
       ),
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fun = digits,
-                         stat_label = ~ default_stat_labels()
+        variables = all_of(include),
+        by = all_of(by),
+        fmt_fun = digits,
+        stat_label = ~ default_stat_labels()
       ),
       # adding total N
       cards::ard_total_n(
@@ -480,9 +478,11 @@ tbl_summary <- function(data,
         ifelse(
           is_empty(by),
           get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
+            default = "**N = {style_number(N)}**"
+          ),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+            default = "**{level}**  \nN = {style_number(n)}"
+          )
         )
     )
 
@@ -530,7 +530,7 @@ tbl_summary <- function(data,
           ),
         by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
       )}
-    #styler: on
+    # styler: on
   }
 
   cards
@@ -598,27 +598,76 @@ tbl_summary <- function(data,
 }
 
 .construct_summary_footnote <- function(card, include, statistic, type) {
-  include |>
-    lapply(
-      function(variable) {
-        if (type[[variable]] %in% "continuous2") {
-          return(NULL)
-        }
-        card |>
-          dplyr::filter(.data$variable %in% .env$variable) |>
-          dplyr::select("stat_name", "stat_label") |>
-          dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
-          glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
-          )
+  if (is.null(card) || length(include) == 0L) {
+    return(NULL)
+  }
+
+  # `continuous2` variables carry their statistic labels in the table body
+  # instead of a footnote, so they contribute nothing here
+  vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
+  if (length(vars) == 0L) {
+    return(NULL)
+  }
+
+  card_vars <- card[["variable"]]
+  card_stat_name <- card[["stat_name"]]
+  card_stat_label <- card[["stat_label"]]
+
+  if (is.null(card_vars) || is.null(card_stat_name) || is.null(card_stat_label)) {
+    return(NULL)
+  }
+
+  keep_idx <- which(card_vars %in% vars)
+  if (length(keep_idx) == 0L) {
+    return(NULL)
+  }
+
+  sub_var <- card_vars[keep_idx]
+  sub_name <- card_stat_name[keep_idx]
+  sub_label <- card_stat_label[keep_idx]
+
+  # one (stat_name, stat_label) pair per variable, replacing a per-variable
+  # `dplyr::filter() |> distinct()` with a single pass over the ARD. `glue_data()`
+  # resolves a duplicated name to its first entry, so keeping the first match
+  # here matches the previous `distinct()` behavior.
+  unique_idx <- which(!duplicated(paste0(sub_var, "\r", sub_name)))
+  u_var <- sub_var[unique_idx]
+  u_name <- sub_name[unique_idx]
+  u_label <- sub_label[unique_idx]
+
+  var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
+
+  # a homogeneous table repeats the same statistic template across every
+  # variable, so the `glue_data()` evaluation below is memoized
+  cache <- new.env(parent = emptyenv())
+  res <- vector("list", length(vars))
+  for (i in seq_along(vars)) {
+    v <- vars[[i]]
+    stat_raw <- statistic[[v]]
+    if (is.null(stat_raw) || length(stat_raw) == 0L) next
+    stat_clean <- gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = stat_raw)
+    map <- var_labels[[v]]
+    if (is.null(map)) map <- list()
+
+    key <- paste(c(stat_clean, names(map), as.character(map)), collapse = "\r")
+    cached_val <- cache[[key]]
+    if (is.null(cached_val)) {
+      if (length(stat_clean) == 1L) {
+        cached_val <- as.character(glue::glue_data(map, stat_clean))
+      } else {
+        cached_val <- vapply(stat_clean, function(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
       }
-    ) |>
-    stats::setNames(include) |>
-    compact() |>
-    unlist() |>
-    unique() %>%
-    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
+      cache[[key]] <- cached_val
+    }
+    res[[i]] <- cached_val
+  }
+
+  # unique footnote text across all variables, collapsed into a single string
+  out <- unique(unlist(res, use.names = FALSE))
+  if (length(out) == 0L) {
+    return(NULL)
+  }
+  paste(out, collapse = "; ")
 }
 
 
@@ -642,16 +691,21 @@ tbl_summary <- function(data,
 
       # otherwise, return default value (use pre-computed value when available)
       default_value <-
-        if (!is.null(default_values)) default_values[[variable]]
-        else .get_default_dichotomous_value(data[[variable]])
+        if (!is.null(default_values)) {
+          default_values[[variable]]
+        } else {
+          .get_default_dichotomous_value(data[[variable]])
+        }
       if (!is.null(default_value)) {
         return(default_value)
       }
-      cli::cli_abort(c(
-        "Error in argument {.arg value} for variable {.val {variable}}.",
-        "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
-      ),
-      call = get_cli_abort_call())
+      cli::cli_abort(
+        c(
+          "Error in argument {.arg value} for variable {.val {variable}}.",
+          "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
+        ),
+        call = get_cli_abort_call()
+      )
     }
   ) |>
     stats::setNames(names(data))
@@ -789,7 +843,6 @@ tbl_summary <- function(data,
     predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
     error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
   )
-
 }
 
 .check_statistic_type_agreement <- function(statistic, type) {
@@ -803,8 +856,7 @@ tbl_summary <- function(data,
           msg <- c(msg, i = "Did you mean to set {.code type = list({variable} = {.val continuous2})} for a multi-line summary?")
         }
         cli::cli_abort(msg, call = get_cli_abort_call())
-      }
-      else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
+      } else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
         cli::cli_abort(
           "The {.arg statistic} argument value for variable {.val {variable}} must be {.cls character}, but is {.obj_type_friendly {stat}}.",
           call = get_cli_abort_call()
@@ -825,4 +877,3 @@ tbl_summary <- function(data,
   }
   missing
 }
-

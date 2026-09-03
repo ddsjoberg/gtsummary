@@ -1,11 +1,50 @@
 name: Performance Benchmark
 on:
   pull_request:
-    branches: [main, master]
+    branches:
+    # `edited` is included so that adding a `perf` prefix to an existing PR
+    # starts the benchmark without needing a new commit. Listing types at all
+    # replaces the defaults, so the original three are spelled out here.
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
+  # GitHub expressions have no trim(), so the `perf` title check runs in a
+  # lightweight shell job whose output gates the benchmark below. This keeps a
+  # stray leading space in the PR title from silently skipping the benchmark.
+  check-title:
+    runs-on: ubuntu-latest
+    outputs:
+      run-benchmark: ${{ steps.check.outputs.run-benchmark }}
+    steps:
+      - name: Check for `perf` title prefix
+        id: check
+        # The title is passed via env rather than interpolated into the script
+        # so that its contents are never evaluated as shell.
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_ACTION: ${{ github.event.action }}
+          # `changes` is only populated on `edited`, and only carries `title`
+          # when the title itself changed.
+          TITLE_EDITED: ${{ github.event.changes.title != null }}
+        run: |
+          # `edited` also fires for description and base-branch edits; without
+          # this guard every such edit would rerun the full benchmark.
+          if [ "$PR_ACTION" = "edited" ] && [ "$TITLE_EDITED" != "true" ]; then
+            echo "PR edit did not touch the title; not benchmarking."
+            echo "run-benchmark=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          title="$(printf '%s' "$PR_TITLE" | sed -e 's/^[[:space:]]*//')"
+          if [ "${title#perf}" != "$title" ]; then
+            echo "run-benchmark=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run-benchmark=false" >> "$GITHUB_OUTPUT"
+          fi
+
   benchmark:
-    if: startsWith(github.event.pull_request.title, 'perf')
+    needs: check-title
+    if: needs.check-title.outputs.run-benchmark == 'true'
     runs-on: ubuntu-latest
     # rocker/r-ver builds R with `--enable-memory-profiling`, which the default
     # r-lib/actions/setup-r Linux binary lacks. Without it bench::mark()'s
