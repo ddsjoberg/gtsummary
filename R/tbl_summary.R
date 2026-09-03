@@ -602,6 +602,8 @@ tbl_summary <- function(data,
     return(NULL)
   }
 
+  # `continuous2` variables carry their statistic labels in the table body
+  # instead of a footnote, so they contribute nothing here
   vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
   if (length(vars) == 0L) {
     return(NULL)
@@ -624,6 +626,10 @@ tbl_summary <- function(data,
   sub_name <- card_stat_name[keep_idx]
   sub_label <- card_stat_label[keep_idx]
 
+  # one (stat_name, stat_label) pair per variable, replacing a per-variable
+  # `dplyr::filter() |> distinct()` with a single pass over the ARD. `glue_data()`
+  # resolves a duplicated name to its first entry, so keeping the first match
+  # here matches the previous `distinct()` behavior.
   unique_idx <- which(!duplicated(paste0(sub_var, "\r", sub_name)))
   u_var <- sub_var[unique_idx]
   u_name <- sub_name[unique_idx]
@@ -631,6 +637,8 @@ tbl_summary <- function(data,
 
   var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
 
+  # a homogeneous table repeats the same statistic template across every
+  # variable, so the `glue_data()` evaluation below is memoized
   cache <- new.env(parent = emptyenv())
   res <- vector("list", length(vars))
   for (i in seq_along(vars)) {
@@ -641,7 +649,7 @@ tbl_summary <- function(data,
     map <- var_labels[[v]]
     if (is.null(map)) map <- list()
 
-    key <- paste(c(stat_clean, paste(names(map), as.character(unlist(map)), sep = "=")), collapse = "||")
+    key <- paste(c(stat_clean, names(map), as.character(map)), collapse = "\r")
     cached_val <- cache[[key]]
     if (is.null(cached_val)) {
       if (length(stat_clean) == 1L) {
@@ -654,6 +662,7 @@ tbl_summary <- function(data,
     res[[i]] <- cached_val
   }
 
+  # unique footnote text across all variables, collapsed into a single string
   out <- unique(unlist(res, use.names = FALSE))
   if (length(out) == 0L) {
     return(NULL)
