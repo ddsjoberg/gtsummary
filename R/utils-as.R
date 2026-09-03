@@ -19,6 +19,55 @@
     dplyr::pull("column")
 }
 
+# converts the `rows` list column of a styling table into a list of row-number
+# vectors, one element per row of the styling table
+.rows_expr_list <- function(df, table_body, return_when_null = NA) {
+  lapply(
+    df$rows,
+    \(rows) .rows_expr_to_row_numbers(table_body, rows, return_when_null = return_when_null)
+  )
+}
+
+# `TRUE` for the last occurrence of each distinct combination of `...`, i.e. the
+# vectorized form of `group_by(...) |> filter(row_number() == n())`. Grouping on
+# an integer ID rather than a pasted string key keeps this independent of
+# whatever characters happen to appear in the column names.
+.last_of_each <- function(...) {
+  !duplicated(vctrs::vec_group_id(vctrs::data_frame(...)), fromLast = TRUE)
+}
+
+# nests `row_numbers` under the distinct combinations of `keys`, in the order
+# those combinations first appear. This is `tidyr::nest()` without the tibble
+# metadata reconstruction, and it accepts list columns as keys (`fmt_fun`).
+# A zero-row `keys` yields the correctly typed zero-row result.
+.nest_row_numbers <- function(keys, row_numbers) {
+  grp <- vctrs::vec_group_loc(keys)
+  res <- grp$key
+  res$row_numbers <- lapply(grp$loc, \(loc) row_numbers[loc])
+  res
+}
+
+# `fmt_fun` and `post_fmt_fun` share a schema and are reduced identically: the
+# most recently added function wins within a column/row, and the result is
+# nested by the (column, function) pair.
+.fmt_fun_expr_to_row_number <- function(df, table_body, n_row_body) {
+  rows_list <- .rows_expr_list(df, table_body, return_when_null = seq_len(n_row_body))
+  lens <- lengths(rows_list)
+  row_rep <- unlist(rows_list, use.names = FALSE)
+  # `rows` is expanded before de-duplication, so carry an index back to the
+  # original rows instead of the `fmt_fun` list column itself
+  orig_idx <- rep(seq_len(nrow(df)), lens)
+  keep <- which(.last_of_each(column = rep(df$column, lens), row = row_rep))
+
+  .nest_row_numbers(
+    dplyr::tibble(
+      column = df$column[orig_idx[keep]],
+      fmt_fun = df$fmt_fun[orig_idx[keep]]
+    ),
+    row_rep[keep]
+  )
+}
+
 
 # 1. Converts row expressions to row numbers, and only keeps the most recent.
 # 2. Deletes NA footnote, text_formatting undoings, etc. as they will not be used
@@ -50,226 +99,182 @@
   table_body <- x$table_body
   n_row_body <- nrow(table_body)
 
+  # Each styling table below is expanded to one row per (column, row number),
+  # reduced to the most recently added instruction, and then re-nested. Working
+  # on plain vectors instead of grouped tibbles avoids the
+  # unnest -> group_by -> filter -> nest cycle this function used to run for
+  # every styling table on every conversion.
+  #
+  # Rows are always subset with `which()` rather than a bare logical: the
+  # predicates below can be `NA` (e.g. a table assembled by `tbl_merge()` from
+  # an object missing one of these columns), and base `[` keeps an `NA`
+  # predicate as an all-`NA` row where `dplyr::filter()` dropped it.
+
   # text_format ----------------------------------------------------------------
-  x$table_styling$text_format <-
-    x$table_styling$text_format %>%
-    dplyr::filter(.data$column %in% .env$cols_to_show) %>%
-    dplyr::mutate(
-      row_numbers =
-        map(
-          .data$rows,
-          \(rows) .rows_expr_to_row_numbers(
-            table_body, rows,
-            return_when_null = seq_len(n_row_body)
-          )
-        )
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers, .data$format_type) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::filter(.data$undo_text_format == FALSE) %>%
-    # dropping undoing cmds
-    dplyr::group_by(.data$column, .data$format_type) %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) %>%
-    dplyr::select("column", "row_numbers", everything()) %>%
-    dplyr::ungroup()
+  tf <- x$table_styling$text_format
+  tf <- tf[which(tf$column %in% cols_to_show), , drop = FALSE]
+  rows_list <- .rows_expr_list(tf, table_body, return_when_null = seq_len(n_row_body))
+  lens <- lengths(rows_list)
+  row_rep <- unlist(rows_list, use.names = FALSE)
+  col_rep <- rep(tf$column, lens)
+  fmt_rep <- rep(tf$format_type, lens)
+  # within a column/row/format type the most recent instruction wins; the
+  # undoings are then dropped, as there is nothing left for them to undo
+  keep <- which(
+    .last_of_each(column = col_rep, row = row_rep, format_type = fmt_rep) &
+      !rep(tf$undo_text_format, lens)
+  )
+  nested <- .nest_row_numbers(
+    dplyr::tibble(column = col_rep[keep], format_type = fmt_rep[keep]),
+    row_rep[keep]
+  )
+  x$table_styling$text_format <- dplyr::tibble(
+    column = nested$column,
+    row_numbers = nested$row_numbers,
+    format_type = nested$format_type,
+    undo_text_format = rep(FALSE, nrow(nested))
+  )
 
   # source_note ----------------------------------------------------------------
-  x$table_styling$source_note <-
-    x$table_styling$source_note |>
-    dplyr::filter(.data$remove == FALSE)
+  sn <- x$table_styling$source_note
+  x$table_styling$source_note <- sn[which(!sn$remove), , drop = FALSE]
 
   # indentation ----------------------------------------------------------------
-  x$table_styling$indent <-
-    x$table_styling$indent %>%
-    dplyr::filter(.data$column %in% .env$cols_to_show) %>%
-    dplyr::mutate(
-      row_numbers =
-        map(
-          .data$rows,
-          \(rows) .rows_expr_to_row_numbers(
-            table_body, rows,
-            return_when_null = seq_len(n_row_body)
-          )
-        )
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::select("column", "row_numbers", "n_spaces") %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
-    dplyr::ungroup() |>
-    dplyr::filter(.data$n_spaces != 0)
+  ind <- x$table_styling$indent
+  ind <- ind[which(ind$column %in% cols_to_show), , drop = FALSE]
+  rows_list <- .rows_expr_list(ind, table_body, return_when_null = seq_len(n_row_body))
+  lens <- lengths(rows_list)
+  row_rep <- unlist(rows_list, use.names = FALSE)
+  col_rep <- rep(ind$column, lens)
+  spaces_rep <- rep(ind$n_spaces, lens)
+  # most recent instruction per column/row wins, then zero-width indents are
+  # dropped since they have no effect on the rendered table
+  keep <- which(.last_of_each(column = col_rep, row = row_rep) & spaces_rep != 0L)
+  x$table_styling$indent <- .nest_row_numbers(
+    dplyr::tibble(column = col_rep[keep], n_spaces = spaces_rep[keep]),
+    row_rep[keep]
+  )
 
   # fmt_missing ----------------------------------------------------------------
-  x$table_styling$fmt_missing <-
-    x$table_styling$fmt_missing %>%
-    dplyr::filter(.data$column %in% .env$cols_to_show) %>%
-    dplyr::mutate(
-      row_numbers = map(.data$rows, \(rows) .rows_expr_to_row_numbers(table_body, rows))
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::select("column", "row_numbers", "symbol") %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
-    dplyr::ungroup()
+  fm <- x$table_styling$fmt_missing
+  fm <- fm[which(fm$column %in% cols_to_show), , drop = FALSE]
+  rows_list <- .rows_expr_list(fm, table_body)
+  lens <- lengths(rows_list)
+  row_rep <- unlist(rows_list, use.names = FALSE)
+  col_rep <- rep(fm$column, lens)
+  symbol_rep <- rep(fm$symbol, lens)
+  keep <- which(.last_of_each(column = col_rep, row = row_rep))
+  x$table_styling$fmt_missing <- .nest_row_numbers(
+    dplyr::tibble(column = col_rep[keep], symbol = symbol_rep[keep]),
+    row_rep[keep]
+  )
 
   # spanning_header ------------------------------------------------------------
-  x$table_styling$spanning_header <-
-    x$table_styling$spanning_header |>
-    dplyr::mutate(
-      # this is a hold-over from old syntax where NA removed headers
-      remove = ifelse(is.na(.data$spanning_header), TRUE, .data$remove),
-    ) |>
-    # within a column and level, utilize the most recently added
-    dplyr::filter(.by = c("column", "level"), dplyr::n() == dplyr::row_number()) |>
-    # finally, remove the row if it's marked for removal or if the column is not printed in final table
-    dplyr::filter(!remove, .data$column %in% .env$cols_to_show) |>
-    dplyr::arrange(.data$level)
+  sh <- x$table_styling$spanning_header
+  # this is a hold-over from old syntax where NA removed headers
+  sh$remove <- ifelse(is.na(sh$spanning_header), TRUE, sh$remove)
+  # within a column and level, utilize the most recently added
+  sh <- sh[.last_of_each(column = sh$column, level = sh$level), , drop = FALSE]
+  # finally, remove the row if it's marked for removal or if the column is not printed in final table
+  sh <- sh[which(!sh$remove & sh$column %in% cols_to_show), , drop = FALSE]
+  x$table_styling$spanning_header <- sh[order(sh$level), , drop = FALSE]
 
-  if (nrow(x$table_styling$spanning_header) > 0L &&
-      !setequal(unique(x$table_styling$spanning_header$level),
-               seq_len(max(x$table_styling$spanning_header$level)))) {
-    max_level <- max(x$table_styling$spanning_header$level)
+  if (nrow(sh) > 0L &&
+    !setequal(unique(sh$level), seq_len(max(sh$level)))) {
+    max_level <- max(sh$level)
     missing_lvls <- seq_len(max_level) |>
-      setdiff(unique(x$table_styling$spanning_header$level))
+      setdiff(unique(sh$level))
 
     cli::cli_abort(
-      c("!" = "There is an error in the spanning headers structure.",
+      c(
+        "!" = "There is an error in the spanning headers structure.",
         "!" = "Each spanning header level must be defined, that is, no levels may be skipped.",
         "i" = "The {cli::qty(length(missing_lvls))} spanning header{?s} for level{?s}
         {.val {missing_lvls}} {cli::qty(length(missing_lvls))} {?is/are} not present,
-        but level {.val {max_level}} is present."),
+        but level {.val {max_level}} is present."
+      ),
       call = get_cli_abort_call()
     )
   }
 
   # footnote_header ------------------------------------------------------------
+  fh <- x$table_styling$footnote_header
+  # this is a hold-over from old syntax where NA removed footnotes.
+  fh$remove <- ifelse(is.na(fh$footnote), TRUE, fh$remove)
+  # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+  fh <- .filter_row_with_subsequent_replace_or_removal(fh)
+  # finally, remove the row if it's marked for removal or if the column is not printed in final table
   x$table_styling$footnote_header <-
-    x$table_styling$footnote_header |>
-    dplyr::mutate(
-      # this is a hold-over from old syntax where NA removed footnotes.
-      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
-    ) |>
-    # within a column, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
-    .filter_row_with_subsequent_replace_or_removal() |>
-    # finally, remove the row if it's marked for removal or if the column is not printed in final table
-    dplyr::filter(!remove, .data$column %in% .env$cols_to_show)
+    fh[which(!fh$remove & fh$column %in% cols_to_show), , drop = FALSE]
 
   # footnote_body --------------------------------------------------------------
-  x$table_styling$footnote_body <-
-    x$table_styling$footnote_body |>
-    dplyr::mutate(
-      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove), # this is a hold-over from pre-v2.0.0 syntax where NA removed footnotes.
-      # convert rows predicate expression to row numbers
-      row_numbers =
-        map(
-          .data$rows,
-          \(rows) .rows_expr_to_row_numbers(table_body, rows)
-        )
-    ) |>
-    tidyr::unnest(cols = "row_numbers") |>
-    # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
-    .filter_row_with_subsequent_replace_or_removal() |>
-    #finally, remove the row if it's marked for removal or if the column is not printed in final table
-    dplyr::filter(!remove, .data$column %in% .env$cols_to_show) |>
-    dplyr::select(all_of(c("column", "row_numbers", "text_interpret", "footnote"))) |>
-    dplyr::mutate(row_numbers = as.integer(.data$row_numbers)) # when there are no body footnotes, this ensures expected type/class
+  fb <- x$table_styling$footnote_body
+  # this is a hold-over from pre-v2.0.0 syntax where NA removed footnotes.
+  fb$remove <- ifelse(is.na(fb$footnote), TRUE, fb$remove)
+  rows_list <- .rows_expr_list(fb, table_body)
+  lens <- lengths(rows_list)
+  # `.filter_row_with_subsequent_replace_or_removal()` groups on row numbers, so
+  # the predicates must be expanded to row numbers before it can be applied
+  fb <- dplyr::tibble(
+    column = rep(fb$column, lens),
+    row_numbers = as.integer(unlist(rows_list, use.names = FALSE)),
+    footnote = rep(fb$footnote, lens),
+    text_interpret = rep(fb$text_interpret, lens),
+    replace = rep(fb$replace, lens),
+    remove = rep(fb$remove, lens)
+  ) |>
+    .filter_row_with_subsequent_replace_or_removal()
+  keep <- which(!fb$remove & fb$column %in% cols_to_show)
+  x$table_styling$footnote_body <- dplyr::tibble(
+    column = fb$column[keep],
+    row_numbers = fb$row_numbers[keep],
+    text_interpret = fb$text_interpret[keep],
+    footnote = fb$footnote[keep]
+  )
 
   # footnote_spanning_header ---------------------------------------------------
+  fsh <- x$table_styling$footnote_spanning_header
+  # this is a hold-over from old syntax where NA removed footnotes.
+  fsh$remove <- ifelse(is.na(fsh$footnote), TRUE, fsh$remove)
+  # within a column/level, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
+  fsh <- .filter_row_with_subsequent_replace_or_removal(fsh)
+  # finally, remove the row if it's marked for removal or if the column is not printed in final table
   x$table_styling$footnote_spanning_header <-
-    x$table_styling$footnote_spanning_header |>
-    dplyr::mutate(
-      # this is a hold-over from old syntax where NA removed footnotes.
-      remove = ifelse(is.na(.data$footnote), TRUE, .data$remove),
-    ) |>
-    # within a column/level, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal
-    .filter_row_with_subsequent_replace_or_removal() |>
-    # finally, remove the row if it's marked for removal or if the column is not printed in final table
-    dplyr::filter(!remove, .data$column %in% .env$cols_to_show)
+    fsh[which(!fsh$remove & fsh$column %in% cols_to_show), , drop = FALSE]
 
   # abbreviation ---------------------------------------------------------------
   abbreviation_cols <-
     cols_to_show |>
     union(discard(x$table_styling$cols_merge$pattern, is.na) |> .extract_glue_elements()) |>
     union(NA_character_)
+  abbr <- x$table_styling$abbreviation
+  abbr <- abbr[which(abbr$column %in% abbreviation_cols), , drop = FALSE]
+  abbr <- abbr[!duplicated(abbr$abbreviation, fromLast = TRUE), , drop = FALSE]
+  # `method = "radix"` sorts in the C locale, matching `dplyr::arrange()`. Base
+  # `order()` would otherwise collate in the user's locale, so the rendered
+  # abbreviation order would vary from machine to machine.
   x$table_styling$abbreviation <-
-    x$table_styling$abbreviation |>
-    dplyr::filter(.data$column %in% .env$abbreviation_cols) |>
-    dplyr::slice_tail(n = 1L, by = "abbreviation") |>
-    dplyr::arrange(.data$abbreviation)
+    abbr[order(as.character(abbr$abbreviation), method = "radix"), , drop = FALSE]
 
-  # fmt_fun --------------------------------------------------------------------
+  # fmt_fun / post_fmt_fun -----------------------------------------------------
   x$table_styling$fmt_fun <-
-    x$table_styling$fmt_fun %>%
-    dplyr::mutate(
-      row_numbers =
-        map(
-          .data$rows,
-          \(rows) .rows_expr_to_row_numbers(
-            table_body, rows,
-            return_when_null = seq_len(n_row_body)
-          )
-        )
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
-
-  # post_fmt_fun --------------------------------------------------------------------
+    .fmt_fun_expr_to_row_number(x$table_styling$fmt_fun, table_body, n_row_body)
   x$table_styling$post_fmt_fun <-
-    x$table_styling$post_fmt_fun %>%
-    dplyr::mutate(
-      row_numbers =
-        map(
-          .data$rows,
-          \(rows) .rows_expr_to_row_numbers(
-            table_body, rows,
-            return_when_null = seq_len(n_row_body)
-          )
-        )
-    ) %>%
-    dplyr::select(-"rows") %>%
-    tidyr::unnest("row_numbers") %>%
-    dplyr::group_by(.data$column, .data$row_numbers) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n()) %>%
-    dplyr::ungroup() %>%
-    tidyr::nest(row_numbers = "row_numbers") %>%
-    dplyr::mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
+    .fmt_fun_expr_to_row_number(x$table_styling$post_fmt_fun, table_body, n_row_body)
 
   # cols_merge -----------------------------------------------------------------
-  x$table_styling$cols_merge <-
-    x$table_styling$cols_merge %>%
-    dplyr::group_by(.data$column) %>%
-    dplyr::filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      row_numbers =
-        switch(nrow(.) == 0,
-          integer(0)
-        ) %||%
-          .rows_expr_to_row_numbers(
-            x$table_body, .data$rows,
-            return_when_null = seq_len(nrow(x$table_body))
-          ) %>%
-          list(),
-    ) %>%
-    dplyr::select(-"rows", rows = "row_numbers")
+  cm <- x$table_styling$cols_merge
+  # The most recently added instruction per column wins. An `NA` pattern in that
+  # position is the hold-over syntax for undoing a merge, so the reduction has to
+  # happen *before* the `NA`s are dropped -- otherwise an older, undone pattern
+  # would resurface.
+  cm <- cm[.last_of_each(column = cm$column), , drop = FALSE]
+  cm <- cm[which(!is.na(cm$pattern)), , drop = FALSE]
+  x$table_styling$cols_merge <- dplyr::tibble(
+    column = cm$column,
+    pattern = cm$pattern,
+    rows = .rows_expr_list(cm, table_body, return_when_null = seq_len(n_row_body))
+  )
 
   class(x) <- "list"
   x
@@ -279,7 +284,9 @@
 # this function processes the footnotes and removes footnotes that have
 # later been replaced or removed from the table
 .filter_row_with_subsequent_replace_or_removal <- function(x) {
-  if (nrow(x) == 0L) return(x)
+  if (nrow(x) == 0L) {
+    return(x)
+  }
 
   # within a column/row, if a later entry contains `replace=TRUE` or `remove=TRUE`, then mark the row for removal.
   # `rev(cumany(rev(.)))` is a suffix-OR (TRUE from the first flagged row to the
