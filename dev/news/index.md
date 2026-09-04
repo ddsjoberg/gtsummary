@@ -2,6 +2,8 @@
 
 ## gtsummary (development version)
 
+## gtsummary 2.6.1
+
 - Improved the speed and memory efficiency of the `as_*()` converters
   and
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md).
