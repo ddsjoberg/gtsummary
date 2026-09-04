@@ -49,7 +49,7 @@ with the body/header/footer transformers applied independently to each.'><meta p
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,13 +115,16 @@ with the <code>body</code>/<code>header</code>/<code>footer</code> transformers 
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">save_flex_docx</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">path</span>,</span>
-<span>  body <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/delete_part.html" class="external-link">delete_part</a></span><span class="op">(</span><span class="va">x</span>, part <span class="op">=</span> <span class="st">"footer"</span><span class="op">)</span>,</span>
+<span>  body <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>     <span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/delete_part.html" class="external-link">delete_part</a></span><span class="op">(</span>part <span class="op">=</span> <span class="st">"footer"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/set_table_properties.html" class="external-link">set_table_properties</a></span><span class="op">(</span>layout <span class="op">=</span> <span class="st">"autofit"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span> <span class="op">}</span>,</span>
 <span>  footer <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>     <span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/delete_part.html" class="external-link">delete_part</a></span><span class="op">(</span>part <span class="op">=</span> <span class="st">"header"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/delete_part.html" class="external-link">delete_part</a></span><span class="op">(</span>part <span class="op">=</span> <span class="st">"body"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/add_footer_lines.html" class="external-link">add_footer_lines</a></span><span class="op">(</span>values <span class="op">=</span></span>
 <span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/as_paragraph.html" class="external-link">as_paragraph</a></span><span class="op">(</span><span class="st">"Page "</span>, <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/as_word_field.html" class="external-link">as_word_field</a></span><span class="op">(</span><span class="st">"PAGE"</span><span class="op">)</span>, <span class="st">" of "</span>,</span>
 <span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/as_word_field.html" class="external-link">as_word_field</a></span><span class="op">(</span><span class="st">"NUMPAGES"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/align.html" class="external-link">align</a></span><span class="op">(</span>i <span class="op">=</span></span>
-<span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/nrow_part.html" class="external-link">nrow_part</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"footer"</span><span class="op">)</span>, part <span class="op">=</span> <span class="st">"footer"</span>, align <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/nrow_part.html" class="external-link">nrow_part</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"footer"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span>, part <span class="op">=</span> <span class="st">"footer"</span>, align <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/set_table_properties.html" class="external-link">set_table_properties</a></span><span class="op">(</span>layout <span class="op">=</span> <span class="st">"autofit"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span> <span class="op">}</span>,</span>
 <span>  header <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -149,9 +152,9 @@ file path to write the Word (<code>.docx</code>) file to</p></dd>
 <dt id="arg-body">body<a class="anchor" aria-label="anchor" href="#arg-body"></a></dt>
 <dd><p>(<code>function</code> or <code>NULL</code>)<br>
 a transformer applied to the source flextable to produce the flextable
-placed in the document body. Default <code>\(x) flextable::delete_part(x, part = "footer")</code> removes the footnote region from the body (it is relocated to the
-Word footer by the <code>footer</code> default). <code>NULL</code> uses the source flextable
-unchanged.</p></dd>
+placed in the document body. The default removes the footnote region from
+the body (it is relocated to the Word footer by the <code>footer</code> default) and fits the table
+to 100% of the page width. <code>NULL</code> uses the source flextable unchanged.</p></dd>
 
 
 <dt id="arg-footer-header">footer, header<a class="anchor" aria-label="anchor" href="#arg-footer-header"></a></dt>
@@ -228,21 +231,10 @@ rather than into the template.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># Default behavior is to place the footnote in the footer and add 'Page X of Y'</span></span></span>
-<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span>  <span class="va">trial</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="modify_caption.html">modify_caption</a></span><span class="op">(</span><span class="st">"**Table 1. Patient Characteristics**"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span>, by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># by default the footnotes move to the Word footer with a page-number line</span></span></span>
 <span class="r-in"><span><span class="fu">save_flex_docx</span><span class="op">(</span><span class="va">tbl</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># keep the whole table (including footnotes) in the body, nothing in the footer</span></span></span>
-<span class="r-in"><span><span class="fu">save_flex_docx</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">tbl</span>,</span></span>
-<span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  body <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>  footer <span class="op">=</span> <span class="cn">NULL</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># This example places a header typically found in the pharmaceutical space,</span></span></span>
@@ -273,14 +265,25 @@ rather than into the template.</p>
 <span class="r-in"><span>  <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/fontsize.html" class="external-link">fontsize</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span>, part <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/padding.html" class="external-link">padding</a></span><span class="op">(</span>padding.top <span class="op">=</span> <span class="fl">0</span>, padding.bottom <span class="op">=</span> <span class="fl">0</span>, part <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/set_table_properties.html" class="external-link">set_table_properties</a></span><span class="op">(</span>layout <span class="op">=</span> <span class="st">"autofit"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">save_flex_docx</span><span class="op">(</span><span class="va">tbl</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span>, header <span class="op">=</span> <span class="va">header_ft</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADAE</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span>,<span class="op">]</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_hierarchical.html">tbl_hierarchical</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="va">TRTA</span>,</span></span>
+<span class="r-in"><span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">AESOC</span>, <span class="va">AEDECOD</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="va">USUBJID</span>,</span></span>
+<span class="r-in"><span>    denominator <span class="op">=</span> <span class="fu">cards</span><span class="fu">::</span><span class="va"><a href="https://pharmaverse.github.io/cards/latest-tag/reference/adam.html" class="external-link">ADSL</a></span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">save_flex_docx</span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span>, header <span class="op">=</span> <span class="va">header_ft</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># a split table is written with one table per section/page</span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># a split table is written with one table per section/page, body footnotes</span></span></span>
+<span class="r-in"><span><span class="co"># only appear on the pages where they are represented</span></span></span>
 <span class="r-in"><span><span class="va">trial</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marker</span>, <span class="va">grade</span><span class="op">)</span>, missing <span class="op">=</span> <span class="op">~</span><span class="st">"no"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify_footnote2.html">modify_footnote_body</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Age in years"</span>, columns <span class="op">=</span> <span class="st">"label"</span>, rows <span class="op">=</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"age"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_split_by.html">tbl_split_by_rows</a></span><span class="op">(</span>variables <span class="op">=</span> <span class="va">marker</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">save_flex_docx</span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 4 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># customize the Word page margins and orientation via a prop_section()</span></span></span>
 <span class="r-in"><span><span class="fu">save_flex_docx</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">tbl</span>,</span></span>
@@ -289,6 +292,15 @@ rather than into the template.</p>
 <span class="r-in"><span>    page_margins <span class="op">=</span> <span class="fu">officer</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/officer/reference/page_mar.html" class="external-link">page_mar</a></span><span class="op">(</span>top <span class="op">=</span> <span class="fl">0.5</span>, bottom <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    page_size <span class="op">=</span> <span class="fu">officer</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/officer/reference/page_size.html" class="external-link">page_size</a></span><span class="op">(</span>orient <span class="op">=</span> <span class="st">"landscape"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 5 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># keep the whole table (including footnotes) in the body, nothing in the footer</span></span></span>
+<span class="r-in"><span><span class="fu">save_flex_docx</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">tbl</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".docx"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  body <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  footer <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span></span>

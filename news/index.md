@@ -1,5 +1,40 @@
 # Changelog
 
+## gtsummary 2.6.1
+
+- Improved the speed and memory efficiency of the `as_*()` converters
+  and
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md).
+  The resolution of the `rows` predicates stored in `x$table_styling` no
+  longer round-trips through
+  [`tidyr::unnest()`](https://tidyr.tidyverse.org/reference/unnest.html)/[`dplyr::group_by()`](https://dplyr.tidyverse.org/reference/group_by.html)/[`tidyr::nest()`](https://tidyr.tidyverse.org/reference/nest.html),
+  and the summary statistic footnote is now constructed in a single pass
+  over the ARD instead of once per variable. We now see 64% faster
+  compute times for
+  [`as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.md),
+  85% for
+  [`as_tibble.gtsummary()`](https://www.danieldsjoberg.com/gtsummary/reference/as_tibble.gtsummary.md),
+  and 5% for
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md).
+  ([\#2474](https://github.com/ddsjoberg/gtsummary/issues/2474);
+  [@kpagacz](https://github.com/kpagacz))
+
+- The default `body` argument of
+  [`save_flex_docx()`](https://www.danieldsjoberg.com/gtsummary/reference/save_flex_docx.md)
+  now fits the table to 100% of the page width, and the default `footer`
+  argument correctly right-aligns the `"Page X of Y"` line.
+
+- The
+  [`plot()`](https://www.danieldsjoberg.com/gtsummary/reference/plot.md)
+  method for
+  [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.md)
+  and
+  [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.md)
+  now correctly passes arguments in `...` to
+  [`ggstats::ggcoef_plot()`](https://larmarange.github.io/ggstats/reference/ggcoef_model.html),
+  as documented.
+  ([\#2470](https://github.com/ddsjoberg/gtsummary/issues/2470))
+
 ## gtsummary 2.6.0
 
 CRAN release: 2026-08-25
