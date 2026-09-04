@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 2.6.1
 
 * Improved the speed and memory efficiency of the `as_*()` converters and `tbl_summary()`. The resolution of the `rows` predicates stored in `x$table_styling` no longer round-trips through `tidyr::unnest()`/`dplyr::group_by()`/`tidyr::nest()`, and the summary statistic footnote is now constructed in a single pass over the ARD instead of once per variable. We now see 64% faster compute times for `as_gt()`, 85% for `as_tibble.gtsummary()`, and 5% for `tbl_summary()`. (#2474; @kpagacz)
