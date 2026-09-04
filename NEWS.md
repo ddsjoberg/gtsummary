@@ -6,7 +6,6 @@
 
 * The `plot()` method for `tbl_regression()` and `tbl_uvregression()` now correctly passes arguments in `...` to `ggstats::ggcoef_plot()`, as documented. (#2470)
 
-
 # gtsummary 2.6.0
 
 ## Performance
