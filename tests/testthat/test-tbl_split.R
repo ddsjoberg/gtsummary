@@ -315,3 +315,113 @@ test_that("tbl_split_by_rows(variable_level) messaging", {
       tbl_split_by_rows(variable_level = all_stat_cols())
   )
 })
+
+test_that("chained splits forward all selectors and stay valid", {
+  base_tbl <- function() {
+    trial |>
+      tbl_summary(by = trt, include = c(age, marker, grade, stage), missing = "no")
+  }
+  grp <- list("stat_1", "stat_2")
+
+  # split by columns, then by rows with each of the three selectors
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(variables = c(marker)),
+    "tbl_split"
+  )
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(row_numbers = 3),
+    "tbl_split"
+  )
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(variable_level = variable),
+    "tbl_split"
+  )
+
+  # split by rows, then by columns
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_rows(variables = c(marker, grade)) |>
+      tbl_split_by_columns(groups = grp),
+    "tbl_split"
+  )
+
+  # split by columns twice
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_columns(groups = list("stat_1")) |>
+      tbl_split_by_columns(groups = list("stat_1")),
+    "tbl_split"
+  )
+
+  # split by rows twice, refining with `variable_level` (valid nested case)
+  expect_length(
+    base_tbl() |>
+      tbl_split_by_rows(variables = c(marker, grade)) |>
+      tbl_split_by_rows(variable_level = variable),
+    4L
+  )
+  expect_s3_class(
+    base_tbl() |>
+      tbl_split_by_rows(row_numbers = c(3, 6)) |>
+      tbl_split_by_rows(variable_level = variable),
+    "tbl_split"
+  )
+})
+
+test_that("row_numbers forwards correctly through a column split", {
+  # regression: the list branch previously dropped `row_numbers`/`variable_level`
+  # and only forwarded `variables`, so this silently errored with a misleading
+  # "one and only one" message
+  tbl <- trial |>
+    tbl_summary(by = trt, include = c(age, marker, grade), missing = "no") |>
+    tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+    tbl_split_by_rows(row_numbers = 3)
+
+  # 2 column groups x 2 row pages
+  expect_length(tbl, 4L)
+})
+
+test_that("nonsensical chained splits error clearly", {
+  base_tbl <- function() {
+    trial |>
+      tbl_summary(by = trt, include = c(age, marker, grade), missing = "no")
+  }
+
+  # `row_numbers` after a row split (positions ambiguous across pages)
+  expect_snapshot(
+    error = TRUE,
+    base_tbl() |>
+      tbl_split_by_rows(variables = c(marker)) |>
+      tbl_split_by_rows(row_numbers = 2)
+  )
+
+  # `variables` after a row split (each page holds only a subset of variables)
+  expect_snapshot(
+    error = TRUE,
+    base_tbl() |>
+      tbl_split_by_rows(variables = c(marker)) |>
+      tbl_split_by_rows(variables = c(grade))
+  )
+
+  # no selector supplied to a list split
+  expect_snapshot(
+    error = TRUE,
+    base_tbl() |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+      tbl_split_by_rows()
+  )
+
+  # more than one selector supplied to a list split
+  expect_snapshot(
+    error = TRUE,
+    base_tbl() |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+      tbl_split_by_rows(variables = c(marker), row_numbers = 2)
+  )
+})

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed `tbl_split_by_rows()` so it forwards the `row_numbers` and `variable_level` selectors when refining an already-split table (e.g. after `tbl_split_by_columns()`). Previously only `variables` was forwarded, causing a misleading "one and only one" error. Chaining splits in an order that cannot apply consistently now errors with a clear message. (#TODO)
+
 * Theme elements are no longer 'evaluated' by default, e.g. `rlang::eval()`. Only `'as_flex_table-lst:addl_cmds'`, `'as_gt-lst:addl_cmds'`, `'as_hux_table-lst:addl_cmds'`, `'as_kable_extra-lst:addl_cmds'` elements that pass expressions are evaluated.
 
 * Removed `test = "tarone"` from `add_p.tbl_survfit()`. The previous implementation used `survdiff(rho = 1.5)`, which does not correctly compute the Tarone-Ware test. Users who need a G-rho family test can use `test = "survdiff"` with `test.args = list(rho = )`. (#2391)

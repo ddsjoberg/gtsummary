@@ -51,3 +51,43 @@
       Error in `tbl_split_by_rows()`:
       ! The `variable_level` argument may only select a single column when specified.
 
+# nonsensical chained splits error clearly
+
+    Code
+      tbl_split_by_rows(tbl_split_by_rows(base_tbl(), variables = c(marker)),
+      row_numbers = 2)
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! The `row_numbers` argument cannot be used after a split by rows.
+      i The resulting tables have different numbers of rows, so row positions are ambiguous.
+      i Split by `row_numbers` first, or use `variables` or `variable_level` here instead.
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_rows(base_tbl(), variables = c(marker)),
+      variables = c(grade))
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! The `variables` argument cannot be used after a split by rows.
+      i Each resulting table holds only a subset of the variables, so a variable split cannot apply across all of them.
+      i Split by `variables` first, or use `variable_level` here instead.
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_columns(base_tbl(), groups = list("stat_1",
+        "stat_2")))
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! One and only one of the following arguments may be specified: `variables`, `row_numbers`, and `variable_level`.
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_columns(base_tbl(), groups = list("stat_1",
+        "stat_2")), variables = c(marker), row_numbers = 2)
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! One and only one of the following arguments may be specified: `variables`, `row_numbers`, and `variable_level`.
+

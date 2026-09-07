@@ -114,16 +114,65 @@ tbl_split_by_rows <- function(x,
 
   # list map -------------------------------------------------------------------
   if (inherits(x, "list")) {
+    # detect which selectors were supplied before tidyselect is resolved, so a
+    # split of an already-split table gives a clear error instead of a buried
+    # one from the mapped call
+    variables_supplied <- !rlang::quo_is_null(rlang::enquo(variables))
+    variable_level_supplied <- !rlang::quo_is_null(rlang::enquo(variable_level))
+
+    if (sum(variables_supplied, !is_empty(row_numbers), variable_level_supplied) != 1L) {
+      cli::cli_abort(
+        "One and only one of the following arguments may be specified:
+         {.arg variables}, {.arg row_numbers}, and {.arg variable_level}.",
+        call = get_cli_abort_call()
+      )
+    }
+
+    # `row_numbers` is positional and only well-defined when every table in the
+    # list has the same rows. A previous split by rows leaves tables with
+    # differing numbers of rows, so the positions would be ambiguous.
+    if (!is_empty(row_numbers) && identical(attr(x, "split_type"), "rows")) {
+      cli::cli_abort(
+        c(
+          "The {.arg row_numbers} argument cannot be used after a split by rows.",
+          i = "The resulting tables have different numbers of rows, so row
+               positions are ambiguous.",
+          i = "Split by {.arg row_numbers} first, or use {.arg variables} or
+               {.arg variable_level} here instead."
+        ),
+        call = get_cli_abort_call()
+      )
+    }
+
+    # `variables` partitions the table body by the `variable` a row belongs to.
+    # A previous split by rows leaves each table with only a subset of the
+    # variables, so a selected variable is absent from most tables and the split
+    # cannot apply consistently across the list.
+    if (variables_supplied && identical(attr(x, "split_type"), "rows")) {
+      cli::cli_abort(
+        c(
+          "The {.arg variables} argument cannot be used after a split by rows.",
+          i = "Each resulting table holds only a subset of the variables, so a
+               variable split cannot apply across all of them.",
+          i = "Split by {.arg variables} first, or use {.arg variable_level}
+               here instead."
+        ),
+        call = get_cli_abort_call()
+      )
+    }
+
     tbl_list <- map(
       .x = x,
       .f = tbl_split_by_rows,
-      variables = {{ variables }}
+      variables = {{ variables }},
+      row_numbers = row_numbers,
+      variable_level = {{ variable_level }}
     )
 
     return(
       tbl_list |>
         unlist(recursive = FALSE) |>
-        structure(class = c("tbl_split", "list"))
+        structure(class = c("tbl_split", "list"), split_type = "rows")
     )
   }
 
@@ -242,7 +291,7 @@ tbl_split_by_rows <- function(x,
   # return list of tbls --------------------------------------------------------
   # assign class (can't assign gtsummary because of print definitions)
   tbl_list |>
-    structure(class = c("tbl_split", "list"))
+    structure(class = c("tbl_split", "list"), split_type = "rows")
 }
 
 #' @export
@@ -265,7 +314,7 @@ tbl_split_by_columns <- function(x, keys, groups,
     return(
       tbl_list |>
         unlist(recursive = FALSE) |>
-        structure(class = c("tbl_split", "list"))
+        structure(class = c("tbl_split", "list"), split_type = "columns")
     )
   }
 
@@ -285,7 +334,14 @@ tbl_split_by_columns <- function(x, keys, groups,
     unlist(groups) |>
     setdiff(x$table_styling$header$column)
   if (!is_empty(columns_do_not_exist)) {
-    cli::cli_abort()
+    cli::cli_abort(
+      c(
+        "Column{?s} named in the {.arg groups} argument {?was/were} not found in
+         the table: {.val {columns_do_not_exist}}.",
+        i = "Run {.fun gtsummary::show_header_names} for a list of all column names."
+      ),
+      call = get_cli_abort_call()
+    )
   }
 
   # check that every un-hidden column is present
@@ -319,7 +375,7 @@ tbl_split_by_columns <- function(x, keys, groups,
 
   # return list of tbls --------------------------------------------------------
   tbl_list |>
-    structure(class = c("tbl_split", "list"))
+    structure(class = c("tbl_split", "list"), split_type = "columns")
 }
 
 # helper function for handling caption/footnotes
