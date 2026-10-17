@@ -18,18 +18,20 @@ test_that("theme_gtsummary_compact() works", {
     NA
   )
 
-  expect_error(
-    with_gtsummary_theme(
-      theme_gtsummary_compact(),
-      expr = trial |> tbl_summary(include = c(age, grade)) |> as_flex_table()
-    ),
-    NA
-  )
- skip_if_pkg_not_installed("kableExtra")
+  skip_if_pkg_not_installed("kableExtra")
   expect_error(
     with_gtsummary_theme(
       theme_gtsummary_compact(),
       expr = trial |> tbl_summary(include = c(age, grade)) |> as_kable_extra()
+    ),
+    NA
+  )
+
+  skip_if_pkg_not_installed("flextable")
+  expect_error(
+    with_gtsummary_theme(
+      theme_gtsummary_compact(),
+      expr = trial |> tbl_summary(include = c(age, grade)) |> as_flex_table()
     ),
     NA
   )
