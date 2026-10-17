@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* `tbl_split_by_rows()` now forwards the `row_numbers` and `variable_level` arguments when applied to an existing `tbl_split` object; previously only `variables` was passed and a misleading error was returned. The `variable_level` attribute is also now retained when a table is further split by rows. (#2479)
+* `tbl_split_by_rows()` now forwards the `row_numbers` and `variable_level` arguments when applied to an existing `tbl_split` object; previously only `variables` was passed and a misleading error was returned. The `variable_level` attribute is also now retained when a table is further split by rows. (#2479; @Melkiades)
 
 * `tbl_split_by_columns()` now returns an informative error message when the `groups` argument names a column not present in the table.
 
