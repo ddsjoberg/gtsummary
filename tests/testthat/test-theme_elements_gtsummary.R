@@ -206,22 +206,6 @@ test_that("tbl_svysummary-arg:col_label works", {
 
 # pkgwide-str:print_engine -----------------------------------------------------
 test_that("pkgwide-str:print_engine changes print methods as expected", {
-  # When setting `pkgwide-str:print_engine` equal to `flextable`, the output
-  # has expected class `flextable`
-  capture.output(
-    expect_equal(
-      with_gtsummary_theme(
-        x = list("pkgwide-str:print_engine" = "flextable"),
-        expr =
-          trial |>
-            tbl_summary(by = trt, include = age, missing = "no") |>
-            print() |>
-            class()
-      ),
-      "flextable"
-    )
-  )
-
   # When setting `pkgwide-str:print_engine` equal to `huxtable`, the output
   # has expected class "huxtable",  "data.frame"
   skip_if_pkg_not_installed("huxtable")
@@ -301,6 +285,23 @@ test_that("pkgwide-str:print_engine changes print methods as expected", {
             class()
       ),
       c("gt_tbl", "list")
+    )
+  )
+
+  # When setting `pkgwide-str:print_engine` equal to `flextable`, the output
+  # has expected class `flextable`
+  skip_if_pkg_not_installed("flextable")
+  capture.output(
+    expect_equal(
+      with_gtsummary_theme(
+        x = list("pkgwide-str:print_engine" = "flextable"),
+        expr =
+          trial |>
+            tbl_summary(by = trt, include = age, missing = "no") |>
+            print() |>
+            class()
+      ),
+      "flextable"
     )
   )
 })
