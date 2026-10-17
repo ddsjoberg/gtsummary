@@ -49,6 +49,7 @@ an external object named \code{variable} in the following expression
 }
 
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))) withAutoprint(\{ # examplesIf}
 # Example 1 ----------------------------------
 # show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
 lm(age ~ marker + grade, trial) |>
@@ -58,4 +59,5 @@ lm(age ~ marker + grade, trial) |>
     c(estimate, conf.low, conf.high) ~ label_style_sigfig(digits = 4),
     rows = variable == "grade"
   )
+\dontshow{\}) # examplesIf}
 }

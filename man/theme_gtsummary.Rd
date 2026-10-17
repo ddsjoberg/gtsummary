@@ -25,7 +25,7 @@ theme_gtsummary_printer(
 
 theme_gtsummary_language(
   language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "kr", "mr", "nl", "no",
-    "pt", "se", "zh-cn", "zh-tw"),
+    "pt", "se", "zh-cn", "zh-tw", "ba"),
   decimal.mark = NULL,
   big.mark = NULL,
   iqr.sep = NULL,
@@ -62,7 +62,8 @@ String indicating language. Must be one of \code{"de"} (German),
 \code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
 \code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"kr"} (Korean),
 \code{"nl"} (Dutch), \code{"mr"} (Marathi), \code{"no"} (Norwegian), \code{"pt"} (Portuguese),
-\code{"se"} (Swedish), \code{"zh-cn"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
+\code{"se"} (Swedish), \code{"zh-cn"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional),
+\code{"ba"} (Bosnian)
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}

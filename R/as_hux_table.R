@@ -8,10 +8,19 @@
 #' @section Excel Output:
 #'
 #' Use the `as_hux_xlsx()` function to save a copy of the table in an excel file.
-#' The file is saved using `huxtable::quick_xlsx()`.
+#'
+#' To export a single table, pass a gtsummary object as `x`; the file is written
+#' with a single worksheet. To export multiple tables to one workbook—one table
+#' per worksheet—pass a (optionally named) list of gtsummary objects as `x`. When
+#' the list is named, the names are used as the worksheet (tab) names; list
+#' elements without a name are assigned a default name of `"Sheet {i}"`.
 #'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
+#' @param x (`gtsummary` or `list`)\cr
+#'   a gtsummary object, or a (optionally named) list of gtsummary objects. When
+#'   a list is passed to `as_hux_xlsx()`, each table is written to its own
+#'   worksheet and the list names are used as the worksheet names.
 #' @param bold_header_rows (scalar `logical`)\cr
 #'   logical indicating whether to bold header rows. Default is `TRUE`
 #'
@@ -77,10 +86,64 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE) {
 #' @rdname as_hux_table
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
   set_cli_abort_call()
-  check_class(x, "gtsummary")
   check_pkg_installed(c("huxtable", "openxlsx"))
   check_scalar_logical(bold_header_rows)
 
+  # normalize `x` to a (named) list of gtsummary objects -----------------------
+  # note: a data frame is also a list, so it is excluded here and handled by the
+  # validation below
+  if (inherits(x, "gtsummary")) {
+    tbls <- list(x)
+  } else if (is.list(x) && !is.data.frame(x)) {
+    tbls <- x
+  } else {
+    cli::cli_abort(
+      "The {.arg x} argument must be a {.cls gtsummary} object or a list of
+       {.cls gtsummary} objects.",
+      call = get_cli_abort_call()
+    )
+  }
+
+  # check every element is a gtsummary object ----------------------------------
+  not_gtsummary <- which(!map_lgl(tbls, ~ inherits(.x, "gtsummary")))
+  if (length(not_gtsummary) > 0L) {
+    cli::cli_abort(
+      c(
+        "Each element of {.arg x} must be a {.cls gtsummary} object.",
+        "i" = "Review {cli::qty(length(not_gtsummary))} element{?s}
+               {.val {not_gtsummary}}."
+      ),
+      call = get_cli_abort_call()
+    )
+  }
+
+  # resolve worksheet names ----------------------------------------------------
+  sheet_names <- names(tbls) %||% rep_len("", length(tbls))
+  sheet_names <- ifelse(
+    is.na(sheet_names) | !nzchar(sheet_names),
+    paste("Sheet", seq_along(tbls)),
+    sheet_names
+  )
+
+  # build a huxtable for each table --------------------------------------------
+  huxtable_objs <-
+    map(tbls, ~ .as_hux_xlsx_object(.x, include = {{ include }}, bold_header_rows = bold_header_rows))
+
+  # write the huxtable(s) to a single workbook ---------------------------------
+  wb <- openxlsx::createWorkbook()
+  walk(
+    seq_along(huxtable_objs),
+    ~ huxtable::as_Workbook(ht = huxtable_objs[[.x]], Workbook = wb, sheet = sheet_names[.x])
+  )
+  openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+
+  invisible(x)
+}
+
+# build a fully-formatted huxtable object from a single gtsummary object -------
+# (indentation applied, optional bold header rows). This is the logic shared by
+# single- and multi-worksheet `as_hux_xlsx()` output.
+.as_hux_xlsx_object <- function(x, include = everything(), bold_header_rows = TRUE) {
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
     as_hux_table(x = x, include = {{ include }}, return_calls = TRUE) |>
@@ -126,9 +189,8 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
       expr(huxtable::style_header_rows(bold = TRUE))
   }
 
-  # run hux commands and export to excel ---------------------------------------
-  .eval_list_of_exprs(huxtable_calls) %>%
-    huxtable::quick_xlsx(file = file, open = FALSE)
+  # run hux commands and return the huxtable object ----------------------------
+  .eval_list_of_exprs(huxtable_calls)
 }
 
 # creating huxtable calls from table_styling -----------------------------------
@@ -139,6 +201,11 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     dplyr::group_by(.data$hide) %>%
     dplyr::mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     dplyr::ungroup()
+
+  # the visible-header subset and the set of spanning-header levels are each used
+  # in several places below, so compute them once here
+  header_visible <- dplyr::filter(x$table_styling$header, .data$hide == FALSE)
+  spanning_levels <- unique(x$table_styling$spanning_header$level)
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
@@ -208,12 +275,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
         expr(
           huxtable::add_footnote(
             text =
-              !!(x$table_styling$abbreviation$abbreviation |>
-              paste(collapse = ", ") %>%
-              paste0(
-                ifelse(nrow(x$table_styling$abbreviation) > 1L, "Abbreviations", "Abbreviation") |> translate_string(),
-                ": ", .
-              ))
+              !!.assemble_abbreviation_source_note(x)
           )
         ),
       .default = list()
@@ -312,8 +374,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # insert_row ----------------------------------------------------------
   # we do this last so as to not mess up row indexes before
   col_labels <-
-    x$table_styling$header %>%
-    dplyr::filter(.data$hide == FALSE) %>%
+    header_visible %>%
     dplyr::select("column", "label") %>%
     deframe()
 
@@ -329,8 +390,8 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       huxtable_calls[["insert_row"]] |>
       append(
         tidyr::expand_grid(
-          level = unique(x$table_styling$spanning_header$level),
-          column = x$table_styling$header$column[!x$table_styling$header$hide]
+          level = spanning_levels,
+          column = header_visible$column
         ) |>
           dplyr::left_join(
             x$table_styling$spanning_header[c("level", "column", "spanning_header")],
@@ -352,7 +413,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       )
   }
 
-  header_bottom_row <- length(unique(x$table_styling$spanning_header$level)) + 1L
+  header_bottom_row <- length(spanning_levels) + 1L
   huxtable_calls[["insert_row"]] <- append(
     huxtable_calls[["insert_row"]],
     expr(
@@ -364,7 +425,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_markdown ---------------------------------------------------------------
-  header_rows <- seq_len(length(unique(x$table_styling$spanning_header$level)) + 1L) # styler: off
+  header_rows <- seq_len(length(spanning_levels) + 1L) # styler: off
   huxtable_calls[["set_markdown"]] <-
     list(
       set_markdown =
@@ -378,8 +439,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    x$table_styling$header %>%
-    dplyr::filter(.data$hide == FALSE) %>%
+    header_visible %>%
     dplyr::select("id", "align") %>%
     dplyr::group_by(.data$align) %>%
     tidyr::nest() %>%

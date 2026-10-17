@@ -13,7 +13,7 @@
       text_interpret = letters)
     Condition
       Error in `modify_source_note()`:
-      ! `text_interpret` must be one of "md" or "html", not "a".
+      ! `text_interpret` must be one of "md", "html", or "none", not "a".
 
 # remove_source_note(source_note_id) messaging
 

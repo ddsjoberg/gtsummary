@@ -1,6 +1,6 @@
 Package: gtsummary
 Title: Presentation-Ready Data Summary and Analytic Result Tables
-Version: 2.5.0.9005
+Version: 2.6.1.9002
 Authors@R: c(
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0862-2018")),
@@ -46,11 +46,11 @@ License: MIT + file LICENSE
 URL: https://github.com/ddsjoberg/gtsummary,
     https://www.danieldsjoberg.com/gtsummary/
 BugReports: https://github.com/ddsjoberg/gtsummary/issues
-Depends: 
+Depends:
     R (>= 4.2)
-Imports: 
-    cards (>= 0.7.1.9008),
-    cardx (>= 0.3.2.9000),
+Imports:
+    cards (>= 0.9.0),
+    cardx (>= 0.3.3),
     cli (>= 3.6.3),
     dplyr (>= 1.1.3),
     glue (>= 1.8.0),
@@ -59,16 +59,16 @@ Imports:
     rlang (>= 1.1.1),
     tidyr (>= 1.3.0),
     vctrs (>= 0.6.4)
-Suggests: 
+Suggests:
     aod (>= 1.3.3),
     broom (>= 1.0.5),
     broom.helpers (>= 1.20.0),
     broom.mixed (>= 0.2.9),
     car (>= 3.0-11),
-    cmprsk,
+    cmprsk (>= 2.2.12),
     effectsize (>= 0.6.0),
     emmeans (>= 1.7.3),
-    flextable (>= 0.8.1),
+    flextable (>= 0.9.11),
     geepack (>= 1.3.10),
     ggstats (>= 0.2.1),
     huxtable (>= 5.4.0),
@@ -77,21 +77,20 @@ Suggests:
     knitr (>= 1.37),
     lme4 (>= 1.1-31),
     mice (>= 3.10.0),
-    nnet,
-    officer,
-    openxlsx,
+    nnet (>= 7.3.20),
+    officer (>= 0.7.5),
+    openxlsx (>= 4.2.8.1),
     parameters (>= 0.20.2),
     parsnip (>= 0.1.7),
-    rmarkdown,
+    rmarkdown (>= 2.3.1),
     smd (>= 0.6.6),
-    spelling,
-    survey (>= 4.2),
+    spelling (>= 2.3.2),
+    survey (>= 4.5),
     survival (>= 3.6-4),
     testthat (>= 3.2.0),
     withr (>= 2.5.0),
     workflows (>= 0.2.4)
-Remotes: insightsengineering/cards@main, insightsengineering/cardx@main
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Config/Needs/check: hms
 Config/Needs/website: forcats, sandwich, scales
@@ -101,4 +100,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.1.0

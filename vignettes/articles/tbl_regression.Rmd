@@ -91,7 +91,7 @@ m1 <- glm(response ~ age + stage, trial, family = binomial)
 summary(m1)$coefficients
 ```
 
-* We will then a **regression model table** to summarize and present these results in just one line of code from {gtsummary}. 
+* We will then create a **regression model table** to summarize and present these results in just one line of code from {gtsummary}.
 
 ```{r, message=FALSE}
 tbl_regression(m1, exponentiate = TRUE)

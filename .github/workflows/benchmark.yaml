@@ -1,12 +1,57 @@
 name: Performance Benchmark
 on:
   pull_request:
-    branches: [main, master]
+    branches:
+    # `edited` is included so that adding a `perf` prefix to an existing PR
+    # starts the benchmark without needing a new commit. Listing types at all
+    # replaces the defaults, so the original three are spelled out here.
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
-  benchmark:
-    if: startsWith(github.event.pull_request.title, 'perf')
+  # GitHub expressions have no trim(), so the `perf` title check runs in a
+  # lightweight shell job whose output gates the benchmark below. This keeps a
+  # stray leading space in the PR title from silently skipping the benchmark.
+  check-title:
     runs-on: ubuntu-latest
+    outputs:
+      run-benchmark: ${{ steps.check.outputs.run-benchmark }}
+    steps:
+      - name: Check for `perf` title prefix
+        id: check
+        # The title is passed via env rather than interpolated into the script
+        # so that its contents are never evaluated as shell.
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_ACTION: ${{ github.event.action }}
+          # `changes` is only populated on `edited`, and only carries `title`
+          # when the title itself changed.
+          TITLE_EDITED: ${{ github.event.changes.title != null }}
+        run: |
+          # `edited` also fires for description and base-branch edits; without
+          # this guard every such edit would rerun the full benchmark.
+          if [ "$PR_ACTION" = "edited" ] && [ "$TITLE_EDITED" != "true" ]; then
+            echo "PR edit did not touch the title; not benchmarking."
+            echo "run-benchmark=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          title="$(printf '%s' "$PR_TITLE" | sed -e 's/^[[:space:]]*//')"
+          if [ "${title#perf}" != "$title" ]; then
+            echo "run-benchmark=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run-benchmark=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  benchmark:
+    needs: check-title
+    if: needs.check-title.outputs.run-benchmark == 'true'
+    runs-on: ubuntu-latest
+    # rocker/r-ver builds R with `--enable-memory-profiling`, which the default
+    # r-lib/actions/setup-r Linux binary lacks. Without it bench::mark()'s
+    # mem_alloc is NA and the memory columns cannot be populated. `latest` tracks
+    # the newest R release; main and PR are built in the same container each run,
+    # so they always compare on identical R.
+    container: rocker/r-ver:latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
@@ -15,8 +60,8 @@ jobs:
       - name: Checkout PR
         uses: actions/checkout@v4
 
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      # R is already installed in the rocker container (with memory profiling),
+      # so the setup-r step is intentionally omitted.
 
       - name: Install Dependencies & Cache
         uses: r-lib/actions/setup-r-dependencies@v2
@@ -26,9 +71,12 @@ jobs:
             any::bench
             any::knitr
             any::gert
-            any::remotes
+            any::pak
             any::broom
             any::pkgload
+            any::flextable
+            any::huxtable
+            any::kableExtra
           cache: true
           cache-version: 3
 
@@ -36,7 +84,7 @@ jobs:
         run: Rscript .github/scripts/benchmark.R
 
       - name: Post Comment
-        uses: mshick/add-pr-comment@v2
+        uses: mshick/add-pr-comment@v3
         with:
           message-path: bench_report.md
-          refresh-main-comment: true
+          message-id: 'add-benchmark-pr-comment'

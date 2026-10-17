@@ -2,6 +2,8 @@
 
 S3method(add_ci,tbl_summary)
 S3method(add_ci,tbl_svysummary)
+S3method(add_difference,tbl_ard_hierarchical)
+S3method(add_difference,tbl_hierarchical)
 S3method(add_difference,tbl_summary)
 S3method(add_difference,tbl_svysummary)
 S3method(add_difference_row,tbl_summary)
@@ -64,6 +66,7 @@ S3method(italicize_labels,tbl_cross)
 S3method(italicize_levels,gtsummary)
 S3method(italicize_levels,tbl_cross)
 S3method(knitr::knit_print,gtsummary)
+S3method(pkgdown::pkgdown_print,gtsummary)
 S3method(plot,tbl_regression)
 S3method(plot,tbl_uvregression)
 S3method(print,gtsummary)
@@ -179,6 +182,7 @@ export(modify_footnote)
 export(modify_footnote_body)
 export(modify_footnote_header)
 export(modify_footnote_spanning_header)
+export(modify_footnote_symbol)
 export(modify_header)
 export(modify_indent)
 export(modify_italic)
@@ -197,7 +201,6 @@ export(pier_summary_continuous2)
 export(pier_summary_dichotomous)
 export(pier_summary_hierarchical)
 export(pier_summary_missing_row)
-export(pkgdown_print.gtsummary)
 export(pool_and_tidy_mice)
 export(proportion_summary)
 export(ratio_summary)
@@ -207,11 +210,13 @@ export(remove_column_merge)
 export(remove_footnote_body)
 export(remove_footnote_header)
 export(remove_footnote_spanning_header)
+export(remove_footnote_symbol)
 export(remove_italic)
 export(remove_row_type)
 export(remove_source_note)
 export(remove_spanning_header)
 export(reset_gtsummary_theme)
+export(save_flex_docx)
 export(scope_header)
 export(scope_table_body)
 export(select)
@@ -268,25 +273,32 @@ export(tidy_wald_test)
 export(vars)
 export(where)
 export(with_gtsummary_theme)
+export(without_gtsummary_theme)
 import(rlang)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,any_of)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,contains)
-importFrom(dplyr,ends_with)
-importFrom(dplyr,everything)
-importFrom(dplyr,last_col)
-importFrom(dplyr,matches)
-importFrom(dplyr,mutate)
-importFrom(dplyr,num_range)
-importFrom(dplyr,one_of)
-importFrom(dplyr,select)
-importFrom(dplyr,starts_with)
-importFrom(dplyr,vars)
-importFrom(dplyr,where)
-importFrom(glue,glue)
-importFrom(glue,glue_data)
-importFrom(utils,head)
-importFrom(utils,tail)
+importFrom(dplyr,
+  "%>%",
+  across,
+  all_of,
+  any_of,
+  as_tibble,
+  contains,
+  ends_with,
+  everything,
+  last_col,
+  matches,
+  mutate,
+  num_range,
+  one_of,
+  select,
+  starts_with,
+  vars,
+  where
+)
+importFrom(glue,
+  glue,
+  glue_data
+)
+importFrom(utils,
+  head,
+  tail
+)

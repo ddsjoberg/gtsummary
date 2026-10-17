@@ -40,8 +40,8 @@ trial |>
   modify_indent(columns = label, rows = !row_type \%in\% 'label', indent = 8L)
 }
 \seealso{
-Other Advanced modifiers: 
-\code{\link{modify_column_merge}()},
-\code{\link{modify_table_styling}()}
+Other Advanced modifiers:
+\code{\link[=modify_column_merge]{modify_column_merge()}},
+\code{\link[=modify_table_styling]{modify_table_styling()}}
 }
 \concept{Advanced modifiers}

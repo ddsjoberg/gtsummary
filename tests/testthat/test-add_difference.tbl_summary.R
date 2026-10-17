@@ -142,6 +142,55 @@ test_that("add_difference.tbl_summary(tests = 'emmeans')", {
   )
 })
 
+test_that("add_difference.tbl_summary(tests = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic-style data where the displayed `value` ("Child") is the FIRST
+  # factor level of `Age` (levels: "Child", "Adult"). Before the fix, emmeans
+  # modeled P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  df_titanic$Freq <- NULL
+
+  # hand-computed group1 - group2 difference of P(Child)
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  tbl_child <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Child")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | No) - P(Child | Yes) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
+
+  # CI must bracket the sign-correct estimate
+  ci_child <-
+    tbl_child$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::select("conf.low", "conf.high")
+  expect_true(ci_child$conf.low <= est_child && est_child <= ci_child$conf.high)
+
+  # displaying the LAST factor level ("Adult") is the negative of P(Child)
+  # and must be unchanged by the fix (already-correct case)
+  tbl_adult <-
+    df_titanic |>
+    tbl_summary(by = Survived, include = Age, value = list(Age ~ "Adult")) |>
+    add_difference(test = list(Age ~ "emmeans"))
+
+  est_adult <-
+    tbl_adult$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  expect_equal(est_adult, -expected_diff, tolerance = 1e-6)
+})
+
 test_that("statistics are replicated within add_difference.tbl_summary()", {
   tbl_test.args <-
     trial |>
@@ -714,3 +763,201 @@ test_that("addressing GH #2165: Non-logical dichotomous comparisons using prop.t
   )
 })
 
+
+test_that("add_difference.tbl_summary(levels) selects two groups when by has 3+ levels", {
+  # selecting two groups from a 3-level `by` runs without error and keeps all stat cols
+  expect_error(
+    tbl_diff <-
+      trial |>
+      tbl_summary(by = grade, include = c(age, marker), missing = "no") |>
+      add_difference(levels = c("I", "III")),
+    NA
+  )
+  # all N original stat columns are retained
+  expect_equal(
+    sum(grepl("^stat_\\d+$", tbl_diff$table_styling$header$column)),
+    3L
+  )
+  # difference result columns are added (estimate, CI, p-value)
+  expect_true(all(c("estimate", "conf.low", "conf.high", "p.value") %in% names(tbl_diff$table_body)))
+
+  # the returned object retains the original full data (not the subset)
+  expect_equal(nrow(tbl_diff$inputs$data), nrow(trial))
+  expect_setequal(
+    as.character(unique(tbl_diff$inputs$data$grade)),
+    as.character(unique(trial$grade))
+  )
+
+  # estimate equals levels[1] - levels[2] (I - III)
+  est_I_III <-
+    tbl_diff$cards$add_difference$age |>
+    dplyr::filter(stat_name == "estimate") |>
+    dplyr::pull("stat") |>
+    unlist()
+  expected <-
+    trial |>
+    dplyr::filter(grade %in% c("I", "III")) |>
+    (\(d) t.test(age ~ factor(grade, levels = c("I", "III")), data = d))() |>
+    getElement("estimate") |>
+    (\(m) unname(m[1] - m[2]))()
+  expect_equal(est_I_III, expected, ignore_attr = TRUE)
+})
+
+test_that("add_difference.tbl_summary(levels) flips sign when levels are reversed", {
+  est_fun <- function(lvls) {
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = lvls) |>
+      getElement("cards") |>
+      getElement("add_difference") |>
+      getElement("age") |>
+      dplyr::filter(stat_name == "estimate") |>
+      dplyr::pull("stat") |>
+      unlist()
+  }
+  expect_equal(est_fun(c("I", "III")), -est_fun(c("III", "I")))
+
+  # CI bounds swap (and negate) when reversed
+  ci_fun <- function(lvls) {
+    tbl <-
+      trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = lvls)
+    card <- tbl$cards$add_difference$age
+    c(
+      low = card |> dplyr::filter(stat_name == "conf.low") |> dplyr::pull("stat") |> unlist(),
+      high = card |> dplyr::filter(stat_name == "conf.high") |> dplyr::pull("stat") |> unlist()
+    )
+  }
+  ci_fwd <- ci_fun(c("I", "III"))
+  ci_rev <- ci_fun(c("III", "I"))
+  expect_equal(unname(ci_fwd["low"]), -unname(ci_rev["high"]))
+  expect_equal(unname(ci_fwd["high"]), -unname(ci_rev["low"]))
+})
+
+test_that("add_difference.tbl_summary(levels) works for two-level by (flip direction)", {
+  est_fun <- function(...) {
+    trial |>
+      tbl_summary(by = trt, include = age, missing = "no") |>
+      add_difference(...) |>
+      getElement("cards") |>
+      getElement("add_difference") |>
+      getElement("age") |>
+      dplyr::filter(stat_name == "estimate") |>
+      dplyr::pull("stat") |>
+      unlist()
+  }
+  est_default <- est_fun()
+  est_flip <- est_fun(levels = c("Drug B", "Drug A"))
+  expect_equal(est_default, -est_flip)
+
+  # supplying levels in the default order matches the default output
+  est_same <- est_fun(levels = c("Drug A", "Drug B"))
+  expect_equal(est_default, est_same)
+})
+
+test_that("add_difference.tbl_summary(levels) backward compatibility for two-level by", {
+  # a two-level call with no `levels` is unchanged
+  expect_error(
+    tbl_default <-
+      trial |>
+      tbl_summary(by = trt, include = c(age, marker), missing = "no") |>
+      add_difference(),
+    NA
+  )
+  expect_true(all(c("estimate", "conf.low", "conf.high", "p.value") %in% names(tbl_default$table_body)))
+})
+
+test_that("add_difference.tbl_summary(levels) validation errors", {
+  # 3+ levels and no `levels` -> informative error pointing to `levels`
+  expect_error(
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(),
+    "levels"
+  )
+  # wrong length
+  expect_error(
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = "I"),
+    "length-two"
+  )
+  # non-existent level
+  expect_error(
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = c("I", "X")),
+    "not present|one of"
+  )
+  # duplicated level
+  expect_error(
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = c("I", "I")),
+    "distinct"
+  )
+})
+
+test_that("add_difference.tbl_summary(levels) composes with adj.vars and test", {
+  expect_error(
+    tbl_adj <-
+      trial |>
+      tbl_summary(
+        by = grade,
+        statistic = all_continuous() ~ "{mean} ({sd})",
+        include = c(age, marker),
+        missing = "no"
+      ) |>
+      add_difference(levels = c("I", "III"), adj.vars = stage),
+    NA
+  )
+  expect_true("estimate" %in% names(tbl_adj$table_body))
+
+  # explicit test argument composes with levels
+  expect_error(
+    trial |>
+      tbl_summary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = c("I", "III"), test = everything() ~ "t.test"),
+    NA
+  )
+})
+
+test_that("add_difference() errors when test does not return an estimate", {
+  # custom test that returns only p.value, no estimate
+  no_estimate_test <- function(data, variable, by, ...) {
+    data.frame(p.value = 0.05)
+  }
+
+  expect_error(
+    trial |>
+      tbl_summary(by = trt, include = age) |>
+      add_difference(test = list(age ~ no_estimate_test)),
+    "did not return a difference estimate"
+  )
+})
+
+test_that("add_difference() with mcnemar.test does not error", {
+  trial_paired <-
+    trial |>
+    dplyr::select(trt, response) |>
+    dplyr::mutate(.by = trt, id = dplyr::row_number()) |>
+    tidyr::drop_na() |>
+    dplyr::filter(.by = id, dplyr::n() == 2)
+
+  expect_error(
+    trial_paired |>
+      tbl_summary(by = trt, include = response) |>
+      add_difference(test = list(response ~ "mcnemar.test"), group = "id"),
+    NA
+  )
+})
+
+test_that("add_difference.tbl_summary(levels) adds footnote naming compared pair", {
+  tbl_diff <-
+    trial |>
+    tbl_summary(by = grade, include = age, missing = "no") |>
+    add_difference(levels = c("I", "III"))
+  footnotes <- tbl_diff$table_styling$footnote_header$footnote
+  expect_true(any(grepl("I - III", footnotes)))
+})

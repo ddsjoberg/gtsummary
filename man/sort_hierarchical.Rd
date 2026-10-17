@@ -9,11 +9,11 @@
 \usage{
 sort_hierarchical(x, ...)
 
-\method{sort_hierarchical}{tbl_hierarchical}(x, sort = everything() ~ "descending", ...)
+\method{sort_hierarchical}{tbl_hierarchical}(x, sort = everything() ~ "descending", by_level = NULL, ...)
 
-\method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = everything() ~ "descending", ...)
+\method{sort_hierarchical}{tbl_hierarchical_count}(x, sort = everything() ~ "descending", by_level = NULL, ...)
 
-\method{sort_hierarchical}{tbl_ard_hierarchical}(x, sort = everything() ~ "descending", ...)
+\method{sort_hierarchical}{tbl_ard_hierarchical}(x, sort = everything() ~ "descending", by_level = NULL, ...)
 }
 \arguments{
 \item{x}{(\code{tbl_hierarchical}, \code{tbl_hierarchical_count}, \code{tbl_ard_hierarchical})\cr
@@ -38,6 +38,17 @@ in \code{x} for the variable, an error will occur.
 }
 
 Defaults to \code{everything() ~ "descending"}.}
+
+\item{by_level}{(scalar)\cr
+an optional single level of the table's \code{by} variable used to restrict the counts used for
+\code{"descending"} sorting. When supplied, \code{"descending"} sorts rank rows by the count sums observed
+only in the specified \code{by} level (e.g. \code{by_level = "Placebo"} sorts by the counts in the
+\code{"Placebo"} arm), rather than by the sums across all \code{by} levels. Has no effect on variables
+sorted \code{"alphanumeric"}, and cannot be used when \code{x} has no \code{by} variable. Because gtsummary
+hierarchical tables allow only a single \code{by} variable, a scalar level is supplied here (rather
+than the named list used by \code{\link[cards:sort_ard_hierarchical]{cards::sort_ard_hierarchical()}}).
+
+Defaults to \code{NULL}, in which case count sums are calculated across all \code{by} levels.}
 }
 \value{
 a gtsummary table of the same class as \code{x}.
@@ -101,6 +112,10 @@ sort_hierarchical(tbl, sort = everything() ~ "alphanumeric")
 # Example 3 ----------------------------------------------
 # Sort `AEBODSYS` alphanumerically, `AEDECOD` by descending frequency
 sort_hierarchical(tbl, sort = list(AEBODSYS = "alphanumeric", AEDECOD = "descending"))
+
+# Example 4 ----------------------------------------------
+# Sort by descending frequency within the "Placebo" arm only
+sort_hierarchical(tbl, by_level = "Placebo")
 
 reset_gtsummary_theme()
 \dontshow{\}) # examplesIf}

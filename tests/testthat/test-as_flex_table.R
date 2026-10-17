@@ -407,6 +407,59 @@ test_that("as_flex_table passes multiple table footnotes correctly", {
   )
 })
 
+test_that("as_flex_table separates multiple footnote symbols on one cell with a comma (#2251)", {
+  skip_if_pkg_not_installed("flextable")
+
+  # two footnotes on the same header cell (via replace = FALSE) -> "1", ",", "2"
+  ft_header <- my_tbl_summary |>
+    modify_footnote_header(
+      footnote = "second header footnote",
+      columns = all_stat_cols(),
+      replace = FALSE
+    ) |>
+    as_flex_table()
+
+  dchunk_h <- flextable::information_data_chunk(ft_header) |>
+    dplyr::filter(.data$.part %in% "header")
+  # the reference symbols and the comma separator appear as consecutive runs
+  expect_true(
+    any(mapply(
+      function(a, b, c) a == "1" && b == "," && c == "2",
+      utils::head(dchunk_h$txt, -2),
+      utils::head(dchunk_h$txt[-1], -1),
+      dchunk_h$txt[-(1:2)]
+    )),
+    info = "expected header footnote symbols rendered as '1' ',' '2'"
+  )
+
+  # two footnotes on the same body cell (via replace = FALSE)
+  ft_body <- my_tbl_summary |>
+    modify_footnote_body(
+      columns = label,
+      rows = variable == "age",
+      footnote = "first body footnote"
+    ) |>
+    modify_footnote_body(
+      columns = label,
+      rows = variable == "age",
+      footnote = "second body footnote",
+      replace = FALSE
+    ) |>
+    as_flex_table()
+
+  dchunk_b <- flextable::information_data_chunk(ft_body) |>
+    dplyr::filter(.data$.part %in% "body")
+  # the indented 'Age' cell should carry two comma-separated reference symbols
+  expect_true(
+    any(mapply(
+      function(a, b) a == "," && b %in% c("1", "2", "3"),
+      utils::head(dchunk_b$txt, -1),
+      dchunk_b$txt[-1]
+    )),
+    info = "expected body footnote symbols separated by a comma"
+  )
+})
+
 test_that("as_flex_table passes table indentation correctly", {
   expect_equal(
     ft_tbl_summary$body$styles$pars$padding.left$data[, 1],

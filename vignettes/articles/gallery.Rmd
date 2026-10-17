@@ -29,7 +29,7 @@ Headers, Labels and Formatting
 
 1. [How do I **change the value** of the by levels?](#modify-pvalue)
 
-1. [How do I added a **spanning header** row to a table?](#table-header)
+1. [How do I add a **spanning header** row to a table?](#table-header)
 
 1. [How do I change **variable labels**?](#modify-pvalue)
 
@@ -142,7 +142,7 @@ trial |>
 <hr>
 <a id="modify-pvalue"></a>
 
-Modify the function that formats the p-values, change variable labels, updating tumor response header, and add a correction for multiple testing.
+Modify the function that formats the p-values, change variable labels, update tumor response header, and add a correction for multiple testing.
 
 ```{r, message = FALSE}
 trial |> 
@@ -160,7 +160,7 @@ trial |>
 <hr>
 <a id="include-missing"></a>
 
-Include missing tumor response as column using `forcats::fct_na_value_to_level()`.
+Include missing tumor response as a column using `forcats::fct_na_value_to_level()`.
 
 ```{r}
 trial |> 
@@ -435,7 +435,7 @@ trial |>
 <hr>
 <a id="use_robust_errors"></a>
 
-To use robust standard errors in a regression model, the model is prepared use usual, and the variance-covariance matrix of the model is modified via an appropriate function, such as `vcovCL` from the sandwich package. 
+To use robust standard errors in a regression model, the model is prepared as usual, and the variance-covariance matrix of the model is modified via an appropriate function, such as `vcovCL` from the sandwich package.
 
 ```{r}
 dat <- trial |> 

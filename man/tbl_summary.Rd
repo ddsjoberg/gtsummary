@@ -13,7 +13,7 @@ tbl_summary(
   digits = NULL,
   type = NULL,
   value = NULL,
-  missing = c("ifany", "no", "always"),
+  missing = everything() ~ "ifany",
   missing_text = "Unknown",
   missing_stat = "{N_miss}",
   sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -44,7 +44,7 @@ or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}. See below for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
@@ -56,7 +56,12 @@ with this argument. Default is \code{NULL}. See below for details.}
 
 \item{missing, missing_text, missing_stat}{Arguments dictating how and if missing values are presented:
 \itemize{
-\item \code{missing}: must be one of \code{c("ifany", "no", "always")}.
+\item \code{missing}: specifies whether to include a row of missing/\code{NA} counts.
+Provide a (\code{\link[=syntax]{formula-list-selector}}) where each variable is
+assigned one of \code{c("ifany", "no", "always")} (e.g.
+\code{missing = list(age ~ "always", grade ~ "no")} or
+\code{missing = everything() ~ "no"}). The default is \code{everything() ~ "ifany"},
+which adds a missing row only for variables that have missing values.
 \item \code{missing_text}: string indicating text shown on missing row. Default is \code{"Unknown"}.
 \item \code{missing_stat}: statistic to show on missing row. Default is \code{"{N_miss}"}.
 Possible values are \code{N_miss}, \code{N_obs}, \code{N_nonmiss}, \code{p_miss}, \code{p_nonmiss}.
@@ -129,7 +134,7 @@ display.
 
 \section{digits argument}{
 
-The digits argument specifies the the number of digits (or formatting function)
+The digits argument specifies the number of digits (or formatting function)
 statistics are rounded to.
 
 The values passed can either be a single integer, a vector of integers, a

@@ -93,7 +93,7 @@ tbl_svysummary <- function(data,
                            digits = NULL,
                            type = NULL,
                            value = NULL,
-                           missing = c("ifany", "no", "always"),
+                           missing = everything() ~ "ifany",
                            missing_text = "Unknown",
                            missing_stat = "{N_miss}",
                            sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -120,12 +120,16 @@ tbl_svysummary <- function(data,
   data <- .svy_ignore_missing_by_obs(data, by = by, include)
   include <- setdiff(include, by) # remove by variable from list vars included
 
+  # resolve `missing` from theme/default; per-variable processing happens below
+  # alongside the other formula-selector arguments
   if (missing(missing)) {
     missing <-
       get_theme_element("tbl_svysummary-arg:missing") %||%
       get_theme_element("tbl_summary-arg:missing", default = missing)
   }
-  missing <- arg_match(missing, values = c("ifany", "no", "always"))
+  # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
+  # A bare string is supported shorthand (for now) for `everything() ~ <string>`.
+  missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
     missing_text <- get_theme_element("tbl_svysummary-arg:missing_text") %||%
@@ -222,7 +226,8 @@ tbl_svysummary <- function(data,
           get_theme_element("tbl_svysummary-arg:digits") %||%
           get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
-      )
+      ),
+    missing = missing
   )
 
   # fill in unspecified variables
@@ -236,7 +241,11 @@ tbl_svysummary <- function(data,
       get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_svysummary)[["sort"]])),
     digits =
       get_theme_element("tbl_svysummary-arg:digits") %||%
-      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_svysummary)[["digits"]]))
+      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_svysummary)[["digits"]])),
+    missing =
+      get_theme_element("tbl_svysummary-arg:missing") %||%
+      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_svysummary)[["missing"]])) |>
+      .normalize_missing_arg()
   )
 
   # fill each element of digits argument
@@ -252,7 +261,8 @@ tbl_svysummary <- function(data,
   .check_haven_labelled(as.data.frame(data)[c(include, by)])
   .check_tbl_summary_args(
     data = as.data.frame(data), label = label, statistic = statistic,
-    digits = digits, type = type, value = value, sort = sort
+    digits = digits, type = type, value = value,
+    missing = missing, sort = sort
   )
   .check_statistic_type_agreement(statistic, type)
 

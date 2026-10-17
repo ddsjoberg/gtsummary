@@ -269,13 +269,21 @@ assign_tests.tbl_survfit <- function(x,
   }
 
   # if passed test is a function and it's an internal test
-  internal_test_index <- df_tests$test_fun |>
-    map_lgl(~ identical_no_attr(eval(.x), test)) |>
-    which()
-  if (is.function(test) && !is_empty(internal_test_index)) {
-    test_to_return <- df_tests$fun_to_run[[internal_test_index]] |> eval()
-    attr(test_to_return, "test_name") <- df_tests$test_name[internal_test_index]
-    return(test_to_return)
+  if (is.function(test)) {
+    internal_test_index <- df_tests$test_fun |>
+      map_lgl(\(test_fun) {
+        # do not load optional pkgs (e.g. lme4) to compare: if not loaded, `test` cannot be from it
+        if (is_call(test_fun, "::") && !isNamespaceLoaded(as.character(test_fun[[2]]))) {
+          return(FALSE)
+        }
+        identical_no_attr(eval(test_fun), test)
+      }) |>
+      which()
+    if (!is_empty(internal_test_index)) {
+      test_to_return <- df_tests$fun_to_run[[internal_test_index]] |> eval()
+      attr(test_to_return, "test_name") <- df_tests$test_name[internal_test_index]
+      return(test_to_return)
+    }
   }
 
   # otherwise, if it's a function, return it

@@ -67,9 +67,10 @@ Must be one of \code{c("bold", "italic")}.}
 An integer indicating how many space to indent text}
 
 \item{text_interpret}{(\code{string})\cr
-Must be one of \code{"md"} or \code{"html"} and indicates the processing function
-as \code{gt::md()} or \code{gt::html()}. Use this in conjunction with arguments for
-header and footnotes.}
+Must be one of \code{"md"}, \code{"html"}, or \code{"none"}, indicating the processing
+function as \code{gt::md()}, \code{gt::html()}, or no interpretation (text rendered
+verbatim). Use this in conjunction with arguments for header and footnotes.
+Applies to tables printed with \code{{gt}}.}
 
 \item{cols_merge_pattern}{(\code{string})\cr
 glue-syntax string indicating how to merge
@@ -141,9 +142,9 @@ internally with care, and it is \emph{not} recommended for users.
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
-Other Advanced modifiers: 
-\code{\link{modify_column_merge}()},
-\code{\link{modify_indent}()}
+Other Advanced modifiers:
+\code{\link[=modify_column_merge]{modify_column_merge()}},
+\code{\link[=modify_indent]{modify_indent()}}
 }
 \concept{Advanced modifiers}
 \keyword{internal}

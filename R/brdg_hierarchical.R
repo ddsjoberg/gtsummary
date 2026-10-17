@@ -89,40 +89,43 @@ brdg_hierarchical <- function(cards,
   )
 
   # add label rows for variables not in 'include'
-  for (i in which(!variables %in% include)) {
-    prior_gp <- paste0("group", 1:i + n_by)
-    prior_gp_lvl <- paste0(prior_gp, "_level")
-    groupX <- dplyr::last(prior_gp)
-    groupX_lvl <- dplyr::last(prior_gp_lvl)
-
-    # create dummy rows
-    tbl_rows <- table_body |>
-      dplyr::filter(!dplyr::if_any(cards::all_ard_groups("names"), ~ .x == " ")) |>
-      select(all_of(c("row_type", prior_gp, prior_gp_lvl))) |>
-      unique() |>
-      mutate(
-        var_label = .data[[groupX_lvl]],
-        variable = .data[[groupX]],
-        label = .data[[groupX_lvl]]
-      )
-
+  excl <- which(!variables %in% include)
+  if (length(excl) > 0L) {
     all_gps <- table_body |> select(cards::all_ard_groups("names")) |> names()
     ord <- utils::head(c(rbind(paste0(all_gps, "_level"), all_gps)), -1)
 
-    tbl_rows <- dplyr::bind_rows(
-      table_body,
-      tbl_rows |> mutate(row_type = "label")
-    ) |>
-      mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
-      dplyr::group_by(across(cards::all_ard_groups("levels"))) |>
-      dplyr::arrange(across(all_of(c(ord, "var_label")))) |>
-      dplyr::ungroup()
+    # complete-path rows are the invariant source for every depth's label rows:
+    # rows carrying a value in every group-name column. (Label rows added below
+    # would carry " "/NA in deeper group columns, so they are never a source --
+    # which is why a single pass reproduces the former per-variable loop.)
+    complete_rows <- table_body |>
+      dplyr::filter(!dplyr::if_any(all_of(all_gps), ~ is.na(.x) | .x == " "))
 
-    table_body <- tbl_rows
+    lst_dummy <- lapply(excl, function(i) {
+      prior_gp <- paste0("group", 1:i + n_by)
+      prior_gp_lvl <- paste0(prior_gp, "_level")
+      groupX <- dplyr::last(prior_gp)
+      groupX_lvl <- dplyr::last(prior_gp_lvl)
+
+      complete_rows |>
+        select(all_of(c("row_type", prior_gp, prior_gp_lvl))) |>
+        unique() |>
+        mutate(
+          var_label = .data[[groupX_lvl]],
+          variable = .data[[groupX]],
+          label = .data[[groupX_lvl]],
+          row_type = "label"
+        )
+    })
+
+    table_body <-
+      rlang::inject(dplyr::bind_rows(table_body, !!!lst_dummy)) |>
+      mutate(across(cards::all_ard_groups(), .fns = ~tidyr::replace_na(., " "))) |>
+      dplyr::arrange(across(all_of(c(ord, "var_label"))))
   }
 
   if (overall_row) {
-    table_body <- dplyr::bind_rows(over_row, table_body)
+    table_body <- vctrs::vec_rbind(over_row, table_body)
   }
 
   # add hierarchy levels to table_body for sorting & filtering -----------------
@@ -258,68 +261,108 @@ pier_summary_hierarchical <- function(cards,
   # subsetting cards object on categorical summaries ----------------------------
   cards_no_attr <-
     cards |>
-    dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes") |>
-    cards::apply_fmt_fun() |>
-    mutate(sort_idx = dplyr::row_number())
+    dplyr::filter(.data$variable %in% .env$variables, !.data$context %in% "attributes")
+
+  # both internal callers (internal_tbl_hierarchical() and tbl_ard_hierarchical())
+  # already apply formatting functions before reaching this function. Only re-apply
+  # when a cell actually needs it, which exactly reproduces `apply_fmt_fun(replace = FALSE)`.
+  if (!"stat_fmt" %in% names(cards_no_attr) ||
+    any(vapply(cards_no_attr$stat_fmt, is.null, logical(1)) &
+      vapply(cards_no_attr$fmt_fun, Negate(is.null), logical(1)))) {
+    cards_no_attr <- cards::apply_fmt_fun(cards_no_attr)
+  }
+  cards_no_attr <- cards_no_attr |> mutate(sort_idx = dplyr::row_number())
 
   # construct formatted statistics ---------------------------------------------
+  # Vectorize the glue interpolation: pivot the ARD wide (one column per stat_name)
+  # and glue once per variable, rather than looping group-by-group. Rows with a
+  # populated `variable_level` are the per-level stats (one table row each); rows
+  # with a NULL `variable_level` are variable-scope stats that glue appends to
+  # every level of the group, with the variable-scope stat winning on any name
+  # collision (matching the prior `c(level_stats, variable_stats)` order, which
+  # under `glue_data()` resolves duplicate names last-wins).
+  group_cols <- cards_no_attr |> select(cards::all_ard_groups()) |> colnames()
+  hier_group_cols <- setdiff(group_cols, by_cols)
+  stat_cols <- unique(cards_no_attr$stat_name)
+
+  is_level <- !map_lgl(cards_no_attr$variable_level, is.null)
+  level_rows <- cards_no_attr[is_level, , drop = FALSE]
+  # per-level sort key = smallest stat-row index within the level (equivalent to
+  # the prior `df_variable_level_stats$sort_idx[1]`, since row order is preserved)
+  gid <- vctrs::vec_group_id(level_rows[c("gts_column", group_cols, "variable", "variable_level")])
+  level_rows$sort_idx <- stats::ave(level_rows$sort_idx, gid, FUN = min)
+  # level label, combining the length-1 `variable_level` cells to their common type
+  # (e.g. factor + character levels across variables -> character), matching the
+  # prior per-group `unlist()` followed by a cross-variable row-bind
+  level_rows$label <- vctrs::list_unchop(level_rows$variable_level)
+
+  level_wide <-
+    tidyr::pivot_wider(
+      level_rows,
+      id_cols = c("variable", "gts_column", all_of(group_cols), "label", "sort_idx"),
+      names_from = "stat_name",
+      values_from = "stat_fmt",
+      values_fn = list
+    )
+  # unlist only the wide stat columns; the group `*_level` id columns must remain
+  # list columns for the downstream unnest
+  sc <- intersect(stat_cols, names(level_wide))
+  level_wide[sc] <- .unlist_wide_stat_cols(level_wide[sc])
+
+  # merge variable-scope stats onto each level of the same group; variable-scope wins
+  var_rows <- cards_no_attr[!is_level, , drop = FALSE]
+  if (nrow(var_rows) > 0L) {
+    key <- c("variable", "gts_column", group_cols)
+    var_wide <-
+      tidyr::pivot_wider(
+        var_rows,
+        id_cols = all_of(key),
+        names_from = "stat_name",
+        values_from = "stat_fmt",
+        values_fn = list
+      )
+    var_sc <- intersect(stat_cols, names(var_wide))
+    var_wide[var_sc] <- .unlist_wide_stat_cols(var_wide[var_sc])
+    # presence indicator: a variable-scope stat overrides only where its ARD row exists
+    var_present <-
+      tidyr::pivot_wider(
+        var_rows |> mutate(..present.. = TRUE),
+        id_cols = all_of(key),
+        names_from = "stat_name",
+        values_from = "..present..",
+        values_fn = function(x) TRUE,
+        values_fill = FALSE
+      )
+    idx <- vctrs::vec_match(level_wide[key], var_wide[key])
+    for (col in setdiff(names(var_wide), key)) {
+      has <- !is.na(idx) & col %in% names(var_present) & var_present[[col]][idx]
+      has[is.na(has)] <- FALSE
+      if (!col %in% names(level_wide)) level_wide[[col]] <- NA
+      level_wide[[col]][has] <- var_wide[[col]][idx[has]]
+    }
+  }
+
+  # evaluate the glue statistic per variable (vectorized over that variable's levels)
   df_glued <-
-    # construct stat columns with glue by grouping variables and primary summary variable
-    cards_no_attr |>
-    dplyr::group_by(across(c("gts_column", cards::all_ard_groups(), "variable"))) |>
-    dplyr::group_map(
-      function(df_variable_stats, df_groups_and_variable) {
-        lst_variable_stats <-
-          cards::get_ard_statistics(
-            df_variable_stats,
-            .data$variable_level %in% list(NULL),
-            .column = "stat_fmt"
-          )
-
-        str_statistic_pre_glue <-
-          statistic[[df_groups_and_variable$variable[1]]]
-
-        mutate(
-          .data = df_groups_and_variable,
-          df_stats =
-            dplyr::filter(df_variable_stats, !.data$variable_level %in% list(NULL)) |>
-            dplyr::bind_cols(
-              df_groups_and_variable |>
-                select(cards::all_ard_groups(), -all_of(by_cols))
-            ) |>
-            dplyr::group_by(.data$variable_level) |>
-            dplyr::group_map(
-              function(df_variable_level_stats, df_variable_levels) {
-                mutate(
-                  .data = df_variable_levels,
-                  stat =
-                    map(
-                      str_statistic_pre_glue,
-                      function(str_to_glue) {
-                        stat <-
-                          glue::glue_data(
-                            .x =
-                              cards::get_ard_statistics(df_variable_level_stats, .column = "stat_fmt") |>
-                              c(lst_variable_stats),
-                            str_to_glue
-                          ) |>
-                          as.character()
-                      }
-                    ),
-                  label = .data$variable_level |> unlist(),
-                  sort_idx = df_variable_level_stats$sort_idx[1]
-                ) |>
-                  dplyr::bind_cols(
-                    df_variable_level_stats[1, ] |> select(cards::all_ard_groups())
-                  )
-              }
-            ) |>
-            dplyr::bind_rows() |>
-            list()
-        )
+    lapply(
+      variables,
+      function(var) {
+        df_var <- level_wide[level_wide$variable == var, , drop = FALSE]
+        if (nrow(df_var) == 0L) {
+          return(NULL)
+        }
+        keep_cols <- setdiff(names(df_var), stat_cols)
+        rlang::inject(vctrs::vec_rbind(!!!lapply(
+          statistic[[var]],
+          function(str_to_glue) {
+            out <- df_var[, keep_cols, drop = FALSE]
+            out$stat <- as.character(glue::glue_data(df_var, str_to_glue))
+            out
+          }
+        )))
       }
     ) |>
-    dplyr::bind_rows() %>%
+    (function(lst) rlang::inject(vctrs::vec_rbind(!!!lst)))() %>%
     # this ensures the correct order when there are 10+ hierarchy levels
     dplyr::left_join(
       cards_no_attr |> dplyr::distinct(!!sym("gts_column")),
@@ -330,32 +373,11 @@ pier_summary_hierarchical <- function(cards,
   # reshape results for final table --------------------------------------------
   df_result_levels <-
     df_glued |>
-    # merge in variable label
-    dplyr::left_join(
-      cards |>
-        dplyr::filter(
-          .data$variable %in% .env$variables,
-          .data$context %in% "attributes",
-          .data$stat_name %in% "label"
-        ) |>
-        select("variable", var_label = "stat"),
-      by = "variable"
-    )
-
-  # add var_label
-  df_result_levels <- df_result_levels |> mutate(var_label = NA_character_)
-
-  df_result_levels <-
-    df_result_levels |>
-    mutate(
-      .by = "variable",
-      row_type = "level",
-      var_label = unlist(.data$var_label),
-      .after = 0L
+    mutate(row_type = "level", var_label = NA_character_) |>
+    select(
+      "row_type", "var_label", "variable", "label",
+      all_of(hier_group_cols), "gts_column", "stat", "sort_idx"
     ) |>
-    select(-cards::all_ard_groups()) |>
-    tidyr::unnest(cols = "df_stats") |>
-    tidyr::unnest(cols = "stat") |>
     dplyr::arrange(.data$sort_idx) |>
     tidyr::pivot_wider(
       id_cols = c("row_type", "var_label", "variable", "label", cards::all_ard_groups()),
@@ -377,13 +399,16 @@ pier_summary_hierarchical <- function(cards,
   if (length(variables) > 1 && length(include) > 1) {
     gps <- df_result_levels |> select(cards::all_ard_groups("names")) |> names()
 
+    # per-column subset assignment (avoids copying the whole frame each iteration)
     for (i in seq_along(gps)) {
-      df_result_levels[df_result_levels$variable == variables[i], ] <-
-        df_result_levels[df_result_levels$variable == variables[i], ] |>
-        mutate(
-          !!gps[i] := dplyr::coalesce(!!sym(gps[i]), .data$variable),
-          !!paste0(gps[i], "_level") := dplyr::coalesce(!!sym(paste0(gps[i], "_level")), .data$label)
-        )
+      idx <- which(df_result_levels$variable == variables[i])
+      if (length(idx) == 0L) next
+      gp <- gps[i]
+      gp_lvl <- paste0(gp, "_level")
+      df_result_levels[[gp]][idx] <-
+        dplyr::coalesce(df_result_levels[[gp]][idx], df_result_levels$variable[idx])
+      df_result_levels[[gp_lvl]][idx] <-
+        dplyr::coalesce(df_result_levels[[gp_lvl]][idx], df_result_levels$label[idx])
     }
   }
 
@@ -391,17 +416,21 @@ pier_summary_hierarchical <- function(cards,
 }
 
 .construct_hierarchical_footnote <- function(card, include, statistic) {
+  # the stat_name -> stat_label lookup does not depend on the loop variable,
+  # so compute it once instead of re-filtering the full ARD for each variable
+  lst_labels <- card |>
+    dplyr::filter(.data$variable %in% .env$include) |>
+    select("stat_name", "stat_label") |>
+    dplyr::distinct() %>%
+    {stats::setNames(as.list(.$stat_label), .$stat_name)} # styler: off
+
   include |>
     lapply(
       function(variable) {
-        card |>
-          dplyr::filter(.data$variable %in% .env$include) |>
-          select("stat_name", "stat_label") |>
-          dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
-          glue::glue_data(
-            gsub("\\{(p)\\}%", "{\\1}", x = statistic[[variable]])
-          )
+        glue::glue_data(
+          lst_labels,
+          gsub("\\{(p)\\}%", "{\\1}", x = statistic[[variable]])
+        )
       }
     ) |>
     stats::setNames(include) |>

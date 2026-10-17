@@ -51,7 +51,7 @@ or function(s). If not specified, default formatting is assigned
 via \code{assign_summary_digits()}. See below for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
-Specifies the summary type. Accepted value are
+Specifies the summary type. Accepted values are
 \code{c("continuous", "continuous2", "categorical", "dichotomous")}.
 If not specified, default type is assigned via
 \code{assign_summary_type()}. See below for details.}
@@ -96,7 +96,7 @@ a custom function in charge of computing the statistics (see Details).
 \section{Similarities with \code{tbl_summary()}}{
 
 Please refer to the help file of \code{\link[=tbl_summary]{tbl_summary()}} regarding the use of select
-helpers, and arguments \code{include}, \code{by}, \code{type}, \code{value}, \code{digits}, \code{missing} and
+helpers, and arguments \code{include}, \code{by}, \code{type}, \code{value}, \code{digits} and
 \code{missing_text}.
 }
 
@@ -123,11 +123,11 @@ if present
 }
 
 The user-defined does not need to utilize each of these inputs. It's
-encouraged the user-defined function accept \code{...} as each of the arguments
+encouraged that the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, ...)} (see examples).
 
-The user-defined function should return a one row \code{\link[dplyr:reexports]{dplyr::tibble()}} with
+The user-defined function should return a one row \code{\link[dplyr:tibble]{dplyr::tibble()}} with
 one column per summary statistics (see examples).
 }
 

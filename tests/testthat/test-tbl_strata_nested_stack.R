@@ -26,7 +26,7 @@ test_that("tbl_strata_nested_stack() works", {
       dplyr::filter(dplyr::n() == dplyr::row_number())
 
     indent_last_row$n_spaces == 0L &&
-      indent_last_row$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L"
+      indent_last_row$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L"
   })
 
   # check the 2nd row is indented
@@ -134,7 +134,7 @@ test_that("tbl_strata_nested_stack() works with unobserved factor levels", {
       dplyr::filter(n_spaces == 0L)
 
     (df_indent$column == "label") &&
-      (df_indent$rows[[1]] |> rlang::quo_squash() |> rlang::expr_deparse() == ".data$tbl_indent_id1 == 1L")
+      (df_indent$rows[[1]] |> quo_squash() |> expr_deparse() == ".data$tbl_indent_id1 == 1L")
   })
 
 })
@@ -233,4 +233,77 @@ test_that("tbl_strata_nested_stack() works with tables without prior indentation
       dplyr::pull(n_spaces),
     c(4L, 4L)
   )
+})
+
+test_that("tbl_strata_nested_stack() keeps second-level headers in all groups with 3+ strata levels (#2418)", {
+  df <- tidyr::expand_grid(
+    SEX     = c("Female", "Male"),
+    PARAMCD = c("A", "C", "W", "Y"),
+    VISIT   = c("D01", "D31", "D31/D01")
+  ) |>
+    dplyr::mutate(
+      SEX     = factor(SEX,     c("Female", "Male")),
+      PARAMCD = factor(PARAMCD, c("A", "C", "W", "Y")),
+      VISIT   = factor(VISIT,   c("D01", "D31", "D31/D01"))
+    ) |>
+    tidyr::crossing(
+      USUBJID = sprintf("S-%03d", 1:4),
+      TRT     = c("G1", "G2")
+    ) |>
+    dplyr::mutate(AVAL = seq_len(dplyr::n()))
+
+  expect_silent(
+    tbl <-
+      tbl_strata_nested_stack(
+        data     = df,
+        strata   = c(SEX, PARAMCD, VISIT),
+        .tbl_fun = function(d) tbl_summary(d, by = TRT, include = AVAL),
+        quiet    = TRUE
+      )
+  )
+
+  # extract the nesting header rows (those without an associated variable)
+  hdr <- tbl$table_body[is.na(tbl$table_body$variable), "label", drop = TRUE] |>
+    as.character()
+
+  # the second-level (PARAMCD) headers must appear under BOTH SEX groups, not
+  # just the first one. Previously, only the first PARAMCD header rendered under
+  # the second SEX group.
+  expect_equal(sum(hdr == "Female"), 1L)
+  expect_equal(sum(hdr == "Male"), 1L)
+  expect_equal(sum(hdr == "A"), 2L)
+  expect_equal(sum(hdr == "C"), 2L)
+  expect_equal(sum(hdr == "W"), 2L)
+  expect_equal(sum(hdr == "Y"), 2L)
+
+  # the header structure should be symmetric across the two SEX groups: each
+  # SEX section contains the same sequence of nested headers
+  female_idx <- which(hdr == "Female")
+  male_idx <- which(hdr == "Male")
+  expect_equal(female_idx, 1L)
+  female_section <- hdr[female_idx:(male_idx - 1L)]
+  male_section <- hdr[male_idx:length(hdr)]
+  expect_equal(female_section[-1], male_section[-1])
+})
+
+test_that("tbl_strata_nested_stack() aligns counts for character strata (#2443)", {
+  # PARAM levels whose base C-locale order (ALT, AST, Albumin) differs from the
+  # locale-aware collation order (Albumin, ALT, AST) used by the header pipeline.
+  # Previously the summary statistics were attached to the wrong strata level for
+  # character strata; the character result must match the (correct) factor result.
+  df <- data.frame(
+    PARAM = rep(c("Albumin", "ALT", "AST", "Bilirubin"), 25L),
+    grp   = factor(rep(c("A", "B"), each = 50L)),
+    x     = factor(rep(c("0", "1", "2", "0"), 25L))
+  )
+  fn <- ~ tbl_summary(.x, by = grp, include = x, type = x ~ "categorical")
+
+  chr <- df |> tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
+  fac <- df %>%
+    # c-locale sorting (which is the sorting used in test environments)
+    # this ensures that the test passes in local environments where sorting is locale-dependent
+   {withr::with_collate("C", dplyr::mutate(., PARAM = factor(PARAM)))} |>
+    tbl_strata_nested_stack(strata = PARAM, .tbl_fun = fn)
+
+  expect_equal(as_tibble(chr), as_tibble(fac))
 })

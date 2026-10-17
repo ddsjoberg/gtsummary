@@ -3,9 +3,9 @@
     Code
       result <- add_stat(tbl, fns = everything() ~ mean)
     Message
-      There was a error for variable "age"
+      There was an error for variable "age"
       x argument "x" is missing, with no default
-      There was a error for variable "marker"
+      There was an error for variable "marker"
       x argument "x" is missing, with no default
 
 ---
@@ -64,9 +64,9 @@
       })
       as.data.frame(add_stat(tbl, fns = ~curly_error))
     Message
-      There was a error for variable "age"
+      There was an error for variable "age"
       x {curly} error
-      There was a error for variable "marker"
+      There was an error for variable "marker"
       x {curly} error
     Output
           **Characteristic** **Drug A**  \nN = 98 **Drug B**  \nN = 102 add_stat_1

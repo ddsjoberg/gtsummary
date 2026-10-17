@@ -47,3 +47,14 @@ test_that("style_number() works", {
     "must be strings."
   )
 })
+
+test_that("style_number() works with matrix input", {
+  vec <- c(-1.25, 1.25, 0.5, NA)
+  mat <- matrix(vec, nrow = 2, dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  result <- style_number(mat, digits = 1)
+
+  expect_true(is.matrix(result))
+  expect_equal(dim(result), c(2L, 2L))
+  expect_equal(dimnames(result), list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(as.vector(result), style_number(vec, digits = 1))
+})

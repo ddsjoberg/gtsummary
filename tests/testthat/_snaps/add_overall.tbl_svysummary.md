@@ -3,7 +3,7 @@
     Code
       tbl <- add_overall(tbl_svysummary(svy_mtcars))
     Message
-      Cannot add an overall column with `add_overall()` when original table is not statified with `tbl_svysummary(by)`.
+      Cannot add an overall column with `add_overall()` when original table is not stratified with `tbl_svysummary(by)`.
       i Returning table unaltered.
 
 ---
@@ -13,6 +13,6 @@
         type = all_continuous() ~ "continuous2"), label = mpg ~ "UPDATED!"))
     Condition
       Error in `add_overall()`:
-      ! An error occured in `add_overall()`, and the overall statistic cannot be added.
+      ! An error occurred in `add_overall()`, and the overall statistic cannot be added.
       Have variable labels changed since the original call to `tbl_svysummary()`?
 

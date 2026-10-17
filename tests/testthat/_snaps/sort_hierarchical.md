@@ -80,3 +80,99 @@
       Error in `sort_hierarchical()`:
       ! Sorting type must be either "descending" or "alphanumeric" for all variables.
 
+# sort_hierarchical(by_level=) restricts descending sort to one by level
+
+    Code
+      as.data.frame(tbl_by)
+    Output
+         **Sex**  \n    **Race**  \n        **Reported Term for the Adverse Event** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                               Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)
+      2                                                                           F              13 (15%)                           18 (21%)                          23 (27%)
+      3                                                                       WHITE              10 (12%)                           14 (17%)                          20 (24%)
+      4                                                                    ERYTHEMA              6 (7.0%)                           6 (7.1%)                          8 (9.5%)
+      5                                                   APPLICATION SITE ERYTHEMA              2 (2.3%)                           5 (6.0%)                          5 (6.0%)
+      6                                                   APPLICATION SITE PRURITUS              2 (2.3%)                           8 (9.5%)                          10 (12%)
+      7                                                                   DIARRHOEA              2 (2.3%)                             0 (0%)                          3 (3.6%)
+      8                                                   BLACK OR AFRICAN AMERICAN              3 (3.5%)                           4 (4.8%)                          3 (3.6%)
+      9                                                   APPLICATION SITE PRURITUS              2 (2.3%)                           2 (2.4%)                          2 (2.4%)
+      10                                                                  DIARRHOEA              1 (1.2%)                             0 (0%)                            0 (0%)
+      11                                       ATRIOVENTRICULAR BLOCK SECOND DEGREE                0 (0%)                           1 (1.2%)                            0 (0%)
+      12                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                          1 (1.2%)
+      13                                                                          M              13 (15%)                           24 (29%)                          17 (20%)
+      14                                                                      WHITE              12 (14%)                           22 (26%)                          17 (20%)
+      15                                                                  DIARRHOEA              6 (7.0%)                           3 (3.6%)                          2 (2.4%)
+      16                                                                   ERYTHEMA              3 (3.5%)                           5 (6.0%)                          6 (7.1%)
+      17                                       ATRIOVENTRICULAR BLOCK SECOND DEGREE              2 (2.3%)                           2 (2.4%)                            0 (0%)
+      18                                                  APPLICATION SITE ERYTHEMA              1 (1.2%)                           10 (12%)                          7 (8.3%)
+      19                                                  APPLICATION SITE PRURITUS              1 (1.2%)                           12 (14%)                          10 (12%)
+      20                                                  BLACK OR AFRICAN AMERICAN              1 (1.2%)                           1 (1.2%)                            0 (0%)
+      21                                                  APPLICATION SITE PRURITUS              1 (1.2%)                             0 (0%)                            0 (0%)
+      22                                                                  DIARRHOEA                0 (0%)                           1 (1.2%)                            0 (0%)
+      23                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                            0 (0%)
+      24                                           AMERICAN INDIAN OR ALASKA NATIVE                0 (0%)                           1 (1.2%)                            0 (0%)
+      25                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                            0 (0%)
+
+# sort_hierarchical(by_level=) works with variables not in include
+
+    Code
+      as.data.frame(res)
+    Output
+         **Sex**  \n    **Race**  \n        **Reported Term for the Adverse Event** **Placebo**  \nN = 86 **Xanomeline High Dose**  \nN = 84 **Xanomeline Low Dose**  \nN = 84
+      1                                               Number of patients with event              26 (30%)                           42 (50%)                          40 (48%)
+      2                                                                           F              13 (15%)                           18 (21%)                          23 (27%)
+      3                                                                       WHITE                  <NA>                               <NA>                              <NA>
+      4                                                                    ERYTHEMA              6 (7.0%)                           6 (7.1%)                          8 (9.5%)
+      5                                                   APPLICATION SITE ERYTHEMA              2 (2.3%)                           5 (6.0%)                          5 (6.0%)
+      6                                                   APPLICATION SITE PRURITUS              2 (2.3%)                           8 (9.5%)                          10 (12%)
+      7                                                                   DIARRHOEA              2 (2.3%)                             0 (0%)                          3 (3.6%)
+      8                                                   BLACK OR AFRICAN AMERICAN                  <NA>                               <NA>                              <NA>
+      9                                                   APPLICATION SITE PRURITUS              2 (2.3%)                           2 (2.4%)                          2 (2.4%)
+      10                                                                  DIARRHOEA              1 (1.2%)                             0 (0%)                            0 (0%)
+      11                                       ATRIOVENTRICULAR BLOCK SECOND DEGREE                0 (0%)                           1 (1.2%)                            0 (0%)
+      12                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                          1 (1.2%)
+      13                                                                          M              13 (15%)                           24 (29%)                          17 (20%)
+      14                                                                      WHITE                  <NA>                               <NA>                              <NA>
+      15                                                                  DIARRHOEA              6 (7.0%)                           3 (3.6%)                          2 (2.4%)
+      16                                                                   ERYTHEMA              3 (3.5%)                           5 (6.0%)                          6 (7.1%)
+      17                                       ATRIOVENTRICULAR BLOCK SECOND DEGREE              2 (2.3%)                           2 (2.4%)                            0 (0%)
+      18                                                  APPLICATION SITE ERYTHEMA              1 (1.2%)                           10 (12%)                          7 (8.3%)
+      19                                                  APPLICATION SITE PRURITUS              1 (1.2%)                           12 (14%)                          10 (12%)
+      20                                                  BLACK OR AFRICAN AMERICAN                  <NA>                               <NA>                              <NA>
+      21                                                  APPLICATION SITE PRURITUS              1 (1.2%)                             0 (0%)                            0 (0%)
+      22                                                                  DIARRHOEA                0 (0%)                           1 (1.2%)                            0 (0%)
+      23                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                            0 (0%)
+      24                                           AMERICAN INDIAN OR ALASKA NATIVE                  <NA>                               <NA>                              <NA>
+      25                                                                   ERYTHEMA                0 (0%)                           1 (1.2%)                            0 (0%)
+
+# sort_hierarchical(by_level=) error messaging works
+
+    Code
+      sort_hierarchical(tbl, by_level = list(TRTA = "Placebo"))
+    Condition
+      Error in `sort_hierarchical()`:
+      ! The `by_level` argument must be a vector of length 1.
+
+---
+
+    Code
+      sort_hierarchical(tbl, by_level = c("Placebo", "Xanomeline Low Dose"))
+    Condition
+      Error in `sort_hierarchical()`:
+      ! The `by_level` argument must be a vector of length 1.
+
+---
+
+    Code
+      sort_hierarchical(tbl, by_level = "Nope")
+    Condition
+      Error in `sort_hierarchical()`:
+      ! The `by_level` element `TRTA` must be one of "Placebo", "Xanomeline High Dose", and "Xanomeline Low Dose", not "Nope".
+
+---
+
+    Code
+      sort_hierarchical(tbl_no_by, by_level = "Placebo")
+    Condition
+      Error in `sort_hierarchical()`:
+      ! The `by_level` argument cannot be used because `x` has no `by` variable.
+

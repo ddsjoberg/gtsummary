@@ -56,7 +56,8 @@ separate_p_footnotes <- function(x) {
       }
     ) |>
     set_names(unique(x$table_body$variable)) |>
-    compact()
+    compact() |>
+    map(translate_string)
 
 
   # adding footnotes to cells in table -----------------------------------------

@@ -21,7 +21,7 @@
 #' @export
 #' @return A 'gtsummary' object
 #'
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 --------------------------------
 #' # Add number of cases and controls to regression table
 #' trial |>
@@ -51,10 +51,12 @@ modify_table_body <- function(x, fun, ...) {
   # execute function on x$table_body -------------------------------------------
   x$table_body <-
     tryCatch(
-      map(.x = list(x$table_body), .f = fun, ...)[[1]],
+      # equivalent to `map(list(x$table_body), fun, ...)[[1]]` (the standalone
+      # purrr `map()` is `as_function()` + `lapply()`) without the list wrapper
+      as_function(fun, env = global_env())(x$table_body, ...),
       error = \(e) {
         cli::cli_abort(
-          c("The following error occured while executing {.arg fun} on {.code x$table_body}:",
+          c("The following error occurred while executing {.arg fun} on {.code x$table_body}:",
             "x" = conditionMessage(e)),
           call = get_cli_abort_call()
         )

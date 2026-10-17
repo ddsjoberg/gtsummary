@@ -148,13 +148,11 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
-  cli::cli_warn(c(
-    "The test {.val aov} in {.code add_p(test)} was deprecated in {.pkg gtsummary} 2.0.0.",
-    i = "The same functionality is covered in {.val oneway.test} with argument `var.equal = TRUE`."
-  ))
-
-  add_p_test_oneway.test(data = .data_pre_processing(data, factor = by),
-                         variable = variable, by = by, test.args = list(var.equal = TRUE))
+  lifecycle::deprecate_stop(
+    "2.0.0",
+    what = I( "The test 'aov' in `add_p(test)`"),
+    details = "The same functionality is covered in 'oneway.test' with argument `var.equal = TRUE`."
+  )
 }
 
 add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
@@ -373,11 +371,29 @@ add_p_test_smd <- function(data, variable, by, ...) {
 }
 
 add_p_test_emmeans <- function(data, variable, by, adj.vars = NULL, conf.level = 0.95,
-                               type, group = NULL, ...) {
+                               type, group = NULL, tbl = NULL, ...) {
   check_empty(c("test.args"), ...)
 
   if (!is_empty(group)) check_pkg_installed("lme4", ref = "cardx")
   if (inherits(data, "survey.design")) check_pkg_installed("survey", ref = "cardx")
+
+  # for dichotomous variables, align the modeled level with the displayed `value`.
+  # emmeans models the probability of the *last* factor level, but gtsummary
+  # displays the proportion of the `value` level. When the displayed `value` is
+  # the first level, reverse the (2-level) factor so it becomes the last level,
+  # making emmeans model P(displayed value) and the contrast sign match the
+  # displayed quantity (stat_1 - stat_2). (#2399)
+  if (identical(type, "dichotomous") &&
+      !is_empty(tbl$inputs$value[[variable]])) {
+    fct_var <- factor(.extract_data_frame(data)[[variable]])
+    if (identical(levels(fct_var)[1], as.character(tbl$inputs$value[[variable]]))) {
+      if (inherits(data, "survey.design")) {
+        data$variables[[variable]] <- fct_rev(fct_var)
+      } else {
+        data[[variable]] <- fct_rev(fct_var)
+      }
+    }
+  }
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
@@ -673,13 +689,19 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type = c("log", "sc", "
 }
 
 warn_unbalanced_pairs <- function(data, by, variable, group) {
+  # `pivot_wider()` is used only to detect unbalanced pairs. When the data has
+  # duplicate (group, by) entries it emits a "not uniquely identified" warning
+  # that is unrelated to this function's purpose and would otherwise duplicate a
+  # warning already surfaced by the test itself (#1945). Suppress it here.
   balanced_pairs <-
-    data[c(group, by, variable)] |>
-    tidyr::drop_na() |>
-    tidyr::pivot_wider(
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
+    suppressWarnings(
+      data[c(group, by, variable)] |>
+        tidyr::drop_na() |>
+        tidyr::pivot_wider(
+          id_cols = all_of(group),
+          names_from = all_of(by),
+          values_from = all_of(variable)
+        )
     ) |>
     dplyr::select(-all_of(group)) |>
     dplyr::mutate(across(everything(), is.na)) |>
@@ -704,7 +726,7 @@ check_empty <- function(x, variable = get("variable", envir = caller_env()),
     \(.x) {
       if (!is_empty(dots[[.x]])) {
         cli::cli_abort(
-          message = "The {.arg {.x}} argument is not used for the test selected for of variable {.val {variable}}.",
+          message = "The {.arg {.x}} argument is not used for the test selected for variable {.val {variable}}.",
           call = call
         )
       }
