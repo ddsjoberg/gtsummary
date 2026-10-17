@@ -2,6 +2,13 @@
 
 ## gtsummary (development version)
 
+- Passing a custom function to the `add_p(test)` and
+  `add_difference(test)` arguments no longer loads the namespaces of
+  optional packages (e.g. lme4) while checking whether the function
+  matches a built-in test. Loading these packages could print messages
+  and slowed the call.
+  ([\#2484](https://github.com/ddsjoberg/gtsummary/issues/2484))
+
 ## gtsummary 2.6.1
 
 CRAN release: 2026-09-04
