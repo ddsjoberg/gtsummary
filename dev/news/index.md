@@ -4,6 +4,8 @@
 
 ## gtsummary 2.6.1
 
+CRAN release: 2026-09-04
+
 - Improved the speed and memory efficiency of the `as_*()` converters
   and
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md).
