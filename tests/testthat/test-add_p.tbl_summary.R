@@ -585,3 +585,26 @@ test_that("warn_unbalanced_pairs() still warns on genuinely unbalanced pairs", {
   expect_length(res$warning, 1L)
   expect_match(res$warning[[1]], "unbalanced missingness")
 })
+
+test_that("add_p() with a custom function does not load optional pkgs (#2484)", {
+  # point an internal test at an installed, but (typically) not loaded pkg
+  skip_if(isNamespaceLoaded("stats4"))
+  df_tests <- df_add_p_tests
+  df_tests$test_fun[df_tests$class == "tbl_summary" & df_tests$test_name == "lme4"] <-
+    list(quote(stats4::mle))
+  local_mocked_bindings(df_add_p_tests = df_tests)
+
+  tbl_summary(trial, by = trt, include = age) |>
+    add_p(test = list(age = \(data, variable, by, ...) broom::tidy(t.test(data[[variable]] ~ data[[by]]))))
+  expect_false(isNamespaceLoaded("stats4"))
+
+  # internal tests passed as functions are still recognized
+  expect_equal(
+    tbl_summary(trial, by = trt, include = age) |>
+      add_p(test = list(age = t.test)) |>
+      getElement("table_body") |>
+      dplyr::pull("test_name") |>
+      unique(),
+    "t.test"
+  )
+})
