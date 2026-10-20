@@ -2,6 +2,18 @@
 
 ## gtsummary (development version)
 
+- [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
+  now forwards the `row_numbers` and `variable_level` arguments when
+  applied to an existing `tbl_split` object; previously only `variables`
+  was passed and a misleading error was returned. The `variable_level`
+  attribute is also now retained when a table is further split by rows.
+  ([\#2479](https://github.com/ddsjoberg/gtsummary/issues/2479);
+  [@Melkiades](https://github.com/Melkiades))
+
+- [`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
+  now returns an informative error message when the `groups` argument
+  names a column not present in the table.
+
 - Passing a custom function to the `add_p(test)` and
   `add_difference(test)` arguments no longer loads the namespaces of
   optional packages (e.g. lme4) while checking whether the function
