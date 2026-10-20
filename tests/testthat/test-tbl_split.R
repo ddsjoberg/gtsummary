@@ -315,3 +315,127 @@ test_that("tbl_split_by_rows(variable_level) messaging", {
       tbl_split_by_rows(variable_level = all_stat_cols())
   )
 })
+
+test_that("tbl_split_by_rows() forwards all selectors to an existing `tbl_split` (#2479)", {
+  tbl <- trial |>
+    tbl_summary(by = trt, include = c(age, marker, grade, stage), missing = "no")
+  grp <- list("stat_1", "stat_2")
+
+  # split by columns, then by rows with each of the three selectors
+  expect_length(
+    tbl |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(variables = c(marker)),
+    4L
+  )
+  expect_length(
+    tbl |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(row_numbers = 3),
+    4L
+  )
+  expect_length(
+    tbl |>
+      tbl_split_by_columns(groups = grp) |>
+      tbl_split_by_rows(variable_level = variable),
+    8L
+  )
+
+  # split by rows, then by columns
+  expect_length(
+    tbl |>
+      tbl_split_by_rows(variables = c(marker, grade)) |>
+      tbl_split_by_columns(groups = grp),
+    6L
+  )
+
+  # split by columns twice
+  expect_length(
+    tbl |>
+      tbl_split_by_columns(groups = list("stat_1")) |>
+      tbl_split_by_columns(groups = list("stat_1")) |>
+      suppressMessages(),
+    3L
+  )
+
+  # split by rows twice
+  expect_length(
+    tbl |>
+      tbl_split_by_rows(variables = c(marker, grade)) |>
+      tbl_split_by_rows(variable_level = variable),
+    4L
+  )
+  expect_length(
+    tbl |>
+      tbl_split_by_rows(row_numbers = c(3, 6)) |>
+      tbl_split_by_rows(variable_level = variable),
+    5L
+  )
+})
+
+test_that("tbl_split_by_rows() retains `variable_level` attribute with further splits (#2479)", {
+  tbl_split <- trial |>
+    tbl_summary(by = trt, include = c(age, marker, grade, stage), missing = "no") |>
+    tbl_split_by_rows(variable_level = variable) |>
+    tbl_split_by_rows(row_numbers = 1)
+
+  expect_length(tbl_split, 6L)
+  expect_equal(
+    map_chr(tbl_split, ~attr(.x, "variable_level")),
+    c("age", "marker", "grade", "grade", "stage", "stage")
+  )
+
+  # attribute is retained when further split by columns
+  expect_equal(
+    tbl_split |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+      map_chr(~attr(.x, "variable_level")),
+    rep(c("age", "marker", "grade", "grade", "stage", "stage"), each = 2L)
+  )
+})
+
+test_that("tbl_split_by_rows() messaging with an existing `tbl_split`", {
+  tbl <- trial |>
+    tbl_summary(by = trt, include = c(age, marker, grade), missing = "no")
+
+  # no selector supplied
+  expect_snapshot(
+    error = TRUE,
+    tbl |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+      tbl_split_by_rows()
+  )
+
+  # more than one selector supplied
+  expect_snapshot(
+    error = TRUE,
+    tbl |>
+      tbl_split_by_columns(groups = list("stat_1", "stat_2")) |>
+      tbl_split_by_rows(variables = c(marker), row_numbers = 2)
+  )
+
+  # variable not present in each of the split tables
+  expect_snapshot(
+    error = TRUE,
+    tbl |>
+      tbl_split_by_rows(variables = c(marker)) |>
+      tbl_split_by_rows(variables = c(grade))
+  )
+
+  # row number out of bounds in one of the split tables
+  expect_snapshot(
+    error = TRUE,
+    tbl |>
+      tbl_split_by_rows(variables = c(marker)) |>
+      tbl_split_by_rows(row_numbers = 3)
+  )
+})
+
+test_that("tbl_split_by_columns(groups) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(by = trt, include = c(age, marker), missing = "no") |>
+      tbl_split_by_columns(groups = list("stat_1", "not_a_column"))
+  )
+})
