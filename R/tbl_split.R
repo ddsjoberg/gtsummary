@@ -119,7 +119,9 @@ tbl_split_by_rows <- function(x,
     tbl_list <- map(
       .x = x,
       .f = tbl_split_by_rows,
-      variables = {{ variables }}
+      variables = {{ variables }},
+      row_numbers = row_numbers,
+      variable_level = {{ variable_level }}
     )
 
     return(
@@ -227,9 +229,12 @@ tbl_split_by_rows <- function(x,
         # add original class from `x`
         class(tbl) <- class(x)
 
-        # add attr with the level splitting value, if `variable_level` specified
+        # add attr with the level splitting value, if `variable_level` specified;
+        # otherwise, retain the attr from a previous split (if any)
         if (!is_empty(variable_level)) {
           attr(tbl, "variable_level") <- .x[[variable_level]][[1]]
+        } else {
+          attr(tbl, "variable_level") <- attr(x, "variable_level")
         }
 
         tbl
@@ -287,7 +292,12 @@ tbl_split_by_columns <- function(x, keys, groups,
     unlist(groups) |>
     setdiff(x$table_styling$header$column)
   if (!is_empty(columns_do_not_exist)) {
-    cli::cli_abort()
+    cli::cli_abort(
+      c("Column{?s} {.val {columns_do_not_exist}} in the {.arg groups} argument {?does/do} not exist in the table.",
+        "i" = "Run {.fun gtsummary::show_header_names} for a list of all column names."
+      ),
+      call = get_cli_abort_call()
+    )
   }
 
   # check that every un-hidden column is present
