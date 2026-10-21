@@ -16,6 +16,7 @@ tbl_ard_hierarchical(
   by = NULL,
   include = everything(),
   statistic = ~"{n} ({p}%)",
+  overall_row = FALSE,
   label = NULL
 )
 ```
@@ -57,17 +58,35 @@ tbl_ard_hierarchical(
   [`tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_hierarchical.md).
   The default is `everything() ~ "{n} ({p})"`.
 
+- overall_row:
+
+  (scalar `logical`)  
+  whether an overall summary row should be included at the top of the
+  table. The default is `FALSE`.
+
 - label:
 
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
   used to override default labels in hierarchical table, e.g.
   `list(AESOC = "System Organ Class")`. The default for each variable is
-  the column label attribute, `attr(., 'label')`. If no label has been
-  set, the column name is used.
+  the label saved in the ARD (e.g. when created with
+  `cards::ard_stack_hierarchical(attributes = TRUE)`). If no label is
+  present, the column name is used.
 
 ## Value
 
 a gtsummary table of class `"tbl_ard_hierarchical"`
+
+## Overall Row
+
+An overall row can be added to the table as the first row by specifying
+`overall_row = TRUE`. The `cards` object must contain the overall
+results, which are calculated by
+`cards::ard_stack_hierarchical(over_variables = TRUE)` and
+`cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
+
+A label for this overall row can be specified by passing an
+`'..ard_hierarchical_overall..'` element in `label`.
 
 ## Examples
 
@@ -86,20 +105,24 @@ ard <-
     variables = c(AESOC, AETERM),
     by = TRTA,
     denominator = cards::ADSL,
-    id = USUBJID
+    id = USUBJID,
+    over_variables = TRUE,
+    attributes = TRUE
   )
 
 # Second, build table from the ARD
 tbl_ard_hierarchical(
   cards = ard,
   variables = c(AESOC, AETERM),
-  by = TRTA
+  by = TRTA,
+  overall_row = TRUE,
+  label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
 )
 
 
   
 
-AESOC
+Primary System Organ Class
 
-    AETERM
+    Reported Term for the Adverse Event
 ```
