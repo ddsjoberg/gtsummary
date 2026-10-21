@@ -4,6 +4,8 @@
 
 * Fixed a bug where `tbl_wide_summary()` and `tbl_ard_wide_summary()` did not save the function call in `x$call_list`.
 
+* The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. (#1948)
+
 * The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`, `'as_hux_table.gtsummary-lst:addl_cmds'`, and `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed list elements, which are appended to the end of the calls. Previously, each element had to be named after the call it should follow. (#1446)
 
 * Updates to `tbl_ard_hierarchical()`: (#2021)

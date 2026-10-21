@@ -251,6 +251,74 @@ test_that("tbl_summary(digit)", {
   )
 })
 
+test_that("tbl_summary(digit) combining named and unnamed values", {
+  # unnamed values are assigned positionally, named values update named stats
+  expect_silent(
+    tbl <- tbl_summary(
+      trial,
+      include = c(age, marker, response),
+      missing = "always",
+      missing_stat = "{N_miss} ({p_miss}%)",
+      digits = list(
+        age = list(2, p_miss = 2),
+        marker = list(label_style_number(digits = 2), p_miss = 2),
+        response = list(1, p = 2)
+      )
+    ) |>
+      as.data.frame(col_labels = FALSE)
+  )
+  expect_equal(
+    tbl$stat_0,
+    c("47.00 (38.00, 57.00)", "11 (5.50%)",
+      "0.64 (0.22, 1.41)", "10 (5.00%)",
+      "61.0 (31.61%)", "7 (3.5%)")
+  )
+
+  # the position of the named values does not matter
+  expect_equal(
+    tbl_summary(trial, include = response, missing = "no", digits = response ~ list(p = 2, 1)) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0),
+    "61.0 (31.61%)"
+  )
+
+  # recycling unnamed values is silent
+  expect_silent(
+    tbl_summary(trial, include = age, missing = "no", digits = age ~ c(1, 2))
+  )
+
+  # selector broadcast with names used only by some variables is silent
+  expect_silent(
+    tbl_summary(trial, include = c(age, response), digits = everything() ~ list(p = 1))
+  )
+})
+
+test_that("tbl_summary(digit) silently ignores unused values", {
+  # more unnamed values than statistics
+  expect_silent(
+    tbl <- tbl_summary(
+      trial,
+      include = age,
+      missing = "always",
+      missing_stat = "{N_miss} ({p_miss}%)",
+      digits = age ~ c(2, 0, 0, 4, p_miss = 2)
+    )
+  )
+  expect_equal(
+    tbl$table_body$stat_0,
+    c("47.00 (38, 57)", "11 (5.50%)")
+  )
+
+  # names that are not statistics in the table are silently ignored
+  expect_silent(
+    tbl <- tbl_summary(trial, include = c(age, marker), missing = "no", digits = everything() ~ list(mediam = 3))
+  )
+  expect_equal(
+    tbl$table_body$stat_0,
+    c("47 (38, 57)", "0.64 (0.22, 1.41)")
+  )
+})
+
 test_that("tbl_summary(digit) errors properly", {
   expect_error(
     tbl_summary(
