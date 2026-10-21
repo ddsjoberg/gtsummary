@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_ard_summary(type)` argument may now assign a summary type that differs from the type implied by the ARD's `context` column, e.g. a continuous summary of re-shaped `cards::ard_tabulate()` results. The assigned type must be compatible with the structure of the ARD: continuous summaries require results without `variable_level` values, and categorical/dichotomous summaries require them. (#2482)
+
 * Passing a custom function to the `add_p(test)` and `add_difference(test)` arguments no longer loads the namespaces of optional packages (e.g. lme4) while checking whether the function matches a built-in test. Loading these packages could print messages and slowed the call. (#2484)
 
 # gtsummary 2.6.1
