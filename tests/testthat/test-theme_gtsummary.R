@@ -379,3 +379,55 @@ test_that("without_gtsummary_theme() returns expr value and is a no-op with no t
   expect_equal(without_gtsummary_theme(1L + 1L), 2L)
   expect_equal(get_gtsummary_theme(), list())
 })
+
+test_that("unnamed `addl_cmds` theme elements are appended to the end of the calls (#1446)", {
+  tbl <- trial |> tbl_summary(include = c(age, grade))
+  expr1 <- rlang::expr(gt::tab_options(table.font.size = "small"))
+  expr2 <- rlang::expr(gt::opt_row_striping())
+
+  # fully unnamed list
+  gt_calls <-
+    with_gtsummary_theme(
+      list("as_gt-lst:addl_cmds" = list(expr1)),
+      expr = as_gt(tbl, return_calls = TRUE)
+    )
+  expect_equal(names(gt_calls) |> dplyr::last(), "user_added1")
+  expect_equal(gt_calls[["user_added1"]], expr1)
+
+  # mixed named and unnamed list
+  gt_calls <-
+    with_gtsummary_theme(
+      list("as_gt-lst:addl_cmds" = list(tab_spanner = expr1, expr2)),
+      expr = as_gt(tbl, return_calls = TRUE)
+    )
+  expect_equal(
+    names(gt_calls)[which(names(gt_calls) == "tab_spanner") + 1L],
+    "user_added1"
+  )
+  expect_equal(names(gt_calls) |> dplyr::last(), "user_added2")
+  expect_equal(gt_calls[["user_added2"]], expr2)
+  expect_silent(
+    with_gtsummary_theme(
+      list("as_gt-lst:addl_cmds" = list(tab_spanner = expr1, expr2)),
+      expr = as_gt(tbl)
+    )
+  )
+
+  # names that do not match a call still error
+  expect_error(
+    with_gtsummary_theme(
+      list("as_gt-lst:addl_cmds" = list(not_a_call = expr1)),
+      expr = as_gt(tbl)
+    ),
+    "must be one of"
+  )
+
+  skip_if_pkg_not_installed("flextable")
+  expect_silent(
+    ft <- with_gtsummary_theme(
+      list("as_flex_table-lst:addl_cmds" = list(rlang::expr(flextable::fontsize(size = 8, part = "all")))),
+      expr = as_flex_table(tbl)
+    )
+  )
+  expect_s3_class(ft, "flextable")
+})
