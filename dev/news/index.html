@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li>
+<ul><li><p>The <code>'as_gt-lst:addl_cmds'</code>, <code>'as_flex_table-lst:addl_cmds'</code>, <code>'as_hux_table.gtsummary-lst:addl_cmds'</code>, and <code>'as_kable_extra-lst:addl_cmds'</code> theme elements now accept unnamed list elements, which are appended to the end of the calls. Previously, each element had to be named after the call it should follow. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1446" class="external-link">#1446</a>)</p></li>
+<li>
 <p>Updates to <code><a href="../reference/tbl_ard_hierarchical.html">tbl_ard_hierarchical()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/2021" class="external-link">#2021</a>)</p>
 <ul><li>Added the <code>overall_row</code> argument to include an overall summary row at the top of the table, using results from <code>cards::ard_stack_hierarchical(over_variables = TRUE)</code> or <code>cards::ard_stack_hierarchical_count(over_variables = TRUE)</code>.</li>
 <li>The structure of the <code>cards</code> input is now checked against the <code>variables</code>, <code>by</code>, <code>include</code>, and <code>statistic</code> arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.</li>

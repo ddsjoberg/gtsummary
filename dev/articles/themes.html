@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9006</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -2814,7 +2814,7 @@ function arguments.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="as_flex_table  name" class="gt_row gt_left"><span class="gt_from_md"><code>as_flex_table-lst:addl_cmds</code></span></td>
-<td headers="as_flex_table  desc" class="gt_row gt_left"><span class="gt_from_md">named list of expressions of {flextable} package commands inserted in the <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> call; do not include the <code>data=</code> argument; the list of expressions is inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_flex_table(x, return_calls = TRUE)</code> and check the names.</span></td>
+<td headers="as_flex_table  desc" class="gt_row gt_left"><span class="gt_from_md">list of expressions of {flextable} package commands inserted in the <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> call; do not include the <code>data=</code> argument; named list elements are inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_flex_table(x, return_calls = TRUE)</code> and check the names; unnamed list elements are appended to the end of the calls.</span></td>
 <td headers="as_flex_table  example" class="gt_row gt_left"><span class="gt_from_md"><code>list(autofit = list(rlang::expr(flextable::font(fontname = "Bodoni 72", part = "all")), rlang::expr(flextable::fontsize(size = 8, part = "all"))))</code></span></td>
 <td headers="as_flex_table  eval" class="gt_row gt_left">Yes</td>
 </tr>
@@ -2832,7 +2832,7 @@ function arguments.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="as_gt  name" class="gt_row gt_left"><span class="gt_from_md"><code>as_gt-lst:addl_cmds</code></span></td>
-<td headers="as_gt  desc" class="gt_row gt_left"><span class="gt_from_md">named list of expressions of {gt} package commands inserted in the <code><a href="../reference/as_gt.html">as_gt()</a></code> call; do not include the <code>data=</code> argument; the list of expressions is inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_gt(x, return_calls = TRUE)</code> and check the names.</span></td>
+<td headers="as_gt  desc" class="gt_row gt_left"><span class="gt_from_md">list of expressions of {gt} package commands inserted in the <code><a href="../reference/as_gt.html">as_gt()</a></code> call; do not include the <code>data=</code> argument; named list elements are inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_gt(x, return_calls = TRUE)</code> and check the names; unnamed list elements are appended to the end of the calls.</span></td>
 <td headers="as_gt  example" class="gt_row gt_left"><span class="gt_from_md"><code>list(tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')))</code></span></td>
 <td headers="as_gt  eval" class="gt_row gt_left">Yes</td>
 </tr>
@@ -2841,7 +2841,7 @@ function arguments.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="as_hux_table  name" class="gt_row gt_left"><span class="gt_from_md"><code>as_hux_table.gtsummary-lst:addl_cmds</code></span></td>
-<td headers="as_hux_table  desc" class="gt_row gt_left"><span class="gt_from_md">named list of expressions of {huxtable} package commands inserted in the <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> call; do not include the <code>data=</code> argument; the list of expressions is inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_hux_table(x, return_calls = TRUE)</code> and check the names.</span></td>
+<td headers="as_hux_table  desc" class="gt_row gt_left"><span class="gt_from_md">list of expressions of {huxtable} package commands inserted in the <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> call; do not include the <code>data=</code> argument; named list elements are inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_hux_table(x, return_calls = TRUE)</code> and check the names; unnamed list elements are appended to the end of the calls.</span></td>
 <td headers="as_hux_table  example" class="gt_row gt_left"><br></td>
 <td headers="as_hux_table  eval" class="gt_row gt_left">Yes</td>
 </tr>
@@ -2850,7 +2850,7 @@ function arguments.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="as_kable_extra  name" class="gt_row gt_left"><span class="gt_from_md"><code>as_kable_extra-lst:addl_cmds</code></span></td>
-<td headers="as_kable_extra  desc" class="gt_row gt_left"><span class="gt_from_md">named list of expressions of {kableExtra} package commands inserted in the <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> call; do not include the <code>data=</code> argument; the list of expressions is inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_kable_extra(x, return_calls = TRUE)</code> and check the names.</span></td>
+<td headers="as_kable_extra  desc" class="gt_row gt_left"><span class="gt_from_md">list of expressions of {kableExtra} package commands inserted in the <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> call; do not include the <code>data=</code> argument; named list elements are inserted after the named call, e.g. if the named list element is <code>"tab_spanner"</code> the expressions will be inserted after expressions named <code>"tab_spanner"</code>; to see the names of the expressions run <code>as_kable_extra(x, return_calls = TRUE)</code> and check the names; unnamed list elements are appended to the end of the calls.</span></td>
 <td headers="as_kable_extra  example" class="gt_row gt_left"><br></td>
 <td headers="as_kable_extra  eval" class="gt_row gt_left">Yes</td>
 </tr>
