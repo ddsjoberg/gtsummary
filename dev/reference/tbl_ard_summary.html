@@ -13,7 +13,7 @@ The functions accepts an ARD object."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,8 +101,13 @@ The default is
 <dd><p>(<code><a href="syntax.html">formula-list-selector</a></code>)<br>
 Specifies the summary type. Accepted values are
 <code>c("continuous", "continuous2", "categorical", "dichotomous")</code>.
-Continuous summaries may be assigned <code>c("continuous", "continuous2")</code>, while
-categorical and dichotomous cannot be modified.</p></dd>
+Default types are derived from the ARD <code>context</code> column
+(<code>"summary"</code> is continuous, <code>"tabulate"</code> is categorical, and <code>"tabulate_value"</code>
+is dichotomous). For other contexts, the default is categorical when the
+variable has <code>variable_level</code> values and continuous otherwise.
+Any type may be assigned, as long as it's compatible with the ARD structure:
+continuous types require results without <code>variable_level</code> values, and
+categorical and dichotomous types require <code>variable_level</code> values.</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>

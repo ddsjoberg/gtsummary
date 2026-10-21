@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9003</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p><code><a href="../reference/tbl_split_by.html">tbl_split_by_rows()</a></code> now forwards the <code>row_numbers</code> and <code>variable_level</code> arguments when applied to an existing <code>tbl_split</code> object; previously only <code>variables</code> was passed and a misleading error was returned. The <code>variable_level</code> attribute is also now retained when a table is further split by rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2479" class="external-link">#2479</a>; <a href="https://github.com/Melkiades" class="external-link">@Melkiades</a>)</p></li>
+<ul><li><p>The <code>tbl_ard_summary(type)</code> argument may now assign a summary type that differs from the type implied by the ARD’s <code>context</code> column, e.g. a continuous summary of re-shaped <code><a href="https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">cards::ard_tabulate()</a></code> results. The assigned type must be compatible with the structure of the ARD: continuous summaries require results without <code>variable_level</code> values, and categorical/dichotomous summaries require them. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2482" class="external-link">#2482</a>)</p></li>
+<li><p><code><a href="../reference/tbl_split_by.html">tbl_split_by_rows()</a></code> now forwards the <code>row_numbers</code> and <code>variable_level</code> arguments when applied to an existing <code>tbl_split</code> object; previously only <code>variables</code> was passed and a misleading error was returned. The <code>variable_level</code> attribute is also now retained when a table is further split by rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2479" class="external-link">#2479</a>; <a href="https://github.com/Melkiades" class="external-link">@Melkiades</a>)</p></li>
 <li><p><code><a href="../reference/tbl_split_by.html">tbl_split_by_columns()</a></code> now returns an informative error message when the <code>groups</code> argument names a column not present in the table.</p></li>
 <li><p>Passing a custom function to the <code>add_p(test)</code> and <code>add_difference(test)</code> arguments no longer loads the namespaces of optional packages (e.g. lme4) while checking whether the function matches a built-in test. Loading these packages could print messages and slowed the call. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2484" class="external-link">#2484</a>)</p></li>
 </ul></div>

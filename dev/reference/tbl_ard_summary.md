@@ -50,8 +50,14 @@ tbl_ard_summary(
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
   Specifies the summary type. Accepted values are
   `c("continuous", "continuous2", "categorical", "dichotomous")`.
-  Continuous summaries may be assigned `c("continuous", "continuous2")`,
-  while categorical and dichotomous cannot be modified.
+  Default types are derived from the ARD `context` column (`"summary"`
+  is continuous, `"tabulate"` is categorical, and `"tabulate_value"` is
+  dichotomous). For other contexts, the default is categorical when the
+  variable has `variable_level` values and continuous otherwise. Any
+  type may be assigned, as long as it's compatible with the ARD
+  structure: continuous types require results without `variable_level`
+  values, and categorical and dichotomous types require `variable_level`
+  values.
 
 - label:
 

@@ -2,6 +2,15 @@
 
 ## gtsummary (development version)
 
+- The `tbl_ard_summary(type)` argument may now assign a summary type
+  that differs from the type implied by the ARD’s `context` column,
+  e.g. a continuous summary of re-shaped
+  [`cards::ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  results. The assigned type must be compatible with the structure of
+  the ARD: continuous summaries require results without `variable_level`
+  values, and categorical/dichotomous summaries require them.
+  ([\#2482](https://github.com/ddsjoberg/gtsummary/issues/2482))
+
 - [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_split_by.md)
   now forwards the `row_numbers` and `variable_level` arguments when
   applied to an existing `tbl_split` object; previously only `variables`
