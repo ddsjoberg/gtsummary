@@ -76,7 +76,7 @@ my_style <- label_style_number(digits = 1)
 my_style(3.14)
 }
 \seealso{
-Other style tools: 
-\code{\link{style_sigfig}()}
+Other style tools:
+\code{\link[=style_sigfig]{style_sigfig()}}
 }
 \concept{style tools}

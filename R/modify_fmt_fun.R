@@ -16,7 +16,7 @@
 #' @inheritSection modify_table_styling rows argument
 #'
 #' @export
-#' @examples
+#' @examplesIf gtsummary:::is_pkg_installed(c("broom", "broom.helpers"))
 #' # Example 1 ----------------------------------
 #' # show 'grade' p-values to 3 decimal places and estimates to 4 sig figs
 #' lm(age ~ marker + grade, trial) |>
@@ -39,10 +39,18 @@ modify_fmt_fun <- function(x, ..., rows = NULL, update, quiet) {
     )
 
   # converting dots arg to a tidyselect list -----------------------------------
-  cards::process_formula_selectors(
-    data = scope_header(x$table_body, x$table_styling$header),
-    dots = dots
-  )
+  # when the dots are all plainly named (no formulas needing tidyselect), the
+  # cards named-list branch reduces to keep-last-duplicate + drop-unknown-names
+  # (see cards::compute_formula_selector()), so the scoped data isn't needed
+  if (is_empty(dots) || is_named(dots)) {
+    dots <- dots[rev(!duplicated(rev(names(dots))))]
+    dots <- dots[intersect(names(dots), names(x$table_body))]
+  } else {
+    cards::process_formula_selectors(
+      data = scope_header(x$table_body, x$table_styling$header),
+      dots = dots
+    )
+  }
   cards::check_list_elements(
     x = dots,
     predicate = \(x) is_function(x),

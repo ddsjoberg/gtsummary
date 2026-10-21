@@ -159,27 +159,21 @@
 # add_p.tbl_summary() works well
 
     Code
-      as.data.frame(add_p(tbl_summary(mtcars, by = am, include = c(mpg, hp, cyl, carb)),
-      test = list(mpg = "t.test", hp = "oneway.test", cyl = "chisq.test.no.correct",
-        carb = "mood.test")))
+      as.data.frame(add_p(tbl_summary(dplyr::mutate(mtcars, wt2 = wt + dplyr::row_number() /
+        1000), by = am, include = c(mpg, hp, cyl, wt2)), test = list(mpg = "t.test",
+        hp = "oneway.test", cyl = "chisq.test.no.correct", wt2 = "mood.test")))
     Message
       The following warnings were returned during `add_p()`:
       ! For variable `cyl` (`am`) and "statistic", "p.value", and "parameter" statistics: Chi-squared approximation may be incorrect
     Output
-         **Characteristic**   **0**  \nN = 19   **1**  \nN = 13 **p-value**
-      1                 mpg 17.3 (14.7, 19.2) 22.8 (21.0, 30.4)       0.001
-      2                  hp    175 (110, 205)     109 (66, 113)         0.2
-      3                 cyl              <NA>              <NA>       0.013
-      4                   4           3 (16%)           8 (62%)        <NA>
-      5                   6           4 (21%)           3 (23%)        <NA>
-      6                   8          12 (63%)           2 (15%)        <NA>
-      7                carb              <NA>              <NA>       0.017
-      8                   1           3 (16%)           4 (31%)        <NA>
-      9                   2           6 (32%)           4 (31%)        <NA>
-      10                  3           3 (16%)            0 (0%)        <NA>
-      11                  4           7 (37%)           3 (23%)        <NA>
-      12                  6            0 (0%)          1 (7.7%)        <NA>
-      13                  8            0 (0%)          1 (7.7%)        <NA>
+        **Characteristic**   **0**  \nN = 19   **1**  \nN = 13 **p-value**
+      1                mpg 17.3 (14.7, 19.2) 22.8 (21.0, 30.4)       0.001
+      2                 hp    175 (110, 205)     109 (66, 113)         0.2
+      3                cyl              <NA>              <NA>       0.013
+      4                  4           3 (16%)           8 (62%)        <NA>
+      5                  6           4 (21%)           3 (23%)        <NA>
+      6                  8          12 (63%)           2 (15%)        <NA>
+      7                wt2 3.54 (3.45, 3.87) 2.32 (1.96, 2.81)         0.3
 
 ---
 

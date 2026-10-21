@@ -76,3 +76,46 @@ test_that("remove_footnote_header(footnote)", {
       unique()
   )
 })
+
+test_that("modify_footnote_header(text_interpret = 'none') stores identity and renders verbatim", {
+  # accepts "none" and stores the `identity` interpret function (#1987)
+  tbl <- base_tbl_summary |>
+    modify_footnote_header(footnote = "*p<0.05", columns = label, text_interpret = "none")
+  expect_equal(
+    tbl$table_styling$footnote_header |>
+      dplyr::filter(footnote == "*p<0.05") |>
+      dplyr::pull("text_interpret"),
+    "identity"
+  )
+
+  # "md" continues to store gt::md
+  tbl_md <- base_tbl_summary |>
+    modify_footnote_header(footnote = "*p<0.05", columns = label, text_interpret = "md")
+  expect_equal(
+    tbl_md$table_styling$footnote_header |>
+      dplyr::filter(footnote == "*p<0.05") |>
+      dplyr::pull("text_interpret"),
+    "gt::md"
+  )
+
+  # invalid values are rejected
+  expect_error(
+    modify_footnote_header(base_tbl_summary, footnote = "x", columns = label, text_interpret = "latex")
+  )
+
+  skip_if_pkg_not_installed("gt")
+  # "none" renders the asterisks verbatim (not as emphasis)
+  html_none <- base_tbl_summary |>
+    modify_footnote_header(footnote = "*p<0.05; **p<0.01", columns = label, text_interpret = "none") |>
+    as_gt() |>
+    gt::as_raw_html()
+  expect_match(html_none, "\\*p", fixed = FALSE)
+  expect_false(grepl("<em>p&lt;0.05", html_none))
+
+  # "md" interpretation is unchanged (bold rendered, literal asterisks gone)
+  html_md <- base_tbl_summary |>
+    modify_footnote_header(footnote = "**bold note**", columns = label, text_interpret = "md") |>
+    as_gt() |>
+    gt::as_raw_html()
+  expect_false(grepl("\\*\\*bold note\\*\\*", html_md))
+})

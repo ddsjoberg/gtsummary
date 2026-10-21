@@ -9,26 +9,26 @@
 NULL
 
 # "soft" deprecation for 6 months: (Sys.Date() - lubridate::dmonths(6)) |> as.Date()
-#   v2.4.0 2025-08-28
-#   v2.3.0 2025-07-03
+#   v2.5.1 2026-05-30
 
 # "warn" deprecation for 18 months: (Sys.Date() - lubridate::dmonths(24)) |> as.Date()
+#   v2.5.0 2025-12-05
+#   v2.4.0 2025-08-28
+#   v2.3.0 2025-07-03
 #   v2.2.0 2025-04-11
 #   v2.1.0 2025-02-19
+
+# "stop" deprecation for 12 months: (Sys.Date() - lubridate::dmonths(36)) |> as.Date()
 #   v2.0.2 2024-09-05
 #   v2.0.1 2024-08-01
 #   v2.0.0 2024-07-23
-
-# "stop" deprecation for 12 months: (Sys.Date() - lubridate::dmonths(36)) |> as.Date()
 #   v1.7.2 2023-07-13
-#   v1.7.1 2023-04-27
-#   v1.7.0 2023-01-13
 
 # v2.3.0 -----------------------------------------------------------------------
 #' @rdname deprecated
 #' @export
 modify_column_indent <- function(...) {
-  lifecycle::deprecate_soft("2.3.0", "gtsummary::modify_column_indent()", "modify_indent()")
+  lifecycle::deprecate_warn("2.3.0", "gtsummary::modify_column_indent()", "modify_indent()")
   modify_indent(...)
 }
 
@@ -43,6 +43,6 @@ tbl_split <- function(x, ...) {
 #' @rdname deprecated
 #' @export
 tbl_split.gtsummary <- function(...) {
-  lifecycle::deprecate_soft("2.3.0", "gtsummary::tbl_split.gtsummary()", "tbl_split_by_rows()")
+  lifecycle::deprecate_warn("2.3.0", "gtsummary::tbl_split.gtsummary()", "tbl_split_by_rows()")
   tbl_split_by_rows(...)
 }

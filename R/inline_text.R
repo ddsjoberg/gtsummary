@@ -148,7 +148,7 @@ inline_text.gtsummary <- function(x,
   if ("row_type" %in% names(df_gtsummary) &&
       nrow(df_gtsummary |> dplyr::filter(.data$row_type %in% "label")) > 1L) {
     cli::cli_inform(
-      "Variable {.cal {variable}} likely not unique in gtsummary table, and
+      "Variable {.val {variable}} likely not unique in gtsummary table, and
        the cell(s) you wish to display may not be accessible.
        This may occur when gtsummary tables with repeated variable
        names are combined using {.fun tbl_stack}.",
@@ -206,7 +206,7 @@ inline_text.gtsummary <- function(x,
   }
   else {
     lvl <- cards::cards_select(expr = !!lvl, data = vec_to_df(possible_lvls))
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = glue("gtsummary::inline_text({lvl_argname} = 'must now be a string')"),
       details = glue("Use `{lvl_argname} = '{lvl}'` instead.")

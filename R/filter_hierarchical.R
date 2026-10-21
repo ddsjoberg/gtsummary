@@ -125,10 +125,7 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
 
   # get `by` variable count rows (do not correspond to a table row)
   rm_idx <- if (!is_empty(ard_args$by)) {
-    x_ard |>
-      dplyr::filter(is.na(.data$group1)) |>
-      dplyr::pull("pre_idx") |>
-      unique()
+    unique(x_ard$pre_idx[is.na(x_ard$group1)])
   } else {
     NULL
   }
@@ -138,25 +135,20 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
     cards::filter_ard_hierarchical(filter = {{ filter }}, var = {{ var }}, keep_empty = keep_empty, quiet = quiet)
 
   # pull updated index order after filtering
-  idx_filter <- x_ard_filter |>
-    dplyr::pull("pre_idx") |>
-    unique() |>
-    setdiff(rm_idx)
+  idx_filter <- setdiff(unique(x_ard_filter$pre_idx), rm_idx)
 
   # apply filtering while retaining original row order
   idx_filter <- intersect(x$table_body$pre_idx, idx_filter)
   x$table_body <- x$table_body[match(idx_filter, x$table_body$pre_idx), ]
 
   if ("tmp" %in% names(x_ard_filter)) {
-    x_ard_filter <- x_ard_filter |>
-      dplyr::filter(is.na(.data$tmp)) |>
-      select(-"tmp")
+    x_ard_filter <- x_ard_filter[is.na(x_ard_filter$tmp), names(x_ard_filter) != "tmp"]
   }
 
   # if overall column present, filter x$cards$add_overall
   if ("add_overall" %in% names(x$cards)) {
-    x_ard_overall_col <- x$cards$add_overall |>
-      dplyr::mutate(pre_idx = dplyr::row_number())
+    x_ard_overall_col <- x$cards$add_overall
+    x_ard_overall_col$pre_idx <- seq_len(nrow(x_ard_overall_col))
 
     # reformat data from overall column
     if (length(ard_args$by) > 0) {
@@ -165,13 +157,13 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
     }
 
     # check which rows are kept after filtering x$cards$tbl_hierarchical
-    # and find matching rows in x$cards$add_overall
+    # and find matching rows in x$cards$add_overall. this is a semi-join
+    # (membership test) on the key columns: `vctrs::vec_in()` avoids
+    # materializing the many-to-many cross product of duplicated keys.
     by_cols <- paste0("group", seq_along(length(ard_args$by)), c("", "_level"))
     x_post_filter <- x_ard_filter |> select(cards::all_ard_groups(), cards::all_ard_variables(), -any_of(by_cols))
-    idx_overall_filter <- x_ard_overall_col |>
-      dplyr::inner_join(x_post_filter, by = names(x_post_filter), relationship = "many-to-many") |>
-      dplyr::pull("pre_idx") |>
-      unique()
+    idx_overall_filter <-
+      x_ard_overall_col$pre_idx[vctrs::vec_in(x_ard_overall_col[names(x_post_filter)], x_post_filter)]
 
     # keep total N, attribute rows
     idx_overall_filter <- x_ard_overall_col$pre_idx |>
@@ -182,10 +174,11 @@ filter_hierarchical.tbl_hierarchical <- function(x, filter, var = NULL, keep_emp
   }
 
   # update x$table_body
-  x$table_body <- x$table_body |> select(-"pre_idx")
+  x$table_body$pre_idx <- NULL
 
   # update x$cards$tbl_hierarchical
-  x$cards[[cls]] <- x_ard_filter |> select(-"pre_idx")
+  x_ard_filter$pre_idx <- NULL
+  x$cards[[cls]] <- x_ard_filter
 
   x
 }

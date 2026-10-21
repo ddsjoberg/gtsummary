@@ -120,7 +120,7 @@ but you can use stored formulas with \code{rlang::inject(survfit(!!my_formula, l
 }
 
 \examples{
-\dontshow{if (gtsummary:::is_pkg_installed("survival")) withAutoprint(\{ # examplesIf}
+\dontshow{if (gtsummary:::is_pkg_installed(c("survival", "broom"))) withAutoprint(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------
@@ -161,7 +161,6 @@ trial2 <- trial |>
       ) |>
       factor()
   )
-
 survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 \dontshow{\}) # examplesIf}

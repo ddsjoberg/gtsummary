@@ -19,7 +19,7 @@
 Object of class \code{"tbl_survfit"}}
 
 \item{test}{(\code{string})\cr
-string indicating test to use. Must be one of \code{"logrank"}, \code{"tarone"}, \code{"survdiff"},
+string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"},
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \code{"coxph_score"}.
 See details below}
 
@@ -60,7 +60,7 @@ and a second test of the \emph{G-rho} family.
 \section{Note}{
 
 
-To calculate the p-values, the formula is re-constructed from the the call in the
+To calculate the p-values, the formula is re-constructed from the call in the
 original \code{survfit()} object.
 When the \code{survfit()} object is created a for loop, \code{lapply()}, \code{purrr::map()}
 setting the call \emph{may not} reflect the true formula which may result in an
@@ -93,7 +93,7 @@ gts_survfit |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other tbl_survfit tools: 
-\code{\link{add_nevent.tbl_survfit}()}
+Other tbl_survfit tools:
+\code{\link[=add_nevent.tbl_survfit]{add_nevent.tbl_survfit()}}
 }
 \concept{tbl_survfit tools}

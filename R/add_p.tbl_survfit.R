@@ -5,7 +5,7 @@
 #' @param x (`tbl_survfit`)\cr
 #'   Object of class `"tbl_survfit"`
 #' @param test (`string`)\cr
-#'   string indicating test to use. Must be one of `"logrank"`, `"tarone"`, `"survdiff"`,
+#'   string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
 #'   `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score"`.
 #'   See details below
 #' @param test.args (named `list`)\cr
@@ -30,7 +30,7 @@
 #'
 #' @section Note:
 #'
-#' To calculate the p-values, the formula is re-constructed from the the call in the
+#' To calculate the p-values, the formula is re-constructed from the call in the
 #' original `survfit()` object.
 #' When the `survfit()` object is created a for loop, `lapply()`, `purrr::map()`
 #' setting the call _may not_ reflect the true formula which may result in an
@@ -71,7 +71,7 @@ add_p.tbl_survfit <- function(x,
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::add_p(quiet)"
     )

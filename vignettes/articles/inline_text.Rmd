@@ -116,7 +116,7 @@ Here's how the line will appear in your report.
 It is reasonable that you'll need to modify the text.
 To do this, use the `pattern` argument.
 The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.
-The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
+The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access to the following fields within the `pattern` argument.
 
 ```{r, echo = FALSE}
 dplyr::tribble(
@@ -141,4 +141,4 @@ If you're printing results from a categorical variable, include the `level` argu
 The `inline_text` function has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).
 These default to the same rounding performed in the table, but can be modified when reporting inline.
 
-For more details about inline code, review to the  [RStudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).
+For more details about inline code, refer to the [RStudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).

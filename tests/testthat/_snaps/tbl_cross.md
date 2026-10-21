@@ -87,9 +87,7 @@
       tbl_cross(trial, row = trt, col = 1)
     Condition
       Error in `tbl_cross()`:
-      ! Error processing `type` argument.
-      ! i In argument: `all_of(row)`. Caused by error in `all_of()`: ! Can't subset elements that don't exist. x Element `trt` doesn't exist.
-      i Select among columns "..total.."
+      ! Arguments `col` and `row` cannot select the same column.
 
 ---
 
@@ -97,7 +95,7 @@
       tbl_cross(trial, row = NULL, col = grade)
     Condition
       Error in `tbl_cross()`:
-      ! The `row` argument must be length 1.
+      ! The `row` argument must be a vector of length 1.
 
 # tbl_cross(label) errors properly
 

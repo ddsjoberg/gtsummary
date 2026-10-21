@@ -251,6 +251,74 @@ test_that("tbl_summary(digit)", {
   )
 })
 
+test_that("tbl_summary(digit) combining named and unnamed values", {
+  # unnamed values are assigned positionally, named values update named stats
+  expect_silent(
+    tbl <- tbl_summary(
+      trial,
+      include = c(age, marker, response),
+      missing = "always",
+      missing_stat = "{N_miss} ({p_miss}%)",
+      digits = list(
+        age = list(2, p_miss = 2),
+        marker = list(label_style_number(digits = 2), p_miss = 2),
+        response = list(1, p = 2)
+      )
+    ) |>
+      as.data.frame(col_labels = FALSE)
+  )
+  expect_equal(
+    tbl$stat_0,
+    c("47.00 (38.00, 57.00)", "11 (5.50%)",
+      "0.64 (0.22, 1.41)", "10 (5.00%)",
+      "61.0 (31.61%)", "7 (3.5%)")
+  )
+
+  # the position of the named values does not matter
+  expect_equal(
+    tbl_summary(trial, include = response, missing = "no", digits = response ~ list(p = 2, 1)) |>
+      as.data.frame(col_labels = FALSE) |>
+      dplyr::pull(stat_0),
+    "61.0 (31.61%)"
+  )
+
+  # recycling unnamed values is silent
+  expect_silent(
+    tbl_summary(trial, include = age, missing = "no", digits = age ~ c(1, 2))
+  )
+
+  # selector broadcast with names used only by some variables is silent
+  expect_silent(
+    tbl_summary(trial, include = c(age, response), digits = everything() ~ list(p = 1))
+  )
+})
+
+test_that("tbl_summary(digit) silently ignores unused values", {
+  # more unnamed values than statistics
+  expect_silent(
+    tbl <- tbl_summary(
+      trial,
+      include = age,
+      missing = "always",
+      missing_stat = "{N_miss} ({p_miss}%)",
+      digits = age ~ c(2, 0, 0, 4, p_miss = 2)
+    )
+  )
+  expect_equal(
+    tbl$table_body$stat_0,
+    c("47.00 (38, 57)", "11 (5.50%)")
+  )
+
+  # names that are not statistics in the table are silently ignored
+  expect_silent(
+    tbl <- tbl_summary(trial, include = c(age, marker), missing = "no", digits = everything() ~ list(mediam = 3))
+  )
+  expect_equal(
+    tbl$table_body$stat_0,
+    c("47 (38, 57)", "0.64 (0.22, 1.41)")
+  )
+})
+
 test_that("tbl_summary(digit) errors properly", {
   expect_error(
     tbl_summary(
@@ -504,6 +572,88 @@ test_that("tbl_summary(missing)", {
       trial,
       missing = "NOT AN OPTION"
     )
+  )
+})
+
+test_that("tbl_summary(missing) accepts formula-list-selector syntax", {
+  # per-variable: age always shown, trt never shown
+  tb <-
+    tbl_summary(
+      trial,
+      include = c(trt, age),
+      missing = list(age ~ "always", trt ~ "no")
+    ) |>
+    getElement("table_body")
+  expect_equal(
+    tb |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+    "age"
+  )
+
+  # everything() ~ "no" suppresses all missing rows
+  expect_equal(
+    tbl_summary(
+      trial,
+      include = c(trt, age),
+      missing = everything() ~ "no"
+    ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      nrow(),
+    0L
+  )
+
+  # type-based selectors are supported
+  tb_type <-
+    tbl_summary(
+      trial,
+      include = c(age, grade, response),
+      missing = list(all_continuous() ~ "always", all_categorical() ~ "no")
+    ) |>
+    getElement("table_body")
+  expect_equal(
+    tb_type |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+    "age"
+  )
+
+  # bare-string input still works (back-compat) and matches formula form
+  expect_equal(
+    tbl_summary(trial, include = c(trt, age), missing = "always") |>
+      as.data.frame(),
+    tbl_summary(trial, include = c(trt, age), missing = everything() ~ "always") |>
+      as.data.frame()
+  )
+
+  # default (unspecified) matches everything() ~ "ifany"
+  expect_equal(
+    tbl_summary(trial, include = c(trt, age)) |> as.data.frame(),
+    tbl_summary(trial, include = c(trt, age), missing = everything() ~ "ifany") |>
+      as.data.frame()
+  )
+
+  # invalid per-variable value errors
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = age, missing = everything() ~ "NOT AN OPTION")
+  )
+
+  # a theme value (incl. a bare string) is used to fill variables the user did
+  # not specify in a partial selector
+  with_gtsummary_theme(
+    x = list("tbl_summary-arg:missing" = "no"),
+    expr = {
+      tb_theme <-
+        tbl_summary(
+          trial,
+          include = c(trt, age),
+          missing = list(age ~ "always")
+        ) |>
+        getElement("table_body")
+      # age (explicit "always") shown; trt follows theme "no" -> not shown
+      expect_equal(
+        tb_theme |> dplyr::filter(row_type == "missing") |> dplyr::pull("variable"),
+        "age"
+      )
+    }
   )
 })
 
@@ -804,4 +954,3 @@ test_that("tbl_summary() handlines character vectors with 'NULL' values", {
     ignore_attr = TRUE
   )
 })
-

@@ -27,7 +27,7 @@
 #' @export
 #' @return A string reporting results from a gtsummary table
 #'
-#' @examplesIf gtsummary:::is_pkg_installed("survival")
+#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #'
 #' # fit survfit

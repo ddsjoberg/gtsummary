@@ -10,6 +10,7 @@ tbl_ard_hierarchical(
   by = NULL,
   include = everything(),
   statistic = ~"{n} ({p}\%)",
+  overall_row = FALSE,
   label = NULL
 )
 }
@@ -34,20 +35,34 @@ The default is \code{everything()}.}
 used to specify the summary statistics to display for all variables in \code{tbl_hierarchical()}.
 The default is \code{everything() ~ "{n} ({p})"}.}
 
+\item{overall_row}{(scalar \code{logical})\cr
+whether an overall summary row should be included at the top of the table.
+The default is \code{FALSE}.}
+
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 used to override default labels in hierarchical table, e.g. \code{list(AESOC = "System Organ Class")}.
-The default for each variable is the column label attribute, \code{attr(., 'label')}.
-If no label has been set, the column name is used.}
+The default for each variable is the label saved in the ARD (e.g. when created with
+\code{cards::ard_stack_hierarchical(attributes = TRUE)}). If no label is present, the column name is used.}
 }
 \value{
 a gtsummary table of class \code{"tbl_ard_hierarchical"}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
-\emph{This is an preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.}
+\emph{This is a preview of this function. There will be changes in the coming releases, and changes will not undergo a formal deprecation cycle.}
 
 Constructs tables from nested or hierarchical data  structures (e.g. adverse events).
 }
+\section{Overall Row}{
+
+
+An overall row can be added to the table as the first row by specifying \code{overall_row = TRUE}.
+The \code{cards} object must contain the overall results, which are calculated by
+\code{cards::ard_stack_hierarchical(over_variables = TRUE)} and \code{cards::ard_stack_hierarchical_count(over_variables = TRUE)}.
+
+A label for this overall row can be specified by passing an \code{'..ard_hierarchical_overall..'} element in \code{label}.
+}
+
 \examples{
 \dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true"))) withAutoprint(\{ # examplesIf}
 ADAE_subset <- cards::ADAE |>
@@ -64,14 +79,18 @@ ard <-
     variables = c(AESOC, AETERM),
     by = TRTA,
     denominator = cards::ADSL,
-    id = USUBJID
+    id = USUBJID,
+    over_variables = TRUE,
+    attributes = TRUE
   )
 
 # Second, build table from the ARD
 tbl_ard_hierarchical(
   cards = ard,
   variables = c(AESOC, AETERM),
-  by = TRTA
+  by = TRTA,
+  overall_row = TRUE,
+  label = list(..ard_hierarchical_overall.. = "Any Adverse Event")
 )
 
 # Example 2: Event Counts  -------------------

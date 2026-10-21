@@ -5,13 +5,13 @@ svy_titanic <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~F
 svy_trial <- survey::svydesign(~1, data = trial, weights = ~1)
 
 test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     tbl_svysummary(svy_trial, by = trt) |>
       add_difference() |>
       as.data.frame(col_labels = FALSE) |>
       select(-all_stat_cols())
   )
-
   expect_snapshot(
     tbl_svysummary(svy_titanic, by = Survived) |>
       add_difference() |>
@@ -21,12 +21,12 @@ test_that("add_difference.tbl_svysummary() snapshots of common outputs", {
 })
 
 test_that("add_difference.tbl_svysummary(x) messaging", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     error = TRUE,
     tbl_svysummary(svy_trial, include = age) |>
       add_difference()
   )
-
   expect_snapshot(
     tbl <- tbl_svysummary(svy_trial, by = trt, percent = "row", include = grade) |>
       add_difference()
@@ -79,7 +79,7 @@ test_that("add_difference.tbl_svysummary(test)", {
       {.[order(names(.))]}, # styler: off
     ignore_attr = TRUE
   )
-
+  skip_if_pkg_not_installed("smd")
   expect_equal(
     tbl$table_body |>
       dplyr::filter(variable == "grade_smd", row_type == "label") |>
@@ -135,6 +135,7 @@ test_that("add_difference.tbl_svysummary(test)", {
 })
 
 test_that("add_difference.tbl_svysummary() + add_p.tbl_svysummary()", {
+  skip_if_pkg_not_installed("smd")
   expect_snapshot(
     svy_trial |>
       tbl_svysummary(by = trt, include = c(age, response, grade), missing = "no") |>
@@ -182,5 +183,155 @@ test_that("add_difference.tbl_svysummary(include)", {
       na.omit(),
     1L
   )
+})
+
+test_that("add_difference.tbl_svysummary(test = 'emmeans') dichotomous sign matches displayed value (#2399)", {
+  skip_if_pkg_not_installed("emmeans", ref = "cardx")
+
+  # Titanic `Age` has levels c("Child", "Adult"); the displayed `value`
+  # ("Child") is the FIRST factor level. Before the fix, emmeans modeled
+  # P(last level = "Adult"), flipping the sign of the displayed P(Child).
+  df_titanic <- as.data.frame(Titanic)
+  df_titanic <- df_titanic[rep(seq_len(nrow(df_titanic)), df_titanic$Freq), ]
+  prop_tbl <- prop.table(table(df_titanic$Age, df_titanic$Survived), margin = 2)
+  expected_diff <- unname(prop_tbl["Child", "No"] - prop_tbl["Child", "Yes"])
+
+  est_child <-
+    suppressWarnings(
+      tbl_svysummary(svy_titanic, by = Survived, value = list(Age = "Child"), include = Age) |>
+        add_difference(test = list(Age ~ "emmeans"))
+    )$table_body |>
+    dplyr::filter(.data$variable == "Age", .data$row_type == "label") |>
+    dplyr::pull("estimate")
+
+  # estimate must reflect P(Child | group1) - P(Child | group2) (correct sign)
+  expect_equal(est_child, expected_diff, tolerance = 1e-6)
+})
+
+test_that("add_difference.tbl_svysummary(levels) selects two groups when by has 3+ levels", {
+  skip_if_pkg_not_installed("broom", ref = "cardx")
+
+  # selecting two groups from a 3-level `by` runs without error and keeps all stat cols
+  expect_error(
+    tbl_diff <-
+      svy_trial |>
+      tbl_svysummary(by = grade, include = c(age, marker), missing = "no") |>
+      add_difference(levels = c("I", "III")),
+    NA
+  )
+  # all 3 original stat columns are retained
+  expect_equal(
+    sum(grepl("^stat_\\d+$", tbl_diff$table_styling$header$column)),
+    3L
+  )
+  # difference result columns are added (estimate, CI, p-value)
+  expect_true(all(c("estimate", "conf.low", "conf.high", "p.value") %in% names(tbl_diff$table_body)))
+
+  # the returned object retains the original full design (not the subset)
+  expect_true(inherits(tbl_diff$inputs$data, "survey.design"))
+  expect_equal(nrow(tbl_diff$inputs$data$variables), nrow(trial))
+  expect_setequal(
+    as.character(unique(tbl_diff$inputs$data$variables$grade)),
+    as.character(unique(trial$grade))
+  )
+
+  # estimate equals levels[1] - levels[2] (I - III)
+  est_I_III <-
+    tbl_diff$cards$add_difference$age |>
+    dplyr::filter(stat_name == "estimate") |>
+    dplyr::pull("stat") |>
+    unlist()
+  expected <-
+    svy_trial |>
+    subset(grade %in% c("I", "III")) |>
+    (\(d) {
+      d$variables$grade <- factor(as.character(d$variables$grade), levels = c("I", "III"))
+      survey::svyttest(age ~ grade, design = d)
+    })() |>
+    getElement("estimate") |>
+    unname()
+  expect_equal(est_I_III, expected, ignore_attr = TRUE)
+})
+
+test_that("add_difference.tbl_svysummary(levels) flips sign when levels are reversed", {
+  skip_if_pkg_not_installed("broom", ref = "cardx")
+
+  est_fun <- function(lvls) {
+    svy_trial |>
+      tbl_svysummary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = lvls) |>
+      getElement("cards") |>
+      getElement("add_difference") |>
+      getElement("age") |>
+      dplyr::filter(stat_name == "estimate") |>
+      dplyr::pull("stat") |>
+      unlist()
+  }
+  expect_equal(est_fun(c("I", "III")), -est_fun(c("III", "I")))
+})
+
+test_that("add_difference.tbl_svysummary(levels) works for two-level by (flip direction)", {
+  skip_if_pkg_not_installed("broom", ref = "cardx")
+
+  est_fun <- function(...) {
+    svy_trial |>
+      tbl_svysummary(by = trt, include = age, missing = "no") |>
+      add_difference(...) |>
+      getElement("cards") |>
+      getElement("add_difference") |>
+      getElement("age") |>
+      dplyr::filter(stat_name == "estimate") |>
+      dplyr::pull("stat") |>
+      unlist()
+  }
+  est_default <- est_fun()
+  est_flip <- est_fun(levels = c("Drug B", "Drug A"))
+  expect_equal(est_default, -est_flip)
+
+  # supplying levels in the default order matches the default output
+  est_same <- est_fun(levels = c("Drug A", "Drug B"))
+  expect_equal(est_default, est_same)
+})
+
+test_that("add_difference.tbl_svysummary(levels) validation errors", {
+  # 3+ levels and no `levels` -> informative error pointing to `levels`
+  expect_error(
+    svy_trial |>
+      tbl_svysummary(by = grade, include = age, missing = "no") |>
+      add_difference(),
+    "levels"
+  )
+  # wrong length
+  expect_error(
+    svy_trial |>
+      tbl_svysummary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = "I"),
+    "length-two"
+  )
+  # non-existent level
+  expect_error(
+    svy_trial |>
+      tbl_svysummary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = c("I", "X")),
+    "not present|one of"
+  )
+  # duplicated level
+  expect_error(
+    svy_trial |>
+      tbl_svysummary(by = grade, include = age, missing = "no") |>
+      add_difference(levels = c("I", "I")),
+    "distinct"
+  )
+})
+
+test_that("add_difference.tbl_svysummary(levels) adds footnote naming compared pair", {
+  skip_if_pkg_not_installed("broom", ref = "cardx")
+
+  tbl_diff <-
+    svy_trial |>
+    tbl_svysummary(by = grade, include = age, missing = "no") |>
+    add_difference(levels = c("I", "III"))
+  footnotes <- tbl_diff$table_styling$footnote_header$footnote
+  expect_true(any(grepl("I - III", footnotes)))
 })
 

@@ -25,8 +25,10 @@ and assist in escaping special characters in LaTeX and HTML tables.
 These function assist in the creations of tables via \code{as_kable_extra()}.
 }
 \examples{
+\dontshow{if (gtsummary:::is_pkg_installed("kableExtra")) withAutoprint(\{ # examplesIf}
 .escape_latex(c("\%", "{test}"))
 .escape_html(c(">0.9", "line\nbreak"))
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{as_kable_extra()}

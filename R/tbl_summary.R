@@ -24,7 +24,7 @@
 #'   or function(s). If not specified, default formatting is assigned
 #'   via `assign_summary_digits()`. See below for details.
 #' @param type ([`formula-list-selector`][syntax])\cr
-#'   Specifies the summary type. Accepted value are
+#'   Specifies the summary type. Accepted values are
 #'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
 #'   If not specified, default type is assigned via
 #'   `assign_summary_type()`. See below for details.
@@ -38,7 +38,12 @@
 #'   See below for details.
 #' @param missing,missing_text,missing_stat
 #'   Arguments dictating how and if missing values are presented:
-#'   - `missing`: must be one of `c("ifany", "no", "always")`.
+#'   - `missing`: specifies whether to include a row of missing/`NA` counts.
+#'     Provide a ([`formula-list-selector`][syntax]) where each variable is
+#'     assigned one of `c("ifany", "no", "always")` (e.g.
+#'     `missing = list(age ~ "always", grade ~ "no")` or
+#'     `missing = everything() ~ "no"`). The default is `everything() ~ "ifany"`,
+#'     which adds a missing row only for variables that have missing values.
 #'   - `missing_text`: string indicating text shown on missing row. Default is `"Unknown"`.
 #'   - `missing_stat`: statistic to show on missing row. Default is `"{N_miss}"`.
 #'     Possible values are `N_miss`, `N_obs`, `N_nonmiss`, `p_miss`, `p_nonmiss`.
@@ -95,7 +100,7 @@
 #' }
 #'
 #' @section digits argument:
-#' The digits argument specifies the the number of digits (or formatting function)
+#' The digits argument specifies the number of digits (or formatting function)
 #' statistics are rounded to.
 #'
 #' The values passed can either be a single integer, a vector of integers, a
@@ -106,7 +111,17 @@
 #' `list(label_style_number(digits=1), label_style_number(digits=1))`.
 #'
 #' Named lists are also accepted to change the default formatting for a single
-#' statistic, e.g. `list(sd = label_style_number(digits=1))`.
+#' statistic, e.g. `list(sd = label_style_number(digits=1))`. The names may be
+#' any statistic shown in the table, including the statistics on the missing row,
+#' e.g. `list(p_miss = 2)`.
+#'
+#' Named and unnamed values may be combined: the unnamed values are first assigned
+#' to the statistics in the order they appear (recycling as needed), and the named
+#' values then update the formatting of the named statistics.
+#' For example, with `statistic = age ~ "{median} ({p25}, {p75})"` and
+#' `missing_stat = "{N_miss} ({p_miss}%)"`, passing `digits = age ~ list(2, p_miss = 2)`
+#' rounds the median and IQR to two decimal places and the percent missing to two
+#' decimal places.
 #'
 #' @section type and value arguments:
 #' There are four summary types. Use the `type` argument to change the default summary types.
@@ -166,7 +181,7 @@ tbl_summary <- function(data,
                         digits = NULL,
                         type = NULL,
                         value = NULL,
-                        missing = c("ifany", "no", "always"),
+                        missing = everything() ~ "ifany",
                         missing_text = "Unknown",
                         missing_stat = "{N_miss}",
                         sort = all_categorical(FALSE) ~ "alphanumeric",
@@ -185,18 +200,21 @@ tbl_summary <- function(data,
     by,
     allow_empty = TRUE,
     message = c("The {.arg {arg_name}} argument must be length {.val {1}} or empty.",
-                i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
+      i = "Use {.fun tbl_strata} for more than one {.arg by} variable."
     )
   )
   data <- dplyr::ungroup(data) |> .drop_missing_by_obs(by = by) # styler: off
   include <- setdiff(include, by) # remove by variable from list vars included
 
 
+  # resolve `missing` from theme/default; per-variable processing happens below
+  # alongside the other formula-selector arguments
   if (missing(missing)) {
     missing <- get_theme_element("tbl_summary-arg:missing", default = missing) # styler: off
   }
-
-  missing <- arg_match(missing, values = c("ifany", "no", "always"))
+  # 2026-06-29: `missing=` accepts list/formula + tidyselect (per-variable).
+  # A bare string is supported shorthand (for now) for `everything() ~ <string>`.
+  missing <- .normalize_missing_arg(missing)
 
   if (missing(missing_text)) {
     missing_text <- get_theme_element("tbl_summary-arg:missing_text", default = translate_string(missing_text)) # styler: off
@@ -214,8 +232,7 @@ tbl_summary <- function(data,
   }
   if (is.character(percent)) {
     percent <- arg_match(percent, values = c("column", "row", "cell"))
-  }
-  else if (is.data.frame(percent)) {
+  } else if (is.data.frame(percent)) {
     if (!is_empty(by) && !by %in% names(percent)) {
       cli::cli_abort(
         "The {.cls data.frame} passed in the {.arg percent} argument must contain the {.val {by}} column.",
@@ -229,8 +246,7 @@ tbl_summary <- function(data,
         call = get_cli_abort_call()
       )
     }
-  }
-  else if (!is_integerish(percent)) {
+  } else if (!is_integerish(percent)) {
     cli::cli_abort(
       "The {.arg percent} argument must be one of {.val {c('column', 'row', 'cell')}} ({.emph the most common input}),
          or a {.cls data.frame} or {.cls integer}; not a {.obj_type_friendly {percent}}.",
@@ -248,6 +264,10 @@ tbl_summary <- function(data,
   )
 
 
+  # compute the default dichotomous value for each variable once; reused below by
+  # `assign_summary_type()` (type inference) and `.assign_default_values()`
+  dichotomous_values <- lapply(data[include], .get_default_dichotomous_value)
+
   # assign summary type --------------------------------------------------------
   type <-
     case_switch(
@@ -257,7 +277,7 @@ tbl_summary <- function(data,
   if (!is_empty(type)) {
     # first set default types, so selectors like `all_continuous()` can be used
     # to recast the summary type, e.g. make all continuous type "continuous2"
-    default_types <- assign_summary_type(data, include, value)
+    default_types <- assign_summary_type(data, include, value, dichotomous_values = dichotomous_values)
     # process the user-passed type argument
     cards::process_formula_selectors(
       data = scope_table_body(.list2tb(default_types, "var_type"), data[include]),
@@ -266,17 +286,22 @@ tbl_summary <- function(data,
     # fill in any types not specified by user
     type <- utils::modifyList(default_types, type)
   } else {
-    type <- assign_summary_type(data, include, value)
+    type <- assign_summary_type(data, include, value, dichotomous_values = dichotomous_values)
   }
 
+  # scope the table body once and reuse it across the argument-processing calls
+  # below (pure CSE: `type` and `data[include]` are unchanged in this window)
+  tb_var_type <- .list2tb(type, "var_type")
+  scoped_include <- scope_table_body(tb_var_type, data[include])
+
   value <-
-    scope_table_body(.list2tb(type, "var_type"), data[include]) |>
-    .assign_default_values(value, type)
+    scoped_include |>
+    .assign_default_values(value, type, default_values = dichotomous_values)
 
   # evaluate the remaining list-formula arguments ------------------------------
   # processed arguments are saved into this env
   cards::process_formula_selectors(
-    data = scope_table_body(.list2tb(type, "var_type"), data[include]),
+    data = scoped_include,
     statistic =
       case_switch(
         missing(statistic) ~ get_theme_element("tbl_summary-arg:statistic", default = statistic),
@@ -289,7 +314,7 @@ tbl_summary <- function(data,
   statistic <- .add_env_to_list_elements(statistic, env = caller_env())
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     label =
       case_switch(
         missing(label) ~ get_deprecated_theme_element("tbl_summary-arg:label", default = label),
@@ -303,29 +328,33 @@ tbl_summary <- function(data,
   )
 
   cards::process_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     digits =
       case_switch(
         missing(digits) ~ get_theme_element("tbl_summary-arg:digits", default = digits),
         .default = digits
-      )
+      ),
+    missing = missing
   )
 
   # fill in unspecified variables
   cards::fill_formula_selectors(
-    scope_table_body(.list2tb(type, "var_type"), data[include]),
+    scoped_include,
     statistic =
       get_theme_element("tbl_summary-arg:statistic", default = eval(formals(gtsummary::tbl_summary)[["statistic"]])),
     sort =
       get_theme_element("tbl_summary-arg:sort", default = eval(formals(gtsummary::tbl_summary)[["sort"]])),
     digits =
-      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]]))
+      get_theme_element("tbl_summary-arg:digits", default = eval(formals(gtsummary::tbl_summary)[["digits"]])),
+    missing =
+      get_theme_element("tbl_summary-arg:missing", default = eval(formals(gtsummary::tbl_summary)[["missing"]])) |>
+        .normalize_missing_arg()
   )
 
   # fill each element of digits argument
   if (!missing(digits)) {
     digits <-
-      scope_table_body(.list2tb(type, "var_type"), data[include]) |>
+      scoped_include |>
       assign_summary_digits(statistic, type, digits = digits)
   }
 
@@ -335,17 +364,28 @@ tbl_summary <- function(data,
   .check_haven_labelled(data[c(include, by)])
   .check_tbl_summary_args(
     data = data, label = label, statistic = statistic,
-    digits = digits, type = type, value = value, sort = sort
+    digits = digits, type = type, value = value,
+    missing = missing, sort = sort
   )
   .check_statistic_type_agreement(statistic, type)
 
   # sort requested columns by frequency
   data <- .sort_data_infreq(data, sort)
 
+  # scope the (post-sort) full data once and reuse it across the `ard_*()` calls
+  # below; built after the sort so frequency reordering is captured
+  scoped_data <- scope_table_body(tb_var_type, data)
+
   # save processed function inputs ---------------------------------------------
+  # drop internal working objects that are not `tbl_summary()` arguments, so the
+  # saved inputs can be replayed as a call (e.g. by `add_overall()`)
   tbl_summary_inputs <-
     as.list(environment()) |>
-    utils::modifyList(list(default_types = NULL))
+    utils::modifyList(list(
+      default_types = NULL, tb_var_type = NULL,
+      scoped_include = NULL, scoped_data = NULL,
+      dichotomous_values = NULL
+    ))
   call <- match.call()
 
 
@@ -354,7 +394,7 @@ tbl_summary <- function(data,
     cards::bind_ard(
       # tabulate categorical summaries
       cards::ard_tabulate(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_categorical(FALSE),
         fmt_fun = digits,
@@ -363,7 +403,7 @@ tbl_summary <- function(data,
       ),
       # tabulate dichotomous summaries
       cards::ard_tabulate_value(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_dichotomous(),
         fmt_fun = digits,
@@ -373,22 +413,22 @@ tbl_summary <- function(data,
       ),
       # calculate continuous summaries
       cards::ard_summary(
-        scope_table_body(.list2tb(type, "var_type"), data),
+        scoped_data,
         by = all_of(by),
         variables = all_continuous(),
         statistic =
           .continuous_statistics_chr_to_fun(
-            statistic[select(scope_table_body(.list2tb(type, "var_type"), data), all_continuous()) |> names()]
+            statistic[select(scoped_data, all_continuous()) |> names()]
           ),
         fmt_fun = digits,
         stat_label = ~ default_stat_labels()
       ),
       cards::ard_attributes(data, variables = all_of(c(include, by)), label = label),
       cards::ard_missing(data,
-                         variables = all_of(include),
-                         by = all_of(by),
-                         fmt_fun = digits,
-                         stat_label = ~ default_stat_labels()
+        variables = all_of(include),
+        by = all_of(by),
+        fmt_fun = digits,
+        stat_label = ~ default_stat_labels()
       ),
       # adding total N
       cards::ard_total_n(
@@ -448,9 +488,11 @@ tbl_summary <- function(data,
         ifelse(
           is_empty(by),
           get_theme_element("tbl_summary-str:header-noby",
-                            default = "**N = {style_number(N)}**"),
+            default = "**N = {style_number(N)}**"
+          ),
           get_theme_element("tbl_summary-str:header-withby",
-                            default = "**{level}**  \nN = {style_number(n)}")
+            default = "**{level}**  \nN = {style_number(n)}"
+          )
         )
     )
 
@@ -466,7 +508,7 @@ tbl_summary <- function(data,
 
 .add_gts_column_to_cards_summary <- function(cards, variables, by) {
   if ("gts_column" %in% names(cards)) {
-    cli::cli_inform("The {.val gts_column} column is alread present. Defining the column has been skipped.")
+    cli::cli_inform("The {.val gts_column} column is already present. Defining the column has been skipped.")
     return(cards)
   }
 
@@ -498,7 +540,7 @@ tbl_summary <- function(data,
           ),
         by = names(dplyr::select(., cards::all_ard_groups(), "variable", "context"))
       )}
-    #styler: on
+    # styler: on
   }
 
   cards
@@ -566,27 +608,76 @@ tbl_summary <- function(data,
 }
 
 .construct_summary_footnote <- function(card, include, statistic, type) {
-  include |>
-    lapply(
-      function(variable) {
-        if (type[[variable]] %in% "continuous2") {
-          return(NULL)
-        }
-        card |>
-          dplyr::filter(.data$variable %in% .env$variable) |>
-          dplyr::select("stat_name", "stat_label") |>
-          dplyr::distinct() %>%
-          {stats::setNames(as.list(.$stat_label), .$stat_name)} |> # styler: off
-          glue::glue_data(
-            gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = statistic[[variable]])
-          )
+  if (is.null(card) || length(include) == 0L) {
+    return(NULL)
+  }
+
+  # `continuous2` variables carry their statistic labels in the table body
+  # instead of a footnote, so they contribute nothing here
+  vars <- include[!vapply(include, function(v) isTRUE(type[[v]] %in% "continuous2"), logical(1L))]
+  if (length(vars) == 0L) {
+    return(NULL)
+  }
+
+  card_vars <- card[["variable"]]
+  card_stat_name <- card[["stat_name"]]
+  card_stat_label <- card[["stat_label"]]
+
+  if (is.null(card_vars) || is.null(card_stat_name) || is.null(card_stat_label)) {
+    return(NULL)
+  }
+
+  keep_idx <- which(card_vars %in% vars)
+  if (length(keep_idx) == 0L) {
+    return(NULL)
+  }
+
+  sub_var <- card_vars[keep_idx]
+  sub_name <- card_stat_name[keep_idx]
+  sub_label <- card_stat_label[keep_idx]
+
+  # one (stat_name, stat_label) pair per variable, replacing a per-variable
+  # `dplyr::filter() |> distinct()` with a single pass over the ARD. `glue_data()`
+  # resolves a duplicated name to its first entry, so keeping the first match
+  # here matches the previous `distinct()` behavior.
+  unique_idx <- which(!duplicated(paste0(sub_var, "\r", sub_name)))
+  u_var <- sub_var[unique_idx]
+  u_name <- sub_name[unique_idx]
+  u_label <- sub_label[unique_idx]
+
+  var_labels <- split(stats::setNames(as.list(u_label), u_name), factor(u_var, levels = unique(u_var)))
+
+  # a homogeneous table repeats the same statistic template across every
+  # variable, so the `glue_data()` evaluation below is memoized
+  cache <- new.env(parent = emptyenv())
+  res <- vector("list", length(vars))
+  for (i in seq_along(vars)) {
+    v <- vars[[i]]
+    stat_raw <- statistic[[v]]
+    if (is.null(stat_raw) || length(stat_raw) == 0L) next
+    stat_clean <- gsub("\\{(p|p_miss|p_nonmiss|p_unweighted)\\}%", "{\\1}", x = stat_raw)
+    map <- var_labels[[v]]
+    if (is.null(map)) map <- list()
+
+    key <- paste(c(stat_clean, names(map), as.character(map)), collapse = "\r")
+    cached_val <- cache[[key]]
+    if (is.null(cached_val)) {
+      if (length(stat_clean) == 1L) {
+        cached_val <- as.character(glue::glue_data(map, stat_clean))
+      } else {
+        cached_val <- vapply(stat_clean, function(s) as.character(glue::glue_data(map, s)), character(1L), USE.NAMES = FALSE)
       }
-    ) |>
-    stats::setNames(include) |>
-    compact() |>
-    unlist() |>
-    unique() %>%
-    {switch(!is.null(.), paste(., collapse = "; "))} # styler: off
+      cache[[key]] <- cached_val
+    }
+    res[[i]] <- cached_val
+  }
+
+  # unique footnote text across all variables, collapsed into a single string
+  out <- unique(unlist(res, use.names = FALSE))
+  if (length(out) == 0L) {
+    return(NULL)
+  }
+  paste(out, collapse = "; ")
 }
 
 
@@ -595,7 +686,7 @@ tbl_summary <- function(data,
   names(x)[unlist(x) %in% type]
 }
 
-.assign_default_values <- function(data, value, type) {
+.assign_default_values <- function(data, value, type, default_values = NULL) {
   lapply(
     names(data),
     function(variable) {
@@ -608,16 +699,23 @@ tbl_summary <- function(data,
         return(NULL)
       }
 
-      # otherwise, return default value
-      default_value <- .get_default_dichotomous_value(data[[variable]])
+      # otherwise, return default value (use pre-computed value when available)
+      default_value <-
+        if (!is.null(default_values)) {
+          default_values[[variable]]
+        } else {
+          .get_default_dichotomous_value(data[[variable]])
+        }
       if (!is.null(default_value)) {
         return(default_value)
       }
-      cli::cli_abort(c(
-        "Error in argument {.arg value} for variable {.val {variable}}.",
-        "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
-      ),
-      call = get_cli_abort_call())
+      cli::cli_abort(
+        c(
+          "Error in argument {.arg value} for variable {.val {variable}}.",
+          "i" = "Summary type is {.val dichotomous} but no summary value has been assigned."
+        ),
+        call = get_cli_abort_call()
+      )
     }
   ) |>
     stats::setNames(names(data))
@@ -715,7 +813,7 @@ tbl_summary <- function(data,
 }
 
 
-.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL) {
+.check_tbl_summary_args <- function(data, label, statistic, digits, type, value, sort = NULL, missing = NULL) {
   # first check the structure of each of the inputs ----------------------------
   type_accepted <- c("continuous", "continuous2", "categorical", "dichotomous")
 
@@ -750,6 +848,11 @@ tbl_summary <- function(data,
     error_msg = "Error in argument {.arg {arg_name}} for column {.val {variable}}: value must be one of {.val {c('alphanumeric', 'frequency')}}."
   )
 
+  cards::check_list_elements(
+    x = missing,
+    predicate = function(x) is_string(x) && x %in% c("ifany", "no", "always"),
+    error_msg = "Error in argument {.arg missing} for column {.val {variable}}: value must be one of {.val {c('ifany', 'no', 'always')}}."
+  )
 }
 
 .check_statistic_type_agreement <- function(statistic, type) {
@@ -763,8 +866,7 @@ tbl_summary <- function(data,
           msg <- c(msg, i = "Did you mean to set {.code type = list({variable} = {.val continuous2})} for a multi-line summary?")
         }
         cli::cli_abort(msg, call = get_cli_abort_call())
-      }
-      else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
+      } else if (type[[variable]] %in% "continuous2" && !is.character(stat)) {
         cli::cli_abort(
           "The {.arg statistic} argument value for variable {.val {variable}} must be {.cls character}, but is {.obj_type_friendly {stat}}.",
           call = get_cli_abort_call()
@@ -772,4 +874,16 @@ tbl_summary <- function(data,
       }
     }
   )
+}
+
+# 2026-06-29: the `missing=` argument accepts list/formula + tidyselect syntax
+# (per-variable). A bare string remains supported shorthand (for now) for
+# `everything() ~ <string>`. This helper normalizes a scalar string to that
+# formula so it can flow through `process_formula_selectors()` like the other
+# per-variable arguments.
+.normalize_missing_arg <- function(missing) {
+  if (is_string(missing)) {
+    return(inject(everything() ~ !!missing))
+  }
+  missing
 }

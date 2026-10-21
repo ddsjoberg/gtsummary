@@ -29,7 +29,7 @@ list(fit1, fit2) |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other tbl_survfit tools: 
-\code{\link{add_p.tbl_survfit}()}
+Other tbl_survfit tools:
+\code{\link[=add_p.tbl_survfit]{add_p.tbl_survfit()}}
 }
 \concept{tbl_survfit tools}

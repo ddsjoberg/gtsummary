@@ -98,4 +98,12 @@ test_that("add_overall.tbl_summary() messaging", {
       add_stat_label(label = mpg ~ "UPDATED!") |>
       add_overall()
   )
+
+  # Running add_overall() twice
+  expect_snapshot(
+    error = TRUE,
+    tbl_summary(trial, include = age, by = trt) |>
+      add_overall() |>
+      add_overall()
+  )
 })

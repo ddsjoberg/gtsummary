@@ -129,7 +129,7 @@ tbl_ard_strata2 <- function(cards,
     dplyr::rename(!!!syms(new_strata_names)) |>
     dplyr::rowwise() |>
     dplyr::mutate(
-      data = cards::as_card(.data$data) |> list(),
+      data = cards::as_card(.data$data, check = FALSE) |> list(),
       strata = paste(!!!syms(names(new_strata_names)), sep = .sep),
       header = glue::glue(.header)
     ) |>

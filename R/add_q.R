@@ -15,7 +15,7 @@
 #'
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
-#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom.helpers", "parameters"))
+#' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && gtsummary:::is_pkg_installed(c("broom.helpers", "parameters", "car"))
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-
 #'   trial |>
@@ -40,7 +40,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
 
   # deprecation ----------------------------------------------------------------
   if (!is_empty(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::add_q(quiet)"
     )

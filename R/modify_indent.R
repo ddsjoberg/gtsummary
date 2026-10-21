@@ -34,21 +34,21 @@ modify_indent <- function(x, columns, rows = NULL, indent = 4L,
   if (!missing(double_indent) || !missing(undo)) {
     check_pkg_installed("withr")
     if (!missing(double_indent)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_stop(
         when = "2.0.0",
         what = I(glue("modify_indent(double_indent={double_indent})")),
         with = I(glue("modify_indent(indent={ifelse(double_indent, 8, 4)})"))
       )
     } else double_indent <- FALSE
     if (!missing(undo) && isTRUE(undo)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_stop(
         when = "2.0.0",
         what = I(glue("modify_indent(undo=TRUE)")),
         with = I("modify_indent(indent=0)")
       )
     }
     else if (!missing(undo) && isFALSE(undo)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_stop(
         when = "2.0.0",
         what = I(glue("modify_indent(undo)")),
         details = "Argument has been ignored."
@@ -87,15 +87,15 @@ modify_indent <- function(x, columns, rows = NULL, indent = 4L,
 
 .modify_indent <- function(x, columns, rows = NULL, indent = 4L) {
   # update hidden status -------------------------------------------------------
+  lst_new <- list(
+    column = columns,
+    rows = list(enquo(rows)),
+    n_spaces = as.integer(indent)
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$indent <-
-    dplyr::bind_rows(
-      x$table_styling$indent,
-      dplyr::tibble(
-        column = columns,
-        rows = list(enquo(rows)),
-        n_spaces = as.integer(indent)
-      )
-    )
+    dplyr::bind_rows(x$table_styling$indent, new_rows)
 
   # return gtsummary table -----------------------------------------------------
   x

@@ -713,7 +713,8 @@ test_that("add_ci(method) messaging", {
 
 test_that("add_ci() correctly handles dichotomous variables", {
   expect_silent(
-    tbl <- tbl_svysummary(
+    tbl <-
+    tbl_svysummary(
       svy_trial,
       include = c(response, grade),
       value = list(response = 0, grade = "III"),
