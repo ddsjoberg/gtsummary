@@ -22,8 +22,10 @@
 #'   Use the `show_header_names()` to see the column names that can be modified.
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether text will be interpreted with
-#'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default) or `"html"`.
-#'   Applies to tables printed with `{gt}`.
+#'   [`gt::md()`] or [`gt::html()`]. Must be `"md"` (default), `"html"`, or
+#'   `"none"`. `"none"` applies no interpretation, rendering the text verbatim
+#'   (useful when the text contains markdown-significant characters). Applies to tables
+#'   printed with `{gt}`.
 #' @param level (`integer`)\cr
 #'   An integer specifying which level to place the spanning header.
 #' @param columns ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
@@ -77,7 +79,7 @@ NULL
 
 #' @name modify
 #' @export
-modify_header <- function(x, ..., text_interpret = c("md", "html"),
+modify_header <- function(x, ..., text_interpret = c("md", "html", "none"),
                           quiet, update) {
   set_cli_abort_call()
 
@@ -94,7 +96,15 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
     )
 
 
-  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  # when the dots are all plainly named (no formulas needing tidyselect), the
+  # cards named-list branch reduces to keep-last-duplicate + drop-unknown-names
+  # (see cards::compute_formula_selector()), so the scoped data isn't needed
+  if (is_empty(dots) || is_named(dots)) {
+    dots <- dots[rev(!duplicated(rev(names(dots))))]
+    dots <- dots[intersect(names(dots), names(x$table_body))]
+  } else {
+    cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  }
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x),
@@ -124,7 +134,7 @@ modify_header <- function(x, ..., text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
+modify_spanning_header <- function(x, ..., text_interpret = c("md", "html", "none"),
                                    level = 1L,
                                    quiet, update) {
   set_cli_abort_call()
@@ -145,7 +155,15 @@ modify_spanning_header <- function(x, ..., text_interpret = c("md", "html"),
   dots <- rlang::dots_list(...)
   dots <- .deprecate_modify_update_and_quiet_args(dots, update, quiet, calling_fun = "modify_spanning_header")
 
-  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  # when the dots are all plainly named (no formulas needing tidyselect), the
+  # cards named-list branch reduces to keep-last-duplicate + drop-unknown-names
+  # (see cards::compute_formula_selector()), so the scoped data isn't needed
+  if (is_empty(dots) || is_named(dots)) {
+    dots <- dots[rev(!duplicated(rev(names(dots))))]
+    dots <- dots[intersect(names(dots), names(x$table_body))]
+  } else {
+    cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  }
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x) || is.na(x),
@@ -210,17 +228,17 @@ remove_spanning_header <- function(x, columns = everything(), level = 1L) {
 
 .modify_spanning_header <- function(x, columns, spanning_header, level = 1L, text_interpret = "md", remove = FALSE) {
   # add updates to `x$table_styling$spanning_header` ---------------------------
+  lst_new <- list(
+    level = level,
+    column = columns,
+    spanning_header = unname(spanning_header),
+    text_interpret = .interpret_fun(text_interpret),
+    remove = remove
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$spanning_header <-
-    x$table_styling$spanning_header |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        level = level,
-        column = columns,
-        spanning_header = unname(spanning_header),
-        text_interpret = paste0("gt::", text_interpret),
-        remove = remove
-      )
-    )
+    dplyr::bind_rows(x$table_styling$spanning_header, new_rows)
 
   # return table ---------------------------------------------------------------
   x
@@ -235,14 +253,14 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
 
   # deprecated arguments -------------------------------------------------------
   if (!missing(include_example)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::show_header_names(include_example)",
       details = "Argument has been ignored."
     )
   }
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::show_header_names(quiet)",
       details = "Argument has been ignored."
@@ -336,29 +354,35 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
   # only keep values that are in the table_body
   dots <- dots[intersect(names(dots), x$table_styling$header$column)]
 
-  df_header_subset <-
-    x$table_styling$header |>
-    dplyr::select("column", starts_with("modify_stat_")) |>
-    dplyr::rename_with(
-      .fn = function(x) gsub("^modify_stat_", "", x),
-      .cols = starts_with("modify_stat_")
-    )
+  header <- x$table_styling$header
+  stat_cols <- names(header)[startsWith(names(header), "modify_stat_")]
+  # glue data (one column per modify_stat_*) is only needed when a value contains
+  # glue syntax, so build it lazily on first use
+  df_header_subset <- NULL
 
   imap(
     dots,
     function(value, variable) {
-      df_header_subset <-
-        df_header_subset |>
-        dplyr::filter(.data$column %in% .env$variable) |>
-        dplyr::select(-"column")
+      # fast path: a constant string (no glue braces to interpolate) is returned
+      # by `glue::glue()` unchanged, so skip the per-column dplyr/glue evaluation
+      if (length(value) == 1L && !is.na(value) && !grepl("[{}\n\r]", value)) {
+        return(glue::as_glue(value))
+      }
+      # fast path: `NA` values evaluate to `NA_character_` (previously the
+      # `is.na(value) ~ NA_character_` branch of the `case_switch()`)
+      if (length(value) == 1L && is.na(value)) {
+        return(NA_character_)
+      }
+
+      if (is.null(df_header_subset)) {
+        df_header_subset <<- header[stat_cols]
+        names(df_header_subset) <<- sub("^modify_stat_", "", stat_cols)
+      }
 
       glued_value <-
         cards::eval_capture_conditions(
-          case_switch(
-            is.na(value) ~ NA_character_,
-            .default = expr(glue::glue(value))
-          ),
-          data = df_header_subset
+          expr(glue::glue(value)),
+          data = df_header_subset[match(variable, header$column), ]
         )
 
       if (!is.null(glued_value$result)) {
@@ -378,7 +402,7 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
 .deprecate_modify_update_and_quiet_args <- function(dots, update, quiet, calling_fun) {
   # deprecated arguments
   if (!missing(update) || (!is_empty(dots) && is.list(dots[[1]]))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "2.0.0", glue("gtsummary::{calling_fun}(update=)"),
       details =
         glue("Use `{calling_fun}(...)` input instead.
@@ -392,7 +416,7 @@ show_header_names <- function(x, show_hidden = FALSE, include_example, quiet) {
     dots
   }
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "2.0.0", glue("gtsummary::{calling_fun}(quiet=)"),
       details = "Argument has been ignored."
     )

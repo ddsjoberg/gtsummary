@@ -43,7 +43,7 @@ navbar:
   left:
   - icon: fa-home
     href: index.html
-    aria-label: View on CRAN
+    aria-label: Home
   - text: Reference
     href: reference/index.html
   - text: Articles
@@ -54,6 +54,8 @@ navbar:
       href: articles/tbl_regression.html
     - text: "gtsummary + Quarto/Rmarkdown"
       href: articles/rmarkdown.html
+    - text: "ARD-first / Clinical Tables"
+      href: articles/tbl_ard-functions.html
     - text: "FAQ + gallery"
       href: articles/gallery.html
     - text: "cheat sheet"
@@ -98,6 +100,7 @@ reference:
       - sort_hierarchical
       - filter_hierarchical
       - add_overall.tbl_hierarchical
+      - add_difference.tbl_hierarchical
   - subtitle: Likert Summary Tables
   - contents:
       - tbl_likert
@@ -160,6 +163,7 @@ reference:
       - as_kable_extra
       - as_hux_table
       - as_tibble.gtsummary
+      - save_flex_docx
 
   - title: Other Functions
   - subtitle: Head or Tail Tables
@@ -181,6 +185,7 @@ reference:
       - modify_abbreviation
       - modify_caption
       - update_header_stats
+      - modify_footnote_symbol
       - bold_italicize_labels_levels
       - bold_p
       - sort_filter_p

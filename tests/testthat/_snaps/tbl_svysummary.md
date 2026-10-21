@@ -271,7 +271,16 @@
       tbl_svysummary(svy_trial, missing = "NOT AN OPTION")
     Condition
       Error in `tbl_svysummary()`:
-      ! `missing` must be one of "ifany", "no", or "always", not "NOT AN OPTION".
+      ! Error in argument `missing` for column "trt": value must be one of "ifany", "no", and "always".
+
+# tbl_svysummary(missing) accepts formula-list-selector syntax
+
+    Code
+      tbl_svysummary(svy_trial, include = age, missing = everything() ~
+        "NOT AN OPTION")
+    Condition
+      Error in `tbl_svysummary()`:
+      ! Error in argument `missing` for column "age": value must be one of "ifany", "no", and "always".
 
 # tbl_svysummary(missing_text)
 

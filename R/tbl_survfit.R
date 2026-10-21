@@ -80,7 +80,7 @@
 #' but you can use stored formulas with `rlang::inject(survfit(!!my_formula, lung))`.
 #'
 #' @author Daniel D. Sjoberg
-#' @examplesIf gtsummary:::is_pkg_installed("survival")
+#' @examplesIf gtsummary:::is_pkg_installed(c("survival", "broom"))
 #' library(survival)
 #'
 #' # Example 1 ----------------------------------
@@ -121,7 +121,6 @@
 #'       ) |>
 #'       factor()
 #'   )
-#'
 #' survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) |>
 #'   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 NULL
@@ -200,13 +199,13 @@ tbl_survfit.list <- function(x,
 
   # deprecation ----------------------------------------------------------------
   if (!missing(quiet)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_survfit(quiet)"
     )
   }
   if (isTRUE(reverse)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::tbl_survfit(reverse)",
       details = "Please use `type='risk'` instead."
@@ -250,7 +249,11 @@ tbl_survfit.list <- function(x,
   }
   check_string(label_header)
   estimate_fun <- as_function(estimate_fun)
-  missing <- ifelse(missing(missing), "\U2014", check_string(missing))
+  if (missing(missing)) {
+    missing <- "\U2014"
+  } else {
+    check_string(missing)
+  }
   if (!is_empty(type)) type <- arg_match(type, values = c("survival", "risk", "cumhaz"))
 
   tbl_survfit_inputs <- as.list(environment())

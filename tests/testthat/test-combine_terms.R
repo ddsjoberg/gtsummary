@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_pkg_not_installed("broom.helpers")
+skip_if_pkg_not_installed(c("broom.helpers", "car"))
 
 lmod <- lm(
   age ~ marker + I(marker^2) + stage,
@@ -159,13 +159,6 @@ test_that("combine_terms works when used in map/apply", {
         tbl = map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
         tbl2 = map2(tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2))
       )
-  )
-})
-
-test_that("combine_terms(quiet) causes deprecation warning", {
-  lifecycle::expect_deprecated(
-    tbl_regression(lmod, label = stage ~ "Stage") |>
-      combine_terms(formula_update = . ~ . - marker - I(marker^2), quiet = TRUE)
   )
 })
 

@@ -18,7 +18,7 @@ and we are now adopting a more modern approach by using these features.
 As a result, the pre-formatted \code{"ci"} column will eventually be dropped from \code{.$table_body}.
 
 By using column merging, the \code{conf.low} and \code{conf.high} remain numeric
-and we can to continue to update how these columns are formatted, even after printing the table.
+and we can continue to update how these columns are formatted, even after printing the table.
 
 The \code{"ci"} column is hidden, meaning that it appears in \code{.$table_body}, but is not printed.
 This means that references to the column in your code will not error, but will likely not have the intended effect.

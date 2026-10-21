@@ -1,31 +1,6 @@
 skip_on_cran()
 skip_if_pkg_not_installed("broom.helpers")
 
-# first, testing deprecation
-test_that("modify_footnote(update,quiet) are deprecated", {
-  lifecycle::expect_deprecated(
-    tbl_summary(trial, include = marker) |>
-      modify_footnote(update = list(label = "Variable"))
-  )
-  lifecycle::expect_deprecated(
-    tbl_summary(trial, include = marker) |>
-      modify_footnote(quiet = FALSE)
-  )
-})
-
-test_that("modify_footnote(update) deprecated argument still works", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-  expect_equal(
-    tbl_summary(trial, include = marker) |>
-      modify_footnote(update = list(label = "Variable")) %>%
-      {.[c("table_body", "table_styling")]},
-    tbl_summary(trial, include = marker) |>
-      modify_footnote(label = "Variable") %>%
-      {.[c("table_body", "table_styling")]}
-  )
-})
-
-
 test_that("modify_footnote(...) works", {
   tbl <- tbl_summary(trial, include = "marker")
 

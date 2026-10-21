@@ -22,7 +22,10 @@
 #'
 #' @return Updated gtsummary object
 #' @name modify_footnote2
-#' @seealso [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+#' @seealso
+#'   [Footnotes vs Source Notes vs Abbreviations](https://www.danieldsjoberg.com/gtsummary/articles/modify-functions.html)
+#'
+#'   [`modify_footnote_symbol()`] to customize the symbols used to reference footnotes
 #'
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example 1 ----------------------------------
@@ -49,7 +52,7 @@ NULL
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_interpret = c("md", "html")) {
+modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_header = match.call()))
 
@@ -85,7 +88,7 @@ modify_footnote_header <- function(x, footnote, columns, replace = TRUE, text_in
 
 #' @export
 #' @rdname modify_footnote2
-modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, text_interpret = c("md", "html")) {
+modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -125,7 +128,7 @@ modify_footnote_body <- function(x, footnote, columns, rows, replace = TRUE, tex
 #' @rdname modify_footnote2
 modify_footnote_spanning_header <- function(x, footnote, columns,
                                             level = 1L, replace = TRUE,
-                                            text_interpret = c("md", "html")) {
+                                            text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote_body = match.call()))
 
@@ -267,6 +270,10 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
 # this checks the rows argument evaluates to a lgl in `x$table_body`
 .check_rows_input <- function(x, rows) {
   rows <- enquo(rows)
+  # literal logical constants (e.g. the `rows = TRUE` default) need no evaluation
+  if (!quo_is_missing(rows) && is.logical(quo_get_expr(rows))) {
+    return(invisible())
+  }
   # check rows evaluates to a logical
   rows_eval_error <-
     tryCatch(
@@ -289,16 +296,17 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
 .modify_footnote_header <- function(x, lst_footnotes, text_interpret = "md",
                                     replace = TRUE, remove = FALSE) {
   # add updates to `x$table_styling$footnote_header` ---------------------------
-  x$table_styling$footnote_header <- x$table_styling$footnote_header |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = names(lst_footnotes),
-        footnote = unlist(lst_footnotes) |> unname(),
-        text_interpret = paste0("gt::", text_interpret),
-        replace = replace,
-        remove = remove
-      )
-    )
+  lst_new <- list(
+    column = names(lst_footnotes),
+    footnote = unlist(lst_footnotes) |> unname(),
+    text_interpret = .interpret_fun(text_interpret),
+    replace = replace,
+    remove = remove
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
+  x$table_styling$footnote_header <-
+    dplyr::bind_rows(x$table_styling$footnote_header, new_rows)
 
   # return table ---------------------------------------------------------------
   x
@@ -307,17 +315,18 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
 .modify_footnote_body <- function(x, lst_footnotes, rows, text_interpret = "md",
                                   replace = TRUE, remove = FALSE) {
   # add updates to `x$table_styling$footnote_body` -----------------------------
-  x$table_styling$footnote_body <- x$table_styling$footnote_body |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = names(lst_footnotes),
-        rows = list(enquo(rows)),
-        footnote = unlist(lst_footnotes) |> unname(),
-        text_interpret = paste0("gt::", text_interpret),
-        replace = replace,
-        remove = remove
-      )
-    )
+  lst_new <- list(
+    column = names(lst_footnotes),
+    rows = list(enquo(rows)),
+    footnote = unlist(lst_footnotes) |> unname(),
+    text_interpret = .interpret_fun(text_interpret),
+    replace = replace,
+    remove = remove
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
+  x$table_styling$footnote_body <-
+    dplyr::bind_rows(x$table_styling$footnote_body, new_rows)
 
   # return table ---------------------------------------------------------------
   x
@@ -328,18 +337,18 @@ remove_footnote_spanning_header <- function(x, columns = everything(), level = 1
                                              text_interpret = "md",
                                              replace = TRUE, remove = FALSE) {
   # add updates to `x$table_styling$footnote_spanning_header` ------------------
+  lst_new <- list(
+    column = names(lst_footnotes),
+    footnote = unlist(lst_footnotes) |> unname(),
+    level = as.integer(level),
+    text_interpret = .interpret_fun(text_interpret),
+    replace = replace,
+    remove = remove
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$footnote_spanning_header <-
-    x$table_styling$footnote_spanning_header |>
-    dplyr::bind_rows(
-      dplyr::tibble(
-        column = names(lst_footnotes),
-        footnote = unlist(lst_footnotes) |> unname(),
-        level = as.integer(level),
-        text_interpret = paste0("gt::", text_interpret),
-        replace = replace,
-        remove = remove
-      )
-    )
+    dplyr::bind_rows(x$table_styling$footnote_spanning_header, new_rows)
 
   # return table ---------------------------------------------------------------
   x

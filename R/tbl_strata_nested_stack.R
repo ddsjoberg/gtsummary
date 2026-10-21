@@ -73,9 +73,9 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
         map(
           .data$data,
           ~cards::eval_capture_conditions(expr(.tbl_fun(.x))) |>
-            # print errors, if they occured
+            # print errors, if they occurred
             cards::captured_condition_as_error(
-              message = c("The following {type} occured while building a table:", x = "{condition}")
+              message = c("The following {type} occurred while building a table:", x = "{condition}")
             )
         )
     )
@@ -113,8 +113,26 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     ) |>
     set_names(strata)
 
-  df_headers <- lst_headers |>
-    reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y)))) |>
+  # join the per-level header tables; keep the raw strata columns for now so `tbls`
+  # can be aligned to the same ordering below
+  df_headers_full <- lst_headers |>
+    reduce(.f = \(.x, .y) dplyr::left_join(.x, .y, by = intersect(names(.x), names(.y))))
+
+  # `cards::nest_for_ard()` (which fixes the order of `tbls`) and the header pipeline
+  # above can order *character* strata differently (base C-locale vs. locale-aware
+  # collation). Re-order `tbls` to match the header order by matching on the strata
+  # level *values* rather than relying on positional alignment, which attaches counts
+  # to the wrong strata for non-factor variables (#2443).
+  tbls <- tbls[
+    vctrs::vec_match(
+      dplyr::mutate(df_headers_full[strata], across(everything(), as.character)),
+      df_tbls[paste0("group", seq_along(strata), "_level")] |>
+        set_names(strata) |>
+        dplyr::mutate(across(everything(), ~ as.character(unlist(.x))))
+    )
+  ]
+
+  df_headers <- df_headers_full |>
     dplyr::select(-all_of(strata)) |>
     dplyr::rename_with(.fn = ~str_remove(.x, "_strata$"))
 
@@ -129,12 +147,26 @@ tbl_strata_nested_stack <- function(data, strata, .tbl_fun, ..., row_header = "{
     ) |>
     dplyr::pull(".....strata.....")
 
+  # NA-out repeated header values so that the later `pivot_longer() |> drop_na()`
+  # keeps only the first occurrence of each value at each level. The
+  # first-occurrence masks must be computed against the *original* strata values,
+  # otherwise NAs introduced for an outer level would corrupt the grouping used
+  # for inner levels and drop valid headers in later groups (#2418).
+  first_occurrence <-
+    map(
+      seq_along(strata[-1]),
+      \(i) {
+        df_headers |>
+          dplyr::mutate(
+            .by = all_of(strata[seq_len(i)]),
+            ...keep... = dplyr::row_number() == 1L
+          ) |>
+          dplyr::pull("...keep...")
+      }
+    )
   for (i in seq_along(strata[-1])) {
-    df_headers <- df_headers |>
-      dplyr::mutate(
-        .by = all_of(strata[seq_len(i)]),
-        "{strata[i]}" := ifelse(dplyr::row_number() == 1, .data[[strata[i]]], NA)
-      )
+    df_headers[[strata[i]]] <-
+      ifelse(first_occurrence[[i]], df_headers[[strata[i]]], NA)
   }
 
   first_non_hidden_col <- .first_unhidden_column(tbls[[1]])

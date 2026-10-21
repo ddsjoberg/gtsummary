@@ -99,7 +99,7 @@
       check_gtsummary_theme(list(not_a_theme_element = letters))
     Condition
       Warning:
-      The following names of `x` are not accepted theme elemets: "not_a_theme_element".
+      The following names of `x` are not accepted theme elements: "not_a_theme_element".
 
 ---
 

@@ -22,7 +22,7 @@
 #' trial |>
 #'   tbl_summary(by = trt, include = c(marker, stage)) |>
 #'   modify_caption(caption = "**Baseline Characteristics** N = {N}")
-modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
+modify_caption <- function(x, caption, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
 

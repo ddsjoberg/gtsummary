@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Add and remove source notes from a table.
-#' Source notes are similar to footnotes, expect they are not linked to a cell in
+#' Source notes are similar to footnotes, except they are not linked to a cell in
 #' the table.
 #'
 #' @param x (`gtsummary`)\cr
@@ -35,7 +35,7 @@ NULL
 
 #' @export
 #' @rdname modify_source_note
-modify_source_note <- function(x, source_note, text_interpret = c("md", "html")) {
+modify_source_note <- function(x, source_note, text_interpret = c("md", "html", "none")) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_source_note = match.call()))
 
@@ -47,16 +47,16 @@ modify_source_note <- function(x, source_note, text_interpret = c("md", "html"))
   text_interpret <- arg_match(text_interpret, error_call = get_cli_abort_call())
 
   # add source note to table_styling -------------------------------------------
+  lst_new <- list(
+    id = nrow(x$table_styling$source_note) + 1L,
+    source_note = source_note,
+    text_interpret = .interpret_fun(text_interpret),
+    remove = FALSE
+  )
+  new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+  if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
   x$table_styling$source_note <-
-    dplyr::bind_rows(
-      x$table_styling$source_note,
-      dplyr::tibble(
-        id = nrow(x$table_styling$source_note) + 1L,
-        source_note = source_note,
-        text_interpret = paste0("gt::", text_interpret),
-        remove = FALSE
-      )
-    )
+    dplyr::bind_rows(x$table_styling$source_note, new_rows)
 
   # return table ---------------------------------------------------------------
   x$call_list <- updated_call_list

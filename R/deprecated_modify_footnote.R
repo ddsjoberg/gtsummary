@@ -17,7 +17,7 @@
 #' @examples
 #' # Use `modify_footnote_header()`, `modify_footnote_body()`, `modify_abbreviation()` instead.
 modify_footnote <- function(x, ..., abbreviation = FALSE,
-                            text_interpret = c("md", "html"),
+                            text_interpret = c("md", "html", "none"),
                             update, quiet) {
   set_cli_abort_call()
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
@@ -32,7 +32,15 @@ modify_footnote <- function(x, ..., abbreviation = FALSE,
 
   # process arguments ----------------------------------------------------------
   text_interpret <- rlang::arg_match(text_interpret)
-  cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  # when the dots are all plainly named (no formulas needing tidyselect), the
+  # cards named-list branch reduces to keep-last-duplicate + drop-unknown-names
+  # (see cards::compute_formula_selector()), so the scoped data isn't needed
+  if (is_empty(dots) || is_named(dots)) {
+    dots <- dots[rev(!duplicated(rev(names(dots))))]
+    dots <- dots[intersect(names(dots), names(x$table_body))]
+  } else {
+    cards::process_formula_selectors(data = scope_header(x$table_body, x$table_styling$header), dots = dots)
+  }
   cards::check_list_elements(
     x = dots,
     predicate = function(x) is_string(x) || is.na(x),

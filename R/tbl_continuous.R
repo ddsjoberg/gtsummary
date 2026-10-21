@@ -224,7 +224,7 @@ tbl_continuous <- function(data,
 
 .add_gts_column_to_cards_continuous <- function(cards, variables, by) {
   if ("gts_column" %in% names(cards)) {
-    cli::cli_inform("The {.val gts_column} column is alread present. Defining the column has been skipped.")
+    cli::cli_inform("The {.val gts_column} column is already present. Defining the column has been skipped.")
     return(cards)
   }
 

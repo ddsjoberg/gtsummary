@@ -7,8 +7,10 @@ assignees: ''
 
 ---
 
-Do not use this form to ask a question, or ask for assistance. Instead, ask on <https://stackoverflow.com/> using the gtsummary tag.
+Do not use this form to ask a question, or ask for assistance. Instead, try asking an AI assistant, or ask on <https://stackoverflow.com/> using the gtsummary tag.
 Questions about a function's use will be closed without a response.
+
+For bugs in `tbl_regression()`, `tbl_uvregression()`, or other model-based tables, please use the "Bug report: tbl_regression()" template instead.
 
 If you have found a bug, please briefly describe your problem and what output you expect.
 

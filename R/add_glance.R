@@ -14,7 +14,7 @@
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   specifies statistic labels, e.g. `list(r.squared = "R2", p.value = "P")`
 #' @param fmt_fun ([`formula-list-selector`][syntax])\cr
-#'   Specifies the the functions used to format/round the glance statistics.
+#'   Specifies the functions used to format/round the glance statistics.
 #'   The default is to round
 #'   the number of observations and degrees of freedom to the nearest integer,
 #'   p-values are styled with `style_pvalue()` and the remaining statistics
@@ -31,7 +31,9 @@
 #' @param text_interpret (`string`)\cr
 #'   String indicates whether source note text
 #'   will be interpreted with
-#'   [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#'   [gt::md()] or [gt::html()]. Must be `"md"` (default), `"html"`, or
+#'   `"none"`. `"none"` applies no interpretation, rendering the text verbatim.
+#'   Applies to tables printed with `{gt}`.
 #'
 #' @return gtsummary table
 #' @name add_glance
@@ -129,7 +131,7 @@ add_glance_source_note <- function(x,
                                        c(where(is.integer), starts_with("df")) ~ label_style_number()
                                      ),
                                    glance_fun = glance_fun_s3(x$inputs$x),
-                                   text_interpret = c("md", "html"),
+                                   text_interpret = c("md", "html", "none"),
                                    sep1 = " = ", sep2 = "; ") {
   # check inputs ---------------------------------------------------------------
   set_cli_abort_call()

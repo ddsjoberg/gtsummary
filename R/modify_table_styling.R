@@ -39,9 +39,10 @@
 #'   String indicated which type of text formatting to apply/remove to the rows and columns.
 #'   Must be one of `c("bold", "italic")`.
 #' @param text_interpret (`string`)\cr
-#'   Must be one of `"md"` or `"html"` and indicates the processing function
-#'   as `gt::md()` or `gt::html()`. Use this in conjunction with arguments for
-#'   header and footnotes.
+#'   Must be one of `"md"`, `"html"`, or `"none"`, indicating the processing
+#'   function as `gt::md()`, `gt::html()`, or no interpretation (text rendered
+#'   verbatim). Use this in conjunction with arguments for header and footnotes.
+#'   Applies to tables printed with `{gt}`.
 #' @param fmt_fun (`function`)\cr
 #'   function that formats the statistics in the columns/rows in `columns` and `rows`
 #' @param footnote_abbrev (`string`)\cr
@@ -155,7 +156,7 @@ modify_table_styling <- function(x,
     if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30L) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::modify_table_styling(undo_text_format = 'must be one of \"bold\" or \"italic\"')",
       details = glue::glue("Update function call to `{updated_call}`.")
@@ -180,7 +181,7 @@ modify_table_styling <- function(x,
     if (nchar(paste(expr_deparse(updated_call[["x"]]), collapse = "")) > 30) updated_call[["x"]] <- expr(.)
     updated_call <- as.call(updated_call) |> expr_deparse(width = Inf)
 
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       when = "2.0.0",
       what = "gtsummary::modify_table_styling(text_format = 'must be one of \"bold\" or \"italic\"')",
       details = glue::glue("Update function call to `{updated_call}`.")
@@ -194,27 +195,53 @@ modify_table_styling <- function(x,
     undo_text_format <- arg_match(undo_text_format, values = c("bold", "italic"), multiple = TRUE)
   }
   rows <- enquo(rows)
-  rows_eval_error <-
-    tryCatch(
-      eval_tidy(rows, data = x$table_body) %>%
-        {!is.null(.) && !is.logical(.)}, # styler: off
-      error = function(e) TRUE
-    )
-  if (rows_eval_error) {
-    cli::cli_abort(
-      "The {.arg rows} argument must be an expression that evaluates to a logical vector in {.code x$table_body}.",
-      call = get_cli_abort_call()
-    )
+  # `rows = NULL` (the default and the common internal call) needs no evaluation
+  # against `table_body`
+  if (!quo_is_null(rows)) {
+    rows_eval_error <-
+      tryCatch(
+        eval_tidy(rows, data = x$table_body) %>%
+          {!is.null(.) && !is.logical(.)}, # styler: off
+        error = function(e) TRUE
+      )
+    if (rows_eval_error) {
+      cli::cli_abort(
+        "The {.arg rows} argument must be an expression that evaluates to a logical vector in {.code x$table_body}.",
+        call = get_cli_abort_call()
+      )
+    }
+  }
+
+  # label / hide / align: columns are unique in the header, so `match()` + direct
+  # indexed assignment replaces the `dplyr::tibble()` + `.rows_update_base()`
+  # round trip. Falls back to the original path for unusual input shapes
+  # (unmatched columns or mismatched lengths) so error messages stay identical.
+  if (!is_empty(label) || !is_empty(hide) || !is_empty(align)) {
+    header_idx <- match(columns, x$table_styling$header$column)
+    n_columns <- length(columns)
+    fast_header_update <- !anyNA(header_idx)
   }
 
   # label ----------------------------------------------------------------------
   if (!is_empty(label)) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
-        dplyr::tibble(column = columns, interpret_label = paste0("gt::", text_interpret), label = label),
-        by = "column"
-      )
+    interpret_label <- .interpret_fun(text_interpret)
+    if (fast_header_update &&
+      length(label) %in% c(1L, n_columns) &&
+      length(interpret_label) %in% c(1L, n_columns)) {
+      # update a local copy of the header and reassign once, so the two column
+      # writes don't each copy-on-modify the whole `x` object chain
+      header <- x$table_styling$header
+      header$interpret_label[header_idx] <- interpret_label
+      header$label[header_idx] <- label
+      x$table_styling$header <- header
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, interpret_label = interpret_label, label = label),
+          by = "column"
+        )
+    }
   }
 
   # spanning_header ------------------------------------------------------------
@@ -230,28 +257,36 @@ modify_table_styling <- function(x,
 
   # hide -----------------------------------------------------------------------
   if (!is_empty(hide)) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
-        dplyr::tibble(column = columns, hide = hide),
-        by = "column"
-      )
+    if (fast_header_update && length(hide) %in% c(1L, n_columns)) {
+      x$table_styling$header$hide[header_idx] <- hide
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, hide = hide),
+          by = "column"
+        )
+    }
   }
 
   # align ----------------------------------------------------------------------
   if (!is_empty(align)) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      dplyr::rows_update(
-        dplyr::tibble(column = columns, align = align),
-        by = "column"
-      )
+    if (fast_header_update && length(align) %in% c(1L, n_columns)) {
+      x$table_styling$header$align[header_idx] <- align
+    } else {
+      x$table_styling$header <-
+        .rows_update_base(
+          x$table_styling$header,
+          dplyr::tibble(column = columns, align = align),
+          by = "column"
+        )
+    }
   }
 
   # footnote -------------------------------------------------------------------
   if (!is_empty(footnote)) {
     # header footnotes
-    if (tryCatch(is.null(eval_tidy(rows)), error = \(x) FALSE)) {
+    if (quo_is_null(rows) || tryCatch(is.null(eval_tidy(rows)), error = \(x) FALSE)) {
       x <-
         .modify_footnote_header(
           x = x,
@@ -261,8 +296,7 @@ modify_table_styling <- function(x,
           replace = TRUE,
           remove = is.na(footnote)
         )
-    }
-    else {
+    } else {
       x <-
         .modify_footnote_body(
           x = x,
@@ -288,15 +322,11 @@ modify_table_styling <- function(x,
   # fmt_fun --------------------------------------------------------------------
   if (!is_empty(fmt_fun)) {
     if (rlang::is_function(fmt_fun)) fmt_fun <- list(fmt_fun)
+    lst_new <- list(column = columns, rows = list(rows), fmt_fun = fmt_fun)
+    new_rows <- .fast_styling_tibble(lst_new, n = max(lengths(lst_new), 0L))
+    if (is.null(new_rows)) new_rows <- inject(dplyr::tibble(!!!lst_new))
     x$table_styling$fmt_fun <-
-      dplyr::bind_rows(
-        x$table_styling$fmt_fun,
-        dplyr::tibble(
-          column = columns,
-          rows = list(rows),
-          fmt_fun = fmt_fun
-        )
-      )
+      dplyr::bind_rows(x$table_styling$fmt_fun, new_rows)
   }
 
   # text_format ----------------------------------------------------------------
@@ -347,11 +377,9 @@ modify_table_styling <- function(x,
           rows = !!rows,
           pattern = cols_merge_pattern
         )
-    }
-    else {
+    } else {
       x <- .remove_column_merge(x, columns = columns)
     }
-
   }
 
   # return x -------------------------------------------------------------------
@@ -363,15 +391,14 @@ modify_table_styling <- function(x,
 .check_ref_to_ci_column <- function(x, columns, cols_merge_pattern) {
   # if "ci" column was selected & selector was not `everything()`, then print note
   if (("ci" %in% columns && !all(names(x$table_body) %in% columns)) ||
-      (!is_empty(cols_merge_pattern) && "ci" %in% .extract_glue_elements(cols_merge_pattern))) {
+    (!is_empty(cols_merge_pattern) && "ci" %in% .extract_glue_elements(cols_merge_pattern))) {
     cli::cli_warn(
       c("Use of the {.val ci} column was deprecated in {.pkg gtsummary} v2.0,
          and the column will eventually be removed from the tables.",
         "!" = "Review {.help deprecated_ci_column} for details on {.emph how to update your code}.\n\n",
         i = "The {.val ci} column has been replaced by the merged {.val {c('conf.low', 'conf.high')}} columns (merged with {.fun modify_column_merge}).",
-        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient.")
+        i = "In most cases, a simple update from {.code ci = 'a new label'} to {.code conf.low = 'a new label'} is sufficient."
+      )
     )
   }
 }
-
-

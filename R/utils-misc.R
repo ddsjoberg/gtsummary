@@ -34,15 +34,22 @@ vec_paste0 <- function(..., collapse = NULL) {
   rlang::inject(paste0(!!!args, collapse = collapse))
 }
 
-# used in the as_flex_table (and friends) functions for inserting calls
+# used in the as_flex_table (and friends) functions for inserting calls.
+# when `add_after` is missing (NULL, NA, or ""), the expression is appended to the end
 add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
-  # checking input
-  if (!rlang::is_string(add_after) || !add_after %in% names(calls)) {
-    cli::cli_abort("Argument {.arg add_after} must be one of {.val {names(calls)}}.")
+  # position to insert
+  if (is.null(add_after) || isTRUE(is.na(add_after)) || identical(add_after, "")) {
+    index <- length(calls)
+  } else if (!rlang::is_string(add_after) || !add_after %in% names(calls)) {
+    cli::cli_abort(
+      c("Named elements in the {.code addl_cmds} theme elements must be one of {.val {names(calls)}}.",
+        i = "Unnamed elements are appended to the end of the calls.")
+    )
+  } else {
+    index <- which(names(calls) == add_after)
   }
 
-  # position to insert, and name of list
-  index <- which(names(calls) == add_after)
+  # name of list
   new_name <- new_name %||% "user_added"
   new_list <- list(expr) %>% set_names(new_name)
 
