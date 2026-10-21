@@ -25,8 +25,13 @@
 #' @param type ([`formula-list-selector`][syntax])\cr
 #'   Specifies the summary type. Accepted values are
 #'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
-#'   Continuous summaries may be assigned `c("continuous", "continuous2")`, while
-#'   categorical and dichotomous cannot be modified.
+#'   Default types are derived from the ARD `context` column
+#'   (`"summary"` is continuous, `"tabulate"` is categorical, and `"tabulate_value"`
+#'   is dichotomous). For other contexts, the default is categorical when the
+#'   variable has `variable_level` values and continuous otherwise.
+#'   Any type may be assigned, as long as it's compatible with the ARD structure:
+#'   continuous types require results without `variable_level` values, and
+#'   categorical and dichotomous types require `variable_level` values.
 #' @param include ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
 #'   Variables to include in the summary table. Default is `everything()`
 #' @param overall (scalar `logical`)\cr
@@ -227,13 +232,17 @@ tbl_ard_summary <- function(cards,
     predicate = \(x) is.character(x) && length(x) == 1L && x %in% c("categorical", "dichotomous", "continuous", "continuous2"),
     error_msg = "Elements of the {.arg type} argument must be one of {.val {c('categorical', 'dichotomous', 'continuous', 'continuous2')}}."
   )
-  # if the user passed `type` then check that the values are compatible with ARD summary types
+  # if the user passed `type` then check that the values are compatible with the ARD structure,
+  # i.e. continuous summaries have no `variable_level` values and categorical summaries do
   if (!missing(type)) {
     walk(
       include,
       function(variable) {
-        if (isTRUE(default_types[[variable]] %in% "continuous") &&
-            !type[[variable]] %in% c("continuous", "continuous2")) {
+        has_levels <-
+          "variable_level" %in% names(cards) &&
+          !is_empty(compact(dplyr::filter(cards, .data$variable %in% .env$variable, !.data$context %in% "attributes")$variable_level))
+
+        if (!has_levels && !type[[variable]] %in% c("continuous", "continuous2")) {
           cli::cli_abort(
             c("Summary type for variable {.val {variable}} must be one of
              {.val {c('continuous', 'continuous2')}}, not {.val {type[[variable]]}}.",
@@ -241,11 +250,11 @@ tbl_ard_summary <- function(cards,
             call = get_cli_abort_call()
           )
         }
-        else if (isTRUE(default_types[[variable]] %in% c("categorical", "dichotomous")) &&
-                   !isTRUE(type[[variable]] %in% c("categorical", "dichotomous"))) {
+        else if (has_levels && !type[[variable]] %in% c("categorical", "dichotomous")) {
           cli::cli_abort(
-            "Summary type for variable {.val {variable}} must be
-             {.val {default_types[[variable]]}}, not {.val {type[[variable]]}}.",
+            c("Summary type for variable {.val {variable}} must be one of
+             {.val {c('categorical', 'dichotomous')}}, not {.val {type[[variable]]}}.",
+              "i" = "Variable {.val {variable}} has {.val variable_level} values in the ARD, and continuous summaries require results without them."),
             call = get_cli_abort_call()
           )
         }
