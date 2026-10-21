@@ -2,6 +2,15 @@
 
 ## gtsummary (development version)
 
+- The `digits` argument of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  and friends now correctly handles lists that combine named and unnamed
+  values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are
+  assigned to the statistics in order, and named values then update the
+  named statistics. Previously, the names were silently discarded and
+  all values were assigned positionally.
+  ([\#1948](https://github.com/ddsjoberg/gtsummary/issues/1948))
+
 - The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`,
   `'as_hux_table.gtsummary-lst:addl_cmds'`, and
   `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed

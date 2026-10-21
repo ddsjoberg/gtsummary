@@ -157,11 +157,44 @@ trial |>
                            "{median} ({p25}, {p75})",
                            "{min}, {max}"),
     missing = "no"
-  ) |> 
+  ) |>
   italicize_levels()
 ```
 
 [TABLE]
+
+------------------------------------------------------------------------
+
+Use named lists in the `digits` argument to modify the formatting of
+individual statistics, including the statistics on the missing row.
+Named and unnamed values may be combined: unnamed values are assigned to
+the statistics in the order they appear, and named values update the
+specified statistics.
+
+``` r
+
+trial |>
+  tbl_summary(
+    include = c(age, marker, response),
+    missing = "always",
+    missing_stat = "{N_miss} ({p_miss}%)",
+    digits = list(
+      age ~ list(p_miss = 2),
+      marker ~ list(1, p_miss = 2),
+      response ~ list(p = 1, p_miss = 2)
+    )
+  )
+```
+
+| **Characteristic**       | **N = 200**¹   |
+|--------------------------|----------------|
+| Age                      | 47 (38, 57)    |
+|     Unknown              | 11 (5.50%)     |
+| Marker Level (ng/mL)     | 0.6 (0.2, 1.4) |
+|     Unknown              | 10 (5.00%)     |
+| Tumor Response           | 61 (31.6%)     |
+|     Unknown              | 7 (3.50%)      |
+| ¹ Median (Q1, Q3); n (%) |                |
 
 ------------------------------------------------------------------------
 
