@@ -140,7 +140,8 @@
         AGEGR1 = "continuous"))
     Condition
       Error in `tbl_ard_summary()`:
-      ! Summary type for variable "AGEGR1" must be "categorical", not "continuous".
+      ! Summary type for variable "AGEGR1" must be one of "categorical" and "dichotomous", not "continuous".
+      i Variable "AGEGR1" has "variable_level" values in the ARD, and continuous summaries require results without them.
 
 # tbl_ard_summary(statistic) error messages
 

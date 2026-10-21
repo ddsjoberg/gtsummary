@@ -206,6 +206,49 @@ test_that("tbl_ard_summary(type) error messages", {
   )
 })
 
+test_that("tbl_ard_summary(type) may differ from the ARD context (#2482)", {
+  # re-shaped tabulation results summarized as continuous
+  expect_silent(
+    tbl <-
+      mtcars |>
+      cards::ard_tabulate(by = am, variables = cyl, statistic = ~"p") |>
+      dplyr::mutate(
+        .by = cards::all_ard_groups(),
+        stat_name = paste0(stat_name, "_", dplyr::row_number())
+      ) |>
+      dplyr::select(-variable_level) |>
+      tbl_ard_summary(
+        by = am,
+        include = cyl,
+        type = cyl ~ "continuous",
+        statistic = cyl ~ "{p_1}% / {p_2}% / {p_3}%"
+      )
+  )
+  expect_equal(
+    tbl$table_body |> dplyr::select(all_stat_cols()) |> as.list(),
+    list(stat_1 = "15.8% / 21.1% / 63.2%", stat_2 = "61.5% / 23.1% / 15.4%")
+  )
+
+  # non-standard contexts with user-assigned types
+  ard_custom <-
+    cards::bind_ard(
+      cards::ard_summary(mtcars, variables = mpg, statistic = ~ cards::continuous_summary_fns("mean")),
+      cards::ard_tabulate(mtcars, variables = cyl, statistic = ~"n")
+    ) |>
+    dplyr::mutate(context = "my_context")
+  expect_silent(
+    tbl <- tbl_ard_summary(
+      ard_custom,
+      type = list(mpg = "continuous", cyl = "categorical"),
+      statistic = list(mpg = "{mean}", cyl = "{n}")
+    )
+  )
+  expect_equal(
+    tbl$table_body$stat_0,
+    c("20.1", NA, "11", "7", "14")
+  )
+})
+
 test_that("tbl_ard_summary(statistic) error messages", {
   expect_snapshot(
     error = TRUE,
