@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`, `'as_hux_table.gtsummary-lst:addl_cmds'`, and `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed list elements, which are appended to the end of the calls. Previously, each element had to be named after the call it should follow. (#1446)
+
 * Updates to `tbl_ard_hierarchical()`: (#2021)
   - Added the `overall_row` argument to include an overall summary row at the top of the table, using results from `cards::ard_stack_hierarchical(over_variables = TRUE)` or `cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
   - The structure of the `cards` input is now checked against the `variables`, `by`, `include`, and `statistic` arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.
