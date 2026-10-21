@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `update_header_stats()` to replace the statistics available to `modify_header()` (e.g. `{N}`, `{n}`, `{p}`, and `{level}`) with results from an ARD. Pass a tabulation of the `by` variable (`cards::ard_tabulate()`) for tables with a `by` variable, or the total N (`cards::ard_total_n()`) for tables without one. (#2181)
+
 * The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. (#1948)
 
 * The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`, `'as_hux_table.gtsummary-lst:addl_cmds'`, and `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed list elements, which are appended to the end of the calls. Previously, each element had to be named after the call it should follow. (#1446)

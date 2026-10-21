@@ -11,8 +11,9 @@ update_header_stats(x, card)
 Object with class 'gtsummary'}
 
 \item{card}{(\code{card})\cr
-Object of class 'card', typically created with \code{cards::ard_tabulate()}.
-The ARD must be a univariate tabulation.}
+Object of class 'card'. Either a univariate tabulation, typically created
+with \code{cards::ard_tabulate()}, or the total N, typically created with
+\code{cards::ard_total_n()}. See details above.}
 }
 \value{
 gtsummary object
@@ -20,9 +21,23 @@ gtsummary object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Use this function to update the statistics that can be injected into
-gtsummary table headers.
-Tables must have underlying columns statistic columns (e.g. 'stat_1', 'stat_2'); typical in tables
-generated from \code{tbl_summary(by)}.
+gtsummary table headers with \code{modify_header()}, e.g. \code{{N}}, \code{{n}}, \code{{p}}, and \code{{level}}.
+This is useful, for example, when the headers should report population Ns
+that differ from the Ns in the data summarized in the table.
+\itemize{
+\item \strong{Tables with a \code{by} variable} (columns \code{'stat_1'}, \code{'stat_2'}, etc.):
+pass a univariate tabulation of the \code{by} variable, e.g. \code{cards::ard_tabulate(variables = trt)}.
+The levels of the tabulated variable are matched \emph{by position} to the
+\code{'stat_1'}, \code{'stat_2'}, etc. columns.
+If the table also includes an overall \code{'stat_0'} column (e.g. from \code{add_overall()}),
+its statistics are updated with the total N from the tabulation.
+\item \strong{Tables without a \code{by} variable} (a single \code{'stat_0'} column):
+pass the total N, e.g. \code{cards::ard_total_n()}.
+}
+
+Statistics are glued into the headers when \code{modify_header()} is called.
+Therefore, after updating the statistics, you must call \code{modify_header()}
+to see the updated numbers in the table.
 }
 \examples{
 # Example 1 ----------------------------------
@@ -34,4 +49,11 @@ tbl_summary(trial, by = trt, include = age) |>
       cards::ard_tabulate(variables = trt)
   ) |>
   modify_header(all_stat_cols() ~ "**{level}**  \n N = {n}")
+
+# Example 2 ----------------------------------
+tbl_summary(trial, include = age) |>
+  update_header_stats(
+    card = cards::ard_total_n(rbind(trial, trial))
+  ) |>
+  modify_header(stat_0 ~ "**Overall**  \n N = {N}")
 }
