@@ -145,7 +145,17 @@ pass \code{1}, \code{c(1, 1)}, \code{label_style_number(digits=1)}, and
 \code{list(label_style_number(digits=1), label_style_number(digits=1))}.
 
 Named lists are also accepted to change the default formatting for a single
-statistic, e.g. \code{list(sd = label_style_number(digits=1))}.
+statistic, e.g. \code{list(sd = label_style_number(digits=1))}. The names may be
+any statistic shown in the table, including the statistics on the missing row,
+e.g. \code{list(p_miss = 2)}.
+
+Named and unnamed values may be combined: the unnamed values are first assigned
+to the statistics in the order they appear (recycling as needed), and the named
+values then update the formatting of the named statistics.
+For example, with \code{statistic = age ~ "{median} ({p25}, {p75})"} and
+\code{missing_stat = "{N_miss} ({p_miss}\%)"}, passing \code{digits = age ~ list(2, p_miss = 2)}
+rounds the median and IQR to two decimal places and the percent missing to two
+decimal places.
 }
 
 \section{type and value arguments}{

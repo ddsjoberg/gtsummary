@@ -55,16 +55,8 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         # if user passed digits AND they've specified every statistic, use the passed value
         # otherwise, we need to calculate the defaults, and later we can update with the pieces the user passed
         if (!is.null(digits[[variable]])) {
-          # if a scalar or vector passed, convert it to a list
-          if (!is.list(digits[[variable]]) && is_vector(digits[[variable]])) {
-            digits[[variable]] <- as.list(digits[[variable]])
-          }
-
-          # if user-passed value is not named, repeat the passed value to the length of 'statistic'
-          if (!is_named(digits[[variable]])) {
-            if (!is_function(digits[[variable]])) digits[[variable]] <- rep_named(statistic[[variable]], digits[[variable]])
-            else digits[[variable]] <- rep_named(statistic[[variable]], digits[variable])
-          }
+          digits[[variable]] <-
+            .assign_digits_to_statistics(digits[[variable]], statistic[[variable]], variable)
 
           # convert integers to a proper function
           digits[[variable]] <- .convert_integer_to_fmt_fun(digits[[variable]])
@@ -107,6 +99,36 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
     stats::setNames(names(statistic))
 
   digits_final
+}
+
+# matches the user-passed digits for a single variable to its statistics.
+# unnamed elements are assigned positionally (recycled to the number of statistics),
+# then named elements override by statistic name, e.g. `list(2, p_miss = 2)`
+.assign_digits_to_statistics <- function(x, statistic, variable) {
+  # if a scalar or vector passed, convert it to a list
+  if (is_function(x)) x <- list(x)
+  if (!is.list(x) && is_vector(x)) x <- as.list(x)
+
+  nms <- names(x) %||% rep_len("", length(x))
+  unnamed <- x[nms == ""]
+  named <- x[nms != ""]
+  if (is_empty(unnamed)) {
+    return(named)
+  }
+
+  # (invalid values, e.g. strings, are reported with an error downstream)
+  if (length(unnamed) > length(statistic) &&
+      every(unnamed, \(.x) is_function(.x) || is_integerish(.x))) {
+    cli::cli_inform(
+      c("The {.arg digits} argument for variable {.val {variable}} has {length(unnamed)}
+         unnamed value{?s}, but only {length(statistic)} statistic{?s} {?is/are} shown: {.val {statistic}}.",
+        i = "The extra values are ignored. Use a named list to specify the formatting
+             of other statistics, e.g. {.code list(p_miss = 1)}.")
+    )
+  }
+
+  rep_named(statistic, unname(unnamed)) |>
+    utils::modifyList(named)
 }
 
 .convert_integer_to_fmt_fun <- function(x) {

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. A message is now also printed when more unnamed values are passed in `digits` than statistics shown, as the extra values are ignored. (#1948)
+
 * Updates to `tbl_ard_hierarchical()`: (#2021)
   - Added the `overall_row` argument to include an overall summary row at the top of the table, using results from `cards::ard_stack_hierarchical(over_variables = TRUE)` or `cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
   - The structure of the `cards` input is now checked against the `variables`, `by`, `include`, and `statistic` arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.
