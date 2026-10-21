@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+* Updates to `tbl_ard_hierarchical()`: (#2021)
+  - Added the `overall_row` argument to include an overall summary row at the top of the table, using results from `cards::ard_stack_hierarchical(over_variables = TRUE)` or `cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
+  - The structure of the `cards` input is now checked against the `variables`, `by`, `include`, and `statistic` arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.
+  - The default variable labels are now taken from the label attributes saved in the ARD (e.g. `cards::ard_stack_hierarchical(attributes = TRUE)`), and the `label` argument now accepts formula-list-selector syntax, as documented.
+
 * The `tbl_ard_summary(type)` argument may now assign a summary type that differs from the type implied by the ARD's `context` column, e.g. a continuous summary of re-shaped `cards::ard_tabulate()` results. The assigned type must be compatible with the structure of the ARD: continuous summaries require results without `variable_level` values, and categorical/dichotomous summaries require them. (#2482)
 
 * `tbl_split_by_rows()` now forwards the `row_numbers` and `variable_level` arguments when applied to an existing `tbl_split` object; previously only `variables` was passed and a misleading error was returned. The `variable_level` attribute is also now retained when a table is further split by rows. (#2479; @Melkiades)
