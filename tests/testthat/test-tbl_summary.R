@@ -293,9 +293,9 @@ test_that("tbl_summary(digit) combining named and unnamed values", {
   )
 })
 
-test_that("tbl_summary(digit) messages for ignored values", {
+test_that("tbl_summary(digit) silently ignores unused values", {
   # more unnamed values than statistics
-  expect_snapshot(
+  expect_silent(
     tbl <- tbl_summary(
       trial,
       include = age,

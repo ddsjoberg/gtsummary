@@ -56,7 +56,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         # otherwise, we need to calculate the defaults, and later we can update with the pieces the user passed
         if (!is.null(digits[[variable]])) {
           digits[[variable]] <-
-            .assign_digits_to_statistics(digits[[variable]], statistic[[variable]], variable)
+            .assign_digits_to_statistics(digits[[variable]], statistic[[variable]])
 
           # convert integers to a proper function
           digits[[variable]] <- .convert_integer_to_fmt_fun(digits[[variable]])
@@ -102,9 +102,9 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
 }
 
 # matches the user-passed digits for a single variable to its statistics.
-# unnamed elements are assigned positionally (recycled to the number of statistics),
+# unnamed elements are assigned positionally (recycled/truncated to the number of statistics),
 # then named elements override by statistic name, e.g. `list(2, p_miss = 2)`
-.assign_digits_to_statistics <- function(x, statistic, variable) {
+.assign_digits_to_statistics <- function(x, statistic) {
   # if a scalar or vector passed, convert it to a list
   if (is_function(x)) x <- list(x)
   if (!is.list(x) && is_vector(x)) x <- as.list(x)
@@ -114,17 +114,6 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
   named <- x[nms != ""]
   if (is_empty(unnamed)) {
     return(named)
-  }
-
-  # (invalid values, e.g. strings, are reported with an error downstream)
-  if (length(unnamed) > length(statistic) &&
-      every(unnamed, \(.x) is_function(.x) || is_integerish(.x))) {
-    cli::cli_inform(
-      c("The {.arg digits} argument for variable {.val {variable}} has {length(unnamed)}
-         unnamed value{?s}, but only {length(statistic)} statistic{?s} {?is/are} shown: {.val {statistic}}.",
-        i = "The extra values are ignored. Use a named list to specify the formatting
-             of other statistics, e.g. {.code list(p_miss = 1)}.")
-    )
   }
 
   rep_named(statistic, unname(unnamed)) |>
