@@ -237,6 +237,15 @@
       Error in `tbl_summary()`:
       ! The `statistic` argument value for variable "grade" must be a string, but is a character vector.
 
+# tbl_summary(digit) messages for ignored values
+
+    Code
+      tbl <- tbl_summary(trial, include = age, missing = "always", missing_stat = "{N_miss} ({p_miss}%)",
+        digits = age ~ c(2, 0, 0, 4, p_miss = 2))
+    Message
+      The `digits` argument for variable "age" has 4 unnamed values, but only 3 statistics are shown: "median", "p25", and "p75".
+      i The extra values are ignored. Use a named list to specify the formatting of other statistics, e.g. `list(p_miss = 1)`.
+
 # tbl_summary(type)
 
     Code
