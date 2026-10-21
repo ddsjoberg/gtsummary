@@ -131,3 +131,193 @@ test_that("tbl_ard_hierarchical() works correctly with non-standard hierarchical
     c("F", race_alphanum, "M", race_alphanum)
   )
 })
+
+test_that("tbl_ard_hierarchical(overall_row) works with event rates", {
+  ard <-
+    cards::ard_stack_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID,
+      over_variables = TRUE,
+      attributes = TRUE
+    )
+
+  expect_silent(
+    tbl <- tbl_ard_hierarchical(
+      cards = ard,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      overall_row = TRUE,
+      label = list(..ard_hierarchical_overall.. = "Any AE")
+    )
+  )
+  expect_equal(tbl$table_body$label[1], "Any AE")
+
+  expect_equal(
+    as.data.frame(tbl),
+    tbl_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID,
+      overall_row = TRUE,
+      label = list(..ard_hierarchical_overall.. = "Any AE"),
+      digits = ~list(p = 1L)
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_ard_hierarchical(overall_row) works with event counts", {
+  ard <-
+    cards::ard_stack_hierarchical_count(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      over_variables = TRUE,
+      attributes = TRUE
+    )
+
+  expect_silent(
+    tbl <- tbl_ard_hierarchical(
+      cards = ard,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      statistic = ~"{n}",
+      overall_row = TRUE
+    )
+  )
+  expect_equal(tbl$table_body$label[1], "Total number of events")
+
+  expect_equal(
+    as.data.frame(tbl),
+    tbl_hierarchical_count(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      overall_row = TRUE
+    ) |>
+      as.data.frame()
+  )
+})
+
+test_that("tbl_ard_hierarchical(overall_row) errors when overall results are missing", {
+  ard <-
+    cards::ard_stack_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID
+    )
+
+  expect_snapshot(
+    tbl_ard_hierarchical(cards = ard, variables = c(AESOC, AETERM), by = TRTA, overall_row = TRUE),
+    error = TRUE
+  )
+})
+
+test_that("tbl_ard_hierarchical() default labels come from the ARD attributes", {
+  ard <-
+    cards::ard_stack_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID,
+      attributes = TRUE
+    )
+
+  expect_equal(
+    tbl_ard_hierarchical(cards = ard, variables = c(AESOC, AETERM), by = TRTA)$table_styling$header |>
+      dplyr::filter(column == "label") |>
+      dplyr::pull("label") |>
+      gsub("[^[:alnum:]]", "", x = _),
+    "PrimarySystemOrganClassReportedTermfortheAdverseEvent"
+  )
+
+  # user-specified labels override the attributes, and formula syntax is accepted
+  expect_equal(
+    tbl_ard_hierarchical(cards = ard, variables = c(AESOC, AETERM), by = TRTA, label = AESOC ~ "SOC")$table_styling$header |>
+      dplyr::filter(column == "label") |>
+      dplyr::pull("label") |>
+      gsub("[^[:alnum:]]", "", x = _),
+    "SOCReportedTermfortheAdverseEvent"
+  )
+})
+
+test_that("tbl_ard_hierarchical() checks the structure of the ARD", {
+  ard <-
+    cards::ard_stack_hierarchical(
+      data = ADAE_subset,
+      variables = c(AESOC, AETERM),
+      by = TRTA,
+      denominator = cards::ADSL,
+      id = USUBJID
+    )
+
+  # `by` not specified for a stratified ARD
+  expect_snapshot(
+    tbl_ard_hierarchical(cards = ard, variables = c(AESOC, AETERM)),
+    error = TRUE
+  )
+
+  # hierarchy variables in the wrong order
+  expect_snapshot(
+    tbl_ard_hierarchical(cards = ard, variables = c(AETERM, AESOC), by = TRTA),
+    error = TRUE
+  )
+
+  # summary statistics are not present for a variable in `include`
+  expect_snapshot(
+    tbl_ard_hierarchical(
+      cards = cards::ard_stack_hierarchical(
+        data = ADAE_subset,
+        variables = c(AESOC, AETERM),
+        by = TRTA,
+        denominator = cards::ADSL,
+        id = USUBJID,
+        include = AETERM
+      ),
+      variables = c(AESOC, AETERM),
+      by = TRTA
+    ),
+    error = TRUE
+  )
+
+  # the overall variable may not be passed as a hierarchy variable
+  expect_snapshot(
+    tbl_ard_hierarchical(
+      cards = cards::ard_stack_hierarchical(
+        data = ADAE_subset,
+        variables = c(AESOC, AETERM),
+        by = TRTA,
+        denominator = cards::ADSL,
+        id = USUBJID,
+        over_variables = TRUE
+      ),
+      variables = c(..ard_hierarchical_overall.., AETERM),
+      by = TRTA
+    ),
+    error = TRUE
+  )
+
+  # statistic not available in the ARD
+  expect_snapshot(
+    tbl_ard_hierarchical(
+      cards = cards::ard_stack_hierarchical_count(
+        data = ADAE_subset,
+        variables = c(AESOC, AETERM),
+        by = TRTA
+      ),
+      variables = c(AESOC, AETERM),
+      by = TRTA
+    ),
+    error = TRUE
+  )
+})
