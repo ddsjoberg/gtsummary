@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Do not use this form to ask a question, or ask for assistance. Instead, ask on <https://stackoverflow.com/> using the gtsummary tag.
+Do not use this form to ask a question, or ask for assistance. Instead, try asking an AI assistant, or ask on <https://stackoverflow.com/> using the gtsummary tag.
 Questions about a function's use will be closed without a response.
 
 Most issues reported for `tbl_regression()` are not gtsummary bugs. `tbl_regression()` relies on the {broom.helpers} package to tidy the model, so before filing please confirm:
