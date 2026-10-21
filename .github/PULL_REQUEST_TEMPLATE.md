@@ -14,7 +14,7 @@ Reviewer Checklist (if item does not apply, mark is as complete)
 - [ ] **All** GitHub Action workflows pass with a :white_check_mark:
 - [ ] Update `NEWS.md` with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parentheses at the end update (see `NEWS.md` for examples).
 
-When the branch is ready to be merged into master:
+When the branch is ready to be merged into main:
 - [ ] Approve Pull Request
 - [ ] Merge the PR. Please use "Squash and merge".
 
