@@ -51,3 +51,50 @@
       Error in `tbl_split_by_rows()`:
       ! The `variable_level` argument may only select a single column when specified.
 
+# tbl_split_by_rows() messaging with an existing `tbl_split`
+
+    Code
+      tbl_split_by_rows(tbl_split_by_columns(tbl, groups = list("stat_1", "stat_2")))
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! One and only one of the following arguments may be specified: `variables`, `row_numbers`, and `variable_level`
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_columns(tbl, groups = list("stat_1", "stat_2")),
+      variables = c(marker), row_numbers = 2)
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! One and only one of the following arguments may be specified: `variables`, `row_numbers`, and `variable_level`
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_rows(tbl, variables = c(marker)), variables = c(
+        grade))
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! Error processing `variables` argument.
+      ! Can't select columns that don't exist. x Column `grade` doesn't exist.
+      i Select among columns "age" and "marker"
+
+---
+
+    Code
+      tbl_split_by_rows(tbl_split_by_rows(tbl, variables = c(marker)), row_numbers = 3)
+    Condition
+      Error in `tbl_split_by_rows()`:
+      ! Argument `row_numbers` is out of bounds.
+      i Must be between 1 and 2.
+
+# tbl_split_by_columns(groups) messaging
+
+    Code
+      tbl_split_by_columns(tbl_summary(trial, by = trt, include = c(age, marker),
+      missing = "no"), groups = list("stat_1", "not_a_column"))
+    Condition
+      Error in `tbl_split_by_columns()`:
+      ! Column "not_a_column" in the `groups` argument does not exist in the table.
+      i Run `gtsummary::show_header_names()` for a list of all column names.
+
