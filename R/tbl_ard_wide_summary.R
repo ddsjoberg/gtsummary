@@ -152,6 +152,15 @@ tbl_ard_wide_summary <- function(cards,
       .quiet = TRUE
     )
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <-
+    cards::eval_capture_conditions(.add_gts_column_to_cards_wide_summary(cards, statistic)) |>
+    cards::captured_condition_as_error(
+      c("There was an assigning a {.pkg gtsummary} column name in the ARD.",
+        "i" = "The error suggests a malformed ARD input in the {.arg cards} argument. See error message below:",
+        "x" = "{condition}")
+    )
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_wide_summary(
@@ -163,11 +172,11 @@ tbl_ard_wide_summary <- function(cards,
     append(
       list(
         cards = list(tbl_ard_wide_summary = cards),
-        inputs = tbl_ard_wide_summary_inputs,
-        call_list <- list(tbl_ard_wide_summary = call)
+        inputs = tbl_ard_wide_summary_inputs
       )
     ) |>
     structure(class = c("tbl_ard_wide_summary", "gtsummary"))
+  x$call_list <- list(tbl_ard_wide_summary = call)
 
   # return tbl_summary table ---------------------------------------------------
   x

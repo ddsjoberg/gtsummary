@@ -4,6 +4,11 @@
 #' Bridge function for converting `tbl_wide_summary()` (and similar) cards to basic gtsummary objects.
 #' All bridge functions begin with prefix `brdg_*()`.
 #'
+#' The ARD data frame passed to this function must include a `"gts_column"`
+#' column, which assigns each statistic to the column it will populate,
+#' e.g. `"stat_1"` for statistics in the first element of each `statistic`
+#' vector, `"stat_2"` for the second, etc.
+#'
 #' @inheritParams brdg_summary
 #' @inheritParams tbl_summary
 #'
@@ -17,6 +22,13 @@
 #'   ard_summary(trial, variables = c(age, marker)),
 #'   ard_attributes(trial, variables = c(age, marker))
 #' ) |>
+#'   # this column is used by the `pier_*()` functions
+#'   dplyr::mutate(
+#'     gts_column = dplyr::case_when(
+#'       stat_name == "mean" ~ "stat_1",
+#'       stat_name == "sd" ~ "stat_2"
+#'     )
+#'   ) |>
 #'   brdg_wide_summary(
 #'     variables = c("age", "marker"),
 #'     statistic = list(age = c("{mean}", "{sd}"), marker = c("{mean}", "{sd}")),
@@ -25,7 +37,7 @@
 brdg_wide_summary <- function(cards, variables, statistic, type) {
   set_cli_abort_call()
 
-  # add gts info to the cards table --------------------------------------------
+  # construct the column headers for each statistic ----------------------------
   lst_stat_labels <-
     cards[c("stat_name", "stat_label")] |>
     unique() |>
@@ -34,7 +46,7 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
   df_stat_info <-
     dplyr::tibble(
       statistic = statistic[[1]],
-      stat_name = map(statistic, ~.extract_glue_elements(.x))
+      gts_column = paste0("stat_", seq_along(.data$statistic))
     ) |>
     dplyr::mutate(
       statistic_header = statistic |>
@@ -42,23 +54,17 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
           ~ glue::glue_data(.x = lst_stat_labels, .x) |>
             str_replace_all(pattern = "%%", replacement = "%", fixed = TRUE)
         ) %>%
-        {paste0("**", ., "**")}, # styler: off
-      stat_id = dplyr::row_number(),
-      gts_column = paste0("stat_", .data$stat_id)
-    ) |>
-    tidyr::unnest(cols = "stat_name")
-
-  cards <- cards |>
-    dplyr::left_join(
-      df_stat_info[c("stat_name", "stat_id", "gts_column")],
-      by = "stat_name"
+        {paste0("**", ., "**")} # styler: off
     )
 
   # build the table body pieces with bridge functions and stack them -----------
   table_body <-
     map(
-      unique(df_stat_info$stat_id),
+      seq_len(nrow(df_stat_info)),
       function(i) {
+        gts_column_i <- df_stat_info$gts_column[i]
+        cards_i <- cards |>
+          dplyr::filter(.data$gts_column %in% .env$gts_column_i | .data$context == "attributes")
         dplyr::left_join(
           dplyr::tibble(
             variable = variables,
@@ -66,17 +72,17 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
           ),
           dplyr::bind_rows(
             pier_summary_continuous(
-              cards = cards |> dplyr::filter(.data$stat_id == i | .data$context == "attributes"),
+              cards = cards_i,
               variables = .get_variables_by_type(type, type = "continuous"),
               statistic = statistic |> map(getElement, i)
             ),
             pier_summary_categorical(
-              cards = cards |> dplyr::filter(.data$stat_id == i | .data$context == "attributes"),
+              cards = cards_i,
               variables = .get_variables_by_type(type, type = "categorical"),
               statistic = statistic |> map(getElement, i)
             ),
             pier_summary_dichotomous(
-              cards = cards |> dplyr::filter(.data$stat_id == i | .data$context == "attributes"),
+              cards = cards_i,
               variables = .get_variables_by_type(type, type = "dichotomous"),
               statistic = statistic |> map(getElement, i)
             )
@@ -103,7 +109,7 @@ brdg_wide_summary <- function(cards, variables, statistic, type) {
       rows = .data$row_type %in% c("level", "missing"),
       indent = 4L
     ) |>
-    modify_header(!!!deframe(unique(df_stat_info[c("gts_column", "statistic_header")])))
+    modify_header(!!!deframe(df_stat_info[c("gts_column", "statistic_header")]))
 
   x |>
     structure(class = "gtsummary")

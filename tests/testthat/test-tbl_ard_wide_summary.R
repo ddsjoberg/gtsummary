@@ -97,13 +97,18 @@ test_that("tbl_ard_wide_summary() existing 'gts_column'", {
   tbl <-
     trial |>
     tbl_wide_summary(include = c(response, grade))
-  expect_equal(
+  tbl_ard <-
     tbl_ard_wide_summary(
       cards = tbl$cards[[1]],
       include = c(response, grade)
-    ) |>
-      as.data.frame(),
+    )
+  expect_true("gts_column" %in% names(tbl$cards[[1]]))
+  expect_equal(
+    as.data.frame(tbl_ard),
     as.data.frame(tbl)
   )
+
+  # the call is saved
+  expect_equal(names(tbl_ard$call_list), "tbl_ard_wide_summary")
 })
 
