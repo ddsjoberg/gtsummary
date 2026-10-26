@@ -22,7 +22,9 @@
 #' @param digits  ([`formula-list-selector`][syntax])\cr
 #'   Specifies how summary statistics are rounded. Values may be either integer(s)
 #'   or function(s). If not specified, default formatting is assigned
-#'   via `assign_summary_digits()`. See below for details.
+#'   via `assign_summary_digits()`; percentages are formatted with
+#'   `label_style_percent()` by default. See the 'digits argument' section of
+#'   [tbl_summary()] for details.
 #' @param type ([`formula-list-selector`][syntax])\cr
 #'   Specifies the summary type. Accepted values are
 #'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
@@ -83,7 +85,15 @@
 #' The most commonly used functions are `{median}`, `{mean}`, `{sd}`, `{min}`,
 #' and `{max}`.
 #' Additionally, `{p##}` is available for percentiles, where `##` is an integer from 0 to 100.
-#' For example, `p25: quantile(probs=0.25, type=2)`.
+#' Percentiles are calculated with `stats::quantile(x, probs = ##/100, type = 2)`,
+#' e.g. `{p25}` is `quantile(x, probs = 0.25, type = 2)`.
+#' The type 2 definition is the inverse of the empirical distribution function
+#' with averaging at discontinuities (the default definition in SAS).
+#' Note that this differs from the `stats::quantile()` default (`type = 7`), and
+#' results may not match other software.
+#' To use another definition, pass your own function, e.g.
+#' `q1 <- function(x) quantile(x, probs = 0.25, type = 7)` and
+#' `statistic = age ~ "{median} ({q1})"`.
 #'
 #' When the summary type is `"continuous2"`, pass a vector of statistics.
 #' Each element of the vector will result in a separate row in the summary table.
@@ -109,6 +119,20 @@
 #' For example, if the statistic is `"{mean} ({sd})"`, it is equivalent to
 #' pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
 #' `list(label_style_number(digits=1), label_style_number(digits=1))`.
+#'
+#' Percentages (`{p}`, `{p_miss}`, and `{p_nonmiss}`) are formatted with
+#' `label_style_percent()` by default (this default may be changed with the
+#' `"tbl_summary-fn:percent_fun"` theme element).
+#' By default, percentages of 10% or greater are rounded to the nearest integer,
+#' percentages under 10% are rounded to one decimal place, and percentages under 0.1%
+#' are shown as `"<0.1"`.
+#' When an integer is passed for a percentage, e.g. `digits = all_categorical() ~ c(0, 1)`,
+#' the percentage is formatted with `label_style_number(digits = 1, scale = 100)`,
+#' that is, every percentage is rounded to the same number of decimal places.
+#' To keep the `label_style_percent()` behavior with more precision, pass the
+#' function instead, e.g. `digits = all_categorical() ~ list(p = label_style_percent(digits = 1))`.
+#' Because each percentage is rounded separately, the percentages shown may not
+#' sum to exactly 100%.
 #'
 #' Named lists are also accepted to change the default formatting for a single
 #' statistic, e.g. `list(sd = label_style_number(digits=1))`. The names may be

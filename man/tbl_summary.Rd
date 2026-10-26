@@ -41,7 +41,9 @@ See below for details.}
 \item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies how summary statistics are rounded. Values may be either integer(s)
 or function(s). If not specified, default formatting is assigned
-via \code{assign_summary_digits()}. See below for details.}
+via \code{assign_summary_digits()}; percentages are formatted with
+\code{label_style_percent()} by default. See the 'digits argument' section of
+\code{\link[=tbl_summary]{tbl_summary()}} for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the summary type. Accepted values are
@@ -115,7 +117,15 @@ For continuous variables, \strong{any univariate function may be used}.
 The most commonly used functions are \code{{median}}, \code{{mean}}, \code{{sd}}, \code{{min}},
 and \code{{max}}.
 Additionally, \verb{\{p##\}} is available for percentiles, where \verb{##} is an integer from 0 to 100.
-For example, \code{p25: quantile(probs=0.25, type=2)}.
+Percentiles are calculated with \verb{stats::quantile(x, probs = ##/100, type = 2)},
+e.g. \code{{p25}} is \code{quantile(x, probs = 0.25, type = 2)}.
+The type 2 definition is the inverse of the empirical distribution function
+with averaging at discontinuities (the default definition in SAS).
+Note that this differs from the \code{stats::quantile()} default (\code{type = 7}), and
+results may not match other software.
+To use another definition, pass your own function, e.g.
+\code{q1 <- function(x) quantile(x, probs = 0.25, type = 7)} and
+\code{statistic = age ~ "{median} ({q1})"}.
 
 When the summary type is \code{"continuous2"}, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary table.
@@ -143,6 +153,20 @@ it is recycled to the length of the number of statistics presented.
 For example, if the statistic is \code{"{mean} ({sd})"}, it is equivalent to
 pass \code{1}, \code{c(1, 1)}, \code{label_style_number(digits=1)}, and
 \code{list(label_style_number(digits=1), label_style_number(digits=1))}.
+
+Percentages (\code{{p}}, \code{{p_miss}}, and \code{{p_nonmiss}}) are formatted with
+\code{label_style_percent()} by default (this default may be changed with the
+\code{"tbl_summary-fn:percent_fun"} theme element).
+By default, percentages of 10\% or greater are rounded to the nearest integer,
+percentages under 10\% are rounded to one decimal place, and percentages under 0.1\%
+are shown as \code{"<0.1"}.
+When an integer is passed for a percentage, e.g. \code{digits = all_categorical() ~ c(0, 1)},
+the percentage is formatted with \code{label_style_number(digits = 1, scale = 100)},
+that is, every percentage is rounded to the same number of decimal places.
+To keep the \code{label_style_percent()} behavior with more precision, pass the
+function instead, e.g. \code{digits = all_categorical() ~ list(p = label_style_percent(digits = 1))}.
+Because each percentage is rounded separately, the percentages shown may not
+sum to exactly 100\%.
 
 Named lists are also accepted to change the default formatting for a single
 statistic, e.g. \code{list(sd = label_style_number(digits=1))}. The names may be
