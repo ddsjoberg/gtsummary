@@ -74,8 +74,12 @@ tbl_custom_summary(
   Specifies how summary statistics are rounded. Values may be either
   integer(s) or function(s). If not specified, default formatting is
   assigned via
-  [`assign_summary_digits()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_summary_digits.md).
-  See below for details.
+  [`assign_summary_digits()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/assign_summary_digits.md);
+  percentages are formatted with
+  [`label_style_percent()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/label_style.md)
+  by default. See the 'digits argument' section of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  for details.
 
 - type:
 

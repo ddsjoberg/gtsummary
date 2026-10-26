@@ -2,6 +2,14 @@
 
 ## gtsummary (development version)
 
+- Added documentation to the
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
+  help file describing how percentages are rounded (including how
+  integers passed in the `digits` argument are handled) and how
+  percentiles are calculated with `quantile(type = 2)`. Also added an
+  FAQ entry showing how to use another percentile definition.
+  ([\#2495](https://github.com/ddsjoberg/gtsummary/issues/2495))
+
 - The `"gts_column"` column is now added to the ARD in
   [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_wide_summary.md)
   and

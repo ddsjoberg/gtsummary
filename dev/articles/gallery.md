@@ -39,35 +39,38 @@ Adding and Modifying Statistics
 9.  [How do I show **additional summary statistics** as a new
     row?](#continuous2)
 
-10. [How do I include a column for **missing values of a grouping
+10. [How are **percentiles** calculated, and how do I change
+    it?](#quantiles)
+
+11. [How do I include a column for **missing values of a grouping
     variable**?](#include-missing)
 
-11. [How do I add a column with the **confidence around the
+12. [How do I add a column with the **confidence around the
     mean**?](#mean-ci)
 
-12. [How do I add a column for the **difference between
+13. [How do I add a column for the **difference between
     groups**?](#add_difference)
 
-13. [How do I summarize a continuous variable by one, two (or more)
+14. [How do I summarize a continuous variable by one, two (or more)
     categorical variables?](#cross_tab_continuous)
 
-14. [How do I **stratify a summary table** by more than one
+15. [How do I **stratify a summary table** by more than one
     variable?](#tbl_strata)
 
-15. [How do I change the **p-values format**?](#modify-pvalue)
+16. [How do I change the **p-values format**?](#modify-pvalue)
 
-16. [How do I add a p-value for each group compared to a **single
+17. [How do I add a p-value for each group compared to a **single
     reference group**?](#compare-to-ref)
 
-17. [How do I add a correction for **multiple
+18. [How do I add a correction for **multiple
     testing**?](#modify-pvalue)
 
-18. [How do I **combine** a summary table with a regression
+19. [How do I **combine** a summary table with a regression
     table?](#side-by-side)
 
 Statistical Tests
 
-19. [How do I do a **paired** t-test or McNemar’s test?](#paired-test)
+20. [How do I do a **paired** t-test or McNemar’s test?](#paired-test)
 
 ------------------------------------------------------------------------
 
@@ -159,6 +162,34 @@ trial |>
     missing = "no"
   ) |>
   italicize_levels()
+```
+
+[TABLE]
+
+------------------------------------------------------------------------
+
+Percentiles, e.g. `{p25}` and `{p75}`, are calculated with
+`quantile(x, probs = 0.25, type = 2)`, which is the inverse of the
+empirical distribution function with averaging at discontinuities. This
+is the default definition in SAS, but it differs from the R default,
+`quantile(type = 7)`, so results may not match those from
+[`quantile()`](https://rdrr.io/r/stats/quantile.html) or other software.
+To use a different definition, pass your own functions in the
+`statistic` argument.
+
+``` r
+
+p25_type7 <- function(x) quantile(x, probs = 0.25, type = 7)
+p75_type7 <- function(x) quantile(x, probs = 0.75, type = 7)
+
+trial |>
+  tbl_summary(
+    include = marker,
+    type = marker ~ "continuous2",
+    statistic = marker ~ c("{p25}, {p75}", "{p25_type7}, {p75_type7}"),
+    missing = "no"
+  ) |>
+  add_stat_label(label = marker ~ c("Q1, Q3 (type 2; default)", "Q1, Q3 (type 7)"))
 ```
 
 [TABLE]
