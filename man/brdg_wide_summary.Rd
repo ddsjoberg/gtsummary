@@ -25,6 +25,11 @@ a gtsummary object
 \description{
 Bridge function for converting \code{tbl_wide_summary()} (and similar) cards to basic gtsummary objects.
 All bridge functions begin with prefix \verb{brdg_*()}.
+
+The ARD data frame passed to this function must include a \code{"gts_column"}
+column, which assigns each statistic to the column it will populate,
+e.g. \code{"stat_1"} for statistics in the first element of each \code{statistic}
+vector, \code{"stat_2"} for the second, etc.
 }
 \examples{
 library(cards)
@@ -33,6 +38,13 @@ bind_ard(
   ard_summary(trial, variables = c(age, marker)),
   ard_attributes(trial, variables = c(age, marker))
 ) |>
+  # this column is used by the `pier_*()` functions
+  dplyr::mutate(
+    gts_column = dplyr::case_when(
+      stat_name == "mean" ~ "stat_1",
+      stat_name == "sd" ~ "stat_2"
+    )
+  ) |>
   brdg_wide_summary(
     variables = c("age", "marker"),
     statistic = list(age = c("{mean}", "{sd}"), marker = c("{mean}", "{sd}")),
