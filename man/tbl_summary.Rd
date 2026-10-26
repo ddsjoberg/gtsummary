@@ -121,11 +121,8 @@ Percentiles are calculated with \verb{stats::quantile(x, probs = ##/100, type = 
 e.g. \code{{p25}} is \code{quantile(x, probs = 0.25, type = 2)}.
 The type 2 definition is the inverse of the empirical distribution function
 with averaging at discontinuities (the default definition in SAS).
-Note that this differs from the \code{stats::quantile()} default (\code{type = 7}), and
-results may not match other software.
-To use another definition, pass your own function, e.g.
-\code{q1 <- function(x) quantile(x, probs = 0.25, type = 7)} and
-\code{statistic = age ~ "{median} ({q1})"}.
+See the \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#quantiles}{FAQ}
+for details and how to use another definition.
 
 When the summary type is \code{"continuous2"}, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary table.

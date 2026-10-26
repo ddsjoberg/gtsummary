@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Added documentation to the `tbl_summary()` help file describing how percentages are rounded (including how integers passed in the `digits` argument are handled) and how percentiles are calculated with `quantile(type = 2)`. (#2495)
+* Added documentation to the `tbl_summary()` help file describing how percentages are rounded (including how integers passed in the `digits` argument are handled) and how percentiles are calculated with `quantile(type = 2)`. Also added an FAQ entry showing how to use another percentile definition. (#2495)
 
 * The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. (#1948)
 
