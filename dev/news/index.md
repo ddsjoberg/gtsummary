@@ -2,6 +2,26 @@
 
 ## gtsummary (development version)
 
+- The `"gts_column"` column is now added to the ARD in
+  [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_wide_summary.md)
+  and
+  [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
+  via the internal `.add_gts_column_to_cards_wide_summary()` before
+  calling
+  [`brdg_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_wide_summary.md),
+  consistent with the other `tbl_*()` functions. As a result,
+  [`brdg_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/brdg_wide_summary.md)
+  now expects the `"gts_column"` column to be present in its `cards`
+  input, and the ARD saved in the returned table now includes the
+  `"gts_column"` column.
+  ([\#1995](https://github.com/ddsjoberg/gtsummary/issues/1995))
+
+- Fixed a bug where
+  [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_wide_summary.md)
+  and
+  [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_wide_summary.md)
+  did not save the function call in `x$call_list`.
+
 - The `digits` argument of
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   and friends now correctly handles lists that combine named and unnamed
