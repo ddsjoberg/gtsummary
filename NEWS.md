@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added documentation to the `tbl_summary()` help file describing how percentages are rounded (including how integers passed in the `digits` argument are handled) and how percentiles are calculated with `quantile(type = 2)`. Also added an FAQ entry showing how to use another percentile definition. (#2495)
+
 * The `"gts_column"` column is now added to the ARD in `tbl_wide_summary()` and `tbl_ard_wide_summary()` via the internal `.add_gts_column_to_cards_wide_summary()` before calling `brdg_wide_summary()`, consistent with the other `tbl_*()` functions. As a result, `brdg_wide_summary()` now expects the `"gts_column"` column to be present in its `cards` input, and the ARD saved in the returned table now includes the `"gts_column"` column. (#1995)
 
 * Fixed a bug where `tbl_wide_summary()` and `tbl_ard_wide_summary()` did not save the function call in `x$call_list`.

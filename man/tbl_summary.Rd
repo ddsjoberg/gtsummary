@@ -41,7 +41,9 @@ See below for details.}
 \item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies how summary statistics are rounded. Values may be either integer(s)
 or function(s). If not specified, default formatting is assigned
-via \code{assign_summary_digits()}. See below for details.}
+via \code{assign_summary_digits()}; percentages are formatted with
+\code{label_style_percent()} by default. See the 'digits argument' section of
+\code{\link[=tbl_summary]{tbl_summary()}} for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the summary type. Accepted values are
@@ -115,7 +117,12 @@ For continuous variables, \strong{any univariate function may be used}.
 The most commonly used functions are \code{{median}}, \code{{mean}}, \code{{sd}}, \code{{min}},
 and \code{{max}}.
 Additionally, \verb{\{p##\}} is available for percentiles, where \verb{##} is an integer from 0 to 100.
-For example, \code{p25: quantile(probs=0.25, type=2)}.
+Percentiles are calculated with \verb{stats::quantile(x, probs = ##/100, type = 2)},
+e.g. \code{{p25}} is \code{quantile(x, probs = 0.25, type = 2)}.
+The type 2 definition is the inverse of the empirical distribution function
+with averaging at discontinuities (the default definition in SAS).
+See the \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#quantiles}{FAQ}
+for details and how to use another definition.
 
 When the summary type is \code{"continuous2"}, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary table.
@@ -143,6 +150,10 @@ it is recycled to the length of the number of statistics presented.
 For example, if the statistic is \code{"{mean} ({sd})"}, it is equivalent to
 pass \code{1}, \code{c(1, 1)}, \code{label_style_number(digits=1)}, and
 \code{list(label_style_number(digits=1), label_style_number(digits=1))}.
+
+Percentages are formatted with \code{label_style_percent()} by default.
+When an integer is passed for a percentage, the percentage is formatted with
+\verb{label_style_number(digits = <integer>, scale = 100)}.
 
 Named lists are also accepted to change the default formatting for a single
 statistic, e.g. \code{list(sd = label_style_number(digits=1))}. The names may be
