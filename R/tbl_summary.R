@@ -117,19 +117,9 @@
 #' pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
 #' `list(label_style_number(digits=1), label_style_number(digits=1))`.
 #'
-#' Percentages (`{p}`, `{p_miss}`, and `{p_nonmiss}`) are formatted with
-#' `label_style_percent()` by default (this default may be changed with the
-#' `"tbl_summary-fn:percent_fun"` theme element).
-#' By default, percentages of 10% or greater are rounded to the nearest integer,
-#' percentages under 10% are rounded to one decimal place, and percentages under 0.1%
-#' are shown as `"<0.1"`.
-#' When an integer is passed for a percentage, e.g. `digits = all_categorical() ~ c(0, 1)`,
-#' the percentage is formatted with `label_style_number(digits = 1, scale = 100)`,
-#' that is, every percentage is rounded to the same number of decimal places.
-#' To keep the `label_style_percent()` behavior with more precision, pass the
-#' function instead, e.g. `digits = all_categorical() ~ list(p = label_style_percent(digits = 1))`.
-#' Because each percentage is rounded separately, the percentages shown may not
-#' sum to exactly 100%.
+#' Percentages are formatted with `label_style_percent()` by default.
+#' When an integer is passed for a percentage, the percentage is formatted with
+#' `label_style_number(digits = <integer>, scale = 100)`.
 #'
 #' Named lists are also accepted to change the default formatting for a single
 #' statistic, e.g. `list(sd = label_style_number(digits=1))`. The names may be
