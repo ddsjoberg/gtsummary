@@ -98,6 +98,23 @@ test_that("tbl_wide_summary(type)", {
   )
 })
 
+test_that("tbl_wide_summary() cards and call_list", {
+  tbl <- tbl_wide_summary(trial, include = c(age, marker), statistic = c("{mean}", "{sd}"))
+
+  # the 'gts_column' column is added to the ARD
+  expect_equal(
+    tbl$cards[[1]] |>
+      dplyr::filter(!is.na(.data$gts_column)) |>
+      dplyr::distinct(.data$stat_name, .data$gts_column) |>
+      dplyr::arrange(.data$gts_column),
+    dplyr::tibble(stat_name = c("mean", "sd"), gts_column = c("stat_1", "stat_2")),
+    ignore_attr = TRUE
+  )
+
+  # the call is saved
+  expect_equal(names(tbl$call_list), "tbl_wide_summary")
+})
+
 test_that("tbl_wide_summary(sort)", {
   expect_equal(
     tbl_wide_summary(trial, include = trt, sort = ~"frequency") |>

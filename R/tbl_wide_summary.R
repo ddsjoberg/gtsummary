@@ -174,6 +174,9 @@ tbl_wide_summary <- function(data,
   # translate statistic labels -------------------------------------------------
   cards$stat_label <- translate_vector(cards$stat_label)
 
+  # add the gtsummary column names to ARD data frame ---------------------------
+  cards <- .add_gts_column_to_cards_wide_summary(cards, statistic)
+
   # construct initial tbl_summary object ---------------------------------------
   x <-
     brdg_wide_summary(
@@ -185,12 +188,29 @@ tbl_wide_summary <- function(data,
     append(
       list(
         cards = list(tbl_wide_summary = cards),
-        inputs = tbl_wide_summary_inputs,
-        call_list <- list(tbl_wide_summary = call)
+        inputs = tbl_wide_summary_inputs
       )
     ) |>
     structure(class = c("tbl_wide_summary", "gtsummary"))
+  x$call_list <- list(tbl_wide_summary = call)
 
   # return tbl_summary table ---------------------------------------------------
   x
+}
+
+.add_gts_column_to_cards_wide_summary <- function(cards, statistic) {
+  if ("gts_column" %in% names(cards)) {
+    cli::cli_inform("The {.val gts_column} column is already present. Defining the column has been skipped.")
+    return(cards)
+  }
+
+  # each element of the statistic vector populates its own column: stat_1, stat_2, ...
+  df_gts_column <-
+    dplyr::tibble(
+      stat_name = map(statistic[[1]], ~ .extract_glue_elements(.x)),
+      gts_column = paste0("stat_", seq_along(statistic[[1]]))
+    ) |>
+    tidyr::unnest(cols = "stat_name")
+
+  dplyr::left_join(cards, df_gts_column, by = "stat_name")
 }
