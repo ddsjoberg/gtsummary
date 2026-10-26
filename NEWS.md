@@ -2,6 +2,10 @@
 
 * Added documentation to the `tbl_summary()` help file describing how percentages are rounded (including how integers passed in the `digits` argument are handled) and how percentiles are calculated with `quantile(type = 2)`. Also added an FAQ entry showing how to use another percentile definition. (#2495)
 
+* The `"gts_column"` column is now added to the ARD in `tbl_wide_summary()` and `tbl_ard_wide_summary()` via the internal `.add_gts_column_to_cards_wide_summary()` before calling `brdg_wide_summary()`, consistent with the other `tbl_*()` functions. As a result, `brdg_wide_summary()` now expects the `"gts_column"` column to be present in its `cards` input, and the ARD saved in the returned table now includes the `"gts_column"` column. (#1995)
+
+* Fixed a bug where `tbl_wide_summary()` and `tbl_ard_wide_summary()` did not save the function call in `x$call_list`.
+
 * The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. (#1948)
 
 * The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`, `'as_hux_table.gtsummary-lst:addl_cmds'`, and `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed list elements, which are appended to the end of the calls. Previously, each element had to be named after the call it should follow. (#1446)
