@@ -48,7 +48,9 @@ See below for details.}
 \item{digits}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies how summary statistics are rounded. Values may be either integer(s)
 or function(s). If not specified, default formatting is assigned
-via \code{assign_summary_digits()}. See below for details.}
+via \code{assign_summary_digits()}; percentages are formatted with
+\code{label_style_percent()} by default. See the 'digits argument' section of
+\code{\link[=tbl_summary]{tbl_summary()}} for details.}
 
 \item{type}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Specifies the summary type. Accepted values are
