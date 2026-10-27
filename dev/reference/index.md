@@ -241,6 +241,8 @@
   : Modify Abbreviations
 - [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_caption.md)
   : Modify table caption
+- [`update_header_stats()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/update_header_stats.md)
+  **\[experimental\]** : Update Header Statistics
 - [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md)
   [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify_footnote_symbol.md)
   : Modify Footnote Symbols

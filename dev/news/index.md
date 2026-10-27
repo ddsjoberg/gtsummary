@@ -2,6 +2,18 @@
 
 ## gtsummary (development version)
 
+- Added
+  [`update_header_stats()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/update_header_stats.md)
+  to replace the statistics available to
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/modify.md)
+  (e.g. `{N}`, `{n}`, `{p}`, and `{level}`) with results from an ARD.
+  Pass a tabulation of the `by` variable
+  ([`cards::ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html))
+  for tables with a `by` variable, or the total N
+  ([`cards::ard_total_n()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html))
+  for tables without one.
+  ([\#2181](https://github.com/ddsjoberg/gtsummary/issues/2181))
+
 - Added documentation to the
   [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
   help file describing how percentages are rounded (including how
