@@ -22,7 +22,9 @@
 #' @param digits  ([`formula-list-selector`][syntax])\cr
 #'   Specifies how summary statistics are rounded. Values may be either integer(s)
 #'   or function(s). If not specified, default formatting is assigned
-#'   via `assign_summary_digits()`. See below for details.
+#'   via `assign_summary_digits()`; percentages are formatted with
+#'   `label_style_percent()` by default. See the 'digits argument' section of
+#'   [tbl_summary()] for details.
 #' @param type ([`formula-list-selector`][syntax])\cr
 #'   Specifies the summary type. Accepted values are
 #'   `c("continuous", "continuous2", "categorical", "dichotomous")`.
@@ -83,7 +85,12 @@
 #' The most commonly used functions are `{median}`, `{mean}`, `{sd}`, `{min}`,
 #' and `{max}`.
 #' Additionally, `{p##}` is available for percentiles, where `##` is an integer from 0 to 100.
-#' For example, `p25: quantile(probs=0.25, type=2)`.
+#' Percentiles are calculated with `stats::quantile(x, probs = ##/100, type = 2)`,
+#' e.g. `{p25}` is `quantile(x, probs = 0.25, type = 2)`.
+#' The type 2 definition is the inverse of the empirical distribution function
+#' with averaging at discontinuities (the default definition in SAS).
+#' See the \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#quantiles}{FAQ}
+#' for details and how to use another definition.
 #'
 #' When the summary type is `"continuous2"`, pass a vector of statistics.
 #' Each element of the vector will result in a separate row in the summary table.
@@ -109,6 +116,10 @@
 #' For example, if the statistic is `"{mean} ({sd})"`, it is equivalent to
 #' pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
 #' `list(label_style_number(digits=1), label_style_number(digits=1))`.
+#'
+#' Percentages are formatted with `label_style_percent()` by default.
+#' When an integer is passed for a percentage, the percentage is formatted with
+#' `label_style_number(digits = <integer>, scale = 100)`.
 #'
 #' Named lists are also accepted to change the default formatting for a single
 #' statistic, e.g. `list(sd = label_style_number(digits=1))`. The names may be
