@@ -24,8 +24,7 @@ Object with class \code{'tbl_summary'}, \code{'tbl_svysummary'}, or \code{'tbl_a
 \item{location}{(\code{string})\cr
 Location where statistic label will be included.
 \code{"row"} (the default) to add the statistic label to the variable label row,
-and \code{"column"} adds a column with the statistic label.
-The default can be changed with the \code{"add_stat_label-arg:location"} theme element.}
+and \code{"column"} adds a column with the statistic label.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 indicates the updates to the statistic label, e.g. \code{label = all_categorical() ~ "No. (\%)"}.

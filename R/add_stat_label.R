@@ -10,7 +10,6 @@
 #'   Location where statistic label will be included.
 #'  `"row"` (the default) to add the statistic label to the variable label row,
 #'  and `"column"` adds a column with the statistic label.
-#'  The default can be changed with the `"add_stat_label-arg:location"` theme element.
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   indicates the updates to the statistic label, e.g. `label = all_categorical() ~ "No. (%)"`.
 #'   When not specified, the default statistic labels are used.
