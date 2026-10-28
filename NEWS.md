@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Updates to `add_stat_label()`: (#1670)
+  - The `label` argument now accepts named character vectors for `'continuous2'` variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. `label = age ~ c("{min} - {max}" = "Range")`. Previously, every statistic label had to be listed.
+  - The `location` argument is now validated when passed; previously, a misspelled value was silently treated as `"row"`.
+  - The statistic label for the missing row with `location = "column"` no longer includes an extra percent symbol, e.g. `"n (%)"` instead of `"n (p%)"` for `missing_stat = "{N_miss} ({p_miss}%)"`.
+  - Error messages for invalid `label` values now correctly report `add_stat_label()` as the calling function.
+
 * Added `update_header_stats()` to replace the statistics available to `modify_header()` (e.g. `{N}`, `{n}`, `{p}`, and `{level}`) with results from an ARD. Pass a tabulation of the `by` variable (`cards::ard_tabulate()`) for tables with a `by` variable, or the total N (`cards::ard_total_n()`) for tables without one. (#2181)
 
 * Added documentation to the `tbl_summary()` help file describing how percentages are rounded (including how integers passed in the `digits` argument are handled) and how percentiles are calculated with `quantile(type = 2)`. Also added an FAQ entry showing how to use another percentile definition. (#2495)
