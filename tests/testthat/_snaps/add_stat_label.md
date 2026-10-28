@@ -109,7 +109,7 @@
       add_stat_label(tbl_summary(trial, include = c(age, trt), by = trt, ), label = age ~
         letters)
     Condition
-      Error:
+      Error in `add_stat_label()`:
       ! Elements of the `label` argument for variable "age" must be a string of length 1.
 
 ---
@@ -121,6 +121,25 @@
     Condition
       Error in `add_stat_label()`:
       ! The element of the `label` argument for variable "age" must be a string of length 2.
+
+---
+
+    Code
+      add_stat_label(tbl_summary(trial, include = c(age, grade, trt), by = trt, type = all_continuous() ~
+        "continuous2", statistic = all_continuous() ~ c("{median} ({p25}, {p75})",
+        "{min} - {max}"), ), label = age ~ c(`{mean}` = "Mean"))
+    Condition
+      Error in `add_stat_label()`:
+      ! When the element of the `label` argument for variable "age" is a named vector, all names must be one of "{median} ({p25}, {p75})" and "{min} - {max}".
+
+# add_stat_label(location) messaging
+
+    Code
+      add_stat_label(tbl_summary(trial, include = age), location = "colum")
+    Condition
+      Error in `add_stat_label()`:
+      ! `location` must be one of "row" or "column", not "colum".
+      i Did you mean "column"?
 
 # add_stat_label() messaging
 
