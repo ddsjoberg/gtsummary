@@ -25,8 +25,9 @@ add_stat_label(x, location = c("row", "column"), label = NULL, ...)
 
 - x:
 
-  (`tbl_summary`)  
-  Object with class `'tbl_summary'` or with class `'tbl_svysummary'`
+  (`tbl_summary`, `tbl_svysummary`, `tbl_ard_summary`)  
+  Object with class `'tbl_summary'`, `'tbl_svysummary'`, or
+  `'tbl_ard_summary'`.
 
 - ...:
 
@@ -44,11 +45,37 @@ add_stat_label(x, location = c("row", "column"), label = NULL, ...)
   ([`formula-list-selector`](https://www.danieldsjoberg.com/gtsummary/dev/reference/syntax.md))  
   indicates the updates to the statistic label, e.g.
   `label = all_categorical() ~ "No. (%)"`. When not specified, the
-  default statistic labels are used.
+  default statistic labels are used. The default labels are constructed
+  from the `statistic` argument, e.g. `"{median} ({p25}, {p75})"` is
+  labelled `"Median (Q1, Q3)"`. Use `NA_character_` to suppress a
+  variable's statistic label. See the continuous2 section below for
+  `'continuous2'` variables.
 
 ## Value
 
-A `tbl_summary` or `tbl_svysummary` object
+A `tbl_summary`, `tbl_svysummary`, or `tbl_ard_summary` object
+
+## continuous2 variables
+
+Variables summarized as `'continuous2'` already present each statistic
+on its own row, and the statistic labels appear in the `"label"` column.
+Updates to these labels replace the text in those rows.
+
+- Pass an unnamed character vector the same length as the variable's
+  `statistic` argument to replace all the labels, e.g.
+  `label = age ~ c("IQR", "Range")`.
+
+- Pass a named character vector to update a subset of the labels, where
+  the names are the statistic strings passed in
+  `tbl_summary(statistic)`, e.g.
+  `label = age ~ c("{min} - {max}" = "Range")`.
+
+To change the text of the missing row, use the `missing_text` argument
+of
+[`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md).
+
+`add_stat_label()` can only be applied to a table once. Subsequent calls
+return the table unaltered.
 
 ## Tips
 
@@ -63,7 +90,7 @@ is printed. The
 function merges on the `"label"` column (among others), which is
 typically the first column you see in a gtsummary table. Therefore, when
 you want to merge a table that has run `add_stat_label(location='row')`
-you need to match the `"label"` column values before the `"stat_column"`
+you need to match the `"label"` column values before the `"stat_label"`
 is merged with it.
 
 For example, the following two tables merge properly

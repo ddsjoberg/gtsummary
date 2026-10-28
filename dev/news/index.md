@@ -2,6 +2,24 @@
 
 ## gtsummary (development version)
 
+- Updates to
+  [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md):
+  ([\#1670](https://github.com/ddsjoberg/gtsummary/issues/1670))
+
+  - The `label` argument now accepts named character vectors for
+    `'continuous2'` variables to update a subset of the statistic
+    labels, where the names are the statistic strings,
+    e.g. `label = age ~ c("{min} - {max}" = "Range")`. Previously, every
+    statistic label had to be listed.
+  - The `location` argument is now validated when passed; previously, a
+    misspelled value was silently treated as `"row"`.
+  - The statistic label for the missing row with `location = "column"`
+    no longer includes an extra percent symbol, e.g. `"n (%)"` instead
+    of `"n (p%)"` for `missing_stat = "{N_miss} ({p_miss}%)"`.
+  - Error messages for invalid `label` values now correctly report
+    [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
+    as the calling function.
+
 - Added
   [`update_header_stats()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/update_header_stats.md)
   to replace the statistics available to
