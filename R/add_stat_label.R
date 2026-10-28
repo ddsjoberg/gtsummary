@@ -4,8 +4,8 @@
 #' Adds or modifies labels describing the summary statistics presented for
 #' each variable in a [`tbl_summary()`] table.
 #'
-#' @param x (`tbl_summary`)\cr
-#'   Object with class `'tbl_summary'` or with class `'tbl_svysummary'`
+#' @param x (`tbl_summary`, `tbl_svysummary`, `tbl_ard_summary`)\cr
+#'   Object with class `'tbl_summary'`, `'tbl_svysummary'`, or `'tbl_ard_summary'`.
 #' @param location (`string`)\cr
 #'   Location where statistic label will be included.
 #'  `"row"` (the default) to add the statistic label to the variable label row,
@@ -13,7 +13,30 @@
 #' @param label ([`formula-list-selector`][syntax])\cr
 #'   indicates the updates to the statistic label, e.g. `label = all_categorical() ~ "No. (%)"`.
 #'   When not specified, the default statistic labels are used.
+#'   The default labels are constructed from the `statistic` argument, e.g.
+#'   `"{median} ({p25}, {p75})"` is labelled `"Median (Q1, Q3)"`.
+#'   Use `NA_character_` to suppress a variable's statistic label.
+#'   See the continuous2 section below for `'continuous2'` variables.
 #' @inheritParams rlang::args_dots_empty
+#'
+#' @section continuous2 variables:
+#'
+#' Variables summarized as `'continuous2'` already present each statistic on
+#' its own row, and the statistic labels appear in the `"label"` column.
+#' Updates to these labels replace the text in those rows.
+#'
+#' - Pass an unnamed character vector the same length as the variable's
+#'   `statistic` argument to replace all the labels,
+#'   e.g. `label = age ~ c("IQR", "Range")`.
+#' - Pass a named character vector to update a subset of the labels, where
+#'   the names are the statistic strings passed in `tbl_summary(statistic)`,
+#'   e.g. `label = age ~ c("{min} - {max}" = "Range")`.
+#'
+#' To change the text of the missing row, use the `missing_text` argument
+#' of `tbl_summary()`.
+#'
+#' `add_stat_label()` can only be applied to a table once. Subsequent calls
+#' return the table unaltered.
 #'
 #' @section Tips:
 #'
@@ -26,7 +49,7 @@
 #' The `tbl_merge()` function merges on the `"label"` column (among others),
 #' which is typically the first column you see in a gtsummary table.
 #' Therefore, when you want to merge a table that has run `add_stat_label(location='row')`
-#' you need to match the `"label"` column values before the `"stat_column"`
+#' you need to match the `"label"` column values before the `"stat_label"`
 #' is merged with it.
 #'
 #' For example, the following two tables merge properly
@@ -47,7 +70,7 @@
 #'
 #' @author Daniel D. Sjoberg
 #' @name add_stat_label
-#' @return A `tbl_summary` or `tbl_svysummary` object
+#' @return A `tbl_summary`, `tbl_svysummary`, or `tbl_ard_summary` object
 #'
 #' @examples
 #' tbl <- trial |>
@@ -78,6 +101,17 @@
 #'     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}"),
 #'   ) |>
 #'   add_stat_label(label = age ~ c("IQR", "Range"))
+#'
+#' # Example 4 ----------------------------------
+#' # update a single continuous2 statistic label
+#' trial |>
+#'   select(age, trt) |>
+#'   tbl_summary(
+#'     by = trt,
+#'     type = all_continuous() ~ "continuous2",
+#'     statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min} - {max}"),
+#'   ) |>
+#'   add_stat_label(label = age ~ c("{min} - {max}" = "Range"))
 NULL
 
 #' @export
@@ -96,7 +130,6 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   updated_call_list <- c(x$call_list, list(add_stat_label = match.call()))
 
   # check inputs ---------------------------------------------------------------
-  check_not_missing(label)
   if ("add_stat_label" %in% names(x$call_list)) {
     cli::cli_inform("{.code add_stat_label()} has previously been applied. Returning {.pkg gtsummary} table unaltered.")
     return(x)
@@ -105,8 +138,8 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   # process arguments ----------------------------------------------------------
   if (missing(location)) {
     location <- get_theme_element("add_stat_label-arg:location", default = location)
-    location <- arg_match(location)
   }
+  location <- arg_match(location, values = c("row", "column"), error_call = get_cli_abort_call())
 
   cards::process_formula_selectors(
     scope_table_body(x$table_body),
@@ -119,7 +152,7 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
       if (length(.x) > 1L || !(is_string(.x) || is.na(.x))) {
         cli::cli_abort(
           "Elements of the {.arg label} argument for variable {.val {.y}} must be a string of length 1.",
-          all = get_cli_abort_call()
+          call = get_cli_abort_call()
         )
       }
     }
@@ -159,9 +192,10 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
                 .x = list(N_obs = "N",
                           N_miss = "n",
                           N_nonmiss = "N - n",
-                          p_miss = "p",
+                          p_miss = "%",
                           p_nonmiss = "1 - p"),
-                x$inputs$missing_stat
+                # remove the percent symbol following percentages, e.g. "{p_miss}%" -> "{p_miss}"
+                gsub("\\{(p_miss|p_nonmiss)\\}%", "{\\1}", x = x$inputs$missing_stat)
               )
           )
       )
@@ -174,6 +208,18 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
     walk(
       cont2_vars_with_new_label,
       function(.x) {
+        # named vectors update a subset of the statistic labels, e.g. c("{min}, {max}" = "Range")
+        if (is.character(label[[.x]]) && !is.null(names(label[[.x]]))) {
+          if (any(names(label[[.x]]) %in% "") ||
+              !all(names(label[[.x]]) %in% x$inputs$statistic[[.x]])) {
+            cli::cli_abort(
+              "When the element of the {.arg label} argument for variable {.val {.x}} is a named vector,
+               all names must be one of {.val {x$inputs$statistic[[.x]]}}.",
+              call = get_cli_abort_call()
+            )
+          }
+          return(invisible())
+        }
         if (!is.character(label[[.x]]) || length(label[[.x]]) != length(x$inputs$statistic[[.x]])) {
           cli::cli_abort(
             "The element of the {.arg label} argument for variable {.val {.x}}
@@ -186,8 +232,14 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
 
     # now update the label column of .$table_body
     for (variable in cont2_vars_with_new_label) {
-      x$table_body$label[x$table_body$variable %in% variable & x$table_body$row_type %in% "level"] <-
-        label[[variable]]
+      idx_rows <- x$table_body$variable %in% variable & x$table_body$row_type %in% "level"
+      if (is.null(names(label[[variable]]))) {
+        x$table_body$label[idx_rows] <- label[[variable]]
+      } else {
+        # replace only the labels for the named statistics
+        x$table_body$label[idx_rows][match(names(label[[variable]]), x$inputs$statistic[[variable]])] <-
+          unname(label[[variable]])
+      }
     }
   }
 

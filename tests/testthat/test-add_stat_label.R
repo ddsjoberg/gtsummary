@@ -76,6 +76,59 @@ test_that("add_stat_label(label) messaging", {
       ) |>
       add_stat_label(label = age ~ c("Median (IQR)", "Range", "TOO LONG!"))
   )
+
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(
+        include = c(age, grade, trt),
+        by = trt,
+        type = all_continuous() ~ "continuous2",
+        statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}"),
+      ) |>
+      add_stat_label(label = age ~ c("{mean}" = "Mean"))
+  )
+})
+
+test_that("add_stat_label(location) messaging", {
+  expect_snapshot(
+    error = TRUE,
+    trial |>
+      tbl_summary(include = age) |>
+      add_stat_label(location = "colum")
+  )
+})
+
+test_that("add_stat_label(label) with named continuous2 labels", {
+  tbl <-
+    trial |>
+    tbl_summary(
+      include = c(age, marker),
+      type = all_continuous() ~ "continuous2",
+      statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min} - {max}"),
+      missing = "no"
+    )
+
+  expect_equal(
+    tbl |>
+      add_stat_label(label = age ~ c("{min} - {max}" = "Range", "{mean} ({sd})" = "Mean (SD)")) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "level") |>
+      dplyr::pull(label),
+    c("Mean (SD)", "Median (Q1, Q3)", "Range", "Mean (SD)", "Median (Q1, Q3)", "Min - Max")
+  )
+})
+
+test_that("add_stat_label(location='column') missing row label", {
+  expect_equal(
+    trial |>
+      tbl_summary(include = age, missing_stat = "{N_miss} ({p_miss}%)") |>
+      add_stat_label(location = "column") |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "missing") |>
+      dplyr::pull(stat_label),
+    "n (%)"
+  )
 })
 
 test_that("add_stat_label() messaging", {

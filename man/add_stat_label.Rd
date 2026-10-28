@@ -16,8 +16,8 @@ add_stat_label(x, ...)
 \method{add_stat_label}{tbl_ard_summary}(x, location = c("row", "column"), label = NULL, ...)
 }
 \arguments{
-\item{x}{(\code{tbl_summary})\cr
-Object with class \code{'tbl_summary'} or with class \code{'tbl_svysummary'}}
+\item{x}{(\code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_ard_summary})\cr
+Object with class \code{'tbl_summary'}, \code{'tbl_svysummary'}, or \code{'tbl_ard_summary'}.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
@@ -28,16 +28,42 @@ and \code{"column"} adds a column with the statistic label.}
 
 \item{label}{(\code{\link[=syntax]{formula-list-selector}})\cr
 indicates the updates to the statistic label, e.g. \code{label = all_categorical() ~ "No. (\%)"}.
-When not specified, the default statistic labels are used.}
+When not specified, the default statistic labels are used.
+The default labels are constructed from the \code{statistic} argument, e.g.
+\code{"{median} ({p25}, {p75})"} is labelled \code{"Median (Q1, Q3)"}.
+Use \code{NA_character_} to suppress a variable's statistic label.
+See the continuous2 section below for \code{'continuous2'} variables.}
 }
 \value{
-A \code{tbl_summary} or \code{tbl_svysummary} object
+A \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_ard_summary} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}\cr
 Adds or modifies labels describing the summary statistics presented for
 each variable in a \code{\link[=tbl_summary]{tbl_summary()}} table.
 }
+\section{continuous2 variables}{
+
+
+Variables summarized as \code{'continuous2'} already present each statistic on
+its own row, and the statistic labels appear in the \code{"label"} column.
+Updates to these labels replace the text in those rows.
+\itemize{
+\item Pass an unnamed character vector the same length as the variable's
+\code{statistic} argument to replace all the labels,
+e.g. \code{label = age ~ c("IQR", "Range")}.
+\item Pass a named character vector to update a subset of the labels, where
+the names are the statistic strings passed in \code{tbl_summary(statistic)},
+e.g. \code{label = age ~ c("{min} - {max}" = "Range")}.
+}
+
+To change the text of the missing row, use the \code{missing_text} argument
+of \code{tbl_summary()}.
+
+\code{add_stat_label()} can only be applied to a table once. Subsequent calls
+return the table unaltered.
+}
+
 \section{Tips}{
 
 
@@ -50,7 +76,7 @@ columns are merged when the gtsummary table is printed.
 The \code{tbl_merge()} function merges on the \code{"label"} column (among others),
 which is typically the first column you see in a gtsummary table.
 Therefore, when you want to merge a table that has run \code{add_stat_label(location='row')}
-you need to match the \code{"label"} column values before the \code{"stat_column"}
+you need to match the \code{"label"} column values before the \code{"stat_label"}
 is merged with it.
 
 For example, the following two tables merge properly
@@ -98,6 +124,17 @@ trial |>
     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} - {max}"),
   ) |>
   add_stat_label(label = age ~ c("IQR", "Range"))
+
+# Example 4 ----------------------------------
+# update a single continuous2 statistic label
+trial |>
+  select(age, trt) |>
+  tbl_summary(
+    by = trt,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min} - {max}"),
+  ) |>
+  add_stat_label(label = age ~ c("{min} - {max}" = "Range"))
 }
 \author{
 Daniel D. Sjoberg

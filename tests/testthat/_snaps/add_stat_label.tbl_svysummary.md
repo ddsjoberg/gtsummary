@@ -97,7 +97,7 @@
       add_stat_label(tbl_svysummary(svy_trial, include = c(age, trt), by = trt, ),
       label = age ~ letters)
     Condition
-      Error:
+      Error in `add_stat_label()`:
       ! Elements of the `label` argument for variable "age" must be a string of length 1.
 
 ---
