@@ -203,6 +203,59 @@ test_that("add_overall.tbl_svysummary-arg:col_label works", {
   )
 })
 
+# add_p.tbl_svysummary-attr:test.continuous/categorical -----------------------
+test_that("add_p.tbl_svysummary-attr:test.continuous and -attr:test.categorical work", {
+  tbl <-
+    survey::svydesign(~1, data = trial, weights = ~1) |>
+    tbl_svysummary(by = trt, include = c(age, grade, response), missing = "no")
+  get_test_names <- function(x) {
+    df <- dplyr::filter(x$table_body, .data$row_type == "label")
+    stats::setNames(df$test_name, df$variable)
+  }
+
+  # the defaults are unchanged when the theme elements are not set
+  expect_equal(
+    tbl |> add_p() |> get_test_names(),
+    c(age = "svy.wilcox.test", grade = "svy.chisq.test", response = "svy.chisq.test")
+  )
+
+  # theme elements update the default tests
+  expect_equal(
+    with_gtsummary_theme(
+      x = list(
+        "add_p.tbl_svysummary-attr:test.continuous" = "svy.t.test",
+        "add_p.tbl_svysummary-attr:test.categorical" = "svy.wald.test"
+      ),
+      expr = tbl |> add_p() |> get_test_names()
+    ),
+    c(age = "svy.t.test", grade = "svy.wald.test", response = "svy.wald.test")
+  )
+
+  # user-supplied `test` takes precedence, with theme defaults filling the rest
+  expect_equal(
+    with_gtsummary_theme(
+      x = list(
+        "add_p.tbl_svysummary-attr:test.continuous" = "svy.t.test",
+        "add_p.tbl_svysummary-attr:test.categorical" = "svy.wald.test"
+      ),
+      expr = tbl |> add_p(test = grade ~ "svy.adj.chisq.test") |> get_test_names()
+    ),
+    c(age = "svy.t.test", grade = "svy.adj.chisq.test", response = "svy.wald.test")
+  )
+
+  # `add_p.tbl_svysummary-arg:test` takes precedence over the attr elements
+  expect_equal(
+    with_gtsummary_theme(
+      x = list(
+        "add_p.tbl_svysummary-arg:test" = list(all_continuous() ~ "svy.wilcox.test"),
+        "add_p.tbl_svysummary-attr:test.continuous" = "svy.t.test",
+        "add_p.tbl_svysummary-attr:test.categorical" = "svy.wald.test"
+      ),
+      expr = tbl |> add_p() |> get_test_names()
+    ),
+    c(age = "svy.wilcox.test", grade = "svy.wald.test", response = "svy.wald.test")
+  )
+})
 
 # pkgwide-str:print_engine -----------------------------------------------------
 test_that("pkgwide-str:print_engine changes print methods as expected", {

@@ -69,15 +69,23 @@ add_p.tbl_svysummary <- function(x,
     scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
     test =
       case_switch(
-        missing(test) ~ get_theme_element("add_p.tbl_svysummary-arg:test", default = test),
+        missing(test) ~ get_theme_element("add_p.tbl_svysummary-arg:test", default = NULL),
         .default = test
       ),
     include_env = TRUE
   )
 
+  # fill in default tests for variables without a test assigned
+  default_test_continuous <-
+    get_theme_element("add_p.tbl_svysummary-attr:test.continuous", default = "svy.wilcox.test")
+  default_test_categorical <-
+    get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test")
   cards::fill_formula_selectors(
     scope_table_body(x$table_body, as.data.frame(x$inputs$data)[include]),
-    test = eval(formals(asNamespace("gtsummary")[["add_p.tbl_svysummary"]])[["test"]])
+    test = list(
+      inject(all_continuous() ~ !!default_test_continuous),
+      inject(all_categorical() ~ !!default_test_categorical)
+    )
   )
   # add the calling env to the test
   test <- .add_env_to_list_elements(test, env = caller_env())
