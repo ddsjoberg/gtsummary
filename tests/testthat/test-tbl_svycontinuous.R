@@ -155,7 +155,7 @@ test_that("tbl_svycontinuous() works with add_overall(), add_stat(), and inline_
       add_stat(
         tbl,
         fns = everything() ~ \(data, variable, by, ...) {
-          tibble::tibble(n_rows = nrow(data$variables))
+          dplyr::tibble(n_rows = nrow(data$variables))
         }
       )
   )
