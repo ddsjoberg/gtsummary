@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9013</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li>
+<ul><li><p>Removed the unused theme elements <code>add_q-arg:method</code>, <code>tbl_regression-arg:tidy_fun</code>, <code>tbl_summary-fn:N_fun</code>, and <code>tbl_summary-str:missing_stat</code> (use <code>tbl_summary-arg:missing_stat</code> instead). Setting these elements had no effect. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1959" class="external-link">#1959</a>)</p></li>
+<li>
 <p>Updates to <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/1670" class="external-link">#1670</a>)</p>
 <ul><li>The <code>label</code> argument now accepts named character vectors for <code>'continuous2'</code> variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. <code>label = age ~ c("{min} - {max}" = "Range")</code>. Previously, every statistic label had to be listed.</li>
 <li>The <code>location</code> argument is now validated when passed; previously, a misspelled value was silently treated as <code>"row"</code>.</li>

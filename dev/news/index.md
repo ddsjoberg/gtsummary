@@ -2,6 +2,12 @@
 
 ## gtsummary (development version)
 
+- Removed the unused theme elements `add_q-arg:method`,
+  `tbl_regression-arg:tidy_fun`, `tbl_summary-fn:N_fun`, and
+  `tbl_summary-str:missing_stat` (use `tbl_summary-arg:missing_stat`
+  instead). Setting these elements had no effect.
+  ([\#1959](https://github.com/ddsjoberg/gtsummary/issues/1959))
+
 - Updates to
   [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md):
   ([\#1670](https://github.com/ddsjoberg/gtsummary/issues/1670))

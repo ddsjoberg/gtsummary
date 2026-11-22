@@ -179,7 +179,7 @@ input for the argument.
 | add_p.tbl_svysummary |
 | `add_p.tbl_svysummary-arg:pvalue_fun`, `add_p.tbl_svysummary-arg:test` |
 | add_q |
-| `add_q-arg:method`, `add_q-arg:pvalue_fun` |
+| `add_q-arg:pvalue_fun` |
 | add_stat_label |
 | `add_stat_label-arg:location` |
 | save_flex_docx |
@@ -191,7 +191,7 @@ input for the argument.
 | style_number |
 | `style_number-arg:big.mark`, `style_number-arg:decimal.mark` |
 | tbl_regression |
-| `tbl_regression-arg:conf.level`, `tbl_regression-arg:conf.int`, `tbl_regression-arg:estimate_fun`, `tbl_regression-arg:add_estimate_to_reference_rows`, `tbl_regression-arg:tidy_fun` |
+| `tbl_regression-arg:conf.level`, `tbl_regression-arg:conf.int`, `tbl_regression-arg:estimate_fun`, `tbl_regression-arg:add_estimate_to_reference_rows` |
 | tbl_summary |
 | `tbl_summary-arg:digits`, `tbl_summary-arg:missing`, `tbl_summary-arg:missing_text`, `tbl_summary-arg:missing_stat`, `tbl_summary-arg:percent`, `tbl_summary-arg:sort`, `tbl_summary-arg:statistic`, `tbl_summary-arg:type`, `tbl_summary-arg:value` |
 | tbl_survfit |

@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9013</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -2744,12 +2744,6 @@ function arguments.</p>
     </tr>
 <tr class="gt_row_group_first">
 <td headers="add_global_p  name" class="gt_row gt_left"><span class="gt_from_md"><code>add_global_p-str:type</code></span></td>
-<td headers="add_global_p  desc" class="gt_row gt_left"><span class="gt_from_md">set argument default for <code>add_global_p.tbl_regression(type=)</code> and <code>add_global_p.tbl_uvregression(type=)</code></span></td>
-<td headers="add_global_p  example" class="gt_row gt_left"><span class="gt_from_md"><code>"II"</code></span></td>
-<td headers="add_global_p  eval" class="gt_row gt_left"><br></td>
-</tr>
-<tr>
-<td headers="add_global_p  name" class="gt_row gt_left"><span class="gt_from_md"><code>add_global_p-str:type</code></span></td>
 <td headers="add_global_p  desc" class="gt_row gt_left"><span class="gt_from_md">set argument default for <code>add_global_p.tbl_regression(type=)</code> and <code>add_global_p.tbl_uvregression(type=)</code>; default is <code>"III"</code></span></td>
 <td headers="add_global_p  example" class="gt_row gt_left"><span class="gt_from_md"><code>"II"</code></span></td>
 <td headers="add_global_p  eval" class="gt_row gt_left"><br></td>
@@ -2917,12 +2911,6 @@ function arguments.</p>
 <td headers="tbl_summary  eval" class="gt_row gt_left"><br></td>
 </tr>
 <tr>
-<td headers="tbl_summary  name" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_summary-fn:N_fun</code></span></td>
-<td headers="tbl_summary  desc" class="gt_row gt_left"><span class="gt_from_md">function to style integers. Currently questioning…THIS MAY BE REMOVED IN A FUTURE RELEASE. Use <code>style_number-arg:big.mark</code> and <code>style_number-arg:decimal.mark</code> instead.</span></td>
-<td headers="tbl_summary  example" class="gt_row gt_left"><span class="gt_from_md"><code>function(x) sprintf("%.0f", x)</code></span></td>
-<td headers="tbl_summary  eval" class="gt_row gt_left"><br></td>
-</tr>
-<tr>
 <td headers="tbl_summary  name" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_summary-fn:percent_fun</code></span></td>
 <td headers="tbl_summary  desc" class="gt_row gt_left"><span class="gt_from_md">function to style percentages; default is <code>style_percent</code></span></td>
 <td headers="tbl_summary  example" class="gt_row gt_left"><span class="gt_from_md"><code>function(x) style_percent(x)</code></span></td>
@@ -2932,12 +2920,6 @@ function arguments.</p>
 <td headers="tbl_summary  name" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_summary-str:default_con_type</code></span></td>
 <td headers="tbl_summary  desc" class="gt_row gt_left"><span class="gt_from_md">string indicating the default summary type for continuous variables; default is <code>"continuous"</code>; update to <code>"continuous2"</code> for multi-line summaries of continuous variables</span></td>
 <td headers="tbl_summary  example" class="gt_row gt_left"><span class="gt_from_md"><code>"continuous2"</code></span></td>
-<td headers="tbl_summary  eval" class="gt_row gt_left"><br></td>
-</tr>
-<tr>
-<td headers="tbl_summary  name" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_summary-str:missing_stat</code></span></td>
-<td headers="tbl_summary  desc" class="gt_row gt_left"><span class="gt_from_md">string indicating the statistic(s) to present on the missing row. The default is <code>"{N_miss}"</code>. Select among <code>c("N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss")</code></span></td>
-<td headers="tbl_summary  example" class="gt_row gt_left"><span class="gt_from_md"><code>"{N_miss} ({p_miss}%)"</code></span></td>
 <td headers="tbl_summary  eval" class="gt_row gt_left"><br></td>
 </tr>
 <tr>
@@ -3473,7 +3455,7 @@ input for the argument.</p>
 <tr class="gt_group_heading_row">
 <th colspan="1" class="gt_group_heading" scope="col" id="add_q">add_q</th>
     </tr>
-<tr class="gt_row_group_first"><td headers="add_q  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>add_q-arg:method</code>, <code>add_q-arg:pvalue_fun</code></span></td></tr>
+<tr class="gt_row_group_first"><td headers="add_q  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>add_q-arg:pvalue_fun</code></span></td></tr>
 <tr class="gt_group_heading_row">
 <th colspan="1" class="gt_group_heading" scope="col" id="add_stat_label">add_stat_label</th>
     </tr>
@@ -3497,7 +3479,7 @@ input for the argument.</p>
 <tr class="gt_group_heading_row">
 <th colspan="1" class="gt_group_heading" scope="col" id="tbl_regression">tbl_regression</th>
     </tr>
-<tr class="gt_row_group_first"><td headers="tbl_regression  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_regression-arg:conf.level</code>, <code>tbl_regression-arg:conf.int</code>, <code>tbl_regression-arg:estimate_fun</code>, <code>tbl_regression-arg:add_estimate_to_reference_rows</code>, <code>tbl_regression-arg:tidy_fun</code></span></td></tr>
+<tr class="gt_row_group_first"><td headers="tbl_regression  arg_list" class="gt_row gt_left"><span class="gt_from_md"><code>tbl_regression-arg:conf.level</code>, <code>tbl_regression-arg:conf.int</code>, <code>tbl_regression-arg:estimate_fun</code>, <code>tbl_regression-arg:add_estimate_to_reference_rows</code></span></td></tr>
 <tr class="gt_group_heading_row">
 <th colspan="1" class="gt_group_heading" scope="col" id="tbl_summary">tbl_summary</th>
     </tr>
