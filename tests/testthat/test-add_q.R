@@ -26,6 +26,24 @@ test_that("add_q() works after add_p()", {
   )
 })
 
+test_that("add_q-arg:pvalue_fun theme element is deprecated but still applied", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  table1 <- tbl_summary(trial, by = trt, include = c(age, grade)) |> add_p()
+
+  expect_warning(
+    tbl <- with_gtsummary_theme(
+      list("add_q-arg:pvalue_fun" = label_style_pvalue(digits = 3)),
+      add_q(table1)
+    ),
+    class = "lifecycle_warning_deprecated"
+  )
+  expect_equal(
+    as.data.frame(tbl, col_label = FALSE) |> dplyr::pull(q.value),
+    p.adjust(table1$table_body$p.value, method = "fdr") |> style_pvalue(digits = 3),
+    ignore_attr = TRUE
+  )
+})
+
 test_that("add_q() errors with no p.value column", {
   table1 <- tbl_summary(trial, by = trt)
 
