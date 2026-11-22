@@ -1,0 +1,48 @@
+# Add event N
+
+For each [`survfit()`](https://rdrr.io/pkg/survival/man/survfit.html)
+object summarized with
+[`tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_survfit.md)
+this function will add the total number of events observed in a new
+column.
+
+## Usage
+
+``` r
+# S3 method for class 'tbl_survfit'
+add_nevent(x, ...)
+```
+
+## Arguments
+
+- x:
+
+  object of class 'tbl_survfit'
+
+- ...:
+
+  Not used
+
+## See also
+
+Other tbl_survfit tools:
+[`add_p.tbl_survfit()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_p.tbl_survfit.md)
+
+## Examples
+
+``` r
+library(survival)
+fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+
+# Example 1 ----------------------------------
+list(fit1, fit2) |>
+  tbl_survfit(times = c(12, 24)) |>
+  add_n() |>
+  add_nevent()
+
+
+  
+
+Characteristic
+```

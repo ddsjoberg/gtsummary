@@ -1,0 +1,28 @@
+# Add differences
+
+- [`add_difference.tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_summary.md)
+
+- [`add_difference.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_svysummary.md)
+
+- [`add_difference.tbl_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/add_difference.tbl_hierarchical.md)
+
+## Usage
+
+``` r
+add_difference(x, ...)
+```
+
+## Arguments
+
+- x:
+
+  (`gtsummary`)  
+  Object with class 'gtsummary'
+
+- ...:
+
+  Passed to other methods.
+
+## Author
+
+Daniel D. Sjoberg
