@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Re-implemented the `add_p.tbl_svysummary-attr:test.continuous` and `add_p.tbl_svysummary-attr:test.categorical` theme elements, which set the default tests in `add_p.tbl_svysummary()` for continuous and categorical/dichotomous variables. Since v2.0.0 these elements had no effect, so `theme_gtsummary_mean_sd()` once again uses the survey-adapted t-test for continuous variables in `add_p.tbl_svysummary()`. (#2501)
+
 * Removed the unused theme elements `add_q-arg:method`, `tbl_regression-arg:tidy_fun`, `tbl_summary-fn:N_fun`, and `tbl_summary-str:missing_stat` (use `tbl_summary-arg:missing_stat` instead). Setting these elements had no effect. (#1959)
 
 * Updates to `add_stat_label()`: (#1670)

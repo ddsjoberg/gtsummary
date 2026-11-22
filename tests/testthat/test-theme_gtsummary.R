@@ -71,6 +71,21 @@ test_that("theme_gtsummary_mean_sd() works", {
     "t.test",
     ignore_attr = TRUE
   )
+
+  # survey t-test is the default continuous test in `add_p.tbl_svysummary()` (#2501)
+  skip_if_pkg_not_installed("survey")
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_mean_sd(),
+      expr = survey::svydesign(~1, data = trial, weights = ~1) |>
+        tbl_svysummary(by = trt, include = age) |>
+        add_p()
+    ) |>
+      getElement("table_body") |>
+      getElement("test_name") |>
+      dplyr::first(),
+    "svy.t.test"
+  )
 })
 
 test_that("theme_gtsummary_continuous2() works", {
