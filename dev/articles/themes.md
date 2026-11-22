@@ -171,15 +171,15 @@ input for the argument.
 | add_ci.tbl_svysummary |
 | `add_ci.tbl_svysummary-arg:method` |
 | add_overall.tbl_summary |
-| `add_overall.tbl_summary-arg:col_label`, `add_overall.tbl_svysummary-arg:col_label` |
+| `add_overall.tbl_summary-arg:col_label` |
+| add_overall.tbl_svysummary |
+| `add_overall.tbl_svysummary-arg:col_label` |
 | add_p.tbl_cross |
-| `add_p.tbl_cross-arg:pvalue_fun`, `add_p.tbl_cross-arg:source_note`, `add_p.tbl_cross-arg:test` |
+| `add_p.tbl_cross-arg:source_note`, `add_p.tbl_cross-arg:test` |
 | add_p.tbl_summary |
 | `add_p.tbl_summary-arg:test` |
 | add_p.tbl_svysummary |
-| `add_p.tbl_svysummary-arg:pvalue_fun`, `add_p.tbl_svysummary-arg:test` |
-| add_q |
-| `add_q-arg:pvalue_fun` |
+| `add_p.tbl_svysummary-arg:test` |
 | add_stat_label |
 | `add_stat_label-arg:location` |
 | save_flex_docx |
@@ -197,8 +197,8 @@ input for the argument.
 | tbl_survfit |
 | `tbl_survfit-arg:statistic` |
 | tbl_svysummary |
-| `tbl_svysummary-arg:digits`, `tbl_svysummary-arg:label`, `tbl_svysummary-arg:missing`, `tbl_svysummary-arg:missing_text`, `tbl_svysummary-arg:missing_stat`, `tbl_svysummary-arg:percent`, `tbl_svysummary-arg:sort`, `tbl_svysummary-arg:statistic`, `tbl_svysummary-arg:type`, `tbl_svysummary-arg:value` |
+| `tbl_svysummary-arg:digits`, `tbl_svysummary-arg:missing`, `tbl_svysummary-arg:missing_text`, `tbl_svysummary-arg:missing_stat`, `tbl_svysummary-arg:percent`, `tbl_svysummary-arg:sort`, `tbl_svysummary-arg:statistic`, `tbl_svysummary-arg:type`, `tbl_svysummary-arg:value` |
 | tbl_custom_summary |
-| `tbl_custom_summary-arg:digits`, `tbl_custom_summary-arg:label`, `tbl_custom_summary-arg:missing`, `tbl_custom_summary-arg:missing_text`, `tbl_custom_summary-arg:type`, `tbl_custom_summary-arg:value` |
+| `tbl_custom_summary-arg:digits`, `tbl_custom_summary-arg:missing`, `tbl_custom_summary-arg:missing_text`, `tbl_custom_summary-arg:type`, `tbl_custom_summary-arg:value` |
 | modify_abbreviation |
 | `modify_abbreviation-arg:prefix`, `modify_abbreviation-arg:sep1`, `modify_abbreviation-arg:sep2` |

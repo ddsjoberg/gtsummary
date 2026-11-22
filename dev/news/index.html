@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9015</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Re-implemented the <code>add_p.tbl_svysummary-attr:test.continuous</code> and <code>add_p.tbl_svysummary-attr:test.categorical</code> theme elements, which set the default tests in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> for continuous and categorical/dichotomous variables. Since v2.0.0 these elements had no effect, so <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> once again uses the survey-adapted t-test for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2501" class="external-link">#2501</a>)</p></li>
+<ul><li><p>The <code>add_p.tbl_cross-arg:pvalue_fun</code>, <code>add_p.tbl_svysummary-arg:pvalue_fun</code>, and <code>add_q-arg:pvalue_fun</code> theme elements are now deprecated. Use the package-wide <code>pkgwide-fn:pvalue_fun</code> theme element instead. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2504" class="external-link">#2504</a>)</p></li>
+<li><p>The <code>tbl_svysummary-arg:label</code> and <code>tbl_custom_summary-arg:label</code> theme elements are now listed as deprecated in the theme elements documentation. Since v2.0.0, setting them has already triggered a deprecation warning. Also removed the internal reference to the unregistered <code>add_p-fn:addnl-fn-to-run</code> theme element, which could never be set, and corrected the function listed for the <code>add_overall.tbl_svysummary-arg:col_label</code> theme element. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2506" class="external-link">#2506</a>)</p></li>
+<li><p>Re-implemented the <code>add_p.tbl_svysummary-attr:test.continuous</code> and <code>add_p.tbl_svysummary-attr:test.categorical</code> theme elements, which set the default tests in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> for continuous and categorical/dichotomous variables. Since v2.0.0 these elements had no effect, so <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> once again uses the survey-adapted t-test for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2501" class="external-link">#2501</a>)</p></li>
 <li><p>Removed the unused theme elements <code>add_q-arg:method</code>, <code>tbl_regression-arg:tidy_fun</code>, <code>tbl_summary-fn:N_fun</code>, and <code>tbl_summary-str:missing_stat</code> (use <code>tbl_summary-arg:missing_stat</code> instead). Setting these elements had no effect. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1959" class="external-link">#1959</a>)</p></li>
 <li>
 <p>Updates to <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/1670" class="external-link">#1670</a>)</p>

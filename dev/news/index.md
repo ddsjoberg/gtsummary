@@ -2,6 +2,21 @@
 
 ## gtsummary (development version)
 
+- The `add_p.tbl_cross-arg:pvalue_fun`,
+  `add_p.tbl_svysummary-arg:pvalue_fun`, and `add_q-arg:pvalue_fun`
+  theme elements are now deprecated. Use the package-wide
+  `pkgwide-fn:pvalue_fun` theme element instead.
+  ([\#2504](https://github.com/ddsjoberg/gtsummary/issues/2504))
+
+- The `tbl_svysummary-arg:label` and `tbl_custom_summary-arg:label`
+  theme elements are now listed as deprecated in the theme elements
+  documentation. Since v2.0.0, setting them has already triggered a
+  deprecation warning. Also removed the internal reference to the
+  unregistered `add_p-fn:addnl-fn-to-run` theme element, which could
+  never be set, and corrected the function listed for the
+  `add_overall.tbl_svysummary-arg:col_label` theme element.
+  ([\#2506](https://github.com/ddsjoberg/gtsummary/issues/2506))
+
 - Re-implemented the `add_p.tbl_svysummary-attr:test.continuous` and
   `add_p.tbl_svysummary-attr:test.categorical` theme elements, which set
   the default tests in
