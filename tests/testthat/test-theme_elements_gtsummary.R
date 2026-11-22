@@ -104,7 +104,7 @@ test_that("assign_summary_type-arg:cat_threshold", {
 })
 
 # tbl_hierarchical-fn:addnl-fn-to-run ------------------------------------------
-test_that("tbl_hierarchical_count-fn:addnl-fn-to-run", {
+test_that("tbl_hierarchical-fn:addnl-fn-to-run", {
   expect_s3_class(
     with_gtsummary_theme(
       x = list("tbl_hierarchical-fn:addnl-fn-to-run" = as.data.frame),
@@ -155,7 +155,7 @@ test_that("tbl_summary-arg:missing_stat works", {
 })
 
 # tbl_svysummary-arg:missing_stat ----------------------------------------------
-test_that("tbl_summary-arg:missing_stat works", {
+test_that("tbl_svysummary-arg:missing_stat works", {
   expect_equal(
     with_gtsummary_theme(
       x = list("tbl_svysummary-arg:missing_stat" = "{N_miss} / {N_obs}"),
@@ -171,7 +171,7 @@ test_that("tbl_summary-arg:missing_stat works", {
 })
 
 # add_overall.tbl_summary-arg:col_label ----------------------------------------
-test_that("tbl_summary-arg:col_label works", {
+test_that("add_overall.tbl_summary-arg:col_label works", {
   expect_equal(
     with_gtsummary_theme(
       x = list("add_overall.tbl_summary-arg:col_label" = "All Participants  \nN = {style_number(N)}"),
@@ -187,7 +187,7 @@ test_that("tbl_summary-arg:col_label works", {
 })
 
 # add_overall.tbl_svysummary-arg:col_label ----------------------------------------
-test_that("tbl_svysummary-arg:col_label works", {
+test_that("add_overall.tbl_svysummary-arg:col_label works", {
   expect_equal(
     with_gtsummary_theme(
       x = list("add_overall.tbl_svysummary-arg:col_label" = "All Participants  \nN = {style_number(N)}"),
