@@ -94,9 +94,10 @@ styles, but please don't restyle code that has nothing to do with your PR.
 Contributions with test cases included are easier to accept. Add tests to the
 existing `tests/testthat/test-*.R` file for the function you are changing rather
 than creating a new standalone test file.  
-*  **NEWS.** For user-facing changes, add a bullet to the top of `NEWS.md` below
-the current development version header describing the change, with links to the
-relevant issue(s)/PR(s).  
+*  **NEWS.** For user-facing changes, the PR submitter must include a bullet at
+the top of `NEWS.md`, below the current development version header, describing
+the change, with links to the relevant issue(s)/PR(s). Reviewers no longer add
+NEWS entries.  
 *  **Namespacing.** `rlang` is imported in full (`@import rlang`), so its
 functions are called bare, without a `rlang::` prefix (e.g.
 `set_cli_abort_call()`, `arg_match()`, `enquo()`, `.data`, `%||%`). All other
@@ -114,6 +115,12 @@ upstream, not here.
 
 ### Pull request process
 
+*  **Clone or fork on or after 2026-11-21.** The repository history was
+rewritten on 2026-11-21 to remove ~670 MB of previously committed files.
+Branches from older clones or forks still contain the old history, and merging
+them would put those files back. If your clone or fork predates the rewrite,
+delete it and re-clone or re-fork before opening a PR. The `check-old-history`
+workflow fails any PR that contains pre-rewrite commits.  
 *  We recommend that you create a Git branch for each pull request (PR).  
 *  Continuous integration runs on GitHub Actions: `R CMD check` (current and
 old-release R), test coverage reported to

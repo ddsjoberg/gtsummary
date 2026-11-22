@@ -1,0 +1,27 @@
+# Fails a PR whose branch contains repository history from before the
+# 2026-11-21 git-filter-repo rewrite. a12ba4e7... is the pre-rewrite SHA of the
+# first commit the rewrite changed: every branch from an old clone/fork has it,
+# the rewritten history does not.
+name: check-old-history
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions: read-all
+
+jobs:
+  check-old-history:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fail if branch contains pre-2026-11-21 history
+        run: |
+          if git cat-file -e a12ba4e72de135a92c3b403b1f2d60a3a31c4410^{commit} 2>/dev/null; then
+            echo "::error::This branch contains repository history from before the 2026-11-21 rewrite. Please re-clone (or re-fork) and re-apply your changes."
+            exit 1
+          fi
+          echo "OK: no pre-rewrite history found."
