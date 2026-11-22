@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed the unused theme elements `add_q-arg:method`, `tbl_regression-arg:tidy_fun`, `tbl_summary-fn:N_fun`, and `tbl_summary-str:missing_stat` (use `tbl_summary-arg:missing_stat` instead). Setting these elements had no effect. (#1959)
+
 * Updates to `add_stat_label()`: (#1670)
   - The `label` argument now accepts named character vectors for `'continuous2'` variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. `label = age ~ c("{min} - {max}" = "Range")`. Previously, every statistic label had to be listed.
   - The `location` argument is now validated when passed; previously, a misspelled value was silently treated as `"row"`.
