@@ -209,10 +209,8 @@ test_that("add_p.tbl_svysummary-attr:test.continuous and -attr:test.categorical 
     survey::svydesign(~1, data = trial, weights = ~1) |>
     tbl_svysummary(by = trt, include = c(age, grade, response), missing = "no")
   get_test_names <- function(x) {
-    x$table_body |>
-      dplyr::filter(.data$row_type == "label") |>
-      dplyr::select("variable", "test_name") |>
-      tibble::deframe()
+    df <- dplyr::filter(x$table_body, .data$row_type == "label")
+    stats::setNames(df$test_name, df$variable)
   }
 
   # the defaults are unchanged when the theme elements are not set
