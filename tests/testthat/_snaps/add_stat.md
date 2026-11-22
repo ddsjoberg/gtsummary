@@ -36,7 +36,7 @@
       add_stat(mtcars, fns = everything() ~ my_ttest2)
     Condition
       Error in `add_stat()`:
-      ! The `x` argument must be class <tbl_summary/tbl_svysummary/tbl_continuous>, not a data frame.
+      ! The `x` argument must be class <tbl_summary/tbl_svysummary/tbl_continuous/tbl_svycontinuous>, not a data frame.
 
 # add_stat() with curly braces in errors/warnings
 

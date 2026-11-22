@@ -1,12 +1,12 @@
 #' Report statistics from summary tables inline
 #'
-#' Extracts and returns statistics from a `tbl_continuous()` object for
+#' Extracts and returns statistics from a `tbl_continuous()` or `tbl_svycontinuous()` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 
 #' @inherit inline_text.tbl_summary
-#' @param x (`tbl_continuous`)\cr
-#'   Object created from  `tbl_continuous()`
+#' @param x (`tbl_continuous`, `tbl_svycontinuous`)\cr
+#'   Object created from  `tbl_continuous()` or `tbl_svycontinuous()`
 #'
 #' @name inline_text.tbl_continuous
 #' @export
@@ -30,3 +30,7 @@ inline_text.tbl_continuous <- function(x,
     pvalue_fun = pvalue_fun
   )
 }
+
+#' @name inline_text.tbl_continuous
+#' @export
+inline_text.tbl_svycontinuous <- inline_text.tbl_continuous

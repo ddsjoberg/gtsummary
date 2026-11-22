@@ -2,6 +2,7 @@
 % Please edit documentation in R/inline_text.tbl_continuous.R
 \name{inline_text.tbl_continuous}
 \alias{inline_text.tbl_continuous}
+\alias{inline_text.tbl_svycontinuous}
 \title{Report statistics from summary tables inline}
 \usage{
 \method{inline_text}{tbl_continuous}(
@@ -13,10 +14,20 @@
   pvalue_fun = label_style_pvalue(prepend_p = TRUE),
   ...
 )
+
+\method{inline_text}{tbl_svycontinuous}(
+  x,
+  variable,
+  column = NULL,
+  level = NULL,
+  pattern = NULL,
+  pvalue_fun = label_style_pvalue(prepend_p = TRUE),
+  ...
+)
 }
 \arguments{
-\item{x}{(\code{tbl_continuous})\cr
-Object created from  \code{tbl_continuous()}}
+\item{x}{(\code{tbl_continuous}, \code{tbl_svycontinuous})\cr
+Object created from  \code{tbl_continuous()} or \code{tbl_svycontinuous()}}
 
 \item{variable}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
 A single variable name of statistic to present}
@@ -44,7 +55,7 @@ the rounded/formatted p-value (e.g. \code{pvalue_fun = label_style_pvalue(digits
 A string reporting results from a gtsummary table
 }
 \description{
-Extracts and returns statistics from a \code{tbl_continuous()} object for
+Extracts and returns statistics from a \code{tbl_continuous()} or \code{tbl_svycontinuous()} object for
 inline reporting in an R markdown document. Detailed examples in the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }

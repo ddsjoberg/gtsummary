@@ -5,6 +5,7 @@
 \alias{add_overall.tbl_summary}
 \alias{add_overall.tbl_continuous}
 \alias{add_overall.tbl_svysummary}
+\alias{add_overall.tbl_svycontinuous}
 \alias{add_overall.tbl_custom_summary}
 \alias{add_overall.tbl_hierarchical}
 \alias{add_overall.tbl_hierarchical_count}
@@ -31,6 +32,15 @@ add_overall(x, ...)
 )
 
 \method{add_overall}{tbl_svysummary}(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \\nN = {style_number(N)}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+\method{add_overall}{tbl_svycontinuous}(
   x,
   last = FALSE,
   col_label = "**Overall**  \\nN = {style_number(N)}",
@@ -68,7 +78,7 @@ add_overall(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous}, \code{tbl_custom_summary})\cr
+\item{x}{(\code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous}, \code{tbl_svycontinuous}, \code{tbl_custom_summary})\cr
 A stratified 'gtsummary' table}
 
 \item{...}{These dots are for future extensions and must be empty.}
@@ -93,7 +103,7 @@ A \code{gtsummary} of same class as \code{x}
 }
 \description{
 Adds a column with overall summary statistics to tables
-created by \code{tbl_summary()}, \code{tbl_svysummary()}, \code{tbl_continuous()} or
+created by \code{tbl_summary()}, \code{tbl_svysummary()}, \code{tbl_continuous()}, \code{tbl_svycontinuous()} or
 \code{tbl_custom_summary()}.
 }
 \examples{
