@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9014</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Removed the unused theme elements <code>add_q-arg:method</code>, <code>tbl_regression-arg:tidy_fun</code>, <code>tbl_summary-fn:N_fun</code>, and <code>tbl_summary-str:missing_stat</code> (use <code>tbl_summary-arg:missing_stat</code> instead). Setting these elements had no effect. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1959" class="external-link">#1959</a>)</p></li>
+<ul><li><p>Re-implemented the <code>add_p.tbl_svysummary-attr:test.continuous</code> and <code>add_p.tbl_svysummary-attr:test.categorical</code> theme elements, which set the default tests in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> for continuous and categorical/dichotomous variables. Since v2.0.0 these elements had no effect, so <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> once again uses the survey-adapted t-test for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2501" class="external-link">#2501</a>)</p></li>
+<li><p>Removed the unused theme elements <code>add_q-arg:method</code>, <code>tbl_regression-arg:tidy_fun</code>, <code>tbl_summary-fn:N_fun</code>, and <code>tbl_summary-str:missing_stat</code> (use <code>tbl_summary-arg:missing_stat</code> instead). Setting these elements had no effect. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1959" class="external-link">#1959</a>)</p></li>
 <li>
 <p>Updates to <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/1670" class="external-link">#1670</a>)</p>
 <ul><li>The <code>label</code> argument now accepts named character vectors for <code>'continuous2'</code> variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. <code>label = age ~ c("{min} - {max}" = "Range")</code>. Previously, every statistic label had to be listed.</li>
