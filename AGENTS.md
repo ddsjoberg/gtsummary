@@ -83,8 +83,10 @@ respective `data-raw/` sources, so expect those to be re-serialized too.
 - Follow the tidyverse style guide. Use `styler`, but don't restyle unrelated code.
 - Edit roxygen in `.R` files (markdown syntax enabled), then run
   `devtools::document()`. Never edit generated `man/*.Rd`.
-- Add a `NEWS.md` bullet under `# gtsummary (development version)` for any
-  user-facing change, referencing the issue/PR number, e.g. `(#1987)`.
+- Every PR must include its own `NEWS.md` bullet under
+  `# gtsummary (development version)` for any user-facing change, referencing
+  the issue/PR number, e.g. `(#1987)`. The submitter adds it; reviewers no
+  longer do.
 - New code ships with tests. Place them in the existing `test-*.R` file for the
   function being changed rather than creating a new standalone test file.
 - File an issue before substantial PRs; PRs are merged with "Squash and merge".
@@ -161,7 +163,14 @@ performance-only.
 ## Pull requests
 
 - Honor [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md);
-  `.github/CONTRIBUTING.md` is the source of truth.
+  `.github/CONTRIBUTING.md` is the source of truth. Complete the template's
+  **Submitter Checklist** (NEWS entry, `devtools::document()`, spelling, etc.).
+- **History rewrite (2026-11-21):** the repository history was rewritten with
+  `git-filter-repo` to remove ~670 MB of previously committed files. Clones and
+  forks must be created on or after 2026-11-21; never push branches from an
+  older clone, as that would reintroduce the old history. The
+  `check-old-history` workflow (`.github/workflows/check-old-history.yaml`)
+  fails any PR that contains pre-rewrite commits.
 - **Performance-sensitive PRs:** if a change may affect package performance,
   **begin the PR title with `perf`**. The "Performance Benchmark" workflow
   (`.github/workflows/benchmark.yaml`) only runs when the PR title starts with
