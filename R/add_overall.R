@@ -73,7 +73,7 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
     col_label_default <- paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
     col_label <-
       case_switch(
-        inherits(x, "tbl_summary") ~
+        inherits(x, c("tbl_summary", "tbl_continuous")) ~
           get_theme_element("add_overall.tbl_summary-arg:col_label", default = col_label_default),
         inherits(x, c("tbl_svysummary", "tbl_svycontinuous")) ~
           get_theme_element("add_overall.tbl_svysummary-arg:col_label", default = col_label_default)
