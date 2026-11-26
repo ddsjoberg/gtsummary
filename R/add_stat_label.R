@@ -1,6 +1,5 @@
 #' Add statistic labels
 #'
-#' `r lifecycle::badge('questioning')`\cr
 #' Adds or modifies labels describing the summary statistics presented for
 #' each variable in a [`tbl_summary()`] table.
 #'
@@ -29,8 +28,12 @@
 #'   `statistic` argument to replace all the labels,
 #'   e.g. `label = age ~ c("IQR", "Range")`.
 #' - Pass a named character vector to update a subset of the labels, where
-#'   the names are the statistic strings passed in `tbl_summary(statistic)`,
-#'   e.g. `label = age ~ c("{min} - {max}" = "Range")`.
+#'   the names are either the labels currently shown in the table or the
+#'   statistic strings passed in `tbl_summary(statistic)`,
+#'   e.g. `label = age ~ c("Min - Max" = "Range")` or
+#'   `label = age ~ c("{min} - {max}" = "Range")`.
+#'   Labels may be translated by `theme_gtsummary_language()`, so prefer the
+#'   statistic strings in code that may run under a different language theme.
 #'
 #' To change the text of the missing row, use the `missing_text` argument
 #' of `tbl_summary()`.
@@ -111,7 +114,7 @@
 #'     type = all_continuous() ~ "continuous2",
 #'     statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min} - {max}"),
 #'   ) |>
-#'   add_stat_label(label = age ~ c("{min} - {max}" = "Range"))
+#'   add_stat_label(label = age ~ c("Min - Max" = "Range"))
 NULL
 
 #' @export
@@ -205,30 +208,48 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
   cont2_vars_with_new_label <- names(keep(x$inputs$type, ~ .x == "continuous2")) |> intersect(updated_variables)
   if (!is_empty(cont2_vars_with_new_label)) {
     # first, check the dimension of the passed value
-    walk(
-      cont2_vars_with_new_label,
-      function(.x) {
-        # named vectors update a subset of the statistic labels, e.g. c("{min}, {max}" = "Range")
-        if (is.character(label[[.x]]) && !is.null(names(label[[.x]]))) {
-          if (any(names(label[[.x]]) %in% "") ||
-              !all(names(label[[.x]]) %in% x$inputs$statistic[[.x]])) {
-            cli::cli_abort(
-              "When the element of the {.arg label} argument for variable {.val {.x}} is a named vector,
-               all names must be one of {.val {x$inputs$statistic[[.x]]}}.",
-              call = get_cli_abort_call()
-            )
-          }
-          return(invisible())
-        }
-        if (!is.character(label[[.x]]) || length(label[[.x]]) != length(x$inputs$statistic[[.x]])) {
+    for (variable in cont2_vars_with_new_label) {
+      stats <- x$inputs$statistic[[variable]]
+      current_labels <-
+        x$table_body$label[x$table_body$variable %in% variable & x$table_body$row_type %in% "level"]
+      lbl_names <- names(label[[variable]])
+
+      # named vectors update a subset of the statistic labels, where names are
+      # either the statistic strings or the current labels,
+      # e.g. c("{min} - {max}" = "Range") or c("Min - Max" = "Range")
+      if (is.character(label[[variable]]) && !is.null(lbl_names)) {
+        if (all(lbl_names %in% c(stats, current_labels))) next
+
+        # names that do not match: fall back to positional matching if the
+        # vector is full length (the behavior prior to v2.7.0); otherwise, error
+        if (length(label[[variable]]) != length(stats)) {
           cli::cli_abort(
-            "The element of the {.arg label} argument for variable {.val {.x}}
-             must be a string of length {.val {length(x$inputs$statistic[[.x]])}}.",
+            c("The element of the {.arg label} argument for variable {.val {variable}} could not be matched to its statistics.",
+              i = "Names must exactly match a statistic string ({.val {stats}}) or a current statistic label ({.val {current_labels}}), or supply an unnamed vector of length {.val {length(stats)}}."),
             call = get_cli_abort_call()
           )
         }
+        lifecycle::deprecate_soft(
+          when = "2.7.0",
+          what = I("Passing names to `add_stat_label(label)` that do not match a statistic string or statistic label"),
+          details = c(
+            x = cli::format_inline("Names for variable {.val {variable}} that do not match: {.val {setdiff(lbl_names, c(stats, current_labels))}}."),
+            i = cli::format_inline("Names must exactly match a statistic string ({.val {stats}}) or a current statistic label ({.val {current_labels}})."),
+            i = "Ignoring all names and applying labels by position. In a future release, names must match or the vector must be unnamed."
+          )
+        )
+        label[[variable]] <- unname(label[[variable]])
+        next
       }
-    )
+
+      if (!is.character(label[[variable]]) || length(label[[variable]]) != length(stats)) {
+        cli::cli_abort(
+          "The element of the {.arg label} argument for variable {.val {variable}}
+           must be a string of length {.val {length(stats)}}.",
+          call = get_cli_abort_call()
+        )
+      }
+    }
 
     # now update the label column of .$table_body
     for (variable in cont2_vars_with_new_label) {
@@ -236,9 +257,15 @@ add_stat_label.tbl_summary <- function(x, location = c("row", "column"), label =
       if (is.null(names(label[[variable]]))) {
         x$table_body$label[idx_rows] <- label[[variable]]
       } else {
-        # replace only the labels for the named statistics
-        x$table_body$label[idx_rows][match(names(label[[variable]]), x$inputs$statistic[[variable]])] <-
-          unname(label[[variable]])
+        # replace only the labels for the named statistics. names match either the
+        # statistic string or the current label (all rows with a matching label are updated)
+        stats <- x$inputs$statistic[[variable]]
+        current_labels <- new_labels <- x$table_body$label[idx_rows]
+        for (i in seq_along(label[[variable]])) {
+          nm <- names(label[[variable]])[i]
+          new_labels[stats %in% nm | current_labels %in% nm] <- label[[variable]][[i]]
+        }
+        x$table_body$label[idx_rows] <- new_labels
       }
     }
   }

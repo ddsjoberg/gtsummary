@@ -12,7 +12,7 @@
 * Added `update_header_stats()` to replace the statistics available to `modify_header()` (e.g. `{N}`, `{n}`, `{p}`, and `{level}`) with results from an ARD. Pass a tabulation of the `by` variable (`cards::ard_tabulate()`) for tables with a `by` variable, or the total N (`cards::ard_total_n()`) for tables without one. (#2181)
 
 * Updates to `add_stat_label()`: (#1670)
-  - The `label` argument now accepts named character vectors for `'continuous2'` variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. `label = age ~ c("{min} - {max}" = "Range")`. Previously, every statistic label had to be listed.
+  - The `label` argument now accepts named character vectors for `'continuous2'` variables to update a subset of the statistic labels, where the names are either the labels currently shown in the table or the statistic strings, e.g. `label = age ~ c("Min - Max" = "Range")` or `label = age ~ c("{min} - {max}" = "Range")`. Previously, every statistic label had to be listed. Full-length named vectors whose names do not all match are still applied by position, as in previous releases, but this usage is now soft-deprecated.
   - The `location` argument is now validated when passed; previously, a misspelled value was silently treated as `"row"`.
   - The statistic label for the missing row with `location = "column"` no longer includes an extra percent symbol, e.g. `"n (%)"` instead of `"n (p%)"` for `missing_stat = "{N_miss} ({p_miss}%)"`.
   - Error messages for invalid `label` values now correctly report `add_stat_label()` as the calling function.

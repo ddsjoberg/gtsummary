@@ -130,7 +130,8 @@
         "{min} - {max}"), ), label = age ~ c(`{mean}` = "Mean"))
     Condition
       Error in `add_stat_label()`:
-      ! When the element of the `label` argument for variable "age" is a named vector, all names must be one of "{median} ({p25}, {p75})" and "{min} - {max}".
+      ! The element of the `label` argument for variable "age" could not be matched to its statistics.
+      i Names must exactly match a statistic string ("{median} ({p25}, {p75})" and "{min} - {max}") or a current statistic label ("Median (Q1, Q3)" and "Min - Max"), or supply an unnamed vector of length 2.
 
 # add_stat_label(location) messaging
 
@@ -140,6 +141,15 @@
       Error in `add_stat_label()`:
       ! `location` must be one of "row" or "column", not "colum".
       i Did you mean "column"?
+
+# add_stat_label(label) with non-statistic names falls back to positional matching
+
+    Code
+      add_stat_label(tbl, label = age ~ c(n = "n", mean = "Mean"))
+    Condition
+      Error in `add_stat_label()`:
+      ! The element of the `label` argument for variable "age" could not be matched to its statistics.
+      i Names must exactly match a statistic string ("{N_nonmiss}", "{mean}", and "{sd}") or a current statistic label ("N Non-missing", "Mean", and "SD"), or supply an unnamed vector of length 3.
 
 # add_stat_label() messaging
 

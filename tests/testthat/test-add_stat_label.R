@@ -117,6 +117,78 @@ test_that("add_stat_label(label) with named continuous2 labels", {
       dplyr::pull(label),
     c("Mean (SD)", "Median (Q1, Q3)", "Range", "Mean (SD)", "Median (Q1, Q3)", "Min - Max")
   )
+
+  # names may also be the labels currently shown in the table, or a mix of both
+  expect_equal(
+    tbl |>
+      add_stat_label(label = age ~ c("Min - Max" = "Range", "{mean} ({sd})" = "Mean (SD)")) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "level") |>
+      dplyr::pull(label),
+    c("Mean (SD)", "Median (Q1, Q3)", "Range", "Mean (SD)", "Median (Q1, Q3)", "Min - Max")
+  )
+
+  # labels are matched against the current labels, not the updated ones
+  expect_equal(
+    tbl |>
+      add_stat_label(label = age ~ c("Min - Max" = "Median (Q1, Q3)", "Median (Q1, Q3)" = "IQR")) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "level", variable == "age") |>
+      dplyr::pull(label),
+    c("Mean (SD)", "IQR", "Median (Q1, Q3)")
+  )
+
+  # translated labels are matched
+  expect_equal(
+    with_gtsummary_theme(
+      theme_gtsummary_language("fr"),
+      tbl_summary(trial, include = age, type = age ~ "continuous2", statistic = age ~ c("{mean}", "{sd}"), missing = "no") |>
+        add_stat_label(label = age ~ c("ET" = "Écart type"))
+    ) |>
+      getElement("table_body") |>
+      dplyr::filter(row_type == "level") |>
+      dplyr::pull(label),
+    c("Moyenne", "Écart type")
+  )
+})
+
+test_that("add_stat_label(label) with non-statistic names falls back to positional matching", {
+  tbl <-
+    trial |>
+    tbl_summary(
+      include = age,
+      type = age ~ "continuous2",
+      statistic = age ~ c("{N_nonmiss}", "{mean}", "{sd}"),
+      missing = "no"
+    )
+
+  # names that are not statistics are ignored for full-length vectors (pre-v2.7.0 behavior)
+  lifecycle::expect_deprecated(
+    tbl_labelled <- add_stat_label(tbl, label = age ~ c(n = "n", mean = "Mean", sd = "SD"))
+  )
+  expect_equal(
+    tbl_labelled$table_body |>
+      dplyr::filter(row_type == "level") |>
+      dplyr::pull(label),
+    c("n", "Mean", "SD")
+  )
+
+  # partially matching names also fall back to positional matching
+  lifecycle::expect_deprecated(
+    tbl_labelled <- add_stat_label(tbl, label = age ~ c("{sd}" = "SD", "{mean}" = "Mean", x = "N"))
+  )
+  expect_equal(
+    tbl_labelled$table_body |>
+      dplyr::filter(row_type == "level") |>
+      dplyr::pull(label),
+    c("SD", "Mean", "N")
+  )
+
+  # names that are not statistics with a vector that is not full length errors
+  expect_snapshot(
+    error = TRUE,
+    add_stat_label(tbl, label = age ~ c(n = "n", mean = "Mean"))
+  )
 })
 
 test_that("add_stat_label(location='column') missing row label", {

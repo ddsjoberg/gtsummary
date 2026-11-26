@@ -38,7 +38,6 @@ See the continuous2 section below for \code{'continuous2'} variables.}
 A \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_ard_summary} object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}\cr
 Adds or modifies labels describing the summary statistics presented for
 each variable in a \code{\link[=tbl_summary]{tbl_summary()}} table.
 }
@@ -53,8 +52,12 @@ Updates to these labels replace the text in those rows.
 \code{statistic} argument to replace all the labels,
 e.g. \code{label = age ~ c("IQR", "Range")}.
 \item Pass a named character vector to update a subset of the labels, where
-the names are the statistic strings passed in \code{tbl_summary(statistic)},
-e.g. \code{label = age ~ c("{min} - {max}" = "Range")}.
+the names are either the labels currently shown in the table or the
+statistic strings passed in \code{tbl_summary(statistic)},
+e.g. \code{label = age ~ c("Min - Max" = "Range")} or
+\code{label = age ~ c("{min} - {max}" = "Range")}.
+Labels may be translated by \code{theme_gtsummary_language()}, so prefer the
+statistic strings in code that may run under a different language theme.
 }
 
 To change the text of the missing row, use the \code{missing_text} argument
@@ -134,7 +137,7 @@ trial |>
     type = all_continuous() ~ "continuous2",
     statistic = all_continuous() ~ c("{mean} ({sd})", "{median} ({p25}, {p75})", "{min} - {max}"),
   ) |>
-  add_stat_label(label = age ~ c("{min} - {max}" = "Range"))
+  add_stat_label(label = age ~ c("Min - Max" = "Range"))
 }
 \author{
 Daniel D. Sjoberg
