@@ -23,7 +23,7 @@
 - [`add_ci()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_ci.md)
   : Add CI Column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)
   : Add a custom statistic
 - [`add_variable_group_header()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_variable_group_header.md)
@@ -110,7 +110,7 @@
   [`add_n(`*`<tbl_likert>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_n_summary.md)
   : Add column with N
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md)
   : Add a custom statistic
 - [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/separate_p_footnotes.md)
@@ -364,7 +364,7 @@
 - [`add_overall(`*`<tbl_ard_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall_ard.md)
   : ARD add overall column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/filter_hierarchical.md)
   **\[experimental\]** : Filter Hierarchical Tables
 - [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/sort_hierarchical.md)

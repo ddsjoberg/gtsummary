@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9017</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9018</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@
 <li><p>Added <code><a href="../reference/update_header_stats.html">update_header_stats()</a></code> to replace the statistics available to <code><a href="../reference/modify.html">modify_header()</a></code> (e.g. <code>{N}</code>, <code>{n}</code>, <code>{p}</code>, and <code>{level}</code>) with results from an ARD. Pass a tabulation of the <code>by</code> variable (<code><a href="https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html" class="external-link">cards::ard_tabulate()</a></code>) for tables with a <code>by</code> variable, or the total N (<code><a href="https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html" class="external-link">cards::ard_total_n()</a></code>) for tables without one. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2181" class="external-link">#2181</a>)</p></li>
 <li>
 <p>Updates to <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/1670" class="external-link">#1670</a>)</p>
-<ul><li>The <code>label</code> argument now accepts named character vectors for <code>'continuous2'</code> variables to update a subset of the statistic labels, where the names are the statistic strings, e.g. <code>label = age ~ c("{min} - {max}" = "Range")</code>. Previously, every statistic label had to be listed.</li>
+<ul><li>The <code>label</code> argument now accepts named character vectors for <code>'continuous2'</code> variables to update a subset of the statistic labels, where the names are either the labels currently shown in the table or the statistic strings, e.g. <code>label = age ~ c("Min - Max" = "Range")</code> or <code>label = age ~ c("{min} - {max}" = "Range")</code>. Previously, every statistic label had to be listed. Full-length named vectors whose names do not all match are still applied by position, as in previous releases, but this usage is now soft-deprecated.</li>
 <li>The <code>location</code> argument is now validated when passed; previously, a misspelled value was silently treated as <code>"row"</code>.</li>
 <li>The statistic label for the missing row with <code>location = "column"</code> no longer includes an extra percent symbol, e.g. <code>"n (%)"</code> instead of <code>"n (p%)"</code> for <code>missing_stat = "{N_miss} ({p_miss}%)"</code>.</li>
 <li>Error messages for invalid <code>label</code> values now correctly report <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code> as the calling function.</li>

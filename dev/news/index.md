@@ -49,9 +49,13 @@
 
   - The `label` argument now accepts named character vectors for
     `'continuous2'` variables to update a subset of the statistic
-    labels, where the names are the statistic strings,
-    e.g. `label = age ~ c("{min} - {max}" = "Range")`. Previously, every
-    statistic label had to be listed.
+    labels, where the names are either the labels currently shown in the
+    table or the statistic strings,
+    e.g. `label = age ~ c("Min - Max" = "Range")` or
+    `label = age ~ c("{min} - {max}" = "Range")`. Previously, every
+    statistic label had to be listed. Full-length named vectors whose
+    names do not all match are still applied by position, as in previous
+    releases, but this usage is now soft-deprecated.
   - The `location` argument is now validated when passed; previously, a
     misspelled value was silently treated as `"row"`.
   - The statistic label for the missing row with `location = "column"`

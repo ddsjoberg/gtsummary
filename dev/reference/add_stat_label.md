@@ -1,6 +1,5 @@
 # Add statistic labels
 
-**\[questioning\]**  
 Adds or modifies labels describing the summary statistics presented for
 each variable in a
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.md)
@@ -66,9 +65,14 @@ Updates to these labels replace the text in those rows.
   `label = age ~ c("IQR", "Range")`.
 
 - Pass a named character vector to update a subset of the labels, where
-  the names are the statistic strings passed in
-  `tbl_summary(statistic)`, e.g.
-  `label = age ~ c("{min} - {max}" = "Range")`.
+  the names are either the labels currently shown in the table or the
+  statistic strings passed in `tbl_summary(statistic)`, e.g.
+  `label = age ~ c("Min - Max" = "Range")` or
+  `label = age ~ c("{min} - {max}" = "Range")`. Labels may be translated
+  by
+  [`theme_gtsummary_language()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/theme_gtsummary.md),
+  so prefer the statistic strings in code that may run under a different
+  language theme.
 
 To change the text of the missing row, use the `missing_text` argument
 of
