@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gtsummary</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9018</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.6.1.9019</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,8 @@
 <h2 class="pkg-version" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-functions-development-version">New Features and Functions<a class="anchor" aria-label="anchor" href="#new-features-and-functions-development-version"></a></h3>
-<ul><li>
+<ul><li><p>Added <code><a href="../reference/tbl_svycontinuous.html">tbl_svycontinuous()</a></code> to summarize a continuous variable by one or more categorical variables from a survey design object, the survey counterpart to <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>. The <code><a href="../reference/add_overall.html">add_overall()</a></code>, <code><a href="../reference/add_stat.html">add_stat()</a></code>, and <code><a href="../reference/inline_text.html">inline_text()</a></code> functions also accept <code><a href="../reference/tbl_svycontinuous.html">tbl_svycontinuous()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/2363" class="external-link">#2363</a>)</p></li>
+<li>
 <p>Updates to <code><a href="../reference/tbl_ard_hierarchical.html">tbl_ard_hierarchical()</a></code>: (<a href="https://github.com/ddsjoberg/gtsummary/issues/2021" class="external-link">#2021</a>)</p>
 <ul><li>Added the <code>overall_row</code> argument to include an overall summary row at the top of the table, using results from <code>cards::ard_stack_hierarchical(over_variables = TRUE)</code> or <code>cards::ard_stack_hierarchical_count(over_variables = TRUE)</code>.</li>
 <li>The structure of the <code>cards</code> input is now checked against the <code>variables</code>, <code>by</code>, <code>include</code>, and <code>statistic</code> arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.</li>

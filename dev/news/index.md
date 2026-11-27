@@ -4,6 +4,20 @@
 
 ### New Features and Functions
 
+- Added
+  [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svycontinuous.md)
+  to summarize a continuous variable by one or more categorical
+  variables from a survey design object, the survey counterpart to
+  [`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_continuous.md).
+  The
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_overall.md),
+  [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/add_stat.md),
+  and
+  [`inline_text()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/inline_text.md)
+  functions also accept
+  [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svycontinuous.md)
+  tables. ([\#2363](https://github.com/ddsjoberg/gtsummary/issues/2363))
+
 - Updates to
   [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_ard_hierarchical.md):
   ([\#2021](https://github.com/ddsjoberg/gtsummary/issues/2021))
