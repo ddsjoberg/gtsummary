@@ -643,6 +643,34 @@ test_that("tbl_svysummary() default fmt fn", {
   )
 })
 
+test_that("tbl_svysummary(digits) scales p_miss_unweighted and p_nonmiss_unweighted by 100", {
+  expect_equal(
+    svy_trial |>
+      tbl_svysummary(
+        include = age,
+        missing_stat = "{N_miss_unweighted} ({p_miss_unweighted}%)",
+        digits = list(age = list(p_miss_unweighted = 2))
+      ) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(stat_0) |>
+      getElement(2L),
+    "11 (5.50%)"
+  )
+
+  expect_equal(
+    svy_trial |>
+      tbl_svysummary(
+        include = age,
+        missing_stat = "{N_nonmiss_unweighted} ({p_nonmiss_unweighted}%)",
+        digits = list(age = list(p_nonmiss_unweighted = 2))
+      ) |>
+      as.data.frame(col_label = FALSE) |>
+      dplyr::pull(stat_0) |>
+      getElement(2L),
+    "189 (94.50%)"
+  )
+})
+
 # Fix for missing counts <1 in #2229
 test_that("tbl_svysummary() default fmt fn", {
   expect_equal(

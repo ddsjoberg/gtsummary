@@ -43,6 +43,8 @@
 
 ## Bug Fixes
 
+* Fixed a bug where passing integer `digits` for `p_miss_unweighted` or `p_nonmiss_unweighted` in `tbl_svysummary()` or `tbl_svycontinuous()` did not scale proportions by 100.
+
 * Fixed a bug where `tbl_wide_summary()` and `tbl_ard_wide_summary()` did not save the function call in `x$call_list`.
 
 * The `digits` argument of `tbl_summary()` and friends now correctly handles lists that combine named and unnamed values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are assigned to the statistics in order, and named values then update the named statistics. Previously, the names were silently discarded and all values were assigned positionally. (#1948)
