@@ -129,7 +129,7 @@ assign_summary_digits <- function(data, statistic, type, digits = NULL) {
         return(value)
       }
       # if an integer is passed for a percentage, process stat with label_style_number()
-      if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted")) {
+      if (stat_name %in% c("p", "p_miss", "p_nonmiss", "p_unweighted", "p_miss_unweighted", "p_nonmiss_unweighted")) {
         return(label_style_number(digits = value, scale = 100))
       }
       # otherwise, use style_number() to style number
