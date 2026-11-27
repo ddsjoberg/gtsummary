@@ -2,6 +2,8 @@
 
 ## New Features and Functions
 
+* Added `tbl_svycontinuous()` to summarize a continuous variable by one or more categorical variables from a survey design object, the survey counterpart to `tbl_continuous()`. The `add_overall()`, `add_stat()`, and `inline_text()` functions also accept `tbl_svycontinuous()` tables. (#2363)
+
 * Updates to `tbl_ard_hierarchical()`: (#2021)
   - Added the `overall_row` argument to include an overall summary row at the top of the table, using results from `cards::ard_stack_hierarchical(over_variables = TRUE)` or `cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
   - The structure of the `cards` input is now checked against the `variables`, `by`, `include`, and `statistic` arguments, and an informative error is returned when they do not match. Previously, some mismatches silently returned an incomplete table.

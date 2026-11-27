@@ -7,8 +7,8 @@
 add_stat(x, fns, location = everything() ~ "label")
 }
 \arguments{
-\item{x}{(\code{tbl_summary}/\code{tbl_svysummary}/\code{tbl_continuous})\cr
-A gtsummary table of class \code{'tbl_summary'}, \code{'tbl_svysummary'}, or \code{'tbl_continuous'}.}
+\item{x}{(\code{tbl_summary}/\code{tbl_svysummary}/\code{tbl_continuous}/\code{tbl_svycontinuous})\cr
+A gtsummary table of class \code{'tbl_summary'}, \code{'tbl_svysummary'}, \code{'tbl_continuous'}, or \code{'tbl_svycontinuous'}.}
 
 \item{fns}{(\code{\link[=syntax]{formula-list-selector}})\cr
 Indicates the functions that create the statistic. See details below.}
@@ -27,7 +27,7 @@ A 'gtsummary' of the same class as the input
 }
 \description{
 The function allows a user to add a new column (or columns) of statistics to an
-existing \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_continuous} object.
+existing \code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous}, or \code{tbl_svycontinuous} object.
 }
 \section{Details}{
 

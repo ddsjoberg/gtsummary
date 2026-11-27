@@ -1,10 +1,10 @@
 #' Add a custom statistic
 #'
 #' The function allows a user to add a new column (or columns) of statistics to an
-#' existing `tbl_summary`, `tbl_svysummary`, or `tbl_continuous` object.
+#' existing `tbl_summary`, `tbl_svysummary`, `tbl_continuous`, or `tbl_svycontinuous` object.
 #'
-#' @param x (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`)\cr
-#'   A gtsummary table of class `'tbl_summary'`, `'tbl_svysummary'`, or `'tbl_continuous'`.
+#' @param x (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`/`tbl_svycontinuous`)\cr
+#'   A gtsummary table of class `'tbl_summary'`, `'tbl_svysummary'`, `'tbl_continuous'`, or `'tbl_svycontinuous'`.
 #' @param fns ([`formula-list-selector`][syntax])\cr
 #'   Indicates the functions that create the statistic. See details below.
 #' @param location ([`formula-list-selector`][syntax])\cr
@@ -112,10 +112,10 @@ add_stat <- function(x, fns, location = everything() ~ "label") {
   # checking inputs ------------------------------------------------------------
   check_not_missing(x)
   check_not_missing(fns)
-  check_class(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous"))
+  check_class(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous", "tbl_svycontinuous"))
 
   # adding type if `tbl_continuous`...this is used later on
-  if (inherits(x, "tbl_continuous")) {
+  if (inherits(x, c("tbl_continuous", "tbl_svycontinuous"))) {
     x$inputs$type <- rep_named(x$inputs$include, list("categorical"))
   }
 

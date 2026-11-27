@@ -1,10 +1,10 @@
 #' Add overall column
 #'
 #' Adds a column with overall summary statistics to tables
-#' created by `tbl_summary()`, `tbl_svysummary()`, `tbl_continuous()` or
+#' created by `tbl_summary()`, `tbl_svysummary()`, `tbl_continuous()`, `tbl_svycontinuous()` or
 #' `tbl_custom_summary()`.
 #'
-#' @param x (`tbl_summary`, `tbl_svysummary`, `tbl_continuous`, `tbl_custom_summary`)\cr
+#' @param x (`tbl_summary`, `tbl_svysummary`, `tbl_continuous`, `tbl_svycontinuous`, `tbl_custom_summary`)\cr
 #'   A stratified 'gtsummary' table
 #' @param last (scalar `logical`)\cr
 #'   Logical indicator to display overall column last in table.
@@ -73,9 +73,9 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = "**Overall**  \
     col_label_default <- paste0("**", translate_string("Overall"), "**  \nN = {style_number(N)}")
     col_label <-
       case_switch(
-        inherits(x, "tbl_summary") ~
+        inherits(x, c("tbl_summary", "tbl_continuous")) ~
           get_theme_element("add_overall.tbl_summary-arg:col_label", default = col_label_default),
-        inherits(x, "tbl_svysummary") ~
+        inherits(x, c("tbl_svysummary", "tbl_svycontinuous")) ~
           get_theme_element("add_overall.tbl_svysummary-arg:col_label", default = col_label_default)
       ) %||%
       get_theme_element("add_overall.tbl_summary-arg:col_label", default = col_label_default)
@@ -99,6 +99,10 @@ add_overall.tbl_continuous <- add_overall.tbl_summary
 #' @rdname add_overall
 #' @export
 add_overall.tbl_svysummary <- add_overall.tbl_summary
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_svycontinuous <- add_overall.tbl_summary
 
 #' @rdname add_overall
 #' @export
