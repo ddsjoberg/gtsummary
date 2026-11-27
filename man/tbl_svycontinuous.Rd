@@ -52,6 +52,7 @@ results for the variable associated with the value (similar to a
 a gtsummary table of class \code{'tbl_svycontinuous'}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}\cr
 Summarize a continuous variable by one or more categorical variables,
 taking into account survey weights and design.
 }

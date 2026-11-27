@@ -1,5 +1,6 @@
 #' Summarize continuous variable from a survey object
 #'
+#' `r lifecycle::badge('experimental')`\cr
 #' Summarize a continuous variable by one or more categorical variables,
 #' taking into account survey weights and design.
 #'
