@@ -62,8 +62,11 @@ tbl_summary(
   Specifies how summary statistics are rounded. Values may be either
   integer(s) or function(s). If not specified, default formatting is
   assigned via
-  [`assign_summary_digits()`](https://www.danieldsjoberg.com/gtsummary/reference/assign_summary_digits.md).
-  See below for details.
+  [`assign_summary_digits()`](https://www.danieldsjoberg.com/gtsummary/reference/assign_summary_digits.md);
+  percentages are formatted with
+  [`label_style_percent()`](https://www.danieldsjoberg.com/gtsummary/reference/label_style.md)
+  by default. See the 'digits argument' section of `tbl_summary()` for
+  details.
 
 - type:
 
@@ -156,8 +159,13 @@ display: `{n}` (frequency), `{N}` (denominator), `{p}` (percent).
 For continuous variables, **any univariate function may be used**. The
 most commonly used functions are `{median}`, `{mean}`, `{sd}`, `{min}`,
 and `{max}`. Additionally, `{p##}` is available for percentiles, where
-`##` is an integer from 0 to 100. For example,
-`p25: quantile(probs=0.25, type=2)`.
+`##` is an integer from 0 to 100. Percentiles are calculated with
+`stats::quantile(x, probs = ##/100, type = 2)`, e.g. `{p25}` is
+`quantile(x, probs = 0.25, type = 2)`. The type 2 definition is the
+inverse of the empirical distribution function with averaging at
+discontinuities (the default definition in SAS). See the
+[FAQ](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#quantiles)
+for details and how to use another definition.
 
 When the summary type is `"continuous2"`, pass a vector of statistics.
 Each element of the vector will result in a separate row in the summary
@@ -189,8 +197,24 @@ presented. For example, if the statistic is `"{mean} ({sd})"`, it is
 equivalent to pass `1`, `c(1, 1)`, `label_style_number(digits=1)`, and
 `list(label_style_number(digits=1), label_style_number(digits=1))`.
 
+Percentages are formatted with
+[`label_style_percent()`](https://www.danieldsjoberg.com/gtsummary/reference/label_style.md)
+by default. When an integer is passed for a percentage, the percentage
+is formatted with `label_style_number(digits = <integer>, scale = 100)`.
+
 Named lists are also accepted to change the default formatting for a
-single statistic, e.g. `list(sd = label_style_number(digits=1))`.
+single statistic, e.g. `list(sd = label_style_number(digits=1))`. The
+names may be any statistic shown in the table, including the statistics
+on the missing row, e.g. `list(p_miss = 2)`.
+
+Named and unnamed values may be combined: the unnamed values are first
+assigned to the statistics in the order they appear (recycling as
+needed), and the named values then update the formatting of the named
+statistics. For example, with
+`statistic = age ~ "{median} ({p25}, {p75})"` and
+`missing_stat = "{N_miss} ({p_miss}%)"`, passing
+`digits = age ~ list(2, p_miss = 2)` rounds the median and IQR to two
+decimal places and the percent missing to two decimal places.
 
 ## type and value arguments
 

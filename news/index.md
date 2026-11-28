@@ -1,6 +1,188 @@
 # Changelog
 
+## gtsummary 2.7.0
+
+### New Features and Functions
+
+- Added
+  [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
+  to summarize a continuous variable by one or more categorical
+  variables from a survey design object, the survey counterpart to
+  [`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_continuous.md).
+  The
+  [`add_overall()`](https://www.danieldsjoberg.com/gtsummary/reference/add_overall.md),
+  [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat.md),
+  and
+  [`inline_text()`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.md)
+  functions also accept
+  [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
+  tables. ([\#2363](https://github.com/ddsjoberg/gtsummary/issues/2363))
+
+- Updates to
+  [`tbl_ard_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_hierarchical.md):
+  ([\#2021](https://github.com/ddsjoberg/gtsummary/issues/2021))
+
+  - Added the `overall_row` argument to include an overall summary row
+    at the top of the table, using results from
+    `cards::ard_stack_hierarchical(over_variables = TRUE)` or
+    `cards::ard_stack_hierarchical_count(over_variables = TRUE)`.
+  - The structure of the `cards` input is now checked against the
+    `variables`, `by`, `include`, and `statistic` arguments, and an
+    informative error is returned when they do not match. Previously,
+    some mismatches silently returned an incomplete table.
+  - The default variable labels are now taken from the label attributes
+    saved in the ARD
+    (e.g. `cards::ard_stack_hierarchical(attributes = TRUE)`), and the
+    `label` argument now accepts formula-list-selector syntax, as
+    documented.
+
+- The `tbl_ard_summary(type)` argument may now assign a summary type
+  that differs from the type implied by the ARD’s `context` column,
+  e.g. a continuous summary of re-shaped
+  [`cards::ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html)
+  results. The assigned type must be compatible with the structure of
+  the ARD: continuous summaries require results without `variable_level`
+  values, and categorical/dichotomous summaries require them.
+  ([\#2482](https://github.com/ddsjoberg/gtsummary/issues/2482))
+
+- Added
+  [`update_header_stats()`](https://www.danieldsjoberg.com/gtsummary/reference/update_header_stats.md)
+  to replace the statistics available to
+  [`modify_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.md)
+  (e.g. `{N}`, `{n}`, `{p}`, and `{level}`) with results from an ARD.
+  Pass a tabulation of the `by` variable
+  ([`cards::ard_tabulate()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_tabulate.html))
+  for tables with a `by` variable, or the total N
+  ([`cards::ard_total_n()`](https://pharmaverse.github.io/cards/latest-tag/reference/ard_total_n.html))
+  for tables without one.
+  ([\#2181](https://github.com/ddsjoberg/gtsummary/issues/2181))
+
+- Updates to
+  [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md):
+  ([\#1670](https://github.com/ddsjoberg/gtsummary/issues/1670))
+
+  - The `label` argument now accepts named character vectors for
+    `'continuous2'` variables to update a subset of the statistic
+    labels, where the names are either the labels currently shown in the
+    table or the statistic strings,
+    e.g. `label = age ~ c("Min - Max" = "Range")` or
+    `label = age ~ c("{min} - {max}" = "Range")`. Previously, every
+    statistic label had to be listed. Full-length named vectors whose
+    names do not all match are still applied by position, as in previous
+    releases, but this usage is now soft-deprecated.
+  - The `location` argument is now validated when passed; previously, a
+    misspelled value was silently treated as `"row"`.
+  - The statistic label for the missing row with `location = "column"`
+    no longer includes an extra percent symbol, e.g. `"n (%)"` instead
+    of `"n (p%)"` for `missing_stat = "{N_miss} ({p_miss}%)"`.
+  - Error messages for invalid `label` values now correctly report
+    [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md)
+    as the calling function.
+
+#### Other Updates
+
+- Added documentation to the
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
+  help file describing how percentages are rounded (including how
+  integers passed in the `digits` argument are handled) and how
+  percentiles are calculated with `quantile(type = 2)`. Also added an
+  FAQ entry showing how to use another percentile definition.
+  ([\#2495](https://github.com/ddsjoberg/gtsummary/issues/2495))
+
+- The `'as_gt-lst:addl_cmds'`, `'as_flex_table-lst:addl_cmds'`,
+  `'as_hux_table.gtsummary-lst:addl_cmds'`, and
+  `'as_kable_extra-lst:addl_cmds'` theme elements now accept unnamed
+  list elements, which are appended to the end of the calls. Previously,
+  each element had to be named after the call it should follow.
+  ([\#1446](https://github.com/ddsjoberg/gtsummary/issues/1446))
+
+- Re-implemented the `add_p.tbl_svysummary-attr:test.continuous` and
+  `add_p.tbl_svysummary-attr:test.categorical` theme elements, which set
+  the default tests in
+  [`add_p.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.tbl_svysummary.md)
+  for continuous and categorical/dichotomous variables. Since v2.0.0
+  these elements had no effect, so
+  [`theme_gtsummary_mean_sd()`](https://www.danieldsjoberg.com/gtsummary/reference/theme_gtsummary.md)
+  once again uses the survey-adapted t-test for continuous variables in
+  [`add_p.tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.tbl_svysummary.md).
+  ([\#2501](https://github.com/ddsjoberg/gtsummary/issues/2501))
+
+- Removed the unused theme elements `add_q-arg:method`,
+  `tbl_regression-arg:tidy_fun`, `tbl_summary-fn:N_fun`, and
+  `tbl_summary-str:missing_stat` (use `tbl_summary-arg:missing_stat`
+  instead). Setting these elements had no effect.
+  ([\#1959](https://github.com/ddsjoberg/gtsummary/issues/1959))
+
+- The `tbl_svysummary-arg:label` and `tbl_custom_summary-arg:label`
+  theme elements are now listed as deprecated in the theme elements
+  documentation. Since v2.0.0, setting them has already triggered a
+  deprecation warning. Also removed the internal reference to the
+  unregistered `add_p-fn:addnl-fn-to-run` theme element, which could
+  never be set, and corrected the function listed for the
+  `add_overall.tbl_svysummary-arg:col_label` theme element.
+  ([\#2506](https://github.com/ddsjoberg/gtsummary/issues/2506))
+
+- [`tbl_split_by_columns()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_split_by.md)
+  now returns an informative error message when the `groups` argument
+  names a column not present in the table.
+
+- The `"gts_column"` column is now added to the ARD in
+  [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_wide_summary.md)
+  and
+  [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_wide_summary.md)
+  via the internal `.add_gts_column_to_cards_wide_summary()` before
+  calling
+  [`brdg_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/brdg_wide_summary.md),
+  consistent with the other `tbl_*()` functions. As a result,
+  [`brdg_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/brdg_wide_summary.md)
+  now expects the `"gts_column"` column to be present in its `cards`
+  input, and the ARD saved in the returned table now includes the
+  `"gts_column"` column.
+  ([\#1995](https://github.com/ddsjoberg/gtsummary/issues/1995))
+
+- Passing a custom function to the `add_p(test)` and
+  `add_difference(test)` arguments no longer loads the namespaces of
+  optional packages (e.g. lme4) while checking whether the function
+  matches a built-in test. Loading these packages could print messages
+  and slowed the call.
+  ([\#2484](https://github.com/ddsjoberg/gtsummary/issues/2484))
+
+#### Lifecycle Updates
+
+- The `add_p.tbl_cross-arg:pvalue_fun`,
+  `add_p.tbl_svysummary-arg:pvalue_fun`, and `add_q-arg:pvalue_fun`
+  theme elements are now deprecated. Use the package-wide
+  `pkgwide-fn:pvalue_fun` theme element instead.
+  ([\#2504](https://github.com/ddsjoberg/gtsummary/issues/2504))
+
+### Bug Fixes
+
+- Fixed a bug where
+  [`tbl_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_wide_summary.md)
+  and
+  [`tbl_ard_wide_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_ard_wide_summary.md)
+  did not save the function call in `x$call_list`.
+
+- The `digits` argument of
+  [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md)
+  and friends now correctly handles lists that combine named and unnamed
+  values, e.g. `digits = age ~ list(2, p_miss = 2)`. Unnamed values are
+  assigned to the statistics in order, and named values then update the
+  named statistics. Previously, the names were silently discarded and
+  all values were assigned positionally.
+  ([\#1948](https://github.com/ddsjoberg/gtsummary/issues/1948))
+
+- [`tbl_split_by_rows()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_split_by.md)
+  now forwards the `row_numbers` and `variable_level` arguments when
+  applied to an existing `tbl_split` object; previously only `variables`
+  was passed and a misleading error was returned. The `variable_level`
+  attribute is also now retained when a table is further split by rows.
+  ([\#2479](https://github.com/ddsjoberg/gtsummary/issues/2479);
+  [@Melkiades](https://github.com/Melkiades))
+
 ## gtsummary 2.6.1
+
+CRAN release: 2026-09-04
 
 - Improved the speed and memory efficiency of the `as_*()` converters
   and

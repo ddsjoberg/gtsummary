@@ -23,7 +23,7 @@
 - [`add_ci()`](https://www.danieldsjoberg.com/gtsummary/reference/add_ci.md)
   : Add CI Column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat.md)
   : Add a custom statistic
 - [`add_variable_group_header()`](https://www.danieldsjoberg.com/gtsummary/reference/add_variable_group_header.md)
@@ -109,8 +109,11 @@
   [`add_n(`*`<tbl_svysummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_n_summary.md)
   [`add_n(`*`<tbl_likert>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_n_summary.md)
   : Add column with N
+- [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
+  **\[experimental\]** : Summarize continuous variable from a survey
+  object
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`add_stat()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat.md)
   : Add a custom statistic
 - [`separate_p_footnotes()`](https://www.danieldsjoberg.com/gtsummary/reference/separate_p_footnotes.md)
@@ -170,6 +173,7 @@
 - [`inline_text(`*`<tbl_cross>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_cross.md)
   : Report statistics from cross table inline
 - [`inline_text(`*`<tbl_continuous>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_continuous.md)
+  [`inline_text(`*`<tbl_svycontinuous>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_continuous.md)
   : Report statistics from summary tables inline
 - [`inline_text(`*`<gtsummary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.gtsummary.md)
   : Report statistics from summary tables inline
@@ -241,6 +245,8 @@
   : Modify Abbreviations
 - [`modify_caption()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_caption.md)
   : Modify table caption
+- [`update_header_stats()`](https://www.danieldsjoberg.com/gtsummary/reference/update_header_stats.md)
+  **\[experimental\]** : Update Header Statistics
 - [`modify_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md)
   [`remove_footnote_symbol()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_footnote_symbol.md)
   : Modify Footnote Symbols
@@ -362,7 +368,7 @@
 - [`add_overall(`*`<tbl_ard_summary>`*`)`](https://www.danieldsjoberg.com/gtsummary/reference/add_overall_ard.md)
   : ARD add overall column
 - [`add_stat_label()`](https://www.danieldsjoberg.com/gtsummary/reference/add_stat_label.md)
-  **\[questioning\]** : Add statistic labels
+  : Add statistic labels
 - [`filter_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/filter_hierarchical.md)
   **\[experimental\]** : Filter Hierarchical Tables
 - [`sort_hierarchical()`](https://www.danieldsjoberg.com/gtsummary/reference/sort_hierarchical.md)

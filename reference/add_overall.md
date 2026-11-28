@@ -3,7 +3,8 @@
 Adds a column with overall summary statistics to tables created by
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.md),
 [`tbl_svysummary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svysummary.md),
-[`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_continuous.md)
+[`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_continuous.md),
+[`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
 or
 [`tbl_custom_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_custom_summary.md).
 
@@ -33,6 +34,16 @@ add_overall(
 )
 
 # S3 method for class 'tbl_svysummary'
+add_overall(
+  x,
+  last = FALSE,
+  col_label = "**Overall**  \nN = {style_number(N)}",
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
+
+# S3 method for class 'tbl_svycontinuous'
 add_overall(
   x,
   last = FALSE,
@@ -79,7 +90,7 @@ add_overall(
 - x:
 
   (`tbl_summary`, `tbl_svysummary`, `tbl_continuous`,
-  `tbl_custom_summary`)  
+  `tbl_svycontinuous`, `tbl_custom_summary`)  
   A stratified 'gtsummary' table
 
 - ...:

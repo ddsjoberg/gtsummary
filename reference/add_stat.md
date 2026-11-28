@@ -1,8 +1,8 @@
 # Add a custom statistic
 
 The function allows a user to add a new column (or columns) of
-statistics to an existing `tbl_summary`, `tbl_svysummary`, or
-`tbl_continuous` object.
+statistics to an existing `tbl_summary`, `tbl_svysummary`,
+`tbl_continuous`, or `tbl_svycontinuous` object.
 
 ## Usage
 
@@ -14,9 +14,9 @@ add_stat(x, fns, location = everything() ~ "label")
 
 - x:
 
-  (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`)  
-  A gtsummary table of class `'tbl_summary'`, `'tbl_svysummary'`, or
-  `'tbl_continuous'`.
+  (`tbl_summary`/`tbl_svysummary`/`tbl_continuous`/`tbl_svycontinuous`)  
+  A gtsummary table of class `'tbl_summary'`, `'tbl_svysummary'`,
+  `'tbl_continuous'`, or `'tbl_svycontinuous'`.
 
 - fns:
 

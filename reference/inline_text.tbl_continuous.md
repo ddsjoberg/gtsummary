@@ -2,6 +2,8 @@
 
 Extracts and returns statistics from a
 [`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_continuous.md)
+or
+[`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
 object for inline reporting in an R markdown document. Detailed examples
 in the [inline_text
 vignette](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)
@@ -19,15 +21,28 @@ inline_text(
   pvalue_fun = label_style_pvalue(prepend_p = TRUE),
   ...
 )
+
+# S3 method for class 'tbl_svycontinuous'
+inline_text(
+  x,
+  variable,
+  column = NULL,
+  level = NULL,
+  pattern = NULL,
+  pvalue_fun = label_style_pvalue(prepend_p = TRUE),
+  ...
+)
 ```
 
 ## Arguments
 
 - x:
 
-  (`tbl_continuous`)  
+  (`tbl_continuous`, `tbl_svycontinuous`)  
   Object created from
   [`tbl_continuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_continuous.md)
+  or
+  [`tbl_svycontinuous()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_svycontinuous.md)
 
 - variable:
 
